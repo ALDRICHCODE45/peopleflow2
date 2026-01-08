@@ -55,12 +55,11 @@ export const ModelName = {
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
-  Organization: 'Organization',
-  Member: 'Member',
-  Invitation: 'Invitation',
-  Permission: 'Permission',
+  Tenant: 'Tenant',
+  Role: 'Role',
+  UserRole: 'UserRole',
   RolePermission: 'RolePermission',
-  UserActiveOrganization: 'UserActiveOrganization'
+  Permission: 'Permission'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -101,7 +100,7 @@ export const SessionScalarFieldEnum = {
   ipAddress: 'ipAddress',
   userAgent: 'userAgent',
   userId: 'userId',
-  activeOrganizationId: 'activeOrganizationId'
+  activeTenantId: 'activeTenantId'
 } as const
 
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
@@ -138,60 +137,41 @@ export const VerificationScalarFieldEnum = {
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
 
 
-export const OrganizationScalarFieldEnum = {
+export const TenantScalarFieldEnum = {
   id: 'id',
   name: 'name',
   slug: 'slug',
-  logo: 'logo',
-  createdAt: 'createdAt',
-  metadata: 'metadata'
-} as const
-
-export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]
-
-
-export const MemberScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  userId: 'userId',
-  role: 'role',
-  createdAt: 'createdAt'
-} as const
-
-export type MemberScalarFieldEnum = (typeof MemberScalarFieldEnum)[keyof typeof MemberScalarFieldEnum]
-
-
-export const InvitationScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  email: 'email',
-  role: 'role',
-  status: 'status',
-  expiresAt: 'expiresAt',
-  createdAt: 'createdAt',
-  inviterId: 'inviterId'
-} as const
-
-export type InvitationScalarFieldEnum = (typeof InvitationScalarFieldEnum)[keyof typeof InvitationScalarFieldEnum]
-
-
-export const PermissionScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  description: 'description',
-  module: 'module',
-  action: 'action',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof typeof PermissionScalarFieldEnum]
+export type TenantScalarFieldEnum = (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum]
+
+
+export const RoleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
+
+
+export const UserRoleScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  roleId: 'roleId',
+  tenantId: 'tenantId',
+  createdAt: 'createdAt'
+} as const
+
+export type UserRoleScalarFieldEnum = (typeof UserRoleScalarFieldEnum)[keyof typeof UserRoleScalarFieldEnum]
 
 
 export const RolePermissionScalarFieldEnum = {
   id: 'id',
-  organizationId: 'organizationId',
-  role: 'role',
+  roleId: 'roleId',
   permissionId: 'permissionId',
   createdAt: 'createdAt'
 } as const
@@ -199,15 +179,17 @@ export const RolePermissionScalarFieldEnum = {
 export type RolePermissionScalarFieldEnum = (typeof RolePermissionScalarFieldEnum)[keyof typeof RolePermissionScalarFieldEnum]
 
 
-export const UserActiveOrganizationScalarFieldEnum = {
+export const PermissionScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
-  organizationId: 'organizationId',
+  name: 'name',
+  resource: 'resource',
+  action: 'action',
+  description: 'description',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type UserActiveOrganizationScalarFieldEnum = (typeof UserActiveOrganizationScalarFieldEnum)[keyof typeof UserActiveOrganizationScalarFieldEnum]
+export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof typeof PermissionScalarFieldEnum]
 
 
 export const SortOrder = {

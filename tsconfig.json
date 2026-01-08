@@ -19,7 +19,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"],
+      "@/*": ["./src/*"],
       "@core/*": ["./src/core/*"],
       "@shadcn/*": ["./src/core/shared/ui/shadcn/*"],
       "@lib/*": ["./src/core/lib/*"],

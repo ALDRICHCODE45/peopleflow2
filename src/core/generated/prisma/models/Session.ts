@@ -33,7 +33,7 @@ export type SessionMinAggregateOutputType = {
   ipAddress: string | null
   userAgent: string | null
   userId: string | null
-  activeOrganizationId: string | null
+  activeTenantId: string | null
 }
 
 export type SessionMaxAggregateOutputType = {
@@ -45,7 +45,7 @@ export type SessionMaxAggregateOutputType = {
   ipAddress: string | null
   userAgent: string | null
   userId: string | null
-  activeOrganizationId: string | null
+  activeTenantId: string | null
 }
 
 export type SessionCountAggregateOutputType = {
@@ -57,7 +57,7 @@ export type SessionCountAggregateOutputType = {
   ipAddress: number
   userAgent: number
   userId: number
-  activeOrganizationId: number
+  activeTenantId: number
   _all: number
 }
 
@@ -71,7 +71,7 @@ export type SessionMinAggregateInputType = {
   ipAddress?: true
   userAgent?: true
   userId?: true
-  activeOrganizationId?: true
+  activeTenantId?: true
 }
 
 export type SessionMaxAggregateInputType = {
@@ -83,7 +83,7 @@ export type SessionMaxAggregateInputType = {
   ipAddress?: true
   userAgent?: true
   userId?: true
-  activeOrganizationId?: true
+  activeTenantId?: true
 }
 
 export type SessionCountAggregateInputType = {
@@ -95,7 +95,7 @@ export type SessionCountAggregateInputType = {
   ipAddress?: true
   userAgent?: true
   userId?: true
-  activeOrganizationId?: true
+  activeTenantId?: true
   _all?: true
 }
 
@@ -180,7 +180,7 @@ export type SessionGroupByOutputType = {
   ipAddress: string | null
   userAgent: string | null
   userId: string
-  activeOrganizationId: string | null
+  activeTenantId: string | null
   _count: SessionCountAggregateOutputType | null
   _min: SessionMinAggregateOutputType | null
   _max: SessionMaxAggregateOutputType | null
@@ -213,8 +213,9 @@ export type SessionWhereInput = {
   ipAddress?: Prisma.StringNullableFilter<"Session"> | string | null
   userAgent?: Prisma.StringNullableFilter<"Session"> | string | null
   userId?: Prisma.StringFilter<"Session"> | string
-  activeOrganizationId?: Prisma.StringNullableFilter<"Session"> | string | null
+  activeTenantId?: Prisma.StringNullableFilter<"Session"> | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  activeTenant?: Prisma.XOR<Prisma.TenantNullableScalarRelationFilter, Prisma.TenantWhereInput> | null
 }
 
 export type SessionOrderByWithRelationInput = {
@@ -226,8 +227,9 @@ export type SessionOrderByWithRelationInput = {
   ipAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
-  activeOrganizationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  activeTenantId?: Prisma.SortOrderInput | Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  activeTenant?: Prisma.TenantOrderByWithRelationInput
 }
 
 export type SessionWhereUniqueInput = Prisma.AtLeast<{
@@ -242,8 +244,9 @@ export type SessionWhereUniqueInput = Prisma.AtLeast<{
   ipAddress?: Prisma.StringNullableFilter<"Session"> | string | null
   userAgent?: Prisma.StringNullableFilter<"Session"> | string | null
   userId?: Prisma.StringFilter<"Session"> | string
-  activeOrganizationId?: Prisma.StringNullableFilter<"Session"> | string | null
+  activeTenantId?: Prisma.StringNullableFilter<"Session"> | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  activeTenant?: Prisma.XOR<Prisma.TenantNullableScalarRelationFilter, Prisma.TenantWhereInput> | null
 }, "id" | "token">
 
 export type SessionOrderByWithAggregationInput = {
@@ -255,7 +258,7 @@ export type SessionOrderByWithAggregationInput = {
   ipAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
-  activeOrganizationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  activeTenantId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.SessionCountOrderByAggregateInput
   _max?: Prisma.SessionMaxOrderByAggregateInput
   _min?: Prisma.SessionMinOrderByAggregateInput
@@ -273,7 +276,7 @@ export type SessionScalarWhereWithAggregatesInput = {
   ipAddress?: Prisma.StringNullableWithAggregatesFilter<"Session"> | string | null
   userAgent?: Prisma.StringNullableWithAggregatesFilter<"Session"> | string | null
   userId?: Prisma.StringWithAggregatesFilter<"Session"> | string
-  activeOrganizationId?: Prisma.StringNullableWithAggregatesFilter<"Session"> | string | null
+  activeTenantId?: Prisma.StringNullableWithAggregatesFilter<"Session"> | string | null
 }
 
 export type SessionCreateInput = {
@@ -284,8 +287,8 @@ export type SessionCreateInput = {
   updatedAt?: Date | string
   ipAddress?: string | null
   userAgent?: string | null
-  activeOrganizationId?: string | null
   user: Prisma.UserCreateNestedOneWithoutSessionsInput
+  activeTenant?: Prisma.TenantCreateNestedOneWithoutSessionsInput
 }
 
 export type SessionUncheckedCreateInput = {
@@ -297,7 +300,7 @@ export type SessionUncheckedCreateInput = {
   ipAddress?: string | null
   userAgent?: string | null
   userId: string
-  activeOrganizationId?: string | null
+  activeTenantId?: string | null
 }
 
 export type SessionUpdateInput = {
@@ -308,8 +311,8 @@ export type SessionUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  activeOrganizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutSessionsNestedInput
+  activeTenant?: Prisma.TenantUpdateOneWithoutSessionsNestedInput
 }
 
 export type SessionUncheckedUpdateInput = {
@@ -321,7 +324,7 @@ export type SessionUncheckedUpdateInput = {
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  activeOrganizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type SessionCreateManyInput = {
@@ -333,7 +336,7 @@ export type SessionCreateManyInput = {
   ipAddress?: string | null
   userAgent?: string | null
   userId: string
-  activeOrganizationId?: string | null
+  activeTenantId?: string | null
 }
 
 export type SessionUpdateManyMutationInput = {
@@ -344,7 +347,6 @@ export type SessionUpdateManyMutationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  activeOrganizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type SessionUncheckedUpdateManyInput = {
@@ -356,7 +358,7 @@ export type SessionUncheckedUpdateManyInput = {
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  activeOrganizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type SessionListRelationFilter = {
@@ -378,7 +380,7 @@ export type SessionCountOrderByAggregateInput = {
   ipAddress?: Prisma.SortOrder
   userAgent?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  activeOrganizationId?: Prisma.SortOrder
+  activeTenantId?: Prisma.SortOrder
 }
 
 export type SessionMaxOrderByAggregateInput = {
@@ -390,7 +392,7 @@ export type SessionMaxOrderByAggregateInput = {
   ipAddress?: Prisma.SortOrder
   userAgent?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  activeOrganizationId?: Prisma.SortOrder
+  activeTenantId?: Prisma.SortOrder
 }
 
 export type SessionMinOrderByAggregateInput = {
@@ -402,7 +404,7 @@ export type SessionMinOrderByAggregateInput = {
   ipAddress?: Prisma.SortOrder
   userAgent?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  activeOrganizationId?: Prisma.SortOrder
+  activeTenantId?: Prisma.SortOrder
 }
 
 export type SessionCreateNestedManyWithoutUserInput = {
@@ -447,6 +449,48 @@ export type SessionUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.SessionScalarWhereInput | Prisma.SessionScalarWhereInput[]
 }
 
+export type SessionCreateNestedManyWithoutActiveTenantInput = {
+  create?: Prisma.XOR<Prisma.SessionCreateWithoutActiveTenantInput, Prisma.SessionUncheckedCreateWithoutActiveTenantInput> | Prisma.SessionCreateWithoutActiveTenantInput[] | Prisma.SessionUncheckedCreateWithoutActiveTenantInput[]
+  connectOrCreate?: Prisma.SessionCreateOrConnectWithoutActiveTenantInput | Prisma.SessionCreateOrConnectWithoutActiveTenantInput[]
+  createMany?: Prisma.SessionCreateManyActiveTenantInputEnvelope
+  connect?: Prisma.SessionWhereUniqueInput | Prisma.SessionWhereUniqueInput[]
+}
+
+export type SessionUncheckedCreateNestedManyWithoutActiveTenantInput = {
+  create?: Prisma.XOR<Prisma.SessionCreateWithoutActiveTenantInput, Prisma.SessionUncheckedCreateWithoutActiveTenantInput> | Prisma.SessionCreateWithoutActiveTenantInput[] | Prisma.SessionUncheckedCreateWithoutActiveTenantInput[]
+  connectOrCreate?: Prisma.SessionCreateOrConnectWithoutActiveTenantInput | Prisma.SessionCreateOrConnectWithoutActiveTenantInput[]
+  createMany?: Prisma.SessionCreateManyActiveTenantInputEnvelope
+  connect?: Prisma.SessionWhereUniqueInput | Prisma.SessionWhereUniqueInput[]
+}
+
+export type SessionUpdateManyWithoutActiveTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.SessionCreateWithoutActiveTenantInput, Prisma.SessionUncheckedCreateWithoutActiveTenantInput> | Prisma.SessionCreateWithoutActiveTenantInput[] | Prisma.SessionUncheckedCreateWithoutActiveTenantInput[]
+  connectOrCreate?: Prisma.SessionCreateOrConnectWithoutActiveTenantInput | Prisma.SessionCreateOrConnectWithoutActiveTenantInput[]
+  upsert?: Prisma.SessionUpsertWithWhereUniqueWithoutActiveTenantInput | Prisma.SessionUpsertWithWhereUniqueWithoutActiveTenantInput[]
+  createMany?: Prisma.SessionCreateManyActiveTenantInputEnvelope
+  set?: Prisma.SessionWhereUniqueInput | Prisma.SessionWhereUniqueInput[]
+  disconnect?: Prisma.SessionWhereUniqueInput | Prisma.SessionWhereUniqueInput[]
+  delete?: Prisma.SessionWhereUniqueInput | Prisma.SessionWhereUniqueInput[]
+  connect?: Prisma.SessionWhereUniqueInput | Prisma.SessionWhereUniqueInput[]
+  update?: Prisma.SessionUpdateWithWhereUniqueWithoutActiveTenantInput | Prisma.SessionUpdateWithWhereUniqueWithoutActiveTenantInput[]
+  updateMany?: Prisma.SessionUpdateManyWithWhereWithoutActiveTenantInput | Prisma.SessionUpdateManyWithWhereWithoutActiveTenantInput[]
+  deleteMany?: Prisma.SessionScalarWhereInput | Prisma.SessionScalarWhereInput[]
+}
+
+export type SessionUncheckedUpdateManyWithoutActiveTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.SessionCreateWithoutActiveTenantInput, Prisma.SessionUncheckedCreateWithoutActiveTenantInput> | Prisma.SessionCreateWithoutActiveTenantInput[] | Prisma.SessionUncheckedCreateWithoutActiveTenantInput[]
+  connectOrCreate?: Prisma.SessionCreateOrConnectWithoutActiveTenantInput | Prisma.SessionCreateOrConnectWithoutActiveTenantInput[]
+  upsert?: Prisma.SessionUpsertWithWhereUniqueWithoutActiveTenantInput | Prisma.SessionUpsertWithWhereUniqueWithoutActiveTenantInput[]
+  createMany?: Prisma.SessionCreateManyActiveTenantInputEnvelope
+  set?: Prisma.SessionWhereUniqueInput | Prisma.SessionWhereUniqueInput[]
+  disconnect?: Prisma.SessionWhereUniqueInput | Prisma.SessionWhereUniqueInput[]
+  delete?: Prisma.SessionWhereUniqueInput | Prisma.SessionWhereUniqueInput[]
+  connect?: Prisma.SessionWhereUniqueInput | Prisma.SessionWhereUniqueInput[]
+  update?: Prisma.SessionUpdateWithWhereUniqueWithoutActiveTenantInput | Prisma.SessionUpdateWithWhereUniqueWithoutActiveTenantInput[]
+  updateMany?: Prisma.SessionUpdateManyWithWhereWithoutActiveTenantInput | Prisma.SessionUpdateManyWithWhereWithoutActiveTenantInput[]
+  deleteMany?: Prisma.SessionScalarWhereInput | Prisma.SessionScalarWhereInput[]
+}
+
 export type SessionCreateWithoutUserInput = {
   id: string
   expiresAt: Date | string
@@ -455,7 +499,7 @@ export type SessionCreateWithoutUserInput = {
   updatedAt?: Date | string
   ipAddress?: string | null
   userAgent?: string | null
-  activeOrganizationId?: string | null
+  activeTenant?: Prisma.TenantCreateNestedOneWithoutSessionsInput
 }
 
 export type SessionUncheckedCreateWithoutUserInput = {
@@ -466,7 +510,7 @@ export type SessionUncheckedCreateWithoutUserInput = {
   updatedAt?: Date | string
   ipAddress?: string | null
   userAgent?: string | null
-  activeOrganizationId?: string | null
+  activeTenantId?: string | null
 }
 
 export type SessionCreateOrConnectWithoutUserInput = {
@@ -507,7 +551,55 @@ export type SessionScalarWhereInput = {
   ipAddress?: Prisma.StringNullableFilter<"Session"> | string | null
   userAgent?: Prisma.StringNullableFilter<"Session"> | string | null
   userId?: Prisma.StringFilter<"Session"> | string
-  activeOrganizationId?: Prisma.StringNullableFilter<"Session"> | string | null
+  activeTenantId?: Prisma.StringNullableFilter<"Session"> | string | null
+}
+
+export type SessionCreateWithoutActiveTenantInput = {
+  id: string
+  expiresAt: Date | string
+  token: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ipAddress?: string | null
+  userAgent?: string | null
+  user: Prisma.UserCreateNestedOneWithoutSessionsInput
+}
+
+export type SessionUncheckedCreateWithoutActiveTenantInput = {
+  id: string
+  expiresAt: Date | string
+  token: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ipAddress?: string | null
+  userAgent?: string | null
+  userId: string
+}
+
+export type SessionCreateOrConnectWithoutActiveTenantInput = {
+  where: Prisma.SessionWhereUniqueInput
+  create: Prisma.XOR<Prisma.SessionCreateWithoutActiveTenantInput, Prisma.SessionUncheckedCreateWithoutActiveTenantInput>
+}
+
+export type SessionCreateManyActiveTenantInputEnvelope = {
+  data: Prisma.SessionCreateManyActiveTenantInput | Prisma.SessionCreateManyActiveTenantInput[]
+  skipDuplicates?: boolean
+}
+
+export type SessionUpsertWithWhereUniqueWithoutActiveTenantInput = {
+  where: Prisma.SessionWhereUniqueInput
+  update: Prisma.XOR<Prisma.SessionUpdateWithoutActiveTenantInput, Prisma.SessionUncheckedUpdateWithoutActiveTenantInput>
+  create: Prisma.XOR<Prisma.SessionCreateWithoutActiveTenantInput, Prisma.SessionUncheckedCreateWithoutActiveTenantInput>
+}
+
+export type SessionUpdateWithWhereUniqueWithoutActiveTenantInput = {
+  where: Prisma.SessionWhereUniqueInput
+  data: Prisma.XOR<Prisma.SessionUpdateWithoutActiveTenantInput, Prisma.SessionUncheckedUpdateWithoutActiveTenantInput>
+}
+
+export type SessionUpdateManyWithWhereWithoutActiveTenantInput = {
+  where: Prisma.SessionScalarWhereInput
+  data: Prisma.XOR<Prisma.SessionUpdateManyMutationInput, Prisma.SessionUncheckedUpdateManyWithoutActiveTenantInput>
 }
 
 export type SessionCreateManyUserInput = {
@@ -518,7 +610,7 @@ export type SessionCreateManyUserInput = {
   updatedAt?: Date | string
   ipAddress?: string | null
   userAgent?: string | null
-  activeOrganizationId?: string | null
+  activeTenantId?: string | null
 }
 
 export type SessionUpdateWithoutUserInput = {
@@ -529,7 +621,7 @@ export type SessionUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  activeOrganizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeTenant?: Prisma.TenantUpdateOneWithoutSessionsNestedInput
 }
 
 export type SessionUncheckedUpdateWithoutUserInput = {
@@ -540,7 +632,7 @@ export type SessionUncheckedUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  activeOrganizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type SessionUncheckedUpdateManyWithoutUserInput = {
@@ -551,7 +643,51 @@ export type SessionUncheckedUpdateManyWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  activeOrganizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type SessionCreateManyActiveTenantInput = {
+  id: string
+  expiresAt: Date | string
+  token: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ipAddress?: string | null
+  userAgent?: string | null
+  userId: string
+}
+
+export type SessionUpdateWithoutActiveTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  token?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  user?: Prisma.UserUpdateOneRequiredWithoutSessionsNestedInput
+}
+
+export type SessionUncheckedUpdateWithoutActiveTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  token?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type SessionUncheckedUpdateManyWithoutActiveTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  token?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -565,8 +701,9 @@ export type SessionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   ipAddress?: boolean
   userAgent?: boolean
   userId?: boolean
-  activeOrganizationId?: boolean
+  activeTenantId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  activeTenant?: boolean | Prisma.Session$activeTenantArgs<ExtArgs>
 }, ExtArgs["result"]["session"]>
 
 export type SessionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -578,8 +715,9 @@ export type SessionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   ipAddress?: boolean
   userAgent?: boolean
   userId?: boolean
-  activeOrganizationId?: boolean
+  activeTenantId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  activeTenant?: boolean | Prisma.Session$activeTenantArgs<ExtArgs>
 }, ExtArgs["result"]["session"]>
 
 export type SessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -591,8 +729,9 @@ export type SessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   ipAddress?: boolean
   userAgent?: boolean
   userId?: boolean
-  activeOrganizationId?: boolean
+  activeTenantId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  activeTenant?: boolean | Prisma.Session$activeTenantArgs<ExtArgs>
 }, ExtArgs["result"]["session"]>
 
 export type SessionSelectScalar = {
@@ -604,24 +743,28 @@ export type SessionSelectScalar = {
   ipAddress?: boolean
   userAgent?: boolean
   userId?: boolean
-  activeOrganizationId?: boolean
+  activeTenantId?: boolean
 }
 
-export type SessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "expiresAt" | "token" | "createdAt" | "updatedAt" | "ipAddress" | "userAgent" | "userId" | "activeOrganizationId", ExtArgs["result"]["session"]>
+export type SessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "expiresAt" | "token" | "createdAt" | "updatedAt" | "ipAddress" | "userAgent" | "userId" | "activeTenantId", ExtArgs["result"]["session"]>
 export type SessionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  activeTenant?: boolean | Prisma.Session$activeTenantArgs<ExtArgs>
 }
 export type SessionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  activeTenant?: boolean | Prisma.Session$activeTenantArgs<ExtArgs>
 }
 export type SessionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  activeTenant?: boolean | Prisma.Session$activeTenantArgs<ExtArgs>
 }
 
 export type $SessionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Session"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    activeTenant: Prisma.$TenantPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -632,7 +775,7 @@ export type $SessionPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     ipAddress: string | null
     userAgent: string | null
     userId: string
-    activeOrganizationId: string | null
+    activeTenantId: string | null
   }, ExtArgs["result"]["session"]>
   composites: {}
 }
@@ -1028,6 +1171,7 @@ readonly fields: SessionFieldRefs;
 export interface Prisma__SessionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  activeTenant<T extends Prisma.Session$activeTenantArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Session$activeTenantArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1065,7 +1209,7 @@ export interface SessionFieldRefs {
   readonly ipAddress: Prisma.FieldRef<"Session", 'String'>
   readonly userAgent: Prisma.FieldRef<"Session", 'String'>
   readonly userId: Prisma.FieldRef<"Session", 'String'>
-  readonly activeOrganizationId: Prisma.FieldRef<"Session", 'String'>
+  readonly activeTenantId: Prisma.FieldRef<"Session", 'String'>
 }
     
 
@@ -1459,6 +1603,25 @@ export type SessionDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Sessions to delete.
    */
   limit?: number
+}
+
+/**
+ * Session.activeTenant
+ */
+export type Session$activeTenantArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Tenant
+   */
+  select?: Prisma.TenantSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Tenant
+   */
+  omit?: Prisma.TenantOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TenantInclude<ExtArgs> | null
+  where?: Prisma.TenantWhereInput
 }
 
 /**

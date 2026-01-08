@@ -38,32 +38,27 @@ export type Account = Prisma.AccountModel
  */
 export type Verification = Prisma.VerificationModel
 /**
- * Model Organization
+ * Model Tenant
  * 
  */
-export type Organization = Prisma.OrganizationModel
+export type Tenant = Prisma.TenantModel
 /**
- * Model Member
+ * Model Role
  * 
  */
-export type Member = Prisma.MemberModel
+export type Role = Prisma.RoleModel
 /**
- * Model Invitation
+ * Model UserRole
  * 
  */
-export type Invitation = Prisma.InvitationModel
-/**
- * Model Permission
- * 
- */
-export type Permission = Prisma.PermissionModel
+export type UserRole = Prisma.UserRoleModel
 /**
  * Model RolePermission
  * 
  */
 export type RolePermission = Prisma.RolePermissionModel
 /**
- * Model UserActiveOrganization
+ * Model Permission
  * 
  */
-export type UserActiveOrganization = Prisma.UserActiveOrganizationModel
+export type Permission = Prisma.PermissionModel

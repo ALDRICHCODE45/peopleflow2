@@ -11,7 +11,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@shadcn/card";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getUserTenantsAction, switchTenantAction, getCurrentTenantAction } from "@/app/actions/tenants";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 /**
  * Componente de ejemplo para demostrar Better Auth
@@ -101,45 +104,7 @@ export function AuthExample() {
   }
 
   if (session?.user) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>¡Bienvenido!</CardTitle>
-          <CardDescription>Has iniciado sesión correctamente</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <p className="text-sm text-muted-foreground">Email:</p>
-            <p className="font-medium">{session.user.email}</p>
-          </div>
-          {session.user.name && (
-            <div>
-              <p className="text-sm text-muted-foreground">Nombre:</p>
-              <p className="font-medium">{session.user.name}</p>
-            </div>
-          )}
-          <div>
-            <p className="text-sm text-muted-foreground">ID de Usuario:</p>
-            <p className="font-mono text-xs">{session.user.id}</p>
-          </div>
-          <Button
-            onClick={handleSignOut}
-            disabled={isLoading}
-            className="w-full"
-          >
-            {isLoading ? "Cerrando sesión..." : "Cerrar Sesión"}
-          </Button>
-          <div className="mt-4 p-4 bg-muted rounded-md">
-            <p className="text-xs text-muted-foreground mb-2">
-              Datos de sesión (JSON):
-            </p>
-            <pre className="text-xs overflow-auto">
-              {JSON.stringify(session, null, 2)}
-            </pre>
-          </div>
-        </CardContent>
-      </Card>
-    );
+    return <UserDashboard session={session} onSignOut={handleSignOut} isLoading={isLoading} />;
   }
 
   return (
@@ -216,6 +181,136 @@ export function AuthExample() {
               : "¿No tienes cuenta? Regístrate"}
           </Button>
         </form>
+      </CardContent>
+    </Card>
+  );
+}
+
+function UserDashboard({ 
+  session, 
+  onSignOut, 
+  isLoading 
+}: { 
+  session: { user: { id: string; email: string; name?: string | null } }; 
+  onSignOut: () => void; 
+  isLoading: boolean;
+}) {
+  const [tenants, setTenants] = useState<any[]>([]);
+  const [currentTenant, setCurrentTenant] = useState<any | null>(null);
+  const [isLoadingTenants, setIsLoadingTenants] = useState(true);
+  const [isSwitching, setIsSwitching] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    loadTenants();
+  }, []);
+
+  const loadTenants = async () => {
+    setIsLoadingTenants(true);
+    const tenantsResult = await getUserTenantsAction();
+    const tenantResult = await getCurrentTenantAction();
+    
+    if (!tenantsResult.error && tenantsResult.tenants) {
+      setTenants(tenantsResult.tenants);
+      
+      // Si solo hay un tenant, seleccionarlo automáticamente
+      if (tenantsResult.tenants.length === 1 && !tenantResult.tenant) {
+        await switchTenant(tenantsResult.tenants[0].id);
+      }
+    }
+    
+    if (!tenantResult.error && tenantResult.tenant) {
+      setCurrentTenant(tenantResult.tenant);
+    }
+    
+    setIsLoadingTenants(false);
+  };
+
+  const switchTenant = async (tenantId: string | null) => {
+    setIsSwitching(true);
+    const result = await switchTenantAction(tenantId);
+    if (!result.error) {
+      await loadTenants();
+      router.refresh();
+    }
+    setIsSwitching(false);
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>¡Bienvenido!</CardTitle>
+        <CardDescription>Has iniciado sesión correctamente</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div>
+          <p className="text-sm text-muted-foreground">Email:</p>
+          <p className="font-medium">{session.user.email}</p>
+        </div>
+        {session.user.name && (
+          <div>
+            <p className="text-sm text-muted-foreground">Nombre:</p>
+            <p className="font-medium">{session.user.name}</p>
+          </div>
+        )}
+        
+        {isLoadingTenants ? (
+          <div className="text-sm text-muted-foreground">Cargando tenants...</div>
+        ) : tenants.length > 0 ? (
+          <div className="space-y-2">
+            <Label>Tenant Activo</Label>
+            {currentTenant ? (
+              <div className="p-3 bg-muted rounded-md">
+                <p className="font-medium">{currentTenant.name}</p>
+                <p className="text-xs text-muted-foreground">{currentTenant.slug}</p>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">Ningún tenant seleccionado</p>
+            )}
+            
+            {tenants.length > 1 && (
+              <div className="space-y-2">
+                <Label>Cambiar Tenant</Label>
+                <div className="flex flex-col gap-2">
+                  {tenants.map((tenant) => (
+                    <Button
+                      key={tenant.id}
+                      variant={currentTenant?.id === tenant.id ? "default" : "outline"}
+                      onClick={() => switchTenant(tenant.id)}
+                      disabled={isSwitching || currentTenant?.id === tenant.id}
+                      className="w-full"
+                    >
+                      {tenant.name}
+                      {currentTenant?.id === tenant.id && " (Activo)"}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="p-3 bg-muted rounded-md">
+            <p className="text-sm text-muted-foreground">
+              No perteneces a ningún tenant. Un administrador debe asignarte a uno.
+            </p>
+          </div>
+        )}
+
+        <div className="flex gap-2">
+          <Link href="/dashboard" className="flex-1">
+            <Button className="w-full" variant="default">
+              Ir al Dashboard
+            </Button>
+          </Link>
+          <Button
+            onClick={onSignOut}
+            disabled={isLoading}
+            variant="outline"
+            className="flex-1"
+          >
+            {isLoading ? "Cerrando..." : "Cerrar Sesión"}
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );
