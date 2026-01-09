@@ -5,10 +5,14 @@
  */
 
 export { MiddlewarePermissionsService } from "./middleware-permissions.service";
-export { RoutePermissionGuard, type AccessCheckResult } from "./route-permission-guard";
+export {
+  RoutePermissionGuard,
+  type AccessCheckResult,
+} from "./route-permission-guard";
 export {
   getDefaultRoute,
   shouldRedirectToSuperAdmin,
   getFirstAccessibleRoute,
   DEFAULT_ROUTES,
 } from "./get-default-route";
+export { PermissionService } from "./permission.service";

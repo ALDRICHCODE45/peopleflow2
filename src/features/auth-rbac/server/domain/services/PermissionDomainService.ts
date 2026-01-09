@@ -1,66 +1,61 @@
-import { ROLE_PERMISSIONS } from "../constants/permissions";
+import { PermissionService } from "@/core/lib/permissions/permission.service";
+import { SUPER_ADMIN_PERMISSION_NAME } from "@/core/shared/constants/permissions";
 
 /**
  * Servicio de dominio para Permisos
- * Contiene reglas de negocio puras relacionadas con permisos y roles
+ *
+ * NOTA: Este servicio ahora delega la lógica de verificación al PermissionService centralizado.
+ * Se mantiene para compatibilidad con el código existente que usa este servicio.
+ *
+ * Para nuevo código, usar directamente PermissionService de @/core/lib/permissions/permission.service
  */
 
 export class PermissionDomainService {
   /**
-   * Verifica si un rol tiene un permiso específico
-   * @param roleName - Nombre del rol
+   * Verifica si un array de permisos incluye el permiso especificado
+   * @param userPermissions - Array de permisos del usuario
    * @param permission - Permiso a verificar
-   * @returns true si el rol tiene el permiso, false en caso contrario
+   * @returns true si tiene el permiso
    */
-  hasPermission(roleName: string, permission: string): boolean {
-    // Superadmin tiene acceso total
-    if (roleName === "superadmin") {
-      return true;
-    }
-
-    const rolePermissions = ROLE_PERMISSIONS[roleName];
-
-    if (!rolePermissions) {
-      return false;
-    }
-
-    return rolePermissions.includes(permission);
+  hasPermission(userPermissions: string[], permission: string): boolean {
+    return PermissionService.hasPermission(userPermissions, permission);
   }
 
   /**
-   * Obtiene todos los permisos de un rol
+   * Verifica si un rol es superadmin basado en el nombre del rol
    * @param roleName - Nombre del rol
-   * @returns Array de permisos del rol, o array vacío si el rol no existe
-   */
-  getRolePermissions(roleName: string): readonly string[] {
-    const rolePermissions = ROLE_PERMISSIONS[roleName];
-    return rolePermissions || [];
-  }
-
-  /**
-   * Verifica si un rol es superadmin
-   * @param roleName - Nombre del rol
-   * @returns true si el rol es superadmin, false en caso contrario
+   * @returns true si el rol es "administrador" (tiene super:admin)
    */
   isSuperAdminRole(roleName: string): boolean {
-    return roleName === "superadmin";
+    // El rol "administrador" tiene asignado el permiso super:admin
+    return roleName === "administrador";
   }
 
   /**
-   * Valida si un nombre de rol es válido
+   * Verifica si los permisos incluyen super:admin
+   * @param userPermissions - Array de permisos del usuario
+   * @returns true si tiene super:admin
    */
-  isValidRole(roleName: string): boolean {
-    return roleName in ROLE_PERMISSIONS;
+  isSuperAdmin(userPermissions: string[]): boolean {
+    return PermissionService.isSuperAdmin(userPermissions);
   }
 
   /**
    * Parsea un permiso en recurso y acción
+   * @param permission - Permiso en formato "recurso:acción"
+   * @returns Objeto con recurso y acción, o null si el formato es inválido
    */
   parsePermission(permission: string): { resource: string; action: string } | null {
-    const parts = permission.split(":");
-    if (parts.length !== 2) {
-      return null;
-    }
-    return { resource: parts[0], action: parts[1] };
+    return PermissionService.parsePermission(permission);
+  }
+
+  /**
+   * Verifica si el usuario tiene acceso a un recurso específico
+   * @param userPermissions - Array de permisos del usuario
+   * @param resource - Nombre del recurso
+   * @returns true si tiene algún permiso sobre el recurso
+   */
+  hasResourceAccess(userPermissions: string[], resource: string): boolean {
+    return PermissionService.hasResourceAccess(userPermissions, resource);
   }
 }

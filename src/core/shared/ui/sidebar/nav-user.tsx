@@ -1,10 +1,12 @@
 "use client";
-import { AccessIcon } from "@hugeicons/core-free-icons";
+import { AccessIcon, Grid } from "@hugeicons/core-free-icons";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@shadcn/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -16,10 +18,13 @@ import {
   useSidebar,
 } from "@shadcn/sidebar";
 import { useAuth } from "@/core/shared/hooks/use-auth";
-import { Button } from "@shadcn/button";
+import { Button, buttonVariants } from "@shadcn/button";
 import { ConfirmDialog } from "../../components/confirmDialog";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useTheme } from "next-themes";
+import { PermissionGuard } from "../../components/PermissionGuard";
+import { PermissionActions } from "../../constants/permissions";
+import Link from "next/link";
 
 export function NavUser({
   user,
@@ -84,22 +89,41 @@ export function NavUser({
                 </div>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem asChild>
+                <ConfirmDialog
+                  title="Cerrar Sesión"
+                  description="¿Estás seguro de que deseas salir de la aplicación? Tendrás que iniciar sesión nuevamente."
+                  action={handleLogout}
+                  trigger={
+                    <Button
+                      variant="destructive"
+                      className="w-full justify-start"
+                    >
+                      <HugeiconsIcon icon={AccessIcon} strokeWidth={2} />
+                      Salir
+                    </Button>
+                  }
+                  confirmText="Sí, salir"
+                  cancelText="Cancelar"
+                  variant="destructive"
+                />
+              </DropdownMenuItem>
 
-            <ConfirmDialog
-              title="Cerrar Sesión"
-              description="¿Estás seguro de que deseas salir de la aplicación? Tendrás que iniciar sesión nuevamente."
-              action={handleLogout}
-              trigger={
-                <Button variant="destructive" className="w-full justify-start">
-                  <HugeiconsIcon icon={AccessIcon} strokeWidth={2} />
-                  Salir
-                </Button>
-              }
-              confirmText="Sí, salir"
-              cancelText="Cancelar"
-              variant="destructive"
-            />
+              <PermissionGuard permissions={[PermissionActions.super.admin]}>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href={"/super-admin"}
+                    className={`${buttonVariants({ variant: "secondary" })} w-full flex justify-start`}
+                  >
+                    <HugeiconsIcon icon={Grid} strokeWidth={2} />
+                    Super Dashboard
+                  </Link>
+                </DropdownMenuItem>
+              </PermissionGuard>
+            </DropdownMenuGroup>
+
+            <DropdownMenuSeparator />
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

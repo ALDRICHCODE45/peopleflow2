@@ -19,9 +19,11 @@ import {
 } from "@shadcn/select";
 import { Input } from "@shadcn/input";
 import { useRouter } from "next/navigation";
-import { assignUserToTenantAction } from "../../server/presentation/actions/user.actions";
+import {
+  assignUserToTenantAction,
+  getRolesAction,
+} from "../../server/presentation/actions/user.actions";
 import { getUserTenantsAction } from "@/features/tenants/server/presentation/actions/tenant.actions";
-import { ALL_ROLES } from "../../server/domain/constants/permissions";
 
 interface Tenant {
   id: string;
@@ -29,11 +31,17 @@ interface Tenant {
   slug: string;
 }
 
+interface Role {
+  id: string;
+  name: string;
+}
+
 export function AssignUserToTenantForm() {
   const [userId, setUserId] = useState("");
   const [tenantId, setTenantId] = useState("");
   const [roleName, setRoleName] = useState("");
   const [tenants, setTenants] = useState<Tenant[]>([]);
+  const [roles, setRoles] = useState<Role[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -47,10 +55,18 @@ export function AssignUserToTenantForm() {
   const loadData = async () => {
     setIsLoadingData(true);
     try {
-      // Cargar tenants
-      const tenantsResult = await getUserTenantsAction();
+      // Cargar tenants y roles en paralelo
+      const [tenantsResult, rolesResult] = await Promise.all([
+        getUserTenantsAction(),
+        getRolesAction(),
+      ]);
+
       if (!tenantsResult.error && tenantsResult.tenants) {
         setTenants(tenantsResult.tenants);
+      }
+
+      if (!rolesResult.error && rolesResult.roles) {
+        setRoles(rolesResult.roles);
       }
     } catch (err) {
       console.error("Error loading data:", err);
@@ -150,9 +166,9 @@ export function AssignUserToTenantForm() {
                 <SelectValue placeholder="Selecciona un rol" />
               </SelectTrigger>
               <SelectContent>
-                {ALL_ROLES.map((role) => (
-                  <SelectItem key={role} value={role}>
-                    {role}
+                {roles.map((role) => (
+                  <SelectItem key={role.id} value={role.name}>
+                    {role.name}
                   </SelectItem>
                 ))}
               </SelectContent>

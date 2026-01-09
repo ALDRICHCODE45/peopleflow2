@@ -179,3 +179,47 @@ export async function isSuperAdminAction(): Promise<boolean> {
     return false;
   }
 }
+
+/**
+ * Tipo para el resultado de getRolesAction
+ */
+export interface GetRolesResult {
+  error: string | null;
+  roles: Array<{ id: string; name: string }>;
+}
+
+/**
+ * Obtiene todos los roles disponibles en el sistema
+ * Solo accesible para superadmins
+ */
+export async function getRolesAction(): Promise<GetRolesResult> {
+  try {
+    const headersList = await headers();
+    const session = await auth.api.getSession({ headers: headersList });
+
+    if (!session?.user) {
+      return { error: "No autenticado", roles: [] };
+    }
+
+    // Verificar que sea superadmin
+    const isSuperAdminUseCase = new IsSuperAdminUseCase(prismaUserRoleRepository);
+    const superAdminResult = await isSuperAdminUseCase.execute({
+      userId: session.user.id,
+    });
+
+    if (!superAdminResult.isSuperAdmin) {
+      return { error: "No tienes permisos para ver los roles", roles: [] };
+    }
+
+    // Obtener roles del repositorio
+    const roles = await prismaRoleRepository.findAll();
+
+    return {
+      error: null,
+      roles: roles.map((role) => ({ id: role.id, name: role.name })),
+    };
+  } catch (error) {
+    console.error("Error getting roles:", error);
+    return { error: "Error al obtener roles", roles: [] };
+  }
+}

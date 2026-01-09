@@ -1,8 +1,11 @@
-import { IRoleRepository } from "../../domain/interfaces/IRoleRepository";
-import { PermissionDomainService } from "../../domain/services/PermissionDomainService";
+import { IUserRoleRepository } from "../../domain/interfaces/IUserRoleRepository";
+import { PermissionService } from "@/core/lib/permissions/permission.service";
 
 /**
  * Caso de uso: Verificar si un usuario tiene un permiso específico
+ *
+ * Este caso de uso obtiene los permisos del usuario desde la BD
+ * y utiliza el PermissionService centralizado para verificar el permiso.
  */
 
 export interface CheckPermissionInput {
@@ -17,29 +20,26 @@ export interface CheckPermissionOutput {
 }
 
 export class CheckPermissionUseCase {
-  private readonly permissionService: PermissionDomainService;
-
-  constructor(private readonly roleRepository: IRoleRepository) {
-    this.permissionService = new PermissionDomainService();
-  }
+  constructor(private readonly userRoleRepository: IUserRoleRepository) {}
 
   async execute(input: CheckPermissionInput): Promise<CheckPermissionOutput> {
     try {
-      // Obtener el rol del usuario en el tenant (o global si es superadmin)
-      const role = await this.roleRepository.findUserRoleInTenant(
+      // Obtener los permisos del usuario en el tenant
+      const userPermissions = await this.userRoleRepository.getUserPermissions(
         input.userId,
         input.tenantId
       );
 
-      if (!role) {
+      // Si no tiene permisos, no tiene acceso
+      if (userPermissions.length === 0) {
         return {
           hasPermission: false,
         };
       }
 
-      // Verificar si el rol tiene el permiso
-      const hasPermission = this.permissionService.hasPermission(
-        role.name,
+      // Verificar si tiene el permiso usando el servicio centralizado
+      const hasPermission = PermissionService.hasPermission(
+        userPermissions,
         input.permission
       );
 

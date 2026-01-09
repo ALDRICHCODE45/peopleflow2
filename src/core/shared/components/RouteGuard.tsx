@@ -63,11 +63,14 @@ export function RouteGuard({ children, fallback }: RouteGuardProps) {
         setHasAccess(true);
       } catch (error) {
         console.error("Error checking route access:", error);
-        // En caso de error, mantener el estado actual si es silent
-        // Si es inicial, permitir acceso para evitar bloqueos
+        // FAIL-CLOSED: En caso de error, denegar acceso por seguridad
+        // Esto previene acceso no autorizado si hay problemas de red o servidor
         if (!silent) {
-          setHasAccess(true);
+          setHasAccess(false);
+          router.replace("/access-denied?error=verification_failed");
         }
+        // Si es silent (verificación periódica), mantener estado actual
+        // para no interrumpir al usuario por errores temporales
       } finally {
         isCheckingRef.current = false;
         if (!silent) {

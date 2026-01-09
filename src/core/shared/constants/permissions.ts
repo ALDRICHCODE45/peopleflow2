@@ -457,3 +457,122 @@ export function getPermissionByName(
  * Constante para el permiso de super admin
  */
 export const SUPER_ADMIN_PERMISSION_NAME = "super:admin";
+
+/**
+ * Objeto para acceso type-safe a permisos
+ * Permite autocompletado en el IDE y validación en tiempo de compilación
+ *
+ * @example
+ * ```tsx
+ * import { PermissionActions } from "@/core/shared/constants/permissions";
+ *
+ * <PermissionGuard
+ *   permissions={[
+ *     PermissionActions.usuarios.acceder,
+ *     PermissionActions.usuarios.gestionar,
+ *   ]}
+ * >
+ *   <DataTable columns={columns} data={data} />
+ * </PermissionGuard>
+ * ```
+ */
+export const PermissionActions = {
+  // Módulo: Administración
+  usuarios: {
+    acceder: "usuarios:acceder",
+    crear: "usuarios:crear",
+    editar: "usuarios:editar",
+    eliminar: "usuarios:eliminar",
+    asignarRoles: "usuarios:asignar-roles",
+    gestionar: "usuarios:gestionar",
+  },
+  roles: {
+    acceder: "roles:acceder",
+    crear: "roles:crear",
+    editar: "roles:editar",
+    eliminar: "roles:eliminar",
+    asignarPermisos: "roles:asignar-permisos",
+    gestionar: "roles:gestionar",
+  },
+
+  // Módulo: Finanzas
+  ingresos: {
+    acceder: "ingresos:acceder",
+    crear: "ingresos:crear",
+    editar: "ingresos:editar",
+    eliminar: "ingresos:eliminar",
+    gestionar: "ingresos:gestionar",
+  },
+  egresos: {
+    acceder: "egresos:acceder",
+    crear: "egresos:crear",
+    editar: "egresos:editar",
+    eliminar: "egresos:eliminar",
+    gestionar: "egresos:gestionar",
+  },
+
+  // Módulo: Reclutamiento
+  vacantes: {
+    acceder: "vacantes:acceder",
+    crear: "vacantes:crear",
+    editar: "vacantes:editar",
+    eliminar: "vacantes:eliminar",
+    gestionar: "vacantes:gestionar",
+  },
+  candidatos: {
+    acceder: "candidatos:acceder",
+    crear: "candidatos:crear",
+    editar: "candidatos:editar",
+    eliminar: "candidatos:eliminar",
+    gestionar: "candidatos:gestionar",
+  },
+  reportesReclutamiento: {
+    acceder: "reportes-reclutamiento:acceder",
+    exportar: "reportes-reclutamiento:exportar",
+    gestionar: "reportes-reclutamiento:gestionar",
+  },
+
+  // Módulo: Sistema
+  configuracion: {
+    acceder: "configuracion:acceder",
+    editar: "configuracion:editar",
+    gestionar: "configuracion:gestionar",
+  },
+  actividad: {
+    acceder: "actividad:acceder",
+    exportar: "actividad:exportar",
+    gestionar: "actividad:gestionar",
+  },
+
+  // Módulo: Ventas
+  leads: {
+    acceder: "leads:acceder",
+    crear: "leads:crear",
+    editar: "leads:editar",
+    eliminar: "leads:eliminar",
+    gestionar: "leads:gestionar",
+  },
+  reportesVentas: {
+    acceder: "reportes-ventas:acceder",
+    exportar: "reportes-ventas:exportar",
+    gestionar: "reportes-ventas:gestionar",
+  },
+
+  // Super Admin
+  super: {
+    admin: "super:admin",
+  },
+} as const;
+
+/**
+ * Tipo helper para extraer valores de un objeto anidado
+ */
+type NestedValues<T> = T extends object
+  ? { [K in keyof T]: T[K] extends object ? NestedValues<T[K]> : T[K] }[keyof T]
+  : T;
+
+/**
+ * Tipo para todos los permisos válidos del sistema
+ * Útil para tipar parámetros que aceptan permisos
+ */
+export type PermissionName = NestedValues<typeof PermissionActions>;
