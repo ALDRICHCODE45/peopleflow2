@@ -19,6 +19,7 @@ import { useAuth } from "@/core/shared/hooks/use-auth";
 import { Button } from "@shadcn/button";
 import { ConfirmDialog } from "../../components/confirmDialog";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { useTheme } from "next-themes";
 
 export function NavUser({
   user,
@@ -31,10 +32,14 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar();
   const { logout } = useAuth();
+  const { setTheme, theme } = useTheme();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    setTheme("light");
+    await logout();
+    console.log({ theme });
   };
+
   const twoFirstNameLetters = user.name.slice(0, 2);
 
   return (

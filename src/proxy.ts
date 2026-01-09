@@ -73,16 +73,23 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // 2. Rutas públicas - permitir acceso sin autenticación
+  // 2. Verificar si hay token de sesión (autenticación básica)
+  const sessionToken = getSessionToken(request);
+  const isLoggedIn = !!sessionToken;
+
+  // 3. Si está logueado y accede a sign-in, redirigir a la raíz
+  //    (la página raíz se encargará de redirigir según permisos)
+  if (isLoggedIn && pathname === "/sign-in") {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  // 4. Rutas públicas - permitir acceso sin autenticación
+  //    (solo si no está logueado, porque si está logueado ya se manejó arriba)
   if (isPublicPath(pathname)) {
     return NextResponse.next();
   }
 
-  // 3. Verificar si hay token de sesión (autenticación básica)
-  const sessionToken = getSessionToken(request);
-  const isLoggedIn = !!sessionToken;
-
-  // 4. Si no está logueado y no es ruta pública, redirigir a sign-in
+  // 5. Si no está logueado y no es ruta pública, redirigir a sign-in
   if (!isLoggedIn) {
     // Si es la ruta raíz, redirigir a sign-in
     if (pathname === "/") {
@@ -90,12 +97,6 @@ export function proxy(request: NextRequest) {
     }
     // Si es cualquier otra ruta protegida, redirigir a sign-in
     return NextResponse.redirect(new URL("/sign-in", request.url));
-  }
-
-  // 5. Si está logueado y accede a sign-in, redirigir a la raíz
-  //    (la página raíz se encargará de redirigir según permisos)
-  if (isLoggedIn && pathname === "/sign-in") {
-    return NextResponse.redirect(new URL("/", request.url));
   }
 
   // 6. Para rutas del flujo de autenticación, permitir si está logueado

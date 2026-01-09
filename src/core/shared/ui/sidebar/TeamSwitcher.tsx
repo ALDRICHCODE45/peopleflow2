@@ -27,6 +27,7 @@ import {
 
 // Server actions
 import { getDefaultRouteForTenantAction } from "@/features/auth-rbac/server/presentation/actions/permission.actions";
+import { useAuth } from "../../hooks";
 
 export function TeamSwitcher() {
   const { isMobile } = useSidebar();

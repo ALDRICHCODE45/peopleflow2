@@ -3,7 +3,6 @@
 import { useAuth } from "@core/shared/hooks/use-auth";
 import { Button } from "@shadcn/button";
 import { Input } from "@shadcn/input";
-import { Label } from "@shadcn/label";
 import {
   Card,
   CardContent,
@@ -11,47 +10,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@shadcn/card";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import Image from "next/image";
+import { useSignInForm } from "../hooks/useSignInForm";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/core/shared/ui/shadcn/field";
+import {
+  PasswordInput,
+  PasswordInputAdornmentToggle,
+  PasswordInputInput,
+} from "@/core/shared/ui/shadcn/password-input";
 
 export const SignInPage = () => {
-  const { user, isAuthenticated, isLoading, isPending, login } = useAuth();
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  // Redirigir si ya está autenticado
-  useEffect(() => {
-    if (isAuthenticated && !isPending) {
-      router.push("/"); // Redirige a raíz, que determina la ruta según permisos
-    }
-  }, [isAuthenticated, isPending, router]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setIsSubmitting(true);
-
-    try {
-      const result = await login(email, password);
-
-      if (!result.success) {
-        setError(result.error || "Error al iniciar sesión");
-      } else {
-        // La redirección se maneja en el useEffect
-        setEmail("");
-        setPassword("");
-      }
-    } catch (err) {
-      setError("Ocurrió un error inesperado");
-      console.error(err);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const { isPending } = useAuth();
+  const form = useSignInForm();
 
   if (isPending) {
     return (
@@ -64,72 +39,116 @@ export const SignInPage = () => {
     );
   }
 
-  if (isAuthenticated && user) {
-    return null; // El useEffect manejará la redirección
-  }
-
   return (
-    <Card className="border-0 shadow-none">
-      <CardHeader className="space-y-1 pb-4">
-        <CardTitle className="text-2xl font-bold">
-          Bienvenido de nuevo
-        </CardTitle>
-        <CardDescription>
-          Ingresa tus credenciales para acceder a tu cuenta
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">Correo electrónico</Label>
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="tu@email.com"
-              required
-              autoComplete="email"
-              disabled={isSubmitting}
-              className="h-11"
+    <div className="flex items-center justify-center min-h-screen p-4">
+      <Card className="w-full max-w-sm rounded-4xl">
+        <CardContent className="p-6 pt-10">
+          <div className="flex flex-col items-center space-y-6 w-full">
+            <Image
+              src="/logos/logo-principal.webp"
+              alt="PeopleFlow Logo"
+              width={120}
+              height={20}
+              className="object-contain"
+              priority
             />
-          </div>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="password">Contraseña</Label>
-              <Link
-                href="/forgot-password"
-                className="text-sm text-primary hover:underline"
-              >
-                ¿Olvidaste tu contraseña?
-              </Link>
+
+            <div className="space-y-2 text-center">
+              <h1 className="text-3xl font-semibold text-foreground">
+                Hola, de Nuevo!
+              </h1>
+              <p className="text-muted-foreground text-sm">
+                Ingresa tus credenciales,{" "}
+                <span className="text-foreground hover:underline">
+                  a continuacion.
+                </span>
+              </p>
             </div>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-              autoComplete="current-password"
-              disabled={isSubmitting}
-              className="h-11"
-            />
+
+            <form
+              id="sign-in-form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                form.handleSubmit();
+              }}
+              className="w-full"
+            >
+              <FieldGroup className="w-full">
+                <form.Field name="email">
+                  {(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched && !field.state.meta.isValid;
+                    return (
+                      <Field data-invalid={isInvalid} className="w-full">
+                        <Input
+                          id={field.name}
+                          name={field.name}
+                          value={field.state.value}
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          aria-invalid={isInvalid}
+                          placeholder="Correo electrónico"
+                          autoComplete="off"
+                          className="w-full rounded-xl"
+                        />
+                        {isInvalid && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    );
+                  }}
+                </form.Field>
+
+                <form.Field name="password">
+                  {(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched && !field.state.meta.isValid;
+                    return (
+                      <Field data-invalid={isInvalid} className="w-full">
+                        <PasswordInput className="rounded-xl">
+                          <PasswordInputInput
+                            placeholder="Contraseña"
+                            id={field.name}
+                            name={field.name}
+                            value={field.state.value}
+                            onBlur={field.handleBlur}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            aria-invalid={isInvalid}
+                            autoComplete="off"
+                          />
+
+                          <PasswordInputAdornmentToggle />
+                        </PasswordInput>
+                        {isInvalid && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    );
+                  }}
+                </form.Field>
+              </FieldGroup>
+
+              <div className="w-full mt-6">
+                <Button type="submit" className="w-full rounded-xl" size="lg">
+                  Sign In
+                </Button>
+              </div>
+            </form>
+
+            <p className="text-center text-xs w-full text-muted-foreground mt-2">
+              You acknowledge that you read, and agree, to our{" "}
+              <a href="#" className="underline hover:text-foreground">
+                Terms of Service
+              </a>{" "}
+              and our{" "}
+              <a href="#" className="underline hover:text-foreground">
+                Privacy Policy
+              </a>
+              .
+            </p>
           </div>
-          {error && (
-            <div className="p-3 bg-destructive/10 text-destructive text-sm rounded-md border border-destructive/20">
-              {error}
-            </div>
-          )}
-          <Button
-            type="submit"
-            disabled={isSubmitting || isLoading}
-            className="w-full h-11"
-          >
-            {isSubmitting ? "Iniciando sesión..." : "Iniciar sesión"}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   );
 };

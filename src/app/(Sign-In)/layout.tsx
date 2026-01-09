@@ -10,10 +10,12 @@ export default function SignInLayout({
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-4 sm:p-6 md:p-10">
         {/* Logo en la parte superior del panel izquierdo */}
+
+        {/*
         <div className="flex justify-center lg:justify-start mb-4">
-          <div className="relative w-48 h-16 sm:w-48 sm:h-16">
+          <div className="relative w-12 h-16 sm:w-12 sm:h-16">
             <Image
-              src="/logos/logo-principal.webp"
+              src="/logos/locopequeno2.webp"
               alt="PeopleFlow Logo"
               fill
               className="object-contain"
@@ -21,6 +23,8 @@ export default function SignInLayout({
             />
           </div>
         </div>
+            
+          */}
 
         {/* Contenido del formulario centrado */}
         <div className="flex flex-1 items-center justify-center">

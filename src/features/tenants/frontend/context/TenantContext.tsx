@@ -31,7 +31,7 @@ interface TenantProviderProps {
 
 /**
  * Intervalo para verificación silenciosa de cambios (2 minutos)
- * Solo verifica si hay cambios, no muestra loading
+ * Solo verifica si hay cambios
  */
 const SILENT_CHECK_INTERVAL = 120000; // 2 minutos
 

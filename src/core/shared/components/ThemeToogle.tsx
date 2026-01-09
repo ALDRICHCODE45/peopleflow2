@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Moon, Sun } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { flushSync } from "react-dom";
+import { useTheme } from "next-themes";
 import { cn } from "@/core/lib/utils";
 
 interface AnimatedThemeTogglerProps extends React.ComponentPropsWithoutRef<"button"> {
@@ -15,36 +16,103 @@ export const ThemeToogle = ({
   duration = 400,
   ...props
 }: AnimatedThemeTogglerProps) => {
+  const { theme, setTheme, resolvedTheme } = useTheme();
   const [isDark, setIsDark] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const [mounted, setMounted] = useState(false);
+
+  // Detectar si estamos usando next-themes o no
+  const hasThemeProvider = theme !== undefined;
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
     const updateTheme = () => {
-      setIsDark(document.documentElement.classList.contains("dark"));
+      if (hasThemeProvider) {
+        // Si usamos next-themes, usar resolvedTheme
+        setIsDark(resolvedTheme === "dark");
+      } else {
+        // Si no hay ThemeProvider, leer directamente del DOM
+        setIsDark(document.documentElement.classList.contains("dark"));
+      }
     };
 
     updateTheme();
 
-    const observer = new MutationObserver(updateTheme);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-
-    return () => observer.disconnect();
-  }, []);
+    if (hasThemeProvider) {
+      // Con next-themes, escuchar cambios del resolvedTheme
+      const observer = new MutationObserver(updateTheme);
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
+      return () => observer.disconnect();
+    } else {
+      // Sin ThemeProvider, usar MutationObserver directamente
+      const observer = new MutationObserver(updateTheme);
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
+      return () => observer.disconnect();
+    }
+  }, [mounted, hasThemeProvider, resolvedTheme]);
 
   const toggleTheme = useCallback(async () => {
-    if (!buttonRef.current) return;
+    if (!buttonRef.current || !mounted) return;
 
-    await document.startViewTransition(() => {
-      flushSync(() => {
-        const newTheme = !isDark;
+    const newTheme = !isDark;
+
+    // Verificar si startViewTransition está disponible
+    // Usar type assertion para evitar conflictos con tipos existentes
+    const doc = document as typeof document & {
+      startViewTransition?: (callback?: () => void | Promise<void>) => {
+        ready: Promise<void>;
+        updateCallbackDone: Promise<void>;
+        finished: Promise<void>;
+        skipTransition: () => void;
+      };
+    };
+
+    const hasViewTransition = typeof doc.startViewTransition === "function";
+
+    if (hasViewTransition && doc.startViewTransition) {
+      const transition = doc.startViewTransition(() => {
+        flushSync(() => {
+          if (hasThemeProvider) {
+            // Actualización Manual Síncrona para la Animación
+            if (newTheme) {
+              document.documentElement.classList.add("dark");
+            } else {
+              document.documentElement.classList.remove("dark");
+            }
+
+            // Usar setTheme de next-themes
+            setTheme(newTheme ? "dark" : "light");
+          } else {
+            // Manipular DOM directamente si no hay ThemeProvider
+            setIsDark(newTheme);
+            document.documentElement.classList.toggle("dark");
+            localStorage.setItem("theme", newTheme ? "dark" : "light");
+          }
+        });
+      });
+      await transition.ready;
+    } else {
+      // Fallback si startViewTransition no está disponible
+      if (hasThemeProvider) {
+        setTheme(newTheme ? "dark" : "light");
+      } else {
         setIsDark(newTheme);
         document.documentElement.classList.toggle("dark");
         localStorage.setItem("theme", newTheme ? "dark" : "light");
-      });
-    }).ready;
+      }
+      return;
+    }
 
     const { top, left, width, height } =
       buttonRef.current.getBoundingClientRect();
@@ -68,7 +136,17 @@ export const ThemeToogle = ({
         pseudoElement: "::view-transition-new(root)",
       }
     );
-  }, [isDark, duration]);
+  }, [isDark, duration, mounted, hasThemeProvider, setTheme]);
+
+  if (!mounted) {
+    // Renderizar placeholder mientras se monta para evitar hydration mismatch
+    return (
+      <button ref={buttonRef} className={cn(className)} {...props} disabled>
+        <HugeiconsIcon icon={Moon} />
+        <span className="sr-only">Toggle theme</span>
+      </button>
+    );
+  }
 
   return (
     <button

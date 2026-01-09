@@ -30,7 +30,9 @@ export class AssignUserToTenantUseCase {
     private readonly userRoleRepository: IUserRoleRepository
   ) {}
 
-  async execute(input: AssignUserToTenantInput): Promise<AssignUserToTenantOutput> {
+  async execute(
+    input: AssignUserToTenantInput
+  ): Promise<AssignUserToTenantOutput> {
     try {
       // Obtener el rol
       const role = await this.roleRepository.findByName(input.roleName);

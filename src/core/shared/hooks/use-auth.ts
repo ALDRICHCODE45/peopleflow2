@@ -113,10 +113,6 @@ export function useAuth() {
         await authClient.signOut();
         await refetch();
 
-        // Redirigir después del logout
-        router.push(redirectTo);
-        router.refresh();
-
         return { success: true };
       } catch (error) {
         console.error("Error en logout:", error);

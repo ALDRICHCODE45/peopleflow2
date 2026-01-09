@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Outfit } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/core/shared/components/Providers/ThemeProvider";
 import { Toaster } from "sonner";
 import {
   CheckmarkCircle02Icon,
@@ -35,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system">
+    <>
       <Toaster
         position="top-center"
         closeButton
@@ -66,6 +65,6 @@ export default function RootLayout({
           {children}
         </body>
       </html>
-    </ThemeProvider>
+    </>
   );
 }
