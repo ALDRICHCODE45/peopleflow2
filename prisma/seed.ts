@@ -2,6 +2,9 @@ import "dotenv/config";
 import { PrismaClient } from "../src/core/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
+import { seedPermissions, seedRoles, seedTenants } from "./seedPermissions";
+import { auth } from "../src/core/lib/auth";
+
 const { Pool } = pg;
 
 if (!process.env.DATABASE_URL) {
@@ -23,205 +26,211 @@ const pool = new Pool({
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
-async function main() {
-  console.log("🌱 Iniciando seed...");
-
-  // Limpiar datos existentes (opcional, comentar si no quieres eliminar datos)
-  console.log("🧹 Limpiando datos existentes...");
-  await prisma.userRole.deleteMany();
-  await prisma.rolePermission.deleteMany();
-  //await prisma.user.deleteMany();
-  await prisma.tenant.deleteMany();
-  await prisma.role.deleteMany();
-  await prisma.permission.deleteMany();
-
-  // Crear Permisos
-  console.log("📋 Creando permisos...");
-  const permFacturasAcceder = await prisma.permission.create({
-    data: {
-      name: "facturas:acceder",
-      resource: "facturas",
-      action: "acceder",
-      description: "Permite acceder a la sección de facturas",
-    },
+/**
+ * Crea un usuario de prueba si no existe usando Better Auth API
+ * Better Auth se encarga del hashing de contraseñas automáticamente
+ */
+async function createTestUser(
+  email: string,
+  name: string,
+  password: string
+): Promise<{ id: string; email: string; name: string | null } | null> {
+  // Verificar si el usuario ya existe
+  const existingUser = await prisma.user.findUnique({
+    where: { email },
   });
 
-  const permFacturasCrear = await prisma.permission.create({
-    data: {
-      name: "facturas:crear",
-      resource: "facturas",
-      action: "crear",
-      description: "Permite crear nuevas facturas",
-    },
-  });
-
-  const permColaboradoresAcceder = await prisma.permission.create({
-    data: {
-      name: "colaboradores:acceder",
-      resource: "colaboradores",
-      action: "acceder",
-      description: "Permite acceder a la sección de colaboradores",
-    },
-  });
-
-  const permColaboradoresCrear = await prisma.permission.create({
-    data: {
-      name: "colaboradores:crear",
-      resource: "colaboradores",
-      action: "crear",
-      description: "Permite crear nuevos colaboradores",
-    },
-  });
-
-  const permColaboradoresEditar = await prisma.permission.create({
-    data: {
-      name: "colaboradores:editar",
-      resource: "colaboradores",
-      action: "editar",
-      description: "Permite editar colaboradores existentes",
-    },
-  });
-
-  // Crear Roles
-  console.log("👥 Creando roles...");
-  const roleCapturador = await prisma.role.create({
-    data: {
-      name: "capturador",
-    },
-  });
-
-  const roleGerente = await prisma.role.create({
-    data: {
-      name: "gerente",
-    },
-  });
-
-  const roleSuperadmin = await prisma.role.create({
-    data: {
-      name: "superadmin",
-    },
-  });
-
-  // Asignar permisos a roles
-  console.log("🔗 Asignando permisos a roles...");
-
-  // Capturador: facturas:acceder, facturas:crear
-  await prisma.rolePermission.createMany({
-    data: [
-      { roleId: roleCapturador.id, permissionId: permFacturasAcceder.id },
-      { roleId: roleCapturador.id, permissionId: permFacturasCrear.id },
-    ],
-  });
-
-  // Gerente: colaboradores:acceder, colaboradores:crear, colaboradores:editar
-  await prisma.rolePermission.createMany({
-    data: [
-      { roleId: roleGerente.id, permissionId: permColaboradoresAcceder.id },
-      { roleId: roleGerente.id, permissionId: permColaboradoresCrear.id },
-      { roleId: roleGerente.id, permissionId: permColaboradoresEditar.id },
-    ],
-  });
-
-  // Superadmin: todos los permisos (se maneja en código con '*')
-  // No asignamos permisos específicos, se maneja en el código de permisos
-
-  // Crear Tenants
-  console.log("🏢 Creando tenants...");
-  const tenantEmpresaA = await prisma.tenant.create({
-    data: {
-      name: "Empresa A",
-      slug: "empresa-a",
-    },
-  });
-
-  const tenantEmpresaB = await prisma.tenant.create({
-    data: {
-      name: "Empresa B",
-      slug: "empresa-b",
-    },
-  });
-
-  // NOTA: Los usuarios deben crearse manualmente usando Better Auth (signup)
-  // Este seed asume que los usuarios ya existen con estos emails:
-  // - capturador@ejemplo.com
-  // - gerente@ejemplo.com
-  // - superadmin@ejemplo.com
-
-  console.log("👤 Buscando usuarios...");
-
-  // Buscar usuarios existentes o crear IDs de ejemplo
-  let user1 = await prisma.user.findUnique({
-    where: { email: "capturador@ejemplo.com" },
-  });
-
-  let user2 = await prisma.user.findUnique({
-    where: { email: "gerente@ejemplo.com" },
-  });
-
-  let user3 = await prisma.user.findUnique({
-    where: { email: "superadmin@ejemplo.com" },
-  });
-
-  if (!user1 || !user2 || !user3) {
-    console.log(
-      "⚠️  Los usuarios no existen. Por favor, créalos primero usando la interfaz de registro."
-    );
-    console.log("   Usuarios necesarios:");
-    console.log("   - capturador@ejemplo.com");
-    console.log("   - gerente@ejemplo.com");
-    console.log("   - superadmin@ejemplo.com");
-    console.log("   \n   Luego ejecuta este seed nuevamente.");
-    return;
+  if (existingUser) {
+    console.log(`  ✓ Usuario ${email} ya existe`);
+    return existingUser;
   }
 
-  // Asignar usuarios a tenants con roles
+  // Crear el usuario usando Better Auth API
+  console.log(`  → Creando usuario ${email}...`);
+
+  try {
+    const result = await auth.api.signUpEmail({
+      body: {
+        email,
+        password,
+        name,
+      },
+    });
+
+    if (!result.user) {
+      console.error(
+        `  ✗ Error al crear usuario ${email}: No se retornó usuario`
+      );
+      return null;
+    }
+
+    // Marcar email como verificado para pruebas
+    await prisma.user.update({
+      where: { id: result.user.id },
+      data: { emailVerified: true },
+    });
+
+    console.log(`  ✓ Usuario ${email} creado exitosamente`);
+    return {
+      id: result.user.id,
+      email: result.user.email,
+      name: result.user.name,
+    };
+  } catch (error) {
+    console.error(`  ✗ Error al crear usuario ${email}:`, error);
+    return null;
+  }
+}
+
+async function main() {
+  console.log("🌱 Iniciando seed...\n");
+
+  // 1. Seed de permisos
+  await seedPermissions(prisma);
+  console.log("");
+
+  // 2. Seed de roles con sus permisos
+  const roles = await seedRoles(prisma);
+  console.log("");
+
+  // 3. Seed de tenants
+  const { tenantA, tenantB } = await seedTenants(prisma);
+  console.log("");
+
+  // 4. Crear usuarios de prueba si no existen
+  console.log("👤 Creando/verificando usuarios de prueba...");
+
+  const adminUser = await createTestUser(
+    "admin@ejemplo.com",
+    "Super Admin",
+    "password123"
+  );
+
+  const gerenteUser = await createTestUser(
+    "gerente@ejemplo.com",
+    "Gerente Finanzas",
+    "password123"
+  );
+
+  const capturadorUser = await createTestUser(
+    "capturador@ejemplo.com",
+    "Capturador",
+    "password123"
+  );
+
+  console.log("");
+
+  // 5. Asignar usuarios a tenants con roles
   console.log("🔗 Asignando usuarios a tenants...");
 
-  // Usuario 1: capturador en ambas empresas
-  await prisma.userRole.createMany({
-    data: [
-      {
-        userId: user1.id,
-        roleId: roleCapturador.id,
-        tenantId: tenantEmpresaA.id,
+  if (adminUser) {
+    // Admin: rol administrador (super:admin global, sin tenant específico)
+    const existingAdminRole = await prisma.userRole.findFirst({
+      where: {
+        userId: adminUser.id,
+        roleId: roles.adminRole.id,
       },
-      {
-        userId: user1.id,
-        roleId: roleCapturador.id,
-        tenantId: tenantEmpresaB.id,
+    });
+
+    if (!existingAdminRole) {
+      await prisma.userRole.create({
+        data: {
+          userId: adminUser.id,
+          roleId: roles.adminRole.id,
+          tenantId: null, // Super admin sin tenant específico
+        },
+      });
+    }
+    console.log("  ✓ admin@ejemplo.com → rol administrador (super:admin)");
+  }
+
+  if (gerenteUser) {
+    // Gerente: gerente-finanzas en ambas empresas
+    await prisma.userRole.upsert({
+      where: {
+        userId_tenantId_roleId: {
+          userId: gerenteUser.id,
+          tenantId: tenantA.id,
+          roleId: roles.gerenteFinanzasRole.id,
+        },
       },
-    ],
-  });
+      update: {},
+      create: {
+        userId: gerenteUser.id,
+        roleId: roles.gerenteFinanzasRole.id,
+        tenantId: tenantA.id,
+      },
+    });
 
-  // Usuario 2: gerente en ambas empresas
-  await prisma.userRole.createMany({
-    data: [
-      { userId: user2.id, roleId: roleGerente.id, tenantId: tenantEmpresaA.id },
-      { userId: user2.id, roleId: roleGerente.id, tenantId: tenantEmpresaB.id },
-    ],
-  });
+    await prisma.userRole.upsert({
+      where: {
+        userId_tenantId_roleId: {
+          userId: gerenteUser.id,
+          tenantId: tenantB.id,
+          roleId: roles.gerenteFinanzasRole.id,
+        },
+      },
+      update: {},
+      create: {
+        userId: gerenteUser.id,
+        roleId: roles.gerenteFinanzasRole.id,
+        tenantId: tenantB.id,
+      },
+    });
+    console.log(
+      "  ✓ gerente@ejemplo.com → rol gerente-finanzas (Empresa A y B)"
+    );
+  }
 
-  // Usuario 3: superadmin (sin tenant - null)
-  await prisma.userRole.create({
-    data: {
-      userId: user3.id,
-      roleId: roleSuperadmin.id,
-      tenantId: null,
-    },
-  });
+  if (capturadorUser) {
+    // Capturador: capturador en Empresa A
+    await prisma.userRole.upsert({
+      where: {
+        userId_tenantId_roleId: {
+          userId: capturadorUser.id,
+          tenantId: tenantA.id,
+          roleId: roles.capturadorRole.id,
+        },
+      },
+      update: {},
+      create: {
+        userId: capturadorUser.id,
+        roleId: roles.capturadorRole.id,
+        tenantId: tenantA.id,
+      },
+    });
+    console.log("  ✓ capturador@ejemplo.com → rol capturador (Empresa A)");
+  }
 
-  console.log("✅ Seed completado exitosamente!");
-  console.log("\n📝 Datos creados:");
-  console.log("- 2 Tenants: Empresa A, Empresa B");
-  console.log("- 3 Roles: capturador, gerente, superadmin");
+  console.log("\n" + "═".repeat(60));
+  console.log("✅ SEED COMPLETADO EXITOSAMENTE!");
+  console.log("═".repeat(60));
+
+  console.log("\n📝 Resumen de datos creados:");
+  console.log("   • Permisos del sistema (todos los módulos)");
   console.log(
-    "- 5 Permisos: facturas:acceder, facturas:crear, colaboradores:acceder, colaboradores:crear, colaboradores:editar"
+    "   • 5 Roles: administrador, gerente-finanzas, gerente-reclutamiento, gerente-ventas, capturador"
   );
-  console.log("- 3 Usuarios:");
-  console.log("  * capturador@ejemplo.com (capturador en ambas empresas)");
-  console.log("  * gerente@ejemplo.com (gerente en ambas empresas)");
-  console.log("  * superadmin@ejemplo.com (superadmin global)");
-  console.log("\n🔐 Contraseña para todos los usuarios: password123");
+  console.log("   • 2 Tenants: Empresa A, Empresa B");
+  console.log("   • 3 Usuarios de prueba");
+
+  console.log("\n🔐 CREDENCIALES DE ACCESO:");
+  console.log("   ┌─────────────────────────────────────────────────────────┐");
+  console.log("   │ Email                    │ Contraseña  │ Rol            │");
+  console.log("   ├─────────────────────────────────────────────────────────┤");
+  console.log("   │ admin@ejemplo.com        │ password123 │ Super Admin    │");
+  console.log("   │ gerente@ejemplo.com      │ password123 │ Gerente Finanz │");
+  console.log("   │ capturador@ejemplo.com   │ password123 │ Capturador     │");
+  console.log("   └─────────────────────────────────────────────────────────┘");
+
+  console.log("\n🧪 PRUEBAS RECOMENDADAS:");
+  console.log("   1. Inicia sesión con admin@ejemplo.com → Ve /super-admin");
+  console.log(
+    "   2. Inicia sesión con gerente@ejemplo.com → Ve selector de tenant"
+  );
+  console.log(
+    "   3. Inicia sesión con capturador@ejemplo.com → Ve /finanzas/ingresos"
+  );
 }
 
 main()

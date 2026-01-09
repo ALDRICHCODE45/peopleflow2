@@ -1,8 +1,18 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Outfit } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/core/shared/components/Providers/ThemeProvider";
+import { Toaster } from "sonner";
+import {
+  CheckmarkCircle02Icon,
+  InformationCircleIcon,
+  Alert02Icon,
+  Cancel01Icon,
+  Loading03Icon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
-const outfit = Outfit({subsets:['latin'],variable:'--font-sans'});
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-sans" });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,12 +35,37 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={outfit.variable}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    <ThemeProvider attribute="class" defaultTheme="system">
+      <Toaster
+        position="top-center"
+        closeButton
+        richColors
+        expand
+        icons={{
+          success: (
+            <HugeiconsIcon icon={CheckmarkCircle02Icon} className="size-4" />
+          ),
+          info: (
+            <HugeiconsIcon icon={InformationCircleIcon} className="size-4" />
+          ),
+          warning: <HugeiconsIcon icon={Alert02Icon} className="size-4" />,
+          error: <HugeiconsIcon icon={Cancel01Icon} className="size-4" />,
+          loading: (
+            <HugeiconsIcon
+              icon={Loading03Icon}
+              className="size-4 animate-spin"
+            />
+          ),
+        }}
+      />
+
+      <html lang="en" className={outfit.variable}>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          {children}
+        </body>
+      </html>
+    </ThemeProvider>
   );
 }

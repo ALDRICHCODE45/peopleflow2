@@ -23,6 +23,9 @@
       "@core/*": ["./src/core/*"],
       "@shadcn/*": ["./src/core/shared/ui/shadcn/*"],
       "@lib/*": ["./src/core/lib/*"],
+      "@features/*": ["./src/features/*"],
+      "@tenants/*": ["./src/features/tenants/*"],
+      "@auth-rbac/*": ["./src/features/auth-rbac/*"]
     }
   },
   "include": [
