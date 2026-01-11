@@ -3,7 +3,7 @@ import { auth } from "@/core/lib/auth";
 import { headers } from "next/headers";
 import prisma from "@/core/lib/prisma";
 import { getDefaultRoute } from "@/core/lib/permissions/get-default-route";
-import { SUPER_ADMIN_PERMISSION_NAME } from "@/core/shared/constants/permissions";
+import { prismaUserRoleRepository } from "@/features/auth-rbac/server/infrastructure/repositories/PrismaUserRoleRepository";
 
 /**
  * Página raíz - Maneja la redirección basada en autenticación y permisos
@@ -13,6 +13,9 @@ import { SUPER_ADMIN_PERMISSION_NAME } from "@/core/shared/constants/permissions
  * 2. Si es super:admin → /super-admin
  * 3. Si tiene múltiples tenants sin seleccionar → /select-tenant
  * 4. Si tiene un solo tenant o ya seleccionó → ruta según permisos
+ *
+ * IMPORTANTE: Los permisos se obtienen SOLO del tenant activo para evitar
+ * permission leakage entre tenants (fix de bug de seguridad).
  */
 export default async function HomePage() {
   const headersList = await headers();
@@ -25,36 +28,25 @@ export default async function HomePage() {
 
   const userId = session.user.id;
 
-  // 2. Obtener roles y permisos del usuario
-  const userRoles = await prisma.userRole.findMany({
-    where: { userId },
-    include: {
-      role: {
-        include: {
-          permissions: {
-            include: {
-              permission: true,
-            },
-          },
-        },
-      },
-      tenant: true,
-    },
-  });
-
-  // Extraer permisos únicos
-  const permissionSet = new Set<string>();
-  for (const userRole of userRoles) {
-    for (const rolePermission of userRole.role.permissions) {
-      permissionSet.add(rolePermission.permission.name);
-    }
-  }
-  const userPermissions = Array.from(permissionSet);
-
-  // 3. Si tiene permiso super:admin, redirigir al dashboard de super admin
-  if (userPermissions.includes(SUPER_ADMIN_PERMISSION_NAME)) {
+  // 2. Verificar primero si es SuperAdmin (tienen rol global sin tenant)
+  const isSuperAdmin = await prismaUserRoleRepository.isSuperAdmin(userId);
+  if (isSuperAdmin) {
     return redirect("/super-admin");
   }
+
+  // 3. Para usuarios normales: obtener tenant activo y roles en paralelo
+  const [dbSession, userRoles] = await Promise.all([
+    prisma.session.findFirst({
+      where: { userId, token: session.session?.token },
+      select: { activeTenantId: true },
+    }),
+    prisma.userRole.findMany({
+      where: { userId },
+      include: { tenant: true },
+    }),
+  ]);
+
+  let activeTenantId = dbSession?.activeTenantId || null;
 
   // 4. Obtener tenants únicos del usuario
   const userTenants = userRoles
@@ -65,51 +57,32 @@ export default async function HomePage() {
         self.findIndex((t) => t.id === tenant.id) === index
     );
 
-  // 5. Si tiene múltiples tenants, verificar si ya seleccionó uno
-  if (userTenants.length > 1) {
-    // Buscar la sesión en la BD para obtener el tenant activo
-    const dbSession = await prisma.session.findFirst({
-      where: {
-        userId,
-        token: session.session?.token,
-      },
-      select: {
-        activeTenantId: true,
-      },
-    });
-
-    if (!dbSession?.activeTenantId) {
-      return redirect("/select-tenant");
-    }
-  }
-
-  // 6. Si tiene un solo tenant, establecerlo como activo si no lo está
-  if (userTenants.length === 1 && session.session?.token) {
-    // Verificar si ya tiene tenant activo
-    const dbSession = await prisma.session.findFirst({
-      where: {
-        token: session.session.token,
-      },
-      select: {
-        activeTenantId: true,
-      },
-    });
-
-    if (!dbSession?.activeTenantId) {
-      // Actualizar la sesión con el tenant activo
-      await prisma.session.update({
-        where: { token: session.session.token },
-        data: { activeTenantId: userTenants[0].id },
-      });
-    }
-  }
-
-  // 7. Si no tiene tenants, redirigir a acceso denegado
+  // 5. Si no tiene tenants, redirigir a acceso denegado
   if (userTenants.length === 0) {
     return redirect("/access-denied");
   }
 
-  // 8. Redirigir a la ruta por defecto según permisos
+  // 6. Si tiene múltiples tenants y no ha seleccionado, redirigir a select-tenant
+  if (userTenants.length > 1 && !activeTenantId) {
+    return redirect("/select-tenant");
+  }
+
+  // 7. Si tiene un solo tenant, establecerlo como activo si no lo está
+  if (userTenants.length === 1 && session.session?.token && !activeTenantId) {
+    await prisma.session.update({
+      where: { token: session.session.token },
+      data: { activeTenantId: userTenants[0].id },
+    });
+    activeTenantId = userTenants[0].id;
+  }
+
+  // 8. Obtener permisos filtrados por tenant activo usando el repositorio seguro
+  const userPermissions = await prismaUserRoleRepository.getUserPermissions(
+    userId,
+    activeTenantId
+  );
+
+  // 9. Redirigir a la ruta por defecto según permisos
   const defaultRoute = getDefaultRoute(userPermissions);
   return redirect(defaultRoute);
 }
