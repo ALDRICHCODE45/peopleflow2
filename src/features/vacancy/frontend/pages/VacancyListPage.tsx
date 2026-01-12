@@ -25,9 +25,31 @@ import {
 } from "@hugeicons/core-free-icons";
 import { useVacancies } from "../hooks/useVacancies";
 import { VacancyTable } from "../components/VacancyTable";
-import { VacancyForm } from "../components/VacancyForm";
+
+//import { VacancyForm } from "../components/VacancyForm";
 import type { VacancyStatus } from "../types/vacancy.types";
 import { VACANCY_STATUS_OPTIONS } from "../types/vacancy.types";
+import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
+import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
+import { PermissionActions } from "@/core/shared/constants/permissions";
+import { DataTable } from "@/core/shared/components/DataTable/DataTable";
+import { VacancyColumns } from "../components/columns/VacancyColumns";
+import { useModalState } from "@/core/shared/hooks/useModalState";
+import { createTableConfig } from "@/core/shared/helpers/createTableConfig";
+import { VacanciesTableConfig } from "../components/tableConfig/VacanciesTableConfig";
+import dynamic from "next/dynamic";
+import { LoadingModalState } from "@/core/shared/components/LoadingModalState";
+
+const VacancyForm = dynamic(
+  () =>
+    import("../components/VacancyForm").then((mod) => ({
+      default: mod.VacancyForm,
+    })),
+  {
+    ssr: false,
+    loading: () => <LoadingModalState />,
+  },
+);
 
 export function VacancyListPage() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -55,87 +77,133 @@ export function VacancyListPage() {
     });
   };
 
+  const { isOpen, openModal, closeModal } = useModalState();
+
+  const handleAdd = () => {
+    openModal();
+  };
+
+  const tableConfig = createTableConfig(VacanciesTableConfig, {
+    onAdd: handleAdd,
+  });
+
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Vacantes</h1>
-          <p className="text-muted-foreground">
-            Gestiona las vacantes de tu organizacion
-          </p>
-        </div>
-        <Button onClick={() => setIsCreateOpen(true)}>
-          <HugeiconsIcon icon={Add01Icon} className="mr-2 h-4 w-4" />
-          Nueva Vacante
-        </Button>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Lista de Vacantes</CardTitle>
-              <CardDescription>
-                {vacancies.length} vacante{vacancies.length !== 1 ? "s" : ""}{" "}
-                encontrada{vacancies.length !== 1 ? "s" : ""}
-              </CardDescription>
-            </div>
-            <Button variant="outline" size="icon" onClick={refresh}>
-              <HugeiconsIcon icon={ArrowReloadHorizontalIcon} className="h-4 w-4" />
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="flex gap-4 mb-6">
-            <div className="flex flex-1 gap-2">
-              <Input
-                placeholder="Buscar vacantes..."
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              />
-              <Button variant="outline" onClick={handleSearch}>
-                <HugeiconsIcon icon={Search01Icon} className="h-4 w-4" />
-              </Button>
-            </div>
-            <Select
-              value={filters.status || "ALL"}
-              onValueChange={handleStatusFilter}
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Filtrar por estado" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ALL">Todos los estados</SelectItem>
-                {VACANCY_STATUS_OPTIONS.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {error && (
-            <div className="p-4 mb-4 bg-destructive/10 text-destructive rounded-md">
-              {error}
-            </div>
-          )}
-
-          <VacancyTable
-            vacancies={vacancies}
-            isLoading={isLoading}
-            onUpdate={updateVacancy}
-            onDelete={deleteVacancy}
-          />
-        </CardContent>
-      </Card>
-
-      <VacancyForm
-        open={isCreateOpen}
-        onOpenChange={setIsCreateOpen}
-        onSubmit={createVacancy}
+    <div className="container mx-auto py-6">
+      <TablePresentation
+        subtitle="Administra la información de las vacantes "
+        title="Gestión de Vacantes"
       />
+      <PermissionGuard
+        permissions={[
+          PermissionActions.vacantes.acceder,
+          PermissionActions.vacantes.gestionar,
+        ]}
+      >
+        <DataTable
+          columns={VacancyColumns}
+          data={vacancies}
+          config={tableConfig}
+        />
+      </PermissionGuard>
+      <PermissionGuard
+        permissions={[
+          PermissionActions.vacantes.crear,
+          PermissionActions.vacantes.gestionar,
+        ]}
+      >
+        {isOpen && (
+          <VacancyForm
+            onSubmit={createVacancy}
+            open={true}
+            onOpenChange={closeModal}
+          />
+        )}
+      </PermissionGuard>
     </div>
+
+    // <div className="space-y-6">
+    //   <div className="flex items-center justify-between">
+    //     <div>
+    //       <h1 className="text-3xl font-bold">Vacantes</h1>
+    //       <p className="text-muted-foreground">
+    //         Gestiona las vacantes de tu organizacion
+    //       </p>
+    //     </div>
+    //     <Button onClick={() => setIsCreateOpen(true)}>
+    //       <HugeiconsIcon icon={Add01Icon} className="mr-2 h-4 w-4" />
+    //       Nueva Vacante
+    //     </Button>
+    //   </div>
+    //
+    //   <Card>
+    //     <CardHeader>
+    //       <div className="flex items-center justify-between">
+    //         <div>
+    //           <CardTitle>Lista de Vacantes</CardTitle>
+    //           <CardDescription>
+    //             {vacancies.length} vacante{vacancies.length !== 1 ? "s" : ""}{" "}
+    //             encontrada{vacancies.length !== 1 ? "s" : ""}
+    //           </CardDescription>
+    //         </div>
+    //         <Button variant="outline" size="icon" onClick={refresh}>
+    //           <HugeiconsIcon
+    //             icon={ArrowReloadHorizontalIcon}
+    //             className="h-4 w-4"
+    //           />
+    //         </Button>
+    //       </div>
+    //     </CardHeader>
+    //     <CardContent>
+    //       <div className="flex gap-4 mb-6">
+    //         <div className="flex flex-1 gap-2">
+    //           <Input
+    //             placeholder="Buscar vacantes..."
+    //             value={searchInput}
+    //             onChange={(e) => setSearchInput(e.target.value)}
+    //             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+    //           />
+    //           <Button variant="outline" onClick={handleSearch}>
+    //             <HugeiconsIcon icon={Search01Icon} className="h-4 w-4" />
+    //           </Button>
+    //         </div>
+    //         <Select
+    //           value={filters.status || "ALL"}
+    //           onValueChange={handleStatusFilter}
+    //         >
+    //           <SelectTrigger className="w-[180px]">
+    //             <SelectValue placeholder="Filtrar por estado" />
+    //           </SelectTrigger>
+    //           <SelectContent>
+    //             <SelectItem value="ALL">Todos los estados</SelectItem>
+    //             {VACANCY_STATUS_OPTIONS.map((option) => (
+    //               <SelectItem key={option.value} value={option.value}>
+    //                 {option.label}
+    //               </SelectItem>
+    //             ))}
+    //           </SelectContent>
+    //         </Select>
+    //       </div>
+    //
+    //       {error && (
+    //         <div className="p-4 mb-4 bg-destructive/10 text-destructive rounded-md">
+    //           {error}
+    //         </div>
+    //       )}
+    //
+    //       <VacancyTable
+    //         vacancies={vacancies}
+    //         isLoading={isLoading}
+    //         onUpdate={updateVacancy}
+    //         onDelete={deleteVacancy}
+    //       />
+    //     </CardContent>
+    //   </Card>
+    //
+    //   <VacancyForm
+    //     open={isCreateOpen}
+    //     onOpenChange={setIsCreateOpen}
+    //     onSubmit={createVacancy}
+    //   />
+    // </div>
   );
 }

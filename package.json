@@ -19,6 +19,7 @@
     "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "7",
     "@tanstack/react-form": "^1.27.7",
+    "@tanstack/react-table": "^8.21.3",
     "better-auth": "^1.4.10",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

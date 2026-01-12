@@ -21,7 +21,6 @@ import type {
   UpdateVacancyResult,
   DeleteVacancyResult,
 } from "../../../frontend/types/vacancy.types";
-import { MiddlewarePermissionsService } from "@/core/lib/permissions";
 import { getCurrentTenantAction } from "@/features/tenants/server/presentation/actions/tenant.actions";
 
 /**
@@ -29,7 +28,6 @@ import { getCurrentTenantAction } from "@/features/tenants/server/presentation/a
  */
 async function getActiveTenantId(): Promise<string | null> {
   const result = await getCurrentTenantAction();
-  console.log("result", result);
   return result.tenant?.id ?? null;
 }
 
@@ -97,18 +95,12 @@ export async function createVacancyAction(data: {
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      console.log("NO paso la session");
       return { error: "No autenticado" };
     }
 
-    console.log("paso la sesion");
-
     const tenantId = await getActiveTenantId();
 
-    console.log({ tenantId });
-
     if (!tenantId) {
-      console.log("no hay tenant");
       return { error: "No hay tenant activo" };
     }
 

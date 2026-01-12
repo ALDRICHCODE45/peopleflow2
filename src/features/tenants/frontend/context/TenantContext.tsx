@@ -14,7 +14,7 @@ import type { Tenant, TenantContextType } from "../types";
 const TenantContext = createContext<TenantContextType>({
   tenant: null,
   isLoading: true,
-  refresh: async () => {},
+  refresh: async () => { },
 });
 
 export function useTenant() {

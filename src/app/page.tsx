@@ -54,7 +54,7 @@ export default async function HomePage() {
     .map((ur) => ur.tenant!)
     .filter(
       (tenant, index, self) =>
-        self.findIndex((t) => t.id === tenant.id) === index
+        self.findIndex((t) => t.id === tenant.id) === index,
     );
 
   // 5. Si no tiene tenants, redirigir a acceso denegado
@@ -79,7 +79,7 @@ export default async function HomePage() {
   // 8. Obtener permisos filtrados por tenant activo usando el repositorio seguro
   const userPermissions = await prismaUserRoleRepository.getUserPermissions(
     userId,
-    activeTenantId
+    activeTenantId,
   );
 
   // 9. Redirigir a la ruta por defecto según permisos
