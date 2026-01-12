@@ -101,6 +101,64 @@ export function createTenantScopedPrisma(basePrisma: PrismaClient) {
           return query(args);
         },
       },
+      vacancy: {
+        /**
+         * Intercepta findMany para inyectar tenantId automáticamente
+         */
+        async findMany({ args, query }) {
+          const context = getTenantContext();
+
+          if (
+            context?.tenantId &&
+            args.where?.tenantId === undefined
+          ) {
+            args.where = {
+              ...args.where,
+              tenantId: context.tenantId,
+            };
+          }
+
+          return query(args);
+        },
+
+        /**
+         * Intercepta findFirst para inyectar tenantId automáticamente
+         */
+        async findFirst({ args, query }) {
+          const context = getTenantContext();
+
+          if (
+            context?.tenantId &&
+            args.where?.tenantId === undefined
+          ) {
+            args.where = {
+              ...args.where,
+              tenantId: context.tenantId,
+            };
+          }
+
+          return query(args);
+        },
+
+        /**
+         * Intercepta count para inyectar tenantId automáticamente
+         */
+        async count({ args, query }) {
+          const context = getTenantContext();
+
+          if (
+            context?.tenantId &&
+            args.where?.tenantId === undefined
+          ) {
+            args.where = {
+              ...args.where,
+              tenantId: context.tenantId,
+            };
+          }
+
+          return query(args);
+        },
+      },
     },
   });
 }

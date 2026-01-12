@@ -392,7 +392,8 @@ export const ModelName = {
   Role: 'Role',
   UserRole: 'UserRole',
   RolePermission: 'RolePermission',
-  Permission: 'Permission'
+  Permission: 'Permission',
+  Vacancy: 'Vacancy'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -408,7 +409,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "tenant" | "role" | "userRole" | "rolePermission" | "permission"
+    modelProps: "user" | "session" | "account" | "verification" | "tenant" | "role" | "userRole" | "rolePermission" | "permission" | "vacancy"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1078,6 +1079,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Vacancy: {
+      payload: Prisma.$VacancyPayload<ExtArgs>
+      fields: Prisma.VacancyFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VacancyFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VacancyFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload>
+        }
+        findFirst: {
+          args: Prisma.VacancyFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VacancyFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload>
+        }
+        findMany: {
+          args: Prisma.VacancyFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload>[]
+        }
+        create: {
+          args: Prisma.VacancyCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload>
+        }
+        createMany: {
+          args: Prisma.VacancyCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VacancyCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload>[]
+        }
+        delete: {
+          args: Prisma.VacancyDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload>
+        }
+        update: {
+          args: Prisma.VacancyUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload>
+        }
+        deleteMany: {
+          args: Prisma.VacancyDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VacancyUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VacancyUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload>[]
+        }
+        upsert: {
+          args: Prisma.VacancyUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload>
+        }
+        aggregate: {
+          args: Prisma.VacancyAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVacancy>
+        }
+        groupBy: {
+          args: Prisma.VacancyGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VacancyGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VacancyCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VacancyCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1231,6 +1306,21 @@ export const PermissionScalarFieldEnum = {
 export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof typeof PermissionScalarFieldEnum]
 
 
+export const VacancyScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  status: 'status',
+  department: 'department',
+  location: 'location',
+  tenantId: 'tenantId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VacancyScalarFieldEnum = (typeof VacancyScalarFieldEnum)[keyof typeof VacancyScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1293,6 +1383,20 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'VacancyStatus'
+ */
+export type EnumVacancyStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VacancyStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'VacancyStatus[]'
+ */
+export type ListEnumVacancyStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VacancyStatus[]'>
     
 
 
@@ -1413,6 +1517,7 @@ export type GlobalOmitConfig = {
   userRole?: Prisma.UserRoleOmit
   rolePermission?: Prisma.RolePermissionOmit
   permission?: Prisma.PermissionOmit
+  vacancy?: Prisma.VacancyOmit
 }
 
 /* Types for Logging */

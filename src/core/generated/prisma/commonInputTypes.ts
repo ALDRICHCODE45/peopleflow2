@@ -148,6 +148,23 @@ export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
 }
 
+export type EnumVacancyStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.VacancyStatus | Prisma.EnumVacancyStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.VacancyStatus[] | Prisma.ListEnumVacancyStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VacancyStatus[] | Prisma.ListEnumVacancyStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVacancyStatusFilter<$PrismaModel> | $Enums.VacancyStatus
+}
+
+export type EnumVacancyStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.VacancyStatus | Prisma.EnumVacancyStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.VacancyStatus[] | Prisma.ListEnumVacancyStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VacancyStatus[] | Prisma.ListEnumVacancyStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVacancyStatusWithAggregatesFilter<$PrismaModel> | $Enums.VacancyStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumVacancyStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumVacancyStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -293,6 +310,23 @@ export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumVacancyStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.VacancyStatus | Prisma.EnumVacancyStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.VacancyStatus[] | Prisma.ListEnumVacancyStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VacancyStatus[] | Prisma.ListEnumVacancyStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVacancyStatusFilter<$PrismaModel> | $Enums.VacancyStatus
+}
+
+export type NestedEnumVacancyStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.VacancyStatus | Prisma.EnumVacancyStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.VacancyStatus[] | Prisma.ListEnumVacancyStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VacancyStatus[] | Prisma.ListEnumVacancyStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVacancyStatusWithAggregatesFilter<$PrismaModel> | $Enums.VacancyStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumVacancyStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumVacancyStatusFilter<$PrismaModel>
 }
 
 

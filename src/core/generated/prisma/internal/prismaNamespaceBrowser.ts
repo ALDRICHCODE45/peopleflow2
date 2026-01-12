@@ -59,7 +59,8 @@ export const ModelName = {
   Role: 'Role',
   UserRole: 'UserRole',
   RolePermission: 'RolePermission',
-  Permission: 'Permission'
+  Permission: 'Permission',
+  Vacancy: 'Vacancy'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -190,6 +191,21 @@ export const PermissionScalarFieldEnum = {
 } as const
 
 export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof typeof PermissionScalarFieldEnum]
+
+
+export const VacancyScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  status: 'status',
+  department: 'department',
+  location: 'location',
+  tenantId: 'tenantId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VacancyScalarFieldEnum = (typeof VacancyScalarFieldEnum)[keyof typeof VacancyScalarFieldEnum]
 
 
 export const SortOrder = {
