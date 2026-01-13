@@ -1,35 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@shadcn/button";
-import { Input } from "@shadcn/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@shadcn/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@shadcn/select";
-import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  Add01Icon,
-  Search01Icon,
-  ArrowReloadHorizontalIcon,
-} from "@hugeicons/core-free-icons";
-import { useVacancies } from "../hooks/useVacancies";
-import { VacancyTable } from "../components/VacancyTable";
-
-//import { VacancyForm } from "../components/VacancyForm";
-import type { VacancyStatus } from "../types/vacancy.types";
-import { VACANCY_STATUS_OPTIONS } from "../types/vacancy.types";
-import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
+import { useState, useMemo } from "react";
+import { useVacanciesQuery } from "../hooks/useVacanciesQuery";
+import { useCreateVacancy } from "../hooks/useCreateVacancy";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { DataTable } from "@/core/shared/components/DataTable/DataTable";
@@ -39,6 +12,29 @@ import { createTableConfig } from "@/core/shared/helpers/createTableConfig";
 import { VacanciesTableConfig } from "../components/tableConfig/VacanciesTableConfig";
 import dynamic from "next/dynamic";
 import { LoadingModalState } from "@/core/shared/components/LoadingModalState";
+import {
+  DataTableStats,
+  StatCardConfig,
+} from "@/core/shared/components/DataTable/DataTableStats";
+import {
+  DataTableTabs,
+  TabConfig,
+} from "@/core/shared/components/DataTable/DataTableTabs";
+import { Button } from "@shadcn/button";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  FileDownloadIcon,
+  ArrowReloadHorizontalIcon,
+  Plus,
+  Minus,
+  ArrowDown,
+} from "@hugeicons/core-free-icons";
+import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/core/shared/ui/shadcn/collapsible";
 
 const VacancyForm = dynamic(
   () =>
@@ -52,35 +48,100 @@ const VacancyForm = dynamic(
 );
 
 export function VacancyListPage() {
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
-
-  const {
-    vacancies,
-    isLoading,
-    error,
-    filters,
-    refresh,
-    createVacancy,
-    updateVacancy,
-    deleteVacancy,
-    updateFilters,
-  } = useVacancies();
-
-  const handleSearch = () => {
-    updateFilters({ search: searchInput || undefined });
-  };
-
-  const handleStatusFilter = (status: string) => {
-    updateFilters({
-      status: status === "ALL" ? undefined : (status as VacancyStatus),
-    });
-  };
-
+  const { data: vacancies = [], isLoading, refetch } = useVacanciesQuery();
+  const createVacancyMutation = useCreateVacancy();
   const { isOpen, openModal, closeModal } = useModalState();
+  const [activeTab, setActiveTab] = useState<string>("all");
+
+  // Calcular estadisticas
+  const stats = useMemo(() => {
+    const total = vacancies.length;
+    const open = vacancies.filter((v) => v.status === "OPEN").length;
+    const draft = vacancies.filter((v) => v.status === "DRAFT").length;
+    const closed = vacancies.filter((v) => v.status === "CLOSED").length;
+    const archived = vacancies.filter((v) => v.status === "ARCHIVED").length;
+
+    return { total, open, draft, closed, archived };
+  }, [vacancies]);
+
+  // Configuracion de estadisticas
+  const statsConfig: StatCardConfig[] = [
+    {
+      id: "total",
+      label: "Total Vacantes",
+      value: stats.total,
+      description: "Todas las vacantes",
+    },
+    {
+      id: "open",
+      label: "Vacantes Abiertas",
+      value: stats.open,
+      description: "En proceso de reclutamiento",
+    },
+    {
+      id: "draft",
+      label: "Borradores",
+      value: stats.draft,
+      description: "Pendientes de publicar",
+    },
+    {
+      id: "closed",
+      label: "Cerradas",
+      value: stats.closed,
+      description: "Proceso finalizado",
+    },
+  ];
+
+  // Configuracion de tabs
+  const tabsConfig: TabConfig[] = [
+    { id: "all", label: "Todas", count: stats.total },
+    { id: "OPEN", label: "Abiertas", count: stats.open, filterValue: "OPEN" },
+    {
+      id: "DRAFT",
+      label: "Borrador",
+      count: stats.draft,
+      filterValue: "DRAFT",
+    },
+    {
+      id: "CLOSED",
+      label: "Cerradas",
+      count: stats.closed,
+      filterValue: "CLOSED",
+    },
+    {
+      id: "ARCHIVED",
+      label: "Archivadas",
+      count: stats.archived,
+      filterValue: "ARCHIVED",
+    },
+  ];
+
+  // Filtrar vacantes segun el tab activo
+  const filteredVacancies = useMemo(() => {
+    if (activeTab === "all") return vacancies;
+    return vacancies.filter((v) => v.status === activeTab);
+  }, [vacancies, activeTab]);
 
   const handleAdd = () => {
     openModal();
+  };
+
+  const handleExport = () => {
+    console.log("Exportando vacantes...");
+  };
+
+  const handleRefresh = () => {
+    refetch();
+  };
+
+  const handleCreateVacancy = async (
+    data: Parameters<typeof createVacancyMutation.mutateAsync>[0],
+  ) => {
+    const result = await createVacancyMutation.mutateAsync(data);
+    if (result) {
+      closeModal();
+    }
+    return { error: null, vacancy: result };
   };
 
   const tableConfig = createTableConfig(VacanciesTableConfig, {
@@ -88,122 +149,99 @@ export function VacancyListPage() {
   });
 
   return (
-    <div className="container mx-auto py-6">
-      <TablePresentation
-        subtitle="Administra la información de las vacantes "
-        title="Gestión de Vacantes"
-      />
-      <PermissionGuard
-        permissions={[
-          PermissionActions.vacantes.acceder,
-          PermissionActions.vacantes.gestionar,
-        ]}
-      >
-        <DataTable
-          columns={VacancyColumns}
-          data={vacancies}
-          config={tableConfig}
-        />
-      </PermissionGuard>
-      <PermissionGuard
-        permissions={[
-          PermissionActions.vacantes.crear,
-          PermissionActions.vacantes.gestionar,
-        ]}
-      >
-        {isOpen && (
-          <VacancyForm
-            onSubmit={createVacancy}
-            open={true}
-            onOpenChange={closeModal}
-          />
-        )}
-      </PermissionGuard>
-    </div>
+    <Card className="p-2 m-1">
+      <CardContent>
+        <div className="space-y-6">
+          {/* Header con titulo y acciones */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="mt-2">
+              <h1 className="text-2xl font-semibold tracking-tight">
+                Gestion de Vacantes
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                Administra las vacantes de tu organizacion
+              </p>
+            </div>
 
-    // <div className="space-y-6">
-    //   <div className="flex items-center justify-between">
-    //     <div>
-    //       <h1 className="text-3xl font-bold">Vacantes</h1>
-    //       <p className="text-muted-foreground">
-    //         Gestiona las vacantes de tu organizacion
-    //       </p>
-    //     </div>
-    //     <Button onClick={() => setIsCreateOpen(true)}>
-    //       <HugeiconsIcon icon={Add01Icon} className="mr-2 h-4 w-4" />
-    //       Nueva Vacante
-    //     </Button>
-    //   </div>
-    //
-    //   <Card>
-    //     <CardHeader>
-    //       <div className="flex items-center justify-between">
-    //         <div>
-    //           <CardTitle>Lista de Vacantes</CardTitle>
-    //           <CardDescription>
-    //             {vacancies.length} vacante{vacancies.length !== 1 ? "s" : ""}{" "}
-    //             encontrada{vacancies.length !== 1 ? "s" : ""}
-    //           </CardDescription>
-    //         </div>
-    //         <Button variant="outline" size="icon" onClick={refresh}>
-    //           <HugeiconsIcon
-    //             icon={ArrowReloadHorizontalIcon}
-    //             className="h-4 w-4"
-    //           />
-    //         </Button>
-    //       </div>
-    //     </CardHeader>
-    //     <CardContent>
-    //       <div className="flex gap-4 mb-6">
-    //         <div className="flex flex-1 gap-2">
-    //           <Input
-    //             placeholder="Buscar vacantes..."
-    //             value={searchInput}
-    //             onChange={(e) => setSearchInput(e.target.value)}
-    //             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-    //           />
-    //           <Button variant="outline" onClick={handleSearch}>
-    //             <HugeiconsIcon icon={Search01Icon} className="h-4 w-4" />
-    //           </Button>
-    //         </div>
-    //         <Select
-    //           value={filters.status || "ALL"}
-    //           onValueChange={handleStatusFilter}
-    //         >
-    //           <SelectTrigger className="w-[180px]">
-    //             <SelectValue placeholder="Filtrar por estado" />
-    //           </SelectTrigger>
-    //           <SelectContent>
-    //             <SelectItem value="ALL">Todos los estados</SelectItem>
-    //             {VACANCY_STATUS_OPTIONS.map((option) => (
-    //               <SelectItem key={option.value} value={option.value}>
-    //                 {option.label}
-    //               </SelectItem>
-    //             ))}
-    //           </SelectContent>
-    //         </Select>
-    //       </div>
-    //
-    //       {error && (
-    //         <div className="p-4 mb-4 bg-destructive/10 text-destructive rounded-md">
-    //           {error}
-    //         </div>
-    //       )}
-    //
-    //       <VacancyTable
-    //         vacancies={vacancies}
-    //         isLoading={isLoading}
-    //         onUpdate={updateVacancy}
-    //         onDelete={deleteVacancy}
-    //       />
-    //     </CardContent>
-    //   </Card>
-    //
-    //   <VacancyForm
-    //     open={isCreateOpen}
-    //     onOpenChange={setIsCreateOpen}
-    //     onSubmit={createVacancy}
-    //   />
-    // </div>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" onClick={handleRefresh}>
+                <HugeiconsIcon
+                  icon={ArrowReloadHorizontalIcon}
+                  className="h-4 w-4 mr-2"
+                />
+                Actualizar
+              </Button>
+              <Button variant="ghost" size="sm" onClick={handleExport}>
+                <HugeiconsIcon
+                  icon={FileDownloadIcon}
+                  className="h-4 w-4 mr-2"
+                />
+                Exportar
+              </Button>
+            </div>
+          </div>
+
+          <Collapsible>
+            <CollapsibleTrigger asChild>
+              <Button
+                className="[&[data-state=open]>svg]:rotate-180 mb-2"
+                variant={"default"}
+                size={"icon"}
+                buttonTooltip
+                buttonTooltipText="Estadisticas rapidas"
+              >
+                <HugeiconsIcon icon={ArrowDown} />
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              {/* Tarjetas de estadisticas */}
+              <DataTableStats
+                stats={statsConfig}
+                isLoading={isLoading}
+                columns={4}
+              />
+            </CollapsibleContent>
+          </Collapsible>
+
+          {/* Tabs de filtrado */}
+          <DataTableTabs
+            tabs={tabsConfig}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+          />
+
+          {/* Tabla */}
+          <PermissionGuard
+            permissions={[
+              PermissionActions.vacantes.acceder,
+              PermissionActions.vacantes.gestionar,
+            ]}
+          >
+            <DataTable
+              columns={VacancyColumns}
+              data={filteredVacancies}
+              config={tableConfig}
+              isLoading={isLoading}
+            />
+          </PermissionGuard>
+
+          {/* Modal de crear vacante */}
+          <PermissionGuard
+            permissions={[
+              PermissionActions.vacantes.crear,
+              PermissionActions.vacantes.gestionar,
+            ]}
+          >
+            {isOpen && (
+              <VacancyForm
+                onSubmit={handleCreateVacancy}
+                open={true}
+                onOpenChange={closeModal}
+              />
+            )}
+          </PermissionGuard>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

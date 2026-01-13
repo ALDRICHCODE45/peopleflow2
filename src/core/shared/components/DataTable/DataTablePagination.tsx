@@ -1,5 +1,4 @@
 import { Table } from "@tanstack/react-table";
-import { Label } from "@shadcn/label";
 import {
   Select,
   SelectContent,
@@ -10,14 +9,62 @@ import {
 import { Button } from "@shadcn/button";
 import { Input } from "@shadcn/input";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { TableConfig } from "./TableTypes.types";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowLeft, ArrowRight } from "@hugeicons/core-free-icons";
+import {
+  ArrowLeft01Icon,
+  ArrowRight01Icon,
+  MoreHorizontalIcon,
+} from "@hugeicons/core-free-icons";
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
   config: TableConfig<TData>;
+}
+
+function generatePageNumbers(
+  currentPage: number,
+  totalPages: number,
+  maxVisible: number = 5
+): (number | "ellipsis")[] {
+  if (totalPages <= maxVisible + 2) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+
+  const pages: (number | "ellipsis")[] = [];
+  const halfVisible = Math.floor(maxVisible / 2);
+
+  pages.push(1);
+
+  let start = Math.max(2, currentPage - halfVisible);
+  let end = Math.min(totalPages - 1, currentPage + halfVisible);
+
+  if (currentPage <= halfVisible + 1) {
+    end = Math.min(maxVisible, totalPages - 1);
+  }
+
+  if (currentPage >= totalPages - halfVisible) {
+    start = Math.max(2, totalPages - maxVisible + 1);
+  }
+
+  if (start > 2) {
+    pages.push("ellipsis");
+  }
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  if (end < totalPages - 1) {
+    pages.push("ellipsis");
+  }
+
+  if (totalPages > 1) {
+    pages.push(totalPages);
+  }
+
+  return pages;
 }
 
 export const DataTablePagination = <TData,>({
@@ -32,80 +79,58 @@ export const DataTablePagination = <TData,>({
     totalRows === 0 ? 0 : table.getState().pagination.pageIndex * pageSize + 1;
   const endRow = Math.min(
     table.getState().pagination.pageIndex * pageSize + pageSize,
-    totalRows,
+    totalRows
   );
 
-  const [pageInputValue, setPageInputValue] = useState<string>(
-    currentPage.toString(),
+  const [jumpToValue, setJumpToValue] = useState<string>("");
+
+  const pageNumbers = useMemo(
+    () => generatePageNumbers(currentPage, pageCount, 3),
+    [currentPage, pageCount]
   );
 
-  // Sincronizar el input cuando cambia la página
-  useEffect(() => {
-    setPageInputValue(currentPage.toString());
-  }, [currentPage]);
-
-  const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPageInputValue(e.target.value);
-  };
-
-  const handlePageInputBlur = () => {
-    const pageNumber = parseInt(pageInputValue, 10);
-    if (
-      !isNaN(pageNumber) &&
-      pageNumber >= 1 &&
-      pageNumber <= pageCount &&
-      pageNumber !== currentPage
-    ) {
+  const handleJumpTo = () => {
+    const pageNumber = parseInt(jumpToValue, 10);
+    if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= pageCount) {
       table.setPageIndex(pageNumber - 1);
-    } else {
-      setPageInputValue(currentPage.toString());
+      setJumpToValue("");
     }
   };
 
-  const handlePageInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleJumpToKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      handlePageInputBlur();
+      handleJumpTo();
     }
   };
 
   if (totalRows === 0) {
     return (
       <div
-        className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full"
+        className="flex items-center justify-center py-4"
         role="status"
         aria-live="polite"
       >
-        <div className="text-sm text-gray-400 text-center sm:text-left">
+        <span className="text-sm text-muted-foreground">
           No hay resultados para mostrar
-        </div>
+        </span>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
-      <div className="flex flex-col sm:flex-row items-center gap-4">
-        {/* Información de paginación */}
-        {config.pagination?.showPaginationInfo && (
-          <div className="text-sm text-gray-400 text-center sm:text-left">
-            Mostrando {startRow} a {endRow} de {totalRows} resultado
-            {totalRows !== 1 ? "s" : ""}
-          </div>
-        )}
-
-        {/* Selector de tamaño de página */}
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full py-2">
+      {/* Lado izquierdo: Show X */}
+      <div className="flex items-center gap-2">
         {config.pagination?.showPageSizeSelector && (
-          <div className="flex items-center gap-2">
-            <Label htmlFor="page-size" className="text-sm">
-              Filas por página:
-            </Label>
+          <>
+            <span className="text-sm text-muted-foreground">Show</span>
             <Select
-              value={table.getState().pagination.pageSize.toString()}
+              value={pageSize.toString()}
               onValueChange={(value) => {
                 table.setPageSize(Number(value));
               }}
             >
-              <SelectTrigger id="page-size" className="w-[80px]">
+              <SelectTrigger className="w-[70px] h-8">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -114,88 +139,111 @@ export const DataTablePagination = <TData,>({
                     <SelectItem key={size} value={size.toString()}>
                       {size}
                     </SelectItem>
-                  ),
+                  )
                 )}
               </SelectContent>
             </Select>
-          </div>
+          </>
+        )}
+        {config.pagination?.showPaginationInfo && (
+          <span className="text-sm text-muted-foreground ml-2">
+            of {totalRows} entries
+          </span>
         )}
       </div>
 
-      <div className="flex items-center gap-2">
-        {/* Botón Primera página */}
+      {/* Centro: Botones de pagina numerados */}
+      <div className="flex items-center gap-1">
+        {/* Primera pagina */}
         <Button
-          size="sm"
-          variant="outline"
-          buttonTooltip
-          buttonTooltipText="Primera página"
+          size="icon"
+          variant="ghost"
+          className="h-8 w-8"
           onClick={() => table.setPageIndex(0)}
           disabled={!table.getCanPreviousPage()}
-          aria-label="Ir a la primera página"
-          className="focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          aria-label="Primera pagina"
         >
-          <HugeiconsIcon icon={ArrowLeft} className="h-4 w-4" />
+          <HugeiconsIcon icon={ArrowLeft01Icon} className="h-4 w-4" />
+          <HugeiconsIcon icon={ArrowLeft01Icon} className="h-4 w-4 -ml-2" />
         </Button>
 
-        {/* Botón Página anterior */}
+        {/* Pagina anterior */}
         <Button
-          size="sm"
-          variant="outline"
-          buttonTooltip
-          buttonTooltipText="Página anterior"
+          size="icon"
+          variant="ghost"
+          className="h-8 w-8"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
-          aria-label="Ir a la página anterior"
+          aria-label="Pagina anterior"
         >
-          <HugeiconsIcon icon={ArrowLeft} className="h-4 w-4" />
+          <HugeiconsIcon icon={ArrowLeft01Icon} className="h-4 w-4" />
         </Button>
 
-        {/* Navegación a página específica */}
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-400 whitespace-nowrap">
-            Página
-          </span>
-          <Input
-            type="number"
-            min={1}
-            max={pageCount}
-            value={pageInputValue}
-            onChange={handlePageInputChange}
-            onBlur={handlePageInputBlur}
-            onKeyDown={handlePageInputKeyDown}
-            className="w-16 h-8 text-center text-sm"
-            aria-label={`Página actual, página ${currentPage} de ${pageCount}`}
-          />
-          <span className="text-sm text-gray-400 whitespace-nowrap">
-            de {pageCount}
-          </span>
-        </div>
+        {/* Numeros de pagina */}
+        {pageNumbers.map((page, index) =>
+          page === "ellipsis" ? (
+            <span
+              key={`ellipsis-${index}`}
+              className="px-2 text-muted-foreground"
+            >
+              <HugeiconsIcon icon={MoreHorizontalIcon} className="h-4 w-4" />
+            </span>
+          ) : (
+            <Button
+              key={page}
+              size="icon"
+              variant={currentPage === page ? "default" : "ghost"}
+              className="h-8 w-8"
+              onClick={() => table.setPageIndex(page - 1)}
+              aria-label={`Ir a pagina ${page}`}
+              aria-current={currentPage === page ? "page" : undefined}
+            >
+              {page}
+            </Button>
+          )
+        )}
 
-        {/* Botón Página siguiente */}
+        {/* Pagina siguiente */}
         <Button
-          size="sm"
-          variant="outline"
-          buttonTooltip
-          buttonTooltipText="Página siguiente"
+          size="icon"
+          variant="ghost"
+          className="h-8 w-8"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
-          aria-label="Ir a la página siguiente"
+          aria-label="Pagina siguiente"
         >
-          <HugeiconsIcon icon={ArrowRight} className="h-4 w-4" />
+          <HugeiconsIcon icon={ArrowRight01Icon} className="h-4 w-4" />
         </Button>
 
-        {/* Botón Última página */}
+        {/* Ultima pagina */}
         <Button
-          size="sm"
-          variant="outline"
-          buttonTooltip
-          buttonTooltipText="Última página"
+          size="icon"
+          variant="ghost"
+          className="h-8 w-8"
           onClick={() => table.setPageIndex(pageCount - 1)}
           disabled={!table.getCanNextPage()}
-          aria-label="Ir a la última página"
+          aria-label="Ultima pagina"
         >
-          <HugeiconsIcon icon={ArrowRight} className="h-4 w-4" />
+          <HugeiconsIcon icon={ArrowRight01Icon} className="h-4 w-4" />
+          <HugeiconsIcon icon={ArrowRight01Icon} className="h-4 w-4 -ml-2" />
         </Button>
+      </div>
+
+      {/* Lado derecho: Jump to */}
+      <div className="flex items-center gap-2">
+        <span className="text-sm text-muted-foreground">Jump to</span>
+        <Input
+          type="number"
+          min={1}
+          max={pageCount}
+          value={jumpToValue}
+          onChange={(e) => setJumpToValue(e.target.value)}
+          onKeyDown={handleJumpToKeyDown}
+          onBlur={handleJumpTo}
+          placeholder=""
+          className="w-16 h-8 text-center text-sm"
+          aria-label="Saltar a pagina"
+        />
       </div>
     </div>
   );

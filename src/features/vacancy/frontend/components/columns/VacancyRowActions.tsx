@@ -1,38 +1,15 @@
 "use client";
 import { Row } from "@tanstack/react-table";
 import { useModalState } from "@/core/shared/hooks/useModalState";
-import dynamic from "next/dynamic";
-import { LoadingModalState } from "@/core/shared/components/LoadingModalState";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { VacancyActionsDropdown } from "./VacanciesActionsDropdown";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { createVacancyActions } from "./types/VacanciesActionList";
 import { Vacancy } from "../../types/vacancy.types";
-
-// const EditSocioSheet = dynamic(
-//   () =>
-//     import("../EditSocioSheet").then((mod) => ({
-//       default: mod.EditSocioSheet,
-//     })),
-//   {
-//     ssr: false,
-//     loading: () => <LoadingModalState />,
-//   }
-// );
-//
-// const DeleteSocioAlertDialog = dynamic(
-//   () =>
-//     import("../DeleteSocioAlertDialog").then((mod) => ({
-//       default: mod.DeleteSocioAlertDialog,
-//     })),
-//   {
-//     ssr: false,
-//     loading: () => <LoadingModalState />,
-//   }
-// );
+import { useDeleteVacancy } from "../../hooks/useDeleteVacancy";
 
 export function VacancyRowActions({ row }: { row: Row<Vacancy> }) {
-  const socio = row.original;
+  const vacancy = row.original;
   const { isOpen, openModal, closeModal } = useModalState();
   const {
     isOpen: isDeleteOpen,
@@ -40,11 +17,11 @@ export function VacancyRowActions({ row }: { row: Row<Vacancy> }) {
     closeModal: closeDeleteModal,
   } = useModalState();
 
-  //const deleteVacacncyMutation= useDeleteVacancy(); // No implementado -> Implementar con Tan Stack Query
+  const deleteVacancyMutation = useDeleteVacancy();
 
   const handleDelete = async () => {
-    // await deleteSocioMutation.mutateAsync(socio.id);
-    console.log("Vacante eliminada");
+    await deleteVacancyMutation.mutateAsync(vacancy.id);
+    closeDeleteModal();
   };
 
   const actions = createVacancyActions(openModal, openDeleteModal);
@@ -59,15 +36,14 @@ export function VacancyRowActions({ row }: { row: Row<Vacancy> }) {
           PermissionActions.vacantes.gestionar,
         ]}
       >
-        {isDeleteOpen && <p>Dialog de Eliminar</p>}
-
-        {/* <DeleteSocioAlertDialog */}
-        {/*   isOpen={isDeleteOpen} */}
-        {/*   onOpenChange={closeDeleteModal} */}
-        {/*   onConfirmDelete={handleDelete} */}
-        {/*   socioToDelete={socio.nombre} */}
-        {/*   isLoading={deleteSocioMutation.isPending} */}
-        {/* /> */}
+        {isDeleteOpen && (
+          <div className="p-4">
+            <p>Confirmar eliminacion de vacante: {vacancy.title}</p>
+            <button onClick={handleDelete} disabled={deleteVacancyMutation.isPending}>
+              {deleteVacancyMutation.isPending ? "Eliminando..." : "Eliminar"}
+            </button>
+          </div>
+        )}
       </PermissionGuard>
 
       <PermissionGuard
@@ -76,8 +52,7 @@ export function VacancyRowActions({ row }: { row: Row<Vacancy> }) {
           PermissionActions.vacantes.gestionar,
         ]}
       >
-        {isOpen && <p>Dialog de Eliminar</p>}
-        {/* <EditSocioSheet socio={socio} isOpen={true} onClose={closeModal} /> */}
+        {isOpen && <p>Dialog de Editar: {vacancy.title}</p>}
       </PermissionGuard>
     </>
   );

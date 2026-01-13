@@ -69,6 +69,8 @@ export interface ActionConfig<TData = unknown> {
   showBulkActions?: boolean;
   onBulkDelete?: (selectedRows: TData[]) => void;
   onBulkExport?: (selectedRows: TData[]) => void;
+  onBulkEdit?: (selectedRows: TData[]) => void;
+  onBulkShare?: (selectedRows: TData[]) => void;
   bulkActionsLabel?: string;
 }
 
