@@ -5,26 +5,82 @@ import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { VacancyActionsDropdown } from "./VacanciesActionsDropdown";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { createVacancyActions } from "./types/VacanciesActionList";
-import { Vacancy } from "../../types/vacancy.types";
+import { Vacancy, VacancyStatus } from "../../types/vacancy.types";
 import { useDeleteVacancy } from "../../hooks/useDeleteVacancy";
+import { LoadingModalState } from "@/core/shared/components/LoadingModalState";
+import dynamic from "next/dynamic";
+import { useUpdateVacancy } from "../../hooks/useUpdateVacancy";
+
+const DeleteVacancyAlertDialog = dynamic(
+  () =>
+    import("../DeleteVacancyAlertDialog").then((mod) => ({
+      default: mod.DeleteColaboradorAlertDialog,
+    })),
+  {
+    ssr: false,
+    loading: () => <LoadingModalState />,
+  },
+);
+
+const VacancyForm = dynamic(
+  () =>
+    import("../VacancyForm").then((mod) => ({
+      default: mod.VacancyForm,
+    })),
+  {
+    ssr: false,
+    loading: () => <LoadingModalState />,
+  },
+);
 
 export function VacancyRowActions({ row }: { row: Row<Vacancy> }) {
   const vacancy = row.original;
-  const { isOpen, openModal, closeModal } = useModalState();
   const {
     isOpen: isDeleteOpen,
     openModal: openDeleteModal,
     closeModal: closeDeleteModal,
   } = useModalState();
 
+  const {
+    isOpen: isUpdateModalOpen,
+    openModal: openUpdateModal,
+    closeModal: closeUpdateModal,
+  } = useModalState();
+
   const deleteVacancyMutation = useDeleteVacancy();
+  const updateVacancyMutation = useUpdateVacancy();
+
+  const handleUpdate = async (data: {
+    title: string;
+    description: string;
+    status?: VacancyStatus;
+    department?: string;
+    location?: string;
+  }) => {
+    try {
+      await updateVacancyMutation.mutateAsync({
+        id: vacancy.id,
+        ...data,
+      });
+      return {
+        error: null,
+      };
+    } catch (e) {
+      console.error(e);
+      return {
+        error: "Error",
+      };
+    } finally {
+      closeUpdateModal();
+    }
+  };
 
   const handleDelete = async () => {
     await deleteVacancyMutation.mutateAsync(vacancy.id);
     closeDeleteModal();
   };
 
-  const actions = createVacancyActions(openModal, openDeleteModal);
+  const actions = createVacancyActions(openUpdateModal, openDeleteModal);
 
   return (
     <>
@@ -37,12 +93,13 @@ export function VacancyRowActions({ row }: { row: Row<Vacancy> }) {
         ]}
       >
         {isDeleteOpen && (
-          <div className="p-4">
-            <p>Confirmar eliminacion de vacante: {vacancy.title}</p>
-            <button onClick={handleDelete} disabled={deleteVacancyMutation.isPending}>
-              {deleteVacancyMutation.isPending ? "Eliminando..." : "Eliminar"}
-            </button>
-          </div>
+          <DeleteVacancyAlertDialog
+            isOpen={isDeleteOpen}
+            onOpenChange={closeDeleteModal}
+            onConfirmDelete={handleDelete}
+            vacancyToDelete={vacancy.title}
+            isLoading={deleteVacancyMutation.isPending}
+          />
         )}
       </PermissionGuard>
 
@@ -52,7 +109,14 @@ export function VacancyRowActions({ row }: { row: Row<Vacancy> }) {
           PermissionActions.vacantes.gestionar,
         ]}
       >
-        {isOpen && <p>Dialog de Editar: {vacancy.title}</p>}
+        {isUpdateModalOpen && (
+          <VacancyForm
+            onSubmit={(data) => handleUpdate(data)}
+            vacancy={vacancy}
+            onOpenChange={closeUpdateModal}
+            open
+          />
+        )}
       </PermissionGuard>
     </>
   );

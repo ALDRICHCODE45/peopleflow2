@@ -2,6 +2,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Vacancy } from "../../types/vacancy.types";
 import { Badge } from "@/core/shared/ui/shadcn/badge";
 import { VacancyRowActions } from "./VacancyRowActions";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Calendar } from "@hugeicons/core-free-icons";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 export const VacancyColumns: ColumnDef<Vacancy>[] = [
   {
@@ -42,12 +46,37 @@ export const VacancyColumns: ColumnDef<Vacancy>[] = [
   {
     header: "Creacion",
     accessorKey: "createdAt",
+
+    cell: ({ row }) => {
+      const date = row.getValue("createdAt") as Date;
+      const fechaFormateada = format(date, "eee d MMM yyyy", { locale: es });
+
+      return (
+        <>
+          <div className="flex justify-between items-center text-center">
+            {fechaFormateada}
+          </div>
+        </>
+      );
+    },
     size: 20,
   },
 
   {
     header: "Actualizado",
     accessorKey: "updatedAt",
+    cell: ({ row }) => {
+      const date = row.getValue("updatedAt") as Date;
+      const fechaFormateada = format(date, "eee d MMM yyyy", { locale: es });
+
+      return (
+        <>
+          <div className="flex justify-between items-center text-center">
+            {fechaFormateada}
+          </div>
+        </>
+      );
+    },
     size: 20,
   },
 

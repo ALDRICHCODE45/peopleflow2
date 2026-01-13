@@ -3,6 +3,7 @@ import { updateVacancyAction } from "../../server/presentation/actions/vacancy.a
 import { toast } from "sonner";
 import { VACANCIES_QUERY_KEY } from "./useVacanciesQuery";
 import type { VacancyStatus } from "../types/vacancy.types";
+import { showToast } from "@/core/shared/components/ShowToast";
 
 export interface UpdateVacancyData {
   id: string;
@@ -25,7 +26,11 @@ export function useUpdateVacancy() {
       return result.vacancy;
     },
     onSuccess: async () => {
-      toast.success("Vacante actualizada exitosamente");
+      showToast({
+        title: "Operacion Exitosa!",
+        description: "Vacante actualizada correctamente",
+        type: "success",
+      });
       await queryClient.invalidateQueries({
         queryKey: VACANCIES_QUERY_KEY,
       });
