@@ -92,7 +92,7 @@ export function DataTable<TData, TValue>({
       isLoading: isLoadingProp ?? config.isLoading ?? false,
       skeletonRows: config.skeletonRows ?? 5,
     }),
-    [config, isLoadingProp],
+    [config, isLoadingProp]
   );
 
   const [pagination, setPagination] = useState<PaginationState>({
@@ -136,7 +136,7 @@ export function DataTable<TData, TValue>({
     >
       {/* Filtros personalizados o por defecto */}
       <div
-        className="w-full min-w-0"
+        className="w-full min-w-0 pr-2"
         role="search"
         aria-label="Filtros de búsqueda"
       >
@@ -173,57 +173,57 @@ export function DataTable<TData, TValue>({
             actions={[
               ...(finalConfig.actions?.onBulkExport
                 ? [
-                  {
-                    id: "duplicate",
-                    label: "Duplicate",
-                    icon: (
-                      <HugeiconsIcon icon={Copy01Icon} className="h-4 w-4" />
-                    ),
-                    onClick: () => {
-                      const selectedRows = table
-                        .getSelectedRowModel()
-                        .rows.map((row) => row.original);
-                      console.log("Duplicating:", selectedRows);
+                    {
+                      id: "duplicate",
+                      label: "Duplicate",
+                      icon: (
+                        <HugeiconsIcon icon={Copy01Icon} className="h-4 w-4" />
+                      ),
+                      onClick: () => {
+                        const selectedRows = table
+                          .getSelectedRowModel()
+                          .rows.map((row) => row.original);
+                        console.log("Duplicating:", selectedRows);
+                      },
+                      variant: "outline" as const,
                     },
-                    variant: "outline" as const,
-                  },
-                ]
+                  ]
                 : []),
               ...(finalConfig.actions?.onBulkExport
                 ? [
-                  {
-                    id: "print",
-                    label: "Print",
-                    icon: (
-                      <HugeiconsIcon icon={Printer} className="h-4 w-4" />
-                    ),
-                    onClick: () => {
-                      const selectedRows = table
-                        .getSelectedRowModel()
-                        .rows.map((row) => row.original);
-                      console.log("Printing:", selectedRows);
+                    {
+                      id: "print",
+                      label: "Print",
+                      icon: (
+                        <HugeiconsIcon icon={Printer} className="h-4 w-4" />
+                      ),
+                      onClick: () => {
+                        const selectedRows = table
+                          .getSelectedRowModel()
+                          .rows.map((row) => row.original);
+                        console.log("Printing:", selectedRows);
+                      },
+                      variant: "outline" as const,
                     },
-                    variant: "outline" as const,
-                  },
-                ]
+                  ]
                 : []),
               ...(finalConfig.actions?.onBulkDelete
                 ? [
-                  {
-                    id: "delete",
-                    label: "Delete",
-                    icon: (
-                      <HugeiconsIcon icon={DeleteIcon} className="h-4 w-4" />
-                    ),
-                    onClick: () => {
-                      const selectedRows = table
-                        .getSelectedRowModel()
-                        .rows.map((row) => row.original);
-                      finalConfig.actions?.onBulkDelete?.(selectedRows);
+                    {
+                      id: "delete",
+                      label: "Delete",
+                      icon: (
+                        <HugeiconsIcon icon={DeleteIcon} className="h-4 w-4" />
+                      ),
+                      onClick: () => {
+                        const selectedRows = table
+                          .getSelectedRowModel()
+                          .rows.map((row) => row.original);
+                        finalConfig.actions?.onBulkDelete?.(selectedRows);
+                      },
+                      variant: "destructive" as const,
                     },
-                    variant: "destructive" as const,
-                  },
-                ]
+                  ]
                 : []),
             ]}
           />

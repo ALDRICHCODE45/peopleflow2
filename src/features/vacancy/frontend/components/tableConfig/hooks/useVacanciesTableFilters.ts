@@ -10,7 +10,7 @@ export const useVacanciesTableFilters = (table: Table<unknown>) => {
       setSelectedEstado(newEstado);
 
       if (newEstado === "todos") {
-        table.getColumn("isActive")?.setFilterValue(undefined);
+        table.getColumn("status")?.setFilterValue(undefined);
         return;
       }
 
@@ -36,7 +36,7 @@ export const useVacanciesTableFilters = (table: Table<unknown>) => {
           break;
       }
     },
-    [table],
+    [table]
   );
 
   const clearFilters = useCallback(() => {

@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:seed": "bunx tsx prisma/seed.ts"
+    "db:seed": "bunx tsx prisma/seed.ts",
+    "prisma:generate": "bunx prisma generate",
+    "prisma:studio": "bunx prisma studio",
+    "better:generate": "bunx @better-auth/cli@latest generate --config src/core/lib/auth.ts"
   },
   "prisma": {
     "seed": "bunx tsx prisma/seed.ts"

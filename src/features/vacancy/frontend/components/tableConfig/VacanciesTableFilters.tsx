@@ -9,6 +9,8 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { BaseFilterProps } from "@/core/shared/components/DataTable/TableTypes.types";
 import { FilterHeaderActions } from "@/core/shared/components/DataTable/FilterHeaderAction";
 import { useVacanciesTableFilters } from "./hooks/useVacanciesTableFilters";
+import { FilterSelect } from "@/core/shared/components/DataTable/FilterSelect";
+import { vacancyStatusOptions } from "./typers/vacancyStatusOptions";
 
 interface VacanciesTableFilterProps extends BaseFilterProps {
   table: Table<unknown>;
@@ -29,8 +31,8 @@ export const VacanciesTableFilters = ({
 
   return (
     <>
-      <Card className="mb-6 border-0 shadow-md w-full min-w-0 overflow-hidden">
-        <CardHeader className="pb-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 w-full min-w-0">
+      <Card className="mb-6 border-0 shadow-md w-full min-w-0 overflow-hidden m-1">
+        <CardHeader className="pb-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 w-full min-w-0 ">
           <div className="flex items-center gap-2 min-w-0">
             <HugeiconsIcon
               icon={Filter}
@@ -39,19 +41,6 @@ export const VacanciesTableFilters = ({
             <Badge variant="outline" className="ml-2 shrink">
               {table.getFilteredRowModel().rows.length} resultados
             </Badge>
-          </div>
-          <div className="flex flex-wrap gap-2 w-full sm:w-auto min-w-0">
-            <FilterHeaderActions
-              showAddButton={showAddButton}
-              AddButtonIcon={AddButtonIcon}
-              addButtonText={addButtonText}
-              buttonTooltipText="Agregar Socio"
-              onClearFilters={() => {
-                clearFilters();
-                onGlobalFilterChange?.("");
-              }}
-              onAdd={onAdd}
-            />
           </div>
         </CardHeader>
 
@@ -66,13 +55,12 @@ export const VacanciesTableFilters = ({
                 <Input
                   id="search"
                   className="w-full pl-9 min-w-0"
-                  placeholder="Buscar colaborador..."
+                  placeholder="Buscar vacante..."
                   value={
-                    (table.getColumn("nombre")?.getFilterValue() ??
-                      "") as string
+                    (table.getColumn("title")?.getFilterValue() ?? "") as string
                   }
                   onChange={(e) => {
-                    table.getColumn("nombre")?.setFilterValue(e.target.value);
+                    table.getColumn("title")?.setFilterValue(e.target.value);
                     onGlobalFilterChange?.(e.target.value);
                   }}
                 />
@@ -85,12 +73,12 @@ export const VacanciesTableFilters = ({
 
             {/* Filtro de categoría */}
 
-            {/* <FilterSelect
+            <FilterSelect
               label="Estado"
               onValueChange={handleEstadoChange}
-              options={estadosUser}
+              options={vacancyStatusOptions}
               value={selectedEstado}
-            /> */}
+            />
 
             {/* Filtro de rango de fechas */}
           </div>

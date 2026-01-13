@@ -3,9 +3,14 @@ import { Add01Icon } from "@hugeicons/core-free-icons";
 import { TableConfig } from "@/core/shared/components/DataTable/TableTypes.types";
 import { Vacancy } from "../../types/vacancy.types";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { VacanciesTableFilters } from "./VacanciesTableFilters";
 
 export const VacanciesTableConfig: TableConfig<Vacancy> = {
   filters: {
+    customFilter: {
+      component: VacanciesTableFilters,
+      props: {},
+    },
     searchColumn: "title",
     searchPlaceholder: "Buscar vacantes...",
     showSearch: true,

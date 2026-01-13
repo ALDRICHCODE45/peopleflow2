@@ -28,6 +28,11 @@ import {
   Plus,
   Minus,
   ArrowDown,
+  Layers,
+  PlayCircleIcon,
+  FileEditIcon,
+  Lock,
+  Archive,
 } from "@hugeicons/core-free-icons";
 import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
 import {
@@ -44,7 +49,7 @@ const VacancyForm = dynamic(
   {
     ssr: false,
     loading: () => <LoadingModalState />,
-  },
+  }
 );
 
 export function VacancyListPage() {
@@ -94,25 +99,34 @@ export function VacancyListPage() {
 
   // Configuracion de tabs
   const tabsConfig: TabConfig[] = [
-    { id: "all", label: "Todas", count: stats.total },
-    { id: "OPEN", label: "Abiertas", count: stats.open, filterValue: "OPEN" },
+    { id: "all", label: "Todas", count: stats.total, icon: Layers },
+    {
+      id: "OPEN",
+      label: "Abiertas",
+      count: stats.open,
+      filterValue: "OPEN",
+      icon: PlayCircleIcon,
+    },
     {
       id: "DRAFT",
       label: "Borrador",
       count: stats.draft,
       filterValue: "DRAFT",
+      icon: FileEditIcon,
     },
     {
       id: "CLOSED",
       label: "Cerradas",
       count: stats.closed,
       filterValue: "CLOSED",
+      icon: Lock,
     },
     {
       id: "ARCHIVED",
       label: "Archivadas",
       count: stats.archived,
       filterValue: "ARCHIVED",
+      icon: Archive,
     },
   ];
 
@@ -135,7 +149,7 @@ export function VacancyListPage() {
   };
 
   const handleCreateVacancy = async (
-    data: Parameters<typeof createVacancyMutation.mutateAsync>[0],
+    data: Parameters<typeof createVacancyMutation.mutateAsync>[0]
   ) => {
     const result = await createVacancyMutation.mutateAsync(data);
     if (result) {
