@@ -28,18 +28,30 @@ export const FilterHeaderActions = ({
 }: FilterHeaderActions) => {
   return (
     <>
-      {showAddButton && (
+      {showAddButton && addButtonText.length > 0 && AddButtonIcon && (
         <Button
           buttonTooltip
           buttonTooltipText={buttonTooltipText}
-          variant="default"
+          variant="outline-primary"
+          size="lg"
+          className="h-8 px-3 flex items-center gap-1"
+          onClick={onAdd}
+        >
+          {addButtonText}
+          <HugeiconsIcon icon={AddButtonIcon} className="h-4 w-4" />
+        </Button>
+      )}
+
+      {showAddButton && addButtonText.length === 0 && AddButtonIcon && (
+        <Button
+          buttonTooltip
+          buttonTooltipText={buttonTooltipText}
+          variant="outline-primary"
           size="icon"
           className="h-8 px-3 flex items-center gap-1"
           onClick={onAdd}
         >
-          {AddButtonIcon && (
-            <HugeiconsIcon icon={AddButtonIcon} className="h-4 w-4" />
-          )}
+          <HugeiconsIcon icon={AddButtonIcon} className="h-4 w-4" />
         </Button>
       )}
       <Button

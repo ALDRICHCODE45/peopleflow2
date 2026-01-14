@@ -136,7 +136,7 @@ export async function updateVacancyAction(
     status?: VacancyStatus;
     department?: string | null;
     location?: string | null;
-  },
+  }
 ): Promise<UpdateVacancyResult> {
   try {
     const headersList = await headers();
@@ -177,7 +177,7 @@ export async function updateVacancyAction(
  * Elimina una vacante
  */
 export async function deleteVacancyAction(
-  id: string,
+  id: string
 ): Promise<DeleteVacancyResult> {
   try {
     const headersList = await headers();

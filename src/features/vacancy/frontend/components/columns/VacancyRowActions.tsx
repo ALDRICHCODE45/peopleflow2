@@ -10,6 +10,7 @@ import { useDeleteVacancy } from "../../hooks/useDeleteVacancy";
 import { LoadingModalState } from "@/core/shared/components/LoadingModalState";
 import dynamic from "next/dynamic";
 import { useUpdateVacancy } from "../../hooks/useUpdateVacancy";
+import { VacancySheetForm } from "../VacancySheetForm";
 
 const DeleteVacancyAlertDialog = dynamic(
   () =>
@@ -19,18 +20,7 @@ const DeleteVacancyAlertDialog = dynamic(
   {
     ssr: false,
     loading: () => <LoadingModalState />,
-  },
-);
-
-const VacancyForm = dynamic(
-  () =>
-    import("../VacancyForm").then((mod) => ({
-      default: mod.VacancyForm,
-    })),
-  {
-    ssr: false,
-    loading: () => <LoadingModalState />,
-  },
+  }
 );
 
 export function VacancyRowActions({ row }: { row: Row<Vacancy> }) {
@@ -110,7 +100,7 @@ export function VacancyRowActions({ row }: { row: Row<Vacancy> }) {
         ]}
       >
         {isUpdateModalOpen && (
-          <VacancyForm
+          <VacancySheetForm
             onSubmit={(data) => handleUpdate(data)}
             vacancy={vacancy}
             onOpenChange={closeUpdateModal}

@@ -23,7 +23,7 @@ export const VacanciesTableFilters = ({
   onGlobalFilterChange,
   addButtonIcon: AddButtonIcon,
   showAddButton,
-  addButtonText = "Agregar",
+  addButtonText = "",
   onAdd,
 }: VacanciesTableFilterProps) => {
   const { clearFilters, handleEstadoChange, selectedEstado } =
@@ -41,6 +41,20 @@ export const VacanciesTableFilters = ({
             <Badge variant="outline" className="ml-2 shrink">
               {table.getFilteredRowModel().rows.length} resultados
             </Badge>
+          </div>
+
+          <div className="flex flex-wrap gap-2 w-full sm:w-auto min-w-0">
+            <FilterHeaderActions
+              showAddButton={showAddButton}
+              AddButtonIcon={AddButtonIcon}
+              addButtonText={addButtonText}
+              buttonTooltipText="crear vacante"
+              onClearFilters={() => {
+                clearFilters();
+                onGlobalFilterChange?.("");
+              }}
+              onAdd={onAdd}
+            />
           </div>
         </CardHeader>
 

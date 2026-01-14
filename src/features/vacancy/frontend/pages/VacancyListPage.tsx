@@ -10,8 +10,6 @@ import { VacancyColumns } from "../components/columns/VacancyColumns";
 import { useModalState } from "@/core/shared/hooks/useModalState";
 import { createTableConfig } from "@/core/shared/helpers/createTableConfig";
 import { VacanciesTableConfig } from "../components/tableConfig/VacanciesTableConfig";
-import dynamic from "next/dynamic";
-import { LoadingModalState } from "@/core/shared/components/LoadingModalState";
 import {
   DataTableStats,
   StatCardConfig,
@@ -25,8 +23,6 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import {
   FileDownloadIcon,
   ArrowReloadHorizontalIcon,
-  Plus,
-  Minus,
   ArrowDown,
   Layers,
   PlayCircleIcon,
@@ -40,17 +36,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/core/shared/ui/shadcn/collapsible";
-
-const VacancyForm = dynamic(
-  () =>
-    import("../components/VacancyForm").then((mod) => ({
-      default: mod.VacancyForm,
-    })),
-  {
-    ssr: false,
-    loading: () => <LoadingModalState />,
-  }
-);
+import { VacancySheetForm } from "../components/VacancySheetForm";
 
 export function VacancyListPage() {
   const { data: vacancies = [], isLoading, refetch } = useVacanciesQuery();
@@ -149,7 +135,7 @@ export function VacancyListPage() {
   };
 
   const handleCreateVacancy = async (
-    data: Parameters<typeof createVacancyMutation.mutateAsync>[0]
+    data: Parameters<typeof createVacancyMutation.mutateAsync>[0],
   ) => {
     const result = await createVacancyMutation.mutateAsync(data);
     if (result) {
@@ -247,7 +233,7 @@ export function VacancyListPage() {
             ]}
           >
             {isOpen && (
-              <VacancyForm
+              <VacancySheetForm
                 onSubmit={handleCreateVacancy}
                 open={true}
                 onOpenChange={closeModal}
