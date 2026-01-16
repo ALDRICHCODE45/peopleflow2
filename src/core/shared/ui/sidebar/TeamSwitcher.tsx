@@ -27,13 +27,18 @@ import {
 
 // Server actions
 import { getDefaultRouteForTenantAction } from "@/features/auth-rbac/server/presentation/actions/permission.actions";
-import { useAuth } from "../../hooks";
+import { useRouter } from "next/navigation";
 
 export function TeamSwitcher() {
   const { isMobile } = useSidebar();
+  const router = useRouter();
 
   // Hooks de tenant
-  const { tenant: activeTenant, isLoading: isTenantLoading } = useTenant();
+  const {
+    tenant: activeTenant,
+    isLoading: isTenantLoading,
+    refresh: refreshTenant,
+  } = useTenant();
   const { tenants, isLoading: isTenantsLoading } = useUserTenants();
   const { switchTenant, isLoading: isSwitching } = useSwitchTenant();
 
@@ -42,14 +47,9 @@ export function TeamSwitcher() {
   /**
    * Maneja el cambio de tenant
    * 1. Cambia el tenant en la sesión (BD)
-   * 2. Obtiene la ruta por defecto para el nuevo tenant
-   * 3. Navega usando window.location.href para garantizar recarga completa
-   *
-   * NOTA: Usamos window.location.href en lugar de router.push() porque:
-   * - Garantiza que la navegación se complete antes de continuar
-   * - Recarga completamente la página, limpiando todo el estado
-   * - Evita race conditions entre el sidebar y la página actual
-   * - El TenantContext se inicializa desde cero con el nuevo tenant
+   * 2. Actualiza el TenantContext local
+   * 3. Obtiene la ruta por defecto para el nuevo tenant
+   * 4. Navega a la nueva ruta
    */
   const handleTenantChange = async (tenantId: string) => {
     if (tenantId === activeTenant?.id || isSwitching) return;
@@ -57,13 +57,16 @@ export function TeamSwitcher() {
     const success = await switchTenant(tenantId);
 
     if (success) {
+      // Actualizar el contexto local con el nuevo tenant
+      await refreshTenant();
+
       // Obtener la ruta por defecto para el nuevo tenant
       const { route: defaultRoute } =
         await getDefaultRouteForTenantAction(tenantId);
 
-      // Navegar con recarga completa para evitar race conditions
-      // No necesitamos llamar refreshTenant() - la recarga lo hará automáticamente
-      window.location.href = defaultRoute;
+      // Navegar a la ruta por defecto del nuevo tenant
+      router.replace(defaultRoute);
+      router.refresh();
     }
   };
 

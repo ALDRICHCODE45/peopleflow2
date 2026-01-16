@@ -23,7 +23,8 @@ const SILENT_PERMISSION_CHECK_INTERVAL = 60000; // 1 minuto
  * - Verifica permisos en la carga inicial (con loading)
  * - Verifica permisos silenciosamente cada minuto (sin loading)
  * - Si detecta pérdida de permisos, redirige a /access-denied
- * - No interrumpe al usuario con recargas innecesarias
+ * - NO desmonta los children durante navegación para preservar estado del sidebar
+ * - Usa un overlay semitransparente durante verificación de navegación
  */
 export function RouteGuard({ children, fallback }: RouteGuardProps) {
   const router = useRouter();
@@ -32,9 +33,11 @@ export function RouteGuard({ children, fallback }: RouteGuardProps) {
 
   const [isInitialCheck, setIsInitialCheck] = useState(true);
   const [hasAccess, setHasAccess] = useState(false);
+  const [wasAccessGranted, setWasAccessGranted] = useState(false);
 
   // Ref para evitar múltiples checks simultáneos
   const isCheckingRef = useRef(false);
+  const previousPathRef = useRef<string | null>(null);
 
   /**
    * Verifica acceso a la ruta actual
@@ -61,6 +64,7 @@ export function RouteGuard({ children, fallback }: RouteGuardProps) {
         }
 
         setHasAccess(true);
+        setWasAccessGranted(true);
       } catch (error) {
         console.error("Error checking route access:", error);
         // FAIL-CLOSED: En caso de error, denegar acceso por seguridad
@@ -81,16 +85,29 @@ export function RouteGuard({ children, fallback }: RouteGuardProps) {
     [pathname, tenant?.id, router]
   );
 
-  // Verificación inicial cuando cambia el pathname o tenant
+  // Verificación cuando cambia el pathname o tenant
   useEffect(() => {
     if (isTenantLoading) return;
 
-    // Reset para nueva ruta
-    setIsInitialCheck(true);
-    setHasAccess(false);
+    const isNavigating =
+      previousPathRef.current !== null && previousPathRef.current !== pathname;
+    previousPathRef.current = pathname;
 
-    checkAccess(false); // Verificación con loading
-  }, [pathname, tenant?.id, isTenantLoading, checkAccess]);
+    if (isNavigating && wasAccessGranted) {
+      // Navegación con acceso previo: overlay sin desmontar children
+      setIsInitialCheck(true);
+      // No resetear hasAccess - mantener children montados
+      checkAccess(false);
+    } else if (!wasAccessGranted) {
+      // Primera carga: verificación completa con loading
+      setIsInitialCheck(true);
+      setHasAccess(false);
+      checkAccess(false);
+    } else {
+      // Mismo pathname, ya con acceso - verificación silenciosa
+      checkAccess(true);
+    }
+  }, [pathname, tenant?.id, isTenantLoading, checkAccess, wasAccessGranted]);
 
   // Verificación silenciosa periódica
   useEffect(() => {
@@ -104,13 +121,13 @@ export function RouteGuard({ children, fallback }: RouteGuardProps) {
     return () => clearInterval(interval);
   }, [isTenantLoading, isInitialCheck, hasAccess, checkAccess]);
 
-  // Loading solo durante la verificación inicial
-  if (isTenantLoading || isInitialCheck) {
+  // Primera carga - loading completo (antes de tener acceso por primera vez)
+  if ((isTenantLoading || isInitialCheck) && !wasAccessGranted) {
     return (
       fallback || (
         <div className="flex items-center justify-center min-h-screen bg-white dark:bg-background">
           <div
-            className="animate-spin rounded-full h-16 w-16 border-4 border-t-transparent 
+            className="animate-spin rounded-full h-16 w-16 border-4 border-t-transparent
                         border-gray-900 dark:border-foreground/20 dark:border-t-transparent"
             role="status"
             aria-label="Verificando permisos..."
@@ -120,10 +137,31 @@ export function RouteGuard({ children, fallback }: RouteGuardProps) {
     );
   }
 
-  // Si no tiene acceso, no mostrar nada (se está redirigiendo)
-  if (!hasAccess) {
+  // Sin acceso y no verificando - se está redirigiendo
+  if (!hasAccess && !isInitialCheck) {
     return null;
   }
 
-  return <>{children}</>;
+  // Con acceso (o verificando durante navegación)
+  // Los children permanecen montados para preservar el estado del sidebar
+  return (
+    <div className="relative min-h-screen">
+      {/* Overlay de verificación durante navegación - no desmonta children */}
+      {isInitialCheck && wasAccessGranted && (
+        <div
+          className="absolute inset-0 z-[100] flex items-center justify-center
+                     bg-white/60 dark:bg-background/60 backdrop-blur-[2px]
+                     transition-opacity duration-150"
+        >
+          <div
+            className="animate-spin rounded-full h-8 w-8 border-2 border-t-transparent
+                        border-gray-600 dark:border-foreground/40"
+            role="status"
+            aria-label="Verificando permisos..."
+          />
+        </div>
+      )}
+      {children}
+    </div>
+  );
 }
