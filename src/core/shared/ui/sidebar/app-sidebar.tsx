@@ -14,22 +14,26 @@ import { useAuth } from "../../hooks/use-auth";
 import { usePermissions } from "../../hooks";
 import { filterSidebarLinks } from "../../helpers/sidebar-filter";
 import { TeamSwitcher } from "./TeamSwitcher";
+import { useIsMobile } from "../../hooks/use-mobile";
+import { cn } from "@/core/lib/utils";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useAuth();
   const { permissions } = usePermissions();
 
+  const isMobile = useIsMobile();
+
   const userData = user
     ? {
-      name: user.name || "Usuario",
-      email: user.email || "usuario@bdp.com",
-      avatar: user.image || "/placeholder-avatar.jpg",
-    }
+        name: user.name || "Usuario",
+        email: user.email || "usuario@bdp.com",
+        avatar: user.image || "/placeholder-avatar.jpg",
+      }
     : {
-      name: "Usuario",
-      email: "usuario@bdp.com",
-      avatar: "/placeholder-avatar.jpg",
-    };
+        name: "Usuario",
+        email: "usuario@bdp.com",
+        avatar: "/placeholder-avatar.jpg",
+      };
 
   // Filtrar los links del sidebar basándose en los permisos del usuario
   const filteredLinks = React.useMemo(() => {
@@ -37,7 +41,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }, [permissions]);
 
   return (
-    <Sidebar collapsible="icon" {...props} variant="floating">
+    <Sidebar
+      collapsible="icon"
+      {...props}
+      variant="floating"
+      className="rounded-full"
+    >
       <SidebarHeader>
         <TeamSwitcher />
       </SidebarHeader>

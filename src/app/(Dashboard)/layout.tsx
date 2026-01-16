@@ -11,7 +11,12 @@ import {
 import { AppSidebar } from "@/core/shared/ui/sidebar/app-sidebar";
 import { BreadcrumbNavbar } from "@/core/shared/ui/sidebar/BreadCrumNavbar";
 import { TenantProvider } from "@/features/tenants/frontend/context/TenantContext";
+import { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
+
+export const metadata: Metadata = {
+  title: "PeopleFlow CRM",
+};
 
 export default function DashboardLayout({
   children,
