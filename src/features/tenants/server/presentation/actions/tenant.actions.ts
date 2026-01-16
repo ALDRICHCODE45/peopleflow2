@@ -125,7 +125,7 @@ export async function switchTenantAction(
       return { error: result.error || "Error al cambiar tenant" };
     }
 
-    revalidatePath("/dashboard");
+    revalidatePath("/", "layout");
     return { error: null };
   } catch (error) {
     console.error("Error switching tenant:", error);

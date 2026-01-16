@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronsUpDown, Building } from "@hugeicons/core-free-icons";
+import { ChevronsUpDown, Building, Circle } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 import {
@@ -27,18 +27,12 @@ import {
 
 // Server actions
 import { getDefaultRouteForTenantAction } from "@/features/auth-rbac/server/presentation/actions/permission.actions";
-import { useRouter } from "next/navigation";
 
 export function TeamSwitcher() {
   const { isMobile } = useSidebar();
-  const router = useRouter();
 
   // Hooks de tenant
-  const {
-    tenant: activeTenant,
-    isLoading: isTenantLoading,
-    refresh: refreshTenant,
-  } = useTenant();
+  const { tenant: activeTenant, isLoading: isTenantLoading } = useTenant();
   const { tenants, isLoading: isTenantsLoading } = useUserTenants();
   const { switchTenant, isLoading: isSwitching } = useSwitchTenant();
 
@@ -47,9 +41,8 @@ export function TeamSwitcher() {
   /**
    * Maneja el cambio de tenant
    * 1. Cambia el tenant en la sesión (BD)
-   * 2. Actualiza el TenantContext local
-   * 3. Obtiene la ruta por defecto para el nuevo tenant
-   * 4. Navega a la nueva ruta
+   * 2. Obtiene la ruta por defecto para el nuevo tenant
+   * 3. Realiza un full page reload para limpiar todos los cachés
    */
   const handleTenantChange = async (tenantId: string) => {
     if (tenantId === activeTenant?.id || isSwitching) return;
@@ -57,16 +50,13 @@ export function TeamSwitcher() {
     const success = await switchTenant(tenantId);
 
     if (success) {
-      // Actualizar el contexto local con el nuevo tenant
-      await refreshTenant();
-
       // Obtener la ruta por defecto para el nuevo tenant
       const { route: defaultRoute } =
         await getDefaultRouteForTenantAction(tenantId);
 
-      // Navegar a la ruta por defecto del nuevo tenant
-      router.replace(defaultRoute);
-      router.refresh();
+      // Full page reload para limpiar todos los cachés (Better Auth, Next.js Router Cache, etc.)
+      // Esto garantiza que la sesión se lea fresca desde la BD
+      window.location.href = defaultRoute;
     }
   };
 
@@ -152,7 +142,7 @@ export function TeamSwitcher() {
             >
               <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                 <HugeiconsIcon
-                  icon={Building}
+                  icon={Circle}
                   strokeWidth={2}
                   className="size-4"
                 />
@@ -186,7 +176,7 @@ export function TeamSwitcher() {
               >
                 <div className="flex size-6 items-center justify-center rounded-md border">
                   <HugeiconsIcon
-                    icon={Building}
+                    icon={Circle}
                     strokeWidth={2}
                     className="size-3.5 shrink-0"
                   />
@@ -199,11 +189,11 @@ export function TeamSwitcher() {
                   >
                     {tenantItem.name}
                   </span>
-                  {tenantItem.roles && tenantItem.roles.length > 0 && (
+                  {/* {tenantItem.roles && tenantItem.roles.length > 0 && (
                     <span className="text-xs text-muted-foreground">
                       {tenantItem.roles.map((r) => r.name).join(", ")}
                     </span>
-                  )}
+                  )} */}
                 </div>
                 {tenantItem.id === activeTenant.id && (
                   <span className="text-xs text-primary">●</span>
