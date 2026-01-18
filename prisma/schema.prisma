@@ -91,6 +91,7 @@ model Tenant {
   userRoles UserRole[]
   sessions  Session[]
   vacancies Vacancy[]
+  roles     Role[]
 
   @@map("tenant")
 }
@@ -99,11 +100,17 @@ model Tenant {
 
 model Role {
   id          String           @id @default(uuid())
-  name        String           @unique
+  name        String
+  tenantId    String?
+  tenant      Tenant?          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   users       UserRole[]
   permissions RolePermission[]
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
+
+  @@unique([name, tenantId])
+  @@index([tenantId])
+  @@index([name])
 }
 
 model UserRole {

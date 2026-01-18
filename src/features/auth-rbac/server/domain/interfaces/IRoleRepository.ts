@@ -12,9 +12,9 @@ export interface IRoleRepository {
   findById(id: string): Promise<Role | null>;
 
   /**
-   * Encuentra un rol por su nombre
+   * Encuentra un rol por su nombre y tenant
    */
-  findByName(name: string): Promise<Role | null>;
+  findByName(name: string, tenantId?: string | null): Promise<Role | null>;
 
   /**
    * Obtiene el rol de un usuario en un tenant específico

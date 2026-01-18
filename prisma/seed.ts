@@ -89,12 +89,12 @@ async function main() {
   await seedPermissions(prisma);
   console.log("");
 
-  // 2. Seed de roles con sus permisos
-  const roles = await seedRoles(prisma);
+  // 2. Seed de tenants (necesario antes de roles)
+  const { tenantA, tenantB } = await seedTenants(prisma);
   console.log("");
 
-  // 3. Seed de tenants
-  const { tenantA, tenantB } = await seedTenants(prisma);
+  // 3. Seed de roles con sus permisos (ahora con tenants)
+  const roles = await seedRoles(prisma, tenantA, tenantB);
   console.log("");
 
   // 4. Crear usuarios de prueba si no existen
@@ -145,19 +145,19 @@ async function main() {
   }
 
   if (gerenteUser) {
-    // Gerente: gerente-finanzas en ambas empresas
+    // Gerente: gerente-finanzas en ambas empresas (cada tenant tiene su propio rol)
     await prisma.userRole.upsert({
       where: {
         userId_tenantId_roleId: {
           userId: gerenteUser.id,
           tenantId: tenantA.id,
-          roleId: roles.gerenteFinanzasRole.id,
+          roleId: roles.gerenteFinanzasRoleA.id,
         },
       },
       update: {},
       create: {
         userId: gerenteUser.id,
-        roleId: roles.gerenteFinanzasRole.id,
+        roleId: roles.gerenteFinanzasRoleA.id,
         tenantId: tenantA.id,
       },
     });
@@ -167,13 +167,13 @@ async function main() {
         userId_tenantId_roleId: {
           userId: gerenteUser.id,
           tenantId: tenantB.id,
-          roleId: roles.gerenteFinanzasRole.id,
+          roleId: roles.gerenteFinanzasRoleB.id,
         },
       },
       update: {},
       create: {
         userId: gerenteUser.id,
-        roleId: roles.gerenteFinanzasRole.id,
+        roleId: roles.gerenteFinanzasRoleB.id,
         tenantId: tenantB.id,
       },
     });
@@ -189,13 +189,13 @@ async function main() {
         userId_tenantId_roleId: {
           userId: capturadorUser.id,
           tenantId: tenantA.id,
-          roleId: roles.capturadorRole.id,
+          roleId: roles.capturadorRoleA.id,
         },
       },
       update: {},
       create: {
         userId: capturadorUser.id,
-        roleId: roles.capturadorRole.id,
+        roleId: roles.capturadorRoleA.id,
         tenantId: tenantA.id,
       },
     });
@@ -208,10 +208,10 @@ async function main() {
 
   console.log("\n📝 Resumen de datos creados:");
   console.log("   • Permisos del sistema (todos los módulos)");
+  console.log("   • 2 Tenants: Trust People, Relevant");
   console.log(
-    "   • 5 Roles: administrador, gerente-finanzas, gerente-reclutamiento, gerente-ventas, capturador"
+    "   • 9 Roles: 1 global (administrador) + 4 por cada tenant"
   );
-  console.log("   • 2 Tenants: Empresa A, Empresa B");
   console.log("   • 3 Usuarios de prueba");
 
   console.log("\n🔐 CREDENCIALES DE ACCESO:");

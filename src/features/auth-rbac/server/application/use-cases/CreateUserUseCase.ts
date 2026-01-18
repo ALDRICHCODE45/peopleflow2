@@ -3,10 +3,12 @@
  * Solo puede ser ejecutado por superadmin (validado en la capa de presentación)
  */
 
+import { auth } from "@/core/lib/auth";
+
 export interface CreateUserInput {
   email: string;
   password: string;
-  name?: string;
+  name: string;
 }
 
 export interface CreateUserOutput {
@@ -20,36 +22,27 @@ export interface CreateUserOutput {
 }
 
 export class CreateUserUseCase {
-  private readonly betterAuthUrl: string;
 
   constructor() {
-    this.betterAuthUrl =
-      process.env.BETTER_AUTH_URL ||
-      process.env.NEXT_PUBLIC_BETTER_AUTH_URL ||
-      "http://localhost:3000";
   }
 
   async execute(input: CreateUserInput): Promise<CreateUserOutput> {
     try {
-      // Crear usuario usando Better Auth API HTTP
-      const response = await fetch(`${this.betterAuthUrl}/api/auth/sign-up/email`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: input.email,
+
+      const result = await auth.api.signUpEmail({
+        body: {
+          email:input.email,
           password: input.password,
-          name: input.name || undefined,
-        }),
+          name: input.name,
+        },
       });
 
-      const result = await response.json();
 
-      if (!response.ok || result.error) {
+      //const result = await response.json();
+      if (!result.user) {
         return {
           success: false,
-          error: result.error?.message || "Error al crear usuario",
+          error: "Error al crear usuario",
         };
       }
 
@@ -57,7 +50,7 @@ export class CreateUserUseCase {
       return {
         success: true,
         user: {
-          id: result.user?.id || result.id,
+          id: result.user?.id || result.user.id,
           email: input.email,
           name: input.name || null,
         },

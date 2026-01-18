@@ -48,46 +48,77 @@ export async function getSuperAdminPermission(prisma: PrismaClient) {
 
 /**
  * Crea roles básicos del sistema con sus permisos
+ * Los roles se crean por tenant (excepto administrador que es global)
  */
-export async function seedRoles(prisma: PrismaClient) {
+export async function seedRoles(
+  prisma: PrismaClient,
+  tenantA: { id: string },
+  tenantB: { id: string }
+) {
   console.log("👥 Creando roles del sistema...");
 
-  // Rol: Administrador (tiene super:admin)
-  const adminRole = await prisma.role.upsert({
-    where: { name: "administrador" },
+  // Rol global: Administrador (tiene super:admin, tenantId = null)
+  // Para roles globales usamos findFirst + create ya que Prisma no soporta null en compound unique where
+  let adminRole = await prisma.role.findFirst({
+    where: { name: "administrador", tenantId: null },
+  });
+  if (!adminRole) {
+    adminRole = await prisma.role.create({
+      data: { name: "administrador", tenantId: null },
+    });
+  }
+
+  // Roles para Tenant A
+  const gerenteFinanzasRoleA = await prisma.role.upsert({
+    where: { name_tenantId: { name: "gerente-finanzas", tenantId: tenantA.id } },
     update: {},
-    create: { name: "administrador" },
+    create: { name: "gerente-finanzas", tenantId: tenantA.id },
   });
 
-  // Rol: Gerente Finanzas
-  const gerenteFinanzasRole = await prisma.role.upsert({
-    where: { name: "gerente-finanzas" },
+  const gerenteReclutamientoRoleA = await prisma.role.upsert({
+    where: { name_tenantId: { name: "gerente-reclutamiento", tenantId: tenantA.id } },
     update: {},
-    create: { name: "gerente-finanzas" },
+    create: { name: "gerente-reclutamiento", tenantId: tenantA.id },
   });
 
-  // Rol: Gerente Reclutamiento
-  const gerenteReclutamientoRole = await prisma.role.upsert({
-    where: { name: "gerente-reclutamiento" },
+  const gerenteVentasRoleA = await prisma.role.upsert({
+    where: { name_tenantId: { name: "gerente-ventas", tenantId: tenantA.id } },
     update: {},
-    create: { name: "gerente-reclutamiento" },
+    create: { name: "gerente-ventas", tenantId: tenantA.id },
   });
 
-  // Rol: Gerente Ventas
-  const gerenteVentasRole = await prisma.role.upsert({
-    where: { name: "gerente-ventas" },
+  const capturadorRoleA = await prisma.role.upsert({
+    where: { name_tenantId: { name: "capturador", tenantId: tenantA.id } },
     update: {},
-    create: { name: "gerente-ventas" },
+    create: { name: "capturador", tenantId: tenantA.id },
   });
 
-  // Rol: Capturador (permisos básicos de lectura)
-  const capturadorRole = await prisma.role.upsert({
-    where: { name: "capturador" },
+  // Roles para Tenant B
+  const gerenteFinanzasRoleB = await prisma.role.upsert({
+    where: { name_tenantId: { name: "gerente-finanzas", tenantId: tenantB.id } },
     update: {},
-    create: { name: "capturador" },
+    create: { name: "gerente-finanzas", tenantId: tenantB.id },
   });
 
-  console.log("✅ Roles creados/actualizados");
+  const gerenteReclutamientoRoleB = await prisma.role.upsert({
+    where: { name_tenantId: { name: "gerente-reclutamiento", tenantId: tenantB.id } },
+    update: {},
+    create: { name: "gerente-reclutamiento", tenantId: tenantB.id },
+  });
+
+  const gerenteVentasRoleB = await prisma.role.upsert({
+    where: { name_tenantId: { name: "gerente-ventas", tenantId: tenantB.id } },
+    update: {},
+    create: { name: "gerente-ventas", tenantId: tenantB.id },
+  });
+
+  const capturadorRoleB = await prisma.role.upsert({
+    where: { name_tenantId: { name: "capturador", tenantId: tenantB.id } },
+    update: {},
+    create: { name: "capturador", tenantId: tenantB.id },
+  });
+
+  console.log("✅ Roles creados/actualizados (globales y por tenant)");
 
   // Asignar permisos a roles
   console.log("🔗 Asignando permisos a roles...");
@@ -115,30 +146,47 @@ export async function seedRoles(prisma: PrismaClient) {
     }
   }
 
-  // Administrador: super:admin (acceso total)
+  // Administrador: super:admin (acceso total) - Rol global
   await assignPermissionsToRole(adminRole.id, ["super:admin"]);
 
-  // Gerente Finanzas: gestionar todo el módulo de finanzas
-  await assignPermissionsToRole(gerenteFinanzasRole.id, [
+  // Permisos para roles del Tenant A
+  await assignPermissionsToRole(gerenteFinanzasRoleA.id, [
     "ingresos:gestionar",
     "egresos:gestionar",
   ]);
-
-  // Gerente Reclutamiento: gestionar todo el módulo de reclutamiento
-  await assignPermissionsToRole(gerenteReclutamientoRole.id, [
+  await assignPermissionsToRole(gerenteReclutamientoRoleA.id, [
     "vacantes:gestionar",
     "candidatos:gestionar",
     "reportes-reclutamiento:gestionar",
   ]);
-
-  // Gerente Ventas: gestionar todo el módulo de ventas
-  await assignPermissionsToRole(gerenteVentasRole.id, [
+  await assignPermissionsToRole(gerenteVentasRoleA.id, [
     "leads:gestionar",
     "reportes-ventas:gestionar",
   ]);
+  await assignPermissionsToRole(capturadorRoleA.id, [
+    "ingresos:acceder",
+    "ingresos:crear",
+    "egresos:acceder",
+    "egresos:crear",
+    "leads:acceder",
+    "leads:crear",
+  ]);
 
-  // Capturador: solo acceder y crear en módulos básicos
-  await assignPermissionsToRole(capturadorRole.id, [
+  // Permisos para roles del Tenant B
+  await assignPermissionsToRole(gerenteFinanzasRoleB.id, [
+    "ingresos:gestionar",
+    "egresos:gestionar",
+  ]);
+  await assignPermissionsToRole(gerenteReclutamientoRoleB.id, [
+    "vacantes:gestionar",
+    "candidatos:gestionar",
+    "reportes-reclutamiento:gestionar",
+  ]);
+  await assignPermissionsToRole(gerenteVentasRoleB.id, [
+    "leads:gestionar",
+    "reportes-ventas:gestionar",
+  ]);
+  await assignPermissionsToRole(capturadorRoleB.id, [
     "ingresos:acceder",
     "ingresos:crear",
     "egresos:acceder",
@@ -151,10 +199,16 @@ export async function seedRoles(prisma: PrismaClient) {
 
   return {
     adminRole,
-    gerenteFinanzasRole,
-    gerenteReclutamientoRole,
-    gerenteVentasRole,
-    capturadorRole,
+    // Roles Tenant A
+    gerenteFinanzasRoleA,
+    gerenteReclutamientoRoleA,
+    gerenteVentasRoleA,
+    capturadorRoleA,
+    // Roles Tenant B
+    gerenteFinanzasRoleB,
+    gerenteReclutamientoRoleB,
+    gerenteVentasRoleB,
+    capturadorRoleB,
   };
 }
 

@@ -459,6 +459,11 @@ export function getPermissionByName(
 export const SUPER_ADMIN_PERMISSION_NAME = "super:admin";
 
 /**
+ * Nombre del rol de super admin (oculto en UIs normales)
+ */
+export const HIDDEN_ADMIN_ROLE_NAME = "administrador";
+
+/**
  * Objeto para acceso type-safe a permisos
  * Permite autocompletado en el IDE y validación en tiempo de compilación
  *

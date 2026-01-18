@@ -34,8 +34,8 @@ export class AssignUserToTenantUseCase {
     input: AssignUserToTenantInput
   ): Promise<AssignUserToTenantOutput> {
     try {
-      // Obtener el rol
-      const role = await this.roleRepository.findByName(input.roleName);
+      // Obtener el rol del tenant específico
+      const role = await this.roleRepository.findByName(input.roleName, input.tenantId);
 
       if (!role) {
         return {

@@ -1,0 +1,15 @@
+Por favor analiza mi proyecto a profundidad, es el inicio de un erp 
+con distintos modulos, multi tenant, y un sistema de rbac. el modulo de administracion 
+aun no esta hecho, lo que quiero que revises principalmente es como puedo implementar el modulo de usuarios 
+y permisos dentro de cada tenant es decir dentro de @src/app/(Dashboard)/(Admin)/admin quiero saber como puedo implementar 
+el modulo de gestion de usuarios, roles y permisos dentro de esta ruta, antes de esto, analiza todos los patronees 
+utilizados en la aplicacion, la organizacion de carpetas, arquitectura utilizada, como se obtienen los datos, 
+como crean las tablas, como se crean y manejan los modales, los formularios, etc... OJO, actualmente en mi @prisma/schema.prisma 
+el modulo de usuario no tiene relacion con tenantId, la relacion la menejan los roles en la tabla UserRole, primero dime si esto es la mejor
+implementacion, la mas escalable, limpia y escalable. El resultado final es: Usuario con los permisos correctos entra al modulo de
+administracion -> /usuarios -> tabla de usuarios activos del sistema, con sus roles, contrasena, etc. en la ruta /roles-permisos se debe observar
+la tabla de todos los roles existentes,    y podra asignar permisos a esos roles desde la misma tabla, desde la columna de acciones de la tabla, 
+debe existir una opcion "asignar permisos" en donde al dar click, se desplegara un sheet con todos los permisios granulares
+separados por modulo. OJO, usa el mcp de context7 para revisar la documentacion de better auth y como se realiza la 
+creacion de usuarios, ya que better auth gestiona automaticamente la encriptacion de contrasenas, sessiones, etc... por favor usa context7 para revisar la documentacion antes de implementar 
+cualquier libreria,en el caso de que hagas cambios en el @prisma/schema.prisma  es de suma importancia que realices las migraciones necesarias tanto en better auth como en prisma por lo que primero debes ejecutar bun run better:generate, seguido de bunx prisma migrate dev --name nombre_de_la_migracion, por ultimo bun run prisma:generate para general el cliente de prisma. OJO ten en cuanta que en este momento hay usuarios de prueba creados por el archivo @prisma/seed.ts en el caso de que el modelo resiva cambios que afecten a la estructura del usuario, borrare los usuarios de la base de datos para que no existan errores al crear migraciones y puedas modificar lo necesario en el seed y en general en el codigo fuente. si necesitas ejecutar algun comando usa siempre bun y al final ejecuta el build de produccion ejecutando bun run build para asegurarte que no existan errores. usa principalmente el agente @.claude/agents/code-review-specialist.md  para analizar el codigo y realiizar cambios, excepto para realizar cambios a la base de datos, para eso, ocupa el agente @.claude/agents/database-schema-designer.md. por favor. es de suma importancia que priorices el uso de shadcn para cualquier implementacion en la interface, pero antes de usar cualqueir componente utiliza context7 para verificar la documentacion antes de implementarlo, por favor. 

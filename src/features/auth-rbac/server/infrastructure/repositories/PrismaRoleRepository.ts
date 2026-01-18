@@ -23,9 +23,9 @@ export class PrismaRoleRepository implements IRoleRepository {
     });
   }
 
-  async findByName(name: string): Promise<Role | null> {
-    const role = await prisma.role.findUnique({
-      where: { name },
+  async findByName(name: string, tenantId?: string | null): Promise<Role | null> {
+    const role = await prisma.role.findFirst({
+      where: { name, tenantId: tenantId ?? null },
     });
 
     if (!role) return null;
@@ -41,8 +41,8 @@ export class PrismaRoleRepository implements IRoleRepository {
   async findUserRoleInTenant(userId: string, tenantId: string | null): Promise<Role | null> {
     if (!tenantId) {
       // Si no hay tenantId, verificar si es superadmin global
-      const superAdminRole = await prisma.role.findUnique({
-        where: { name: "superadmin" },
+      const superAdminRole = await prisma.role.findFirst({
+        where: { name: "superadmin", tenantId: null },
       });
 
       if (superAdminRole) {
@@ -101,6 +101,26 @@ export class PrismaRoleRepository implements IRoleRepository {
 
     return !!userRole;
   }
+
+
+  async findByTenantId(tenantId:string):Promise<Role[]> {
+    const roles = await prisma.role.findMany({
+      where:{
+        tenantId
+      }
+    })
+
+    return roles.map(
+      (role) =>
+        new Role({
+          id: role.id,
+          name: role.name,
+          createdAt: role.createdAt,
+          updatedAt: role.updatedAt,
+        })
+    );
+  }
+
 
   async findAll(): Promise<Role[]> {
     const roles = await prisma.role.findMany();

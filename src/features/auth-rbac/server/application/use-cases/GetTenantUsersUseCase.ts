@@ -24,7 +24,8 @@ export class GetTenantUsersUseCase {
 
   async execute(input: GetTenantUsersInput): Promise<GetTenantUsersOutput> {
     try {
-      // Verificar que el usuario solicitante sea superadmin o pertenezca al tenant
+      // Verificar autorización: SuperAdmin puede acceder a cualquier tenant
+      // O el usuario pertenece al tenant
       const isSuperAdmin = await this.userRoleRepository.isSuperAdmin(
         input.requestingUserId
       );
@@ -43,6 +44,9 @@ export class GetTenantUsersUseCase {
           };
         }
       }
+
+      // IMPORTANTE: Siempre filtrar datos por el tenantId activo
+      // SuperAdmin ve solo usuarios del tenant activo, no de todos
 
       // Obtener usuarios del tenant (filtrado por tenantId en el repositorio)
       const users = await this.userRoleRepository.findUsersByTenantId(input.tenantId);
