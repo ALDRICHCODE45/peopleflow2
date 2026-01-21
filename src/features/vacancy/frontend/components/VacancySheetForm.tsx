@@ -20,7 +20,7 @@ const VacancyForm = dynamic(
   {
     ssr: false,
     loading: () => <LoadingModalState />,
-  }
+  },
 );
 
 interface VacancyFormProps {

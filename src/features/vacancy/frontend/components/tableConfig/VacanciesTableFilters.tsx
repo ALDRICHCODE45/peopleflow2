@@ -11,6 +11,17 @@ import { FilterHeaderActions } from "@/core/shared/components/DataTable/FilterHe
 import { useVacanciesTableFilters } from "./hooks/useVacanciesTableFilters";
 import { FilterSelect } from "@/core/shared/components/DataTable/FilterSelect";
 import { vacancyStatusOptions } from "./typers/vacancyStatusOptions";
+import { useState } from "react";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/core/shared/ui/shadcn/sheet";
+import { useIsMobile } from "@/core/shared/hooks/use-mobile";
+import { Button } from "@/core/shared/ui/shadcn/button";
 
 interface VacanciesTableFilterProps extends BaseFilterProps {
   table: Table<unknown>;
@@ -29,15 +40,17 @@ export const VacanciesTableFilters = ({
   const { clearFilters, handleEstadoChange, selectedEstado } =
     useVacanciesTableFilters(table);
 
+  const [isSheetOpen, setSheetOpen] = useState<boolean>(false);
+
+  const isMobile = useIsMobile();
+
+  const sheetSide = isMobile ? "bottom" : "right";
+
   return (
     <>
       <Card className="mb-6 border-0 shadow-md w-full min-w-0 overflow-hidden m-1">
         <CardHeader className="pb-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 w-full min-w-0 ">
           <div className="flex items-center gap-2 min-w-0">
-            <HugeiconsIcon
-              icon={Filter}
-              className="h-5 w-5 text-primary shrink"
-            />
             <Badge variant="outline" className="ml-2 shrink">
               {table.getFilteredRowModel().rows.length} resultados
             </Badge>
@@ -93,6 +106,41 @@ export const VacanciesTableFilters = ({
               options={vacancyStatusOptions}
               value={selectedEstado}
             />
+
+            <div className="space-y-2 w-full min-w-0">
+              <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
+                <Label
+                  htmlFor="categoria-filter"
+                  className="text-xs font-medium"
+                >
+                  Filtros
+                </Label>
+                <SheetTrigger asChild>
+                  <Button
+                    variant={"outline-primary"}
+                    className="w-full min-w-0"
+                  >
+                    <HugeiconsIcon
+                      icon={Filter}
+                      className="h-5 w-5 text-primary shrink"
+                    />
+                    Filtros
+                  </Button>
+                </SheetTrigger>
+                <SheetContent
+                  width="md"
+                  className="md:mr-8 ml-0 rounded-3xl dark:bg-[#18181B]"
+                  side={sheetSide}
+                >
+                  <SheetHeader>
+                    <SheetTitle>Filtros</SheetTitle>
+                    <SheetDescription>
+                      Filtra tus vacantes en este apartado
+                    </SheetDescription>
+                  </SheetHeader>
+                </SheetContent>
+              </Sheet>
+            </div>
 
             {/* Filtro de rango de fechas */}
           </div>

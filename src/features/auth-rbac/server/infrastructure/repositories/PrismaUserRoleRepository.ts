@@ -4,8 +4,11 @@ import {
   IUserRoleRepository,
   UserWithRoles,
   CreateUserRoleData,
+  FindPaginatedUsersParams,
+  PaginatedUsersResult,
 } from "../../domain/interfaces/IUserRoleRepository";
 import { SUPER_ADMIN_PERMISSION_NAME } from "@/core/shared/constants/permissions";
+import { Prisma } from "@/core/generated/prisma/client";
 
 /**
  * Implementación del repositorio de UserRoles usando Prisma
@@ -244,6 +247,142 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
     }
 
     return Array.from(permissionSet);
+  }
+
+  /**
+   * Obtiene usuarios de un tenant con paginación server-side
+   * Ejecuta COUNT y SELECT en paralelo para mejor rendimiento
+   * SEGURIDAD: Filtrado obligatorio por tenantId
+   */
+  async findPaginatedUsers(
+    params: FindPaginatedUsersParams,
+  ): Promise<PaginatedUsersResult> {
+    const { tenantId, skip, take, sorting, filters } = params;
+
+    // Whitelist de columnas permitidas para sorting (previene SQL injection)
+    const allowedSortColumns = ["email", "name", "createdAt"];
+
+    // Construir where clause base
+    const baseWhere: Prisma.UserRoleWhereInput = {
+      tenantId, // Filtrado OBLIGATORIO por tenant
+    };
+
+    // Agregar filtro de búsqueda si existe
+    const userWhere: Prisma.UserWhereInput | undefined = filters?.search
+      ? {
+          OR: [
+            { email: { contains: filters.search, mode: "insensitive" } },
+            { name: { contains: filters.search, mode: "insensitive" } },
+          ],
+        }
+      : undefined;
+
+    // Ejecutar COUNT y SELECT en paralelo
+    const [totalUserRoles, userRoles] = await Promise.all([
+      // COUNT: Total de usuarios únicos en el tenant
+      prisma.userRole.findMany({
+        where: {
+          ...baseWhere,
+          user: userWhere,
+        },
+        select: { userId: true },
+        distinct: ["userId"],
+      }),
+      // SELECT: Datos paginados
+      prisma.userRole.findMany({
+        where: {
+          ...baseWhere,
+          user: userWhere,
+        },
+        include: {
+          user: true,
+          role: true,
+        },
+        orderBy: this.buildUserSorting(sorting, allowedSortColumns),
+      }),
+    ]);
+
+    // Agrupar por usuario (ya que un usuario puede tener múltiples roles)
+    const userMap = new Map<string, UserWithRoles>();
+
+    for (const userRole of userRoles) {
+      const userId = userRole.userId;
+      if (!userMap.has(userId)) {
+        userMap.set(userId, {
+          id: userRole.user.id,
+          email: userRole.user.email,
+          name: userRole.user.name,
+          roles: [],
+          createdAt: userRole.user.createdAt,
+        });
+      }
+      userMap.get(userId)!.roles.push({
+        id: userRole.role.id,
+        name: userRole.role.name,
+      });
+    }
+
+    // Convertir a array y aplicar paginación manual (necesario por el groupBy)
+    let usersArray = Array.from(userMap.values());
+
+    // Aplicar sorting en memoria si es necesario
+    if (sorting && sorting.length > 0) {
+      const sortField = sorting[0].id;
+      const sortDesc = sorting[0].desc;
+
+      if (allowedSortColumns.includes(sortField)) {
+        usersArray.sort((a, b) => {
+          let aVal: string | Date | null | undefined;
+          let bVal: string | Date | null | undefined;
+
+          if (sortField === "email") {
+            aVal = a.email;
+            bVal = b.email;
+          } else if (sortField === "name") {
+            aVal = a.name;
+            bVal = b.name;
+          } else if (sortField === "createdAt") {
+            aVal = a.createdAt;
+            bVal = b.createdAt;
+          }
+
+          if (aVal === null || aVal === undefined) return sortDesc ? -1 : 1;
+          if (bVal === null || bVal === undefined) return sortDesc ? 1 : -1;
+          if (aVal < bVal) return sortDesc ? 1 : -1;
+          if (aVal > bVal) return sortDesc ? -1 : 1;
+          return 0;
+        });
+      }
+    }
+
+    // Aplicar paginación manual
+    const paginatedUsers = usersArray.slice(skip, skip + take);
+
+    return {
+      data: paginatedUsers,
+      totalCount: totalUserRoles.length,
+    };
+  }
+
+  /**
+   * Construye el orderBy para las queries de usuarios
+   */
+  private buildUserSorting(
+    sorting: FindPaginatedUsersParams["sorting"],
+    allowedColumns: string[],
+  ): Prisma.UserRoleOrderByWithRelationInput[] | undefined {
+    if (!sorting || sorting.length === 0) {
+      return [{ user: { createdAt: "desc" } }];
+    }
+
+    const validSorting = sorting.filter((s) => allowedColumns.includes(s.id));
+    if (validSorting.length === 0) {
+      return [{ user: { createdAt: "desc" } }];
+    }
+
+    return validSorting.map((s) => ({
+      user: { [s.id]: s.desc ? "desc" : "asc" },
+    }));
   }
 }
 

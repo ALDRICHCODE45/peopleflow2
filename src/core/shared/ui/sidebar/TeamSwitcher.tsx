@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronsUpDown, Building, Circle } from "@hugeicons/core-free-icons";
+import { ChevronsUpDown, Circle } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 import {
@@ -84,11 +84,7 @@ export function TeamSwitcher() {
         <SidebarMenuItem>
           <SidebarMenuButton size="lg" disabled>
             <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-              <HugeiconsIcon
-                icon={Building}
-                strokeWidth={2}
-                className="size-4"
-              />
+              <HugeiconsIcon icon={Circle} strokeWidth={2} className="size-4" />
             </div>
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-medium text-muted-foreground">
@@ -111,11 +107,7 @@ export function TeamSwitcher() {
         <SidebarMenuItem>
           <SidebarMenuButton size="lg">
             <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-              <HugeiconsIcon
-                icon={Building}
-                strokeWidth={2}
-                className="size-4"
-              />
+              <HugeiconsIcon icon={Circle} strokeWidth={2} className="size-4" />
             </div>
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-medium">{activeTenant.name}</span>

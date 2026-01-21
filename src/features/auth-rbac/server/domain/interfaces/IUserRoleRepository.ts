@@ -1,4 +1,5 @@
 import { UserRole } from "../entities/UserRole";
+import type { SortingParam } from "@/core/shared/types/pagination.types";
 
 /**
  * Interfaz del repositorio de UserRoles
@@ -10,6 +11,24 @@ export interface UserWithRoles {
   email: string;
   name: string | null;
   roles: Array<{ id: string; name: string }>;
+  createdAt?: Date;
+}
+
+/** Parámetros para búsqueda paginada de usuarios */
+export interface FindPaginatedUsersParams {
+  tenantId: string;
+  skip: number;
+  take: number;
+  sorting?: SortingParam[];
+  filters?: {
+    search?: string;
+  };
+}
+
+/** Resultado de búsqueda paginada de usuarios */
+export interface PaginatedUsersResult {
+  data: UserWithRoles[];
+  totalCount: number;
 }
 
 export interface CreateUserRoleData {
@@ -57,4 +76,10 @@ export interface IUserRoleRepository {
    * Si tenantId es null, busca roles globales (como super:admin)
    */
   getUserPermissions(userId: string, tenantId: string | null): Promise<string[]>;
+
+  /**
+   * Obtiene usuarios de un tenant con paginación server-side
+   * Soporta búsqueda por email/name y ordenamiento
+   */
+  findPaginatedUsers(params: FindPaginatedUsersParams): Promise<PaginatedUsersResult>;
 }

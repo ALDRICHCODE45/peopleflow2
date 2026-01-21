@@ -1,62 +1,92 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
+import { PaginationState, SortingState } from "@tanstack/react-table";
 import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
-import { Button } from "@/core/shared/ui/shadcn/button";
 import { DataTable } from "@/core/shared/components/DataTable/DataTable";
-import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
-import { PermissionActions } from "@/core/shared/constants/permissions";
 import { createTableConfig } from "@/core/shared/helpers/createTableConfig";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { UserAdd01Icon } from "@hugeicons/core-free-icons";
-import { useTenantUsersQuery } from "../hooks/useUsers";
+import { usePaginatedUsersQuery } from "../hooks/usePaginatedUsersQuery";
 import { UserColumns } from "../components/UserColumns";
 import { UserSheetForm } from "../components/UserSheetForm";
 import { UsersTableConfig } from "../tableConfig/UsersTableConfig";
+import { useDebouncedValue } from "@/core/shared/hooks/useDebouncedValue";
+import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
 
 export function UsersListPage() {
-  const { data: users = [], isLoading } = useTenantUsersQuery();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
-  const tableConfig = createTableConfig(UsersTableConfig, {
-    onAdd: () => setIsCreateOpen(true),
+  // Estado para server-side pagination
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [globalFilter, setGlobalFilter] = useState("");
+
+  // Debounce para búsqueda (300ms)
+  const debouncedSearch = useDebouncedValue(globalFilter, 300);
+
+  // Query con paginación server-side
+  const { data, isLoading, isFetching } = usePaginatedUsersQuery({
+    pageIndex: pagination.pageIndex,
+    pageSize: pagination.pageSize,
+    sorting: sorting.map((s) => ({ id: s.id, desc: s.desc })),
+    globalFilter: debouncedSearch || undefined,
   });
 
-  return (
-    <div className="container mx-auto py-6 px-4">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-2xl font-bold">Usuarios</h1>
-          <p className="text-muted-foreground">
-            Gestiona los usuarios de tu organización
-          </p>
-        </div>
-        <PermissionGuard
-          permissions={[
-            PermissionActions.usuarios.crear,
-            PermissionActions.usuarios.gestionar,
-          ]}
-        >
-          <Button onClick={() => setIsCreateOpen(true)}>
-            <HugeiconsIcon icon={UserAdd01Icon} className="mr-2 h-4 w-4" />
-            Crear Usuario
-          </Button>
-        </PermissionGuard>
-      </div>
+  // Extraer datos de la respuesta paginada
+  const users = data?.data ?? [];
+  const paginationMeta = data?.pagination;
 
-      <Card>
-        <CardContent className="pt-6">
+  // Handler para cambio de globalFilter - resetea a página 0
+  const handleGlobalFilterChange = useCallback((value: string) => {
+    setGlobalFilter(value);
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+  }, []);
+
+  // Configuración de la tabla con server-side habilitado
+  const tableConfig = useMemo(
+    () =>
+      createTableConfig(UsersTableConfig, {
+        onAdd: () => setIsCreateOpen(true),
+        serverSide: {
+          enabled: true,
+          totalCount: paginationMeta?.totalCount ?? 0,
+          pageCount: paginationMeta?.pageCount ?? 0,
+          isLoading,
+          isFetching,
+        },
+      }),
+    [paginationMeta, isLoading, isFetching],
+  );
+
+  return (
+    <Card className="p-2 m-1">
+      <CardContent>
+        <div className="space-y-6">
+          <TablePresentation
+            subtitle="Administra los usuarios de tu organizacion"
+            title="Gestion de Usuarios"
+          />
+
           <DataTable
             columns={UserColumns}
             data={users}
             config={tableConfig}
             isLoading={isLoading}
+            // Server-side: Estado controlado
+            pagination={pagination}
+            sorting={sorting}
+            // Server-side: Callbacks
+            onPaginationChange={setPagination}
+            onSortingChange={setSorting}
+            onGlobalFilterChange={handleGlobalFilterChange}
           />
-        </CardContent>
-      </Card>
 
-      {/* Sheet para crear usuario */}
-      <UserSheetForm open={isCreateOpen} onOpenChange={setIsCreateOpen} />
-    </div>
+          {/* Sheet para crear usuario */}
+          <UserSheetForm open={isCreateOpen} onOpenChange={setIsCreateOpen} />
+        </div>
+      </CardContent>
+    </Card>
   );
 }

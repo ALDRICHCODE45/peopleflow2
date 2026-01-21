@@ -14,7 +14,7 @@ export const RolesTableConfig: TableConfig<RoleWithStats> = {
   },
   pagination: {
     defaultPageSize: 10,
-    pageSizeOptions: [5, 10, 15, 20],
+    pageSizeOptions: [3, 5, 10, 15, 20],
     showPageSizeSelector: true,
     showPaginationInfo: true,
   },

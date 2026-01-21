@@ -15,11 +15,7 @@ import {
   DataTableTabs,
   TabConfig,
 } from "@/core/shared/components/DataTable/DataTableTabs";
-import { Button } from "@shadcn/button";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  FileDownloadIcon,
-  ArrowReloadHorizontalIcon,
   Layers,
   PlayCircleIcon,
   FileEditIcon,
@@ -31,6 +27,7 @@ import { VacancySheetForm } from "../components/VacancySheetForm";
 import { useDebouncedValue } from "@/core/shared/hooks/useDebouncedValue";
 import { VacancyStatus } from "../types/vacancy.types";
 import { useQueryClient } from "@tanstack/react-query";
+import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
 
 export function VacancyListPage() {
   const queryClient = useQueryClient();
@@ -117,23 +114,15 @@ export function VacancyListPage() {
         icon: Archive,
       },
     ],
-    [activeTab, paginationMeta?.totalCount]
+    [activeTab, paginationMeta?.totalCount],
   );
 
-  const handleAdd = () => {
+  const handleAdd = useCallback(() => {
     openModal();
-  };
-
-  const handleExport = () => {
-    console.log("Exportando vacantes...");
-  };
-
-  const handleRefresh = () => {
-    refetch();
-  };
+  }, [openModal]);
 
   const handleCreateVacancy = async (
-    data: Parameters<typeof createVacancyMutation.mutateAsync>[0]
+    data: Parameters<typeof createVacancyMutation.mutateAsync>[0],
   ) => {
     const result = await createVacancyMutation.mutateAsync(data);
     if (result) {
@@ -157,7 +146,7 @@ export function VacancyListPage() {
           isFetching,
         },
       }),
-    [paginationMeta, isLoading, isFetching]
+    [paginationMeta, isLoading, isFetching, handleAdd],
   );
 
   return (
@@ -165,43 +154,11 @@ export function VacancyListPage() {
       <CardContent>
         <div className="space-y-6">
           {/* Header con titulo y acciones */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="mt-2">
-              <h1 className="text-2xl font-semibold tracking-tight">
-                Gestion de Vacantes
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                Administra las vacantes de tu organizacion
-                {paginationMeta && (
-                  <span className="ml-2 text-xs">
-                    ({paginationMeta.totalCount} total)
-                  </span>
-                )}
-              </p>
-            </div>
 
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleRefresh}
-                disabled={isFetching}
-              >
-                <HugeiconsIcon
-                  icon={ArrowReloadHorizontalIcon}
-                  className={`h-4 w-4 mr-2 ${isFetching ? "animate-spin" : ""}`}
-                />
-                {isFetching ? "Actualizando..." : "Actualizar"}
-              </Button>
-              <Button variant="ghost" size="sm" onClick={handleExport}>
-                <HugeiconsIcon
-                  icon={FileDownloadIcon}
-                  className="h-4 w-4 mr-2"
-                />
-                Exportar
-              </Button>
-            </div>
-          </div>
+          <TablePresentation
+            title="Gestion de Vacantes"
+            subtitle="Administra las vacantes de tu organizacion"
+          />
 
           {/* Tabs de filtrado */}
           <DataTableTabs

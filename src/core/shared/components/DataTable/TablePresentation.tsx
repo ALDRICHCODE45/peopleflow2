@@ -5,9 +5,13 @@ interface Props {
 
 export const TablePresentation = ({ subtitle, title }: Props) => {
   return (
-    <div className="mb-6">
-      <h1 className="text-2xl font-bold">{title}</h1>
-      <p className="text-muted-foreground">{subtitle}</p>
-    </div>
+    <>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="mt-2">
+          <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+          <p className="text-sm text-muted-foreground">{subtitle}</p>
+        </div>
+      </div>
+    </>
   );
 };
