@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { useVacanciesQuery } from "../hooks/useVacanciesQuery";
+import { useState, useMemo, useCallback } from "react";
+import { PaginationState, SortingState } from "@tanstack/react-table";
+import { usePaginatedVacanciesQuery } from "../hooks/usePaginatedVacanciesQuery";
 import { useCreateVacancy } from "../hooks/useCreateVacancy";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
@@ -11,10 +12,6 @@ import { useModalState } from "@/core/shared/hooks/useModalState";
 import { createTableConfig } from "@/core/shared/helpers/createTableConfig";
 import { VacanciesTableConfig } from "../components/tableConfig/VacanciesTableConfig";
 import {
-  DataTableStats,
-  StatCardConfig,
-} from "@/core/shared/components/DataTable/DataTableStats";
-import {
   DataTableTabs,
   TabConfig,
 } from "@/core/shared/components/DataTable/DataTableTabs";
@@ -23,7 +20,6 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import {
   FileDownloadIcon,
   ArrowReloadHorizontalIcon,
-  ArrowDown,
   Layers,
   PlayCircleIcon,
   FileEditIcon,
@@ -31,96 +27,98 @@ import {
   Archive,
 } from "@hugeicons/core-free-icons";
 import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/core/shared/ui/shadcn/collapsible";
 import { VacancySheetForm } from "../components/VacancySheetForm";
+import { useDebouncedValue } from "@/core/shared/hooks/useDebouncedValue";
+import { VacancyStatus } from "../types/vacancy.types";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function VacancyListPage() {
-  const { data: vacancies = [], isLoading, refetch } = useVacanciesQuery();
+  const queryClient = useQueryClient();
   const createVacancyMutation = useCreateVacancy();
   const { isOpen, openModal, closeModal } = useModalState();
+
+  // Estado para server-side pagination
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [globalFilter, setGlobalFilter] = useState("");
   const [activeTab, setActiveTab] = useState<string>("all");
 
-  // Calcular estadisticas
-  const stats = useMemo(() => {
-    const total = vacancies.length;
-    const open = vacancies.filter((v) => v.status === "OPEN").length;
-    const draft = vacancies.filter((v) => v.status === "DRAFT").length;
-    const closed = vacancies.filter((v) => v.status === "CLOSED").length;
-    const archived = vacancies.filter((v) => v.status === "ARCHIVED").length;
+  // Debounce para búsqueda (300ms)
+  const debouncedSearch = useDebouncedValue(globalFilter, 300);
 
-    return { total, open, draft, closed, archived };
-  }, [vacancies]);
+  // Determinar el filtro de status basado en el tab activo
+  const statusFilter: VacancyStatus | undefined =
+    activeTab !== "all" ? (activeTab as VacancyStatus) : undefined;
 
-  // Configuracion de estadisticas
-  const statsConfig: StatCardConfig[] = [
-    {
-      id: "total",
-      label: "Total Vacantes",
-      value: stats.total,
-      description: "Todas las vacantes",
-    },
-    {
-      id: "open",
-      label: "Vacantes Abiertas",
-      value: stats.open,
-      description: "En proceso de reclutamiento",
-    },
-    {
-      id: "draft",
-      label: "Borradores",
-      value: stats.draft,
-      description: "Pendientes de publicar",
-    },
-    {
-      id: "closed",
-      label: "Cerradas",
-      value: stats.closed,
-      description: "Proceso finalizado",
-    },
-  ];
+  // Query con paginación server-side
+  const { data, isLoading, isFetching, refetch } = usePaginatedVacanciesQuery({
+    pageIndex: pagination.pageIndex,
+    pageSize: pagination.pageSize,
+    sorting: sorting.map((s) => ({ id: s.id, desc: s.desc })),
+    globalFilter: debouncedSearch || undefined,
+    status: statusFilter,
+  });
 
-  // Configuracion de tabs
-  const tabsConfig: TabConfig[] = [
-    { id: "all", label: "Todas", count: stats.total, icon: Layers },
-    {
-      id: "OPEN",
-      label: "Abiertas",
-      count: stats.open,
-      filterValue: "OPEN",
-      icon: PlayCircleIcon,
-    },
-    {
-      id: "DRAFT",
-      label: "Borrador",
-      count: stats.draft,
-      filterValue: "DRAFT",
-      icon: FileEditIcon,
-    },
-    {
-      id: "CLOSED",
-      label: "Cerradas",
-      count: stats.closed,
-      filterValue: "CLOSED",
-      icon: Lock,
-    },
-    {
-      id: "ARCHIVED",
-      label: "Archivadas",
-      count: stats.archived,
-      filterValue: "ARCHIVED",
-      icon: Archive,
-    },
-  ];
+  // Extraer datos de la respuesta paginada
+  const vacancies = data?.data ?? [];
+  const paginationMeta = data?.pagination;
 
-  // Filtrar vacantes segun el tab activo
-  const filteredVacancies = useMemo(() => {
-    if (activeTab === "all") return vacancies;
-    return vacancies.filter((v) => v.status === activeTab);
-  }, [vacancies, activeTab]);
+  // Handler para cambio de tab - resetea a página 0
+  const handleTabChange = useCallback((tabId: string) => {
+    setActiveTab(tabId);
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+  }, []);
+
+  // Handler para cambio de globalFilter - resetea a página 0
+  const handleGlobalFilterChange = useCallback((value: string) => {
+    setGlobalFilter(value);
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+  }, []);
+
+  // Configuracion de tabs (los conteos se actualizan dinámicamente con el total)
+  const tabsConfig: TabConfig[] = useMemo(
+    () => [
+      {
+        id: "all",
+        label: "Todas",
+        count: activeTab === "all" ? paginationMeta?.totalCount : undefined,
+        icon: Layers,
+      },
+      {
+        id: "OPEN",
+        label: "Abiertas",
+        count: activeTab === "OPEN" ? paginationMeta?.totalCount : undefined,
+        filterValue: "OPEN",
+        icon: PlayCircleIcon,
+      },
+      {
+        id: "DRAFT",
+        label: "Borrador",
+        count: activeTab === "DRAFT" ? paginationMeta?.totalCount : undefined,
+        filterValue: "DRAFT",
+        icon: FileEditIcon,
+      },
+      {
+        id: "CLOSED",
+        label: "Cerradas",
+        count: activeTab === "CLOSED" ? paginationMeta?.totalCount : undefined,
+        filterValue: "CLOSED",
+        icon: Lock,
+      },
+      {
+        id: "ARCHIVED",
+        label: "Archivadas",
+        count:
+          activeTab === "ARCHIVED" ? paginationMeta?.totalCount : undefined,
+        filterValue: "ARCHIVED",
+        icon: Archive,
+      },
+    ],
+    [activeTab, paginationMeta?.totalCount]
+  );
 
   const handleAdd = () => {
     openModal();
@@ -135,18 +133,32 @@ export function VacancyListPage() {
   };
 
   const handleCreateVacancy = async (
-    data: Parameters<typeof createVacancyMutation.mutateAsync>[0],
+    data: Parameters<typeof createVacancyMutation.mutateAsync>[0]
   ) => {
     const result = await createVacancyMutation.mutateAsync(data);
     if (result) {
       closeModal();
+      // Invalidar todas las queries de vacantes para refrescar
+      queryClient.invalidateQueries({ queryKey: ["vacancies"] });
     }
     return { error: null, vacancy: result };
   };
 
-  const tableConfig = createTableConfig(VacanciesTableConfig, {
-    onAdd: handleAdd,
-  });
+  // Configuración de la tabla con server-side habilitado
+  const tableConfig = useMemo(
+    () =>
+      createTableConfig(VacanciesTableConfig, {
+        onAdd: handleAdd,
+        serverSide: {
+          enabled: true,
+          totalCount: paginationMeta?.totalCount ?? 0,
+          pageCount: paginationMeta?.pageCount ?? 0,
+          isLoading,
+          isFetching,
+        },
+      }),
+    [paginationMeta, isLoading, isFetching]
+  );
 
   return (
     <Card className="p-2 m-1">
@@ -160,16 +172,26 @@ export function VacancyListPage() {
               </h1>
               <p className="text-sm text-muted-foreground">
                 Administra las vacantes de tu organizacion
+                {paginationMeta && (
+                  <span className="ml-2 text-xs">
+                    ({paginationMeta.totalCount} total)
+                  </span>
+                )}
               </p>
             </div>
 
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" onClick={handleRefresh}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleRefresh}
+                disabled={isFetching}
+              >
                 <HugeiconsIcon
                   icon={ArrowReloadHorizontalIcon}
-                  className="h-4 w-4 mr-2"
+                  className={`h-4 w-4 mr-2 ${isFetching ? "animate-spin" : ""}`}
                 />
-                Actualizar
+                {isFetching ? "Actualizando..." : "Actualizar"}
               </Button>
               <Button variant="ghost" size="sm" onClick={handleExport}>
                 <HugeiconsIcon
@@ -181,36 +203,14 @@ export function VacancyListPage() {
             </div>
           </div>
 
-          <Collapsible>
-            <CollapsibleTrigger asChild>
-              <Button
-                className="[&[data-state=open]>svg]:rotate-180 mb-2"
-                variant={"default"}
-                size={"icon"}
-                buttonTooltip
-                buttonTooltipText="Estadisticas rapidas"
-              >
-                <HugeiconsIcon icon={ArrowDown} />
-              </Button>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              {/* Tarjetas de estadisticas */}
-              <DataTableStats
-                stats={statsConfig}
-                isLoading={isLoading}
-                columns={4}
-              />
-            </CollapsibleContent>
-          </Collapsible>
-
           {/* Tabs de filtrado */}
           <DataTableTabs
             tabs={tabsConfig}
             activeTab={activeTab}
-            onTabChange={setActiveTab}
+            onTabChange={handleTabChange}
           />
 
-          {/* Tabla */}
+          {/* Tabla con Server-Side Pagination */}
           <PermissionGuard
             permissions={[
               PermissionActions.vacantes.acceder,
@@ -219,9 +219,16 @@ export function VacancyListPage() {
           >
             <DataTable
               columns={VacancyColumns}
-              data={filteredVacancies}
+              data={vacancies}
               config={tableConfig}
               isLoading={isLoading}
+              // Server-side: Estado controlado
+              pagination={pagination}
+              sorting={sorting}
+              // Server-side: Callbacks
+              onPaginationChange={setPagination}
+              onSortingChange={setSorting}
+              onGlobalFilterChange={handleGlobalFilterChange}
             />
           </PermissionGuard>
 

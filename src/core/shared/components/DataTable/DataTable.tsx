@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -13,6 +13,7 @@ import {
   useReactTable,
   VisibilityState,
   RowSelectionState,
+  Updater,
 } from "@tanstack/react-table";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
@@ -35,6 +36,13 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   config?: TableConfig<TData>;
   isLoading?: boolean;
+  // Callbacks para server-side (cuando config.serverSide.enabled = true)
+  onPaginationChange?: (pagination: PaginationState) => void;
+  onSortingChange?: (sorting: SortingState) => void;
+  onGlobalFilterChange?: (filter: string) => void;
+  // Estado controlado desde el padre (server-side)
+  pagination?: PaginationState;
+  sorting?: SortingState;
 }
 
 export function DataTable<TData, TValue>({
@@ -42,11 +50,21 @@ export function DataTable<TData, TValue>({
   data,
   config = {},
   isLoading: isLoadingProp,
+  // Server-side callbacks
+  onPaginationChange: onPaginationChangeProp,
+  onSortingChange: onSortingChangeProp,
+  onGlobalFilterChange: onGlobalFilterChangeProp,
+  // Estado controlado (server-side)
+  pagination: paginationProp,
+  sorting: sortingProp,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-  const [globalFilter, setGlobalFilter] = useState<string>("");
+  const [globalFilter, setGlobalFilterState] = useState<string>("");
+
+  // Determinar si es server-side
+  const isServerSide = config.serverSide?.enabled ?? false;
 
   // Configuración por defecto
   const defaultConfig: Required<TableConfig<TData>> = {
@@ -74,6 +92,13 @@ export function DataTable<TData, TValue>({
     enableRowSelection: false,
     isLoading: false,
     skeletonRows: 5,
+    serverSide: {
+      enabled: false,
+      totalCount: 0,
+      pageCount: 0,
+      isLoading: false,
+      isFetching: false,
+    },
   };
 
   // Combinar configuración por defecto con la proporcionada (memoizado)
@@ -91,33 +116,94 @@ export function DataTable<TData, TValue>({
         config.enableRowSelection ?? defaultConfig.enableRowSelection,
       isLoading: isLoadingProp ?? config.isLoading ?? false,
       skeletonRows: config.skeletonRows ?? 5,
+      serverSide: { ...defaultConfig.serverSide, ...config.serverSide },
     }),
     [config, isLoadingProp]
   );
 
-  const [pagination, setPagination] = useState<PaginationState>({
+  // Estado interno para client-side
+  const [internalPagination, setInternalPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: finalConfig.pagination.defaultPageSize || 10,
   });
+  const [internalSorting, setInternalSorting] = useState<SortingState>([]);
 
-  const [sorting, setSorting] = useState<SortingState>([]);
+  // Usar estado del padre si es server-side, sino usar estado interno
+  const pagination = isServerSide && paginationProp ? paginationProp : internalPagination;
+  const sorting = isServerSide && sortingProp ? sortingProp : internalSorting;
+
+  // Wrapper para setGlobalFilter que notifica al padre en server-side
+  const setGlobalFilter = (value: string) => {
+    setGlobalFilterState(value);
+    if (isServerSide && onGlobalFilterChangeProp) {
+      onGlobalFilterChangeProp(value);
+    }
+  };
+
+  // Handler para cambios de paginación
+  const handlePaginationChange = (updater: Updater<PaginationState>) => {
+    const newPagination = typeof updater === "function" ? updater(pagination) : updater;
+
+    if (isServerSide) {
+      // En server-side, notificar al padre
+      onPaginationChangeProp?.(newPagination);
+    } else {
+      // En client-side, actualizar estado interno
+      setInternalPagination(newPagination);
+    }
+  };
+
+  // Handler para cambios de sorting
+  const handleSortingChange = (updater: Updater<SortingState>) => {
+    const newSorting = typeof updater === "function" ? updater(sorting) : updater;
+
+    if (isServerSide) {
+      // En server-side, notificar al padre y resetear a página 0
+      onSortingChangeProp?.(newSorting);
+      onPaginationChangeProp?.({ ...pagination, pageIndex: 0 });
+    } else {
+      // En client-side, actualizar estado interno
+      setInternalSorting(newSorting);
+    }
+  };
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    onSortingChange: setSorting,
+
+    // Row models condicionales: solo para client-side
+    ...(isServerSide
+      ? {}
+      : {
+          getSortedRowModel: getSortedRowModel(),
+          getPaginationRowModel: getPaginationRowModel(),
+          getFilteredRowModel: getFilteredRowModel(),
+        }),
+
+    // Flags manuales para server-side
+    manualPagination: isServerSide,
+    manualSorting: isServerSide,
+    manualFiltering: isServerSide,
+
+    // pageCount del servidor (solo en server-side)
+    ...(isServerSide && finalConfig.serverSide?.pageCount
+      ? { pageCount: finalConfig.serverSide.pageCount }
+      : {}),
+
+    // Handlers
+    onSortingChange: handleSortingChange,
     enableSortingRemoval: false,
-    getPaginationRowModel: getPaginationRowModel(),
-    onPaginationChange: setPagination,
+    onPaginationChange: handlePaginationChange,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     onGlobalFilterChange: setGlobalFilter,
-    getFilteredRowModel: getFilteredRowModel(),
+
+    // Faceted values (siempre disponible)
     getFacetedUniqueValues: getFacetedUniqueValues(),
     enableRowSelection: finalConfig.enableRowSelection,
+
     state: {
       sorting,
       pagination,

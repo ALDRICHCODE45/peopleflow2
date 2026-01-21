@@ -5,6 +5,8 @@ import {
   CreateVacancyData,
   UpdateVacancyData,
   FindVacanciesFilters,
+  FindPaginatedParams,
+  PaginatedResult,
 } from "../../domain/interfaces/IVacancyRepository";
 
 /**
@@ -54,22 +56,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
     tenantId: string,
     filters?: FindVacanciesFilters
   ): Promise<Vacancy[]> {
-    const where: Record<string, unknown> = { tenantId };
-
-    if (filters?.status) {
-      where.status = filters.status;
-    }
-
-    if (filters?.department) {
-      where.department = filters.department;
-    }
-
-    if (filters?.search) {
-      where.OR = [
-        { title: { contains: filters.search, mode: "insensitive" } },
-        { description: { contains: filters.search, mode: "insensitive" } },
-      ];
-    }
+    const where = this.buildWhereClause(tenantId, filters);
 
     const vacancies = await prisma.vacancy.findMany({
       where,
@@ -156,6 +143,58 @@ export class PrismaVacancyRepository implements IVacancyRepository {
     tenantId: string,
     filters?: FindVacanciesFilters
   ): Promise<number> {
+    const where = this.buildWhereClause(tenantId, filters);
+    return prisma.vacancy.count({ where });
+  }
+
+  async findPaginated(
+    params: FindPaginatedParams
+  ): Promise<PaginatedResult<Vacancy>> {
+    const { tenantId, skip, take, sorting, filters } = params;
+    const where = this.buildWhereClause(tenantId, filters);
+
+    // Construir orderBy dinámico basado en sorting
+    // Whitelist de columnas permitidas para prevenir inyección
+    const allowedSortColumns = [
+      "title",
+      "status",
+      "department",
+      "location",
+      "createdAt",
+      "updatedAt",
+    ];
+
+    const orderBy =
+      sorting && sorting.length > 0
+        ? sorting
+            .filter((s) => allowedSortColumns.includes(s.id))
+            .map((s) => ({ [s.id]: s.desc ? "desc" : "asc" }))
+        : [{ createdAt: "desc" as const }];
+
+    // Ejecutar count y findMany en paralelo para mejor performance
+    const [totalCount, vacancies] = await Promise.all([
+      prisma.vacancy.count({ where }),
+      prisma.vacancy.findMany({
+        where,
+        orderBy,
+        skip,
+        take,
+      }),
+    ]);
+
+    return {
+      data: vacancies.map((v) => this.mapToDomain(v)),
+      totalCount,
+    };
+  }
+
+  /**
+   * Construye la cláusula where para las queries de vacantes
+   */
+  private buildWhereClause(
+    tenantId: string,
+    filters?: FindVacanciesFilters
+  ): Record<string, unknown> {
     const where: Record<string, unknown> = { tenantId };
 
     if (filters?.status) {
@@ -166,7 +205,14 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       where.department = filters.department;
     }
 
-    return prisma.vacancy.count({ where });
+    if (filters?.search) {
+      where.OR = [
+        { title: { contains: filters.search, mode: "insensitive" } },
+        { description: { contains: filters.search, mode: "insensitive" } },
+      ];
+    }
+
+    return where;
   }
 }
 

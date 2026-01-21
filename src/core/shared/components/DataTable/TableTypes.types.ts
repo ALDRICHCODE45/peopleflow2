@@ -82,6 +82,20 @@ export interface PaginationConfig {
   showPaginationInfo?: boolean;
 }
 
+// Configuración para paginación server-side
+export interface ServerSideConfig {
+  /** Habilitar modo server-side (manualPagination, manualSorting, manualFiltering) */
+  enabled: boolean;
+  /** Total de registros en el servidor (para calcular páginas) */
+  totalCount: number;
+  /** Número total de páginas (calculado por el servidor) */
+  pageCount: number;
+  /** Indica si se está cargando la primera vez */
+  isLoading?: boolean;
+  /** Indica si se está haciendo fetch de nuevos datos (loading entre páginas) */
+  isFetching?: boolean;
+}
+
 // Configuración de la tabla
 export interface TableConfig<TData> {
   filters?: FilterConfig;
@@ -93,4 +107,6 @@ export interface TableConfig<TData> {
   enableRowSelection?: boolean;
   isLoading?: boolean;
   skeletonRows?: number;
+  /** Configuración para paginación/sorting/filtrado server-side */
+  serverSide?: ServerSideConfig;
 }

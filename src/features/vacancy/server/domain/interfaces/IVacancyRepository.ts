@@ -28,6 +28,21 @@ export interface FindVacanciesFilters {
   search?: string;
 }
 
+/** Parámetros para paginación server-side */
+export interface FindPaginatedParams {
+  tenantId: string;
+  skip: number;
+  take: number;
+  sorting?: { id: string; desc: boolean }[];
+  filters?: FindVacanciesFilters;
+}
+
+/** Resultado de búsqueda paginada */
+export interface PaginatedResult<T> {
+  data: T[];
+  totalCount: number;
+}
+
 export interface IVacancyRepository {
   /**
    * Encuentra una vacante por su ID
@@ -65,4 +80,10 @@ export interface IVacancyRepository {
    * Cuenta vacantes por tenant y filtros
    */
   count(tenantId: string, filters?: FindVacanciesFilters): Promise<number>;
+
+  /**
+   * Obtiene vacantes paginadas con filtros y ordenamiento
+   * Para server-side pagination con TanStack Table
+   */
+  findPaginated(params: FindPaginatedParams): Promise<PaginatedResult<Vacancy>>;
 }
