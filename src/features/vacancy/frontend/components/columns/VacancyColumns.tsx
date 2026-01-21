@@ -2,8 +2,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Vacancy } from "../../types/vacancy.types";
 import { Badge } from "@/core/shared/ui/shadcn/badge";
 import { VacancyRowActions } from "./VacancyRowActions";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { Calendar } from "@hugeicons/core-free-icons";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 

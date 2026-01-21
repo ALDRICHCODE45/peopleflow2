@@ -9,16 +9,22 @@ import {
   deleteRoleAction,
 } from "../../server/presentation/actions/role.actions";
 import type { RoleWithStats } from "../types";
+import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 
-// Query Keys
-export const ROLES_QUERY_KEY = ["roles-with-stats"] as const;
+// Query Key Factory - Incluye tenantId para evitar cache stale entre tenants
+export const getRolesQueryKey = (tenantId: string) =>
+  ["roles-with-stats", tenantId] as const;
 
 /**
  * Hook para obtener los roles con estadísticas
  */
 export function useRolesWithStatsQuery() {
+  const { tenant } = useTenant();
+
   return useQuery({
-    queryKey: ROLES_QUERY_KEY,
+    queryKey: tenant?.id
+      ? getRolesQueryKey(tenant.id)
+      : ["roles-with-stats", "no-tenant"],
     queryFn: async (): Promise<RoleWithStats[]> => {
       const result = await getRolesWithStatsAction();
       if (result.error) {
@@ -26,6 +32,7 @@ export function useRolesWithStatsQuery() {
       }
       return result.roles;
     },
+    enabled: !!tenant?.id,
   });
 }
 
@@ -34,6 +41,7 @@ export function useRolesWithStatsQuery() {
  */
 export function useCreateRole() {
   const queryClient = useQueryClient();
+  const { tenant } = useTenant();
 
   return useMutation({
     mutationFn: async (name: string) => {
@@ -45,7 +53,11 @@ export function useCreateRole() {
     },
     onSuccess: async () => {
       toast.success("Rol creado exitosamente");
-      await queryClient.invalidateQueries({ queryKey: ROLES_QUERY_KEY });
+      if (tenant?.id) {
+        await queryClient.invalidateQueries({
+          queryKey: getRolesQueryKey(tenant.id),
+        });
+      }
     },
     onError: (error: Error) => {
       toast.error(error.message || "Error al crear rol");
@@ -58,6 +70,7 @@ export function useCreateRole() {
  */
 export function useUpdateRole() {
   const queryClient = useQueryClient();
+  const { tenant } = useTenant();
 
   return useMutation({
     mutationFn: async ({ roleId, name }: { roleId: string; name: string }) => {
@@ -69,7 +82,11 @@ export function useUpdateRole() {
     },
     onSuccess: async () => {
       toast.success("Rol actualizado exitosamente");
-      await queryClient.invalidateQueries({ queryKey: ROLES_QUERY_KEY });
+      if (tenant?.id) {
+        await queryClient.invalidateQueries({
+          queryKey: getRolesQueryKey(tenant.id),
+        });
+      }
     },
     onError: (error: Error) => {
       toast.error(error.message || "Error al actualizar rol");
@@ -82,6 +99,7 @@ export function useUpdateRole() {
  */
 export function useDeleteRole() {
   const queryClient = useQueryClient();
+  const { tenant } = useTenant();
 
   return useMutation({
     mutationFn: async (roleId: string) => {
@@ -93,7 +111,11 @@ export function useDeleteRole() {
     },
     onSuccess: async () => {
       toast.success("Rol eliminado exitosamente");
-      await queryClient.invalidateQueries({ queryKey: ROLES_QUERY_KEY });
+      if (tenant?.id) {
+        await queryClient.invalidateQueries({
+          queryKey: getRolesQueryKey(tenant.id),
+        });
+      }
     },
     onError: (error: Error) => {
       toast.error(error.message || "Error al eliminar rol");

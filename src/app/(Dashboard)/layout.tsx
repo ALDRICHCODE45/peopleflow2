@@ -15,7 +15,7 @@ import { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 
 export const metadata: Metadata = {
-  title: "PeopleFlow CRM",
+  title: "PeopleFlow ERP",
 };
 
 export default function DashboardLayout({

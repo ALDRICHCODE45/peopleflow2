@@ -86,13 +86,18 @@ export class UpdateUserRolesUseCase {
       }
 
       // Verificar que todos los roles existen Y pertenecen al tenant (o son globales)
+      // Incluir permisos para validación de privilege escalation
       const roles = await prisma.role.findMany({
         where: {
           id: { in: input.roleIds },
-          OR: [
-            { tenantId: input.tenantId },
-            { tenantId: null }  // Roles globales
-          ]
+          OR: [{ tenantId: input.tenantId }, { tenantId: null }], // Roles globales
+        },
+        include: {
+          permissions: {
+            include: {
+              permission: true,
+            },
+          },
         },
       });
 
@@ -110,6 +115,36 @@ export class UpdateUserRolesUseCase {
           success: false,
           error: "No se puede asignar el rol de administrador a través de este método",
         };
+      }
+
+      // SEGURIDAD: Si no es SuperAdmin, validar que el solicitante tiene
+      // todos los permisos de los roles que está asignando (previene privilege escalation)
+      if (!isSuperAdmin) {
+        // Obtener permisos del usuario solicitante
+        const requesterPermissions = await this.userRoleRepository.getUserPermissions(
+          input.requestingUserId,
+          input.tenantId
+        );
+
+        // Recopilar todos los permisos de los roles a asignar
+        const allRolePermissions = new Set<string>();
+        for (const role of roles) {
+          for (const rp of role.permissions) {
+            allRolePermissions.add(rp.permission.name);
+          }
+        }
+
+        // Verificar que el solicitante tiene todos los permisos
+        const unauthorizedPermissions = Array.from(allRolePermissions).filter(
+          (perm) => !requesterPermissions.includes(perm)
+        );
+
+        if (unauthorizedPermissions.length > 0) {
+          return {
+            success: false,
+            error: `No puedes asignar roles con permisos que no posees: ${unauthorizedPermissions.join(", ")}`,
+          };
+        }
       }
 
       // Usar transaccion para eliminar roles existentes y crear nuevos

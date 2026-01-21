@@ -100,6 +100,7 @@ export async function getTenantUsersAction(): Promise<GetTenantUsersResult> {
 
 /**
  * Crea un nuevo usuario y opcionalmente lo asigna al tenant actual
+ * SEGURIDAD: Valida que el creador tenga todos los permisos del rol a asignar
  */
 export async function createUserAction(data: {
   email: string;
@@ -117,22 +118,25 @@ export async function createUserAction(data: {
 
     // Verificar permisos
     const isSuperAdmin = await prismaUserRoleRepository.isSuperAdmin(session.user.id);
+    const tenantResult = await getCurrentTenantAction();
+
+    // Obtener permisos del usuario creador (si no es SuperAdmin)
+    let creatorPermissions: string[] = [];
 
     if (!isSuperAdmin) {
-      // Obtener tenant activo
-      const tenantResult = await getCurrentTenantAction();
       if (tenantResult.error || !tenantResult.tenant) {
         return { error: "No hay tenant activo" };
       }
 
       // Verificar permiso de crear usuarios
-      const permissions = await prismaUserRoleRepository.getUserPermissions(
+      creatorPermissions = await prismaUserRoleRepository.getUserPermissions(
         session.user.id,
         tenantResult.tenant.id
       );
 
-      const canCreate = permissions.includes("usuarios:crear") ||
-                        permissions.includes("usuarios:gestionar");
+      const canCreate =
+        creatorPermissions.includes("usuarios:crear") ||
+        creatorPermissions.includes("usuarios:gestionar");
 
       if (!canCreate) {
         return { error: "No tienes permisos para crear usuarios" };
@@ -152,34 +156,51 @@ export async function createUserAction(data: {
     }
 
     // Si hay roleId, asignar al tenant actual
-    if (data.roleId) {
-      const tenantResult = await getCurrentTenantAction();
-      if (tenantResult.tenant) {
-        // Verificar que el rol existe, pertenece al tenant y no es admin
-        const role = await prisma.role.findFirst({
-          where: {
-            id: data.roleId,
-            OR: [
-              { tenantId: tenantResult.tenant.id },
-              { tenantId: null }
-            ],
-            name: { not: HIDDEN_ADMIN_ROLE_NAME }
-          }
-        });
-
-        if (!role) {
-          return { error: "Rol no válido para este tenant" };
-        }
-
-        // Crear asignación directamente
-        await prisma.userRole.create({
-          data: {
-            userId: createResult.user.id,
-            roleId: data.roleId,
-            tenantId: tenantResult.tenant.id,
+    if (data.roleId && tenantResult.tenant) {
+      // Verificar que el rol existe, pertenece al tenant y no es admin
+      const role = await prisma.role.findFirst({
+        where: {
+          id: data.roleId,
+          OR: [{ tenantId: tenantResult.tenant.id }, { tenantId: null }],
+          name: { not: HIDDEN_ADMIN_ROLE_NAME },
+        },
+        include: {
+          permissions: {
+            include: {
+              permission: true,
+            },
           },
-        });
+        },
+      });
+
+      if (!role) {
+        return { error: "Rol no válido para este tenant" };
       }
+
+      // SEGURIDAD: Si no es SuperAdmin, validar que el creador tiene
+      // todos los permisos del rol que está asignando (previene privilege escalation)
+      if (!isSuperAdmin) {
+        const rolePermissions = role.permissions.map((rp) => rp.permission.name);
+
+        const unauthorizedPermissions = rolePermissions.filter(
+          (perm) => !creatorPermissions.includes(perm)
+        );
+
+        if (unauthorizedPermissions.length > 0) {
+          return {
+            error: `No puedes asignar un rol con permisos que no posees: ${unauthorizedPermissions.join(", ")}`,
+          };
+        }
+      }
+
+      // Crear asignación directamente
+      await prisma.userRole.create({
+        data: {
+          userId: createResult.user.id,
+          roleId: data.roleId,
+          tenantId: tenantResult.tenant.id,
+        },
+      });
     }
 
     revalidatePath("/admin/usuarios");
@@ -318,6 +339,7 @@ export async function updateUserRolesAction(
 
 /**
  * Obtiene los roles disponibles para asignar
+ * SEGURIDAD: Valida que el usuario tenga acceso al tenant solicitado
  */
 export async function getAvailableRolesAction(tenantId: string): Promise<GetRolesResult> {
   try {
@@ -328,6 +350,25 @@ export async function getAvailableRolesAction(tenantId: string): Promise<GetRole
       return { error: "No autenticado", roles: [] };
     }
 
+    // SEGURIDAD: Verificar que el usuario tenga acceso al tenant solicitado
+    const isSuperAdmin = await prismaUserRoleRepository.isSuperAdmin(session.user.id);
+
+    if (!isSuperAdmin) {
+      // Usuario normal: verificar que pertenece al tenant
+      const belongsToTenant = await prismaUserRoleRepository.userBelongsToTenant(
+        session.user.id,
+        tenantId
+      );
+
+      if (!belongsToTenant) {
+        return {
+          error: "No tienes acceso a este tenant",
+          roles: [],
+        };
+      }
+    }
+
+    // Solo después de validar acceso, obtener roles
     const roles = await prismaRoleRepository.findByTenantId(tenantId);
 
     // SEGURIDAD: Filtrar el rol de administrador

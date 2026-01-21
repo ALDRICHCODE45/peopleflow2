@@ -20,9 +20,12 @@ export interface CreateUserRoleData {
 
 export interface IUserRoleRepository {
   /**
-   * Encuentra un UserRole por su ID
+   * Encuentra un UserRole por su ID con filtrado de tenant
+   * SEGURIDAD: Requiere tenantId para prevenir acceso cross-tenant
+   * @param id - ID del UserRole
+   * @param tenantId - ID del tenant (null para roles globales de SuperAdmin)
    */
-  findById(id: string): Promise<UserRole | null>;
+  findById(id: string, tenantId: string | null): Promise<UserRole | null>;
 
   /**
    * Verifica si existe una asignación de usuario-rol-tenant

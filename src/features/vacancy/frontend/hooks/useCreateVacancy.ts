@@ -1,8 +1,11 @@
+"use client";
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createVacancyAction } from "../../server/presentation/actions/vacancy.actions";
-import { toast } from "sonner";
-import { VACANCIES_QUERY_KEY } from "./useVacanciesQuery";
+import { getVacanciesQueryKey } from "./useVacanciesQuery";
 import type { VacancyStatus } from "../types/vacancy.types";
+import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
+import { createVacancyAction } from "../../server/presentation/actions/createVacancy.action";
+import { showToast } from "@/core/shared/components/ShowToast";
 
 export interface CreateVacancyData {
   title: string;
@@ -14,6 +17,7 @@ export interface CreateVacancyData {
 
 export function useCreateVacancy() {
   const queryClient = useQueryClient();
+  const { tenant } = useTenant();
 
   return useMutation({
     mutationFn: async (data: CreateVacancyData) => {
@@ -24,13 +28,24 @@ export function useCreateVacancy() {
       return result.vacancy;
     },
     onSuccess: async () => {
-      toast.success("Vacante creada exitosamente");
-      await queryClient.invalidateQueries({
-        queryKey: VACANCIES_QUERY_KEY,
+      showToast({
+        type: "success",
+        title: "Operacion Exitosa!",
+        description: "Vacante creada exitosamente",
       });
+
+      if (tenant?.id) {
+        await queryClient.invalidateQueries({
+          queryKey: getVacanciesQueryKey(tenant.id),
+        });
+      }
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Error al crear vacante");
+      showToast({
+        type: "error",
+        title: "Ah ocurrido un error",
+        description: "Error al crear la vacante",
+      });
     },
   });
 }

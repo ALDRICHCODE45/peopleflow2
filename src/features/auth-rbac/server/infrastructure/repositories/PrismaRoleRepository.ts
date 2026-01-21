@@ -23,7 +23,10 @@ export class PrismaRoleRepository implements IRoleRepository {
     });
   }
 
-  async findByName(name: string, tenantId?: string | null): Promise<Role | null> {
+  async findByName(
+    name: string,
+    tenantId?: string | null,
+  ): Promise<Role | null> {
     const role = await prisma.role.findFirst({
       where: { name, tenantId: tenantId ?? null },
     });
@@ -38,7 +41,10 @@ export class PrismaRoleRepository implements IRoleRepository {
     });
   }
 
-  async findUserRoleInTenant(userId: string, tenantId: string | null): Promise<Role | null> {
+  async findUserRoleInTenant(
+    userId: string,
+    tenantId: string | null,
+  ): Promise<Role | null> {
     if (!tenantId) {
       // Si no hay tenantId, verificar si es superadmin global
       const superAdminRole = await prisma.role.findFirst({
@@ -102,13 +108,12 @@ export class PrismaRoleRepository implements IRoleRepository {
     return !!userRole;
   }
 
-
-  async findByTenantId(tenantId:string):Promise<Role[]> {
+  async findByTenantId(tenantId: string): Promise<Role[]> {
     const roles = await prisma.role.findMany({
-      where:{
-        tenantId
-      }
-    })
+      where: {
+        tenantId,
+      },
+    });
 
     return roles.map(
       (role) =>
@@ -117,10 +122,9 @@ export class PrismaRoleRepository implements IRoleRepository {
           name: role.name,
           createdAt: role.createdAt,
           updatedAt: role.updatedAt,
-        })
+        }),
     );
   }
-
 
   async findAll(): Promise<Role[]> {
     const roles = await prisma.role.findMany();
@@ -132,7 +136,7 @@ export class PrismaRoleRepository implements IRoleRepository {
           name: role.name,
           createdAt: role.createdAt,
           updatedAt: role.updatedAt,
-        })
+        }),
     );
   }
 }

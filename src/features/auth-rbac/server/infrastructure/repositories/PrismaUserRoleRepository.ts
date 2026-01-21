@@ -13,9 +13,19 @@ import { SUPER_ADMIN_PERMISSION_NAME } from "@/core/shared/constants/permissions
  */
 
 export class PrismaUserRoleRepository implements IUserRoleRepository {
-  async findById(id: string): Promise<UserRole | null> {
-    const userRole = await prisma.userRole.findUnique({
-      where: { id },
+  /**
+   * Encuentra un UserRole por su ID con filtrado obligatorio de tenant
+   * SEGURIDAD: Previene acceso cross-tenant (IDOR)
+   */
+  async findById(
+    id: string,
+    tenantId: string | null,
+  ): Promise<UserRole | null> {
+    const userRole = await prisma.userRole.findFirst({
+      where: {
+        id,
+        tenantId, // Filtrado OBLIGATORIO por tenant
+      },
     });
 
     if (!userRole) return null;
@@ -32,7 +42,7 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
   async exists(
     userId: string,
     roleId: string,
-    tenantId: string | null
+    tenantId: string | null,
   ): Promise<boolean> {
     const userRole = await prisma.userRole.findFirst({
       where: {
@@ -99,7 +109,7 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
 
   async userBelongsToTenant(
     userId: string,
-    tenantId: string
+    tenantId: string,
   ): Promise<boolean> {
     const userRole = await prisma.userRole.findFirst({
       where: {
@@ -153,7 +163,7 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
    */
   async getUserPermissions(
     userId: string,
-    tenantId: string | null
+    tenantId: string | null,
   ): Promise<string[]> {
     // PASO 1: Verificar primero si es SuperAdmin
     const isSuperAdmin = await this.isSuperAdmin(userId);
@@ -164,35 +174,6 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
         where: {
           userId,
           tenantId: null, // Roles globales de superadmin
-        },
-      include: {
-        role: {
-          include: {
-            permissions: {
-              include: {
-                permission: true,
-              },
-            },
-          },
-        },
-      },
-    });
-
-      return this.extractPermissionsFromRoles(globalRoles);
-    }
-
-    // PASO 2: Usuario normal - Requiere tenantId obligatorio
-    // FAIL-CLOSED: Sin tenant, sin permisos
-    if (!tenantId) {
-      return [];
-    }
-
-    // PASO 3: Obtener SOLO permisos del tenant específico
-    // NO hay fallback a roles globales para usuarios normales
-    const userRoles = await prisma.userRole.findMany({
-        where: {
-          userId,
-        tenantId, // Filtrado ESTRICTO por tenant
         },
         include: {
           role: {
@@ -206,6 +187,35 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
           },
         },
       });
+
+      return this.extractPermissionsFromRoles(globalRoles);
+    }
+
+    // PASO 2: Usuario normal - Requiere tenantId obligatorio
+    // FAIL-CLOSED: Sin tenant, sin permisos
+    if (!tenantId) {
+      return [];
+    }
+
+    // PASO 3: Obtener SOLO permisos del tenant específico
+    // NO hay fallback a roles globales para usuarios normales
+    const userRoles = await prisma.userRole.findMany({
+      where: {
+        userId,
+        tenantId, // Filtrado ESTRICTO por tenant
+      },
+      include: {
+        role: {
+          include: {
+            permissions: {
+              include: {
+                permission: true,
+              },
+            },
+          },
+        },
+      },
+    });
 
     return this.extractPermissionsFromRoles(userRoles);
   }
@@ -223,7 +233,7 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
           };
         }>;
       };
-    }>
+    }>,
   ): string[] {
     const permissionSet = new Set<string>();
 

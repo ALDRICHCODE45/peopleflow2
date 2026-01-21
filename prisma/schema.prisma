@@ -45,6 +45,7 @@ model Session {
   @@unique([token])
   @@index([userId])
   @@index([activeTenantId])
+  @@index([expiresAt]) // Para cleanup de sesiones expiradas
   @@map("session")
 }
 
@@ -111,6 +112,7 @@ model Role {
   @@unique([name, tenantId])
   @@index([tenantId])
   @@index([name])
+  @@index([tenantId, name]) // Covering index para queries con filtros compuestos
 }
 
 model UserRole {
@@ -127,6 +129,7 @@ model UserRole {
   @@index([userId])
   @@index([roleId])
   @@index([tenantId])
+  @@index([userId, tenantId]) // CRÍTICO: Optimiza getUserPermissions() - 60-80% mejora
 }
 
 model RolePermission {

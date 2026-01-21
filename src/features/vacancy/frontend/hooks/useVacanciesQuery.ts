@@ -1,17 +1,28 @@
+"use client";
+
 import { useQuery } from "@tanstack/react-query";
-import { getVacanciesAction } from "../../server/presentation/actions/vacancy.actions";
 import type { VacancyStatus, Vacancy } from "../types/vacancy.types";
+import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
+import { getVacanciesAction } from "../../server/presentation/actions/getVacanciesAction.action";
 
 export interface VacanciesQueryFilters {
   status?: VacancyStatus;
   search?: string;
 }
 
-export const VACANCIES_QUERY_KEY = ["vacancies"] as const;
+// Query Key Factory - Incluye tenantId para evitar cache stale entre tenants
+export const getVacanciesQueryKey = (
+  tenantId: string,
+  filters?: VacanciesQueryFilters,
+) => ["vacancies", tenantId, filters] as const;
 
 export function useVacanciesQuery(filters?: VacanciesQueryFilters) {
+  const { tenant } = useTenant();
+
   return useQuery({
-    queryKey: [...VACANCIES_QUERY_KEY, filters],
+    queryKey: tenant?.id
+      ? getVacanciesQueryKey(tenant.id, filters)
+      : ["vacancies", "no-tenant", filters],
     queryFn: async (): Promise<Vacancy[]> => {
       const result = await getVacanciesAction(filters);
       if (result.error) {
@@ -19,5 +30,6 @@ export function useVacanciesQuery(filters?: VacanciesQueryFilters) {
       }
       return result.vacancies;
     },
+    enabled: !!tenant?.id,
   });
 }

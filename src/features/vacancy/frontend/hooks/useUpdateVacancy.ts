@@ -1,9 +1,11 @@
+"use client";
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateVacancyAction } from "../../server/presentation/actions/vacancy.actions";
-import { toast } from "sonner";
-import { VACANCIES_QUERY_KEY } from "./useVacanciesQuery";
+import { getVacanciesQueryKey } from "./useVacanciesQuery";
 import type { VacancyStatus } from "../types/vacancy.types";
 import { showToast } from "@/core/shared/components/ShowToast";
+import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
+import { updateVacancyAction } from "../../server/presentation/actions/updateVacancy.action";
 
 export interface UpdateVacancyData {
   id: string;
@@ -16,6 +18,7 @@ export interface UpdateVacancyData {
 
 export function useUpdateVacancy() {
   const queryClient = useQueryClient();
+  const { tenant } = useTenant();
 
   return useMutation({
     mutationFn: async ({ id, ...data }: UpdateVacancyData) => {
@@ -31,12 +34,18 @@ export function useUpdateVacancy() {
         description: "Vacante actualizada correctamente",
         type: "success",
       });
-      await queryClient.invalidateQueries({
-        queryKey: VACANCIES_QUERY_KEY,
-      });
+      if (tenant?.id) {
+        await queryClient.invalidateQueries({
+          queryKey: getVacanciesQueryKey(tenant.id),
+        });
+      }
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Error al actualizar vacante");
+      showToast({
+        title: "Ah ocurrido un error",
+        description: "La vacante no se pudo actualizar",
+        type: "error",
+      });
     },
   });
 }

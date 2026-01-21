@@ -1,13 +1,11 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import {
-  getVacanciesAction,
-  createVacancyAction,
-  updateVacancyAction,
-  deleteVacancyAction,
-} from "../../server/presentation/actions/vacancy.actions";
 import type { Vacancy, VacancyStatus } from "../types/vacancy.types";
+import { getVacanciesAction } from "../../server/presentation/actions/getVacanciesAction.action";
+import { createVacancyAction } from "../../server/presentation/actions/createVacancy.action";
+import { updateVacancyAction } from "../../server/presentation/actions/updateVacancy.action";
+import { deleteVacancyAction } from "../../server/presentation/actions/deleteVacancy.action";
 
 interface UseVacanciesFilters {
   status?: VacancyStatus;
@@ -22,7 +20,7 @@ export function useVacancies(initialFilters?: UseVacanciesFilters) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<UseVacanciesFilters>(
-    initialFilters || {}
+    initialFilters || {},
   );
 
   const loadVacancies = useCallback(async () => {
@@ -66,7 +64,7 @@ export function useVacancies(initialFilters?: UseVacanciesFilters) {
       status?: VacancyStatus;
       department?: string | null;
       location?: string | null;
-    }
+    },
   ) => {
     const result = await updateVacancyAction(id, data);
     if (!result.error) {

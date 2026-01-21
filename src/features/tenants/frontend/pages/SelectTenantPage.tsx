@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@shadcn/button";
 import {
   Card,
@@ -26,7 +25,6 @@ interface SelectTenantPageProps {
 }
 
 export function SelectTenantPage({ tenants, userName }: SelectTenantPageProps) {
-  const router = useRouter();
   const [isSelecting, setIsSelecting] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -43,9 +41,9 @@ export function SelectTenantPage({ tenants, userName }: SelectTenantPageProps) {
         return;
       }
 
-      // Redirigir a la página principal para que determine la ruta
-      router.push("/");
-      router.refresh();
+      // Full page reload para limpiar todos los cachés
+      // Consistente con TeamSwitcher
+      window.location.href = "/";
     } catch (err) {
       console.error("Error al seleccionar tenant:", err);
       setError("Error al seleccionar la organización");

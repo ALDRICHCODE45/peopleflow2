@@ -53,12 +53,15 @@ export function SuperAdminDashboard({
     try {
       const result = await switchTenantAction(tenantId);
       if (!result.error) {
-        router.push("/admin/usuarios");
-        router.refresh();
+        // Full page reload para limpiar TODOS los cachés:
+        // - React Query cache
+        // - Next.js Router Cache
+        // - Better Auth session cache
+        // Esto garantiza datos frescos del nuevo tenant
+        window.location.href = "/admin/usuarios";
       }
     } catch (error) {
       console.error("Error al entrar al tenant:", error);
-    } finally {
       setIsEntering(null);
     }
   };
