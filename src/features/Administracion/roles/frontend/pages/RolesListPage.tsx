@@ -2,13 +2,10 @@
 
 import { useState } from "react";
 import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
-import { Button } from "@/core/shared/ui/shadcn/button";
 import { DataTable } from "@/core/shared/components/DataTable/DataTable";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { createTableConfig } from "@/core/shared/helpers/createTableConfig";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { SecurityIcon } from "@hugeicons/core-free-icons";
 import { useRolesWithStatsQuery } from "../hooks/useRoles";
 import { RoleColumns } from "../components/RoleColumns";
 import { RoleSheetForm } from "../components/RoleSheetForm";
@@ -31,12 +28,6 @@ export function RolesListPage() {
             Administra los roles y sus permisos del sistema
           </p>
         </div>
-        {/* <PermissionGuard permissions={[]}>
-          <Button onClick={() => setIsCreateOpen(true)}>
-            <HugeiconsIcon icon={SecurityIcon} className="mr-2 h-4 w-4" />
-            Crear Rol
-          </Button>
-        </PermissionGuard> */}
       </div>
 
       <Card>
@@ -50,8 +41,13 @@ export function RolesListPage() {
         </CardContent>
       </Card>
 
-      {/* Sheet para crear rol - solo SuperAdmin */}
-      <PermissionGuard permissions={[PermissionActions.roles.gestionar, PermissionActions.roles.crear]}>
+      {/* Sheet para crear rol - solo usuarios con permisos*/}
+      <PermissionGuard
+        permissions={[
+          PermissionActions.roles.gestionar,
+          PermissionActions.roles.crear,
+        ]}
+      >
         <RoleSheetForm open={isCreateOpen} onOpenChange={setIsCreateOpen} />
       </PermissionGuard>
     </div>

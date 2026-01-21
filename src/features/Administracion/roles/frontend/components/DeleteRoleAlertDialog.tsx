@@ -1,5 +1,4 @@
-"use client";
-
+import { useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,51 +8,68 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/core/shared/ui/shadcn/alert-dialog";
-import { useDeleteRole } from "../hooks/useRoles";
-import type { RoleWithStats } from "../types";
+} from "@shadcn/alert-dialog";
+import { Input } from "@shadcn/input";
+import { Button } from "@shadcn/button";
 
-interface DeleteRoleAlertDialogProps {
-  role: RoleWithStats;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+interface DeleteUserAlertDialogProps {
+  isOpen: boolean;
+  onOpenChange: () => void;
+  roleNameToDelete?: string;
+  onConfirmDelete?: () => void;
+  isLoading?: boolean;
 }
 
-export function DeleteRoleAlertDialog({
-  role,
-  open,
+export const DeleteRoleAlertDialog = ({
+  isOpen,
   onOpenChange,
-}: DeleteRoleAlertDialogProps) {
-  const deleteRoleMutation = useDeleteRole();
+  roleNameToDelete,
+  onConfirmDelete,
+  isLoading = false,
+}: DeleteUserAlertDialogProps) => {
+  const [inputValue, setInputValue] = useState("");
 
-  const handleConfirm = async () => {
-    await deleteRoleMutation.mutateAsync(role.id);
-    onOpenChange(false);
-  };
-
-  const isLoading = deleteRoleMutation.isPending;
+  const isMatch = inputValue.trim() === roleNameToDelete;
 
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
+    <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Eliminar Rol</AlertDialogTitle>
+          <AlertDialogTitle>
+            ¿Estás seguro que deseas eliminar este role?
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            Esta acción eliminará permanentemente el rol{" "}
-            <strong>{role.name}</strong>. Esta acción no se puede deshacer.
+            Esta acción <b>no se puede deshacer</b>. Para confirmar, por favor
+            escribe <b>{roleNameToDelete}</b> debajo.
           </AlertDialogDescription>
         </AlertDialogHeader>
+        <div className="py-3">
+          <Input
+            autoFocus
+            placeholder="Escribe el nombre de usuario"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            data-testid="delete-user-confirm-input"
+          />
+          {!isMatch && inputValue.length > 0 && (
+            <span className="text-xs text-red-500 mt-1 block">
+              El nombre no coincide.
+            </span>
+          )}
+        </div>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isLoading}>Cancelar</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={handleConfirm}
-            disabled={isLoading}
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-          >
-            {isLoading ? "Eliminando..." : "Eliminar"}
-          </AlertDialogAction>
+          <Button asChild variant={"destructive"}>
+            <AlertDialogAction
+              disabled={!isMatch || isLoading}
+              onClick={onConfirmDelete}
+              data-testid="delete-user-confirm-btn"
+            >
+              {isLoading ? "Eliminando..." : "Eliminar"}
+            </AlertDialogAction>
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   );
-}
+};

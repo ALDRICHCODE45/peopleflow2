@@ -1,7 +1,6 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import {
   getRolesWithStatsAction,
   createRoleAction,
@@ -10,6 +9,7 @@ import {
 } from "../../server/presentation/actions/role.actions";
 import type { RoleWithStats } from "../types";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
+import { showToast } from "@/core/shared/components/ShowToast";
 
 // Query Key Factory - Incluye tenantId para evitar cache stale entre tenants
 export const getRolesQueryKey = (tenantId: string) =>
@@ -52,7 +52,11 @@ export function useCreateRole() {
       return result.role;
     },
     onSuccess: async () => {
-      toast.success("Rol creado exitosamente");
+      showToast({
+        title: "Operacion Exitosa",
+        description: "Role creado exitosamente.",
+        type: "success",
+      });
       if (tenant?.id) {
         await queryClient.invalidateQueries({
           queryKey: getRolesQueryKey(tenant.id),
@@ -60,7 +64,11 @@ export function useCreateRole() {
       }
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Error al crear rol");
+      showToast({
+        title: "Error",
+        description: "El role no se pude crear correctamente",
+        type: "success",
+      });
     },
   });
 }
@@ -81,7 +89,11 @@ export function useUpdateRole() {
       return result.role;
     },
     onSuccess: async () => {
-      toast.success("Rol actualizado exitosamente");
+      showToast({
+        title: "Operacion Exitosa",
+        description: "El role ha sido actualizado correctamente",
+        type: "success",
+      });
       if (tenant?.id) {
         await queryClient.invalidateQueries({
           queryKey: getRolesQueryKey(tenant.id),
@@ -89,7 +101,11 @@ export function useUpdateRole() {
       }
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Error al actualizar rol");
+      showToast({
+        title: "Ah ocurrido un error",
+        description: "Ha ocurrido un problema actualizando el role",
+        type: "error",
+      });
     },
   });
 }
@@ -110,7 +126,11 @@ export function useDeleteRole() {
       return result;
     },
     onSuccess: async () => {
-      toast.success("Rol eliminado exitosamente");
+      showToast({
+        title: "Role eliminado",
+        description: "El role fue eliminado exitosamente.",
+        type: "success",
+      });
       if (tenant?.id) {
         await queryClient.invalidateQueries({
           queryKey: getRolesQueryKey(tenant.id),
@@ -118,7 +138,11 @@ export function useDeleteRole() {
       }
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Error al eliminar rol");
+      showToast({
+        title: "Operacion Exitosa",
+        description: "Ha ocurrido un problema eliminando el role",
+        type: "error",
+      });
     },
   });
 }
