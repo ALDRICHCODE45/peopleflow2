@@ -60,6 +60,14 @@ export const ModelName = {
   UserRole: 'UserRole',
   RolePermission: 'RolePermission',
   Permission: 'Permission',
+  Sector: 'Sector',
+  Subsector: 'Subsector',
+  LeadOrigin: 'LeadOrigin',
+  Lead: 'Lead',
+  LeadStatusHistory: 'LeadStatusHistory',
+  Contact: 'Contact',
+  Interaction: 'Interaction',
+  Attachment: 'Attachment',
   Vacancy: 'Vacancy'
 } as const
 
@@ -192,6 +200,134 @@ export const PermissionScalarFieldEnum = {
 } as const
 
 export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof typeof PermissionScalarFieldEnum]
+
+
+export const SectorScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  isActive: 'isActive',
+  tenantId: 'tenantId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SectorScalarFieldEnum = (typeof SectorScalarFieldEnum)[keyof typeof SectorScalarFieldEnum]
+
+
+export const SubsectorScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  sectorId: 'sectorId',
+  isActive: 'isActive',
+  tenantId: 'tenantId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SubsectorScalarFieldEnum = (typeof SubsectorScalarFieldEnum)[keyof typeof SubsectorScalarFieldEnum]
+
+
+export const LeadOriginScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  isActive: 'isActive',
+  tenantId: 'tenantId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LeadOriginScalarFieldEnum = (typeof LeadOriginScalarFieldEnum)[keyof typeof LeadOriginScalarFieldEnum]
+
+
+export const LeadScalarFieldEnum = {
+  id: 'id',
+  companyName: 'companyName',
+  rfc: 'rfc',
+  website: 'website',
+  linkedInUrl: 'linkedInUrl',
+  address: 'address',
+  notes: 'notes',
+  status: 'status',
+  sectorId: 'sectorId',
+  subsectorId: 'subsectorId',
+  originId: 'originId',
+  assignedToId: 'assignedToId',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  tenantId: 'tenantId',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LeadScalarFieldEnum = (typeof LeadScalarFieldEnum)[keyof typeof LeadScalarFieldEnum]
+
+
+export const LeadStatusHistoryScalarFieldEnum = {
+  id: 'id',
+  leadId: 'leadId',
+  previousStatus: 'previousStatus',
+  newStatus: 'newStatus',
+  changedById: 'changedById',
+  tenantId: 'tenantId',
+  createdAt: 'createdAt'
+} as const
+
+export type LeadStatusHistoryScalarFieldEnum = (typeof LeadStatusHistoryScalarFieldEnum)[keyof typeof LeadStatusHistoryScalarFieldEnum]
+
+
+export const ContactScalarFieldEnum = {
+  id: 'id',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  email: 'email',
+  phone: 'phone',
+  position: 'position',
+  linkedInUrl: 'linkedInUrl',
+  isPrimary: 'isPrimary',
+  notes: 'notes',
+  leadId: 'leadId',
+  tenantId: 'tenantId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ContactScalarFieldEnum = (typeof ContactScalarFieldEnum)[keyof typeof ContactScalarFieldEnum]
+
+
+export const InteractionScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  subject: 'subject',
+  content: 'content',
+  date: 'date',
+  contactId: 'contactId',
+  createdById: 'createdById',
+  tenantId: 'tenantId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InteractionScalarFieldEnum = (typeof InteractionScalarFieldEnum)[keyof typeof InteractionScalarFieldEnum]
+
+
+export const AttachmentScalarFieldEnum = {
+  id: 'id',
+  fileName: 'fileName',
+  fileUrl: 'fileUrl',
+  fileSize: 'fileSize',
+  mimeType: 'mimeType',
+  attachableType: 'attachableType',
+  leadId: 'leadId',
+  contactId: 'contactId',
+  interactionId: 'interactionId',
+  tenantId: 'tenantId',
+  uploadedById: 'uploadedById',
+  createdAt: 'createdAt'
+} as const
+
+export type AttachmentScalarFieldEnum = (typeof AttachmentScalarFieldEnum)[keyof typeof AttachmentScalarFieldEnum]
 
 
 export const VacancyScalarFieldEnum = {

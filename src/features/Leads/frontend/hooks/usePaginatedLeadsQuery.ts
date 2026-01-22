@@ -1,0 +1,83 @@
+"use client";
+
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import type { LeadStatus, Lead } from "../types";
+import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
+import { getPaginatedLeadsAction } from "../../server/presentation/actions/getPaginatedLeadsAction.action";
+import type {
+  PaginatedResponse,
+  SortingParam,
+} from "@/core/shared/types/pagination.types";
+
+/** Parámetros para la query paginada de leads */
+export interface PaginatedLeadsQueryParams {
+  pageIndex: number;
+  pageSize: number;
+  sorting?: SortingParam[];
+  globalFilter?: string;
+  status?: LeadStatus;
+  sectorId?: string;
+  originId?: string;
+}
+
+/** Query Key Factory */
+export const getPaginatedLeadsQueryKey = (
+  tenantId: string,
+  params: PaginatedLeadsQueryParams
+) =>
+  [
+    "leads",
+    "paginated",
+    tenantId,
+    {
+      pageIndex: params.pageIndex,
+      pageSize: params.pageSize,
+      sorting: params.sorting,
+      globalFilter: params.globalFilter,
+      status: params.status,
+      sectorId: params.sectorId,
+      originId: params.originId,
+    },
+  ] as const;
+
+/**
+ * Hook para obtener leads con paginación server-side
+ */
+export function usePaginatedLeadsQuery(params: PaginatedLeadsQueryParams) {
+  const { tenant } = useTenant();
+
+  return useQuery({
+    queryKey: tenant?.id
+      ? getPaginatedLeadsQueryKey(tenant.id, params)
+      : ["leads", "paginated", "no-tenant"],
+    queryFn: async (): Promise<PaginatedResponse<Lead>> => {
+      const result = await getPaginatedLeadsAction({
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        sorting: params.sorting,
+        globalFilter: params.globalFilter,
+        status: params.status,
+        sectorId: params.sectorId,
+        originId: params.originId,
+      });
+
+      if ("error" in result && result.error) {
+        throw new Error(result.error);
+      }
+
+      return {
+        data: result.data ?? [],
+        pagination: result.pagination ?? {
+          pageIndex: params.pageIndex,
+          pageSize: params.pageSize,
+          totalCount: 0,
+          pageCount: 0,
+        },
+      };
+    },
+    enabled: !!tenant?.id,
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: false,
+    staleTime: 30 * 1000,
+  });
+}

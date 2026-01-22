@@ -63,6 +63,46 @@ export type RolePermission = Prisma.RolePermissionModel
  */
 export type Permission = Prisma.PermissionModel
 /**
+ * Model Sector
+ * 
+ */
+export type Sector = Prisma.SectorModel
+/**
+ * Model Subsector
+ * 
+ */
+export type Subsector = Prisma.SubsectorModel
+/**
+ * Model LeadOrigin
+ * 
+ */
+export type LeadOrigin = Prisma.LeadOriginModel
+/**
+ * Model Lead
+ * 
+ */
+export type Lead = Prisma.LeadModel
+/**
+ * Model LeadStatusHistory
+ * 
+ */
+export type LeadStatusHistory = Prisma.LeadStatusHistoryModel
+/**
+ * Model Contact
+ * 
+ */
+export type Contact = Prisma.ContactModel
+/**
+ * Model Interaction
+ * 
+ */
+export type Interaction = Prisma.InteractionModel
+/**
+ * Model Attachment
+ * 
+ */
+export type Attachment = Prisma.AttachmentModel
+/**
  * Model Vacancy
  * 
  */

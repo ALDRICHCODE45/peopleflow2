@@ -9,6 +9,29 @@
 * 🟢 You can import this file directly.
 */
 
+export const LeadStatus = {
+  CONTACTO_CALIDO: 'CONTACTO_CALIDO',
+  SOCIAL_SELLING: 'SOCIAL_SELLING',
+  CITA_AGENDADA: 'CITA_AGENDADA',
+  CITA_ATENDIDA: 'CITA_ATENDIDA',
+  CITA_VALIDADA: 'CITA_VALIDADA',
+  POSICIONES_ASIGNADAS: 'POSICIONES_ASIGNADAS',
+  STAND_BY: 'STAND_BY'
+} as const
+
+export type LeadStatus = (typeof LeadStatus)[keyof typeof LeadStatus]
+
+
+export const AttachableType = {
+  LEAD: 'LEAD',
+  CONTACT: 'CONTACT',
+  INTERACTION: 'INTERACTION',
+  VACANCY: 'VACANCY'
+} as const
+
+export type AttachableType = (typeof AttachableType)[keyof typeof AttachableType]
+
+
 export const VacancyStatus = {
   DRAFT: 'DRAFT',
   OPEN: 'OPEN',

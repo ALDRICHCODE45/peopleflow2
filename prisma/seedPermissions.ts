@@ -1,4 +1,4 @@
-import { PrismaClient } from "../src/core/generated/prisma/client";
+import { PrismaClient, LeadStatus } from "../src/core/generated/prisma/client";
 import {
   ALL_PERMISSIONS,
   SUPER_ADMIN_PERMISSION_NAME,
@@ -239,4 +239,321 @@ export async function seedTenants(prisma: PrismaClient) {
   console.log("✅ Tenants creados/actualizados");
 
   return { tenantA, tenantB };
+}
+
+// =============================================
+// SEED DE DATOS DEL MÓDULO DE LEADS
+// =============================================
+
+/**
+ * Datos de sectores con subsectores para seed
+ */
+const SECTORS_DATA = [
+  {
+    name: "Tecnología",
+    subsectors: ["SaaS", "Fintech", "E-commerce", "Ciberseguridad", "Inteligencia Artificial"],
+  },
+  {
+    name: "Salud",
+    subsectors: ["Farmacéutica", "Hospitales", "Seguros Médicos", "Biotecnología", "Dispositivos Médicos"],
+  },
+  {
+    name: "Manufactura",
+    subsectors: ["Automotriz", "Alimentos", "Textil", "Electrónica", "Maquinaria"],
+  },
+  {
+    name: "Servicios Financieros",
+    subsectors: ["Banca", "Seguros", "Inversiones", "Créditos", "Pagos Digitales"],
+  },
+  {
+    name: "Retail",
+    subsectors: ["Moda", "Supermercados", "Electrónicos", "Hogar", "Deportes"],
+  },
+  {
+    name: "Energía",
+    subsectors: ["Petróleo y Gas", "Energías Renovables", "Electricidad", "Minería"],
+  },
+  {
+    name: "Construcción",
+    subsectors: ["Residencial", "Comercial", "Industrial", "Infraestructura"],
+  },
+  {
+    name: "Educación",
+    subsectors: ["Universidades", "Capacitación Corporativa", "EdTech", "Escuelas"],
+  },
+];
+
+/**
+ * Datos de orígenes de leads para seed
+ */
+const LEAD_ORIGINS_DATA = [
+  { name: "LinkedIn", description: "Prospección y contacto vía LinkedIn" },
+  { name: "Referido", description: "Referencia de cliente existente o contacto" },
+  { name: "Email Campaign", description: "Respuesta a campaña de email marketing" },
+  { name: "Website", description: "Formulario de contacto del sitio web" },
+  { name: "Evento", description: "Feria comercial, conferencia o evento presencial" },
+  { name: "Cold Call", description: "Llamada en frío de prospección" },
+  { name: "Redes Sociales", description: "Contacto vía Facebook, Twitter, Instagram" },
+  { name: "Partner", description: "Lead referido por socio comercial" },
+  { name: "Inbound", description: "Lead que llegó por contenido o SEO" },
+];
+
+/**
+ * Seed de sectores industriales con subsectores
+ */
+export async function seedSectors(prisma: PrismaClient) {
+  console.log("🏭 Creando sectores y subsectores...");
+
+  const createdSectors: { id: string; name: string }[] = [];
+
+  for (const sectorData of SECTORS_DATA) {
+    // Crear sector global (tenantId = null)
+    const sector = await prisma.sector.upsert({
+      where: {
+        name_tenantId: { name: sectorData.name, tenantId: null as unknown as string },
+      },
+      update: {},
+      create: {
+        name: sectorData.name,
+        isActive: true,
+        tenantId: null,
+      },
+    });
+
+    createdSectors.push({ id: sector.id, name: sector.name });
+
+    // Crear subsectores
+    for (const subsectorName of sectorData.subsectors) {
+      await prisma.subsector.upsert({
+        where: {
+          name_sectorId: { name: subsectorName, sectorId: sector.id },
+        },
+        update: {},
+        create: {
+          name: subsectorName,
+          sectorId: sector.id,
+          isActive: true,
+          tenantId: null,
+        },
+      });
+    }
+  }
+
+  console.log(`✅ ${SECTORS_DATA.length} sectores y ${SECTORS_DATA.reduce((acc, s) => acc + s.subsectors.length, 0)} subsectores creados`);
+
+  return createdSectors;
+}
+
+/**
+ * Seed de orígenes de leads
+ */
+export async function seedLeadOrigins(prisma: PrismaClient) {
+  console.log("🎯 Creando orígenes de leads...");
+
+  const createdOrigins: { id: string; name: string }[] = [];
+
+  for (const originData of LEAD_ORIGINS_DATA) {
+    const origin = await prisma.leadOrigin.upsert({
+      where: {
+        name_tenantId: { name: originData.name, tenantId: null as unknown as string },
+      },
+      update: {
+        description: originData.description,
+      },
+      create: {
+        name: originData.name,
+        description: originData.description,
+        isActive: true,
+        tenantId: null,
+      },
+    });
+
+    createdOrigins.push({ id: origin.id, name: origin.name });
+  }
+
+  console.log(`✅ ${LEAD_ORIGINS_DATA.length} orígenes de leads creados`);
+
+  return createdOrigins;
+}
+
+/**
+ * Seed de leads de ejemplo con contactos
+ */
+export async function seedSampleLeads(
+  prisma: PrismaClient,
+  tenantId: string,
+  userId: string
+) {
+  console.log("📋 Creando leads de ejemplo...");
+
+  // Obtener algunos sectores y orígenes para asignar
+  const sectors = await prisma.sector.findMany({ take: 5 });
+  const origins = await prisma.leadOrigin.findMany({ take: 5 });
+
+  const leadsData = [
+    {
+      companyName: "TechCorp Solutions",
+      rfc: "TCS123456ABC",
+      website: "https://techcorp.com",
+      linkedInUrl: "https://linkedin.com/company/techcorp",
+      address: "Av. Reforma 123, CDMX",
+      notes: "Empresa de tecnología interesada en servicios de reclutamiento de desarrolladores",
+      status: "CONTACTO_CALIDO" as LeadStatus,
+      contacts: [
+        {
+          firstName: "Carlos",
+          lastName: "Rodríguez",
+          email: "carlos.rodriguez@techcorp.com",
+          phone: "+52 55 1234 5678",
+          position: "Director de RH",
+          isPrimary: true,
+        },
+        {
+          firstName: "María",
+          lastName: "García",
+          email: "maria.garcia@techcorp.com",
+          phone: "+52 55 8765 4321",
+          position: "Gerente de Talento",
+          isPrimary: false,
+        },
+      ],
+    },
+    {
+      companyName: "Innovate Labs",
+      rfc: "INL789012DEF",
+      website: "https://innovatelabs.mx",
+      linkedInUrl: "https://linkedin.com/company/innovatelabs",
+      address: "Blvd. Insurgentes Sur 456, CDMX",
+      notes: "Startup en crecimiento, necesitan escalar equipo de desarrollo",
+      status: "CITA_AGENDADA" as LeadStatus,
+      contacts: [
+        {
+          firstName: "Ana",
+          lastName: "Martínez",
+          email: "ana@innovatelabs.mx",
+          phone: "+52 55 2345 6789",
+          position: "CEO",
+          isPrimary: true,
+        },
+      ],
+    },
+    {
+      companyName: "Global Fintech",
+      rfc: "GFI345678GHI",
+      website: "https://globalfintech.com",
+      linkedInUrl: "https://linkedin.com/company/globalfintech",
+      address: "Paseo de la Reforma 789, CDMX",
+      notes: "Fintech en expansión regional, buscan perfiles especializados",
+      status: "CITA_VALIDADA" as LeadStatus,
+      contacts: [
+        {
+          firstName: "Roberto",
+          lastName: "López",
+          email: "roberto.lopez@globalfintech.com",
+          phone: "+52 55 3456 7890",
+          position: "CHRO",
+          isPrimary: true,
+        },
+        {
+          firstName: "Laura",
+          lastName: "Sánchez",
+          email: "laura.sanchez@globalfintech.com",
+          phone: "+52 55 4567 8901",
+          position: "Talent Acquisition Lead",
+          isPrimary: false,
+        },
+      ],
+    },
+    {
+      companyName: "Health Solutions MX",
+      rfc: "HSM901234JKL",
+      website: "https://healthsolutions.mx",
+      linkedInUrl: null,
+      address: "Av. Universidad 321, Monterrey",
+      notes: "Empresa del sector salud, interesados en perfiles de TI para hospitales",
+      status: "SOCIAL_SELLING" as LeadStatus,
+      contacts: [
+        {
+          firstName: "Patricia",
+          lastName: "Hernández",
+          email: "patricia@healthsolutions.mx",
+          phone: "+52 81 1234 5678",
+          position: "Directora de Operaciones",
+          isPrimary: true,
+        },
+      ],
+    },
+    {
+      companyName: "EcoEnergy Corp",
+      rfc: "EEC567890MNO",
+      website: "https://ecoenergy.com.mx",
+      linkedInUrl: "https://linkedin.com/company/ecoenergy",
+      address: "Av. Chapultepec 654, Guadalajara",
+      notes: "Empresa de energías renovables en crecimiento",
+      status: "STAND_BY" as LeadStatus,
+      contacts: [
+        {
+          firstName: "Miguel",
+          lastName: "Torres",
+          email: "miguel.torres@ecoenergy.com.mx",
+          phone: "+52 33 2345 6789",
+          position: "Gerente de RH",
+          isPrimary: true,
+        },
+      ],
+    },
+  ];
+
+  let leadCount = 0;
+  let contactCount = 0;
+
+  for (let i = 0; i < leadsData.length; i++) {
+    const leadData = leadsData[i];
+    const sector = sectors[i % sectors.length];
+    const origin = origins[i % origins.length];
+
+    // Obtener subsector del sector
+    const subsector = await prisma.subsector.findFirst({
+      where: { sectorId: sector.id },
+    });
+
+    const lead = await prisma.lead.create({
+      data: {
+        companyName: leadData.companyName,
+        rfc: leadData.rfc,
+        website: leadData.website,
+        linkedInUrl: leadData.linkedInUrl,
+        address: leadData.address,
+        notes: leadData.notes,
+        status: leadData.status,
+        sectorId: sector.id,
+        subsectorId: subsector?.id,
+        originId: origin.id,
+        assignedToId: userId,
+        tenantId: tenantId,
+        createdById: userId,
+      },
+    });
+
+    leadCount++;
+
+    // Crear contactos para este lead
+    for (const contactData of leadData.contacts) {
+      await prisma.contact.create({
+        data: {
+          firstName: contactData.firstName,
+          lastName: contactData.lastName,
+          email: contactData.email,
+          phone: contactData.phone,
+          position: contactData.position,
+          isPrimary: contactData.isPrimary,
+          leadId: lead.id,
+          tenantId: tenantId,
+        },
+      });
+      contactCount++;
+    }
+  }
+
+  console.log(`✅ ${leadCount} leads y ${contactCount} contactos de ejemplo creados`);
 }

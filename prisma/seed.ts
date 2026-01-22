@@ -2,7 +2,14 @@ import "dotenv/config";
 import { PrismaClient } from "../src/core/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
-import { seedPermissions, seedRoles, seedTenants } from "./seedPermissions";
+import {
+  seedPermissions,
+  seedRoles,
+  seedTenants,
+  seedSectors,
+  seedLeadOrigins,
+  seedSampleLeads,
+} from "./seedPermissions";
 import { auth } from "../src/core/lib/auth";
 
 const { Pool } = pg;
@@ -95,6 +102,13 @@ async function main() {
 
   // 3. Seed de roles con sus permisos (ahora con tenants)
   const roles = await seedRoles(prisma, tenantA, tenantB);
+  console.log("");
+
+  // 4. Seed de datos del módulo de Leads (catálogos globales)
+  await seedSectors(prisma);
+  console.log("");
+
+  await seedLeadOrigins(prisma);
   console.log("");
 
   // 4. Crear usuarios de prueba si no existen
@@ -202,6 +216,13 @@ async function main() {
     console.log("  ✓ capturador@ejemplo.com → rol capturador (Empresa A)");
   }
 
+  console.log("");
+
+  // 6. Seed de leads de ejemplo (para el tenant A)
+  if (adminUser) {
+    await seedSampleLeads(prisma, tenantA.id, adminUser.id);
+  }
+
   console.log("\n" + "═".repeat(60));
   console.log("✅ SEED COMPLETADO EXITOSAMENTE!");
   console.log("═".repeat(60));
@@ -213,6 +234,8 @@ async function main() {
     "   • 9 Roles: 1 global (administrador) + 4 por cada tenant"
   );
   console.log("   • 3 Usuarios de prueba");
+  console.log("   • Catálogos de Leads: Sectores, Subsectores, Orígenes");
+  console.log("   • 5 Leads de ejemplo con contactos (Trust People)");
 
   console.log("\n🔐 CREDENCIALES DE ACCESO:");
   console.log("   ┌─────────────────────────────────────────────────────────┐");

@@ -186,6 +186,14 @@ export type TenantWhereInput = {
   sessions?: Prisma.SessionListRelationFilter
   vacancies?: Prisma.VacancyListRelationFilter
   roles?: Prisma.RoleListRelationFilter
+  leads?: Prisma.LeadListRelationFilter
+  sectors?: Prisma.SectorListRelationFilter
+  subsectors?: Prisma.SubsectorListRelationFilter
+  leadOrigins?: Prisma.LeadOriginListRelationFilter
+  contacts?: Prisma.ContactListRelationFilter
+  interactions?: Prisma.InteractionListRelationFilter
+  leadStatusHistory?: Prisma.LeadStatusHistoryListRelationFilter
+  attachments?: Prisma.AttachmentListRelationFilter
 }
 
 export type TenantOrderByWithRelationInput = {
@@ -198,6 +206,14 @@ export type TenantOrderByWithRelationInput = {
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   vacancies?: Prisma.VacancyOrderByRelationAggregateInput
   roles?: Prisma.RoleOrderByRelationAggregateInput
+  leads?: Prisma.LeadOrderByRelationAggregateInput
+  sectors?: Prisma.SectorOrderByRelationAggregateInput
+  subsectors?: Prisma.SubsectorOrderByRelationAggregateInput
+  leadOrigins?: Prisma.LeadOriginOrderByRelationAggregateInput
+  contacts?: Prisma.ContactOrderByRelationAggregateInput
+  interactions?: Prisma.InteractionOrderByRelationAggregateInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryOrderByRelationAggregateInput
+  attachments?: Prisma.AttachmentOrderByRelationAggregateInput
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -213,6 +229,14 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   sessions?: Prisma.SessionListRelationFilter
   vacancies?: Prisma.VacancyListRelationFilter
   roles?: Prisma.RoleListRelationFilter
+  leads?: Prisma.LeadListRelationFilter
+  sectors?: Prisma.SectorListRelationFilter
+  subsectors?: Prisma.SubsectorListRelationFilter
+  leadOrigins?: Prisma.LeadOriginListRelationFilter
+  contacts?: Prisma.ContactListRelationFilter
+  interactions?: Prisma.InteractionListRelationFilter
+  leadStatusHistory?: Prisma.LeadStatusHistoryListRelationFilter
+  attachments?: Prisma.AttachmentListRelationFilter
 }, "id" | "name" | "slug">
 
 export type TenantOrderByWithAggregationInput = {
@@ -247,6 +271,14 @@ export type TenantCreateInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
   vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateInput = {
@@ -259,6 +291,14 @@ export type TenantUncheckedCreateInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
   vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginUncheckedCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUpdateInput = {
@@ -271,6 +311,14 @@ export type TenantUpdateInput = {
   sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
   vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateInput = {
@@ -283,6 +331,14 @@ export type TenantUncheckedUpdateInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
   vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUncheckedUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
@@ -391,6 +447,124 @@ export type TenantUpdateOneWithoutUserRolesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutUserRolesInput, Prisma.TenantUpdateWithoutUserRolesInput>, Prisma.TenantUncheckedUpdateWithoutUserRolesInput>
 }
 
+export type TenantCreateNestedOneWithoutSectorsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutSectorsInput, Prisma.TenantUncheckedCreateWithoutSectorsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutSectorsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneWithoutSectorsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutSectorsInput, Prisma.TenantUncheckedCreateWithoutSectorsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutSectorsInput
+  upsert?: Prisma.TenantUpsertWithoutSectorsInput
+  disconnect?: Prisma.TenantWhereInput | boolean
+  delete?: Prisma.TenantWhereInput | boolean
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutSectorsInput, Prisma.TenantUpdateWithoutSectorsInput>, Prisma.TenantUncheckedUpdateWithoutSectorsInput>
+}
+
+export type TenantCreateNestedOneWithoutSubsectorsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutSubsectorsInput, Prisma.TenantUncheckedCreateWithoutSubsectorsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutSubsectorsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneWithoutSubsectorsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutSubsectorsInput, Prisma.TenantUncheckedCreateWithoutSubsectorsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutSubsectorsInput
+  upsert?: Prisma.TenantUpsertWithoutSubsectorsInput
+  disconnect?: Prisma.TenantWhereInput | boolean
+  delete?: Prisma.TenantWhereInput | boolean
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutSubsectorsInput, Prisma.TenantUpdateWithoutSubsectorsInput>, Prisma.TenantUncheckedUpdateWithoutSubsectorsInput>
+}
+
+export type TenantCreateNestedOneWithoutLeadOriginsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLeadOriginsInput, Prisma.TenantUncheckedCreateWithoutLeadOriginsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLeadOriginsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneWithoutLeadOriginsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLeadOriginsInput, Prisma.TenantUncheckedCreateWithoutLeadOriginsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLeadOriginsInput
+  upsert?: Prisma.TenantUpsertWithoutLeadOriginsInput
+  disconnect?: Prisma.TenantWhereInput | boolean
+  delete?: Prisma.TenantWhereInput | boolean
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutLeadOriginsInput, Prisma.TenantUpdateWithoutLeadOriginsInput>, Prisma.TenantUncheckedUpdateWithoutLeadOriginsInput>
+}
+
+export type TenantCreateNestedOneWithoutLeadsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLeadsInput, Prisma.TenantUncheckedCreateWithoutLeadsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLeadsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutLeadsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLeadsInput, Prisma.TenantUncheckedCreateWithoutLeadsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLeadsInput
+  upsert?: Prisma.TenantUpsertWithoutLeadsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutLeadsInput, Prisma.TenantUpdateWithoutLeadsInput>, Prisma.TenantUncheckedUpdateWithoutLeadsInput>
+}
+
+export type TenantCreateNestedOneWithoutLeadStatusHistoryInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLeadStatusHistoryInput, Prisma.TenantUncheckedCreateWithoutLeadStatusHistoryInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLeadStatusHistoryInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutLeadStatusHistoryNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLeadStatusHistoryInput, Prisma.TenantUncheckedCreateWithoutLeadStatusHistoryInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLeadStatusHistoryInput
+  upsert?: Prisma.TenantUpsertWithoutLeadStatusHistoryInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutLeadStatusHistoryInput, Prisma.TenantUpdateWithoutLeadStatusHistoryInput>, Prisma.TenantUncheckedUpdateWithoutLeadStatusHistoryInput>
+}
+
+export type TenantCreateNestedOneWithoutContactsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutContactsInput, Prisma.TenantUncheckedCreateWithoutContactsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutContactsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutContactsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutContactsInput, Prisma.TenantUncheckedCreateWithoutContactsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutContactsInput
+  upsert?: Prisma.TenantUpsertWithoutContactsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutContactsInput, Prisma.TenantUpdateWithoutContactsInput>, Prisma.TenantUncheckedUpdateWithoutContactsInput>
+}
+
+export type TenantCreateNestedOneWithoutInteractionsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInteractionsInput, Prisma.TenantUncheckedCreateWithoutInteractionsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInteractionsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutInteractionsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInteractionsInput, Prisma.TenantUncheckedCreateWithoutInteractionsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInteractionsInput
+  upsert?: Prisma.TenantUpsertWithoutInteractionsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutInteractionsInput, Prisma.TenantUpdateWithoutInteractionsInput>, Prisma.TenantUncheckedUpdateWithoutInteractionsInput>
+}
+
+export type TenantCreateNestedOneWithoutAttachmentsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutAttachmentsInput, Prisma.TenantUncheckedCreateWithoutAttachmentsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutAttachmentsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutAttachmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutAttachmentsInput, Prisma.TenantUncheckedCreateWithoutAttachmentsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutAttachmentsInput
+  upsert?: Prisma.TenantUpsertWithoutAttachmentsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutAttachmentsInput, Prisma.TenantUpdateWithoutAttachmentsInput>, Prisma.TenantUncheckedUpdateWithoutAttachmentsInput>
+}
+
 export type TenantCreateNestedOneWithoutVacanciesInput = {
   create?: Prisma.XOR<Prisma.TenantCreateWithoutVacanciesInput, Prisma.TenantUncheckedCreateWithoutVacanciesInput>
   connectOrCreate?: Prisma.TenantCreateOrConnectWithoutVacanciesInput
@@ -414,6 +588,14 @@ export type TenantCreateWithoutSessionsInput = {
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
   vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutSessionsInput = {
@@ -425,6 +607,14 @@ export type TenantUncheckedCreateWithoutSessionsInput = {
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
   vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginUncheckedCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSessionsInput = {
@@ -452,6 +642,14 @@ export type TenantUpdateWithoutSessionsInput = {
   userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
   vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutSessionsInput = {
@@ -463,6 +661,14 @@ export type TenantUncheckedUpdateWithoutSessionsInput = {
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
   vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUncheckedUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutRolesInput = {
@@ -474,6 +680,14 @@ export type TenantCreateWithoutRolesInput = {
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
   vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutRolesInput = {
@@ -485,6 +699,14 @@ export type TenantUncheckedCreateWithoutRolesInput = {
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
   vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginUncheckedCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutRolesInput = {
@@ -512,6 +734,14 @@ export type TenantUpdateWithoutRolesInput = {
   userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
   vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutRolesInput = {
@@ -523,6 +753,14 @@ export type TenantUncheckedUpdateWithoutRolesInput = {
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
   vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUncheckedUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutUserRolesInput = {
@@ -534,6 +772,14 @@ export type TenantCreateWithoutUserRolesInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
   vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutUserRolesInput = {
@@ -545,6 +791,14 @@ export type TenantUncheckedCreateWithoutUserRolesInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
   vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginUncheckedCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutUserRolesInput = {
@@ -572,6 +826,14 @@ export type TenantUpdateWithoutUserRolesInput = {
   sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
   vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutUserRolesInput = {
@@ -583,6 +845,750 @@ export type TenantUncheckedUpdateWithoutUserRolesInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
   vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUncheckedUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutSectorsInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutSectorsInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginUncheckedCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutSectorsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutSectorsInput, Prisma.TenantUncheckedCreateWithoutSectorsInput>
+}
+
+export type TenantUpsertWithoutSectorsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutSectorsInput, Prisma.TenantUncheckedUpdateWithoutSectorsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutSectorsInput, Prisma.TenantUncheckedCreateWithoutSectorsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutSectorsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutSectorsInput, Prisma.TenantUncheckedUpdateWithoutSectorsInput>
+}
+
+export type TenantUpdateWithoutSectorsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutSectorsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUncheckedUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutSubsectorsInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutSubsectorsInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginUncheckedCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutSubsectorsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutSubsectorsInput, Prisma.TenantUncheckedCreateWithoutSubsectorsInput>
+}
+
+export type TenantUpsertWithoutSubsectorsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutSubsectorsInput, Prisma.TenantUncheckedUpdateWithoutSubsectorsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutSubsectorsInput, Prisma.TenantUncheckedCreateWithoutSubsectorsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutSubsectorsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutSubsectorsInput, Prisma.TenantUncheckedUpdateWithoutSubsectorsInput>
+}
+
+export type TenantUpdateWithoutSubsectorsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutSubsectorsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUncheckedUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutLeadOriginsInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutLeadOriginsInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutLeadOriginsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLeadOriginsInput, Prisma.TenantUncheckedCreateWithoutLeadOriginsInput>
+}
+
+export type TenantUpsertWithoutLeadOriginsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutLeadOriginsInput, Prisma.TenantUncheckedUpdateWithoutLeadOriginsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLeadOriginsInput, Prisma.TenantUncheckedCreateWithoutLeadOriginsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutLeadOriginsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutLeadOriginsInput, Prisma.TenantUncheckedUpdateWithoutLeadOriginsInput>
+}
+
+export type TenantUpdateWithoutLeadOriginsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutLeadOriginsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutLeadsInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutLeadsInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginUncheckedCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutLeadsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLeadsInput, Prisma.TenantUncheckedCreateWithoutLeadsInput>
+}
+
+export type TenantUpsertWithoutLeadsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutLeadsInput, Prisma.TenantUncheckedUpdateWithoutLeadsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLeadsInput, Prisma.TenantUncheckedCreateWithoutLeadsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutLeadsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutLeadsInput, Prisma.TenantUncheckedUpdateWithoutLeadsInput>
+}
+
+export type TenantUpdateWithoutLeadsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutLeadsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUncheckedUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutLeadStatusHistoryInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutLeadStatusHistoryInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginUncheckedCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutLeadStatusHistoryInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLeadStatusHistoryInput, Prisma.TenantUncheckedCreateWithoutLeadStatusHistoryInput>
+}
+
+export type TenantUpsertWithoutLeadStatusHistoryInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutLeadStatusHistoryInput, Prisma.TenantUncheckedUpdateWithoutLeadStatusHistoryInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLeadStatusHistoryInput, Prisma.TenantUncheckedCreateWithoutLeadStatusHistoryInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutLeadStatusHistoryInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutLeadStatusHistoryInput, Prisma.TenantUncheckedUpdateWithoutLeadStatusHistoryInput>
+}
+
+export type TenantUpdateWithoutLeadStatusHistoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutLeadStatusHistoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUncheckedUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutContactsInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutContactsInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginUncheckedCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutContactsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutContactsInput, Prisma.TenantUncheckedCreateWithoutContactsInput>
+}
+
+export type TenantUpsertWithoutContactsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutContactsInput, Prisma.TenantUncheckedUpdateWithoutContactsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutContactsInput, Prisma.TenantUncheckedCreateWithoutContactsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutContactsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutContactsInput, Prisma.TenantUncheckedUpdateWithoutContactsInput>
+}
+
+export type TenantUpdateWithoutContactsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutContactsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUncheckedUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutInteractionsInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutInteractionsInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginUncheckedCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutInteractionsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInteractionsInput, Prisma.TenantUncheckedCreateWithoutInteractionsInput>
+}
+
+export type TenantUpsertWithoutInteractionsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutInteractionsInput, Prisma.TenantUncheckedUpdateWithoutInteractionsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInteractionsInput, Prisma.TenantUncheckedCreateWithoutInteractionsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutInteractionsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutInteractionsInput, Prisma.TenantUncheckedUpdateWithoutInteractionsInput>
+}
+
+export type TenantUpdateWithoutInteractionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutInteractionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUncheckedUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutAttachmentsInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutAttachmentsInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginUncheckedCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutAttachmentsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutAttachmentsInput, Prisma.TenantUncheckedCreateWithoutAttachmentsInput>
+}
+
+export type TenantUpsertWithoutAttachmentsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutAttachmentsInput, Prisma.TenantUncheckedUpdateWithoutAttachmentsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutAttachmentsInput, Prisma.TenantUncheckedCreateWithoutAttachmentsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutAttachmentsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutAttachmentsInput, Prisma.TenantUncheckedUpdateWithoutAttachmentsInput>
+}
+
+export type TenantUpdateWithoutAttachmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutAttachmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUncheckedUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutVacanciesInput = {
@@ -594,6 +1600,14 @@ export type TenantCreateWithoutVacanciesInput = {
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutVacanciesInput = {
@@ -605,6 +1619,14 @@ export type TenantUncheckedCreateWithoutVacanciesInput = {
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginUncheckedCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutVacanciesInput = {
@@ -632,6 +1654,14 @@ export type TenantUpdateWithoutVacanciesInput = {
   userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutVacanciesInput = {
@@ -643,6 +1673,14 @@ export type TenantUncheckedUpdateWithoutVacanciesInput = {
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUncheckedUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 
@@ -655,6 +1693,14 @@ export type TenantCountOutputType = {
   sessions: number
   vacancies: number
   roles: number
+  leads: number
+  sectors: number
+  subsectors: number
+  leadOrigins: number
+  contacts: number
+  interactions: number
+  leadStatusHistory: number
+  attachments: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -662,6 +1708,14 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   sessions?: boolean | TenantCountOutputTypeCountSessionsArgs
   vacancies?: boolean | TenantCountOutputTypeCountVacanciesArgs
   roles?: boolean | TenantCountOutputTypeCountRolesArgs
+  leads?: boolean | TenantCountOutputTypeCountLeadsArgs
+  sectors?: boolean | TenantCountOutputTypeCountSectorsArgs
+  subsectors?: boolean | TenantCountOutputTypeCountSubsectorsArgs
+  leadOrigins?: boolean | TenantCountOutputTypeCountLeadOriginsArgs
+  contacts?: boolean | TenantCountOutputTypeCountContactsArgs
+  interactions?: boolean | TenantCountOutputTypeCountInteractionsArgs
+  leadStatusHistory?: boolean | TenantCountOutputTypeCountLeadStatusHistoryArgs
+  attachments?: boolean | TenantCountOutputTypeCountAttachmentsArgs
 }
 
 /**
@@ -702,6 +1756,62 @@ export type TenantCountOutputTypeCountRolesArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.RoleWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountLeadsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LeadWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountSectorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SectorWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountSubsectorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubsectorWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountLeadOriginsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LeadOriginWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountContactsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ContactWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountInteractionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InteractionWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountLeadStatusHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LeadStatusHistoryWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountAttachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AttachmentWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -713,6 +1823,14 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   sessions?: boolean | Prisma.Tenant$sessionsArgs<ExtArgs>
   vacancies?: boolean | Prisma.Tenant$vacanciesArgs<ExtArgs>
   roles?: boolean | Prisma.Tenant$rolesArgs<ExtArgs>
+  leads?: boolean | Prisma.Tenant$leadsArgs<ExtArgs>
+  sectors?: boolean | Prisma.Tenant$sectorsArgs<ExtArgs>
+  subsectors?: boolean | Prisma.Tenant$subsectorsArgs<ExtArgs>
+  leadOrigins?: boolean | Prisma.Tenant$leadOriginsArgs<ExtArgs>
+  contacts?: boolean | Prisma.Tenant$contactsArgs<ExtArgs>
+  interactions?: boolean | Prisma.Tenant$interactionsArgs<ExtArgs>
+  leadStatusHistory?: boolean | Prisma.Tenant$leadStatusHistoryArgs<ExtArgs>
+  attachments?: boolean | Prisma.Tenant$attachmentsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
 
@@ -746,6 +1864,14 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   sessions?: boolean | Prisma.Tenant$sessionsArgs<ExtArgs>
   vacancies?: boolean | Prisma.Tenant$vacanciesArgs<ExtArgs>
   roles?: boolean | Prisma.Tenant$rolesArgs<ExtArgs>
+  leads?: boolean | Prisma.Tenant$leadsArgs<ExtArgs>
+  sectors?: boolean | Prisma.Tenant$sectorsArgs<ExtArgs>
+  subsectors?: boolean | Prisma.Tenant$subsectorsArgs<ExtArgs>
+  leadOrigins?: boolean | Prisma.Tenant$leadOriginsArgs<ExtArgs>
+  contacts?: boolean | Prisma.Tenant$contactsArgs<ExtArgs>
+  interactions?: boolean | Prisma.Tenant$interactionsArgs<ExtArgs>
+  leadStatusHistory?: boolean | Prisma.Tenant$leadStatusHistoryArgs<ExtArgs>
+  attachments?: boolean | Prisma.Tenant$attachmentsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TenantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -758,6 +1884,14 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     vacancies: Prisma.$VacancyPayload<ExtArgs>[]
     roles: Prisma.$RolePayload<ExtArgs>[]
+    leads: Prisma.$LeadPayload<ExtArgs>[]
+    sectors: Prisma.$SectorPayload<ExtArgs>[]
+    subsectors: Prisma.$SubsectorPayload<ExtArgs>[]
+    leadOrigins: Prisma.$LeadOriginPayload<ExtArgs>[]
+    contacts: Prisma.$ContactPayload<ExtArgs>[]
+    interactions: Prisma.$InteractionPayload<ExtArgs>[]
+    leadStatusHistory: Prisma.$LeadStatusHistoryPayload<ExtArgs>[]
+    attachments: Prisma.$AttachmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1163,6 +2297,14 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   sessions<T extends Prisma.Tenant$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   vacancies<T extends Prisma.Tenant$vacanciesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$vacanciesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   roles<T extends Prisma.Tenant$rolesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$rolesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  leads<T extends Prisma.Tenant$leadsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$leadsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sectors<T extends Prisma.Tenant$sectorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$sectorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SectorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  subsectors<T extends Prisma.Tenant$subsectorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$subsectorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubsectorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  leadOrigins<T extends Prisma.Tenant$leadOriginsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$leadOriginsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeadOriginPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  contacts<T extends Prisma.Tenant$contactsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$contactsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  interactions<T extends Prisma.Tenant$interactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$interactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InteractionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  leadStatusHistory<T extends Prisma.Tenant$leadStatusHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$leadStatusHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeadStatusHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  attachments<T extends Prisma.Tenant$attachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1678,6 +2820,198 @@ export type Tenant$rolesArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.RoleScalarFieldEnum | Prisma.RoleScalarFieldEnum[]
+}
+
+/**
+ * Tenant.leads
+ */
+export type Tenant$leadsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Lead
+   */
+  select?: Prisma.LeadSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Lead
+   */
+  omit?: Prisma.LeadOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LeadInclude<ExtArgs> | null
+  where?: Prisma.LeadWhereInput
+  orderBy?: Prisma.LeadOrderByWithRelationInput | Prisma.LeadOrderByWithRelationInput[]
+  cursor?: Prisma.LeadWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LeadScalarFieldEnum | Prisma.LeadScalarFieldEnum[]
+}
+
+/**
+ * Tenant.sectors
+ */
+export type Tenant$sectorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Sector
+   */
+  select?: Prisma.SectorSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Sector
+   */
+  omit?: Prisma.SectorOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SectorInclude<ExtArgs> | null
+  where?: Prisma.SectorWhereInput
+  orderBy?: Prisma.SectorOrderByWithRelationInput | Prisma.SectorOrderByWithRelationInput[]
+  cursor?: Prisma.SectorWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SectorScalarFieldEnum | Prisma.SectorScalarFieldEnum[]
+}
+
+/**
+ * Tenant.subsectors
+ */
+export type Tenant$subsectorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Subsector
+   */
+  select?: Prisma.SubsectorSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Subsector
+   */
+  omit?: Prisma.SubsectorOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubsectorInclude<ExtArgs> | null
+  where?: Prisma.SubsectorWhereInput
+  orderBy?: Prisma.SubsectorOrderByWithRelationInput | Prisma.SubsectorOrderByWithRelationInput[]
+  cursor?: Prisma.SubsectorWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SubsectorScalarFieldEnum | Prisma.SubsectorScalarFieldEnum[]
+}
+
+/**
+ * Tenant.leadOrigins
+ */
+export type Tenant$leadOriginsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LeadOrigin
+   */
+  select?: Prisma.LeadOriginSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LeadOrigin
+   */
+  omit?: Prisma.LeadOriginOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LeadOriginInclude<ExtArgs> | null
+  where?: Prisma.LeadOriginWhereInput
+  orderBy?: Prisma.LeadOriginOrderByWithRelationInput | Prisma.LeadOriginOrderByWithRelationInput[]
+  cursor?: Prisma.LeadOriginWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LeadOriginScalarFieldEnum | Prisma.LeadOriginScalarFieldEnum[]
+}
+
+/**
+ * Tenant.contacts
+ */
+export type Tenant$contactsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Contact
+   */
+  select?: Prisma.ContactSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Contact
+   */
+  omit?: Prisma.ContactOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContactInclude<ExtArgs> | null
+  where?: Prisma.ContactWhereInput
+  orderBy?: Prisma.ContactOrderByWithRelationInput | Prisma.ContactOrderByWithRelationInput[]
+  cursor?: Prisma.ContactWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ContactScalarFieldEnum | Prisma.ContactScalarFieldEnum[]
+}
+
+/**
+ * Tenant.interactions
+ */
+export type Tenant$interactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Interaction
+   */
+  select?: Prisma.InteractionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Interaction
+   */
+  omit?: Prisma.InteractionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InteractionInclude<ExtArgs> | null
+  where?: Prisma.InteractionWhereInput
+  orderBy?: Prisma.InteractionOrderByWithRelationInput | Prisma.InteractionOrderByWithRelationInput[]
+  cursor?: Prisma.InteractionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InteractionScalarFieldEnum | Prisma.InteractionScalarFieldEnum[]
+}
+
+/**
+ * Tenant.leadStatusHistory
+ */
+export type Tenant$leadStatusHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LeadStatusHistory
+   */
+  select?: Prisma.LeadStatusHistorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LeadStatusHistory
+   */
+  omit?: Prisma.LeadStatusHistoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LeadStatusHistoryInclude<ExtArgs> | null
+  where?: Prisma.LeadStatusHistoryWhereInput
+  orderBy?: Prisma.LeadStatusHistoryOrderByWithRelationInput | Prisma.LeadStatusHistoryOrderByWithRelationInput[]
+  cursor?: Prisma.LeadStatusHistoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LeadStatusHistoryScalarFieldEnum | Prisma.LeadStatusHistoryScalarFieldEnum[]
+}
+
+/**
+ * Tenant.attachments
+ */
+export type Tenant$attachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Attachment
+   */
+  select?: Prisma.AttachmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Attachment
+   */
+  omit?: Prisma.AttachmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AttachmentInclude<ExtArgs> | null
+  where?: Prisma.AttachmentWhereInput
+  orderBy?: Prisma.AttachmentOrderByWithRelationInput | Prisma.AttachmentOrderByWithRelationInput[]
+  cursor?: Prisma.AttachmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AttachmentScalarFieldEnum | Prisma.AttachmentScalarFieldEnum[]
 }
 
 /**

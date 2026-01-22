@@ -25,6 +25,13 @@ model User {
   accounts      Account[]
   userRoles     UserRole[]
 
+  // Relaciones con módulo de Leads
+  leadsAssigned      Lead[]              @relation("LeadAssignedTo")
+  leadsCreated       Lead[]              @relation("LeadCreatedBy")
+  leadStatusChanges  LeadStatusHistory[]
+  interactions       Interaction[]
+  attachments        Attachment[]
+
   @@map("user")
 }
 
@@ -94,6 +101,16 @@ model Tenant {
   vacancies Vacancy[]
   roles     Role[]
 
+  // Relaciones con módulo de Leads
+  leads             Lead[]
+  sectors           Sector[]
+  subsectors        Subsector[]
+  leadOrigins       LeadOrigin[]
+  contacts          Contact[]
+  interactions      Interaction[]
+  leadStatusHistory LeadStatusHistory[]
+  attachments       Attachment[]
+
   @@map("tenant")
 }
 
@@ -157,6 +174,267 @@ model Permission {
 
   @@index([resource])
   @@index([name])
+}
+
+// =============================================
+// ENUMS DEL MÓDULO DE LEADS
+// =============================================
+
+enum LeadStatus {
+  CONTACTO_CALIDO
+  SOCIAL_SELLING
+  CITA_AGENDADA
+  CITA_ATENDIDA
+  CITA_VALIDADA
+  POSICIONES_ASIGNADAS
+  STAND_BY
+}
+
+enum AttachableType {
+  LEAD
+  CONTACT
+  INTERACTION
+  VACANCY
+}
+
+// =============================================
+// TABLAS DE CATÁLOGO
+// =============================================
+
+model Sector {
+  id        String      @id @default(uuid())
+  name      String
+  isActive  Boolean     @default(true)
+  tenantId  String?
+  tenant    Tenant?     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  subsectors Subsector[]
+  leads      Lead[]
+
+  @@unique([name, tenantId])
+  @@index([tenantId])
+  @@index([isActive])
+  @@map("sector")
+}
+
+model Subsector {
+  id        String   @id @default(uuid())
+  name      String
+  sectorId  String
+  sector    Sector   @relation(fields: [sectorId], references: [id], onDelete: Cascade)
+  isActive  Boolean  @default(true)
+  tenantId  String?
+  tenant    Tenant?  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  leads Lead[]
+
+  @@unique([name, sectorId])
+  @@index([sectorId])
+  @@index([tenantId])
+  @@index([isActive])
+  @@map("subsector")
+}
+
+model LeadOrigin {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  isActive    Boolean  @default(true)
+  tenantId    String?
+  tenant      Tenant?  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  leads Lead[]
+
+  @@unique([name, tenantId])
+  @@index([tenantId])
+  @@index([isActive])
+  @@map("lead_origin")
+}
+
+// =============================================
+// ENTIDADES CORE DEL MÓDULO DE LEADS
+// =============================================
+
+model Lead {
+  id          String     @id @default(uuid())
+  companyName String
+  rfc         String?
+  website     String?
+  linkedInUrl String?
+  address     String?
+  notes       String?    @db.Text
+  status      LeadStatus @default(CONTACTO_CALIDO)
+
+  // Relaciones con catálogos
+  sectorId    String?
+  sector      Sector?    @relation(fields: [sectorId], references: [id], onDelete: SetNull)
+  subsectorId String?
+  subsector   Subsector? @relation(fields: [subsectorId], references: [id], onDelete: SetNull)
+  originId    String?
+  origin      LeadOrigin? @relation(fields: [originId], references: [id], onDelete: SetNull)
+
+  // Usuario asignado
+  assignedToId String?
+  assignedTo   User?   @relation("LeadAssignedTo", fields: [assignedToId], references: [id], onDelete: SetNull)
+
+  // Soft delete
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime?
+
+  // Relación con tenant
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Auditoría
+  createdById String?
+  createdBy   User?    @relation("LeadCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relaciones hijas (parte del agregado)
+  contacts      Contact[]
+  statusHistory LeadStatusHistory[]
+  attachments   Attachment[]
+
+  @@index([tenantId])
+  @@index([status])
+  @@index([sectorId])
+  @@index([subsectorId])
+  @@index([originId])
+  @@index([assignedToId])
+  @@index([isDeleted])
+  @@index([tenantId, status])
+  @@index([tenantId, isDeleted])
+  @@map("lead")
+}
+
+model LeadStatusHistory {
+  id             String     @id @default(uuid())
+  leadId         String
+  lead           Lead       @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  previousStatus LeadStatus
+  newStatus      LeadStatus
+  changedById    String
+  changedBy      User       @relation(fields: [changedById], references: [id], onDelete: Cascade)
+  tenantId       String
+  tenant         Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt      DateTime   @default(now())
+
+  @@index([leadId])
+  @@index([tenantId])
+  @@index([changedById])
+  @@index([createdAt])
+  @@map("lead_status_history")
+}
+
+model Contact {
+  id           String   @id @default(uuid())
+  firstName    String
+  lastName     String
+  email        String?
+  phone        String?
+  position     String?
+  linkedInUrl  String?
+  isPrimary    Boolean  @default(false)
+  notes        String?  @db.Text
+
+  // Relación con Lead (Aggregate Root)
+  leadId String
+  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  // Relación con tenant
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Auditoría
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relaciones
+  interactions Interaction[]
+  attachments  Attachment[]
+
+  @@index([leadId])
+  @@index([tenantId])
+  @@index([email])
+  @@map("contact")
+}
+
+model Interaction {
+  id        String   @id @default(uuid())
+  type      String   // "CALL", "EMAIL", "MEETING", "NOTE", "LINKEDIN", etc.
+  subject   String
+  content   String?  @db.Text
+  date      DateTime @default(now())
+
+  // Relación con Contact
+  contactId String
+  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  // Usuario que registró la interacción
+  createdById String
+  createdBy   User   @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  // Relación con tenant
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Auditoría
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relaciones
+  attachments Attachment[]
+
+  @@index([contactId])
+  @@index([tenantId])
+  @@index([createdById])
+  @@index([date])
+  @@index([type])
+  @@map("interaction")
+}
+
+// =============================================
+// SISTEMA POLIMÓRFICO DE ARCHIVOS
+// =============================================
+
+model Attachment {
+  id             String         @id @default(uuid())
+  fileName       String
+  fileUrl        String
+  fileSize       Int
+  mimeType       String
+  attachableType AttachableType
+
+  // Relaciones polimórficas opcionales
+  leadId        String?
+  lead          Lead?        @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  contactId     String?
+  contact       Contact?     @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  interactionId String?
+  interaction   Interaction? @relation(fields: [interactionId], references: [id], onDelete: Cascade)
+
+  // Relación con tenant
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Auditoría
+  uploadedById String
+  uploadedBy   User     @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+
+  @@index([leadId])
+  @@index([contactId])
+  @@index([interactionId])
+  @@index([tenantId])
+  @@index([attachableType])
+  @@map("attachment")
 }
 
 // Vacantes
