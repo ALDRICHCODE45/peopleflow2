@@ -117,8 +117,7 @@ export function LeadRowActions({ row }: { row: Row<Lead> }) {
             ]}
           >
             <DropdownMenuItem onClick={openDetailModal}>
-              <HugeiconsIcon icon={ViewIcon} className="mr-2 h-4 w-4" />
-              Ver detalle
+              Detalles
             </DropdownMenuItem>
           </PermissionGuard>
 
@@ -129,7 +128,6 @@ export function LeadRowActions({ row }: { row: Row<Lead> }) {
             ]}
           >
             <DropdownMenuItem onClick={openUpdateModal}>
-              <HugeiconsIcon icon={PencilEdit01Icon} className="mr-2 h-4 w-4" />
               Editar
             </DropdownMenuItem>
           </PermissionGuard>

@@ -308,17 +308,16 @@ export async function seedSectors(prisma: PrismaClient) {
 
   for (const sectorData of SECTORS_DATA) {
     // Crear sector global (tenantId = null)
-    const sector = await prisma.sector.upsert({
-      where: {
-        name_tenantId: { name: sectorData.name, tenantId: null as unknown as string },
-      },
-      update: {},
-      create: {
-        name: sectorData.name,
-        isActive: true,
-        tenantId: null,
-      },
+    // Usamos findFirst + create en lugar de upsert porque Prisma no permite null en índices únicos compuestos
+    let sector = await prisma.sector.findFirst({
+      where: { name: sectorData.name, tenantId: null },
     });
+
+    if (!sector) {
+      sector = await prisma.sector.create({
+        data: { name: sectorData.name, isActive: true, tenantId: null },
+      });
+    }
 
     createdSectors.push({ id: sector.id, name: sector.name });
 
@@ -353,20 +352,26 @@ export async function seedLeadOrigins(prisma: PrismaClient) {
   const createdOrigins: { id: string; name: string }[] = [];
 
   for (const originData of LEAD_ORIGINS_DATA) {
-    const origin = await prisma.leadOrigin.upsert({
-      where: {
-        name_tenantId: { name: originData.name, tenantId: null as unknown as string },
-      },
-      update: {
-        description: originData.description,
-      },
-      create: {
-        name: originData.name,
-        description: originData.description,
-        isActive: true,
-        tenantId: null,
-      },
+    // Usamos findFirst + create/update en lugar de upsert porque Prisma no permite null en índices únicos compuestos
+    let origin = await prisma.leadOrigin.findFirst({
+      where: { name: originData.name, tenantId: null },
     });
+
+    if (origin) {
+      origin = await prisma.leadOrigin.update({
+        where: { id: origin.id },
+        data: { description: originData.description },
+      });
+    } else {
+      origin = await prisma.leadOrigin.create({
+        data: {
+          name: originData.name,
+          description: originData.description,
+          isActive: true,
+          tenantId: null,
+        },
+      });
+    }
 
     createdOrigins.push({ id: origin.id, name: origin.name });
   }

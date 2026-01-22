@@ -16,7 +16,7 @@ const { Pool } = pg;
 
 if (!process.env.DATABASE_URL) {
   throw new Error(
-    "DATABASE_URL no está configurado. Por favor, configura DATABASE_URL en tu archivo .env"
+    "DATABASE_URL no está configurado. Por favor, configura DATABASE_URL en tu archivo .env",
   );
 }
 
@@ -40,7 +40,7 @@ const prisma = new PrismaClient({ adapter });
 async function createTestUser(
   email: string,
   name: string,
-  password: string
+  password: string,
 ): Promise<{ id: string; email: string; name: string | null } | null> {
   // Verificar si el usuario ya existe
   const existingUser = await prisma.user.findUnique({
@@ -66,7 +66,7 @@ async function createTestUser(
 
     if (!result.user) {
       console.error(
-        `  ✗ Error al crear usuario ${email}: No se retornó usuario`
+        `  ✗ Error al crear usuario ${email}: No se retornó usuario`,
       );
       return null;
     }
@@ -117,19 +117,19 @@ async function main() {
   const adminUser = await createTestUser(
     "admin@ejemplo.com",
     "Super Admin",
-    "password123"
+    "password123",
   );
 
   const gerenteUser = await createTestUser(
     "gerente@ejemplo.com",
     "Gerente Finanzas",
-    "password123"
+    "password123",
   );
 
   const capturadorUser = await createTestUser(
     "capturador@ejemplo.com",
     "Capturador",
-    "password123"
+    "password123",
   );
 
   console.log("");
@@ -192,7 +192,7 @@ async function main() {
       },
     });
     console.log(
-      "  ✓ gerente@ejemplo.com → rol gerente-finanzas (Empresa A y B)"
+      "  ✓ gerente@ejemplo.com → rol gerente-finanzas (Empresa A y B)",
     );
   }
 
@@ -230,9 +230,7 @@ async function main() {
   console.log("\n📝 Resumen de datos creados:");
   console.log("   • Permisos del sistema (todos los módulos)");
   console.log("   • 2 Tenants: Trust People, Relevant");
-  console.log(
-    "   • 9 Roles: 1 global (administrador) + 4 por cada tenant"
-  );
+  console.log("   • 9 Roles: 1 global (administrador) + 4 por cada tenant");
   console.log("   • 3 Usuarios de prueba");
   console.log("   • Catálogos de Leads: Sectores, Subsectores, Orígenes");
   console.log("   • 5 Leads de ejemplo con contactos (Trust People)");
@@ -249,10 +247,10 @@ async function main() {
   console.log("\n🧪 PRUEBAS RECOMENDADAS:");
   console.log("   1. Inicia sesión con admin@ejemplo.com → Ve /super-admin");
   console.log(
-    "   2. Inicia sesión con gerente@ejemplo.com → Ve selector de tenant"
+    "   2. Inicia sesión con gerente@ejemplo.com → Ve selector de tenant",
   );
   console.log(
-    "   3. Inicia sesión con capturador@ejemplo.com → Ve /finanzas/ingresos"
+    "   3. Inicia sesión con capturador@ejemplo.com → Ve /finanzas/ingresos",
   );
 }
 

@@ -21,13 +21,13 @@ export const LeadColumns: ColumnDef<Lead>[] = [
         </div>
       );
     },
-    size: 200,
+    size: 20,
   },
   {
     header: "Estado",
     accessorKey: "status",
     cell: ({ row }) => <LeadStatusBadge status={row.original.status} />,
-    size: 150,
+    size: 20,
   },
   {
     header: "Sector",
@@ -45,19 +45,19 @@ export const LeadColumns: ColumnDef<Lead>[] = [
         </div>
       );
     },
-    size: 150,
+    size: 20,
   },
   {
     header: "Origen",
     accessorKey: "originName",
     cell: ({ row }) => row.original.originName || "-",
-    size: 120,
+    size: 20,
   },
   {
     header: "Asignado",
     accessorKey: "assignedToName",
     cell: ({ row }) => row.original.assignedToName || "-",
-    size: 120,
+    size: 20,
   },
   {
     header: "Contactos",
@@ -70,7 +70,7 @@ export const LeadColumns: ColumnDef<Lead>[] = [
         </Badge>
       );
     },
-    size: 100,
+    size: 20,
   },
   {
     header: "Creación",
@@ -80,13 +80,13 @@ export const LeadColumns: ColumnDef<Lead>[] = [
       const date = new Date(dateStr);
       return format(date, "d MMM yyyy", { locale: es });
     },
-    size: 100,
+    size: 20,
   },
   {
     id: "actions",
     header: () => <span className="sr-only">Acciones</span>,
     cell: ({ row }) => <LeadRowActions row={row} />,
-    size: 50,
+    size: 10,
     enableHiding: false,
   },
 ];
