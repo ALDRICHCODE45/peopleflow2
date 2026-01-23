@@ -2,20 +2,21 @@
 
 import { useState } from "react";
 import type { Lead } from "../types";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@shadcn/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@shadcn/sheet";
 import { useIsMobile } from "@/core/shared/hooks/use-mobile";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/core/shared/ui/shadcn/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/core/shared/ui/shadcn/tabs";
 import { LeadStatusBadge } from "./LeadStatusBadge";
 import { ContactsSection } from "./ContactsSection";
 import { InteractionsTimeline } from "./InteractionsTimeline";
 import { Badge } from "@/core/shared/ui/shadcn/badge";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { Separator } from "@/core/shared/ui/shadcn/separator";
 
 interface LeadDetailSheetProps {
   lead: Lead;
@@ -39,7 +40,7 @@ export function LeadDetailSheet({
         className="md:mr-8 ml-0 rounded-3xl dark:bg-[#18181B] overflow-y-auto"
         side={sheetSide}
       >
-        <SheetHeader className="space-y-4">
+        <SheetHeader className="space-y-4 bg-primary-foreground">
           <div className="flex items-start justify-between">
             <div>
               <SheetTitle className="text-xl">{lead.companyName}</SheetTitle>
@@ -49,11 +50,17 @@ export function LeadDetailSheet({
                 </p>
               )}
             </div>
-            <LeadStatusBadge status={lead.status} />
+            <div className="mr-6">
+              <LeadStatusBadge status={lead.status} />
+            </div>
           </div>
         </SheetHeader>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-6">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="mt-6 p-5"
+        >
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="info">Información</TabsTrigger>
             <TabsTrigger value="contacts">
@@ -119,7 +126,9 @@ export function LeadDetailSheet({
                   <p className="text-sm font-medium text-muted-foreground">
                     Notas
                   </p>
-                  <p className="text-sm mt-1 whitespace-pre-wrap">{lead.notes}</p>
+                  <p className="text-sm mt-1 whitespace-pre-wrap">
+                    {lead.notes}
+                  </p>
                 </div>
               )}
 
