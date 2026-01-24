@@ -4,7 +4,11 @@ import { useState } from "react";
 import { Button } from "@/core/shared/ui/shadcn/button";
 import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
 import { Badge } from "@/core/shared/ui/shadcn/badge";
-import { useContactsByLead, useAddContact, useDeleteContact } from "../hooks/useContacts";
+import {
+  useContactsByLead,
+  useAddContact,
+  useDeleteContact,
+} from "../hooks/useContacts";
 import type { Contact, ContactFormData } from "../types";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
@@ -14,18 +18,11 @@ import {
   Call02Icon,
   Linkedin01Icon,
   UserIcon,
+  MoreVertical,
 } from "@hugeicons/core-free-icons";
-import { ContactForm } from "./ContactForm";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/core/shared/ui/shadcn/alert-dialog";
+import { CreateContactDialog } from "./CreateContactDialog";
+import { useModalState } from "@/core/shared/hooks/useModalState";
+import { DeleteContactAlertDialog } from "./DeleteContacAlertDialot";
 
 interface ContactsSectionProps {
   leadId: string;
@@ -36,7 +33,12 @@ export function ContactsSection({ leadId }: ContactsSectionProps) {
   const addContactMutation = useAddContact();
   const deleteContactMutation = useDeleteContact();
 
-  const [showForm, setShowForm] = useState(false);
+  const {
+    openModal: openEditDialog,
+    isOpen: isOpenEditDialog,
+    closeModal: closeEditDialog,
+  } = useModalState();
+
   const [contactToDelete, setContactToDelete] = useState<Contact | null>(null);
 
   const handleAddContact = async (data: ContactFormData) => {
@@ -44,7 +46,7 @@ export function ContactsSection({ leadId }: ContactsSectionProps) {
       leadId,
       data,
     });
-    setShowForm(false);
+    closeEditDialog();
   };
 
   const handleDeleteContact = async () => {
@@ -68,31 +70,28 @@ export function ContactsSection({ leadId }: ContactsSectionProps) {
         <h3 className="text-sm font-medium">
           {contacts.length} {contacts.length === 1 ? "contacto" : "contactos"}
         </h3>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setShowForm(!showForm)}
-        >
+
+        {isOpenEditDialog && (
+          <CreateContactDialog
+            open={true}
+            onOpenChange={closeEditDialog}
+            onSubmit={handleAddContact}
+            isLoading={addContactMutation.isPending}
+          />
+        )}
+
+        <Button variant="outline" size="sm" onClick={openEditDialog}>
           <HugeiconsIcon icon={Add01Icon} className="mr-2 h-4 w-4" />
           Agregar contacto
         </Button>
       </div>
 
-      {showForm && (
-        <Card>
-          <CardContent className="pt-4">
-            <ContactForm
-              onSubmit={handleAddContact}
-              onCancel={() => setShowForm(false)}
-              isLoading={addContactMutation.isPending}
-            />
-          </CardContent>
-        </Card>
-      )}
-
-      {contacts.length === 0 && !showForm ? (
+      {contacts.length === 0 ? (
         <div className="text-center py-8 text-muted-foreground">
-          <HugeiconsIcon icon={UserIcon} className="h-12 w-12 mx-auto mb-2 opacity-50" />
+          <HugeiconsIcon
+            icon={UserIcon}
+            className="h-12 w-12 mx-auto mb-2 opacity-50"
+          />
           <p>No hay contactos registrados</p>
           <p className="text-sm">Agrega el primer contacto para este lead</p>
         </div>
@@ -109,35 +108,16 @@ export function ContactsSection({ leadId }: ContactsSectionProps) {
       )}
 
       {/* Dialog de confirmación para eliminar */}
-      <AlertDialog
-        open={!!contactToDelete}
-        onOpenChange={() => setContactToDelete(null)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Eliminar contacto</AlertDialogTitle>
-            <AlertDialogDescription>
-              ¿Estás seguro de que deseas eliminar a{" "}
-              <span className="font-semibold">
-                {contactToDelete?.firstName} {contactToDelete?.lastName}
-              </span>
-              ? Esta acción no se puede deshacer.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleteContactMutation.isPending}>
-              Cancelar
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDeleteContact}
-              disabled={deleteContactMutation.isPending}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              {deleteContactMutation.isPending ? "Eliminando..." : "Eliminar"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+
+      {!!contactToDelete && (
+        <DeleteContactAlertDialog
+          isOpen={true}
+          onOpenChange={() => setContactToDelete(null)}
+          contactNameToDelete={contactToDelete.firstName}
+          onConfirmDelete={handleDeleteContact}
+          isLoading={deleteContactMutation.isPending}
+        />
+      )}
     </div>
   );
 }
@@ -165,7 +145,9 @@ function ContactCard({
               )}
             </div>
             {contact.position && (
-              <p className="text-sm text-muted-foreground">{contact.position}</p>
+              <p className="text-sm text-muted-foreground">
+                {contact.position}
+              </p>
             )}
 
             <div className="flex flex-wrap gap-3 mt-2">
@@ -207,7 +189,7 @@ function ContactCard({
             className="h-8 w-8 text-muted-foreground hover:text-destructive"
             onClick={onDelete}
           >
-            <HugeiconsIcon icon={Delete01Icon} className="h-4 w-4" />
+            <HugeiconsIcon icon={MoreVertical} className="h-4 w-4" />
           </Button>
         </div>
 

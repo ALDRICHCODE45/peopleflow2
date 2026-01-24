@@ -13,16 +13,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/core/shared/ui/shadcn/dropdown-menu";
 import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  MoreVerticalIcon,
-  PencilEdit01Icon,
-  Delete01Icon,
-  ViewIcon,
-} from "@hugeicons/core-free-icons";
+import { MoreVerticalIcon } from "@hugeicons/core-free-icons";
 
 const LeadSheetForm = dynamic(
   () =>
@@ -32,7 +28,7 @@ const LeadSheetForm = dynamic(
   {
     ssr: false,
     loading: () => <LoadingModalState />,
-  }
+  },
 );
 
 const DeleteLeadAlertDialog = dynamic(
@@ -43,7 +39,7 @@ const DeleteLeadAlertDialog = dynamic(
   {
     ssr: false,
     loading: () => <LoadingModalState />,
-  }
+  },
 );
 
 const LeadDetailSheet = dynamic(
@@ -54,7 +50,7 @@ const LeadDetailSheet = dynamic(
   {
     ssr: false,
     loading: () => <LoadingModalState />,
-  }
+  },
 );
 
 export function LeadRowActions({ row }: { row: Row<Lead> }) {
@@ -109,7 +105,10 @@ export function LeadRowActions({ row }: { row: Row<Lead> }) {
             <span className="sr-only">Abrir menú</span>
           </Button>
         </DropdownMenuTrigger>
+
         <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+          <DropdownMenuSeparator />
           <PermissionGuard
             permissions={[
               PermissionActions.leads.acceder,
@@ -140,11 +139,7 @@ export function LeadRowActions({ row }: { row: Row<Lead> }) {
               PermissionActions.leads.gestionar,
             ]}
           >
-            <DropdownMenuItem
-              onClick={openDeleteModal}
-              className="text-destructive focus:text-destructive"
-            >
-              <HugeiconsIcon icon={Delete01Icon} className="mr-2 h-4 w-4" />
+            <DropdownMenuItem onClick={openDeleteModal} variant="destructive">
               Eliminar
             </DropdownMenuItem>
           </PermissionGuard>

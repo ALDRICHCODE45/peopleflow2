@@ -10,14 +10,12 @@ import type { ContactFormData } from "../types";
 
 interface ContactFormProps {
   onSubmit: (data: ContactFormData) => Promise<void>;
-  onCancel: () => void;
   isLoading?: boolean;
   initialData?: ContactFormData;
 }
 
 export function ContactForm({
   onSubmit,
-  onCancel,
   isLoading = false,
   initialData,
 }: ContactFormProps) {
@@ -39,7 +37,7 @@ export function ContactForm({
 
   const handleChange = (
     field: keyof ContactFormData,
-    value: string | boolean
+    value: string | boolean,
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -133,20 +131,15 @@ export function ContactForm({
             handleChange("isPrimary", checked as boolean)
           }
         />
-        <Label htmlFor="isPrimary" className="text-sm font-normal cursor-pointer">
+        <Label
+          htmlFor="isPrimary"
+          className="text-sm font-normal cursor-pointer"
+        >
           Contacto principal
         </Label>
       </div>
 
       <div className="flex justify-end gap-2 pt-2">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onCancel}
-          disabled={isLoading}
-        >
-          Cancelar
-        </Button>
         <Button type="submit" disabled={isLoading}>
           {isLoading ? "Guardando..." : "Guardar contacto"}
         </Button>

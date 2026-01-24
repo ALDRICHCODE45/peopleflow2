@@ -83,7 +83,7 @@ export class LeadStatusVO {
   transitionTo(newStatus: LeadStatusType): LeadStatusVO {
     if (!this.canTransitionTo(newStatus)) {
       throw new Error(
-        `Transición de estado no válida: ${this.value} → ${newStatus}`
+        `Transición de estado no válida: ${this.value} → ${newStatus}`,
       );
     }
     return new LeadStatusVO(newStatus);
