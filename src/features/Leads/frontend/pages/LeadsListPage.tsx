@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
-import { PaginationState, SortingState } from "@tanstack/react-table";
+import { useMemo, useCallback, useState } from "react";
 import { usePaginatedLeadsQuery } from "../hooks/usePaginatedLeadsQuery";
 import { useCreateLead } from "../hooks/useLeads";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
@@ -11,125 +10,90 @@ import { LeadColumns } from "../components/columns/LeadColumns";
 import { useModalState } from "@/core/shared/hooks/useModalState";
 import { createTableConfig } from "@/core/shared/helpers/createTableConfig";
 import { LeadsTableConfig } from "../components/tableConfig/LeadsTableConfig";
-import {
-  DataTableTabs,
-  TabConfig,
-} from "@/core/shared/components/DataTable/DataTableTabs";
-import {
-  Layers,
-  Target01Icon,
-  Calendar03Icon,
-  CheckmarkCircle01Icon,
-  PauseIcon,
-  UserGroupIcon,
-  MessageMultiple02Icon,
-} from "@hugeicons/core-free-icons";
+import { DataTableTabs } from "@/core/shared/components/DataTable/DataTableTabs";
 import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
 import { LeadSheetForm } from "../components/LeadSheetForm";
-import { useDebouncedValue } from "@/core/shared/hooks/useDebouncedValue";
-import type { LeadStatus, LeadFormData, Lead } from "../types";
+import { useServerPaginatedTable } from "@/core/shared/hooks/useServerPaginatedTable";
+import type { LeadStatus, LeadFormData } from "../types";
 import { useQueryClient } from "@tanstack/react-query";
 import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
+import {
+  enrichLeadTabsWithCounts,
+  type LeadTabId,
+} from "../config/leadTabsConfig";
 
 export function LeadsListPage() {
   const queryClient = useQueryClient();
   const createLeadMutation = useCreateLead();
   const { isOpen, openModal, closeModal } = useModalState();
 
-  // Estado para server-side pagination
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 10,
-  });
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [globalFilter, setGlobalFilter] = useState("");
-  const [activeTab, setActiveTab] = useState<string>("all");
+  // Server-side filter state for sector and origin
+  const [selectedSectorId, setSelectedSectorId] = useState<
+    string | undefined
+  >();
+  const [selectedOriginId, setSelectedOriginId] = useState<
+    string | undefined
+  >();
 
-  // Debounce para búsqueda (300ms)
-  const debouncedSearch = useDebouncedValue(globalFilter, 300);
+  // Server-side pagination state with smart pageSize handling
+  const {
+    pagination,
+    sorting,
+    activeTab,
+    debouncedSearch,
+    statusFilter,
+    setPagination,
+    setSorting,
+    handleGlobalFilterChange,
+    handleTabChange,
+    createPaginationHandler,
+  } = useServerPaginatedTable<LeadStatus>({ initialPageSize: 10 });
 
-  // Determinar el filtro de status basado en el tab activo
-  const statusFilter: LeadStatus | undefined =
-    activeTab !== "all" ? (activeTab as LeadStatus) : undefined;
+  // Handlers for sector/origin changes - reset to page 0
+  const handleSectorChange = useCallback(
+    (sectorId: string | undefined) => {
+      setSelectedSectorId(sectorId === "todos" ? undefined : sectorId);
+      setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+    },
+    [setPagination],
+  );
 
-  // Query con paginación server-side
+  const handleOriginChange = useCallback(
+    (originId: string | undefined) => {
+      setSelectedOriginId(originId === "todos" ? undefined : originId);
+      setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+    },
+    [setPagination],
+  );
+
+  // Handler to clear all filters
+  const handleClearFilters = useCallback(() => {
+    setSelectedSectorId(undefined);
+    setSelectedOriginId(undefined);
+    handleGlobalFilterChange("");
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+  }, [handleGlobalFilterChange, setPagination]);
+
+  // Query with server-side pagination
   const { data, isLoading, isFetching } = usePaginatedLeadsQuery({
     pageIndex: pagination.pageIndex,
     pageSize: pagination.pageSize,
     sorting: sorting.map((s) => ({ id: s.id, desc: s.desc })),
     globalFilter: debouncedSearch || undefined,
     status: statusFilter,
+    sectorId: selectedSectorId,
+    originId: selectedOriginId,
   });
 
-  // Extraer datos de la respuesta paginada
+  // Extract data from paginated response
   const leads = data?.data ?? [];
   const paginationMeta = data?.pagination;
+  const totalCount = paginationMeta?.totalCount ?? 0;
 
-  // Handler para cambio de tab - resetea a página 0
-  const handleTabChange = useCallback((tabId: string) => {
-    setActiveTab(tabId);
-    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-  }, []);
-
-  // Handler para cambio de globalFilter - resetea a página 0
-  const handleGlobalFilterChange = useCallback((value: string) => {
-    setGlobalFilter(value);
-    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-  }, []);
-
-  // Configuracion de tabs (los conteos se actualizan dinámicamente con el total)
-  const tabsConfig: TabConfig[] = useMemo(
-    () => [
-      {
-        id: "all",
-        label: "Todos",
-        count: activeTab === "all" ? paginationMeta?.totalCount : undefined,
-        icon: Layers,
-      },
-      {
-        id: "CONTACTO_CALIDO",
-        label: "Contacto Cálido",
-        count: activeTab === "CONTACTO_CALIDO" ? paginationMeta?.totalCount : undefined,
-        filterValue: "CONTACTO_CALIDO",
-        icon: Target01Icon,
-      },
-      {
-        id: "SOCIAL_SELLING",
-        label: "Social Selling",
-        count: activeTab === "SOCIAL_SELLING" ? paginationMeta?.totalCount : undefined,
-        filterValue: "SOCIAL_SELLING",
-        icon: MessageMultiple02Icon,
-      },
-      {
-        id: "CITA_AGENDADA",
-        label: "Cita Agendada",
-        count: activeTab === "CITA_AGENDADA" ? paginationMeta?.totalCount : undefined,
-        filterValue: "CITA_AGENDADA",
-        icon: Calendar03Icon,
-      },
-      {
-        id: "CITA_VALIDADA",
-        label: "Cita Validada",
-        count: activeTab === "CITA_VALIDADA" ? paginationMeta?.totalCount : undefined,
-        filterValue: "CITA_VALIDADA",
-        icon: CheckmarkCircle01Icon,
-      },
-      {
-        id: "POSICIONES_ASIGNADAS",
-        label: "Posiciones",
-        count: activeTab === "POSICIONES_ASIGNADAS" ? paginationMeta?.totalCount : undefined,
-        filterValue: "POSICIONES_ASIGNADAS",
-        icon: UserGroupIcon,
-      },
-      {
-        id: "STAND_BY",
-        label: "Stand By",
-        count: activeTab === "STAND_BY" ? paginationMeta?.totalCount : undefined,
-        filterValue: "STAND_BY",
-        icon: PauseIcon,
-      },
-    ],
-    [activeTab, paginationMeta?.totalCount]
+  // Tabs config with dynamic counts
+  const tabsConfig = useMemo(
+    () => enrichLeadTabsWithCounts(activeTab as LeadTabId, totalCount),
+    [activeTab, totalCount],
   );
 
   const handleAdd = useCallback(() => {
@@ -140,46 +104,59 @@ export function LeadsListPage() {
     const result = await createLeadMutation.mutateAsync(formData);
     if (result) {
       closeModal();
-      // Invalidar todas las queries de leads para refrescar
       queryClient.invalidateQueries({ queryKey: ["leads"] });
     }
     return { error: null, lead: result };
   };
 
-  // Configuración de la tabla con server-side habilitado
+  // Table configuration with server-side enabled
   const tableConfig = useMemo(
     () =>
       createTableConfig(LeadsTableConfig, {
         onAdd: handleAdd,
+        // Props for controlled filter component
+        selectedSectorId,
+        selectedOriginId,
+        onSectorChange: handleSectorChange,
+        onOriginChange: handleOriginChange,
+        onClearFilters: handleClearFilters,
         serverSide: {
           enabled: true,
-          totalCount: paginationMeta?.totalCount ?? 0,
+          totalCount,
           pageCount: paginationMeta?.pageCount ?? 0,
           isLoading,
           isFetching,
         },
       }),
-    [paginationMeta, isLoading, isFetching, handleAdd]
+    [
+      totalCount,
+      paginationMeta?.pageCount,
+      isLoading,
+      isFetching,
+      handleAdd,
+      selectedSectorId,
+      selectedOriginId,
+      handleSectorChange,
+      handleOriginChange,
+      handleClearFilters,
+    ],
   );
 
   return (
     <Card className="p-2 m-1">
       <CardContent>
         <div className="space-y-6">
-          {/* Header con titulo y acciones */}
           <TablePresentation
-            title="Gestión de Leads"
-            subtitle="Administra los leads de tu organización"
+            title="Gestion de Leads"
+            subtitle="Administra los leads de tu organizacion"
           />
 
-          {/* Tabs de filtrado */}
           <DataTableTabs
             tabs={tabsConfig}
             activeTab={activeTab}
             onTabChange={handleTabChange}
           />
 
-          {/* Tabla con Server-Side Pagination */}
           <PermissionGuard
             permissions={[
               PermissionActions.leads.acceder,
@@ -191,17 +168,14 @@ export function LeadsListPage() {
               data={leads}
               config={tableConfig}
               isLoading={isLoading}
-              // Server-side: Estado controlado
               pagination={pagination}
               sorting={sorting}
-              // Server-side: Callbacks
-              onPaginationChange={setPagination}
+              onPaginationChange={createPaginationHandler(totalCount)}
               onSortingChange={setSorting}
               onGlobalFilterChange={handleGlobalFilterChange}
             />
           </PermissionGuard>
 
-          {/* Modal de crear lead */}
           <PermissionGuard
             permissions={[
               PermissionActions.leads.crear,

@@ -4,10 +4,7 @@
  */
 
 import type { Lead as LeadDTO } from "../../../frontend/types";
-import {
-  LeadStatusVO,
-  type LeadStatusType,
-} from "../value-objects/LeadStatus";
+import { LeadStatusVO, type LeadStatusType } from "../value-objects/LeadStatus";
 
 export interface LeadProps {
   id: string;

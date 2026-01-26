@@ -7,9 +7,7 @@ import { Filter, Search } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { BaseFilterProps } from "@/core/shared/components/DataTable/TableTypes.types";
 import { FilterHeaderActions } from "@/core/shared/components/DataTable/FilterHeaderAction";
-import { useLeadsTableFilters } from "./hooks/useLeadsTableFilters";
 import { FilterSelect } from "@/core/shared/components/DataTable/FilterSelect";
-import { leadStatusOptions } from "./types/leadStatusOptions";
 import { useState } from "react";
 import {
   Sheet,
@@ -27,6 +25,12 @@ interface LeadsTableFilterProps extends BaseFilterProps {
   table: Table<unknown>;
   onGlobalFilterChange?: (value: string) => void;
   onAdd?: () => void;
+  // Controlled props from parent (server-side filtering)
+  selectedSectorId?: string;
+  selectedOriginId?: string;
+  onSectorChange?: (value: string | undefined) => void;
+  onOriginChange?: (value: string | undefined) => void;
+  onClearFilters?: () => void;
 }
 
 export const LeadsTableFilters = ({
@@ -36,17 +40,13 @@ export const LeadsTableFilters = ({
   showAddButton,
   addButtonText = "",
   onAdd,
+  // Controlled filter props
+  selectedSectorId,
+  selectedOriginId,
+  onSectorChange,
+  onOriginChange,
+  onClearFilters,
 }: LeadsTableFilterProps) => {
-  const {
-    clearFilters,
-    handleStatusChange,
-    handleSectorChange,
-    handleOriginChange,
-    selectedStatus,
-    selectedSector,
-    selectedOrigin,
-  } = useLeadsTableFilters(table);
-
   const { data: sectors = [] } = useSectors();
   const { data: origins = [] } = useLeadOrigins();
 
@@ -56,16 +56,21 @@ export const LeadsTableFilters = ({
 
   const sheetSide = isMobile ? "bottom" : "right";
 
-  // Convert sectors and origins to filter options
+  // Convert sectors and origins to filter options using IDs
   const sectorOptions = [
     { value: "todos", label: "Todos los sectores" },
-    ...sectors.map((s) => ({ value: s.name, label: s.name })),
+    ...sectors.map((s) => ({ value: s.id, label: s.name })),
   ];
 
   const originOptions = [
     { value: "todos", label: "Todos los orígenes" },
-    ...origins.map((o) => ({ value: o.name, label: o.name })),
+    ...origins.map((o) => ({ value: o.id, label: o.name })),
   ];
+
+  // Handler for clearing all filters
+  const handleClearAllFilters = () => {
+    onClearFilters?.();
+  };
 
   return (
     <>
@@ -83,10 +88,7 @@ export const LeadsTableFilters = ({
               AddButtonIcon={AddButtonIcon}
               addButtonText={addButtonText}
               buttonTooltipText="crear lead"
-              onClearFilters={() => {
-                clearFilters();
-                onGlobalFilterChange?.("");
-              }}
+              onClearFilters={handleClearAllFilters}
               onAdd={onAdd}
             />
           </div>
@@ -109,7 +111,9 @@ export const LeadsTableFilters = ({
                       "") as string
                   }
                   onChange={(e) => {
-                    table.getColumn("companyName")?.setFilterValue(e.target.value);
+                    table
+                      .getColumn("companyName")
+                      ?.setFilterValue(e.target.value);
                     onGlobalFilterChange?.(e.target.value);
                   }}
                 />
@@ -120,20 +124,12 @@ export const LeadsTableFilters = ({
               </div>
             </div>
 
-            {/* Filtro de estado */}
-            <FilterSelect
-              label="Estado"
-              onValueChange={handleStatusChange}
-              options={leadStatusOptions}
-              value={selectedStatus}
-            />
-
             {/* Filtro de sector */}
             <FilterSelect
               label="Sector"
-              onValueChange={handleSectorChange}
+              onValueChange={(val) => onSectorChange?.(val === "todos" ? undefined : val)}
               options={sectorOptions}
-              value={selectedSector}
+              value={selectedSectorId ?? "todos"}
             />
 
             {/* Sheet de filtros adicionales */}
@@ -171,9 +167,9 @@ export const LeadsTableFilters = ({
                   <div className="mt-6 space-y-4">
                     <FilterSelect
                       label="Origen"
-                      onValueChange={handleOriginChange}
+                      onValueChange={(val) => onOriginChange?.(val === "todos" ? undefined : val)}
                       options={originOptions}
-                      value={selectedOrigin}
+                      value={selectedOriginId ?? "todos"}
                     />
                   </div>
                 </SheetContent>

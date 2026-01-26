@@ -186,9 +186,13 @@ export function DataTable<TData, TValue>({
     manualSorting: isServerSide,
     manualFiltering: isServerSide,
 
-    // pageCount del servidor (solo en server-side)
-    ...(isServerSide && finalConfig.serverSide?.pageCount
-      ? { pageCount: finalConfig.serverSide.pageCount }
+    // pageCount y rowCount del servidor (solo en server-side)
+    // rowCount es importante para que TanStack calcule getRowCount() correctamente
+    ...(isServerSide
+      ? {
+          pageCount: finalConfig.serverSide?.pageCount ?? -1,
+          rowCount: finalConfig.serverSide?.totalCount ?? 0,
+        }
       : {}),
 
     // Handlers

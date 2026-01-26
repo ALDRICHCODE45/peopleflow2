@@ -7,7 +7,8 @@ interface CreateTableConfigHandlers {
   onAdd?: () => void;
   onImport?: () => void;
   serverSide?: ServerSideConfig;
-  [key: string]: (() => void) | ServerSideConfig | undefined;
+  // Allow any additional props to be passed to custom filter components
+  [key: string]: unknown;
 }
 
 export const createTableConfig = <T>(

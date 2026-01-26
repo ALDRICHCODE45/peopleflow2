@@ -11,7 +11,10 @@ import { GetPaginatedLeadsUseCase } from "../../application/use-cases/GetPaginat
 
 // Types
 import type { LeadStatus, Lead } from "../../../frontend/types";
-import type { PaginationMeta, SortingParam } from "@/core/shared/types/pagination.types";
+import type {
+  PaginationMeta,
+  SortingParam,
+} from "@/core/shared/types/pagination.types";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
@@ -36,7 +39,7 @@ export interface GetPaginatedLeadsResult {
  * Obtiene leads con paginación server-side
  */
 export async function getPaginatedLeadsAction(
-  params: GetPaginatedLeadsParams
+  params: GetPaginatedLeadsParams,
 ): Promise<GetPaginatedLeadsResult> {
   try {
     const headersList = await headers();

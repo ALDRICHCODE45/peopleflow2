@@ -1,5 +1,6 @@
 import type { ILeadRepository, UpdateLeadData } from "../../domain/interfaces/ILeadRepository";
 import { Lead } from "../../domain/entities/Lead";
+import { CompanyNameVO, RFCVO, URLVO } from "../../domain/value-objects";
 
 export interface UpdateLeadInput {
   leadId: string;
@@ -49,46 +50,32 @@ export class UpdateLeadUseCase {
         };
       }
 
-      // Validaciones
-      if (input.data.companyName !== undefined) {
-        const companyName = input.data.companyName.trim();
-        if (companyName.length < 2) {
-          return {
-            success: false,
-            error: "El nombre de la empresa debe tener al menos 2 caracteres",
-          };
-        }
-        if (companyName.length > 200) {
-          return {
-            success: false,
-            error: "El nombre de la empresa no puede exceder 200 caracteres",
-          };
-        }
-      }
-
-      if (input.data.rfc !== undefined && input.data.rfc !== null) {
-        if (input.data.rfc.length > 13) {
-          return {
-            success: false,
-            error: "El RFC no puede exceder 13 caracteres",
-          };
-        }
-      }
-
       const updateData: UpdateLeadData = {};
 
+      // Validar y procesar companyName si se proporciona
       if (input.data.companyName !== undefined) {
-        updateData.companyName = input.data.companyName.trim();
+        const companyName = CompanyNameVO.create(input.data.companyName);
+        updateData.companyName = companyName.getValue();
       }
+
+      // Validar y procesar RFC si se proporciona
       if (input.data.rfc !== undefined) {
-        updateData.rfc = input.data.rfc?.trim() || null;
+        const rfc = RFCVO.create(input.data.rfc);
+        updateData.rfc = rfc.getValue();
       }
+
+      // Validar y procesar website si se proporciona
       if (input.data.website !== undefined) {
-        updateData.website = input.data.website?.trim() || null;
+        const website = URLVO.create(input.data.website);
+        updateData.website = website.getValue();
       }
+
+      // Validar y procesar linkedInUrl si se proporciona
       if (input.data.linkedInUrl !== undefined) {
-        updateData.linkedInUrl = input.data.linkedInUrl?.trim() || null;
+        const linkedInUrl = URLVO.create(input.data.linkedInUrl);
+        updateData.linkedInUrl = linkedInUrl.getValue();
       }
+
       if (input.data.address !== undefined) {
         updateData.address = input.data.address?.trim() || null;
       }
@@ -127,6 +114,12 @@ export class UpdateLeadUseCase {
       };
     } catch (error) {
       console.error("Error in UpdateLeadUseCase:", error);
+      if (error instanceof Error) {
+        return {
+          success: false,
+          error: error.message,
+        };
+      }
       return {
         success: false,
         error: "Error al actualizar lead",

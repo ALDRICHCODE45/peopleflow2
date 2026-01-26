@@ -27,7 +27,7 @@ export const LeadsTableConfig: TableConfig<Lead> = {
   emptyStateMessage: "No se encontraron leads",
   pagination: {
     defaultPageSize: 10,
-    pageSizeOptions: [5, 10, 15, 20, 50],
+    pageSizeOptions: [3, 5, 10, 15, 20, 50],
     showPageSizeSelector: true,
     showPaginationInfo: true,
   },

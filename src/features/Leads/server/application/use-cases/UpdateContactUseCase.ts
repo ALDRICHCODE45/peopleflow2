@@ -1,5 +1,6 @@
 import type { IContactRepository, UpdateContactData } from "../../domain/interfaces/IContactRepository";
 import { Contact } from "../../domain/entities/Contact";
+import { PersonNameVO, EmailVO, URLVO } from "../../domain/value-objects";
 
 export interface UpdateContactInput {
   contactId: string;
@@ -40,70 +41,46 @@ export class UpdateContactUseCase {
         };
       }
 
-      // Validaciones
-      if (input.data.firstName !== undefined) {
-        const firstName = input.data.firstName.trim();
-        if (firstName.length < 2) {
-          return {
-            success: false,
-            error: "El nombre debe tener al menos 2 caracteres",
-          };
-        }
-        if (firstName.length > 100) {
-          return {
-            success: false,
-            error: "El nombre no puede exceder 100 caracteres",
-          };
-        }
-      }
+      const updateData: UpdateContactData = {};
 
-      if (input.data.lastName !== undefined) {
-        const lastName = input.data.lastName.trim();
-        if (lastName.length < 2) {
-          return {
-            success: false,
-            error: "El apellido debe tener al menos 2 caracteres",
-          };
+      // Validar nombre usando PersonNameVO.createPartial si se actualiza firstName o lastName
+      if (input.data.firstName !== undefined || input.data.lastName !== undefined) {
+        const personName = PersonNameVO.createPartial(
+          input.data.firstName,
+          input.data.lastName,
+          {
+            firstName: existingContact.firstName,
+            lastName: existingContact.lastName,
+          }
+        );
+
+        if (input.data.firstName !== undefined) {
+          updateData.firstName = personName.getFirstName();
         }
-        if (lastName.length > 100) {
-          return {
-            success: false,
-            error: "El apellido no puede exceder 100 caracteres",
-          };
+        if (input.data.lastName !== undefined) {
+          updateData.lastName = personName.getLastName();
         }
       }
 
       // Validar email si se proporciona
-      if (input.data.email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(input.data.email)) {
-          return {
-            success: false,
-            error: "El email no tiene un formato válido",
-          };
-        }
-      }
-
-      const updateData: UpdateContactData = {};
-
-      if (input.data.firstName !== undefined) {
-        updateData.firstName = input.data.firstName.trim();
-      }
-      if (input.data.lastName !== undefined) {
-        updateData.lastName = input.data.lastName.trim();
-      }
       if (input.data.email !== undefined) {
-        updateData.email = input.data.email?.trim() || null;
+        const email = EmailVO.create(input.data.email);
+        updateData.email = email.getValue();
       }
+
       if (input.data.phone !== undefined) {
         updateData.phone = input.data.phone?.trim() || null;
       }
       if (input.data.position !== undefined) {
         updateData.position = input.data.position?.trim() || null;
       }
+
+      // Validar linkedInUrl si se proporciona
       if (input.data.linkedInUrl !== undefined) {
-        updateData.linkedInUrl = input.data.linkedInUrl?.trim() || null;
+        const linkedInUrl = URLVO.create(input.data.linkedInUrl);
+        updateData.linkedInUrl = linkedInUrl.getValue();
       }
+
       if (input.data.isPrimary !== undefined) {
         updateData.isPrimary = input.data.isPrimary;
       }
@@ -130,6 +107,12 @@ export class UpdateContactUseCase {
       };
     } catch (error) {
       console.error("Error in UpdateContactUseCase:", error);
+      if (error instanceof Error) {
+        return {
+          success: false,
+          error: error.message,
+        };
+      }
       return {
         success: false,
         error: "Error al actualizar contacto",

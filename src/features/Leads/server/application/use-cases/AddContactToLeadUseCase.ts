@@ -1,6 +1,7 @@
 import type { IContactRepository } from "../../domain/interfaces/IContactRepository";
 import type { ILeadRepository } from "../../domain/interfaces/ILeadRepository";
 import { Contact } from "../../domain/entities/Contact";
+import { PersonNameVO, EmailVO, URLVO } from "../../domain/value-objects";
 
 export interface AddContactToLeadInput {
   leadId: string;
@@ -49,56 +50,18 @@ export class AddContactToLeadUseCase {
         };
       }
 
-      // Validaciones
-      const firstName = input.firstName?.trim() || "";
-      const lastName = input.lastName?.trim() || "";
-
-      if (firstName.length < 2) {
-        return {
-          success: false,
-          error: "El nombre debe tener al menos 2 caracteres",
-        };
-      }
-
-      if (lastName.length < 2) {
-        return {
-          success: false,
-          error: "El apellido debe tener al menos 2 caracteres",
-        };
-      }
-
-      if (firstName.length > 100) {
-        return {
-          success: false,
-          error: "El nombre no puede exceder 100 caracteres",
-        };
-      }
-
-      if (lastName.length > 100) {
-        return {
-          success: false,
-          error: "El apellido no puede exceder 100 caracteres",
-        };
-      }
-
-      // Validar email si se proporciona
-      if (input.email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(input.email)) {
-          return {
-            success: false,
-            error: "El email no tiene un formato válido",
-          };
-        }
-      }
+      // Validaciones encapsuladas en Value Objects
+      const personName = PersonNameVO.create(input.firstName, input.lastName);
+      const email = EmailVO.create(input.email);
+      const linkedInUrl = URLVO.create(input.linkedInUrl);
 
       const contact = await this.contactRepository.create({
-        firstName,
-        lastName,
-        email: input.email?.trim() || null,
+        firstName: personName.getFirstName(),
+        lastName: personName.getLastName(),
+        email: email.getValue(),
         phone: input.phone?.trim() || null,
         position: input.position?.trim() || null,
-        linkedInUrl: input.linkedInUrl?.trim() || null,
+        linkedInUrl: linkedInUrl.getValue(),
         isPrimary: input.isPrimary,
         notes: input.notes?.trim() || null,
         leadId: input.leadId,
@@ -111,6 +74,12 @@ export class AddContactToLeadUseCase {
       };
     } catch (error) {
       console.error("Error in AddContactToLeadUseCase:", error);
+      if (error instanceof Error) {
+        return {
+          success: false,
+          error: error.message,
+        };
+      }
       return {
         success: false,
         error: "Error al agregar contacto",

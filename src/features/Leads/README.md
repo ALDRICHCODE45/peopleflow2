@@ -80,11 +80,47 @@ export class Lead {
 
 ### Value Objects
 
-Los Value Objects encapsulan validaciones y lógica de dominio:
+Los Value Objects encapsulan validaciones y lógica de dominio. Cada VO sigue el patrón:
+- Constructor privado
+- Método estático `create()` que lanza error si la validación falla
+- Método `getValue()` para obtener el valor primitivo
+- Método `equals()` para comparar VOs
+
+```
+src/features/Leads/server/domain/value-objects/
+├── index.ts              # Re-export de todos los VOs
+├── LeadStatus.ts         # Estado del lead + transiciones válidas
+├── CompanyName.ts        # Nombre de empresa (2-200 chars)
+├── RFC.ts                # RFC mexicano (max 13 chars, nullable)
+├── URL.ts                # URLs (max 500 chars, nullable)
+├── Email.ts              # Email con validación regex (nullable)
+├── PersonName.ts         # Nombre + Apellido (2-100 chars c/u)
+├── InteractionType.ts    # Enum de tipos de interacción
+└── InteractionSubject.ts # Asunto de interacción (2-200 chars)
+```
+
+**Ejemplo de uso en Use Cases:**
 
 ```typescript
-// src/features/Leads/server/domain/value-objects/LeadStatus.ts
+// Antes (validaciones hardcoded en el Use Case)
+if (companyName.length < 2) {
+  return { success: false, error: "El nombre..." };
+}
 
+// Después (validaciones encapsuladas en VOs)
+try {
+  const companyName = CompanyNameVO.create(input.companyName);
+  const rfc = RFCVO.create(input.rfc);
+  const email = EmailVO.create(input.email);
+  // Los VOs lanzan errores descriptivos si la validación falla
+} catch (error) {
+  return { success: false, error: error.message };
+}
+```
+
+**LeadStatusVO** - Controla las transiciones de estado válidas:
+
+```typescript
 export class LeadStatusVO {
   private static readonly VALID_TRANSITIONS: Record<LeadStatusType, LeadStatusType[]> = {
     CONTACTO_CALIDO: ["SOCIAL_SELLING", "CITA_AGENDADA", "STAND_BY"],
@@ -376,7 +412,15 @@ src/features/Leads/
 │   │   │   ├── Contact.ts
 │   │   │   └── Interaction.ts
 │   │   ├── value-objects/
-│   │   │   └── LeadStatus.ts
+│   │   │   ├── index.ts             # Re-export de todos los VOs
+│   │   │   ├── LeadStatus.ts        # Estado + transiciones
+│   │   │   ├── CompanyName.ts       # 2-200 chars
+│   │   │   ├── RFC.ts               # max 13 chars, nullable
+│   │   │   ├── URL.ts               # max 500 chars, nullable
+│   │   │   ├── Email.ts             # regex validation, nullable
+│   │   │   ├── PersonName.ts        # firstName + lastName
+│   │   │   ├── InteractionType.ts   # enum validation
+│   │   │   └── InteractionSubject.ts # 2-200 chars
 │   │   └── interfaces/
 │   │       ├── ILeadRepository.ts
 │   │       ├── IContactRepository.ts
