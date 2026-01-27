@@ -24,9 +24,10 @@ export interface GetPaginatedLeadsParams {
   pageSize: number;
   sorting?: SortingParam[];
   globalFilter?: string;
-  status?: LeadStatus;
-  sectorId?: string;
-  originId?: string;
+  statuses?: LeadStatus[];
+  sectorIds?: string[];
+  originIds?: string[];
+  assignedToIds?: string[];
 }
 
 export interface GetPaginatedLeadsResult {
@@ -77,9 +78,10 @@ export async function getPaginatedLeadsAction(
       pageSize: params.pageSize,
       sorting: params.sorting,
       filters: {
-        status: params.status,
-        sectorId: params.sectorId,
-        originId: params.originId,
+        statuses: params.statuses,
+        sectorIds: params.sectorIds,
+        originIds: params.originIds,
+        assignedToIds: params.assignedToIds,
         search: params.globalFilter,
       },
     });

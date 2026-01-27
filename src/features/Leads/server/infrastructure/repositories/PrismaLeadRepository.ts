@@ -283,20 +283,20 @@ export class PrismaLeadRepository implements ILeadRepository {
       isDeleted: filters?.isDeleted ?? false,
     };
 
-    if (filters?.status) {
-      where.status = filters.status;
+    if (filters?.statuses?.length) {
+      where.status = { in: filters.statuses };
     }
 
-    if (filters?.sectorId) {
-      where.sectorId = filters.sectorId;
+    if (filters?.sectorIds?.length) {
+      where.sectorId = { in: filters.sectorIds };
     }
 
-    if (filters?.originId) {
-      where.originId = filters.originId;
+    if (filters?.originIds?.length) {
+      where.originId = { in: filters.originIds };
     }
 
-    if (filters?.assignedToId) {
-      where.assignedToId = filters.assignedToId;
+    if (filters?.assignedToIds?.length) {
+      where.assignedToId = { in: filters.assignedToIds };
     }
 
     if (filters?.search) {

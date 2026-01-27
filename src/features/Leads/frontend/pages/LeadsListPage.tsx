@@ -9,54 +9,58 @@ import { LeadColumns } from "../components/columns/LeadColumns";
 import { useModalState } from "@/core/shared/hooks/useModalState";
 import { createTableConfig } from "@/core/shared/helpers/createTableConfig";
 import { LeadsTableConfig } from "../components/tableConfig/LeadsTableConfig";
-import { DataTableTabs } from "@/core/shared/components/DataTable/DataTableTabs";
+import { DataTableMultiTabs } from "@/core/shared/components/DataTable/DataTableMultiTabs";
 import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
 import { LeadSheetForm } from "../components/LeadSheetForm";
 import { useServerPaginatedTable } from "@/core/shared/hooks/useServerPaginatedTable";
 import type { LeadStatus } from "../types";
 import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
-import {
-  enrichLeadTabsWithCounts,
-  type LeadTabId,
-} from "../config/leadTabsConfig";
+import { enrichLeadTabsWithCounts } from "../config/leadTabsConfig";
 
 export function LeadsListPage() {
   const { isOpen, openModal, closeModal } = useModalState();
 
-  // Server-side filter state for sector and origin
-  const [selectedSectorId, setSelectedSectorId] = useState<
-    string | undefined
-  >();
-  const [selectedOriginId, setSelectedOriginId] = useState<
-    string | undefined
-  >();
+  // Server-side filter state for sector and origin (now multi-select)
+  const [selectedSectorIds, setSelectedSectorIds] = useState<string[]>([]);
+  const [selectedOriginIds, setSelectedOriginIds] = useState<string[]>([]);
+  const [selectedAssignedToIds, setSelectedAssignedToIds] = useState<string[]>(
+    [],
+  );
 
-  // Server-side pagination state with smart pageSize handling
+  // Server-side pagination state with multi-tab support
   const {
     pagination,
     sorting,
-    activeTab,
+    activeTabs,
     debouncedSearch,
-    statusFilter,
+    statusFilters,
     setPagination,
     setSorting,
     handleGlobalFilterChange,
-    handleTabChange,
+    handleMultiTabChange,
     createPaginationHandler,
   } = useServerPaginatedTable<LeadStatus>({ initialPageSize: 10 });
 
   // Handlers for sector/origin changes - reset to page 0
   const handleSectorChange = useCallback(
-    (sectorId: string | undefined) => {
-      setSelectedSectorId(sectorId === "todos" ? undefined : sectorId);
+    (ids: string[]) => {
+      setSelectedSectorIds(ids);
       setPagination((prev) => ({ ...prev, pageIndex: 0 }));
     },
     [setPagination],
   );
 
   const handleOriginChange = useCallback(
-    (originId: string | undefined) => {
-      setSelectedOriginId(originId === "todos" ? undefined : originId);
+    (ids: string[]) => {
+      setSelectedOriginIds(ids);
+      setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+    },
+    [setPagination],
+  );
+
+  const handleAssignedToChange = useCallback(
+    (ids: string[]) => {
+      setSelectedAssignedToIds(ids);
       setPagination((prev) => ({ ...prev, pageIndex: 0 }));
     },
     [setPagination],
@@ -64,11 +68,13 @@ export function LeadsListPage() {
 
   // Handler to clear all filters
   const handleClearFilters = useCallback(() => {
-    setSelectedSectorId(undefined);
-    setSelectedOriginId(undefined);
+    setSelectedSectorIds([]);
+    setSelectedOriginIds([]);
+    setSelectedAssignedToIds([]);
+    handleMultiTabChange([]);
     handleGlobalFilterChange("");
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-  }, [handleGlobalFilterChange, setPagination]);
+  }, [handleGlobalFilterChange, handleMultiTabChange, setPagination]);
 
   // Query with server-side pagination
   const { data, isLoading, isFetching } = usePaginatedLeadsQuery({
@@ -76,9 +82,11 @@ export function LeadsListPage() {
     pageSize: pagination.pageSize,
     sorting: sorting.map((s) => ({ id: s.id, desc: s.desc })),
     globalFilter: debouncedSearch || undefined,
-    status: statusFilter,
-    sectorId: selectedSectorId,
-    originId: selectedOriginId,
+    statuses: statusFilters.length > 0 ? statusFilters : undefined,
+    sectorIds: selectedSectorIds.length > 0 ? selectedSectorIds : undefined,
+    originIds: selectedOriginIds.length > 0 ? selectedOriginIds : undefined,
+    assignedToIds:
+      selectedAssignedToIds.length > 0 ? selectedAssignedToIds : undefined,
   });
 
   // Extract data from paginated response
@@ -88,8 +96,8 @@ export function LeadsListPage() {
 
   // Tabs config with dynamic counts
   const tabsConfig = useMemo(
-    () => enrichLeadTabsWithCounts(activeTab as LeadTabId, totalCount),
-    [activeTab, totalCount],
+    () => enrichLeadTabsWithCounts(activeTabs, totalCount),
+    [activeTabs, totalCount],
   );
 
   const handleAdd = useCallback(() => {
@@ -102,11 +110,13 @@ export function LeadsListPage() {
       createTableConfig(LeadsTableConfig, {
         onAdd: handleAdd,
         // Props for controlled filter component
-        selectedSectorId,
-        selectedOriginId,
+        selectedSectorIds,
+        selectedOriginIds,
         onSectorChange: handleSectorChange,
         onOriginChange: handleOriginChange,
         onClearFilters: handleClearFilters,
+        selectedAssignedToIds,
+        onAssignedToChange: handleAssignedToChange,
         serverSide: {
           enabled: true,
           totalCount,
@@ -121,11 +131,13 @@ export function LeadsListPage() {
       isLoading,
       isFetching,
       handleAdd,
-      selectedSectorId,
-      selectedOriginId,
+      selectedSectorIds,
+      selectedOriginIds,
       handleSectorChange,
       handleOriginChange,
       handleClearFilters,
+      selectedAssignedToIds,
+      handleAssignedToChange,
     ],
   );
 
@@ -138,10 +150,10 @@ export function LeadsListPage() {
             subtitle="Administra los leads de tu organizacion"
           />
 
-          <DataTableTabs
+          <DataTableMultiTabs
             tabs={tabsConfig}
-            activeTab={activeTab}
-            onTabChange={handleTabChange}
+            activeTabs={activeTabs}
+            onTabsChange={handleMultiTabChange}
           />
 
           <PermissionGuard

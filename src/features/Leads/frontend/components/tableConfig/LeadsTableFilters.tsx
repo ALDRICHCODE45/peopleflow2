@@ -7,9 +7,9 @@ import { Filter, Search } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { BaseFilterProps } from "@/core/shared/components/DataTable/TableTypes.types";
 import { FilterHeaderActions } from "@/core/shared/components/DataTable/FilterHeaderAction";
-import { FilterSelect } from "@/core/shared/components/DataTable/FilterSelect";
+import { FilterMultiSelect } from "@/core/shared/components/DataTable/FilterMultiSelect";
 import { Button } from "@/core/shared/ui/shadcn/button";
-import { useSectors, useLeadOrigins } from "../../hooks/useCatalogs";
+import { useSectors } from "../../hooks/useCatalogs";
 import { SheetFilters } from "./SheetFilters";
 import { useModalState } from "@/core/shared/hooks";
 
@@ -18,11 +18,14 @@ interface LeadsTableFilterProps extends BaseFilterProps {
   onGlobalFilterChange?: (value: string) => void;
   onAdd?: () => void;
   // Controlled props from parent (server-side filtering)
-  selectedSectorId?: string;
-  selectedOriginId?: string;
-  onSectorChange?: (value: string | undefined) => void;
-  onOriginChange?: (value: string | undefined) => void;
+  selectedSectorIds?: string[];
+  selectedOriginIds?: string[];
+  onSectorChange?: (ids: string[]) => void;
+  onOriginChange?: (ids: string[]) => void;
   onClearFilters?: () => void;
+  // Multi-select assigned user filter
+  selectedAssignedToIds?: string[];
+  onAssignedToChange?: (ids: string[]) => void;
 }
 
 export const LeadsTableFilters = ({
@@ -33,11 +36,13 @@ export const LeadsTableFilters = ({
   addButtonText = "",
   onAdd,
   // Controlled filter props
-  selectedSectorId,
-  selectedOriginId,
+  selectedSectorIds,
+  selectedOriginIds,
   onSectorChange,
   onOriginChange,
   onClearFilters,
+  selectedAssignedToIds,
+  onAssignedToChange,
 }: LeadsTableFilterProps) => {
   const { data: sectors = [] } = useSectors();
 
@@ -47,11 +52,8 @@ export const LeadsTableFilters = ({
     closeModal: closeSheetFilters,
   } = useModalState();
 
-  // Convert sectors and origins to filter options using IDs
-  const sectorOptions = [
-    { value: "todos", label: "Todos los sectores" },
-    ...sectors.map((s) => ({ value: s.id, label: s.name })),
-  ];
+  // Convert sectors to filter options using IDs
+  const sectorOptions = sectors.map((s) => ({ value: s.id, label: s.name }));
 
   // Handler for clearing all filters
   const handleClearAllFilters = () => {
@@ -111,13 +113,12 @@ export const LeadsTableFilters = ({
             </div>
 
             {/* Filtro de sector */}
-            <FilterSelect
+            <FilterMultiSelect
               label="Sector"
-              onValueChange={(val) =>
-                onSectorChange?.(val === "todos" ? undefined : val)
-              }
               options={sectorOptions}
-              value={selectedSectorId ?? "todos"}
+              selected={selectedSectorIds ?? []}
+              onChange={(ids) => onSectorChange?.(ids)}
+              placeholder="Todos los sectores"
             />
 
             {/* Sheet de filtros adicionales */}
@@ -141,7 +142,9 @@ export const LeadsTableFilters = ({
                 onOpenChange={closeSheetFilters}
                 isSheetOpen={isOpenSheetFilters}
                 onOriginChange={onOriginChange}
-                selectedOriginId={selectedOriginId}
+                selectedOriginIds={selectedOriginIds}
+                selectedAssignedToIds={selectedAssignedToIds}
+                onAssignedToChange={onAssignedToChange}
               />
             </div>
           </div>

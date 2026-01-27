@@ -13,6 +13,10 @@ export interface UseServerPaginatedTableOptions<TStatus = string> {
   initialTab?: string;
   /** Function to extract status from tab ID (default: returns tab if not "all") */
   tabToStatus?: (tabId: string) => TStatus | undefined;
+  /** Enable multi-tab mode (default: false) */
+  multiTab?: boolean;
+  /** Function to convert selected tab IDs to status array (multi-tab mode) */
+  tabsToStatuses?: (tabIds: string[]) => TStatus[];
 }
 
 export interface UseServerPaginatedTableReturn<TStatus = string> {
@@ -23,6 +27,11 @@ export interface UseServerPaginatedTableReturn<TStatus = string> {
   activeTab: string;
   debouncedSearch: string;
   statusFilter: TStatus | undefined;
+
+  // Multi-tab state
+  activeTabs: string[];
+  statusFilters: TStatus[];
+  handleMultiTabChange: (tabIds: string[]) => void;
 
   // Setters (with smart reset logic)
   setPagination: (updater: Updater<PaginationState>) => void;
@@ -84,6 +93,8 @@ export function useServerPaginatedTable<TStatus = string>(
     initialTab = "all",
     tabToStatus = (tabId: string) =>
       tabId !== "all" ? (tabId as unknown as TStatus) : undefined,
+    tabsToStatuses = (tabIds: string[]) =>
+      tabIds.map((id) => id as unknown as TStatus),
   } = options;
 
   // Core state
@@ -94,15 +105,28 @@ export function useServerPaginatedTable<TStatus = string>(
   const [sorting, setSortingInternal] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
   const [activeTab, setActiveTab] = useState<string>(initialTab);
+  const [activeTabs, setActiveTabs] = useState<string[]>([]);
 
   // Debounced search value
   const debouncedSearch = useDebouncedValue(globalFilter, debounceDelay);
 
-  // Derive status filter from active tab
+  // Derive status filter from active tab (single-tab mode)
   const statusFilter = useMemo(
     () => tabToStatus(activeTab),
     [activeTab, tabToStatus]
   );
+
+  // Derive status filters from active tabs (multi-tab mode)
+  const statusFilters = useMemo(
+    () => tabsToStatuses(activeTabs),
+    [activeTabs, tabsToStatuses]
+  );
+
+  // Handler for multi-tab changes - resets to page 0
+  const handleMultiTabChange = useCallback((tabIds: string[]) => {
+    setActiveTabs(tabIds);
+    setPaginationInternal((prev) => ({ ...prev, pageIndex: 0 }));
+  }, []);
 
   // Handler for direct pagination changes (page navigation)
   const setPagination = useCallback(
@@ -194,6 +218,11 @@ export function useServerPaginatedTable<TStatus = string>(
     activeTab,
     debouncedSearch,
     statusFilter,
+
+    // Multi-tab state
+    activeTabs,
+    statusFilters,
+    handleMultiTabChange,
 
     // Handlers
     setPagination,

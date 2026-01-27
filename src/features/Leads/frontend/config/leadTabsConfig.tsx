@@ -96,12 +96,17 @@ export const LEAD_TABS_CONFIG: readonly LeadTabConfig[] = [
  * ```
  */
 export function enrichLeadTabsWithCounts(
-  activeTab: LeadTabId,
+  activeTabs: string[],
   totalCount?: number
 ): LeadTabConfig[] {
   return LEAD_TABS_CONFIG.map((tab) => ({
     ...tab,
-    count: tab.id === activeTab ? totalCount : undefined,
+    count:
+      activeTabs.length === 0 && tab.id === "all"
+        ? totalCount
+        : activeTabs.includes(tab.id)
+          ? totalCount
+          : undefined,
   }));
 }
 

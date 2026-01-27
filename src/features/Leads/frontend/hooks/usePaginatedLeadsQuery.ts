@@ -15,9 +15,10 @@ export interface PaginatedLeadsQueryParams {
   pageSize: number;
   sorting?: SortingParam[];
   globalFilter?: string;
-  status?: LeadStatus;
-  sectorId?: string;
-  originId?: string;
+  statuses?: LeadStatus[];
+  sectorIds?: string[];
+  originIds?: string[];
+  assignedToIds?: string[];
 }
 
 /** Query Key Factory */
@@ -34,9 +35,10 @@ export const getPaginatedLeadsQueryKey = (
       pageSize: params.pageSize,
       sorting: params.sorting,
       globalFilter: params.globalFilter,
-      status: params.status,
-      sectorId: params.sectorId,
-      originId: params.originId,
+      statuses: params.statuses,
+      sectorIds: params.sectorIds,
+      originIds: params.originIds,
+      assignedToIds: params.assignedToIds,
     },
   ] as const;
 
@@ -56,9 +58,10 @@ export function usePaginatedLeadsQuery(params: PaginatedLeadsQueryParams) {
         pageSize: params.pageSize,
         sorting: params.sorting,
         globalFilter: params.globalFilter,
-        status: params.status,
-        sectorId: params.sectorId,
-        originId: params.originId,
+        statuses: params.statuses,
+        sectorIds: params.sectorIds,
+        originIds: params.originIds,
+        assignedToIds: params.assignedToIds,
       });
 
       if ("error" in result && result.error) {

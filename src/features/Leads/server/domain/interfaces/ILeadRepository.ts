@@ -36,10 +36,10 @@ export interface UpdateLeadData {
 }
 
 export interface FindLeadsFilters {
-  status?: LeadStatusType;
-  sectorId?: string;
-  originId?: string;
-  assignedToId?: string;
+  statuses?: LeadStatusType[];
+  sectorIds?: string[];
+  originIds?: string[];
+  assignedToIds?: string[];
   search?: string;
   isDeleted?: boolean;
 }

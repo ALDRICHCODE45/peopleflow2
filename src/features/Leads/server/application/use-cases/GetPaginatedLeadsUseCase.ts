@@ -12,10 +12,10 @@ export interface GetPaginatedLeadsInput {
   pageSize: number;
   sorting?: { id: string; desc: boolean }[];
   filters?: {
-    status?: LeadStatusType;
-    sectorId?: string;
-    originId?: string;
-    assignedToId?: string;
+    statuses?: LeadStatusType[];
+    sectorIds?: string[];
+    originIds?: string[];
+    assignedToIds?: string[];
     search?: string;
   };
 }
@@ -38,10 +38,10 @@ export class GetPaginatedLeadsUseCase {
 
       const filters: FindLeadsFilters = {
         isDeleted: false,
-        ...(input.filters?.status && { status: input.filters.status }),
-        ...(input.filters?.sectorId && { sectorId: input.filters.sectorId }),
-        ...(input.filters?.originId && { originId: input.filters.originId }),
-        ...(input.filters?.assignedToId && { assignedToId: input.filters.assignedToId }),
+        ...(input.filters?.statuses?.length && { statuses: input.filters.statuses }),
+        ...(input.filters?.sectorIds?.length && { sectorIds: input.filters.sectorIds }),
+        ...(input.filters?.originIds?.length && { originIds: input.filters.originIds }),
+        ...(input.filters?.assignedToIds?.length && { assignedToIds: input.filters.assignedToIds }),
         ...(input.filters?.search && { search: input.filters.search }),
       };
 

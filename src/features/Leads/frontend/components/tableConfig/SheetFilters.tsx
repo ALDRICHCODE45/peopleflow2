@@ -1,4 +1,4 @@
-import { FilterSelect } from "@/core/shared/components/DataTable/FilterSelect";
+import { FilterMultiSelect } from "@/core/shared/components/DataTable/FilterMultiSelect";
 import {
   Sheet,
   SheetContent,
@@ -8,31 +8,43 @@ import {
 } from "@shadcn/sheet";
 import { useLeadOrigins } from "../../hooks/useCatalogs";
 import { useIsMobile } from "@/core/shared/hooks/use-mobile";
+import { useTenantUsersQuery } from "@/features/Administracion/usuarios/frontend/hooks/useUsers";
 
 interface Props {
   isSheetOpen: boolean;
   onOpenChange: () => void;
-  //Filtro por origen.
-  selectedOriginId?: string;
-  onOriginChange?: (value: string | undefined) => void;
+  //Filtro por origen (multi-select).
+  selectedOriginIds?: string[];
+  onOriginChange?: (ids: string[]) => void;
+  // Filtro por usuario asignado (multi-select)
+  selectedAssignedToIds?: string[];
+  onAssignedToChange?: (ids: string[]) => void;
 }
 
 export const SheetFilters = ({
   isSheetOpen,
   onOpenChange,
   onOriginChange,
-  selectedOriginId,
+  selectedOriginIds = [],
+  selectedAssignedToIds = [],
+  onAssignedToChange,
 }: Props) => {
   const isMobile = useIsMobile();
 
   const sheetSide = isMobile ? "bottom" : "right";
 
   const { data: origins = [] } = useLeadOrigins();
+  const { data: users = [] } = useTenantUsersQuery();
 
-  const originOptions = [
-    { value: "todos", label: "Todos los orígenes" },
-    ...origins.map((o) => ({ value: o.id, label: o.name })),
-  ];
+  const originOptions = origins.map((o) => ({
+    value: o.id,
+    label: o.name,
+  }));
+
+  const userOptions = users.map((u) => ({
+    value: u.id,
+    label: u.name || u.email,
+  }));
 
   return (
     <Sheet open={isSheetOpen} onOpenChange={onOpenChange}>
@@ -47,14 +59,21 @@ export const SheetFilters = ({
             Filtra tus leads con opciones adicionales
           </SheetDescription>
         </SheetHeader>
-        <div className="mt-6 space-y-4 p-3">
-          <FilterSelect
+        <div className=" space-y-4 p-3">
+          <FilterMultiSelect
             label="Origen"
-            onValueChange={(val) =>
-              onOriginChange?.(val === "todos" ? undefined : val)
-            }
             options={originOptions}
-            value={selectedOriginId ?? "todos"}
+            selected={selectedOriginIds}
+            onChange={(ids) => onOriginChange?.(ids)}
+            placeholder="Todos los origenes"
+          />
+
+          <FilterMultiSelect
+            label="Usuario asignado"
+            options={userOptions}
+            selected={selectedAssignedToIds}
+            onChange={(ids) => onAssignedToChange?.(ids)}
+            placeholder="Todos los usuarios"
           />
         </div>
       </SheetContent>
