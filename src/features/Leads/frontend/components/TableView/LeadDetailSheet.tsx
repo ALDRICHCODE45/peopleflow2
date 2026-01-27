@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { Lead } from "../types";
+import type { Lead } from "../../types";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@shadcn/sheet";
 import { useIsMobile } from "@/core/shared/hooks/use-mobile";
 import { HugeiconsIcon } from "@hugeicons/react";

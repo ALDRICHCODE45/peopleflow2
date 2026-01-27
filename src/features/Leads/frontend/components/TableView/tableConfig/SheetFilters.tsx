@@ -6,7 +6,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@shadcn/sheet";
-import { useLeadOrigins } from "../../hooks/useCatalogs";
+import { useLeadOrigins } from "../../../hooks/useCatalogs";
 import { useIsMobile } from "@/core/shared/hooks/use-mobile";
 import { useTenantUsersQuery } from "@/features/Administracion/usuarios/frontend/hooks/useUsers";
 

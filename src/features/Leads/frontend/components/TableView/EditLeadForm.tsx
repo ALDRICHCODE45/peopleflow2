@@ -11,9 +11,9 @@ import {
   SelectValue,
 } from "@/core/shared/ui/shadcn/select";
 import { Field, FieldError, FieldLabel } from "@/core/shared/ui/shadcn/field";
-import { useEditLeadForm } from "../hooks/useEditLeadForm";
-import type { Lead } from "../types";
-import { LEAD_STATUS_OPTIONS } from "../types";
+import { useEditLeadForm } from "../../hooks/useEditLeadForm";
+import type { Lead } from "../../types";
+import { LEAD_STATUS_OPTIONS } from "../../types";
 
 interface EditLeadFormProps {
   lead: Lead;
@@ -93,7 +93,9 @@ export function EditLeadForm({ lead, onOpenChange }: EditLeadFormProps) {
             <FieldLabel htmlFor={field.name}>Estado</FieldLabel>
             <Select
               value={field.state.value}
-              onValueChange={(value) => field.handleChange(value as typeof field.state.value)}
+              onValueChange={(value) =>
+                field.handleChange(value as typeof field.state.value)
+              }
             >
               <SelectTrigger>
                 <SelectValue placeholder="Selecciona un estado" />

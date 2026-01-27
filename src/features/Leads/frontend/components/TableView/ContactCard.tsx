@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
 import { Badge } from "@/core/shared/ui/shadcn/badge";
-import type { Contact } from "../types";
+import type { Contact } from "../../types";
 
 import { HugeiconsIcon } from "@hugeicons/react";
 import {

@@ -12,13 +12,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@shadcn/select";
-import type { Lead, LeadFormData, LeadStatus } from "../types";
-import { LEAD_STATUS_OPTIONS } from "../types";
+import type { Lead, LeadFormData, LeadStatus } from "../../types";
+import { LEAD_STATUS_OPTIONS } from "../../types";
 import {
   useSectors,
   useSubsectorsBySector,
   useLeadOrigins,
-} from "../hooks/useCatalogs";
+} from "../../hooks/useCatalogs";
 
 interface LeadFormProps {
   lead?: Lead;

@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import type { Lead } from "../../types";
+import type { Lead } from "../../../types";
 import { LeadStatusBadge } from "../LeadStatusBadge";
 import { LeadRowActions } from "./LeadRowActions";
 import { format } from "date-fns";

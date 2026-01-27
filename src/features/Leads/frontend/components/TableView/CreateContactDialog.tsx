@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@shadcn/dialog";
-import { ContactFormData } from "../types";
+import { ContactFormData } from "../../types";
 import { ContactForm } from "./ContactForm";
 import { Button } from "@/core/shared/ui/shadcn/button";
 

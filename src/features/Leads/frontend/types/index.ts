@@ -7,6 +7,7 @@
 // =============================================
 
 export type LeadStatus =
+  | "CONTACTO"
   | "CONTACTO_CALIDO"
   | "SOCIAL_SELLING"
   | "CITA_AGENDADA"
@@ -27,6 +28,7 @@ export type AttachableType = "LEAD" | "CONTACT" | "INTERACTION" | "VACANCY";
 
 // Mapeo de estados para UI
 export const LEAD_STATUS_LABELS: Record<LeadStatus, string> = {
+  CONTACTO: "Contacto",
   CONTACTO_CALIDO: "Contacto Cálido",
   SOCIAL_SELLING: "Social Selling",
   CITA_AGENDADA: "Cita Agendada",
@@ -37,6 +39,7 @@ export const LEAD_STATUS_LABELS: Record<LeadStatus, string> = {
 };
 
 export const LEAD_STATUS_OPTIONS: { value: LeadStatus; label: string }[] = [
+  { value: "CONTACTO", label: "Contacto" },
   { value: "CONTACTO_CALIDO", label: "Contacto Cálido" },
   { value: "SOCIAL_SELLING", label: "Social Selling" },
   { value: "CITA_AGENDADA", label: "Cita Agendada" },

@@ -9,7 +9,7 @@ import { BaseFilterProps } from "@/core/shared/components/DataTable/TableTypes.t
 import { FilterHeaderActions } from "@/core/shared/components/DataTable/FilterHeaderAction";
 import { FilterMultiSelect } from "@/core/shared/components/DataTable/FilterMultiSelect";
 import { Button } from "@/core/shared/ui/shadcn/button";
-import { useSectors } from "../../hooks/useCatalogs";
+import { useSectors } from "../../../hooks/useCatalogs";
 import { SheetFilters } from "./SheetFilters";
 import { useModalState } from "@/core/shared/hooks";
 

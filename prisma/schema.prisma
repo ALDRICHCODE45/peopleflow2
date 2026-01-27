@@ -181,6 +181,7 @@ model Permission {
 // =============================================
 
 enum LeadStatus {
+  CONTACTO
   CONTACTO_CALIDO
   SOCIAL_SELLING
   CITA_AGENDADA

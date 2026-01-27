@@ -1,6 +1,6 @@
 "use client";
 
-import type { Lead } from "../types";
+import type { Lead } from "../../types";
 import {
   Sheet,
   SheetContent,

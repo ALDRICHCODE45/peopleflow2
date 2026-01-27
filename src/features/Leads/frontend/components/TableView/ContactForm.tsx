@@ -6,7 +6,7 @@ import { Input } from "@/core/shared/ui/shadcn/input";
 import { Label } from "@/core/shared/ui/shadcn/label";
 import { Textarea } from "@/core/shared/ui/shadcn/textarea";
 import { Checkbox } from "@/core/shared/ui/shadcn/checkbox";
-import type { ContactFormData } from "../types";
+import type { ContactFormData } from "../../types";
 
 interface ContactFormProps {
   onSubmit: (data: ContactFormData) => Promise<void>;

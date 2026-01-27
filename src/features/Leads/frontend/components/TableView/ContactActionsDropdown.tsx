@@ -10,7 +10,7 @@ import {
 import { Button } from "@shadcn/button";
 import { Ellipsis } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ContactAction } from "../types/ContactAction";
+import { ContactAction } from "../../types/ContactAction";
 
 interface ContactActionDropdownProps {
   actions: ContactAction[];

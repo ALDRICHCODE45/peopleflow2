@@ -12,8 +12,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/core/shared/ui/shadcn/select";
-import type { Contact, InteractionFormData, InteractionType } from "../types";
-import { INTERACTION_TYPE_OPTIONS } from "../types";
+import type {
+  Contact,
+  InteractionFormData,
+  InteractionType,
+} from "../../types";
+import { INTERACTION_TYPE_OPTIONS } from "../../types";
 
 interface InteractionFormProps {
   contacts: Contact[];
@@ -41,10 +45,7 @@ export function InteractionForm({
     await onSubmit(formData);
   };
 
-  const handleChange = (
-    field: keyof InteractionFormData,
-    value: string
-  ) => {
+  const handleChange = (field: keyof InteractionFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 

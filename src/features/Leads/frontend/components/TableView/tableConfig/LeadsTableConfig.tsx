@@ -1,6 +1,6 @@
 import { Add01Icon, FilePlus } from "@hugeicons/core-free-icons";
 import { TableConfig } from "@/core/shared/components/DataTable/TableTypes.types";
-import type { Lead } from "../../types";
+import type { Lead } from "../../../types";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { LeadsTableFilters } from "./LeadsTableFilters";
 

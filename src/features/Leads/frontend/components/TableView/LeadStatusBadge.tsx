@@ -1,10 +1,12 @@
 "use client";
 
 import { Badge } from "@/core/shared/ui/shadcn/badge";
-import type { LeadStatus } from "../types";
-import { LEAD_STATUS_LABELS } from "../types";
+import type { LeadStatus } from "../../types";
+import { LEAD_STATUS_LABELS } from "../../types";
 
 const STATUS_COLORS: Record<LeadStatus, string> = {
+  CONTACTO:
+    "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-300",
   CONTACTO_CALIDO:
     "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
   SOCIAL_SELLING:

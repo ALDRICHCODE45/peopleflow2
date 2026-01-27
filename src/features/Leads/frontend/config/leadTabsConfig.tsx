@@ -9,6 +9,7 @@ import {
   PauseIcon,
   UserGroupIcon,
   MessageMultiple02Icon,
+  UserIcon,
 } from "@hugeicons/core-free-icons";
 import { IconSvgElement } from "@hugeicons/react";
 import type { LeadStatus } from "../types";
@@ -42,6 +43,12 @@ export const LEAD_TABS_CONFIG: readonly LeadTabConfig[] = [
     id: "all",
     label: "Todos",
     icon: Layers,
+  },
+  {
+    id: "CONTACTO",
+    label: "Contacto",
+    statusFilter: "CONTACTO",
+    icon: UserIcon,
   },
   {
     id: "CONTACTO_CALIDO",

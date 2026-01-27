@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/core/shared/ui/shadcn/select";
 import { Field, FieldError, FieldLabel } from "@/core/shared/ui/shadcn/field";
-import { useCreateLeadForm } from "../hooks/useCreateLeadForm";
+import { useCreateLeadForm } from "../../hooks/useCreateLeadForm";
 
 interface CreateLeadFormProps {
   onOpenChange: (open: boolean) => void;

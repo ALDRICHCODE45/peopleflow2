@@ -4,10 +4,17 @@ import { useState } from "react";
 import { Button } from "@/core/shared/ui/shadcn/button";
 import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
 import { Badge } from "@/core/shared/ui/shadcn/badge";
-import { useInteractionsByLead, useAddInteraction } from "../hooks/useInteractions";
-import { useContactsByLead } from "../hooks/useContacts";
-import type { Interaction, InteractionFormData, InteractionType } from "../types";
-import { INTERACTION_TYPE_LABELS } from "../types";
+import {
+  useInteractionsByLead,
+  useAddInteraction,
+} from "../../hooks/useInteractions";
+import { useContactsByLead } from "../../hooks/useContacts";
+import type {
+  Interaction,
+  InteractionFormData,
+  InteractionType,
+} from "../../types";
+import { INTERACTION_TYPE_LABELS } from "../../types";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Add01Icon,
@@ -129,7 +136,10 @@ function InteractionCard({ interaction }: { interaction: Interaction }) {
     <div className="relative pl-10">
       {/* Timeline dot */}
       <div className="absolute left-2 top-3 w-4 h-4 rounded-full bg-background border-2 border-primary flex items-center justify-center">
-        <HugeiconsIcon icon={IconComponent} className="h-2.5 w-2.5 text-primary" />
+        <HugeiconsIcon
+          icon={IconComponent}
+          className="h-2.5 w-2.5 text-primary"
+        />
       </div>
 
       <Card>

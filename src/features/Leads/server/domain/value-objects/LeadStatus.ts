@@ -4,6 +4,7 @@
  */
 
 export type LeadStatusType =
+  | "CONTACTO"
   | "CONTACTO_CALIDO"
   | "SOCIAL_SELLING"
   | "CITA_AGENDADA"
@@ -17,6 +18,7 @@ export type LeadStatusType =
  * Define desde qué estados se puede transicionar a cuáles
  */
 const VALID_TRANSITIONS: Record<LeadStatusType, LeadStatusType[]> = {
+  CONTACTO: ["CONTACTO_CALIDO", "SOCIAL_SELLING", "STAND_BY"],
   CONTACTO_CALIDO: ["SOCIAL_SELLING", "CITA_AGENDADA", "STAND_BY"],
   SOCIAL_SELLING: ["CITA_AGENDADA", "STAND_BY", "CONTACTO_CALIDO"],
   CITA_AGENDADA: ["CITA_ATENDIDA", "STAND_BY", "CONTACTO_CALIDO"],
@@ -24,6 +26,7 @@ const VALID_TRANSITIONS: Record<LeadStatusType, LeadStatusType[]> = {
   CITA_VALIDADA: ["POSICIONES_ASIGNADAS", "STAND_BY"],
   POSICIONES_ASIGNADAS: ["STAND_BY"],
   STAND_BY: [
+    "CONTACTO",
     "CONTACTO_CALIDO",
     "SOCIAL_SELLING",
     "CITA_AGENDADA",
@@ -48,6 +51,7 @@ export class LeadStatusVO {
 
   static isValidStatus(value: string): value is LeadStatusType {
     return [
+      "CONTACTO",
       "CONTACTO_CALIDO",
       "SOCIAL_SELLING",
       "CITA_AGENDADA",

@@ -6,8 +6,8 @@ import {
   useContactsByLead,
   useAddContact,
   useDeleteContact,
-} from "../hooks/useContacts";
-import type { Contact, ContactFormData } from "../types";
+} from "../../hooks/useContacts";
+import type { Contact, ContactFormData } from "../../types";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Add01Icon, UserIcon } from "@hugeicons/core-free-icons";
 import { CreateContactDialog } from "./CreateContactDialog";
