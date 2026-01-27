@@ -47,7 +47,7 @@ export function KanbanColumn({
   });
 
   const { setNodeRef: setDroppableRef } = useDroppable({
-    id: column.id,
+    id: `drop-${column.id}`,
     data: { type: "column", column },
   });
 

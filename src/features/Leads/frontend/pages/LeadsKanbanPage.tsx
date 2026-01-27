@@ -5,9 +5,8 @@ import {
   DndContext,
   DragOverlay,
   DragStartEvent,
-  DragOverEvent,
   DragEndEvent,
-  closestCorners,
+  pointerWithin,
   PointerSensor,
   KeyboardSensor,
   useSensors,
@@ -20,17 +19,24 @@ import {
 } from "@dnd-kit/sortable";
 import { Card, CardContent } from "@shadcn/card";
 import { Button } from "@/core/shared/ui/shadcn/button";
+import { Input } from "@shadcn/input";
+import { Label } from "@shadcn/label";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { PlusSignIcon } from "@hugeicons/core-free-icons";
+import { PlusSignIcon, Filter, Search } from "@hugeicons/core-free-icons";
 import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
+import { FilterMultiSelect } from "@/core/shared/components/DataTable/FilterMultiSelect";
 import { usePaginatedLeadsQuery } from "../hooks/usePaginatedLeadsQuery";
 import { useUpdateLeadStatus } from "../hooks/useLeads";
+import { useSectors } from "../hooks/useCatalogs";
 import { DEFAULT_KANBAN_COLUMNS } from "../components/KanbanView/kanbanTypes";
 import type { KanbanColumn as KanbanColumnType } from "../components/KanbanView/kanbanTypes";
 import { KanbanColumn } from "../components/KanbanView/KanbanColumn";
 import { LeadKanbanCardOverlay } from "../components/KanbanView/LeadKanbanCard";
 import { LeadDetailSheet } from "../components/TableView/LeadDetailSheet";
 import { LeadSheetForm } from "../components/TableView/LeadSheetForm";
+import { SheetFilters } from "../components/TableView/tableConfig/SheetFilters";
+import { useModalState } from "@/core/shared/hooks";
+import { useDebouncedValue } from "@/core/shared/hooks/useDebouncedValue";
 import type { Lead, LeadStatus } from "../types";
 
 export const LeadsKabanPage = () => {
@@ -45,10 +51,40 @@ export const LeadsKabanPage = () => {
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [isCreating, setIsCreating] = useState(false);
 
+  // Search filter with debounce
+  const [searchValue, setSearchValue] = useState("");
+  const debouncedSearch = useDebouncedValue(searchValue, 300);
+
+  // Multi-select filters
+  const [selectedSectorIds, setSelectedSectorIds] = useState<string[]>([]);
+  const [selectedOriginIds, setSelectedOriginIds] = useState<string[]>([]);
+  const [selectedAssignedToIds, setSelectedAssignedToIds] = useState<string[]>([]);
+
+  // Sheet modal for advanced filters
+  const { openModal: openSheetFilters, isOpen: isSheetOpen, closeModal: closeSheetFilters } = useModalState();
+
+  // Catalog data for sector filter
+  const { data: sectors = [] } = useSectors();
+  const sectorOptions = useMemo(() => sectors.map(s => ({ value: s.id, label: s.name })), [sectors]);
+
+  // Clear all filters handler
+  const handleClearFilters = useCallback(() => {
+    setSearchValue("");
+    setSelectedSectorIds([]);
+    setSelectedOriginIds([]);
+    setSelectedAssignedToIds([]);
+  }, []);
+
+  const hasActiveFilters = searchValue.length > 0 || selectedSectorIds.length > 0 || selectedOriginIds.length > 0 || selectedAssignedToIds.length > 0;
+
   // Fetch all leads (large page size for kanban)
-  const { data } = usePaginatedLeadsQuery({
+  const { data, isFetching } = usePaginatedLeadsQuery({
     pageIndex: 0,
     pageSize: 500,
+    globalFilter: debouncedSearch || undefined,
+    sectorIds: selectedSectorIds.length > 0 ? selectedSectorIds : undefined,
+    originIds: selectedOriginIds.length > 0 ? selectedOriginIds : undefined,
+    assignedToIds: selectedAssignedToIds.length > 0 ? selectedAssignedToIds : undefined,
   });
 
   const updateStatusMutation = useUpdateLeadStatus();
@@ -105,36 +141,6 @@ export const LeadsKabanPage = () => {
     }
   }, []);
 
-  const handleDragOver = useCallback(
-    (event: DragOverEvent) => {
-      const { active, over } = event;
-      if (!over) return;
-
-      const activeData = active.data.current;
-      const overData = over.data.current;
-
-      // Only handle lead dragging over columns
-      if (activeData?.type !== "lead") return;
-
-      // Determine target column
-      let targetColumnId: LeadStatus | null = null;
-
-      if (overData?.type === "column") {
-        targetColumnId = overData.column.id;
-      } else if (overData?.type === "lead") {
-        targetColumnId = findColumnForLead(over.id as string);
-      }
-
-      if (!targetColumnId) return;
-
-      const currentStatus = findColumnForLead(active.id as string);
-      if (currentStatus === targetColumnId) return;
-
-      // No local optimistic reordering needed - we just need the drop target
-    },
-    [findColumnForLead],
-  );
-
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event;
@@ -173,12 +179,22 @@ export const LeadsKabanPage = () => {
           targetColumnId = findColumnForLead(over.id as string);
         }
 
-        // Also check if dropped directly on a column droppable (over.id is the column status)
+        // Fallback: extract column status from prefixed droppable/sortable IDs
         if (!targetColumnId) {
           const overIdStr = over.id as string;
-          const columnExists = columns.find((c) => c.id === overIdStr);
-          if (columnExists) {
-            targetColumnId = columnExists.id;
+          let candidateId: string | null = null;
+
+          if (overIdStr.startsWith("drop-")) {
+            candidateId = overIdStr.slice(5);
+          } else if (overIdStr.startsWith("column-")) {
+            candidateId = overIdStr.slice(7);
+          }
+
+          if (candidateId) {
+            const columnExists = columns.find((c) => c.id === candidateId);
+            if (columnExists) {
+              targetColumnId = columnExists.id;
+            }
           }
         }
 
@@ -217,15 +233,76 @@ export const LeadsKabanPage = () => {
             </Button>
           </div>
 
-          {/* Filtros placeholder */}
-          <div>{/* Espacio reservado para filtros */}</div>
+          {/* Filtros */}
+          <div className="flex flex-wrap gap-3 items-end">
+            {/* Búsqueda */}
+            <div className="space-y-2 min-w-0 w-56">
+              <Label htmlFor="kanban-search" className="text-xs font-medium">
+                Búsqueda
+              </Label>
+              <div className="relative w-full min-w-0">
+                <Input
+                  id="kanban-search"
+                  className="w-full pl-9 min-w-0"
+                  placeholder="Buscar lead..."
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                />
+                <HugeiconsIcon
+                  icon={Search}
+                  className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                />
+              </div>
+            </div>
+
+            {/* Sector multi-select */}
+            <div className="w-56">
+              <FilterMultiSelect
+                label="Sector"
+                options={sectorOptions}
+                selected={selectedSectorIds}
+                onChange={setSelectedSectorIds}
+                placeholder="Todos los sectores"
+              />
+            </div>
+
+            {/* Más filtros (origin + assigned user) */}
+            <div className="space-y-2 min-w-0">
+              <Label className="text-xs font-medium">Más filtros</Label>
+              <Button
+                onClick={openSheetFilters}
+                variant="outline-primary"
+                className="w-full min-w-0"
+              >
+                <HugeiconsIcon
+                  icon={Filter}
+                  className="h-5 w-5 text-primary shrink"
+                />
+                Filtros
+              </Button>
+              <SheetFilters
+                isSheetOpen={isSheetOpen}
+                onOpenChange={closeSheetFilters}
+                selectedOriginIds={selectedOriginIds}
+                onOriginChange={setSelectedOriginIds}
+                selectedAssignedToIds={selectedAssignedToIds}
+                onAssignedToChange={setSelectedAssignedToIds}
+              />
+            </div>
+
+            {/* Limpiar filtros */}
+            {hasActiveFilters && (
+              <Button variant="ghost" size="sm" onClick={handleClearFilters}>
+                Limpiar filtros
+              </Button>
+            )}
+          </div>
 
           <div className="overflow-x-auto pb-4 min-h-[75%]">
             <DndContext
               sensors={sensors}
-              collisionDetection={closestCorners}
+              collisionDetection={pointerWithin}
               onDragStart={handleDragStart}
-              onDragOver={handleDragOver}
               onDragEnd={handleDragEnd}
             >
               <SortableContext

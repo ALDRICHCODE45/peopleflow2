@@ -5,8 +5,7 @@ import type { LeadStatus } from "../../types";
 import { LEAD_STATUS_LABELS } from "../../types";
 
 const STATUS_COLORS: Record<LeadStatus, string> = {
-  CONTACTO:
-    "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-300",
+  CONTACTO: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-300",
   CONTACTO_CALIDO:
     "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
   SOCIAL_SELLING:
@@ -28,7 +27,10 @@ interface LeadStatusBadgeProps {
 
 export function LeadStatusBadge({ status }: LeadStatusBadgeProps) {
   return (
-    <Badge className={`${STATUS_COLORS[status]} font-medium rounded-[3px]`}>
+    <Badge
+      className={`${STATUS_COLORS[status]} font-medium rounded-full inline-flex items-center gap-1.5 px-2.5`}
+    >
+      <span className="h-[6px] w-[6px] rounded-full bg-current" />
       {LEAD_STATUS_LABELS[status]}
     </Badge>
   );
