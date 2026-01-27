@@ -42,7 +42,7 @@ export async function createLeadAction(data: {
   sectorId?: string;
   subsectorId?: string;
   originId?: string;
-  assignedToId?: string;
+  assignedToId: string;
 }): Promise<CreateLeadResult> {
   try {
     const headersList = await headers();
@@ -77,7 +77,7 @@ export async function createLeadAction(data: {
     const result = await useCase.execute({
       ...data,
       tenantId,
-      createdById: session.user.id,
+      createdById: data.assignedToId,
     });
 
     if (!result.success) {
@@ -111,7 +111,7 @@ export async function updateLeadAction(
     subsectorId?: string | null;
     originId?: string | null;
     assignedToId?: string | null;
-  }
+  },
 ): Promise<UpdateLeadResult> {
   try {
     const headersList = await headers();
@@ -167,7 +167,9 @@ export async function updateLeadAction(
 /**
  * Elimina un lead (soft delete)
  */
-export async function deleteLeadAction(leadId: string): Promise<DeleteLeadResult> {
+export async function deleteLeadAction(
+  leadId: string,
+): Promise<DeleteLeadResult> {
   try {
     const headersList = await headers();
     const session = await auth.api.getSession({ headers: headersList });
@@ -194,7 +196,10 @@ export async function deleteLeadAction(leadId: string): Promise<DeleteLeadResult
     });
 
     if (!hasPermission) {
-      return { error: "No tienes permisos para eliminar leads", success: false };
+      return {
+        error: "No tienes permisos para eliminar leads",
+        success: false,
+      };
     }
 
     const useCase = new DeleteLeadUseCase(prismaLeadRepository);
@@ -204,7 +209,10 @@ export async function deleteLeadAction(leadId: string): Promise<DeleteLeadResult
     });
 
     if (!result.success) {
-      return { error: result.error || "Error al eliminar lead", success: false };
+      return {
+        error: result.error || "Error al eliminar lead",
+        success: false,
+      };
     }
 
     revalidatePath("/generacion-de-leads/leads");
@@ -222,7 +230,7 @@ export async function deleteLeadAction(leadId: string): Promise<DeleteLeadResult
  * Obtiene un lead por ID
  */
 export async function getLeadByIdAction(
-  leadId: string
+  leadId: string,
 ): Promise<{ error: string | null; lead?: Lead }> {
   try {
     const headersList = await headers();
@@ -278,7 +286,7 @@ export async function getLeadByIdAction(
  */
 export async function updateLeadStatusAction(
   leadId: string,
-  newStatus: LeadStatus
+  newStatus: LeadStatus,
 ): Promise<UpdateLeadStatusResult> {
   try {
     const headersList = await headers();
@@ -311,7 +319,7 @@ export async function updateLeadStatusAction(
 
     const useCase = new UpdateLeadStatusUseCase(
       prismaLeadRepository,
-      prismaLeadStatusHistoryRepository
+      prismaLeadStatusHistoryRepository,
     );
     const result = await useCase.execute({
       leadId,

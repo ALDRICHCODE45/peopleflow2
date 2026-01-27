@@ -1,20 +1,24 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/core/shared/ui/shadcn/button";
-import { Input } from "@/core/shared/ui/shadcn/input";
-import { Label } from "@/core/shared/ui/shadcn/label";
-import { Textarea } from "@/core/shared/ui/shadcn/textarea";
+import { Button } from "@shadcn/button";
+import { Input } from "@shadcn/input";
+import { Label } from "@shadcn/label";
+import { Textarea } from "@shadcn/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/core/shared/ui/shadcn/select";
+} from "@shadcn/select";
 import type { Lead, LeadFormData, LeadStatus } from "../types";
 import { LEAD_STATUS_OPTIONS } from "../types";
-import { useSectors, useSubsectorsBySector, useLeadOrigins } from "../hooks/useCatalogs";
+import {
+  useSectors,
+  useSubsectorsBySector,
+  useLeadOrigins,
+} from "../hooks/useCatalogs";
 
 interface LeadFormProps {
   lead?: Lead;
@@ -31,14 +35,16 @@ export function LeadForm({
 }: LeadFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedSectorId, setSelectedSectorId] = useState<string | undefined>(
-    lead?.sectorId ?? undefined
+    lead?.sectorId ?? undefined,
   );
 
   const { data: sectors = [] } = useSectors();
-  const { data: subsectors = [] } = useSubsectorsBySector(selectedSectorId ?? null);
+  const { data: subsectors = [] } = useSubsectorsBySector(
+    selectedSectorId ?? null,
+  );
   const { data: origins = [] } = useLeadOrigins();
 
-  const [formData, setFormData] = useState<LeadFormData>({
+  const [formData, setFormData] = useState({
     companyName: lead?.companyName ?? "",
     rfc: lead?.rfc ?? "",
     website: lead?.website ?? "",
@@ -61,9 +67,13 @@ export function LeadForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    const finalData = {
+      ...formData,
+      assignedToId: "jkj",
+    };
 
     try {
-      const result = await onSubmit(formData);
+      const result = await onSubmit(finalData);
       if (!result.error) {
         onOpenChange(false);
       }
@@ -74,7 +84,7 @@ export function LeadForm({
 
   const handleChange = (
     field: keyof LeadFormData,
-    value: string | undefined
+    value: string | undefined,
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (field === "sectorId") {
@@ -114,7 +124,9 @@ export function LeadForm({
           <Label htmlFor="status">Estado</Label>
           <Select
             value={formData.status}
-            onValueChange={(value) => handleChange("status", value as LeadStatus)}
+            onValueChange={(value) =>
+              handleChange("status", value as LeadStatus)
+            }
           >
             <SelectTrigger>
               <SelectValue placeholder="Selecciona un estado" />
@@ -264,8 +276,8 @@ export function LeadForm({
               ? "Guardando..."
               : "Creando..."
             : isEditing
-            ? "Guardar cambios"
-            : "Crear lead"}
+              ? "Guardar cambios"
+              : "Crear lead"}
         </Button>
       </div>
     </form>

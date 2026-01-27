@@ -4,8 +4,8 @@ import { Row } from "@tanstack/react-table";
 import { useModalState } from "@/core/shared/hooks/useModalState";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
-import type { Lead, LeadFormData } from "../../types";
-import { useDeleteLead, useUpdateLead } from "../../hooks/useLeads";
+import type { Lead } from "../../types";
+import { useDeleteLead } from "../../hooks/useLeads";
 import { LoadingModalState } from "@/core/shared/components/LoadingModalState";
 import dynamic from "next/dynamic";
 import { Button } from "@/core/shared/ui/shadcn/button";
@@ -75,21 +75,6 @@ export function LeadRowActions({ row }: { row: Row<Lead> }) {
   } = useModalState();
 
   const deleteLeadMutation = useDeleteLead();
-  const updateLeadMutation = useUpdateLead();
-
-  const handleUpdate = async (data: LeadFormData) => {
-    try {
-      await updateLeadMutation.mutateAsync({
-        leadId: lead.id,
-        data,
-      });
-      closeUpdateModal();
-      return { error: null };
-    } catch (e) {
-      console.error(e);
-      return { error: "Error al actualizar" };
-    }
-  };
 
   const handleDelete = async () => {
     await deleteLeadMutation.mutateAsync(lead.id);
@@ -153,13 +138,11 @@ export function LeadRowActions({ row }: { row: Row<Lead> }) {
           PermissionActions.leads.gestionar,
         ]}
       >
-        {isDetailOpen && (
-          <LeadDetailSheet
-            lead={lead}
-            open={isDetailOpen}
-            onOpenChange={closeDetailModal}
-          />
-        )}
+        <LeadDetailSheet
+          lead={lead}
+          open={isDetailOpen}
+          onOpenChange={closeDetailModal}
+        />
       </PermissionGuard>
 
       {/* Modal de edición */}
@@ -169,14 +152,11 @@ export function LeadRowActions({ row }: { row: Row<Lead> }) {
           PermissionActions.leads.gestionar,
         ]}
       >
-        {isUpdateModalOpen && (
-          <LeadSheetForm
-            lead={lead}
-            open={isUpdateModalOpen}
-            onOpenChange={closeUpdateModal}
-            onSubmit={handleUpdate}
-          />
-        )}
+        <LeadSheetForm
+          lead={lead}
+          open={isUpdateModalOpen}
+          onOpenChange={closeUpdateModal}
+        />
       </PermissionGuard>
 
       {/* Modal de eliminación */}
@@ -186,15 +166,13 @@ export function LeadRowActions({ row }: { row: Row<Lead> }) {
           PermissionActions.leads.gestionar,
         ]}
       >
-        {isDeleteOpen && (
-          <DeleteLeadAlertDialog
-            isOpen={isDeleteOpen}
-            onOpenChange={closeDeleteModal}
-            onConfirmDelete={handleDelete}
-            leadName={lead.companyName}
-            isLoading={deleteLeadMutation.isPending}
-          />
-        )}
+        <DeleteLeadAlertDialog
+          isOpen={isDeleteOpen}
+          onOpenChange={closeDeleteModal}
+          onConfirmDelete={handleDelete}
+          leadName={lead.companyName}
+          isLoading={deleteLeadMutation.isPending}
+        />
       </PermissionGuard>
     </>
   );

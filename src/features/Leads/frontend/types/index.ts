@@ -248,7 +248,23 @@ export interface LeadFormData {
   sectorId?: string;
   subsectorId?: string;
   originId?: string;
-  assignedToId?: string;
+  assignedToId: string;
+}
+
+export interface CreateLeadFormData {
+  companyName: string;
+  rfc?: string;
+  website?: string;
+  linkedInUrl?: string;
+  address?: string;
+  notes?: string;
+  sectorId?: string;
+  subsectorId?: string;
+  originId?: string;
+}
+
+export interface EditLeadFormData extends CreateLeadFormData {
+  status: LeadStatus;
 }
 
 export interface ContactFormData {

@@ -8,18 +8,10 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { BaseFilterProps } from "@/core/shared/components/DataTable/TableTypes.types";
 import { FilterHeaderActions } from "@/core/shared/components/DataTable/FilterHeaderAction";
 import { FilterSelect } from "@/core/shared/components/DataTable/FilterSelect";
-import { useState } from "react";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/core/shared/ui/shadcn/sheet";
-import { useIsMobile } from "@/core/shared/hooks/use-mobile";
 import { Button } from "@/core/shared/ui/shadcn/button";
 import { useSectors, useLeadOrigins } from "../../hooks/useCatalogs";
+import { SheetFilters } from "./SheetFilters";
+import { useModalState } from "@/core/shared/hooks";
 
 interface LeadsTableFilterProps extends BaseFilterProps {
   table: Table<unknown>;
@@ -48,23 +40,17 @@ export const LeadsTableFilters = ({
   onClearFilters,
 }: LeadsTableFilterProps) => {
   const { data: sectors = [] } = useSectors();
-  const { data: origins = [] } = useLeadOrigins();
 
-  const [isSheetOpen, setSheetOpen] = useState<boolean>(false);
-
-  const isMobile = useIsMobile();
-
-  const sheetSide = isMobile ? "bottom" : "right";
+  const {
+    openModal: openSheetFilters,
+    isOpen: isOpenSheetFilters,
+    closeModal: closeSheetFilters,
+  } = useModalState();
 
   // Convert sectors and origins to filter options using IDs
   const sectorOptions = [
     { value: "todos", label: "Todos los sectores" },
     ...sectors.map((s) => ({ value: s.id, label: s.name })),
-  ];
-
-  const originOptions = [
-    { value: "todos", label: "Todos los orígenes" },
-    ...origins.map((o) => ({ value: o.id, label: o.name })),
   ];
 
   // Handler for clearing all filters
@@ -127,53 +113,36 @@ export const LeadsTableFilters = ({
             {/* Filtro de sector */}
             <FilterSelect
               label="Sector"
-              onValueChange={(val) => onSectorChange?.(val === "todos" ? undefined : val)}
+              onValueChange={(val) =>
+                onSectorChange?.(val === "todos" ? undefined : val)
+              }
               options={sectorOptions}
               value={selectedSectorId ?? "todos"}
             />
 
             {/* Sheet de filtros adicionales */}
             <div className="space-y-2 w-full min-w-0">
-              <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
-                <Label
-                  htmlFor="categoria-filter"
-                  className="text-xs font-medium"
-                >
-                  Más filtros
-                </Label>
-                <SheetTrigger asChild>
-                  <Button
-                    variant={"outline-primary"}
-                    className="w-full min-w-0"
-                  >
-                    <HugeiconsIcon
-                      icon={Filter}
-                      className="h-5 w-5 text-primary shrink"
-                    />
-                    Filtros
-                  </Button>
-                </SheetTrigger>
-                <SheetContent
-                  width="md"
-                  className="md:mr-8 ml-0 rounded-3xl dark:bg-[#18181B]"
-                  side={sheetSide}
-                >
-                  <SheetHeader>
-                    <SheetTitle>Filtros avanzados</SheetTitle>
-                    <SheetDescription>
-                      Filtra tus leads con opciones adicionales
-                    </SheetDescription>
-                  </SheetHeader>
-                  <div className="mt-6 space-y-4">
-                    <FilterSelect
-                      label="Origen"
-                      onValueChange={(val) => onOriginChange?.(val === "todos" ? undefined : val)}
-                      options={originOptions}
-                      value={selectedOriginId ?? "todos"}
-                    />
-                  </div>
-                </SheetContent>
-              </Sheet>
+              <Label htmlFor="categoria-filter" className="text-xs font-medium">
+                Más filtros
+              </Label>
+              <Button
+                onClick={openSheetFilters}
+                variant={"outline-primary"}
+                className="w-full min-w-0"
+              >
+                <HugeiconsIcon
+                  icon={Filter}
+                  className="h-5 w-5 text-primary shrink"
+                />
+                Filtros
+              </Button>
+
+              <SheetFilters
+                onOpenChange={closeSheetFilters}
+                isSheetOpen={isOpenSheetFilters}
+                onOriginChange={onOriginChange}
+                selectedOriginId={selectedOriginId}
+              />
             </div>
           </div>
         </CardContent>

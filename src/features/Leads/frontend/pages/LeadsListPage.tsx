@@ -2,7 +2,6 @@
 
 import { useMemo, useCallback, useState } from "react";
 import { usePaginatedLeadsQuery } from "../hooks/usePaginatedLeadsQuery";
-import { useCreateLead } from "../hooks/useLeads";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { DataTable } from "@/core/shared/components/DataTable/DataTable";
@@ -14,8 +13,7 @@ import { DataTableTabs } from "@/core/shared/components/DataTable/DataTableTabs"
 import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
 import { LeadSheetForm } from "../components/LeadSheetForm";
 import { useServerPaginatedTable } from "@/core/shared/hooks/useServerPaginatedTable";
-import type { LeadStatus, LeadFormData } from "../types";
-import { useQueryClient } from "@tanstack/react-query";
+import type { LeadStatus } from "../types";
 import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
 import {
   enrichLeadTabsWithCounts,
@@ -23,8 +21,6 @@ import {
 } from "../config/leadTabsConfig";
 
 export function LeadsListPage() {
-  const queryClient = useQueryClient();
-  const createLeadMutation = useCreateLead();
   const { isOpen, openModal, closeModal } = useModalState();
 
   // Server-side filter state for sector and origin
@@ -100,15 +96,6 @@ export function LeadsListPage() {
     openModal();
   }, [openModal]);
 
-  const handleCreateLead = async (formData: LeadFormData) => {
-    const result = await createLeadMutation.mutateAsync(formData);
-    if (result) {
-      closeModal();
-      queryClient.invalidateQueries({ queryKey: ["leads"] });
-    }
-    return { error: null, lead: result };
-  };
-
   // Table configuration with server-side enabled
   const tableConfig = useMemo(
     () =>
@@ -182,13 +169,7 @@ export function LeadsListPage() {
               PermissionActions.leads.gestionar,
             ]}
           >
-            {isOpen && (
-              <LeadSheetForm
-                onSubmit={handleCreateLead}
-                open={true}
-                onOpenChange={closeModal}
-              />
-            )}
+            <LeadSheetForm open={isOpen} onOpenChange={closeModal} />
           </PermissionGuard>
         </div>
       </CardContent>
