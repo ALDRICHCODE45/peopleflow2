@@ -25,7 +25,11 @@ export function useCreateLead() {
       return result.lead;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["leads"] });
+      // Invalidate both paginated and infinite queries
+      queryClient.invalidateQueries({
+        queryKey: ["leads"],
+        refetchType: "active",
+      });
       showToast({
         type: "success",
         title: "Lead creado",
@@ -63,7 +67,11 @@ export function useUpdateLead() {
       return result.lead;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["leads"] });
+      // Invalidate both paginated and infinite queries
+      queryClient.invalidateQueries({
+        queryKey: ["leads"],
+        refetchType: "active",
+      });
       showToast({
         type: "success",
         title: "Lead actualizado",
@@ -95,7 +103,11 @@ export function useDeleteLead() {
       return result.success;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["leads"] });
+      // Invalidate both paginated and infinite queries
+      queryClient.invalidateQueries({
+        queryKey: ["leads"],
+        refetchType: "active",
+      });
       showToast({
         type: "success",
         title: "Lead eliminado",
@@ -113,7 +125,7 @@ export function useDeleteLead() {
 }
 
 /**
- * Hook para actualizar el estado de un lead
+ * Hook para actualizar el estado de un lead con actualizaciones optimistas
  */
 export function useUpdateLeadStatus() {
   const queryClient = useQueryClient();
@@ -132,19 +144,97 @@ export function useUpdateLeadStatus() {
       }
       return result.lead;
     },
+
+    // Optimistic update for instant UI feedback
+    onMutate: async ({ leadId, newStatus }) => {
+      // Cancel any outgoing refetches to avoid overwriting optimistic update
+      await queryClient.cancelQueries({ queryKey: ["leads"] });
+
+      // Snapshot previous data for rollback
+      const previousPaginatedData = queryClient.getQueriesData({
+        queryKey: ["leads", "paginated"],
+      });
+      const previousInfiniteData = queryClient.getQueriesData({
+        queryKey: ["leads", "infinite"],
+      });
+
+      // Optimistically update paginated queries
+      queryClient.setQueriesData(
+        { queryKey: ["leads", "paginated"] },
+        (old: { data?: { id: string; status: LeadStatus }[] } | undefined) => {
+          if (!old?.data) return old;
+          return {
+            ...old,
+            data: old.data.map((lead) =>
+              lead.id === leadId ? { ...lead, status: newStatus } : lead
+            ),
+          };
+        }
+      );
+
+      // Optimistically update infinite queries
+      queryClient.setQueriesData(
+        { queryKey: ["leads", "infinite"] },
+        (
+          old:
+            | {
+                pages?: Array<{
+                  data?: { id: string; status: LeadStatus }[];
+                }>;
+              }
+            | undefined
+        ) => {
+          if (!old?.pages) return old;
+          return {
+            ...old,
+            pages: old.pages.map((page) => ({
+              ...page,
+              data: page.data?.map((lead) =>
+                lead.id === leadId ? { ...lead, status: newStatus } : lead
+              ),
+            })),
+          };
+        }
+      );
+
+      return { previousPaginatedData, previousInfiniteData };
+    },
+
+    // Rollback on error
+    onError: (error: Error, _variables, context) => {
+      // Restore previous paginated data
+      if (context?.previousPaginatedData) {
+        context.previousPaginatedData.forEach(([queryKey, data]) => {
+          queryClient.setQueryData(queryKey, data);
+        });
+      }
+      // Restore previous infinite data
+      if (context?.previousInfiniteData) {
+        context.previousInfiniteData.forEach(([queryKey, data]) => {
+          queryClient.setQueryData(queryKey, data);
+        });
+      }
+
+      showToast({
+        type: "error",
+        title: "Error",
+        description: error.message || "Error al actualizar el estado",
+      });
+    },
+
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["leads"] });
       showToast({
         type: "success",
         title: "Estado actualizado",
         description: "El estado del lead se ha actualizado correctamente",
       });
     },
-    onError: (error: Error) => {
-      showToast({
-        type: "error",
-        title: "Error",
-        description: error.message || "Error al actualizar el estado",
+
+    // Always refetch after error or success to ensure data consistency
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["leads"],
+        refetchType: "active",
       });
     },
   });

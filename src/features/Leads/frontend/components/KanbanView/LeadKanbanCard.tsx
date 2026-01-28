@@ -1,5 +1,6 @@
 "use client";
 
+import { memo, useMemo, useCallback } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import type { Lead } from "../../types";
@@ -11,15 +12,12 @@ import {
   Calendar,
   Document,
   Link,
-  MoreHorizontal,
   People,
 } from "@hugeicons/core-free-icons";
-import { Button } from "@/core/shared/ui/shadcn/button";
 import { Separator } from "@/core/shared/ui/shadcn/separator";
 import {
   Avatar,
   AvatarFallback,
-  AvatarImage,
 } from "@/core/shared/ui/shadcn/avatar";
 import {
   Tooltip,
@@ -41,7 +39,10 @@ interface LeadKanbanCardProps {
   onSelect: (lead: Lead) => void;
 }
 
-export function LeadKanbanCard({ lead, onSelect }: LeadKanbanCardProps) {
+export const LeadKanbanCard = memo(function LeadKanbanCard({
+  lead,
+  onSelect,
+}: LeadKanbanCardProps) {
   const {
     attributes,
     listeners,
@@ -81,16 +82,27 @@ export function LeadKanbanCard({ lead, onSelect }: LeadKanbanCardProps) {
 
   const deleteLeadMutation = useDeleteLead();
 
-  const handleDelete = async () => {
+  // Memoize date formatting to avoid expensive date-fns calculations on every render
+  const formattedDate = useMemo(
+    () => format(new Date(lead.createdAt), "dd MMM yyyy", { locale: es }),
+    [lead.createdAt]
+  );
+
+  const handleDelete = useCallback(async () => {
     await deleteLeadMutation.mutateAsync(lead.id);
     closeDeleteModal();
-  };
+  }, [lead.id, deleteLeadMutation, closeDeleteModal]);
 
-  const kanbanActions = createKanbanActions({
-    onEdit: openUpdateModal,
-    onDelete: openDeleteModal,
-    onReasingnar: openReasignModal,
-  });
+  // Memoize kanban actions to prevent recreation on every render
+  const kanbanActions = useMemo(
+    () =>
+      createKanbanActions({
+        onEdit: openUpdateModal,
+        onDelete: openDeleteModal,
+        onReasingnar: openReasignModal,
+      }),
+    [openUpdateModal, openDeleteModal, openReasignModal]
+  );
 
   return (
     <div
@@ -145,9 +157,7 @@ export function LeadKanbanCard({ lead, onSelect }: LeadKanbanCardProps) {
           className="text-muted-foreground/70"
           size={14}
         />
-        <span className="text-xs text-muted-foreground">
-          {format(new Date(lead.createdAt), "dd MMM yyyy", { locale: es })}
-        </span>
+        <span className="text-xs text-muted-foreground">{formattedDate}</span>
       </div>
 
       <Separator className="mb-3" />
@@ -209,7 +219,7 @@ export function LeadKanbanCard({ lead, onSelect }: LeadKanbanCardProps) {
       </div>
     </div>
   );
-}
+});
 
 export function LeadKanbanCardOverlay({ lead }: { lead: Lead }) {
   return (

@@ -48,7 +48,7 @@ export const TableBodyDataTable = <TData, TValue>({
           aria-label="Tabla con scroll horizontal"
           tabIndex={0}
         >
-          <TableComponent className="w-full min-w-fit" role="table">
+          <TableComponent className="w-full table-fixed" role="table">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id} className="border-b">
@@ -61,6 +61,7 @@ export const TableBodyDataTable = <TData, TValue>({
                         style={{
                           width: `${size}%`,
                           minWidth: `${getColumnMinWidth(size)}px`,
+                          maxWidth: `${size}%`,
                         }}
                       >
                         {header.isPlaceholder ? null : config.enableSorting &&
@@ -123,10 +124,11 @@ export const TableBodyDataTable = <TData, TValue>({
                       return (
                         <TableCell
                           key={cell.id}
-                          className="px-2 sm:px-6 py-4"
+                          className="px-2 sm:px-6 py-4 overflow-hidden whitespace-normal"
                           style={{
                             width: `${size}%`,
                             minWidth: `${getColumnMinWidth(size)}px`,
+                            maxWidth: `${size}%`,
                           }}
                         >
                           {flexRender(

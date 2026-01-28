@@ -1,16 +1,15 @@
 "use client";
 
-import { useMemo, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { Card, CardContent } from "@shadcn/card";
 import { Button } from "@/core/shared/ui/shadcn/button";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { PlusSignIcon } from "@hugeicons/core-free-icons";
 import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
-import { usePaginatedLeadsQuery } from "../hooks/usePaginatedLeadsQuery";
 import { useUpdateLeadStatus } from "../hooks/useLeads";
 import { useKanbanFilters } from "../hooks/useKanbanFilters";
 import { useKanbanDragAndDrop } from "../hooks/useKanbanDragAndDrop";
-import { DEFAULT_KANBAN_COLUMNS } from "../components/KanbanView/kanbanTypes";
+import { useKanbanInfiniteQueries } from "../hooks/useKanbanInfiniteQueries";
 import { KanbanFilters } from "../components/KanbanView/KanbanFilters";
 import { KanbanBoard } from "../components/KanbanView/KanbanBoard";
 import { LeadDetailSheet } from "../components/TableView/LeadDetailSheet";
@@ -23,10 +22,14 @@ export const LeadsKabanPage = () => {
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [isCreating, setIsCreating] = useState(false);
 
-  const { data } = usePaginatedLeadsQuery({
-    pageIndex: 0,
-    pageSize: 500,
-    globalFilter: filters.debouncedSearch || undefined,
+  // Use infinite queries for per-column pagination (20 leads per page)
+  const {
+    leadsByStatus,
+    totalCountByStatus,
+    queryByStatus,
+    allLeads,
+  } = useKanbanInfiniteQueries({
+    search: filters.debouncedSearch || undefined,
     sectorIds:
       filters.selectedSectorIds.length > 0
         ? filters.selectedSectorIds
@@ -41,22 +44,9 @@ export const LeadsKabanPage = () => {
         : undefined,
   });
 
-  const leads = data?.data ?? [];
   const updateStatusMutation = useUpdateLeadStatus();
-  const dnd = useKanbanDragAndDrop({ leads, updateStatusMutation });
-
-  const leadsByStatus = useMemo(() => {
-    const grouped: Record<string, Lead[]> = {};
-    for (const col of DEFAULT_KANBAN_COLUMNS) {
-      grouped[col.id] = [];
-    }
-    for (const lead of leads) {
-      if (grouped[lead.status]) {
-        grouped[lead.status].push(lead);
-      }
-    }
-    return grouped;
-  }, [leads]);
+  // Pass allLeads for drag & drop status lookups
+  const dnd = useKanbanDragAndDrop({ leads: allLeads, updateStatusMutation });
 
   const handleSelectLead = useCallback((lead: Lead) => {
     setSelectedLead(lead);
@@ -81,6 +71,8 @@ export const LeadsKabanPage = () => {
           <KanbanBoard
             dnd={dnd}
             leadsByStatus={leadsByStatus}
+            totalCountByStatus={totalCountByStatus}
+            queryByStatus={queryByStatus}
             onSelectLead={handleSelectLead}
           />
         </div>

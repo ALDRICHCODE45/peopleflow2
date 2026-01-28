@@ -13,21 +13,21 @@ export const LeadColumns: ColumnDef<Lead>[] = [
     cell: ({ row }) => {
       const lead = row.original;
       return (
-        <div className="flex flex-col">
-          <span className="font-medium">{lead.companyName}</span>
+        <div className="flex flex-col min-w-0 w-full overflow-hidden">
+          <p className="font-medium truncate">{lead.companyName}</p>
           {lead.rfc && (
-            <span className="text-xs text-muted-foreground">{lead.rfc}</span>
+            <p className="text-xs text-muted-foreground truncate">{lead.rfc}</p>
           )}
         </div>
       );
     },
-    size: 20,
+    size: 18,
   },
   {
     header: "Estado",
     accessorKey: "status",
     cell: ({ row }) => <LeadStatusBadge status={row.original.status} />,
-    size: 20,
+    size: 12,
   },
   {
     header: "Sector",
@@ -35,29 +35,33 @@ export const LeadColumns: ColumnDef<Lead>[] = [
     cell: ({ row }) => {
       const lead = row.original;
       return (
-        <div className="flex flex-col">
-          <span>{lead.sectorName || "-"}</span>
+        <div className="flex flex-col min-w-0 overflow-hidden">
+          <span className="truncate">{lead.sectorName || "-"}</span>
           {lead.subsectorName && (
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs text-muted-foreground truncate">
               {lead.subsectorName}
             </span>
           )}
         </div>
       );
     },
-    size: 20,
+    size: 14,
   },
   {
     header: "Origen",
     accessorKey: "originName",
-    cell: ({ row }) => row.original.originName || "-",
-    size: 20,
+    cell: ({ row }) => (
+      <span className="truncate block">{row.original.originName || "-"}</span>
+    ),
+    size: 12,
   },
   {
     header: "Asignado",
     accessorKey: "assignedToName",
-    cell: ({ row }) => row.original.assignedToName || "-",
-    size: 20,
+    cell: ({ row }) => (
+      <span className="truncate block">{row.original.assignedToName || "-"}</span>
+    ),
+    size: 14,
   },
   {
     header: "Contactos",
@@ -65,12 +69,12 @@ export const LeadColumns: ColumnDef<Lead>[] = [
     cell: ({ row }) => {
       const count = row.original.contactsCount ?? 0;
       return (
-        <Badge variant="outline" className="font-normal">
+        <Badge variant="outline" className="font-normal whitespace-nowrap">
           {count} {count === 1 ? "contacto" : "contactos"}
         </Badge>
       );
     },
-    size: 20,
+    size: 10,
   },
   {
     header: "Creación",
@@ -78,15 +82,19 @@ export const LeadColumns: ColumnDef<Lead>[] = [
     cell: ({ row }) => {
       const dateStr = row.getValue("createdAt") as string;
       const date = new Date(dateStr);
-      return format(date, "d MMM yyyy", { locale: es });
+      return (
+        <span className="whitespace-nowrap">
+          {format(date, "d MMM yyyy", { locale: es })}
+        </span>
+      );
     },
-    size: 20,
+    size: 12,
   },
   {
     id: "actions",
     header: () => <span className="sr-only">Acciones</span>,
     cell: ({ row }) => <LeadRowActions row={row} />,
-    size: 10,
+    size: 8,
     enableHiding: false,
   },
 ];

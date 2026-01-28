@@ -42,12 +42,24 @@ export function useKanbanDragAndDrop({
     [columns],
   );
 
+  // Create Map for O(1) lead status lookups instead of O(n) find
+  const leadStatusMap = useMemo(() => {
+    const map = new Map<string, LeadStatus>();
+    leads.forEach((lead) => map.set(lead.id, lead.status));
+    return map;
+  }, [leads]);
+
+  // Create Set for O(1) column ID validation
+  const columnIdSet = useMemo(
+    () => new Set(columns.map((c) => c.id)),
+    [columns]
+  );
+
   const findColumnForLead = useCallback(
     (leadId: string): LeadStatus | null => {
-      const lead = leads.find((l) => l.id === leadId);
-      return lead?.status ?? null;
+      return leadStatusMap.get(leadId) ?? null;
     },
-    [leads],
+    [leadStatusMap],
   );
 
   const resolveDropTargetColumn = useCallback(
@@ -70,16 +82,14 @@ export function useKanbanDragAndDrop({
         candidateId = overId.slice(7);
       }
 
-      if (candidateId) {
-        const columnExists = columns.find((c) => c.id === candidateId);
-        if (columnExists) {
-          return columnExists.id;
-        }
+      // Use Set for O(1) validation instead of array.find
+      if (candidateId && columnIdSet.has(candidateId as LeadStatus)) {
+        return candidateId as LeadStatus;
       }
 
       return null;
     },
-    [columns, findColumnForLead],
+    [columnIdSet, findColumnForLead],
   );
 
   const handleDragStart = useCallback((event: DragStartEvent) => {

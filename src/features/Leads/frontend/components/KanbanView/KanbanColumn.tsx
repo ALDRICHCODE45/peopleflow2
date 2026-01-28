@@ -1,5 +1,6 @@
 "use client";
 
+import { memo, useMemo, useEffect, useRef } from "react";
 import {
   SortableContext,
   useSortable,
@@ -11,6 +12,7 @@ import type { Lead, LeadStatus } from "../../types";
 import type { KanbanColumn as KanbanColumnType } from "./kanbanTypes";
 import { LeadKanbanCard } from "./LeadKanbanCard";
 import { Badge } from "@/core/shared/ui/shadcn/badge";
+import { Spinner } from "@/core/shared/ui/shadcn/spinner";
 
 const COLUMN_DOT_COLORS: Record<LeadStatus, string> = {
   CONTACTO: "bg-cyan-500",
@@ -27,12 +29,20 @@ interface KanbanColumnProps {
   column: KanbanColumnType;
   leads: Lead[];
   onSelectLead: (lead: Lead) => void;
+  totalCount?: number;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
+  fetchNextPage?: () => void;
 }
 
-export function KanbanColumn({
+export const KanbanColumn = memo(function KanbanColumn({
   column,
   leads,
   onSelectLead,
+  totalCount,
+  hasNextPage,
+  isFetchingNextPage,
+  fetchNextPage,
 }: KanbanColumnProps) {
   const {
     attributes,
@@ -57,7 +67,31 @@ export function KanbanColumn({
     opacity: isDragging ? 0.5 : 1,
   };
 
-  const leadIds = leads.map((l) => l.id);
+  // Memoize leadIds to prevent unnecessary re-renders of SortableContext
+  const leadIds = useMemo(() => leads.map((l) => l.id), [leads]);
+
+  // Ref for intersection observer (infinite scroll trigger)
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  // Intersection observer for loading more leads when scrolling to bottom
+  useEffect(() => {
+    if (!loadMoreRef.current || !hasNextPage || isFetchingNextPage) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && fetchNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.1, rootMargin: "100px" }
+    );
+
+    observer.observe(loadMoreRef.current);
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  // Display count: show totalCount if available (from server), otherwise leads.length
+  const displayCount = totalCount ?? leads.length;
 
   return (
     <div
@@ -75,7 +109,7 @@ export function KanbanColumn({
         />
         <h3 className="font-semibold text-sm">{column.title}</h3>
         <Badge variant="secondary" className="ml-auto text-xs">
-          {leads.length}
+          {displayCount}
         </Badge>
       </div>
 
@@ -92,7 +126,16 @@ export function KanbanColumn({
             />
           ))}
         </SortableContext>
+
+        {/* Trigger element for infinite scroll */}
+        <div ref={loadMoreRef} className="h-4 shrink-0">
+          {isFetchingNextPage && (
+            <div className="flex justify-center py-2">
+              <Spinner className="size-5" />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
-}
+});

@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import {
   DndContext,
   DragOverlay,
@@ -11,18 +12,23 @@ import {
 } from "@dnd-kit/sortable";
 import { KanbanColumn } from "./KanbanColumn";
 import { LeadKanbanCardOverlay } from "./LeadKanbanCard";
-import type { Lead } from "../../types";
+import type { Lead, LeadStatus } from "../../types";
 import type { UseKanbanDragAndDropReturn } from "../../hooks/useKanbanDragAndDrop";
+import type { UseInfiniteLeadsByStatusReturn } from "../../hooks/useInfiniteLeadsByStatus";
 
 interface KanbanBoardProps {
   dnd: UseKanbanDragAndDropReturn;
   leadsByStatus: Record<string, Lead[]>;
+  totalCountByStatus?: Record<LeadStatus, number>;
+  queryByStatus?: Map<LeadStatus, UseInfiniteLeadsByStatusReturn>;
   onSelectLead: (lead: Lead) => void;
 }
 
 export function KanbanBoard({
   dnd,
   leadsByStatus,
+  totalCountByStatus,
+  queryByStatus,
   onSelectLead,
 }: KanbanBoardProps) {
   const {
@@ -48,14 +54,21 @@ export function KanbanBoard({
           strategy={horizontalListSortingStrategy}
         >
           <div className="flex gap-4 min-w-max min-h-[75vh] items-stretch">
-            {columns.map((column) => (
-              <KanbanColumn
-                key={column.id}
-                column={column}
-                leads={leadsByStatus[column.id] ?? []}
-                onSelectLead={onSelectLead}
-              />
-            ))}
+            {columns.map((column) => {
+              const query = queryByStatus?.get(column.id);
+              return (
+                <KanbanColumn
+                  key={column.id}
+                  column={column}
+                  leads={leadsByStatus[column.id] ?? []}
+                  totalCount={totalCountByStatus?.[column.id]}
+                  hasNextPage={query?.hasNextPage}
+                  isFetchingNextPage={query?.isFetchingNextPage}
+                  fetchNextPage={query?.fetchNextPage}
+                  onSelectLead={onSelectLead}
+                />
+              );
+            })}
           </div>
         </SortableContext>
 
