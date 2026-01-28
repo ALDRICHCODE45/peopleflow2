@@ -28,7 +28,7 @@ interface LeadStatusBadgeProps {
 export function LeadStatusBadge({ status }: LeadStatusBadgeProps) {
   return (
     <Badge
-      className={`${STATUS_COLORS[status]} font-medium rounded-full inline-flex items-center gap-1.5 px-2.5`}
+      className={`${STATUS_COLORS[status]} font-medium rounded-full inline-flex items-center gap-1.5 px-2.5 whitespace-nowrap`}
     >
       <span className="h-[6px] w-[6px] rounded-full bg-current" />
       {LEAD_STATUS_LABELS[status]}

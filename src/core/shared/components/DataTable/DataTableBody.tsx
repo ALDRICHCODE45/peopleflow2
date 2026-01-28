@@ -39,6 +39,11 @@ export const TableBodyDataTable = <TData, TValue>({
   config,
   columns,
 }: TableBodyProps<TData, TValue>) => {
+  // Calculate total min-width from all columns to enable horizontal scroll on mobile
+  const totalMinWidth = table
+    .getAllColumns()
+    .reduce((acc, column) => acc + getColumnMinWidth(column.getSize()), 0);
+
   return (
     <>
       <div className="rounded-lg border shadow-sm w-full min-w-0 overflow-hidden">
@@ -48,7 +53,11 @@ export const TableBodyDataTable = <TData, TValue>({
           aria-label="Tabla con scroll horizontal"
           tabIndex={0}
         >
-          <TableComponent className="w-full table-fixed" role="table">
+          <TableComponent
+            className="w-full table-fixed"
+            role="table"
+            style={{ minWidth: `${totalMinWidth}px` }}
+          >
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id} className="border-b">

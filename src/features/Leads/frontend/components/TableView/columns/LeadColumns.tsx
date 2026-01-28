@@ -21,13 +21,13 @@ export const LeadColumns: ColumnDef<Lead>[] = [
         </div>
       );
     },
-    size: 18,
+    size: 22,
   },
   {
     header: "Estado",
     accessorKey: "status",
     cell: ({ row }) => <LeadStatusBadge status={row.original.status} />,
-    size: 12,
+    size: 24,
   },
   {
     header: "Sector",
@@ -45,7 +45,7 @@ export const LeadColumns: ColumnDef<Lead>[] = [
         </div>
       );
     },
-    size: 14,
+    size: 25,
   },
   {
     header: "Origen",
@@ -53,13 +53,15 @@ export const LeadColumns: ColumnDef<Lead>[] = [
     cell: ({ row }) => (
       <span className="truncate block">{row.original.originName || "-"}</span>
     ),
-    size: 12,
+    size: 11,
   },
   {
     header: "Asignado",
     accessorKey: "assignedToName",
     cell: ({ row }) => (
-      <span className="truncate block">{row.original.assignedToName || "-"}</span>
+      <span className="truncate block">
+        {row.original.assignedToName || "-"}
+      </span>
     ),
     size: 14,
   },
@@ -74,7 +76,7 @@ export const LeadColumns: ColumnDef<Lead>[] = [
         </Badge>
       );
     },
-    size: 10,
+    size: 8,
   },
   {
     header: "Creación",
@@ -88,13 +90,13 @@ export const LeadColumns: ColumnDef<Lead>[] = [
         </span>
       );
     },
-    size: 12,
+    size: 11,
   },
   {
     id: "actions",
     header: () => <span className="sr-only">Acciones</span>,
     cell: ({ row }) => <LeadRowActions row={row} />,
-    size: 8,
+    size: 4,
     enableHiding: false,
   },
 ];
