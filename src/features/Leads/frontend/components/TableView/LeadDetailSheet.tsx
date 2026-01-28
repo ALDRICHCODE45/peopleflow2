@@ -66,7 +66,9 @@ export function LeadDetailSheet({
                 </p>
               )}
             </div>
-            <LeadStatusBadge status={lead.status} />
+            <div className="md:mr-4">
+              <LeadStatusBadge status={lead.status} />
+            </div>
           </div>
 
           {/* Secondary row: links + notes */}
