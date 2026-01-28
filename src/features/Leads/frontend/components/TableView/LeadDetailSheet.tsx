@@ -4,8 +4,6 @@ import { useState } from "react";
 import type { Lead } from "../../types";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@shadcn/sheet";
 import { useIsMobile } from "@/core/shared/hooks/use-mobile";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { Comment01Icon, ExternalLink } from "@hugeicons/core-free-icons";
 import {
   Tabs,
   TabsContent,
@@ -22,6 +20,11 @@ import { Separator } from "@/core/shared/ui/shadcn/separator";
 import Link from "next/link";
 import { Button } from "@/core/shared/ui/shadcn/button";
 import { NotesDialog } from "./NotesDialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/core/shared/ui/shadcn/tooltip";
 
 interface LeadDetailSheetProps {
   lead: Lead;
@@ -36,98 +39,103 @@ export function LeadDetailSheet({
 }: LeadDetailSheetProps) {
   const isMobile = useIsMobile();
   const sheetSide = isMobile ? "bottom" : "right";
-  const [activeTab, setActiveTab] = useState("info");
+  const [activeTab, setActiveTab] = useState("contacts");
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         width="2xl"
-        className="md:mr-8 ml-0 rounded-3xl dark:bg-[#18181B] overflow-y-auto p-5"
+        className="md:mr-8 ml-0 rounded-3xl dark:bg-[#18181B] overflow-y-auto p-0"
         side={sheetSide}
       >
-        <SheetHeader className="space-y-4">
-          <div className="flex items-start justify-between">
-            <div className="flex w-full justify-envently gap-5 items-center">
-              <div className="flex flex-col ">
-                <SheetTitle className="text-xl">{lead.companyName}</SheetTitle>
-                {lead.rfc && (
-                  <p className="text-sm text-muted-foreground mt-1">
-                    RFC: {lead.rfc}
-                  </p>
-                )}
-              </div>
-
-              <NotesDialog
-                trigger={
-                  <Button
-                    buttonTooltip
-                    buttonTooltipText="Notas"
-                    variant="outline"
-                    size="icon"
-                  >
-                    <HugeiconsIcon icon={Comment01Icon} />
-                  </Button>
-                }
-                notes={lead.notes ?? "No hay notas disponibles por el momento"}
-              />
-            </div>
-
-            <div className="flex flex-col items-center gap-2">
-              <LeadStatusBadge status={lead.status} />
-
-              {lead.website && (
-                <Link
-                  href={lead.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm flex text-primary hover:underline mr-12 "
-                >
-                  <span className="truncate">{lead.website}</span>
-                  <HugeiconsIcon icon={ExternalLink} size={17} />
-                </Link>
+        {/* Header */}
+        <SheetHeader className="p-4 pb-3 space-y-3">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+            <div className="flex-1 min-w-0">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <SheetTitle className="text-xl font-semibold truncate">
+                    {lead.companyName}
+                  </SheetTitle>
+                </TooltipTrigger>
+                <TooltipContent>{lead.companyName}</TooltipContent>
+              </Tooltip>
+              {lead.rfc && (
+                <p className="text-sm text-muted-foreground mt-0.5">
+                  RFC: {lead.rfc}
+                </p>
               )}
             </div>
+            <LeadStatusBadge status={lead.status} />
+          </div>
+
+          {/* Secondary row: links + notes */}
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+            {lead.website && (
+              <Link
+                href={lead.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {(() => {
+                  try {
+                    return new URL(lead.website).hostname;
+                  } catch {
+                    return lead.website;
+                  }
+                })()}
+              </Link>
+            )}
+            {lead.linkedInUrl && (
+              <Link
+                href={lead.linkedInUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                LinkedIn
+              </Link>
+            )}
+            <div className="flex-1" />
+            <NotesDialog
+              trigger={
+                <Button variant="ghost" size="sm" className="h-7 px-2">
+                  Notas
+                </Button>
+              }
+              notes={lead.notes ?? "No hay notas disponibles"}
+            />
           </div>
         </SheetHeader>
+
         <Separator />
 
-        <section className="">
-          <div className="grid gap-4">
-            <div className="grid grid-cols-2 gap-4">
-              <InfoItem label="Sector" value={lead.sectorName} />
-              <InfoItem label="Subsector" value={lead.subsectorName} />
-            </div>
+        {/* Info Section */}
+        <section className="p-4 space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <InfoItem label="Sector" value={lead.sectorName} />
+            <InfoItem label="Subsector" value={lead.subsectorName} />
+          </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <InfoItem label="Origen" value={lead.originName} />
-              <InfoItem label="Asignado a" value={lead.assignedToName} />
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <InfoItem label="Origen" value={lead.originName} />
+            <InfoItem label="Asignado a" value={lead.assignedToName} />
+          </div>
 
-            <InfoItem label="Dirección" value={lead.address} />
+          <InfoItem label="Dirección" value={lead.address} />
 
-            {lead.linkedInUrl && (
+          {/* Dates */}
+          <div className="pt-3 border-t">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  LinkedIn
-                </p>
-                <a
-                  href={lead.linkedInUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-primary hover:underline"
-                >
-                  {lead.linkedInUrl}
-                </a>
-              </div>
-            )}
-
-            <div className="grid grid-cols-2 gap-4 pt-4 border-t">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
                   Creado
                 </p>
-                <p className="text-sm">
-                  {format(new Date(lead.createdAt), "PPP", { locale: es })}
+                <p className="text-sm mt-0.5">
+                  {format(new Date(lead.createdAt), "d MMM yyyy", {
+                    locale: es,
+                  })}
                 </p>
                 {lead.createdByName && (
                   <p className="text-xs text-muted-foreground">
@@ -136,41 +144,39 @@ export function LeadDetailSheet({
                 )}
               </div>
               <div>
-                <p className="text-sm font-medium text-muted-foreground">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
                   Actualizado
                 </p>
-                <p className="text-sm">
-                  {format(new Date(lead.updatedAt), "PPP", { locale: es })}
+                <p className="text-sm mt-0.5">
+                  {format(new Date(lead.updatedAt), "d MMM yyyy", {
+                    locale: es,
+                  })}
                 </p>
               </div>
             </div>
           </div>
         </section>
 
+        {/* Tabs */}
         <Tabs
           value={activeTab}
           onValueChange={setActiveTab}
-          className="mt-6  w0-full max-w-full"
+          className="px-4 pb-4"
           defaultValue="contacts"
         >
-          <TabsList className="rounded-none border-b p-0 bg-transparent">
-            <TabsTrigger
-              value="contacts"
-              className="bg-transparent dark:bg-transparent data-[state=active]:bg-transparent dark:data-[state=active]:bg-transparent data-active:bg-transparent dark:data-active:bg-transparent data-[state=active]:border-primary dark:data-[state=active]:border-primary h-full rounded-none border-0 border-t-0 border-l-0 border-r-0 border-b-2 border-transparent data-[state=active]:border-b-2 shadow-none"
-            >
+          <TabsList variant="line">
+            <TabsTrigger value="contacts">
               Contactos
-              {lead.contactsCount !== undefined && (
-                <Badge variant="secondary" className="ml-2">
+              {lead.contactsCount !== undefined && lead.contactsCount > 0 && (
+                <Badge
+                  variant="secondary"
+                  className="ml-1.5 h-5 min-w-5 px-1.5 text-xs"
+                >
                   {lead.contactsCount}
                 </Badge>
               )}
             </TabsTrigger>
-            <TabsTrigger
-              className="bg-transparent dark:bg-transparent data-[state=active]:bg-transparent dark:data-[state=active]:bg-transparent data-active:bg-transparent dark:data-active:bg-transparent data-[state=active]:border-primary dark:data-[state=active]:border-primary h-full rounded-none border-0 border-t-0 border-l-0 border-r-0 border-b-2 border-transparent data-[state=active]:border-b-2 shadow-none"
-              value="interactions"
-            >
-              Interacciones
-            </TabsTrigger>
+            <TabsTrigger value="interactions">Interacciones</TabsTrigger>
           </TabsList>
 
           <TabsContent value="contacts" className="mt-4">
@@ -193,10 +199,14 @@ function InfoItem({
   label: string;
   value: string | null | undefined;
 }) {
+  if (!value) return null;
+
   return (
     <div>
-      <p className="text-sm font-medium text-muted-foreground">{label}</p>
-      <p className="text-sm">{value || "-"}</p>
+      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+        {label}
+      </p>
+      <p className="text-sm mt-0.5">{value}</p>
     </div>
   );
 }
