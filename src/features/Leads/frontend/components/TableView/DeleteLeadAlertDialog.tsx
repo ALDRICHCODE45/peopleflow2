@@ -10,6 +10,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/core/shared/ui/shadcn/alert-dialog";
+import { Button } from "@/core/shared/ui/shadcn/button";
+import { Input } from "@/core/shared/ui/shadcn/input";
+import { useState } from "react";
 
 interface DeleteLeadAlertDialogProps {
   isOpen: boolean;
@@ -26,26 +29,47 @@ export function DeleteLeadAlertDialog({
   leadName,
   isLoading = false,
 }: DeleteLeadAlertDialogProps) {
+  const [inputValue, setInputValue] = useState("");
+
+  const isMatch = inputValue.trim() === leadName;
+
   return (
     <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Eliminar lead</AlertDialogTitle>
+          <AlertDialogTitle>
+            ¿Estás seguro que deseas eliminar este Lead?
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            ¿Estás seguro de que deseas eliminar el lead{" "}
-            <span className="font-semibold">&quot;{leadName}&quot;</span>? Esta
-            acción no se puede deshacer.
+            Esta acción <b>no se puede deshacer</b>. Para confirmar, por favor
+            escribe <b>{leadName}</b> debajo.
           </AlertDialogDescription>
         </AlertDialogHeader>
+        <div className="py-3">
+          <Input
+            autoFocus
+            placeholder="Escribe el nombre de lead"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            data-testid="delete-lead-confirm-input"
+          />
+          {!isMatch && inputValue.length > 0 && (
+            <span className="text-xs text-red-500 mt-1 block">
+              El nombre no coincide.
+            </span>
+          )}
+        </div>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isLoading}>Cancelar</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={onConfirmDelete}
-            disabled={isLoading}
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-          >
-            {isLoading ? "Eliminando..." : "Eliminar"}
-          </AlertDialogAction>
+          <Button asChild variant={"destructive"}>
+            <AlertDialogAction
+              disabled={!isMatch || isLoading}
+              onClick={onConfirmDelete}
+              data-testid="delete-lead-confirm-btn"
+            >
+              {isLoading ? "Eliminando..." : "Eliminar"}
+            </AlertDialogAction>
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

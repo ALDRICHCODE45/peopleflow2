@@ -6,18 +6,14 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/core/shared/ui/shadcn/dropdown-menu";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  Ellipsis,
-  PencilEdit01Icon,
-  UserMultiple02Icon,
-  DeleteIcon,
-} from "@hugeicons/core-free-icons";
+import { Ellipsis } from "@hugeicons/core-free-icons";
 import type { TenantUser } from "../types";
 import { UserSheetForm } from "./UserSheetForm";
 import { UserRolesSheet } from "./UserRolesSheet";
@@ -42,6 +38,8 @@ export function UserRowActions({ user }: UserRowActionsProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+          <DropdownMenuSeparator />
           <PermissionGuard
             permissions={[
               PermissionActions.usuarios.editar,
@@ -49,7 +47,6 @@ export function UserRowActions({ user }: UserRowActionsProps) {
             ]}
           >
             <DropdownMenuItem onClick={() => setIsEditOpen(true)}>
-              <HugeiconsIcon icon={PencilEdit01Icon} className="mr-2 h-4 w-4" />
               Editar
             </DropdownMenuItem>
           </PermissionGuard>
@@ -61,8 +58,7 @@ export function UserRowActions({ user }: UserRowActionsProps) {
             ]}
           >
             <DropdownMenuItem onClick={() => setIsRolesOpen(true)}>
-              <HugeiconsIcon icon={UserMultiple02Icon} className="mr-2 h-4 w-4" />
-              Asignar Roles
+              Roles
             </DropdownMenuItem>
           </PermissionGuard>
 
@@ -75,9 +71,8 @@ export function UserRowActions({ user }: UserRowActionsProps) {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => setIsDeleteOpen(true)}
-              className="text-destructive focus:text-destructive"
+              variant="destructive"
             >
-              <HugeiconsIcon icon={DeleteIcon} className="mr-2 h-4 w-4" />
               Eliminar
             </DropdownMenuItem>
           </PermissionGuard>
@@ -97,23 +92,20 @@ export function UserRowActions({ user }: UserRowActionsProps) {
       {/* Sheet para asignar roles */}
 
       <PermissionGuard permissions={[PermissionActions.usuarios.asignarRoles]}>
-      <UserRolesSheet
-        user={user}
-        open={isRolesOpen}
-        onOpenChange={setIsRolesOpen}
-      />
-
+        <UserRolesSheet
+          user={user}
+          open={isRolesOpen}
+          onOpenChange={setIsRolesOpen}
+        />
       </PermissionGuard>
       <PermissionGuard permissions={[PermissionActions.usuarios.eliminar]}>
-
-      {/* Dialog para eliminar */}
-      <DeleteUserAlertDialog
-        user={user}
-        open={isDeleteOpen}
-        onOpenChange={setIsDeleteOpen}
-      />
+        {/* Dialog para eliminar */}
+        <DeleteUserAlertDialog
+          user={user}
+          open={isDeleteOpen}
+          onOpenChange={setIsDeleteOpen}
+        />
       </PermissionGuard>
-
     </>
   );
 }

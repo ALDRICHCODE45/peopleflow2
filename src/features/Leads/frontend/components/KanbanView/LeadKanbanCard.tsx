@@ -27,15 +27,14 @@ import {
   TooltipTrigger,
 } from "@/core/shared/ui/shadcn/tooltip";
 import { getInitials } from "@/core/shared/helpers/getInitials";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/core/shared/ui/shadcn/dropdown-menu";
+import { useModalState } from "@/core/shared/hooks";
+import { createKanbanActions } from "./helpers/createKanbanActions";
+import { LeadKanbanActionsDropdown } from "./KanbanActionsDropdown";
+import { LeadSheetForm } from "../TableView/LeadSheetForm";
+import { DeleteLeadAlertDialog } from "../TableView/DeleteLeadAlertDialog";
+import { useDeleteLead } from "../../hooks/useLeads";
+import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
+import { PermissionActions } from "@/core/shared/constants/permissions";
 
 interface LeadKanbanCardProps {
   lead: Lead;
@@ -47,6 +46,7 @@ export function LeadKanbanCard({ lead, onSelect }: LeadKanbanCardProps) {
     attributes,
     listeners,
     setNodeRef,
+    setActivatorNodeRef,
     transform,
     transition,
     isDragging,
@@ -61,9 +61,43 @@ export function LeadKanbanCard({ lead, onSelect }: LeadKanbanCardProps) {
     opacity: isDragging ? 0.5 : 1,
   };
 
+  const {
+    isOpen: isUpdateOpen,
+    openModal: openUpdateModal,
+    closeModal: closeUpdateModal,
+  } = useModalState();
+
+  const {
+    isOpen: isDeleteOpen,
+    openModal: openDeleteModal,
+    closeModal: closeDeleteModal,
+  } = useModalState();
+
+  const {
+    isOpen: isReasignOpen,
+    openModal: openReasignModal,
+    closeModal: closeReasignModal,
+  } = useModalState();
+
+  const deleteLeadMutation = useDeleteLead();
+
+  const handleDelete = async () => {
+    await deleteLeadMutation.mutateAsync(lead.id);
+    closeDeleteModal();
+  };
+
+  const kanbanActions = createKanbanActions({
+    onEdit: openUpdateModal,
+    onDelete: openDeleteModal,
+    onReasingnar: openReasignModal,
+  });
+
   return (
     <div
-      ref={setNodeRef}
+      ref={(node) => {
+        setNodeRef(node);
+        setActivatorNodeRef(node);
+      }}
       style={style}
       {...attributes}
       {...listeners}
@@ -73,40 +107,14 @@ export function LeadKanbanCard({ lead, onSelect }: LeadKanbanCardProps) {
       {/* Header: Status badge + menu */}
       <div className="flex items-center justify-between mb-3">
         <LeadStatusBadge status={lead.status} />
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              size={"icon-sm"}
-              variant={"ghost"}
-              className="opacity-0 group-hover:opacity-100 transition-opacity -mr-1"
-            >
-              <HugeiconsIcon
-                icon={MoreHorizontal}
-                className="text-muted-foreground"
-                size={16}
-              />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuGroup>
-              <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-              <DropdownMenuItem>Reasignar</DropdownMenuItem>
-              <DropdownMenuItem>Editar</DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem variant="destructive">
-                Eliminar
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div onClick={(e) => e.stopPropagation()}>
+          <LeadKanbanActionsDropdown actions={kanbanActions} />
+        </div>
       </div>
 
       {/* Company name + avatar */}
       <div className="flex items-start justify-between gap-2 mb-1">
-        <h4 className="font-semibold text-sm text-foreground leading-snug">
+        <h4 className="font-semibold w-2/3 text-sm truncate text-foreground leading-snug">
           {lead.companyName}
         </h4>
         {lead.assignedToName && (
@@ -164,6 +172,40 @@ export function LeadKanbanCard({ lead, onSelect }: LeadKanbanCardProps) {
           />
           <span className="text-xs font-medium text-primary/80">0</span>
         </div>
+      </div>
+
+      <div
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <PermissionGuard
+          permissions={[
+            PermissionActions.leads.editar,
+            PermissionActions.leads.gestionar,
+          ]}
+        >
+          <LeadSheetForm
+            lead={lead}
+            open={isUpdateOpen}
+            onOpenChange={closeUpdateModal}
+          />
+        </PermissionGuard>
+
+        {/* Modal de eliminación */}
+        <PermissionGuard
+          permissions={[
+            PermissionActions.leads.eliminar,
+            PermissionActions.leads.gestionar,
+          ]}
+        >
+          <DeleteLeadAlertDialog
+            isOpen={isDeleteOpen}
+            onOpenChange={closeDeleteModal}
+            onConfirmDelete={handleDelete}
+            leadName={lead.companyName}
+            isLoading={deleteLeadMutation.isPending}
+          />
+        </PermissionGuard>
       </div>
     </div>
   );

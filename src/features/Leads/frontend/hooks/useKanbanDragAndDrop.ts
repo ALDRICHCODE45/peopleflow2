@@ -1,0 +1,160 @@
+"use client";
+
+import { useMemo, useState, useCallback } from "react";
+import {
+  DragStartEvent,
+  DragEndEvent,
+  PointerSensor,
+  KeyboardSensor,
+  useSensors,
+  useSensor,
+} from "@dnd-kit/core";
+import { arrayMove } from "@dnd-kit/sortable";
+import {
+  DEFAULT_KANBAN_COLUMNS,
+  type KanbanColumn,
+} from "../components/KanbanView/kanbanTypes";
+import type { Lead, LeadStatus } from "../types";
+import type { useUpdateLeadStatus } from "./useLeads";
+
+interface UseKanbanDragAndDropParams {
+  leads: Lead[];
+  updateStatusMutation: ReturnType<typeof useUpdateLeadStatus>;
+}
+
+export function useKanbanDragAndDrop({
+  leads,
+  updateStatusMutation,
+}: UseKanbanDragAndDropParams) {
+  const [columns, setColumns] = useState<KanbanColumn[]>(
+    DEFAULT_KANBAN_COLUMNS,
+  );
+  const [activeType, setActiveType] = useState<"lead" | "column" | null>(null);
+  const [activeLead, setActiveLead] = useState<Lead | null>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor),
+  );
+
+  const columnIds = useMemo(
+    () => columns.map((c) => `column-${c.id}`),
+    [columns],
+  );
+
+  const findColumnForLead = useCallback(
+    (leadId: string): LeadStatus | null => {
+      const lead = leads.find((l) => l.id === leadId);
+      return lead?.status ?? null;
+    },
+    [leads],
+  );
+
+  const resolveDropTargetColumn = useCallback(
+    (
+      overData: Record<string, unknown> | undefined,
+      overId: string,
+    ): LeadStatus | null => {
+      if (overData?.type === "column") {
+        return (overData.column as KanbanColumn).id;
+      }
+      if (overData?.type === "lead") {
+        return findColumnForLead(overId);
+      }
+
+      // Fallback: extract column status from prefixed droppable/sortable IDs
+      let candidateId: string | null = null;
+      if (overId.startsWith("drop-")) {
+        candidateId = overId.slice(5);
+      } else if (overId.startsWith("column-")) {
+        candidateId = overId.slice(7);
+      }
+
+      if (candidateId) {
+        const columnExists = columns.find((c) => c.id === candidateId);
+        if (columnExists) {
+          return columnExists.id;
+        }
+      }
+
+      return null;
+    },
+    [columns, findColumnForLead],
+  );
+
+  const handleDragStart = useCallback((event: DragStartEvent) => {
+    const { active } = event;
+    const data = active.data.current;
+
+    if (data?.type === "column") {
+      setActiveType("column");
+    } else if (data?.type === "lead") {
+      setActiveType("lead");
+      setActiveLead(data.lead);
+    }
+  }, []);
+
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
+
+      setActiveType(null);
+      setActiveLead(null);
+
+      if (!over) return;
+
+      const activeData = active.data.current;
+      const overData = over.data.current;
+
+      // Handle column reorder
+      if (activeData?.type === "column" && overData?.type === "column") {
+        const activeColumnId = activeData.column.id;
+        const overColumnId = overData.column.id;
+
+        if (activeColumnId !== overColumnId) {
+          setColumns((prev) => {
+            const oldIndex = prev.findIndex((c) => c.id === activeColumnId);
+            const newIndex = prev.findIndex((c) => c.id === overColumnId);
+            return arrayMove(prev, oldIndex, newIndex);
+          });
+        }
+        return;
+      }
+
+      // Handle lead dropped on column or on another lead
+      if (activeData?.type === "lead") {
+        const targetColumnId = resolveDropTargetColumn(
+          overData,
+          over.id as string,
+        );
+
+        if (!targetColumnId) return;
+
+        const leadId = active.id as string;
+        const currentStatus = findColumnForLead(leadId);
+
+        if (currentStatus && currentStatus !== targetColumnId) {
+          updateStatusMutation.mutate({
+            leadId,
+            newStatus: targetColumnId,
+          });
+        }
+      }
+    },
+    [resolveDropTargetColumn, findColumnForLead, updateStatusMutation],
+  );
+
+  return {
+    columns,
+    sensors,
+    columnIds,
+    activeType,
+    activeLead,
+    handleDragStart,
+    handleDragEnd,
+  };
+}
+
+export type UseKanbanDragAndDropReturn = ReturnType<
+  typeof useKanbanDragAndDrop
+>;
