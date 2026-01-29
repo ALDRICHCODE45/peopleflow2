@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { Card, CardContent } from "@shadcn/card";
 import { Button } from "@/core/shared/ui/shadcn/button";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -23,27 +23,42 @@ export const LeadsKabanPage = () => {
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [isCreating, setIsCreating] = useState(false);
 
+  // Memoize filter object to prevent unnecessary query invalidations
+  const queryFilters = useMemo(
+    () => ({
+      search: filters.debouncedSearch || undefined,
+      sectorIds:
+        filters.debouncedSectorIds.length > 0
+          ? filters.debouncedSectorIds
+          : undefined,
+      originIds:
+        filters.debouncedOriginIds.length > 0
+          ? filters.debouncedOriginIds
+          : undefined,
+      assignedToIds:
+        filters.debouncedAssignedToIds.length > 0
+          ? filters.debouncedAssignedToIds
+          : undefined,
+    }),
+    [
+      filters.debouncedSearch,
+      filters.debouncedSectorIds,
+      filters.debouncedOriginIds,
+      filters.debouncedAssignedToIds,
+    ],
+  );
+
   // Use infinite queries for per-column pagination (20 leads per page)
   const {
     leadsByStatus,
     totalCountByStatus,
     queryByStatus,
     allLeads,
-  } = useKanbanInfiniteQueries({
-    search: filters.debouncedSearch || undefined,
-    sectorIds:
-      filters.selectedSectorIds.length > 0
-        ? filters.selectedSectorIds
-        : undefined,
-    originIds:
-      filters.selectedOriginIds.length > 0
-        ? filters.selectedOriginIds
-        : undefined,
-    assignedToIds:
-      filters.selectedAssignedToIds.length > 0
-        ? filters.selectedAssignedToIds
-        : undefined,
-  });
+    isFetching,
+  } = useKanbanInfiniteQueries(queryFilters);
+
+  // Show loading when filters are pending (debounce) or queries are fetching
+  const isFiltersLoading = filters.isFiltersPending || isFetching;
 
   const updateStatusMutation = useUpdateLeadStatus();
   const prefetchLeadDetails = usePrefetchLeadDetails();
@@ -77,6 +92,7 @@ export const LeadsKabanPage = () => {
             totalCountByStatus={totalCountByStatus}
             queryByStatus={queryByStatus}
             onSelectLead={handleSelectLead}
+            isFiltersLoading={isFiltersLoading}
           />
         </div>
 

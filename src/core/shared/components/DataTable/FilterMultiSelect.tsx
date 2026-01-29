@@ -1,5 +1,6 @@
 "use client";
 
+import { memo, useState, useCallback } from "react";
 import { Label } from "@shadcn/label";
 import {
   DropdownMenu,
@@ -16,7 +17,6 @@ import {
   Tick02Icon,
 } from "@hugeicons/core-free-icons";
 import { cn } from "@core/lib/utils";
-import { useState } from "react";
 
 interface FilterOption {
   value: string;
@@ -31,7 +31,7 @@ interface FilterMultiSelectProps {
   placeholder?: string;
 }
 
-export function FilterMultiSelect({
+export const FilterMultiSelect = memo(function FilterMultiSelect({
   label,
   options,
   selected,
@@ -40,13 +40,16 @@ export function FilterMultiSelect({
 }: FilterMultiSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleToggle = (value: string) => {
-    if (selected.includes(value)) {
-      onChange(selected.filter((v) => v !== value));
-    } else {
-      onChange([...selected, value]);
-    }
-  };
+  const handleToggle = useCallback(
+    (value: string) => {
+      if (selected.includes(value)) {
+        onChange(selected.filter((v) => v !== value));
+      } else {
+        onChange([...selected, value]);
+      }
+    },
+    [selected, onChange],
+  );
 
   return (
     <div className="space-y-2 w-full min-w-0">
@@ -112,4 +115,4 @@ export function FilterMultiSelect({
       </DropdownMenu>
     </div>
   );
-}
+});

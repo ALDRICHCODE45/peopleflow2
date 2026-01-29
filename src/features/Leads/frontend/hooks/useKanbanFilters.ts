@@ -10,10 +10,15 @@ export function useKanbanFilters() {
   const debouncedSearch = useDebouncedValue(searchValue, 300);
 
   const [selectedSectorIds, setSelectedSectorIds] = useState<string[]>([]);
+  const debouncedSectorIds = useDebouncedValue(selectedSectorIds, 300);
+
   const [selectedOriginIds, setSelectedOriginIds] = useState<string[]>([]);
+  const debouncedOriginIds = useDebouncedValue(selectedOriginIds, 300);
+
   const [selectedAssignedToIds, setSelectedAssignedToIds] = useState<string[]>(
     [],
   );
+  const debouncedAssignedToIds = useDebouncedValue(selectedAssignedToIds, 300);
 
   const {
     openModal: openSheetFilters,
@@ -43,22 +48,45 @@ export function useKanbanFilters() {
     [searchValue, selectedSectorIds, selectedOriginIds, selectedAssignedToIds],
   );
 
+  // Detect when filters are pending (user changed but debounce hasn't fired yet)
+  const isFiltersPending = useMemo(
+    () =>
+      searchValue !== debouncedSearch ||
+      selectedSectorIds !== debouncedSectorIds ||
+      selectedOriginIds !== debouncedOriginIds ||
+      selectedAssignedToIds !== debouncedAssignedToIds,
+    [
+      searchValue,
+      debouncedSearch,
+      selectedSectorIds,
+      debouncedSectorIds,
+      selectedOriginIds,
+      debouncedOriginIds,
+      selectedAssignedToIds,
+      debouncedAssignedToIds,
+    ],
+  );
+
   return {
     searchValue,
     setSearchValue,
     debouncedSearch,
     selectedSectorIds,
     setSelectedSectorIds,
+    debouncedSectorIds,
     selectedOriginIds,
     setSelectedOriginIds,
+    debouncedOriginIds,
     selectedAssignedToIds,
     setSelectedAssignedToIds,
+    debouncedAssignedToIds,
     openSheetFilters,
     isSheetOpen,
     closeSheetFilters,
     sectorOptions,
     handleClearFilters,
     hasActiveFilters,
+    isFiltersPending,
   };
 }
 

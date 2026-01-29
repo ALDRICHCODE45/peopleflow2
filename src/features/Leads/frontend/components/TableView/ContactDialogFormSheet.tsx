@@ -7,7 +7,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@shadcn/dialog";
 import { ContactFormData } from "../../types";
 import { ContactForm } from "./ContactForm";
@@ -32,7 +31,7 @@ export const ContactDialogFormSheet = ({
 }: Props) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="min-w-xl">
+      <DialogContent className="w-sm  md:min-w-xl">
         <DialogHeader>
           <DialogTitle>Formulario de contacto</DialogTitle>
           <DialogDescription>

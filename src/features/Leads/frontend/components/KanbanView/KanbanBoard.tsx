@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import {
   DndContext,
   DragOverlay,
@@ -10,6 +10,7 @@ import {
   SortableContext,
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { Spinner } from "@shadcn/spinner";
 import { KanbanColumn } from "./KanbanColumn";
 import { LeadKanbanCardOverlay } from "./LeadKanbanCard";
 import type { Lead, LeadStatus } from "../../types";
@@ -22,14 +23,16 @@ interface KanbanBoardProps {
   totalCountByStatus?: Record<LeadStatus, number>;
   queryByStatus?: Map<LeadStatus, UseInfiniteLeadsByStatusReturn>;
   onSelectLead: (lead: Lead) => void;
+  isFiltersLoading?: boolean;
 }
 
-export function KanbanBoard({
+export const KanbanBoard = memo(function KanbanBoard({
   dnd,
   leadsByStatus,
   totalCountByStatus,
   queryByStatus,
   onSelectLead,
+  isFiltersLoading = false,
 }: KanbanBoardProps) {
   const {
     columns,
@@ -42,7 +45,18 @@ export function KanbanBoard({
   } = dnd;
 
   return (
-    <div className="overflow-x-auto pb-4 min-h-[75%]">
+    <div className="relative overflow-x-auto pb-4 min-h-[75%]">
+      {/* Loading overlay */}
+      {isFiltersLoading && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-background/60 backdrop-blur-[1px] rounded-lg transition-opacity duration-200">
+          <div className="flex items-center gap-3 bg-card px-4 py-3 rounded-lg shadow-lg border border-border/50">
+            <Spinner className="size-5 text-primary" />
+            <span className="text-sm font-medium text-muted-foreground">
+              Aplicando filtros...
+            </span>
+          </div>
+        </div>
+      )}
       <DndContext
         sensors={sensors}
         collisionDetection={pointerWithin}
@@ -80,4 +94,4 @@ export function KanbanBoard({
       </DndContext>
     </div>
   );
-}
+});

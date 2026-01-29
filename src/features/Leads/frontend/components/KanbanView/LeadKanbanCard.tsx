@@ -230,7 +230,16 @@ export const LeadKanbanCard = memo(function LeadKanbanCard({
   );
 });
 
-export function LeadKanbanCardOverlay({ lead }: { lead: Lead }) {
+export const LeadKanbanCardOverlay = memo(function LeadKanbanCardOverlay({
+  lead,
+}: {
+  lead: Lead;
+}) {
+  const formattedDate = useMemo(
+    () => format(new Date(lead.createdAt), "dd MMM yyyy", { locale: es }),
+    [lead.createdAt],
+  );
+
   return (
     <div className="cursor-grabbing rounded-xl border border-border/60 bg-card p-4 shadow-xl scale-[1.03] rotate-[1deg] opacity-90">
       {/* Header: Status badge */}
@@ -266,10 +275,8 @@ export function LeadKanbanCardOverlay({ lead }: { lead: Lead }) {
           className="text-muted-foreground/70"
           size={14}
         />
-        <span className="text-xs text-muted-foreground">
-          {format(new Date(lead.createdAt), "dd MMM yyyy", { locale: es })}
-        </span>
+        <span className="text-xs text-muted-foreground">{formattedDate}</span>
       </div>
     </div>
   );
-}
+});
