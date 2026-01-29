@@ -206,6 +206,7 @@ export type UserWhereInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryListRelationFilter
   interactions?: Prisma.InteractionListRelationFilter
   attachments?: Prisma.AttachmentListRelationFilter
+  notificationsCreated?: Prisma.NotificationListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -224,6 +225,7 @@ export type UserOrderByWithRelationInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryOrderByRelationAggregateInput
   interactions?: Prisma.InteractionOrderByRelationAggregateInput
   attachments?: Prisma.AttachmentOrderByRelationAggregateInput
+  notificationsCreated?: Prisma.NotificationOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -245,6 +247,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   leadStatusChanges?: Prisma.LeadStatusHistoryListRelationFilter
   interactions?: Prisma.InteractionListRelationFilter
   attachments?: Prisma.AttachmentListRelationFilter
+  notificationsCreated?: Prisma.NotificationListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -289,6 +292,7 @@ export type UserCreateInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -307,6 +311,7 @@ export type UserUncheckedCreateInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUpdateInput = {
@@ -325,6 +330,7 @@ export type UserUpdateInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -343,6 +349,7 @@ export type UserUncheckedUpdateInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -547,6 +554,22 @@ export type UserUpdateOneRequiredWithoutAttachmentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAttachmentsInput, Prisma.UserUpdateWithoutAttachmentsInput>, Prisma.UserUncheckedUpdateWithoutAttachmentsInput>
 }
 
+export type UserCreateNestedOneWithoutNotificationsCreatedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsCreatedInput, Prisma.UserUncheckedCreateWithoutNotificationsCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsCreatedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutNotificationsCreatedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsCreatedInput, Prisma.UserUncheckedCreateWithoutNotificationsCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsCreatedInput
+  upsert?: Prisma.UserUpsertWithoutNotificationsCreatedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationsCreatedInput, Prisma.UserUpdateWithoutNotificationsCreatedInput>, Prisma.UserUncheckedUpdateWithoutNotificationsCreatedInput>
+}
+
 export type UserCreateWithoutSessionsInput = {
   id?: string
   email: string
@@ -562,6 +585,7 @@ export type UserCreateWithoutSessionsInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -579,6 +603,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -612,6 +637,7 @@ export type UserUpdateWithoutSessionsInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -629,6 +655,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -646,6 +673,7 @@ export type UserCreateWithoutAccountsInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -663,6 +691,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -696,6 +725,7 @@ export type UserUpdateWithoutAccountsInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -713,6 +743,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutUserRolesInput = {
@@ -730,6 +761,7 @@ export type UserCreateWithoutUserRolesInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutUserRolesInput = {
@@ -747,6 +779,7 @@ export type UserUncheckedCreateWithoutUserRolesInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutUserRolesInput = {
@@ -780,6 +813,7 @@ export type UserUpdateWithoutUserRolesInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserRolesInput = {
@@ -797,6 +831,7 @@ export type UserUncheckedUpdateWithoutUserRolesInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutLeadsAssignedInput = {
@@ -814,6 +849,7 @@ export type UserCreateWithoutLeadsAssignedInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutLeadsAssignedInput = {
@@ -831,6 +867,7 @@ export type UserUncheckedCreateWithoutLeadsAssignedInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutLeadsAssignedInput = {
@@ -853,6 +890,7 @@ export type UserCreateWithoutLeadsCreatedInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutLeadsCreatedInput = {
@@ -870,6 +908,7 @@ export type UserUncheckedCreateWithoutLeadsCreatedInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutLeadsCreatedInput = {
@@ -903,6 +942,7 @@ export type UserUpdateWithoutLeadsAssignedInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLeadsAssignedInput = {
@@ -920,6 +960,7 @@ export type UserUncheckedUpdateWithoutLeadsAssignedInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUpsertWithoutLeadsCreatedInput = {
@@ -948,6 +989,7 @@ export type UserUpdateWithoutLeadsCreatedInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLeadsCreatedInput = {
@@ -965,6 +1007,7 @@ export type UserUncheckedUpdateWithoutLeadsCreatedInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutLeadStatusChangesInput = {
@@ -982,6 +1025,7 @@ export type UserCreateWithoutLeadStatusChangesInput = {
   leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutLeadStatusChangesInput = {
@@ -999,6 +1043,7 @@ export type UserUncheckedCreateWithoutLeadStatusChangesInput = {
   leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutLeadStatusChangesInput = {
@@ -1032,6 +1077,7 @@ export type UserUpdateWithoutLeadStatusChangesInput = {
   leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLeadStatusChangesInput = {
@@ -1049,6 +1095,7 @@ export type UserUncheckedUpdateWithoutLeadStatusChangesInput = {
   leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutInteractionsInput = {
@@ -1066,6 +1113,7 @@ export type UserCreateWithoutInteractionsInput = {
   leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutInteractionsInput = {
@@ -1083,6 +1131,7 @@ export type UserUncheckedCreateWithoutInteractionsInput = {
   leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutInteractionsInput = {
@@ -1116,6 +1165,7 @@ export type UserUpdateWithoutInteractionsInput = {
   leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInteractionsInput = {
@@ -1133,6 +1183,7 @@ export type UserUncheckedUpdateWithoutInteractionsInput = {
   leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutAttachmentsInput = {
@@ -1150,6 +1201,7 @@ export type UserCreateWithoutAttachmentsInput = {
   leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
+  notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutAttachmentsInput = {
@@ -1167,6 +1219,7 @@ export type UserUncheckedCreateWithoutAttachmentsInput = {
   leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
+  notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutAttachmentsInput = {
@@ -1200,6 +1253,7 @@ export type UserUpdateWithoutAttachmentsInput = {
   leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
+  notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAttachmentsInput = {
@@ -1217,6 +1271,95 @@ export type UserUncheckedUpdateWithoutAttachmentsInput = {
   leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
+  notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutNotificationsCreatedInput = {
+  id?: string
+  email: string
+  name?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emailVerified?: boolean
+  image?: string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  leadsAssigned?: Prisma.LeadCreateNestedManyWithoutAssignedToInput
+  leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+}
+
+export type UserUncheckedCreateWithoutNotificationsCreatedInput = {
+  id?: string
+  email: string
+  name?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emailVerified?: boolean
+  image?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  leadsAssigned?: Prisma.LeadUncheckedCreateNestedManyWithoutAssignedToInput
+  leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+}
+
+export type UserCreateOrConnectWithoutNotificationsCreatedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsCreatedInput, Prisma.UserUncheckedCreateWithoutNotificationsCreatedInput>
+}
+
+export type UserUpsertWithoutNotificationsCreatedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsCreatedInput, Prisma.UserUncheckedUpdateWithoutNotificationsCreatedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsCreatedInput, Prisma.UserUncheckedCreateWithoutNotificationsCreatedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutNotificationsCreatedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsCreatedInput, Prisma.UserUncheckedUpdateWithoutNotificationsCreatedInput>
+}
+
+export type UserUpdateWithoutNotificationsCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  leadsAssigned?: Prisma.LeadUpdateManyWithoutAssignedToNestedInput
+  leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutNotificationsCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  leadsAssigned?: Prisma.LeadUncheckedUpdateManyWithoutAssignedToNestedInput
+  leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
 }
 
 
@@ -1233,6 +1376,7 @@ export type UserCountOutputType = {
   leadStatusChanges: number
   interactions: number
   attachments: number
+  notificationsCreated: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1244,6 +1388,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   leadStatusChanges?: boolean | UserCountOutputTypeCountLeadStatusChangesArgs
   interactions?: boolean | UserCountOutputTypeCountInteractionsArgs
   attachments?: boolean | UserCountOutputTypeCountAttachmentsArgs
+  notificationsCreated?: boolean | UserCountOutputTypeCountNotificationsCreatedArgs
 }
 
 /**
@@ -1312,6 +1457,13 @@ export type UserCountOutputTypeCountAttachmentsArgs<ExtArgs extends runtime.Type
   where?: Prisma.AttachmentWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountNotificationsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1329,6 +1481,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   leadStatusChanges?: boolean | Prisma.User$leadStatusChangesArgs<ExtArgs>
   interactions?: boolean | Prisma.User$interactionsArgs<ExtArgs>
   attachments?: boolean | Prisma.User$attachmentsArgs<ExtArgs>
+  notificationsCreated?: boolean | Prisma.User$notificationsCreatedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1372,6 +1525,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   leadStatusChanges?: boolean | Prisma.User$leadStatusChangesArgs<ExtArgs>
   interactions?: boolean | Prisma.User$interactionsArgs<ExtArgs>
   attachments?: boolean | Prisma.User$attachmentsArgs<ExtArgs>
+  notificationsCreated?: boolean | Prisma.User$notificationsCreatedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1388,6 +1542,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     leadStatusChanges: Prisma.$LeadStatusHistoryPayload<ExtArgs>[]
     interactions: Prisma.$InteractionPayload<ExtArgs>[]
     attachments: Prisma.$AttachmentPayload<ExtArgs>[]
+    notificationsCreated: Prisma.$NotificationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1799,6 +1954,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   leadStatusChanges<T extends Prisma.User$leadStatusChangesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$leadStatusChangesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeadStatusHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   interactions<T extends Prisma.User$interactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$interactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InteractionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   attachments<T extends Prisma.User$attachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notificationsCreated<T extends Prisma.User$notificationsCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2412,6 +2568,30 @@ export type User$attachmentsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.AttachmentScalarFieldEnum | Prisma.AttachmentScalarFieldEnum[]
+}
+
+/**
+ * User.notificationsCreated
+ */
+export type User$notificationsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
 }
 
 /**

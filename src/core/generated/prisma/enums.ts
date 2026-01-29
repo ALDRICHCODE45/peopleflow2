@@ -9,6 +9,36 @@
 * 🟢 You can import this file directly.
 */
 
+export const NotificationProvider = {
+  EMAIL: 'EMAIL',
+  TELEGRAM: 'TELEGRAM',
+  WHATSAPP: 'WHATSAPP',
+  SMS: 'SMS'
+} as const
+
+export type NotificationProvider = (typeof NotificationProvider)[keyof typeof NotificationProvider]
+
+
+export const NotificationStatus = {
+  PENDING: 'PENDING',
+  SENDING: 'SENDING',
+  SENT: 'SENT',
+  FAILED: 'FAILED'
+} as const
+
+export type NotificationStatus = (typeof NotificationStatus)[keyof typeof NotificationStatus]
+
+
+export const NotificationPriority = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  CRITICAL: 'CRITICAL'
+} as const
+
+export type NotificationPriority = (typeof NotificationPriority)[keyof typeof NotificationPriority]
+
+
 export const LeadStatus = {
   CONTACTO: 'CONTACTO',
   CONTACTO_CALIDO: 'CONTACTO_CALIDO',

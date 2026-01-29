@@ -107,3 +107,8 @@ export type Attachment = Prisma.AttachmentModel
  * 
  */
 export type Vacancy = Prisma.VacancyModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel

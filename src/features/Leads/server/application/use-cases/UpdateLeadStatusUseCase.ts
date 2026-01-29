@@ -2,6 +2,14 @@ import type { ILeadRepository } from "../../domain/interfaces/ILeadRepository";
 import type { ILeadStatusHistoryRepository } from "../../domain/interfaces/ILeadStatusHistoryRepository";
 import { Lead } from "../../domain/entities/Lead";
 import type { LeadStatusType } from "../../domain/value-objects/LeadStatus";
+import { SendNotificationUseCase } from "@features/Notifications/server/application/use-cases/SendNotificationUseCase";
+import { prismaNotificationRepository } from "@features/Notifications/server/infrastructure/repositories/PrismaNotificationRepository";
+import { emailProvider } from "@features/Notifications/server/infrastructure/providers/EmailProvider";
+import {
+  generateLeadStatusChangeEmail,
+  generateLeadStatusChangePlainText,
+} from "@features/Notifications/server/infrastructure/templates/leadStatusChangeTemplate";
+import prisma from "@lib/prisma";
 
 export interface UpdateLeadStatusInput {
   leadId: string;
@@ -19,7 +27,7 @@ export interface UpdateLeadStatusOutput {
 export class UpdateLeadStatusUseCase {
   constructor(
     private readonly leadRepository: ILeadRepository,
-    private readonly leadStatusHistoryRepository: ILeadStatusHistoryRepository
+    private readonly leadStatusHistoryRepository: ILeadStatusHistoryRepository,
   ) {}
 
   async execute(input: UpdateLeadStatusInput): Promise<UpdateLeadStatusOutput> {
@@ -27,7 +35,7 @@ export class UpdateLeadStatusUseCase {
       // Obtener el lead actual
       const lead = await this.leadRepository.findById(
         input.leadId,
-        input.tenantId
+        input.tenantId,
       );
 
       if (!lead) {
@@ -67,7 +75,7 @@ export class UpdateLeadStatusUseCase {
         input.leadId,
         input.tenantId,
         input.newStatus,
-        input.userId
+        input.userId,
       );
 
       if (!updatedLead) {
@@ -85,6 +93,53 @@ export class UpdateLeadStatusUseCase {
         newStatus: input.newStatus,
         changedById: input.userId,
       });
+
+      // Enviar notificación si el nuevo estado es CONTACTO_CALIDO y hay usuario asignado
+      if (input.newStatus === "CONTACTO_CALIDO" && updatedLead.assignedToId) {
+        try {
+          const assignedUser = await prisma.user.findUnique({
+            where: { id: updatedLead.assignedToId },
+            select: { email: true, name: true },
+          });
+
+          if (assignedUser?.email) {
+            const notificationUseCase = new SendNotificationUseCase(
+              prismaNotificationRepository,
+              [emailProvider],
+            );
+
+            const emailData = {
+              recipientName: assignedUser.name || "Usuario",
+              leadName: updatedLead.companyName,
+              newStatus: "Contacto Calido",
+              appUrl: "https://peopleflow.space",
+            };
+
+            const htmlTemplate = generateLeadStatusChangeEmail(emailData);
+            const plainTextBody = generateLeadStatusChangePlainText(emailData);
+
+            await notificationUseCase.execute({
+              tenantId: input.tenantId,
+              provider: "EMAIL",
+              recipient: "nocheblanca92@gmail.com",
+              subject: `Lead "${updatedLead.companyName}" es ahora Contacto Calido`,
+              body: plainTextBody,
+              priority: "HIGH",
+              metadata: {
+                leadId: updatedLead.id,
+                leadName: updatedLead.companyName,
+                triggerEvent: "LEAD_STATUS_CHANGE",
+                newStatus: "CONTACTO_CALIDO",
+                htmlTemplate: htmlTemplate,
+              },
+              createdById: input.userId,
+            });
+          }
+        } catch (notificationError) {
+          // Log error but don't fail the status update
+          console.error("Error sending notification:", notificationError);
+        }
+      }
 
       return {
         success: true,

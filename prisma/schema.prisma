@@ -32,6 +32,9 @@ model User {
   interactions       Interaction[]
   attachments        Attachment[]
 
+  // Relaciones con módulo de Notificaciones
+  notificationsCreated Notification[] @relation("NotificationCreatedBy")
+
   @@map("user")
 }
 
@@ -111,6 +114,9 @@ model Tenant {
   leadStatusHistory LeadStatusHistory[]
   attachments       Attachment[]
 
+  // Relaciones con módulo de Notificaciones
+  notifications Notification[]
+
   @@map("tenant")
 }
 
@@ -174,6 +180,31 @@ model Permission {
 
   @@index([resource])
   @@index([name])
+}
+
+// =============================================
+// ENUMS DEL MÓDULO DE NOTIFICACIONES
+// =============================================
+
+enum NotificationProvider {
+  EMAIL
+  TELEGRAM
+  WHATSAPP
+  SMS
+}
+
+enum NotificationStatus {
+  PENDING
+  SENDING
+  SENT
+  FAILED
+}
+
+enum NotificationPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
 }
 
 // =============================================
@@ -463,4 +494,41 @@ model Vacancy {
   @@index([status])
   @@index([tenantId, status])
   @@map("vacancy")
+}
+
+// =============================================
+// SISTEMA DE NOTIFICACIONES
+// =============================================
+
+model Notification {
+  id        String               @id @default(uuid())
+  tenantId  String
+  tenant    Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  provider  NotificationProvider
+  status    NotificationStatus   @default(PENDING)
+  priority  NotificationPriority @default(MEDIUM)
+
+  recipient String
+  subject   String?
+  body      String               @db.Text
+  metadata  Json?
+
+  sentAt     DateTime?
+  failedAt   DateTime?
+  error      String?   @db.Text
+  retryCount Int       @default(0)
+  maxRetries Int       @default(3)
+
+  // Auditoría
+  createdById String?
+  createdBy   User?    @relation("NotificationCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([tenantId])
+  @@index([status])
+  @@index([provider])
+  @@index([tenantId, status])
+  @@map("notification")
 }
