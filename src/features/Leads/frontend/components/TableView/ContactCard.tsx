@@ -1,5 +1,3 @@
-import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
-import { Badge } from "@/core/shared/ui/shadcn/badge";
 import type { Contact, ContactFormData } from "../../types";
 
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -13,6 +11,7 @@ import { LeadContactActionsDropdown } from "./LeadContactActionsDropdown";
 import { useModalState } from "@/core/shared/hooks";
 import { ContactDialogFormSheet } from "./ContactDialogFormSheet";
 import { useUpdateContact } from "../../hooks/useContacts";
+import { cn } from "@/core/lib/utils";
 
 export function ContactCard({
   contact,
@@ -54,90 +53,151 @@ export function ContactCard({
     }
   };
 
+  // Generate initials for avatar
+  const initials = `${contact.firstName.charAt(0)}${contact.lastName.charAt(0)}`.toUpperCase();
+
+  // Check if contact has any contact methods
+  const hasContactMethods = contact.email || contact.phone || contact.linkedInUrl;
+
   return (
-    <Card>
-      <CardContent className="p-4">
-        <div className="flex items-start justify-between">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="font-medium">
-                {contact.firstName} {contact.lastName}
-              </span>
-              {contact.isPrimary && (
-                <Badge variant="secondary" className="text-xs">
-                  Principal
-                </Badge>
-              )}
-            </div>
-            {contact.position && (
-              <p className="text-sm text-muted-foreground">
-                {contact.position}
-              </p>
-            )}
-
-            <div className="flex flex-wrap gap-3 mt-2">
-              {contact.email && (
-                <a
-                  href={`mailto:${contact.email}`}
-                  className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
-                >
-                  <HugeiconsIcon icon={Mail01Icon} className="h-4 w-4" />
-                  {contact.email}
-                </a>
-              )}
-              {contact.phone && (
-                <a
-                  href={`tel:${contact.phone}`}
-                  className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
-                >
-                  <HugeiconsIcon icon={Call02Icon} className="h-4 w-4" />
-                  {contact.phone}
-                </a>
-              )}
-              {contact.linkedInUrl && (
-                <a
-                  href={contact.linkedInUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
-                >
-                  <HugeiconsIcon icon={Linkedin01Icon} className="h-4 w-4" />
-                  LinkedIn
-                </a>
-              )}
-            </div>
-          </div>
-
-          <div onClick={(e) => e.stopPropagation()}>
-            <LeadContactActionsDropdown actions={contactCardActions} />
-          </div>
+    <div
+      className={cn(
+        "group relative",
+        "rounded-xl border border-border/40",
+        "bg-gradient-to-b from-background to-muted/20",
+        "p-4 transition-all duration-200",
+        "hover:border-border/80 hover:shadow-sm"
+      )}
+    >
+      {/* Main content row */}
+      <div className="flex items-start gap-3">
+        {/* Avatar */}
+        <div
+          className={cn(
+            "flex-shrink-0 size-10 rounded-full",
+            "flex items-center justify-center",
+            "text-xs font-semibold tracking-wide",
+            contact.isPrimary
+              ? "bg-primary/10 text-primary ring-1 ring-primary/20"
+              : "bg-muted text-muted-foreground"
+          )}
+        >
+          {initials}
         </div>
 
-        {contact.notes && (
-          <p className="text-sm text-muted-foreground mt-2 pt-2 border-t">
-            {contact.notes}
-          </p>
-        )}
+        {/* Info */}
+        <div className="flex-1 min-w-0 space-y-1">
+          {/* Name row */}
+          <div className="flex items-center gap-2">
+            <span className="font-medium text-sm truncate">
+              {contact.firstName} {contact.lastName}
+            </span>
+            {contact.isPrimary && (
+              <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-primary/10 text-primary">
+                Principal
+              </span>
+            )}
+          </div>
 
-        <ContactDialogFormSheet
-          open={isEditModalOpen}
-          onOpenChange={(open) => {
-            if (!open) closeEditModal();
-          }}
-          onSubmit={handleEditContact}
-          isLoading={editContactMutation.isPending}
-          initialData={{
-            firstName: contact.firstName,
-            lastName: contact.lastName,
-            email: contact.email ?? undefined,
-            phone: contact.phone ?? undefined,
-            position: contact.position ?? undefined,
-            linkedInUrl: contact.linkedInUrl ?? undefined,
-            isPrimary: contact.isPrimary,
-            notes: contact.notes ?? undefined,
-          }}
-        />
-      </CardContent>
-    </Card>
+          {/* Position */}
+          {contact.position && (
+            <p className="text-xs text-muted-foreground truncate">
+              {contact.position}
+            </p>
+          )}
+        </div>
+
+        {/* Actions */}
+        <div
+          className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <LeadContactActionsDropdown actions={contactCardActions} />
+        </div>
+      </div>
+
+      {/* Contact methods - compact inline display */}
+      {hasContactMethods && (
+        <div className="flex items-center gap-1 mt-3 ml-13">
+          {contact.email && (
+            <a
+              href={`mailto:${contact.email}`}
+              className={cn(
+                "inline-flex items-center justify-center",
+                "size-7 rounded-md",
+                "text-muted-foreground hover:text-foreground",
+                "hover:bg-muted/80 transition-colors"
+              )}
+              title={contact.email}
+            >
+              <HugeiconsIcon icon={Mail01Icon} className="size-3.5" />
+            </a>
+          )}
+          {contact.phone && (
+            <a
+              href={`tel:${contact.phone}`}
+              className={cn(
+                "inline-flex items-center justify-center",
+                "size-7 rounded-md",
+                "text-muted-foreground hover:text-foreground",
+                "hover:bg-muted/80 transition-colors"
+              )}
+              title={contact.phone}
+            >
+              <HugeiconsIcon icon={Call02Icon} className="size-3.5" />
+            </a>
+          )}
+          {contact.linkedInUrl && (
+            <a
+              href={contact.linkedInUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(
+                "inline-flex items-center justify-center",
+                "size-7 rounded-md",
+                "text-muted-foreground hover:text-[#0A66C2]",
+                "hover:bg-[#0A66C2]/10 transition-colors"
+              )}
+              title="LinkedIn"
+            >
+              <HugeiconsIcon icon={Linkedin01Icon} className="size-3.5" />
+            </a>
+          )}
+
+          {/* Inline contact info - show primary method */}
+          {contact.email && (
+            <span className="ml-1 text-xs text-muted-foreground truncate max-w-[140px]">
+              {contact.email}
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* Notes - subtle display */}
+      {contact.notes && (
+        <p className="mt-3 ml-13 text-xs text-muted-foreground/80 line-clamp-2 italic">
+          {contact.notes}
+        </p>
+      )}
+
+      <ContactDialogFormSheet
+        open={isEditModalOpen}
+        onOpenChange={(open) => {
+          if (!open) closeEditModal();
+        }}
+        onSubmit={handleEditContact}
+        isLoading={editContactMutation.isPending}
+        initialData={{
+          firstName: contact.firstName,
+          lastName: contact.lastName,
+          email: contact.email ?? undefined,
+          phone: contact.phone ?? undefined,
+          position: contact.position ?? undefined,
+          linkedInUrl: contact.linkedInUrl ?? undefined,
+          isPrimary: contact.isPrimary,
+          notes: contact.notes ?? undefined,
+        }}
+      />
+    </div>
   );
 }

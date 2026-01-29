@@ -58,7 +58,9 @@ export function LeadDetailSheet({
                     {lead.companyName}
                   </SheetTitle>
                 </TooltipTrigger>
-                <TooltipContent>{lead.companyName}</TooltipContent>
+                <TooltipContent side="bottom" align="start">
+                  {lead.companyName}
+                </TooltipContent>
               </Tooltip>
               {lead.rfc && (
                 <p className="text-sm text-muted-foreground mt-0.5">

@@ -9,7 +9,7 @@ import {
 } from "../../hooks/useContacts";
 import type { Contact, ContactFormData } from "../../types";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Add01Icon, UserIcon } from "@hugeicons/core-free-icons";
+import { Add01Icon, UserCircleIcon } from "@hugeicons/core-free-icons";
 import { DeleteContactAlertDialog } from "./DeleteContacAlertDialot";
 import { ContactCard } from "./ContactCard";
 import { ContactDialogFormSheet } from "./ContactDialogFormSheet";
@@ -49,18 +49,20 @@ export function ContactsSection({ leadId }: ContactsSectionProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-8">
-        <p className="text-muted-foreground">Cargando contactos...</p>
+      <div className="flex flex-col items-center justify-center py-12 gap-3">
+        <div className="size-8 rounded-full border-2 border-muted-foreground/20 border-t-muted-foreground animate-spin" />
+        <p className="text-sm text-muted-foreground">Cargando contactos...</p>
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
+      {/* Header */}
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-medium">
+        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
           {contacts.length} {contacts.length === 1 ? "contacto" : "contactos"}
-        </h3>
+        </p>
 
         {isOpenEditDialog && (
           <ContactDialogFormSheet
@@ -71,23 +73,44 @@ export function ContactsSection({ leadId }: ContactsSectionProps) {
           />
         )}
 
-        <Button variant="outline" size="sm" onClick={openEditDialog}>
-          <HugeiconsIcon icon={Add01Icon} className="mr-2 h-4 w-4" />
-          Agregar contacto
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={openEditDialog}
+          className="h-8 px-3 text-xs font-medium hover:bg-primary/5 hover:text-primary"
+        >
+          <HugeiconsIcon icon={Add01Icon} className="mr-1.5 size-3.5" />
+          Agregar
         </Button>
       </div>
 
+      {/* Contact list or empty state */}
       {contacts.length === 0 ? (
-        <div className="text-center py-8 text-muted-foreground">
-          <HugeiconsIcon
-            icon={UserIcon}
-            className="h-12 w-12 mx-auto mb-2 opacity-50"
-          />
-          <p>No hay contactos registrados</p>
-          <p className="text-sm">Agrega el primer contacto para este lead</p>
+        <div className="flex flex-col items-center justify-center py-10 px-4 rounded-xl border border-dashed border-border/60 bg-muted/30">
+          <div className="size-12 rounded-full bg-muted flex items-center justify-center mb-3">
+            <HugeiconsIcon
+              icon={UserCircleIcon}
+              className="size-6 text-muted-foreground/60"
+            />
+          </div>
+          <p className="text-sm font-medium text-foreground/80">
+            Sin contactos
+          </p>
+          <p className="text-xs text-muted-foreground mt-1 text-center max-w-[200px]">
+            Agrega contactos para gestionar la comunicación con este lead
+          </p>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={openEditDialog}
+            className="mt-4 h-8 text-xs"
+          >
+            <HugeiconsIcon icon={Add01Icon} className="mr-1.5 size-3.5" />
+            Agregar primer contacto
+          </Button>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2">
           {contacts.map((contact) => (
             <ContactCard
               key={contact.id}
@@ -98,8 +121,7 @@ export function ContactsSection({ leadId }: ContactsSectionProps) {
         </div>
       )}
 
-      {/* Dialog de confirmación para eliminar */}
-
+      {/* Delete confirmation dialog */}
       {!!contactToDelete && (
         <DeleteContactAlertDialog
           isOpen={true}
