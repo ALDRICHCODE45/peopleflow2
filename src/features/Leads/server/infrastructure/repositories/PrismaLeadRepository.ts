@@ -93,7 +93,7 @@ export class PrismaLeadRepository implements ILeadRepository {
 
   async findByTenantId(
     tenantId: string,
-    filters?: FindLeadsFilters
+    filters?: FindLeadsFilters,
   ): Promise<Lead[]> {
     const where = this.buildWhereClause(tenantId, filters);
 
@@ -132,23 +132,31 @@ export class PrismaLeadRepository implements ILeadRepository {
   async update(
     id: string,
     tenantId: string,
-    data: UpdateLeadData
+    data: UpdateLeadData,
   ): Promise<Lead | null> {
     try {
       // Operación atómica: verifica tenantId y actualiza
       const result = await prisma.lead.updateMany({
         where: { id, tenantId, isDeleted: false },
         data: {
-          ...(data.companyName !== undefined && { companyName: data.companyName }),
+          ...(data.companyName !== undefined && {
+            companyName: data.companyName,
+          }),
           ...(data.rfc !== undefined && { rfc: data.rfc }),
           ...(data.website !== undefined && { website: data.website }),
-          ...(data.linkedInUrl !== undefined && { linkedInUrl: data.linkedInUrl }),
+          ...(data.linkedInUrl !== undefined && {
+            linkedInUrl: data.linkedInUrl,
+          }),
           ...(data.address !== undefined && { address: data.address }),
           ...(data.notes !== undefined && { notes: data.notes }),
           ...(data.sectorId !== undefined && { sectorId: data.sectorId }),
-          ...(data.subsectorId !== undefined && { subsectorId: data.subsectorId }),
+          ...(data.subsectorId !== undefined && {
+            subsectorId: data.subsectorId,
+          }),
           ...(data.originId !== undefined && { originId: data.originId }),
-          ...(data.assignedToId !== undefined && { assignedToId: data.assignedToId }),
+          ...(data.assignedToId !== undefined && {
+            assignedToId: data.assignedToId,
+          }),
         },
       });
 
@@ -173,7 +181,7 @@ export class PrismaLeadRepository implements ILeadRepository {
     id: string,
     tenantId: string,
     status: LeadStatusType,
-    _userId: string
+    _userId: string,
   ): Promise<Lead | null> {
     try {
       const result = await prisma.lead.updateMany({
@@ -238,7 +246,9 @@ export class PrismaLeadRepository implements ILeadRepository {
     return prisma.lead.count({ where });
   }
 
-  async findPaginated(params: FindPaginatedParams): Promise<PaginatedResult<Lead>> {
+  async findPaginated(
+    params: FindPaginatedParams,
+  ): Promise<PaginatedResult<Lead>> {
     const { tenantId, skip, take, sorting, filters } = params;
     const where = this.buildWhereClause(tenantId, filters);
 
@@ -276,7 +286,7 @@ export class PrismaLeadRepository implements ILeadRepository {
 
   private buildWhereClause(
     tenantId: string,
-    filters?: FindLeadsFilters
+    filters?: FindLeadsFilters,
   ): Record<string, unknown> {
     const where: Record<string, unknown> = {
       tenantId,
@@ -308,6 +318,24 @@ export class PrismaLeadRepository implements ILeadRepository {
     }
 
     return where;
+  }
+
+  async reasignLead(leadId: string, newUserId: string): Promise<Lead | null> {
+    try {
+      const result = await prisma.lead.update({
+        where: {
+          id: leadId,
+        },
+        data: {
+          assignedToId: newUserId,
+        },
+        include: this.getBaseInclude(),
+      });
+      return this.mapToDomain(result);
+    } catch (error) {
+      console.error("Error updating lead:", error);
+      return null;
+    }
   }
 }
 

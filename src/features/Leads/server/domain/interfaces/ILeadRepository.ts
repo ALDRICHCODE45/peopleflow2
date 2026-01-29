@@ -66,10 +66,7 @@ export interface ILeadRepository {
   /**
    * Obtiene todos los leads de un tenant
    */
-  findByTenantId(
-    tenantId: string,
-    filters?: FindLeadsFilters
-  ): Promise<Lead[]>;
+  findByTenantId(tenantId: string, filters?: FindLeadsFilters): Promise<Lead[]>;
 
   /**
    * Crea un nuevo lead
@@ -82,7 +79,7 @@ export interface ILeadRepository {
   update(
     id: string,
     tenantId: string,
-    data: UpdateLeadData
+    data: UpdateLeadData,
   ): Promise<Lead | null>;
 
   /**
@@ -92,7 +89,7 @@ export interface ILeadRepository {
     id: string,
     tenantId: string,
     status: LeadStatusType,
-    userId: string
+    userId: string,
   ): Promise<Lead | null>;
 
   /**
@@ -114,4 +111,9 @@ export interface ILeadRepository {
    * Obtiene leads paginados con filtros y ordenamiento
    */
   findPaginated(params: FindPaginatedParams): Promise<PaginatedResult<Lead>>;
+
+  /**
+   * Reasigna un lead especifico
+   */
+  reasignLead(leadId: string, newUserId: string): Promise<Lead | null>;
 }

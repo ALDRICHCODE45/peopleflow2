@@ -196,6 +196,11 @@ export interface UpdateLeadStatusResult {
   lead?: Lead;
 }
 
+export interface ReasignLeadResult {
+  error: string | null;
+  lead?: Lead;
+}
+
 export interface GetContactsResult {
   error: string | null;
   contacts: Contact[];

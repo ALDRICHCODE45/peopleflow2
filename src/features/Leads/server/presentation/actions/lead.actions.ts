@@ -22,11 +22,13 @@ import type {
   UpdateLeadResult,
   DeleteLeadResult,
   UpdateLeadStatusResult,
+  ReasignLeadResult,
 } from "../../../frontend/types";
 import type { Lead } from "../../../frontend/types";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
+import { ReasignLeadUseCase } from "../../application/use-cases/ReasignLeadUseCase";
 
 /**
  * Crea un nuevo lead
@@ -342,3 +344,57 @@ export async function updateLeadStatusAction(
     return { error: "Error al actualizar estado del lead" };
   }
 }
+
+export const reasignLeadAction = async (
+  leadId: string,
+  newUserId: string,
+): Promise<ReasignLeadResult> => {
+  try {
+    const headersList = await headers();
+    const session = await auth.api.getSession({ headers: headersList });
+
+    if (!session?.user) {
+      return { error: "No autenticado" };
+    }
+
+    const tenantId = await getActiveTenantId();
+
+    if (!tenantId) {
+      return { error: "No hay tenant activo" };
+    }
+
+    // Verificar permisos
+    const hasAnyPermissionUseCase = new CheckAnyPermissonUseCase();
+    const hasPermission = await hasAnyPermissionUseCase.execute({
+      userId: session.user.id,
+      permissions: [
+        PermissionActions.leads.editar,
+        PermissionActions.leads.gestionar,
+      ],
+      tenantId,
+    });
+
+    if (!hasPermission) {
+      return { error: "No tienes permisos para editar leads" };
+    }
+
+    const usecase = new ReasignLeadUseCase(prismaLeadRepository);
+    const result = await usecase.execute({ leadId, newUserId });
+
+    if (!result.success) {
+      return { error: result.error || "Error al actualizar estado del lead" };
+    }
+
+    revalidatePath("/generacion-de-leads/leads");
+    revalidatePath("/generacion-de-leads/kanban");
+    return {
+      error: null,
+      lead: result.lead?.toJSON(),
+    };
+  } catch (error) {
+    console.error("Error updating lead status:", error);
+    return {
+      error: "Error al reasignar el lead",
+    };
+  }
+};

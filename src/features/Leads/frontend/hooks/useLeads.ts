@@ -1,6 +1,11 @@
 "use client";
 
-import { useMutation, useQueryClient, type InfiniteData, type QueryKey } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  type InfiniteData,
+  type QueryKey,
+} from "@tanstack/react-query";
 import { showToast } from "@/core/shared/components/ShowToast";
 import type { LeadStatus, LeadFormData, Lead } from "../types";
 import {
@@ -8,6 +13,7 @@ import {
   updateLeadAction,
   deleteLeadAction,
   updateLeadStatusAction,
+  reasignLeadAction,
 } from "../../server/presentation/actions/lead.actions";
 import type { PaginationMeta } from "@/core/shared/types/pagination.types";
 
@@ -133,6 +139,44 @@ export function useDeleteLead() {
 }
 
 /**
+ * Hook para reasignar un lead
+ */
+export function useReasignLead() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      leadId,
+      newUserId,
+    }: {
+      leadId: string;
+      newUserId: string;
+    }) => {
+      const result = await reasignLeadAction(leadId, newUserId);
+      if (result.error) {
+        throw new Error(result.error);
+      }
+      return result.lead;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["leads"] });
+      showToast({
+        type: "success",
+        title: "Lead Reasignado",
+        description: "El lead se ha reasignado correctamente",
+      });
+    },
+    onError: (error: Error) => {
+      showToast({
+        type: "error",
+        title: "Error",
+        description: error.message || "Error al reasignar el contacto",
+      });
+    },
+  });
+}
+
+/**
  * Hook para actualizar el estado de un lead con actualizaciones optimistas
  * Optimized: Moves leads between columns instantly without waiting for server response
  */
@@ -181,7 +225,12 @@ export function useUpdateLeadStatus() {
       }
 
       // If lead not found or already in target status, skip optimistic update
-      if (!sourceStatus || !leadToMove || !sourceQueryKey || sourceStatus === newStatus) {
+      if (
+        !sourceStatus ||
+        !leadToMove ||
+        !sourceQueryKey ||
+        sourceStatus === newStatus
+      ) {
         return undefined;
       }
 
@@ -191,17 +240,22 @@ export function useUpdateLeadStatus() {
         sourceQueryKey[0], // "leads"
         sourceQueryKey[1], // "infinite"
         sourceQueryKey[2], // tenantId
-        newStatus,         // new status
+        newStatus, // new status
         sourceQueryKey[4], // filters
       ] as QueryKey;
 
       // 3. Cancel only affected queries to avoid race conditions
-      await queryClient.cancelQueries({ queryKey: sourceQueryKey, exact: true });
+      await queryClient.cancelQueries({
+        queryKey: sourceQueryKey,
+        exact: true,
+      });
       await queryClient.cancelQueries({ queryKey: destQueryKey, exact: true });
 
       // 4. Snapshot previous data for rollback
-      const previousSourceData = queryClient.getQueryData<LeadsInfiniteData>(sourceQueryKey);
-      const previousDestData = queryClient.getQueryData<LeadsInfiniteData>(destQueryKey);
+      const previousSourceData =
+        queryClient.getQueryData<LeadsInfiniteData>(sourceQueryKey);
+      const previousDestData =
+        queryClient.getQueryData<LeadsInfiniteData>(destQueryKey);
 
       // 5. Remove lead from source column
       queryClient.setQueryData<LeadsInfiniteData>(sourceQueryKey, (old) => {
@@ -211,9 +265,13 @@ export function useUpdateLeadStatus() {
           pages: old.pages.map((page, idx) => ({
             ...page,
             data: page.data?.filter((l) => l.id !== leadId) ?? [],
-            pagination: idx === 0
-              ? { ...page.pagination, totalCount: Math.max(0, page.pagination.totalCount - 1) }
-              : page.pagination,
+            pagination:
+              idx === 0
+                ? {
+                    ...page.pagination,
+                    totalCount: Math.max(0, page.pagination.totalCount - 1),
+                  }
+                : page.pagination,
           })),
         };
       });
@@ -223,10 +281,17 @@ export function useUpdateLeadStatus() {
         // If destination column has no data yet, create initial structure
         if (!old?.pages?.length) {
           return {
-            pages: [{
-              data: [leadToMove!],
-              pagination: { pageIndex: 0, pageSize: 20, totalCount: 1, pageCount: 1 },
-            }],
+            pages: [
+              {
+                data: [leadToMove!],
+                pagination: {
+                  pageIndex: 0,
+                  pageSize: 20,
+                  totalCount: 1,
+                  pageCount: 1,
+                },
+              },
+            ],
             pageParams: [0],
           };
         }
@@ -235,23 +300,38 @@ export function useUpdateLeadStatus() {
           pages: old.pages.map((page, idx) => ({
             ...page,
             data: idx === 0 ? [leadToMove!, ...(page.data ?? [])] : page.data,
-            pagination: idx === 0
-              ? { ...page.pagination, totalCount: page.pagination.totalCount + 1 }
-              : page.pagination,
+            pagination:
+              idx === 0
+                ? {
+                    ...page.pagination,
+                    totalCount: page.pagination.totalCount + 1,
+                  }
+                : page.pagination,
           })),
         };
       });
 
-      return { previousSourceData, previousDestData, sourceQueryKey, destQueryKey };
+      return {
+        previousSourceData,
+        previousDestData,
+        sourceQueryKey,
+        destQueryKey,
+      };
     },
 
     // Rollback on error - restore previous data from both columns
     onError: (error: Error, _variables, context) => {
       if (context?.sourceQueryKey && context?.previousSourceData) {
-        queryClient.setQueryData(context.sourceQueryKey, context.previousSourceData);
+        queryClient.setQueryData(
+          context.sourceQueryKey,
+          context.previousSourceData,
+        );
       }
       if (context?.destQueryKey && context?.previousDestData) {
-        queryClient.setQueryData(context.destQueryKey, context.previousDestData);
+        queryClient.setQueryData(
+          context.destQueryKey,
+          context.previousDestData,
+        );
       }
 
       showToast({
@@ -275,10 +355,16 @@ export function useUpdateLeadStatus() {
       if (error && context) {
         // Refetch only affected columns on error
         if (context.sourceQueryKey) {
-          queryClient.invalidateQueries({ queryKey: context.sourceQueryKey, exact: true });
+          queryClient.invalidateQueries({
+            queryKey: context.sourceQueryKey,
+            exact: true,
+          });
         }
         if (context.destQueryKey) {
-          queryClient.invalidateQueries({ queryKey: context.destQueryKey, exact: true });
+          queryClient.invalidateQueries({
+            queryKey: context.destQueryKey,
+            exact: true,
+          });
         }
       }
     },

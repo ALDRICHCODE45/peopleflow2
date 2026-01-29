@@ -1,8 +1,12 @@
+"use client";
 import { Avatar, AvatarFallback } from "@/core/shared/ui/shadcn/avatar";
+import { Button } from "@/core/shared/ui/shadcn/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/core/shared/ui/shadcn/dialog";
@@ -16,15 +20,40 @@ import {
   SelectLabel,
   SelectItem,
 } from "@shadcn/select";
+import { useState } from "react";
+import { useReasignLead } from "../../hooks/useLeads";
+import { IconSvgElement } from "@hugeicons/react";
+import { LoadingButton } from "@/core/shared/ui/shadcn/loading-button";
 
 interface Props {
   isOpen: boolean;
   onOpenChange: () => void;
   leadId: string;
+  icon?: IconSvgElement;
 }
 
-export const ReasignLeadDialog = ({ isOpen, onOpenChange }: Props) => {
+export const ReasignLeadDialog = ({ isOpen, onOpenChange, leadId }: Props) => {
   const { data: users, isPending } = useTenantUsersQuery();
+  const reasignLeadMutation = useReasignLead();
+
+  const [selectedUser, setSelectedUser] = useState<string | undefined>(
+    undefined,
+  );
+
+  const handleSubmit = async () => {
+    if (!selectedUser || !leadId) {
+      return;
+    }
+
+    try {
+      await reasignLeadMutation.mutateAsync({
+        leadId,
+        newUserId: selectedUser,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -35,9 +64,12 @@ export const ReasignLeadDialog = ({ isOpen, onOpenChange }: Props) => {
             Selecciona el generador nuevo a continuacion:
           </DialogDescription>
         </DialogHeader>
-        <Select>
+        <Select
+          onValueChange={(value) => setSelectedUser(value)}
+          value={selectedUser}
+        >
           <SelectTrigger className="w-full ">
-            <SelectValue placeholder="Select framework" />
+            <SelectValue placeholder="Selecciona el usuario" />
           </SelectTrigger>
           <SelectContent className="">
             <SelectGroup>
@@ -53,6 +85,20 @@ export const ReasignLeadDialog = ({ isOpen, onOpenChange }: Props) => {
             </SelectGroup>
           </SelectContent>
         </Select>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant={"outline"}>cancelar</Button>
+          </DialogClose>
+
+          <LoadingButton
+            variant="default"
+            isLoading={reasignLeadMutation.isPending}
+            loadingText="Reasignando..."
+            onClick={handleSubmit}
+          >
+            Reasignar
+          </LoadingButton>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
