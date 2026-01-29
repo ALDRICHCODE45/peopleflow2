@@ -2,6 +2,7 @@ import { AuthGuard } from "@/core/shared/components/AuthGuard";
 import { QueryProvider } from "@/core/shared/components/Providers/QueryProvider";
 import { RouteGuard } from "@/core/shared/components/RouteGuard";
 import { ThemeToogle } from "@/core/shared/components/ThemeToogle";
+import { PermissionProvider } from "@/core/shared/context/PermissionContext";
 import { Separator } from "@/core/shared/ui/shadcn/separator";
 import {
   SidebarInset,
@@ -28,7 +29,8 @@ export default function DashboardLayout({
       <QueryProvider>
         <AuthGuard>
           <TenantProvider>
-            <RouteGuard>
+            <PermissionProvider>
+              <RouteGuard>
               <SidebarProvider defaultOpen={false}>
                 <AppSidebar />
                 <SidebarInset className="flex flex-col min-h-screen w-full min-w-0">
@@ -55,6 +57,7 @@ export default function DashboardLayout({
                 </SidebarInset>
               </SidebarProvider>
             </RouteGuard>
+            </PermissionProvider>
           </TenantProvider>
         </AuthGuard>
       </QueryProvider>

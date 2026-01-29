@@ -1,9 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
-import { getUserPermissionsAction } from "@/features/auth-rbac/server/presentation/actions/permission.actions";
-import { isSuperAdminAction } from "@/features/auth-rbac/server/presentation/actions/user.actions";
+import { useCallback, useMemo } from "react";
+import { usePermissionContext } from "../context/PermissionContext";
 import {
   hasPermission as checkHasPermission,
   hasAnyPermission as checkHasAnyPermission,
@@ -44,49 +42,14 @@ import {
  * ```
  */
 export function usePermissions() {
-  const { tenant, isLoading: isTenantLoading } = useTenant();
-  const [permissions, setPermissions] = useState<string[]>([]);
-  const [superAdmin, setSuperAdmin] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  /**
-   * Carga los permisos del usuario para el tenant actual
-   */
-  const loadPermissions = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      // Cargar permisos y verificar si es super admin en paralelo
-      const [permissionsResult, superAdminResult] = await Promise.all([
-        getUserPermissionsAction(tenant?.id || null),
-        isSuperAdminAction(),
-      ]);
-
-      if (permissionsResult.error) {
-        setError(permissionsResult.error);
-        setPermissions([]);
-      } else {
-        setPermissions(permissionsResult.permissions);
-      }
-
-      setSuperAdmin(superAdminResult);
-    } catch (err) {
-      console.error("Error loading permissions:", err);
-      setError("Error al cargar permisos");
-      setPermissions([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [tenant?.id]);
-
-  // Recargar permisos cuando cambia el tenant
-  useEffect(() => {
-    if (!isTenantLoading) {
-      loadPermissions();
-    }
-  }, [loadPermissions, isTenantLoading]);
+  const {
+    permissions,
+    isSuperAdmin: superAdmin,
+    isLoading,
+    error,
+    refresh,
+    tenantId,
+  } = usePermissionContext();
 
   /**
    * Verifica si el usuario tiene un permiso específico
@@ -155,10 +118,10 @@ export function usePermissions() {
     hasResourceAccess,
     isSuperAdmin,
     isAdmin,
-    isLoading: isLoading || isTenantLoading,
+    isLoading,
     error,
-    refresh: loadPermissions,
-    tenantId: tenant?.id || null,
+    refresh,
+    tenantId,
   };
 }
 
