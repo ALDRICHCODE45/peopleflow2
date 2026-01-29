@@ -1,5 +1,4 @@
 "use client";
-
 import { useMemo, useCallback } from "react";
 import { usePaginatedVacanciesQuery } from "../hooks/usePaginatedVacanciesQuery";
 import { useCreateVacancy } from "../hooks/useCreateVacancy";
@@ -57,7 +56,7 @@ export function VacancyListPage() {
   // Tabs config with dynamic counts
   const tabsConfig = useMemo(
     () => enrichVacancyTabsWithCounts(activeTab as VacancyTabId, totalCount),
-    [activeTab, totalCount]
+    [activeTab, totalCount],
   );
 
   const handleAdd = useCallback(() => {
@@ -65,7 +64,7 @@ export function VacancyListPage() {
   }, [openModal]);
 
   const handleCreateVacancy = async (
-    data: Parameters<typeof createVacancyMutation.mutateAsync>[0]
+    data: Parameters<typeof createVacancyMutation.mutateAsync>[0],
   ) => {
     const result = await createVacancyMutation.mutateAsync(data);
     if (result) {
@@ -88,7 +87,7 @@ export function VacancyListPage() {
           isFetching,
         },
       }),
-    [totalCount, paginationMeta?.pageCount, isLoading, isFetching, handleAdd]
+    [totalCount, paginationMeta?.pageCount, isLoading, isFetching, handleAdd],
   );
 
   return (

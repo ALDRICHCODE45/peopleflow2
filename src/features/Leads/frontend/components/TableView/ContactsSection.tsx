@@ -10,10 +10,10 @@ import {
 import type { Contact, ContactFormData } from "../../types";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Add01Icon, UserIcon } from "@hugeicons/core-free-icons";
-import { CreateContactDialog } from "./CreateContactDialog";
-import { useModalState } from "@/core/shared/hooks/useModalState";
 import { DeleteContactAlertDialog } from "./DeleteContacAlertDialot";
 import { ContactCard } from "./ContactCard";
+import { ContactDialogFormSheet } from "./ContactDialogFormSheet";
+import { useModalState } from "@/core/shared/hooks";
 
 interface ContactsSectionProps {
   leadId: string;
@@ -63,7 +63,7 @@ export function ContactsSection({ leadId }: ContactsSectionProps) {
         </h3>
 
         {isOpenEditDialog && (
-          <CreateContactDialog
+          <ContactDialogFormSheet
             open={true}
             onOpenChange={closeEditDialog}
             onSubmit={handleAddContact}

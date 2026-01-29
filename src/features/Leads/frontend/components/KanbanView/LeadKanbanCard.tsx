@@ -23,6 +23,7 @@ import { LeadKanbanActionsDropdown } from "./KanbanActionsDropdown";
 import { LeadSheetForm } from "../TableView/LeadSheetForm";
 import { DeleteLeadAlertDialog } from "../TableView/DeleteLeadAlertDialog";
 import { useDeleteLead } from "../../hooks/useLeads";
+import { usePrefetchLeadDetails } from "../../hooks/usePrefetchLeadDetails";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { ReasignLeadDialog } from "./ReasignLeadDialog";
@@ -74,6 +75,7 @@ export const LeadKanbanCard = memo(function LeadKanbanCard({
   } = useModalState();
 
   const deleteLeadMutation = useDeleteLead();
+  const prefetchLeadDetails = usePrefetchLeadDetails();
 
   // Memoize date formatting to avoid expensive date-fns calculations on every render
   const formattedDate = useMemo(
@@ -107,6 +109,7 @@ export const LeadKanbanCard = memo(function LeadKanbanCard({
       {...attributes}
       {...listeners}
       onClick={() => onSelect(lead)}
+      onMouseEnter={() => prefetchLeadDetails(lead.id)}
       className="cursor-grab active:cursor-grabbing rounded-xl border border-border/60 bg-card p-4 shadow-sm hover:shadow-md transition-all duration-200 group"
     >
       {/* Header: Status badge + menu */}

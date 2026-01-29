@@ -25,6 +25,7 @@ export function useContactsByLead(leadId: string | null) {
       return result.contacts;
     },
     enabled: !!leadId,
+    staleTime: 5 * 60 * 1000, // 5 minutes - reduces refetches when reopening sheet
   });
 }
 

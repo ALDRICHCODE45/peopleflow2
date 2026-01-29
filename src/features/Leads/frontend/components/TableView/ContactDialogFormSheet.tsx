@@ -22,7 +22,7 @@ interface Props {
   onOpenChange: (open: boolean) => void;
 }
 
-export const CreateContactDialog = ({
+export const ContactDialogFormSheet = ({
   onSubmit,
   isLoading,
   initialData,

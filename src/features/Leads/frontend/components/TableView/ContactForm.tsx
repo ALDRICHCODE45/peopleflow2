@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/core/shared/ui/shadcn/button";
 import { Input } from "@/core/shared/ui/shadcn/input";
 import { Label } from "@/core/shared/ui/shadcn/label";
@@ -29,6 +29,19 @@ export function ContactForm({
     isPrimary: initialData?.isPrimary ?? false,
     notes: initialData?.notes ?? "",
   });
+
+  useEffect(() => {
+    setFormData({
+      firstName: initialData?.firstName ?? "",
+      lastName: initialData?.lastName ?? "",
+      email: initialData?.email ?? "",
+      phone: initialData?.phone ?? "",
+      position: initialData?.position ?? "",
+      linkedInUrl: initialData?.linkedInUrl ?? "",
+      isPrimary: initialData?.isPrimary ?? false,
+      notes: initialData?.notes ?? "",
+    });
+  }, [initialData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

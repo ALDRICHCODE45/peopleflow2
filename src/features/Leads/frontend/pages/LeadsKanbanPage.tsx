@@ -7,6 +7,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { PlusSignIcon } from "@hugeicons/core-free-icons";
 import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
 import { useUpdateLeadStatus } from "../hooks/useLeads";
+import { usePrefetchLeadDetails } from "../hooks/usePrefetchLeadDetails";
 import { useKanbanFilters } from "../hooks/useKanbanFilters";
 import { useKanbanDragAndDrop } from "../hooks/useKanbanDragAndDrop";
 import { useKanbanInfiniteQueries } from "../hooks/useKanbanInfiniteQueries";
@@ -45,12 +46,14 @@ export const LeadsKabanPage = () => {
   });
 
   const updateStatusMutation = useUpdateLeadStatus();
+  const prefetchLeadDetails = usePrefetchLeadDetails();
   // Pass allLeads for drag & drop status lookups
   const dnd = useKanbanDragAndDrop({ leads: allLeads, updateStatusMutation });
 
   const handleSelectLead = useCallback((lead: Lead) => {
+    prefetchLeadDetails(lead.id); // Backup prefetch in case hover didn't trigger
     setSelectedLead(lead);
-  }, []);
+  }, [prefetchLeadDetails]);
 
   return (
     <Card className="p-2 m-1">

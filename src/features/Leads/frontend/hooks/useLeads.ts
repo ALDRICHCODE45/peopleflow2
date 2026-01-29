@@ -1,14 +1,22 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, type InfiniteData, type QueryKey } from "@tanstack/react-query";
 import { showToast } from "@/core/shared/components/ShowToast";
-import type { LeadStatus, LeadFormData } from "../types";
+import type { LeadStatus, LeadFormData, Lead } from "../types";
 import {
   createLeadAction,
   updateLeadAction,
   deleteLeadAction,
   updateLeadStatusAction,
 } from "../../server/presentation/actions/lead.actions";
+import type { PaginationMeta } from "@/core/shared/types/pagination.types";
+
+interface InfiniteLeadsPage {
+  data: Lead[];
+  pagination: PaginationMeta;
+}
+
+type LeadsInfiniteData = InfiniteData<InfiniteLeadsPage, number>;
 
 /**
  * Hook para crear un lead
@@ -126,6 +134,7 @@ export function useDeleteLead() {
 
 /**
  * Hook para actualizar el estado de un lead con actualizaciones optimistas
+ * Optimized: Moves leads between columns instantly without waiting for server response
  */
 export function useUpdateLeadStatus() {
   const queryClient = useQueryClient();
@@ -145,74 +154,104 @@ export function useUpdateLeadStatus() {
       return result.lead;
     },
 
-    // Optimistic update for instant UI feedback
+    // Optimistic update: Move lead between columns instantly
     onMutate: async ({ leadId, newStatus }) => {
-      // Cancel any outgoing refetches to avoid overwriting optimistic update
-      await queryClient.cancelQueries({ queryKey: ["leads"] });
-
-      // Snapshot previous data for rollback
-      const previousPaginatedData = queryClient.getQueriesData({
-        queryKey: ["leads", "paginated"],
-      });
-      const previousInfiniteData = queryClient.getQueriesData({
+      // 1. Find the lead in infinite queries to get its current status
+      const allInfiniteQueries = queryClient.getQueriesData<LeadsInfiniteData>({
         queryKey: ["leads", "infinite"],
       });
 
-      // Optimistically update paginated queries
-      queryClient.setQueriesData(
-        { queryKey: ["leads", "paginated"] },
-        (old: { data?: { id: string; status: LeadStatus }[] } | undefined) => {
-          if (!old?.data) return old;
+      let sourceStatus: LeadStatus | null = null;
+      let leadToMove: Lead | null = null;
+      let sourceQueryKey: QueryKey | null = null;
+
+      // Search through all infinite queries to find the lead
+      for (const [queryKey, data] of allInfiniteQueries) {
+        if (!data?.pages) continue;
+        for (const page of data.pages) {
+          const foundLead = page.data?.find((l) => l.id === leadId);
+          if (foundLead) {
+            sourceStatus = foundLead.status;
+            leadToMove = { ...foundLead, status: newStatus };
+            sourceQueryKey = queryKey;
+            break;
+          }
+        }
+        if (leadToMove) break;
+      }
+
+      // If lead not found or already in target status, skip optimistic update
+      if (!sourceStatus || !leadToMove || !sourceQueryKey || sourceStatus === newStatus) {
+        return undefined;
+      }
+
+      // 2. Build destination query key (same structure, different status)
+      // Query key structure: ["leads", "infinite", tenantId, status, filters]
+      const destQueryKey = [
+        sourceQueryKey[0], // "leads"
+        sourceQueryKey[1], // "infinite"
+        sourceQueryKey[2], // tenantId
+        newStatus,         // new status
+        sourceQueryKey[4], // filters
+      ] as QueryKey;
+
+      // 3. Cancel only affected queries to avoid race conditions
+      await queryClient.cancelQueries({ queryKey: sourceQueryKey, exact: true });
+      await queryClient.cancelQueries({ queryKey: destQueryKey, exact: true });
+
+      // 4. Snapshot previous data for rollback
+      const previousSourceData = queryClient.getQueryData<LeadsInfiniteData>(sourceQueryKey);
+      const previousDestData = queryClient.getQueryData<LeadsInfiniteData>(destQueryKey);
+
+      // 5. Remove lead from source column
+      queryClient.setQueryData<LeadsInfiniteData>(sourceQueryKey, (old) => {
+        if (!old?.pages) return old;
+        return {
+          ...old,
+          pages: old.pages.map((page, idx) => ({
+            ...page,
+            data: page.data?.filter((l) => l.id !== leadId) ?? [],
+            pagination: idx === 0
+              ? { ...page.pagination, totalCount: Math.max(0, page.pagination.totalCount - 1) }
+              : page.pagination,
+          })),
+        };
+      });
+
+      // 6. Add lead to destination column (at the top of first page)
+      queryClient.setQueryData<LeadsInfiniteData>(destQueryKey, (old) => {
+        // If destination column has no data yet, create initial structure
+        if (!old?.pages?.length) {
           return {
-            ...old,
-            data: old.data.map((lead) =>
-              lead.id === leadId ? { ...lead, status: newStatus } : lead
-            ),
+            pages: [{
+              data: [leadToMove!],
+              pagination: { pageIndex: 0, pageSize: 20, totalCount: 1, pageCount: 1 },
+            }],
+            pageParams: [0],
           };
         }
-      );
+        return {
+          ...old,
+          pages: old.pages.map((page, idx) => ({
+            ...page,
+            data: idx === 0 ? [leadToMove!, ...(page.data ?? [])] : page.data,
+            pagination: idx === 0
+              ? { ...page.pagination, totalCount: page.pagination.totalCount + 1 }
+              : page.pagination,
+          })),
+        };
+      });
 
-      // Optimistically update infinite queries
-      queryClient.setQueriesData(
-        { queryKey: ["leads", "infinite"] },
-        (
-          old:
-            | {
-                pages?: Array<{
-                  data?: { id: string; status: LeadStatus }[];
-                }>;
-              }
-            | undefined
-        ) => {
-          if (!old?.pages) return old;
-          return {
-            ...old,
-            pages: old.pages.map((page) => ({
-              ...page,
-              data: page.data?.map((lead) =>
-                lead.id === leadId ? { ...lead, status: newStatus } : lead
-              ),
-            })),
-          };
-        }
-      );
-
-      return { previousPaginatedData, previousInfiniteData };
+      return { previousSourceData, previousDestData, sourceQueryKey, destQueryKey };
     },
 
-    // Rollback on error
+    // Rollback on error - restore previous data from both columns
     onError: (error: Error, _variables, context) => {
-      // Restore previous paginated data
-      if (context?.previousPaginatedData) {
-        context.previousPaginatedData.forEach(([queryKey, data]) => {
-          queryClient.setQueryData(queryKey, data);
-        });
+      if (context?.sourceQueryKey && context?.previousSourceData) {
+        queryClient.setQueryData(context.sourceQueryKey, context.previousSourceData);
       }
-      // Restore previous infinite data
-      if (context?.previousInfiniteData) {
-        context.previousInfiniteData.forEach(([queryKey, data]) => {
-          queryClient.setQueryData(queryKey, data);
-        });
+      if (context?.destQueryKey && context?.previousDestData) {
+        queryClient.setQueryData(context.destQueryKey, context.previousDestData);
       }
 
       showToast({
@@ -230,12 +269,18 @@ export function useUpdateLeadStatus() {
       });
     },
 
-    // Always refetch after error or success to ensure data consistency
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["leads"],
-        refetchType: "active",
-      });
+    // Only refetch on error to guarantee consistency
+    // On success, the optimistic update is already correct
+    onSettled: (_data, error, _variables, context) => {
+      if (error && context) {
+        // Refetch only affected columns on error
+        if (context.sourceQueryKey) {
+          queryClient.invalidateQueries({ queryKey: context.sourceQueryKey, exact: true });
+        }
+        if (context.destQueryKey) {
+          queryClient.invalidateQueries({ queryKey: context.destQueryKey, exact: true });
+        }
+      }
     },
   });
 }
