@@ -8,17 +8,9 @@ import { LeadStatusBadge } from "../TableView/LeadStatusBadge";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  Calendar,
-  Document,
-  Link,
-  People,
-} from "@hugeicons/core-free-icons";
+import { Calendar, Document, Link, People } from "@hugeicons/core-free-icons";
 import { Separator } from "@/core/shared/ui/shadcn/separator";
-import {
-  Avatar,
-  AvatarFallback,
-} from "@/core/shared/ui/shadcn/avatar";
+import { Avatar, AvatarFallback } from "@/core/shared/ui/shadcn/avatar";
 import {
   Tooltip,
   TooltipContent,
@@ -33,6 +25,7 @@ import { DeleteLeadAlertDialog } from "../TableView/DeleteLeadAlertDialog";
 import { useDeleteLead } from "../../hooks/useLeads";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
+import { ReasignLeadDialog } from "./ReasignLeadDialog";
 
 interface LeadKanbanCardProps {
   lead: Lead;
@@ -85,7 +78,7 @@ export const LeadKanbanCard = memo(function LeadKanbanCard({
   // Memoize date formatting to avoid expensive date-fns calculations on every render
   const formattedDate = useMemo(
     () => format(new Date(lead.createdAt), "dd MMM yyyy", { locale: es }),
-    [lead.createdAt]
+    [lead.createdAt],
   );
 
   const handleDelete = useCallback(async () => {
@@ -101,7 +94,7 @@ export const LeadKanbanCard = memo(function LeadKanbanCard({
         onDelete: openDeleteModal,
         onReasingnar: openReasignModal,
       }),
-    [openUpdateModal, openDeleteModal, openReasignModal]
+    [openUpdateModal, openDeleteModal, openReasignModal],
   );
 
   return (
@@ -214,6 +207,19 @@ export const LeadKanbanCard = memo(function LeadKanbanCard({
             onConfirmDelete={handleDelete}
             leadName={lead.companyName}
             isLoading={deleteLeadMutation.isPending}
+          />
+        </PermissionGuard>
+
+        <PermissionGuard
+          permissions={[
+            PermissionActions.leads.editar,
+            PermissionActions.leads.gestionar,
+          ]}
+        >
+          <ReasignLeadDialog
+            isOpen={isReasignOpen}
+            onOpenChange={closeReasignModal}
+            leadId={lead.id}
           />
         </PermissionGuard>
       </div>

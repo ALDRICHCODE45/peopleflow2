@@ -10,6 +10,9 @@ import {
   MoreVertical,
 } from "@hugeicons/core-free-icons";
 import { Button } from "@/core/shared/ui/shadcn/button";
+import { createLeadAction } from "@/features/Leads/server/presentation/actions/lead.actions";
+import { createLeadContactActions } from "./createLeadContactActions";
+import { LeadContactActionsDropdown } from "./LeadContactActionsDropdown";
 
 export function ContactCard({
   contact,
@@ -18,6 +21,12 @@ export function ContactCard({
   contact: Contact;
   onDelete: () => void;
 }) {
+  const contactCardActions = createLeadContactActions({
+    onDelete: onDelete,
+    onEdit: () => console.log,
+    onShowInteracciones: () => console.log(),
+  });
+
   return (
     <Card>
       <CardContent className="p-4">
@@ -72,14 +81,9 @@ export function ContactCard({
             </div>
           </div>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-muted-foreground hover:text-destructive"
-            onClick={onDelete}
-          >
-            <HugeiconsIcon icon={MoreVertical} className="h-4 w-4" />
-          </Button>
+          <div onClick={(e) => e.stopPropagation()}>
+            <LeadContactActionsDropdown actions={contactCardActions} />
+          </div>
         </div>
 
         {contact.notes && (

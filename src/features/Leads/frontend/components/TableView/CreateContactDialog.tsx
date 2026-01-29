@@ -1,6 +1,7 @@
 import { Separator } from "@/core/shared/ui/shadcn/separator";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -45,7 +46,9 @@ export const CreateContactDialog = ({
           initialData={initialData}
         />
         <DialogFooter>
-          <Button variant="outline">Cancel</Button>
+          <DialogClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
