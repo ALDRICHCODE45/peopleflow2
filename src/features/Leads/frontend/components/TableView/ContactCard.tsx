@@ -10,6 +10,7 @@ import { createLeadContactActions } from "./createLeadContactActions";
 import { LeadContactActionsDropdown } from "./LeadContactActionsDropdown";
 import { useModalState } from "@/core/shared/hooks";
 import { ContactDialogFormSheet } from "./ContactDialogFormSheet";
+import { ContactInteractionsDialog } from "./ContactInteractionsDialog";
 import { useUpdateContact } from "../../hooks/useContacts";
 import { cn } from "@/core/lib/utils";
 import Link from "next/link";
@@ -219,6 +220,14 @@ export function ContactCard({
           linkedInUrl: contact.linkedInUrl ?? undefined,
           isPrimary: contact.isPrimary,
           notes: contact.notes ?? undefined,
+        }}
+      />
+
+      <ContactInteractionsDialog
+        contact={contact}
+        open={isInteractionModalOpen}
+        onOpenChange={(open) => {
+          if (!open) closeInteractionModal();
         }}
       />
     </div>

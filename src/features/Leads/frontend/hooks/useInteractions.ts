@@ -6,6 +6,7 @@ import type { InteractionFormData, Interaction } from "../types";
 import {
   addInteractionAction,
   getInteractionsByLeadAction,
+  getInteractionsByContactAction,
 } from "../../server/presentation/actions/interaction.actions";
 
 /**
@@ -24,6 +25,25 @@ export function useInteractionsByLead(leadId: string | null) {
     },
     enabled: !!leadId,
     staleTime: 5 * 60 * 1000, // 5 minutes - reduces refetches when reopening sheet
+  });
+}
+
+/**
+ * Hook para obtener interacciones de un contacto específico
+ */
+export function useInteractionsByContact(contactId: string | null) {
+  return useQuery({
+    queryKey: ["interactions", "by-contact", contactId],
+    queryFn: async (): Promise<Interaction[]> => {
+      if (!contactId) return [];
+      const result = await getInteractionsByContactAction(contactId);
+      if (result.error) {
+        throw new Error(result.error);
+      }
+      return result.interactions;
+    },
+    enabled: !!contactId,
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 }
 

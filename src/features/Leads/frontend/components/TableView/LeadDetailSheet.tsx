@@ -13,7 +13,7 @@ import {
 } from "@/core/shared/ui/shadcn/tabs";
 import { LeadStatusBadge } from "./LeadStatusBadge";
 import { ContactsSection } from "./ContactsSection";
-import { InteractionsTimeline } from "./InteractionsTimeline";
+import { LeadStatusHistoryTimeline } from "./LeadStatusHistoryTimeline";
 import { Badge } from "@/core/shared/ui/shadcn/badge";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -187,15 +187,15 @@ export function LeadDetailSheet({
                 </Badge>
               )}
             </TabsTrigger>
-            <TabsTrigger value="interactions">Interacciones</TabsTrigger>
+            <TabsTrigger value="history">Historial</TabsTrigger>
           </TabsList>
 
           <TabsContent value="contacts" className="mt-4">
             <ContactsSection leadId={displayLead.id} />
           </TabsContent>
 
-          <TabsContent value="interactions" className="mt-4">
-            <InteractionsTimeline leadId={displayLead.id} />
+          <TabsContent value="history" className="mt-4">
+            <LeadStatusHistoryTimeline leadId={displayLead.id} />
           </TabsContent>
         </Tabs>
       </SheetContent>

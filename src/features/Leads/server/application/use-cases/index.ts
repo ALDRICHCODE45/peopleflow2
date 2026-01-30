@@ -5,6 +5,7 @@ export * from "./DeleteLeadUseCase";
 export * from "./GetLeadByIdUseCase";
 export * from "./GetPaginatedLeadsUseCase";
 export * from "./UpdateLeadStatusUseCase";
+export * from "./GetLeadStatusHistoryUseCase";
 
 // Contact Use Cases
 export * from "./AddContactToLeadUseCase";
@@ -15,6 +16,7 @@ export * from "./GetContactsByLeadUseCase";
 // Interaction Use Cases
 export * from "./AddInteractionUseCase";
 export * from "./GetInteractionsByLeadUseCase";
+export * from "./GetInteractionsByContactUseCase";
 
 // Catalog Use Cases
 export * from "./GetSectorsUseCase";

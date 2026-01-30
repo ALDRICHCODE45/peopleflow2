@@ -33,6 +33,10 @@ import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { ReasignLeadUseCase } from "../../application/use-cases/ReasignLeadUseCase";
+import { GetLeadStatusHistoryUseCase } from "../../application/use-cases/GetLeadStatusHistoryUseCase";
+
+// Types for status history
+import type { LeadStatusHistoryItem } from "../../../frontend/types";
 
 /**
  * Crea un nuevo lead
@@ -437,3 +441,76 @@ export const reasignLeadAction = async (
     };
   }
 };
+
+/**
+ * Obtiene el historial de cambios de estado de un lead
+ */
+export async function getLeadStatusHistoryAction(
+  leadId: string
+): Promise<{ error: string | null; history: LeadStatusHistoryItem[] }> {
+  try {
+    // Validar UUID
+    const parsedId = uuidSchema.safeParse(leadId);
+    if (!parsedId.success) {
+      return { error: "ID de lead inválido", history: [] };
+    }
+
+    const headersList = await headers();
+    const session = await auth.api.getSession({ headers: headersList });
+
+    if (!session?.user) {
+      return { error: "No autenticado", history: [] };
+    }
+
+    const tenantId = await getActiveTenantId();
+
+    if (!tenantId) {
+      return { error: "No hay tenant activo", history: [] };
+    }
+
+    // Verificar permisos
+    const hasAnyPermissionUseCase = new CheckAnyPermissonUseCase();
+    const hasPermission = await hasAnyPermissionUseCase.execute({
+      userId: session.user.id,
+      permissions: [
+        PermissionActions.leads.acceder,
+        PermissionActions.leads.gestionar,
+      ],
+      tenantId,
+    });
+
+    if (!hasPermission) {
+      return { error: "No tienes permisos para ver leads", history: [] };
+    }
+
+    const useCase = new GetLeadStatusHistoryUseCase(
+      prismaLeadStatusHistoryRepository
+    );
+    const result = await useCase.execute({
+      leadId,
+      tenantId,
+    });
+
+    if (!result.success) {
+      return {
+        error: result.error || "Error al obtener historial de estados",
+        history: [],
+      };
+    }
+
+    // Serialize dates to ISO strings
+    const serializedHistory =
+      result.history?.map((item) => ({
+        ...item,
+        createdAt: item.createdAt.toISOString(),
+      })) || [];
+
+    return {
+      error: null,
+      history: serializedHistory,
+    };
+  } catch (error) {
+    console.error("Error getting lead status history:", error);
+    return { error: "Error al obtener historial de estados", history: [] };
+  }
+}

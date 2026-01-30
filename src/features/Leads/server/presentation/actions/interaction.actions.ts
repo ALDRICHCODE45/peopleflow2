@@ -11,6 +11,7 @@ import { prismaContactRepository } from "../../infrastructure/repositories/Prism
 // Use Cases
 import { AddInteractionUseCase } from "../../application/use-cases/AddInteractionUseCase";
 import { GetInteractionsByLeadUseCase } from "../../application/use-cases/GetInteractionsByLeadUseCase";
+import { GetInteractionsByContactUseCase } from "../../application/use-cases/GetInteractionsByContactUseCase";
 
 // Types
 import type {
@@ -142,5 +143,68 @@ export async function getInteractionsByLeadAction(
   } catch (error) {
     console.error("Error getting interactions:", error);
     return { error: "Error al obtener interacciones", interactions: [] };
+  }
+}
+
+/**
+ * Obtiene las interacciones de un contacto específico
+ */
+export async function getInteractionsByContactAction(
+  contactId: string
+): Promise<{ error: string | null; interactions: Interaction[] }> {
+  try {
+    const headersList = await headers();
+    const session = await auth.api.getSession({ headers: headersList });
+
+    if (!session?.user) {
+      return { error: "No autenticado", interactions: [] };
+    }
+
+    const tenantId = await getActiveTenantId();
+
+    if (!tenantId) {
+      return { error: "No hay tenant activo", interactions: [] };
+    }
+
+    // Verificar permisos
+    const hasAnyPermissionUseCase = new CheckAnyPermissonUseCase();
+    const hasPermission = await hasAnyPermissionUseCase.execute({
+      userId: session.user.id,
+      permissions: [
+        PermissionActions.leads.acceder,
+        PermissionActions.leads.gestionar,
+      ],
+      tenantId,
+    });
+
+    if (!hasPermission) {
+      return { error: "No tienes permisos para ver leads", interactions: [] };
+    }
+
+    const useCase = new GetInteractionsByContactUseCase(
+      prismaInteractionRepository
+    );
+    const result = await useCase.execute({
+      contactId,
+      tenantId,
+    });
+
+    if (!result.success) {
+      return {
+        error: result.error || "Error al obtener interacciones del contacto",
+        interactions: [],
+      };
+    }
+
+    return {
+      error: null,
+      interactions: result.interactions?.map((i) => i.toJSON()) || [],
+    };
+  } catch (error) {
+    console.error("Error getting interactions by contact:", error);
+    return {
+      error: "Error al obtener interacciones del contacto",
+      interactions: [],
+    };
   }
 }

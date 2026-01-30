@@ -121,7 +121,7 @@ export class UpdateLeadStatusUseCase {
             await notificationUseCase.execute({
               tenantId: input.tenantId,
               provider: "EMAIL",
-              recipient: "nocheblanca92@gmail.com",
+              recipient: "salvador@topsales.expert",
               subject: `Lead "${updatedLead.companyName}" es ahora Contacto Calido`,
               body: plainTextBody,
               priority: "HIGH",
