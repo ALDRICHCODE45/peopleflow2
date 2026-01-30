@@ -12,6 +12,12 @@ import { useModalState } from "@/core/shared/hooks";
 import { ContactDialogFormSheet } from "./ContactDialogFormSheet";
 import { useUpdateContact } from "../../hooks/useContacts";
 import { cn } from "@/core/lib/utils";
+import Link from "next/link";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/core/shared/ui/shadcn/tooltip";
 
 export function ContactCard({
   contact,
@@ -54,10 +60,12 @@ export function ContactCard({
   };
 
   // Generate initials for avatar
-  const initials = `${contact.firstName.charAt(0)}${contact.lastName.charAt(0)}`.toUpperCase();
+  const initials =
+    `${contact.firstName.charAt(0)}${contact.lastName.charAt(0)}`.toUpperCase();
 
   // Check if contact has any contact methods
-  const hasContactMethods = contact.email || contact.phone || contact.linkedInUrl;
+  const hasContactMethods =
+    contact.email || contact.phone || contact.linkedInUrl;
 
   return (
     <div
@@ -66,7 +74,7 @@ export function ContactCard({
         "rounded-xl border border-border/40",
         "bg-gradient-to-b from-background to-muted/20",
         "p-4 transition-all duration-200",
-        "hover:border-border/80 hover:shadow-sm"
+        "hover:border-border/80 hover:shadow-sm",
       )}
     >
       {/* Main content row */}
@@ -79,7 +87,7 @@ export function ContactCard({
             "text-xs font-semibold tracking-wide",
             contact.isPrimary
               ? "bg-primary/10 text-primary ring-1 ring-primary/20"
-              : "bg-muted text-muted-foreground"
+              : "bg-muted text-muted-foreground",
           )}
         >
           {initials}
@@ -126,11 +134,16 @@ export function ContactCard({
                 "inline-flex items-center justify-center",
                 "size-7 rounded-md",
                 "text-muted-foreground hover:text-foreground",
-                "hover:bg-muted/80 transition-colors"
+                "hover:bg-muted/80 transition-colors",
               )}
               title={contact.email}
             >
-              <HugeiconsIcon icon={Mail01Icon} className="size-3.5" />
+              <Tooltip>
+                <TooltipTrigger>
+                  <HugeiconsIcon icon={Mail01Icon} className="size-3.5" />
+                </TooltipTrigger>
+                <TooltipContent>{contact.email}</TooltipContent>
+              </Tooltip>
             </a>
           )}
           {contact.phone && (
@@ -140,15 +153,20 @@ export function ContactCard({
                 "inline-flex items-center justify-center",
                 "size-7 rounded-md",
                 "text-muted-foreground hover:text-foreground",
-                "hover:bg-muted/80 transition-colors"
+                "hover:bg-muted/80 transition-colors",
               )}
               title={contact.phone}
             >
-              <HugeiconsIcon icon={Call02Icon} className="size-3.5" />
+              <Tooltip>
+                <TooltipTrigger>
+                  <HugeiconsIcon icon={Call02Icon} className="size-3.5" />
+                </TooltipTrigger>
+                <TooltipContent>{contact.phone}</TooltipContent>
+              </Tooltip>
             </a>
           )}
           {contact.linkedInUrl && (
-            <a
+            <Link
               href={contact.linkedInUrl}
               target="_blank"
               rel="noopener noreferrer"
@@ -156,12 +174,17 @@ export function ContactCard({
                 "inline-flex items-center justify-center",
                 "size-7 rounded-md",
                 "text-muted-foreground hover:text-[#0A66C2]",
-                "hover:bg-[#0A66C2]/10 transition-colors"
+                "hover:bg-[#0A66C2]/10 transition-colors",
               )}
               title="LinkedIn"
             >
-              <HugeiconsIcon icon={Linkedin01Icon} className="size-3.5" />
-            </a>
+              <Tooltip>
+                <TooltipTrigger>
+                  <HugeiconsIcon icon={Linkedin01Icon} className="size-3.5" />
+                </TooltipTrigger>
+                <TooltipContent>{contact.linkedInUrl}</TooltipContent>
+              </Tooltip>
+            </Link>
           )}
 
           {/* Inline contact info - show primary method */}

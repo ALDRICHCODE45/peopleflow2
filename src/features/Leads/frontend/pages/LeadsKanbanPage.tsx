@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useMemo } from "react";
 import { Card, CardContent } from "@shadcn/card";
+import { Badge } from "@/core/shared/ui/shadcn/badge";
 import { Button } from "@/core/shared/ui/shadcn/button";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { PlusSignIcon } from "@hugeicons/core-free-icons";
@@ -60,6 +61,11 @@ export const LeadsKabanPage = () => {
   // Show loading when filters are pending (debounce) or queries are fetching
   const isFiltersLoading = filters.isFiltersPending || isFetching;
 
+  // Calculate total leads count from server-provided counts (zero additional queries)
+  const totalLeadsCount = useMemo(() => {
+    return Object.values(totalCountByStatus).reduce((sum, count) => sum + count, 0);
+  }, [totalCountByStatus]);
+
   const updateStatusMutation = useUpdateLeadStatus();
   const prefetchLeadDetails = usePrefetchLeadDetails();
   // Pass allLeads for drag & drop status lookups
@@ -86,6 +92,24 @@ export const LeadsKabanPage = () => {
           </div>
 
           <KanbanFilters {...filters} />
+
+          {/* Total Leads Counter */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">Total:</span>
+            {isFiltersLoading ? (
+              <Badge variant="secondary" className="animate-pulse min-w-[2.5rem] justify-center">
+                ---
+              </Badge>
+            ) : (
+              <Badge variant="secondary" className="font-semibold">
+                {totalLeadsCount.toLocaleString()}
+              </Badge>
+            )}
+            <span className="text-sm text-muted-foreground">
+              {totalLeadsCount === 1 ? "lead encontrado" : "leads encontrados"}
+            </span>
+          </div>
+
           <KanbanBoard
             dnd={dnd}
             leadsByStatus={leadsByStatus}
