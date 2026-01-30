@@ -53,3 +53,19 @@ export interface GetRolesResult {
   error: string | null;
   roles: Array<{ id: string; name: string }>;
 }
+
+export interface InvitableTenant {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+export interface GetInvitableTenantsResult {
+  error: string | null;
+  tenants: InvitableTenant[];
+}
+
+export interface InviteToTenantResult {
+  error: string | null;
+  success: boolean;
+}

@@ -55,6 +55,12 @@ const ADMINISTRACION_PERMISSIONS: PermissionDefinition[] = [
     description:
       "Gestionar completamente el módulo de usuarios (incluye todas las acciones)",
   },
+  {
+    name: "usuarios:invitar-tenant",
+    resource: "usuarios",
+    action: "invitar-tenant",
+    description: "Invitar usuarios a otros tenants",
+  },
 
   // Roles - Granulares
   {
@@ -490,6 +496,7 @@ export const PermissionActions = {
     eliminar: "usuarios:eliminar",
     asignarRoles: "usuarios:asignar-roles",
     gestionar: "usuarios:gestionar",
+    invitarTenant: "usuarios:invitar-tenant",
   },
   roles: {
     acceder: "roles:acceder",

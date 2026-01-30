@@ -21,6 +21,11 @@ export interface CreateTenantData {
 
 export interface ITenantRepository {
   /**
+   * Obtiene todos los tenants del sistema (solo superadmin)
+   */
+  findAll(): Promise<Tenant[]>;
+
+  /**
    * Encuentra un tenant por su ID
    */
   findById(id: string): Promise<Tenant | null>;

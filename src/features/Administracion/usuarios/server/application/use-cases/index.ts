@@ -39,3 +39,9 @@ export {
   type UpdateUserRolesInput,
   type UpdateUserRolesOutput,
 } from "./UpdateUserRolesUseCase";
+
+export {
+  InviteUserToTenantUseCase,
+  type InviteUserToTenantInput,
+  type InviteUserToTenantOutput,
+} from "./InviteUserToTenantUseCase";

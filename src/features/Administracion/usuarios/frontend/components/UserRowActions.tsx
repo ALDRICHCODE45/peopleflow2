@@ -18,15 +18,22 @@ import type { TenantUser } from "../types";
 import { UserSheetForm } from "./UserSheetForm";
 import { UserRolesSheet } from "./UserRolesSheet";
 import { DeleteUserAlertDialog } from "./DeleteUserAlertDialog";
+import { InviteToTenantDialog } from "./InviteToTenantDialog";
+import { useAuth } from "@/core/shared/hooks/use-auth";
 
 interface UserRowActionsProps {
   user: TenantUser;
 }
 
 export function UserRowActions({ user }: UserRowActionsProps) {
+  const { user: currentUser } = useAuth();
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isRolesOpen, setIsRolesOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isInviteOpen, setIsInviteOpen] = useState(false);
+
+  // No mostrar opcion de invitar para el usuario actual (previene auto-invitacion)
+  const canShowInviteOption = user.id !== currentUser?.id;
 
   return (
     <>
@@ -61,6 +68,19 @@ export function UserRowActions({ user }: UserRowActionsProps) {
               Roles
             </DropdownMenuItem>
           </PermissionGuard>
+
+          {canShowInviteOption && (
+            <PermissionGuard
+              permissions={[
+                PermissionActions.usuarios.invitarTenant,
+                PermissionActions.usuarios.gestionar,
+              ]}
+            >
+              <DropdownMenuItem onClick={() => setIsInviteOpen(true)}>
+                Invitar a Tenant
+              </DropdownMenuItem>
+            </PermissionGuard>
+          )}
 
           <PermissionGuard
             permissions={[
@@ -106,6 +126,22 @@ export function UserRowActions({ user }: UserRowActionsProps) {
           onOpenChange={setIsDeleteOpen}
         />
       </PermissionGuard>
+
+      {/* Dialog para invitar a tenant */}
+      {canShowInviteOption && (
+        <PermissionGuard
+          permissions={[
+            PermissionActions.usuarios.invitarTenant,
+            PermissionActions.usuarios.gestionar,
+          ]}
+        >
+          <InviteToTenantDialog
+            user={user}
+            open={isInviteOpen}
+            onOpenChange={setIsInviteOpen}
+          />
+        </PermissionGuard>
+      )}
     </>
   );
 }

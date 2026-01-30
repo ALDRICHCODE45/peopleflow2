@@ -12,6 +12,22 @@ import {
  */
 
 export class PrismaTenantRepository implements ITenantRepository {
+  async findAll(): Promise<Tenant[]> {
+    const tenants = await prisma.tenant.findMany({
+      orderBy: { name: "asc" },
+    });
+    return tenants.map(
+      (t) =>
+        new Tenant({
+          id: t.id,
+          name: t.name,
+          slug: t.slug,
+          createdAt: t.createdAt,
+          updatedAt: t.updatedAt,
+        })
+    );
+  }
+
   async findById(id: string): Promise<Tenant | null> {
     const tenant = await prisma.tenant.findUnique({
       where: { id },

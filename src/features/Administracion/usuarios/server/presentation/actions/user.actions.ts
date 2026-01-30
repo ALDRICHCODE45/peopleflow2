@@ -18,7 +18,11 @@ import {
   UpdateUserUseCase,
   DeleteUserFromTenantUseCase,
   UpdateUserRolesUseCase,
+  InviteUserToTenantUseCase,
 } from "../../application/use-cases";
+
+// Tenant repository
+import { prismaTenantRepository } from "@/features/tenants/server/infrastructure/repositories/PrismaTenantRepository";
 
 // Tenant actions
 import { getCurrentTenantAction } from "@/features/tenants/server/presentation/actions/tenant.actions";
@@ -61,6 +65,22 @@ export interface UpdateUserRolesResult {
 export interface GetRolesResult {
   error: string | null;
   roles: Array<{ id: string; name: string }>;
+}
+
+export interface InvitableTenant {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+export interface GetInvitableTenantsResult {
+  error: string | null;
+  tenants: InvitableTenant[];
+}
+
+export interface InviteToTenantResult {
+  error: string | null;
+  success: boolean;
 }
 
 /**
@@ -381,5 +401,146 @@ export async function getAvailableRolesAction(tenantId: string): Promise<GetRole
   } catch (error) {
     console.error("Error in getAvailableRolesAction:", error);
     return { error: "Error al obtener roles", roles: [] };
+  }
+}
+
+/**
+ * Obtiene los tenants a los que el usuario puede invitar
+ * SEGURIDAD:
+ * - SuperAdmin: Retorna todos los tenants del sistema
+ * - Usuario normal: Retorna solo tenants donde tiene permiso de invitar
+ */
+export async function getInvitableTenantsAction(): Promise<GetInvitableTenantsResult> {
+  try {
+    const headersList = await headers();
+    const session = await auth.api.getSession({ headers: headersList });
+
+    if (!session?.user) {
+      return { error: "No autenticado", tenants: [] };
+    }
+
+    const isSuperAdmin = await prismaUserRoleRepository.isSuperAdmin(session.user.id);
+
+    if (isSuperAdmin) {
+      // SuperAdmin: retorna todos los tenants
+      const allTenants = await prismaTenantRepository.findAll();
+      return {
+        error: null,
+        tenants: allTenants.map((t) => ({
+          id: t.id,
+          name: t.name,
+          slug: t.slug,
+        })),
+      };
+    }
+
+    // Usuario normal: filtrar por permisos
+    const userTenants = await prismaTenantRepository.findByUserId(session.user.id);
+    const tenantsWithPermission: InvitableTenant[] = [];
+
+    for (const tenant of userTenants) {
+      const permissions = await prismaUserRoleRepository.getUserPermissions(
+        session.user.id,
+        tenant.id
+      );
+
+      const canInvite =
+        permissions.includes("usuarios:invitar-tenant") ||
+        permissions.includes("usuarios:gestionar");
+
+      if (canInvite) {
+        tenantsWithPermission.push({
+          id: tenant.id,
+          name: tenant.name,
+          slug: tenant.slug,
+        });
+      }
+    }
+
+    return {
+      error: null,
+      tenants: tenantsWithPermission,
+    };
+  } catch (error) {
+    console.error("Error in getInvitableTenantsAction:", error);
+    return { error: "Error al obtener tenants", tenants: [] };
+  }
+}
+
+/**
+ * Invita un usuario existente a un tenant
+ * SEGURIDAD:
+ * - Verifica que no sea auto-invitacion
+ * - SuperAdmin: puede invitar a cualquier tenant
+ * - Usuario normal: debe tener permiso en el tenant destino
+ */
+export async function inviteUserToTenantAction(data: {
+  userId: string;
+  tenantId: string;
+  roleIds: string[];
+}): Promise<InviteToTenantResult> {
+  try {
+    const headersList = await headers();
+    const session = await auth.api.getSession({ headers: headersList });
+
+    if (!session?.user) {
+      return { error: "No autenticado", success: false };
+    }
+
+    // SEGURIDAD: Prevenir auto-invitacion
+    if (data.userId === session.user.id) {
+      return { error: "No puedes invitarte a ti mismo", success: false };
+    }
+
+    // Validar que se selecciono al menos un rol
+    if (!data.roleIds || data.roleIds.length === 0) {
+      return { error: "Debes seleccionar al menos un rol", success: false };
+    }
+
+    const isSuperAdmin = await prismaUserRoleRepository.isSuperAdmin(session.user.id);
+
+    // SEGURIDAD: Si no es SuperAdmin, verificar permiso en tenant destino
+    if (!isSuperAdmin) {
+      const permissionsInTargetTenant = await prismaUserRoleRepository.getUserPermissions(
+        session.user.id,
+        data.tenantId
+      );
+
+      const canInvite =
+        permissionsInTargetTenant.includes("usuarios:invitar-tenant") ||
+        permissionsInTargetTenant.includes("usuarios:gestionar");
+
+      if (!canInvite) {
+        return {
+          error: "No tienes permisos para invitar en este tenant",
+          success: false,
+        };
+      }
+    }
+
+    // Ejecutar caso de uso
+    const useCase = new InviteUserToTenantUseCase(
+      prismaUserRoleRepository,
+      prismaTenantRepository,
+      prismaRoleRepository
+    );
+
+    const result = await useCase.execute({
+      userId: data.userId,
+      tenantId: data.tenantId,
+      roleIds: data.roleIds,
+      invitedById: session.user.id,
+      invitedByName: session.user.name || session.user.email || "Un usuario",
+    });
+
+    if (!result.success) {
+      return { error: result.error || "Error al invitar usuario", success: false };
+    }
+
+    revalidatePath("/admin/usuarios");
+    return { error: null, success: true };
+  } catch (error) {
+    console.error("Error in inviteUserToTenantAction:", error);
+    return { error: "Error al invitar usuario", success: false };
   }
 }

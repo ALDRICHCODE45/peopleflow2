@@ -30,4 +30,9 @@ export interface IRoleRepository {
    * Obtiene todos los roles
    */
   findAll(): Promise<Role[]>;
+
+  /**
+   * Obtiene los roles de un tenant especifico
+   */
+  findByTenantId(tenantId: string): Promise<Role[]>;
 }
