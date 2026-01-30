@@ -66,7 +66,9 @@ export class Lead {
   // El Lead controla los cambios de estado con validaciones
   public changeStatus(newStatus: LeadStatusType): void {
     if (!this._status.canTransitionTo(newStatus)) {
-      throw new Error(`Transición no válida: ${this._status.value} → ${newStatus}`);
+      throw new Error(
+        `Transición no válida: ${this._status.value} → ${newStatus}`,
+      );
     }
     this._status = LeadStatusVO.create(newStatus);
   }
@@ -81,6 +83,7 @@ export class Lead {
 ### Value Objects
 
 Los Value Objects encapsulan validaciones y lógica de dominio. Cada VO sigue el patrón:
+
 - Constructor privado
 - Método estático `create()` que lanza error si la validación falla
 - Método `getValue()` para obtener el valor primitivo
@@ -122,7 +125,10 @@ try {
 
 ```typescript
 export class LeadStatusVO {
-  private static readonly VALID_TRANSITIONS: Record<LeadStatusType, LeadStatusType[]> = {
+  private static readonly VALID_TRANSITIONS: Record<
+    LeadStatusType,
+    LeadStatusType[]
+  > = {
     CONTACTO_CALIDO: ["SOCIAL_SELLING", "CITA_AGENDADA", "STAND_BY"],
     SOCIAL_SELLING: ["CITA_AGENDADA", "STAND_BY"],
     CITA_AGENDADA: ["CITA_ATENDIDA", "STAND_BY"],
@@ -166,12 +172,15 @@ Los casos de uso orquestan la lógica de negocio y **siempre usan repositorios**
 export class UpdateLeadStatusUseCase {
   constructor(
     private readonly leadRepository: ILeadRepository,
-    private readonly historyRepository: ILeadStatusHistoryRepository
+    private readonly historyRepository: ILeadStatusHistoryRepository,
   ) {}
 
   async execute(input: UpdateLeadStatusInput): Promise<UpdateLeadStatusOutput> {
     // 1. Obtener el Lead (vía repositorio, NUNCA Prisma directo)
-    const lead = await this.leadRepository.findById(input.leadId, input.tenantId);
+    const lead = await this.leadRepository.findById(
+      input.leadId,
+      input.tenantId,
+    );
     if (!lead) {
       return { success: false, error: "Lead no encontrado" };
     }
@@ -186,7 +195,7 @@ export class UpdateLeadStatusUseCase {
     const updatedLead = await this.leadRepository.updateStatus(
       input.leadId,
       input.tenantId,
-      input.newStatus
+      input.newStatus,
     );
 
     // 4. Crear historial para KPIs (vía repositorio)
@@ -214,6 +223,7 @@ const lead = await this.leadRepository.create(leadData);
 ```
 
 **¿Por qué?**
+
 - Desacopla el dominio de la infraestructura
 - Facilita testing con mocks
 - Permite cambiar la base de datos sin afectar la lógica de negocio
@@ -272,7 +282,7 @@ Los Server Actions son el punto de entrada desde el frontend:
 
 export async function updateLeadStatusAction(
   leadId: string,
-  newStatus: LeadStatus
+  newStatus: LeadStatus,
 ): Promise<UpdateLeadStatusResult> {
   // 1. Verificar autenticación
   const session = await auth.api.getSession({ headers: await headers() });
@@ -284,7 +294,10 @@ export async function updateLeadStatusAction(
   const permissionCheck = await new CheckAnyPermissonUseCase().execute({
     userId: session.user.id,
     tenantId: session.session.activeOrganizationId!,
-    permissions: [PermissionActions.leads.editar, PermissionActions.leads.gestionar],
+    permissions: [
+      PermissionActions.leads.editar,
+      PermissionActions.leads.gestionar,
+    ],
   });
 
   if (!permissionCheck.hasPermission) {
@@ -294,7 +307,7 @@ export async function updateLeadStatusAction(
   // 3. Ejecutar caso de uso
   const useCase = new UpdateLeadStatusUseCase(
     new PrismaLeadRepository(),
-    new PrismaLeadStatusHistoryRepository()
+    new PrismaLeadStatusHistoryRepository(),
   );
 
   const result = await useCase.execute({
@@ -336,6 +349,7 @@ model LeadStatusHistory {
 ```
 
 **Casos de uso para KPIs:**
+
 - Tiempo promedio en cada etapa del funnel
 - Tasa de conversión entre estados
 - Leads que pasaron a "Stand By" y luego reactivados
@@ -358,6 +372,7 @@ const leads = await prisma.lead.findMany({
 ```
 
 Los catálogos (Sector, Subsector, LeadOrigin) soportan:
+
 - `tenantId = null` → Catálogo global (disponible para todos)
 - `tenantId = "xxx"` → Catálogo específico del tenant
 
@@ -385,11 +400,13 @@ export class FileUploadService implements IFileUploadService {
 **Para implementar:**
 
 1. Instalar SDK de AWS S3 (compatible con DO Spaces):
+
    ```bash
    bun add @aws-sdk/client-s3 @aws-sdk/s3-request-presigner
    ```
 
 2. Configurar variables de entorno:
+
    ```env
    DO_SPACES_KEY=tu_key
    DO_SPACES_SECRET=tu_secret
@@ -519,11 +536,11 @@ bun run build
 Los permisos ya existían en el sistema:
 
 ```typescript
-PermissionActions.leads.acceder    // "leads:acceder"
-PermissionActions.leads.crear      // "leads:crear"
-PermissionActions.leads.editar     // "leads:editar"
-PermissionActions.leads.eliminar   // "leads:eliminar"
-PermissionActions.leads.gestionar  // "leads:gestionar"
+PermissionActions.leads.acceder; // "leads:acceder"
+PermissionActions.leads.crear; // "leads:crear"
+PermissionActions.leads.editar; // "leads:editar"
+PermissionActions.leads.eliminar; // "leads:eliminar"
+PermissionActions.leads.gestionar; // "leads:gestionar"
 ```
 
 ---

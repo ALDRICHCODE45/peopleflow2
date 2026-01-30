@@ -10,9 +10,11 @@ import { useDroppable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import type { Lead, LeadStatus } from "../../types";
 import type { KanbanColumn as KanbanColumnType } from "./kanbanTypes";
-import { LeadKanbanCard } from "./LeadKanbanCard";
+import { LeadKanbanCard, type LeadPermissions } from "./LeadKanbanCard";
 import { Badge } from "@/core/shared/ui/shadcn/badge";
 import { Spinner } from "@/core/shared/ui/shadcn/spinner";
+import { usePermissions } from "@/core/shared/hooks/use-permissions";
+import { PermissionActions } from "@/core/shared/constants/permissions";
 
 const COLUMN_DOT_COLORS: Record<LeadStatus, string> = {
   CONTACTO: "bg-cyan-500",
@@ -56,6 +58,22 @@ export const KanbanColumn = memo(function KanbanColumn({
     data: { type: "column", column },
   });
 
+  // Compute permissions once at column level to avoid per-card lookups
+  const { hasAnyPermission } = usePermissions();
+  const leadPermissions = useMemo<LeadPermissions>(
+    () => ({
+      canEdit: hasAnyPermission([
+        PermissionActions.leads.editar,
+        PermissionActions.leads.gestionar,
+      ]),
+      canDelete: hasAnyPermission([
+        PermissionActions.leads.eliminar,
+        PermissionActions.leads.gestionar,
+      ]),
+    }),
+    [hasAnyPermission],
+  );
+
   const { setNodeRef: setDroppableRef } = useDroppable({
     id: `drop-${column.id}`,
     data: { type: "column", column },
@@ -83,7 +101,7 @@ export const KanbanColumn = memo(function KanbanColumn({
           fetchNextPage();
         }
       },
-      { threshold: 0.1, rootMargin: "100px" }
+      { threshold: 0.1, rootMargin: "100px" },
     );
 
     observer.observe(loadMoreRef.current);
@@ -123,6 +141,7 @@ export const KanbanColumn = memo(function KanbanColumn({
               key={lead.id}
               lead={lead}
               onSelect={onSelectLead}
+              permissions={leadPermissions}
             />
           ))}
         </SortableContext>

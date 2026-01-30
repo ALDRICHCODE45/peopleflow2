@@ -1,8 +1,12 @@
 "use server";
 
+import { z } from "zod";
 import { auth } from "@lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+
+// UUID validation schema
+const uuidSchema = z.string().uuid("ID inválido");
 
 // Repositories
 import { prismaLeadRepository } from "../../infrastructure/repositories/PrismaLeadRepository";
@@ -116,6 +120,12 @@ export async function updateLeadAction(
   },
 ): Promise<UpdateLeadResult> {
   try {
+    // Validar UUID
+    const parsedId = uuidSchema.safeParse(leadId);
+    if (!parsedId.success) {
+      return { error: "ID de lead inválido" };
+    }
+
     const headersList = await headers();
     const session = await auth.api.getSession({ headers: headersList });
 
@@ -173,6 +183,12 @@ export async function deleteLeadAction(
   leadId: string,
 ): Promise<DeleteLeadResult> {
   try {
+    // Validar UUID
+    const parsedId = uuidSchema.safeParse(leadId);
+    if (!parsedId.success) {
+      return { error: "ID de lead inválido", success: false };
+    }
+
     const headersList = await headers();
     const session = await auth.api.getSession({ headers: headersList });
 
@@ -235,6 +251,12 @@ export async function getLeadByIdAction(
   leadId: string,
 ): Promise<{ error: string | null; lead?: Lead }> {
   try {
+    // Validar UUID
+    const parsedId = uuidSchema.safeParse(leadId);
+    if (!parsedId.success) {
+      return { error: "ID de lead inválido" };
+    }
+
     const headersList = await headers();
     const session = await auth.api.getSession({ headers: headersList });
 
@@ -291,6 +313,12 @@ export async function updateLeadStatusAction(
   newStatus: LeadStatus,
 ): Promise<UpdateLeadStatusResult> {
   try {
+    // Validar UUID
+    const parsedId = uuidSchema.safeParse(leadId);
+    if (!parsedId.success) {
+      return { error: "ID de lead inválido" };
+    }
+
     const headersList = await headers();
     const session = await auth.api.getSession({ headers: headersList });
 
@@ -350,6 +378,17 @@ export const reasignLeadAction = async (
   newUserId: string,
 ): Promise<ReasignLeadResult> => {
   try {
+    // Validar UUIDs
+    const parsedLeadId = uuidSchema.safeParse(leadId);
+    if (!parsedLeadId.success) {
+      return { error: "ID de lead inválido" };
+    }
+
+    const parsedUserId = uuidSchema.safeParse(newUserId);
+    if (!parsedUserId.success) {
+      return { error: "ID de usuario inválido" };
+    }
+
     const headersList = await headers();
     const session = await auth.api.getSession({ headers: headersList });
 
@@ -379,7 +418,7 @@ export const reasignLeadAction = async (
     }
 
     const usecase = new ReasignLeadUseCase(prismaLeadRepository);
-    const result = await usecase.execute({ leadId, newUserId });
+    const result = await usecase.execute({ leadId, newUserId, tenantId });
 
     if (!result.success) {
       return { error: result.error || "Error al actualizar estado del lead" };

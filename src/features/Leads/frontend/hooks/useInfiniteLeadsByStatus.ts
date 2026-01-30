@@ -54,6 +54,7 @@ export const getInfiniteLeadsQueryOptions = (
         sectorIds: filters.sectorIds,
         originIds: filters.originIds,
         assignedToIds: filters.assignedToIds,
+        minimal: true, // Use minimal includes for Kanban cards
       });
 
       if (result.error) {
@@ -124,6 +125,7 @@ export function useInfiniteLeadsByStatus(
         sectorIds: filters.sectorIds,
         originIds: filters.originIds,
         assignedToIds: filters.assignedToIds,
+        minimal: true, // Use minimal includes for Kanban cards
       });
 
       if (result.error) {

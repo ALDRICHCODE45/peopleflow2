@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { Lead } from "../../types";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@shadcn/sheet";
 import { useIsMobile } from "@/core/shared/hooks/use-mobile";
+import { useLeadById } from "../../hooks/useLeadById";
 import {
   Tabs,
   TabsContent,
@@ -41,6 +42,12 @@ export function LeadDetailSheet({
   const sheetSide = isMobile ? "bottom" : "right";
   const [activeTab, setActiveTab] = useState("contacts");
 
+  // Fetch complete lead data (handles Kanban's minimal query case)
+  const { data: fullLead } = useLeadById(open ? lead.id : null);
+
+  // Use fetched data if available, otherwise fall back to prop data
+  const displayLead = fullLead ?? lead;
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
@@ -55,45 +62,45 @@ export function LeadDetailSheet({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <SheetTitle className="text-xl font-semibold truncate">
-                    {lead.companyName}
+                    {displayLead.companyName}
                   </SheetTitle>
                 </TooltipTrigger>
                 <TooltipContent side="bottom" align="start">
-                  {lead.companyName}
+                  {displayLead.companyName}
                 </TooltipContent>
               </Tooltip>
-              {lead.rfc && (
+              {displayLead.rfc && (
                 <p className="text-sm text-muted-foreground mt-0.5">
-                  RFC: {lead.rfc}
+                  RFC: {displayLead.rfc}
                 </p>
               )}
             </div>
             <div className="md:mr-4">
-              <LeadStatusBadge status={lead.status} />
+              <LeadStatusBadge status={displayLead.status} />
             </div>
           </div>
 
           {/* Secondary row: links + notes */}
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-            {lead.website && (
+            {displayLead.website && (
               <Link
-                href={lead.website}
+                href={displayLead.website}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 {(() => {
                   try {
-                    return new URL(lead.website).hostname;
+                    return new URL(displayLead.website).hostname;
                   } catch {
-                    return lead.website;
+                    return displayLead.website;
                   }
                 })()}
               </Link>
             )}
-            {lead.linkedInUrl && (
+            {displayLead.linkedInUrl && (
               <Link
-                href={lead.linkedInUrl}
+                href={displayLead.linkedInUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors"
@@ -108,7 +115,7 @@ export function LeadDetailSheet({
                   Notas
                 </Button>
               }
-              notes={lead.notes ?? "No hay notas disponibles"}
+              notes={displayLead.notes ?? "No hay notas disponibles"}
             />
           </div>
         </SheetHeader>
@@ -118,16 +125,16 @@ export function LeadDetailSheet({
         {/* Info Section */}
         <section className="p-4 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <InfoItem label="Sector" value={lead.sectorName} />
-            <InfoItem label="Subsector" value={lead.subsectorName} />
+            <InfoItem label="Sector" value={displayLead.sectorName} />
+            <InfoItem label="Subsector" value={displayLead.subsectorName} />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <InfoItem label="Origen" value={lead.originName} />
-            <InfoItem label="Asignado a" value={lead.assignedToName} />
+            <InfoItem label="Origen" value={displayLead.originName} />
+            <InfoItem label="Asignado a" value={displayLead.assignedToName} />
           </div>
 
-          <InfoItem label="Dirección" value={lead.address} />
+          <InfoItem label="Dirección" value={displayLead.address} />
 
           {/* Dates */}
           <div className="pt-3 border-t">
@@ -137,13 +144,13 @@ export function LeadDetailSheet({
                   Creado
                 </p>
                 <p className="text-sm mt-0.5">
-                  {format(new Date(lead.createdAt), "d MMM yyyy", {
+                  {format(new Date(displayLead.createdAt), "d MMM yyyy", {
                     locale: es,
                   })}
                 </p>
-                {lead.createdByName && (
+                {displayLead.createdByName && (
                   <p className="text-xs text-muted-foreground">
-                    por {lead.createdByName}
+                    por {displayLead.createdByName}
                   </p>
                 )}
               </div>
@@ -152,7 +159,7 @@ export function LeadDetailSheet({
                   Actualizado
                 </p>
                 <p className="text-sm mt-0.5">
-                  {format(new Date(lead.updatedAt), "d MMM yyyy", {
+                  {format(new Date(displayLead.updatedAt), "d MMM yyyy", {
                     locale: es,
                   })}
                 </p>
@@ -171,12 +178,12 @@ export function LeadDetailSheet({
           <TabsList variant="line">
             <TabsTrigger value="contacts">
               Contactos
-              {lead.contactsCount !== undefined && lead.contactsCount > 0 && (
+              {displayLead.contactsCount !== undefined && displayLead.contactsCount > 0 && (
                 <Badge
                   variant="secondary"
                   className="ml-1.5 h-5 min-w-5 px-1.5 text-xs"
                 >
-                  {lead.contactsCount}
+                  {displayLead.contactsCount}
                 </Badge>
               )}
             </TabsTrigger>
@@ -184,11 +191,11 @@ export function LeadDetailSheet({
           </TabsList>
 
           <TabsContent value="contacts" className="mt-4">
-            <ContactsSection leadId={lead.id} />
+            <ContactsSection leadId={displayLead.id} />
           </TabsContent>
 
           <TabsContent value="interactions" className="mt-4">
-            <InteractionsTimeline leadId={lead.id} />
+            <InteractionsTimeline leadId={displayLead.id} />
           </TabsContent>
         </Tabs>
       </SheetContent>

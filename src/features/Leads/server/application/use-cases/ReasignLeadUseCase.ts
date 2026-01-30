@@ -4,6 +4,7 @@ import { ILeadRepository } from "../../domain/interfaces/ILeadRepository";
 export interface ReasignLeadInput {
   leadId: string;
   newUserId: string;
+  tenantId: string;
 }
 
 export interface ReasignLeadOutput {
@@ -32,9 +33,17 @@ export class ReasignLeadUseCase {
         };
       }
 
+      if (!input.tenantId || input.tenantId.length < 5) {
+        return {
+          success: false,
+          error: "Error reasignando el lead",
+        };
+      }
+
       const lead = await this.leadRepository.reasignLead(
         input.leadId,
         input.newUserId,
+        input.tenantId,
       );
 
       if (!lead) {

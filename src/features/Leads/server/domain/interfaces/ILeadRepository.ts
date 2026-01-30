@@ -50,6 +50,8 @@ export interface FindPaginatedParams {
   take: number;
   sorting?: { id: string; desc: boolean }[];
   filters?: FindLeadsFilters;
+  /** If true, only includes essential relations (assignedTo, sector, _count) for faster Kanban queries */
+  minimal?: boolean;
 }
 
 export interface PaginatedResult<T> {
@@ -114,6 +116,13 @@ export interface ILeadRepository {
 
   /**
    * Reasigna un lead especifico
+   * @param leadId - ID del lead a reasignar
+   * @param newUserId - ID del nuevo usuario asignado
+   * @param tenantId - ID del tenant para validación de aislamiento
    */
-  reasignLead(leadId: string, newUserId: string): Promise<Lead | null>;
+  reasignLead(
+    leadId: string,
+    newUserId: string,
+    tenantId: string,
+  ): Promise<Lead | null>;
 }

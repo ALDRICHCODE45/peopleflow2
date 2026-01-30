@@ -81,6 +81,18 @@ export class PrismaLeadRepository implements ILeadRepository {
     };
   }
 
+  /**
+   * Minimal include for Kanban cards - only essential relations
+   * Reduces query payload for faster loading
+   */
+  private getMinimalInclude() {
+    return {
+      sector: { select: { name: true } },
+      assignedTo: { select: { name: true } },
+      _count: { select: { contacts: true } },
+    };
+  }
+
   async findById(id: string, tenantId: string): Promise<Lead | null> {
     const lead = await prisma.lead.findFirst({
       where: { id, tenantId },
@@ -249,7 +261,7 @@ export class PrismaLeadRepository implements ILeadRepository {
   async findPaginated(
     params: FindPaginatedParams,
   ): Promise<PaginatedResult<Lead>> {
-    const { tenantId, skip, take, sorting, filters } = params;
+    const { tenantId, skip, take, sorting, filters, minimal } = params;
     const where = this.buildWhereClause(tenantId, filters);
 
     // Whitelist de columnas permitidas para prevenir inyección
@@ -267,11 +279,14 @@ export class PrismaLeadRepository implements ILeadRepository {
             .map((s) => ({ [s.id]: s.desc ? "desc" : "asc" }))
         : [{ createdAt: "desc" as const }];
 
+    // Use minimal includes for Kanban queries to reduce payload
+    const include = minimal ? this.getMinimalInclude() : this.getBaseInclude();
+
     const [totalCount, leads] = await Promise.all([
       prisma.lead.count({ where }),
       prisma.lead.findMany({
         where,
-        include: this.getBaseInclude(),
+        include,
         orderBy,
         skip,
         take,
@@ -320,20 +335,39 @@ export class PrismaLeadRepository implements ILeadRepository {
     return where;
   }
 
-  async reasignLead(leadId: string, newUserId: string): Promise<Lead | null> {
+  async reasignLead(
+    leadId: string,
+    newUserId: string,
+    tenantId: string,
+  ): Promise<Lead | null> {
     try {
+      // Verificar que el lead pertenece al tenant
+      const lead = await prisma.lead.findFirst({
+        where: { id: leadId, tenantId, isDeleted: false },
+      });
+
+      if (!lead) {
+        return null;
+      }
+
+      // Verificar que el nuevo usuario pertenece al tenant (via UserRole)
+      const userBelongsToTenant = await prisma.userRole.findFirst({
+        where: { userId: newUserId, tenantId },
+      });
+
+      if (!userBelongsToTenant) {
+        return null;
+      }
+
       const result = await prisma.lead.update({
-        where: {
-          id: leadId,
-        },
-        data: {
-          assignedToId: newUserId,
-        },
+        where: { id: leadId },
+        data: { assignedToId: newUserId },
         include: this.getBaseInclude(),
       });
+
       return this.mapToDomain(result);
     } catch (error) {
-      console.error("Error updating lead:", error);
+      console.error("Error reassigning lead:", error);
       return null;
     }
   }

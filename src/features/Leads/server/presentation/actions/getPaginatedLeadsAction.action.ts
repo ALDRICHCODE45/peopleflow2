@@ -28,6 +28,8 @@ export interface GetPaginatedLeadsParams {
   sectorIds?: string[];
   originIds?: string[];
   assignedToIds?: string[];
+  /** If true, uses minimal includes for faster Kanban queries */
+  minimal?: boolean;
 }
 
 export interface GetPaginatedLeadsResult {
@@ -84,6 +86,7 @@ export async function getPaginatedLeadsAction(
         assignedToIds: params.assignedToIds,
         search: params.globalFilter,
       },
+      minimal: params.minimal,
     });
 
     if (!result.success) {

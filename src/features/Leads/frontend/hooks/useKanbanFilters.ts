@@ -49,12 +49,14 @@ export function useKanbanFilters() {
   );
 
   // Detect when filters are pending (user changed but debounce hasn't fired yet)
+  // Note: Array comparison uses JSON.stringify since !== compares references, not content
   const isFiltersPending = useMemo(
     () =>
       searchValue !== debouncedSearch ||
-      selectedSectorIds !== debouncedSectorIds ||
-      selectedOriginIds !== debouncedOriginIds ||
-      selectedAssignedToIds !== debouncedAssignedToIds,
+      JSON.stringify(selectedSectorIds) !== JSON.stringify(debouncedSectorIds) ||
+      JSON.stringify(selectedOriginIds) !== JSON.stringify(debouncedOriginIds) ||
+      JSON.stringify(selectedAssignedToIds) !==
+        JSON.stringify(debouncedAssignedToIds),
     [
       searchValue,
       debouncedSearch,

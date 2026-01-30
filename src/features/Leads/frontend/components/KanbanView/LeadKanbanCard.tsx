@@ -24,18 +24,23 @@ import { LeadSheetForm } from "../TableView/LeadSheetForm";
 import { DeleteLeadAlertDialog } from "../TableView/DeleteLeadAlertDialog";
 import { useDeleteLead } from "../../hooks/useLeads";
 import { usePrefetchLeadDetails } from "../../hooks/usePrefetchLeadDetails";
-import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
-import { PermissionActions } from "@/core/shared/constants/permissions";
 import { ReasignLeadDialog } from "./ReasignLeadDialog";
+
+export interface LeadPermissions {
+  canEdit: boolean;
+  canDelete: boolean;
+}
 
 interface LeadKanbanCardProps {
   lead: Lead;
   onSelect: (lead: Lead) => void;
+  permissions: LeadPermissions;
 }
 
 export const LeadKanbanCard = memo(function LeadKanbanCard({
   lead,
   onSelect,
+  permissions,
 }: LeadKanbanCardProps) {
   const {
     attributes,
@@ -184,26 +189,16 @@ export const LeadKanbanCard = memo(function LeadKanbanCard({
         onClick={(e) => e.stopPropagation()}
         onKeyDown={(e) => e.stopPropagation()}
       >
-        <PermissionGuard
-          permissions={[
-            PermissionActions.leads.editar,
-            PermissionActions.leads.gestionar,
-          ]}
-        >
+        {permissions.canEdit && (
           <LeadSheetForm
             lead={lead}
             open={isUpdateOpen}
             onOpenChange={closeUpdateModal}
           />
-        </PermissionGuard>
+        )}
 
         {/* Modal de eliminación */}
-        <PermissionGuard
-          permissions={[
-            PermissionActions.leads.eliminar,
-            PermissionActions.leads.gestionar,
-          ]}
-        >
+        {permissions.canDelete && (
           <DeleteLeadAlertDialog
             isOpen={isDeleteOpen}
             onOpenChange={closeDeleteModal}
@@ -211,20 +206,15 @@ export const LeadKanbanCard = memo(function LeadKanbanCard({
             leadName={lead.companyName}
             isLoading={deleteLeadMutation.isPending}
           />
-        </PermissionGuard>
+        )}
 
-        <PermissionGuard
-          permissions={[
-            PermissionActions.leads.editar,
-            PermissionActions.leads.gestionar,
-          ]}
-        >
+        {permissions.canEdit && (
           <ReasignLeadDialog
             isOpen={isReasignOpen}
             onOpenChange={closeReasignModal}
             leadId={lead.id}
           />
-        </PermissionGuard>
+        )}
       </div>
     </div>
   );

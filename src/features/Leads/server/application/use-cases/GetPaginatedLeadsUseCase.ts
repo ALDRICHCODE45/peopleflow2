@@ -18,6 +18,8 @@ export interface GetPaginatedLeadsInput {
     assignedToIds?: string[];
     search?: string;
   };
+  /** If true, uses minimal includes for faster Kanban queries */
+  minimal?: boolean;
 }
 
 export interface GetPaginatedLeadsOutput {
@@ -51,6 +53,7 @@ export class GetPaginatedLeadsUseCase {
         take: pageSize,
         sorting: input.sorting,
         filters,
+        minimal: input.minimal,
       });
 
       return {
