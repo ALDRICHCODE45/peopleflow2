@@ -141,10 +141,11 @@ export interface LeadStatusHistoryItem {
 export interface Lead {
   id: string;
   companyName: string;
-  rfc: string | null;
   website: string | null;
   linkedInUrl: string | null;
   address: string | null;
+  subOrigin: string | null;
+  employeeCount: string | null;
   notes: string | null;
   status: LeadStatus;
   sectorId: string | null;
@@ -194,6 +195,7 @@ export interface DeleteLeadResult {
 export interface UpdateLeadStatusResult {
   error: string | null;
   lead?: Lead;
+  missingFields?: string[];
 }
 
 export interface ReasignLeadResult {
@@ -226,6 +228,16 @@ export interface CreateInteractionResult {
   interaction?: Interaction;
 }
 
+export interface UpdateInteractionResult {
+  error: string | null;
+  interaction?: Interaction;
+}
+
+export interface DeleteInteractionResult {
+  error: string | null;
+  success: boolean;
+}
+
 export interface GetSectorsResult {
   error: string | null;
   sectors: Sector[];
@@ -247,10 +259,11 @@ export interface GetLeadOriginsResult {
 
 export interface LeadFormData {
   companyName: string;
-  rfc?: string;
   website?: string;
   linkedInUrl?: string;
   address?: string;
+  subOrigin?: string;
+  employeeCount?: string;
   notes?: string;
   status?: LeadStatus;
   sectorId?: string;
@@ -261,10 +274,11 @@ export interface LeadFormData {
 
 export interface CreateLeadFormData {
   companyName: string;
-  rfc?: string;
   website?: string;
   linkedInUrl?: string;
   address?: string;
+  subOrigin?: string;
+  employeeCount?: string;
   notes?: string;
   sectorId?: string;
   subsectorId?: string;

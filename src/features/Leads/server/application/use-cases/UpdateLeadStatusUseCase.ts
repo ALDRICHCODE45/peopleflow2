@@ -22,7 +22,18 @@ export interface UpdateLeadStatusOutput {
   success: boolean;
   lead?: Lead;
   error?: string;
+  missingFields?: string[];
 }
+
+// Estados que requieren datos completos
+const STATES_REQUIRING_COMPLETE_DATA: LeadStatusType[] = [
+  "CONTACTO_CALIDO",
+  "CITA_AGENDADA",
+  "CITA_ATENDIDA",
+  "CITA_VALIDADA",
+  "POSICIONES_ASIGNADAS",
+  "STAND_BY",
+];
 
 export class UpdateLeadStatusUseCase {
   constructor(
@@ -50,6 +61,18 @@ export class UpdateLeadStatusUseCase {
           success: false,
           error: "El lead no puede ser editado",
         };
+      }
+
+      // Verificar datos completos para estados avanzados
+      if (STATES_REQUIRING_COMPLETE_DATA.includes(input.newStatus)) {
+        if (!lead.isDataComplete()) {
+          const missingFields = lead.getMissingFields();
+          return {
+            success: false,
+            error: "INCOMPLETE_DATA",
+            missingFields,
+          };
+        }
       }
 
       const oldStatus = lead.status;

@@ -1,16 +1,17 @@
 import type { ILeadRepository, UpdateLeadData } from "../../domain/interfaces/ILeadRepository";
 import { Lead } from "../../domain/entities/Lead";
-import { CompanyNameVO, RFCVO, URLVO } from "../../domain/value-objects";
+import { CompanyNameVO, URLVO } from "../../domain/value-objects";
 
 export interface UpdateLeadInput {
   leadId: string;
   tenantId: string;
   data: {
     companyName?: string;
-    rfc?: string | null;
     website?: string | null;
     linkedInUrl?: string | null;
     address?: string | null;
+    subOrigin?: string | null;
+    employeeCount?: string | null;
     notes?: string | null;
     sectorId?: string | null;
     subsectorId?: string | null;
@@ -58,12 +59,6 @@ export class UpdateLeadUseCase {
         updateData.companyName = companyName.getValue();
       }
 
-      // Validar y procesar RFC si se proporciona
-      if (input.data.rfc !== undefined) {
-        const rfc = RFCVO.create(input.data.rfc);
-        updateData.rfc = rfc.getValue();
-      }
-
       // Validar y procesar website si se proporciona
       if (input.data.website !== undefined) {
         const website = URLVO.create(input.data.website);
@@ -78,6 +73,12 @@ export class UpdateLeadUseCase {
 
       if (input.data.address !== undefined) {
         updateData.address = input.data.address?.trim() || null;
+      }
+      if (input.data.subOrigin !== undefined) {
+        updateData.subOrigin = input.data.subOrigin?.trim() || null;
+      }
+      if (input.data.employeeCount !== undefined) {
+        updateData.employeeCount = input.data.employeeCount?.trim() || null;
       }
       if (input.data.notes !== undefined) {
         updateData.notes = input.data.notes?.trim() || null;

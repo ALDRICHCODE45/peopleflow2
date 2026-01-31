@@ -69,11 +69,6 @@ export function LeadDetailSheet({
                   {displayLead.companyName}
                 </TooltipContent>
               </Tooltip>
-              {displayLead.rfc && (
-                <p className="text-sm text-muted-foreground mt-0.5">
-                  RFC: {displayLead.rfc}
-                </p>
-              )}
             </div>
             <div className="md:mr-4">
               <LeadStatusBadge status={displayLead.status} />
@@ -131,10 +126,15 @@ export function LeadDetailSheet({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <InfoItem label="Origen" value={displayLead.originName} />
-            <InfoItem label="Asignado a" value={displayLead.assignedToName} />
+            <InfoItem label="Sub-Origen" value={displayLead.subOrigin} />
           </div>
 
-          <InfoItem label="Dirección" value={displayLead.address} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <InfoItem label="Asignado a" value={displayLead.assignedToName} />
+            <InfoItem label="Empleados" value={displayLead.employeeCount} />
+          </div>
+
+          <InfoItem label="Direccion" value={displayLead.address} />
 
           {/* Dates */}
           <div className="pt-3 border-t">

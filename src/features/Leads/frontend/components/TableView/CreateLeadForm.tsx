@@ -61,29 +61,6 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
         }}
       </form.Field>
 
-      {/* RFC */}
-      <form.Field name="rfc">
-        {(field) => {
-          const isInvalid =
-            field.state.meta.isTouched && !field.state.meta.isValid;
-          return (
-            <Field data-invalid={isInvalid}>
-              <FieldLabel htmlFor={field.name}>RFC</FieldLabel>
-              <Input
-                id={field.name}
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
-                placeholder="RFC de la empresa"
-                maxLength={13}
-                aria-invalid={isInvalid}
-              />
-              {isInvalid && <FieldError errors={field.state.meta.errors} />}
-            </Field>
-          );
-        }}
-      </form.Field>
-
       {/* Sector y Subsector */}
       <div className="grid grid-cols-2 gap-4">
         <form.Field name="sectorId">
@@ -163,6 +140,38 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
                 ))}
               </SelectContent>
             </Select>
+          </Field>
+        )}
+      </form.Field>
+
+      {/* Sub-Origen */}
+      <form.Field name="subOrigin">
+        {(field) => (
+          <Field>
+            <FieldLabel htmlFor={field.name}>Sub-Origen</FieldLabel>
+            <Input
+              id={field.name}
+              value={field.state.value}
+              onBlur={field.handleBlur}
+              onChange={(e) => field.handleChange(e.target.value)}
+              placeholder="URL especifica, publicacion, etc."
+            />
+          </Field>
+        )}
+      </form.Field>
+
+      {/* Empleados */}
+      <form.Field name="employeeCount">
+        {(field) => (
+          <Field>
+            <FieldLabel htmlFor={field.name}>Numero de empleados</FieldLabel>
+            <Input
+              id={field.name}
+              value={field.state.value}
+              onBlur={field.handleBlur}
+              onChange={(e) => field.handleChange(e.target.value)}
+              placeholder="Ej: 20-40 empleados"
+            />
           </Field>
         )}
       </form.Field>

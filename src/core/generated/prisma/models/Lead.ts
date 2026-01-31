@@ -27,10 +27,11 @@ export type AggregateLead = {
 export type LeadMinAggregateOutputType = {
   id: string | null
   companyName: string | null
-  rfc: string | null
   website: string | null
   linkedInUrl: string | null
   address: string | null
+  subOrigin: string | null
+  employeeCount: string | null
   notes: string | null
   status: $Enums.LeadStatus | null
   sectorId: string | null
@@ -48,10 +49,11 @@ export type LeadMinAggregateOutputType = {
 export type LeadMaxAggregateOutputType = {
   id: string | null
   companyName: string | null
-  rfc: string | null
   website: string | null
   linkedInUrl: string | null
   address: string | null
+  subOrigin: string | null
+  employeeCount: string | null
   notes: string | null
   status: $Enums.LeadStatus | null
   sectorId: string | null
@@ -69,10 +71,11 @@ export type LeadMaxAggregateOutputType = {
 export type LeadCountAggregateOutputType = {
   id: number
   companyName: number
-  rfc: number
   website: number
   linkedInUrl: number
   address: number
+  subOrigin: number
+  employeeCount: number
   notes: number
   status: number
   sectorId: number
@@ -92,10 +95,11 @@ export type LeadCountAggregateOutputType = {
 export type LeadMinAggregateInputType = {
   id?: true
   companyName?: true
-  rfc?: true
   website?: true
   linkedInUrl?: true
   address?: true
+  subOrigin?: true
+  employeeCount?: true
   notes?: true
   status?: true
   sectorId?: true
@@ -113,10 +117,11 @@ export type LeadMinAggregateInputType = {
 export type LeadMaxAggregateInputType = {
   id?: true
   companyName?: true
-  rfc?: true
   website?: true
   linkedInUrl?: true
   address?: true
+  subOrigin?: true
+  employeeCount?: true
   notes?: true
   status?: true
   sectorId?: true
@@ -134,10 +139,11 @@ export type LeadMaxAggregateInputType = {
 export type LeadCountAggregateInputType = {
   id?: true
   companyName?: true
-  rfc?: true
   website?: true
   linkedInUrl?: true
   address?: true
+  subOrigin?: true
+  employeeCount?: true
   notes?: true
   status?: true
   sectorId?: true
@@ -228,10 +234,11 @@ export type LeadGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type LeadGroupByOutputType = {
   id: string
   companyName: string
-  rfc: string | null
   website: string | null
   linkedInUrl: string | null
   address: string | null
+  subOrigin: string | null
+  employeeCount: string | null
   notes: string | null
   status: $Enums.LeadStatus
   sectorId: string | null
@@ -270,10 +277,11 @@ export type LeadWhereInput = {
   NOT?: Prisma.LeadWhereInput | Prisma.LeadWhereInput[]
   id?: Prisma.StringFilter<"Lead"> | string
   companyName?: Prisma.StringFilter<"Lead"> | string
-  rfc?: Prisma.StringNullableFilter<"Lead"> | string | null
   website?: Prisma.StringNullableFilter<"Lead"> | string | null
   linkedInUrl?: Prisma.StringNullableFilter<"Lead"> | string | null
   address?: Prisma.StringNullableFilter<"Lead"> | string | null
+  subOrigin?: Prisma.StringNullableFilter<"Lead"> | string | null
+  employeeCount?: Prisma.StringNullableFilter<"Lead"> | string | null
   notes?: Prisma.StringNullableFilter<"Lead"> | string | null
   status?: Prisma.EnumLeadStatusFilter<"Lead"> | $Enums.LeadStatus
   sectorId?: Prisma.StringNullableFilter<"Lead"> | string | null
@@ -300,10 +308,11 @@ export type LeadWhereInput = {
 export type LeadOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   companyName?: Prisma.SortOrder
-  rfc?: Prisma.SortOrderInput | Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
   linkedInUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
+  subOrigin?: Prisma.SortOrderInput | Prisma.SortOrder
+  employeeCount?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   sectorId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -333,10 +342,11 @@ export type LeadWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.LeadWhereInput[]
   NOT?: Prisma.LeadWhereInput | Prisma.LeadWhereInput[]
   companyName?: Prisma.StringFilter<"Lead"> | string
-  rfc?: Prisma.StringNullableFilter<"Lead"> | string | null
   website?: Prisma.StringNullableFilter<"Lead"> | string | null
   linkedInUrl?: Prisma.StringNullableFilter<"Lead"> | string | null
   address?: Prisma.StringNullableFilter<"Lead"> | string | null
+  subOrigin?: Prisma.StringNullableFilter<"Lead"> | string | null
+  employeeCount?: Prisma.StringNullableFilter<"Lead"> | string | null
   notes?: Prisma.StringNullableFilter<"Lead"> | string | null
   status?: Prisma.EnumLeadStatusFilter<"Lead"> | $Enums.LeadStatus
   sectorId?: Prisma.StringNullableFilter<"Lead"> | string | null
@@ -363,10 +373,11 @@ export type LeadWhereUniqueInput = Prisma.AtLeast<{
 export type LeadOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   companyName?: Prisma.SortOrder
-  rfc?: Prisma.SortOrderInput | Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
   linkedInUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
+  subOrigin?: Prisma.SortOrderInput | Prisma.SortOrder
+  employeeCount?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   sectorId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -390,10 +401,11 @@ export type LeadScalarWhereWithAggregatesInput = {
   NOT?: Prisma.LeadScalarWhereWithAggregatesInput | Prisma.LeadScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Lead"> | string
   companyName?: Prisma.StringWithAggregatesFilter<"Lead"> | string
-  rfc?: Prisma.StringNullableWithAggregatesFilter<"Lead"> | string | null
   website?: Prisma.StringNullableWithAggregatesFilter<"Lead"> | string | null
   linkedInUrl?: Prisma.StringNullableWithAggregatesFilter<"Lead"> | string | null
   address?: Prisma.StringNullableWithAggregatesFilter<"Lead"> | string | null
+  subOrigin?: Prisma.StringNullableWithAggregatesFilter<"Lead"> | string | null
+  employeeCount?: Prisma.StringNullableWithAggregatesFilter<"Lead"> | string | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"Lead"> | string | null
   status?: Prisma.EnumLeadStatusWithAggregatesFilter<"Lead"> | $Enums.LeadStatus
   sectorId?: Prisma.StringNullableWithAggregatesFilter<"Lead"> | string | null
@@ -411,10 +423,11 @@ export type LeadScalarWhereWithAggregatesInput = {
 export type LeadCreateInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   isDeleted?: boolean
@@ -435,10 +448,11 @@ export type LeadCreateInput = {
 export type LeadUncheckedCreateInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   sectorId?: string | null
@@ -459,10 +473,11 @@ export type LeadUncheckedCreateInput = {
 export type LeadUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -483,10 +498,11 @@ export type LeadUpdateInput = {
 export type LeadUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   sectorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -507,10 +523,11 @@ export type LeadUncheckedUpdateInput = {
 export type LeadCreateManyInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   sectorId?: string | null
@@ -528,10 +545,11 @@ export type LeadCreateManyInput = {
 export type LeadUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -543,10 +561,11 @@ export type LeadUpdateManyMutationInput = {
 export type LeadUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   sectorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -574,10 +593,11 @@ export type LeadOrderByRelationAggregateInput = {
 export type LeadCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   companyName?: Prisma.SortOrder
-  rfc?: Prisma.SortOrder
   website?: Prisma.SortOrder
   linkedInUrl?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  subOrigin?: Prisma.SortOrder
+  employeeCount?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   status?: Prisma.SortOrder
   sectorId?: Prisma.SortOrder
@@ -595,10 +615,11 @@ export type LeadCountOrderByAggregateInput = {
 export type LeadMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   companyName?: Prisma.SortOrder
-  rfc?: Prisma.SortOrder
   website?: Prisma.SortOrder
   linkedInUrl?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  subOrigin?: Prisma.SortOrder
+  employeeCount?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   status?: Prisma.SortOrder
   sectorId?: Prisma.SortOrder
@@ -616,10 +637,11 @@ export type LeadMaxOrderByAggregateInput = {
 export type LeadMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   companyName?: Prisma.SortOrder
-  rfc?: Prisma.SortOrder
   website?: Prisma.SortOrder
   linkedInUrl?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  subOrigin?: Prisma.SortOrder
+  employeeCount?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   status?: Prisma.SortOrder
   sectorId?: Prisma.SortOrder
@@ -947,10 +969,11 @@ export type LeadUpdateOneWithoutAttachmentsNestedInput = {
 export type LeadCreateWithoutAssignedToInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   isDeleted?: boolean
@@ -970,10 +993,11 @@ export type LeadCreateWithoutAssignedToInput = {
 export type LeadUncheckedCreateWithoutAssignedToInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   sectorId?: string | null
@@ -1003,10 +1027,11 @@ export type LeadCreateManyAssignedToInputEnvelope = {
 export type LeadCreateWithoutCreatedByInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   isDeleted?: boolean
@@ -1026,10 +1051,11 @@ export type LeadCreateWithoutCreatedByInput = {
 export type LeadUncheckedCreateWithoutCreatedByInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   sectorId?: string | null
@@ -1078,10 +1104,11 @@ export type LeadScalarWhereInput = {
   NOT?: Prisma.LeadScalarWhereInput | Prisma.LeadScalarWhereInput[]
   id?: Prisma.StringFilter<"Lead"> | string
   companyName?: Prisma.StringFilter<"Lead"> | string
-  rfc?: Prisma.StringNullableFilter<"Lead"> | string | null
   website?: Prisma.StringNullableFilter<"Lead"> | string | null
   linkedInUrl?: Prisma.StringNullableFilter<"Lead"> | string | null
   address?: Prisma.StringNullableFilter<"Lead"> | string | null
+  subOrigin?: Prisma.StringNullableFilter<"Lead"> | string | null
+  employeeCount?: Prisma.StringNullableFilter<"Lead"> | string | null
   notes?: Prisma.StringNullableFilter<"Lead"> | string | null
   status?: Prisma.EnumLeadStatusFilter<"Lead"> | $Enums.LeadStatus
   sectorId?: Prisma.StringNullableFilter<"Lead"> | string | null
@@ -1115,10 +1142,11 @@ export type LeadUpdateManyWithWhereWithoutCreatedByInput = {
 export type LeadCreateWithoutTenantInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   isDeleted?: boolean
@@ -1138,10 +1166,11 @@ export type LeadCreateWithoutTenantInput = {
 export type LeadUncheckedCreateWithoutTenantInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   sectorId?: string | null
@@ -1187,10 +1216,11 @@ export type LeadUpdateManyWithWhereWithoutTenantInput = {
 export type LeadCreateWithoutSectorInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   isDeleted?: boolean
@@ -1210,10 +1240,11 @@ export type LeadCreateWithoutSectorInput = {
 export type LeadUncheckedCreateWithoutSectorInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   subsectorId?: string | null
@@ -1259,10 +1290,11 @@ export type LeadUpdateManyWithWhereWithoutSectorInput = {
 export type LeadCreateWithoutSubsectorInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   isDeleted?: boolean
@@ -1282,10 +1314,11 @@ export type LeadCreateWithoutSubsectorInput = {
 export type LeadUncheckedCreateWithoutSubsectorInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   sectorId?: string | null
@@ -1331,10 +1364,11 @@ export type LeadUpdateManyWithWhereWithoutSubsectorInput = {
 export type LeadCreateWithoutOriginInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   isDeleted?: boolean
@@ -1354,10 +1388,11 @@ export type LeadCreateWithoutOriginInput = {
 export type LeadUncheckedCreateWithoutOriginInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   sectorId?: string | null
@@ -1403,10 +1438,11 @@ export type LeadUpdateManyWithWhereWithoutOriginInput = {
 export type LeadCreateWithoutStatusHistoryInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   isDeleted?: boolean
@@ -1426,10 +1462,11 @@ export type LeadCreateWithoutStatusHistoryInput = {
 export type LeadUncheckedCreateWithoutStatusHistoryInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   sectorId?: string | null
@@ -1465,10 +1502,11 @@ export type LeadUpdateToOneWithWhereWithoutStatusHistoryInput = {
 export type LeadUpdateWithoutStatusHistoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1488,10 +1526,11 @@ export type LeadUpdateWithoutStatusHistoryInput = {
 export type LeadUncheckedUpdateWithoutStatusHistoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   sectorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1511,10 +1550,11 @@ export type LeadUncheckedUpdateWithoutStatusHistoryInput = {
 export type LeadCreateWithoutContactsInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   isDeleted?: boolean
@@ -1534,10 +1574,11 @@ export type LeadCreateWithoutContactsInput = {
 export type LeadUncheckedCreateWithoutContactsInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   sectorId?: string | null
@@ -1573,10 +1614,11 @@ export type LeadUpdateToOneWithWhereWithoutContactsInput = {
 export type LeadUpdateWithoutContactsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1596,10 +1638,11 @@ export type LeadUpdateWithoutContactsInput = {
 export type LeadUncheckedUpdateWithoutContactsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   sectorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1619,10 +1662,11 @@ export type LeadUncheckedUpdateWithoutContactsInput = {
 export type LeadCreateWithoutAttachmentsInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   isDeleted?: boolean
@@ -1642,10 +1686,11 @@ export type LeadCreateWithoutAttachmentsInput = {
 export type LeadUncheckedCreateWithoutAttachmentsInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   sectorId?: string | null
@@ -1681,10 +1726,11 @@ export type LeadUpdateToOneWithWhereWithoutAttachmentsInput = {
 export type LeadUpdateWithoutAttachmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1704,10 +1750,11 @@ export type LeadUpdateWithoutAttachmentsInput = {
 export type LeadUncheckedUpdateWithoutAttachmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   sectorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1727,10 +1774,11 @@ export type LeadUncheckedUpdateWithoutAttachmentsInput = {
 export type LeadCreateManyAssignedToInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   sectorId?: string | null
@@ -1747,10 +1795,11 @@ export type LeadCreateManyAssignedToInput = {
 export type LeadCreateManyCreatedByInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   sectorId?: string | null
@@ -1767,10 +1816,11 @@ export type LeadCreateManyCreatedByInput = {
 export type LeadUpdateWithoutAssignedToInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1790,10 +1840,11 @@ export type LeadUpdateWithoutAssignedToInput = {
 export type LeadUncheckedUpdateWithoutAssignedToInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   sectorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1813,10 +1864,11 @@ export type LeadUncheckedUpdateWithoutAssignedToInput = {
 export type LeadUncheckedUpdateManyWithoutAssignedToInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   sectorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1833,10 +1885,11 @@ export type LeadUncheckedUpdateManyWithoutAssignedToInput = {
 export type LeadUpdateWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1856,10 +1909,11 @@ export type LeadUpdateWithoutCreatedByInput = {
 export type LeadUncheckedUpdateWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   sectorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1879,10 +1933,11 @@ export type LeadUncheckedUpdateWithoutCreatedByInput = {
 export type LeadUncheckedUpdateManyWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   sectorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1899,10 +1954,11 @@ export type LeadUncheckedUpdateManyWithoutCreatedByInput = {
 export type LeadCreateManyTenantInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   sectorId?: string | null
@@ -1919,10 +1975,11 @@ export type LeadCreateManyTenantInput = {
 export type LeadUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1942,10 +1999,11 @@ export type LeadUpdateWithoutTenantInput = {
 export type LeadUncheckedUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   sectorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1965,10 +2023,11 @@ export type LeadUncheckedUpdateWithoutTenantInput = {
 export type LeadUncheckedUpdateManyWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   sectorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1985,10 +2044,11 @@ export type LeadUncheckedUpdateManyWithoutTenantInput = {
 export type LeadCreateManySectorInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   subsectorId?: string | null
@@ -2005,10 +2065,11 @@ export type LeadCreateManySectorInput = {
 export type LeadUpdateWithoutSectorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2028,10 +2089,11 @@ export type LeadUpdateWithoutSectorInput = {
 export type LeadUncheckedUpdateWithoutSectorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   subsectorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2051,10 +2113,11 @@ export type LeadUncheckedUpdateWithoutSectorInput = {
 export type LeadUncheckedUpdateManyWithoutSectorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   subsectorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2071,10 +2134,11 @@ export type LeadUncheckedUpdateManyWithoutSectorInput = {
 export type LeadCreateManySubsectorInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   sectorId?: string | null
@@ -2091,10 +2155,11 @@ export type LeadCreateManySubsectorInput = {
 export type LeadUpdateWithoutSubsectorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2114,10 +2179,11 @@ export type LeadUpdateWithoutSubsectorInput = {
 export type LeadUncheckedUpdateWithoutSubsectorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   sectorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2137,10 +2203,11 @@ export type LeadUncheckedUpdateWithoutSubsectorInput = {
 export type LeadUncheckedUpdateManyWithoutSubsectorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   sectorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2157,10 +2224,11 @@ export type LeadUncheckedUpdateManyWithoutSubsectorInput = {
 export type LeadCreateManyOriginInput = {
   id?: string
   companyName: string
-  rfc?: string | null
   website?: string | null
   linkedInUrl?: string | null
   address?: string | null
+  subOrigin?: string | null
+  employeeCount?: string | null
   notes?: string | null
   status?: $Enums.LeadStatus
   sectorId?: string | null
@@ -2177,10 +2245,11 @@ export type LeadCreateManyOriginInput = {
 export type LeadUpdateWithoutOriginInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2200,10 +2269,11 @@ export type LeadUpdateWithoutOriginInput = {
 export type LeadUncheckedUpdateWithoutOriginInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   sectorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2223,10 +2293,11 @@ export type LeadUncheckedUpdateWithoutOriginInput = {
 export type LeadUncheckedUpdateManyWithoutOriginInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
   sectorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2292,10 +2363,11 @@ export type LeadCountOutputTypeCountAttachmentsArgs<ExtArgs extends runtime.Type
 export type LeadSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   companyName?: boolean
-  rfc?: boolean
   website?: boolean
   linkedInUrl?: boolean
   address?: boolean
+  subOrigin?: boolean
+  employeeCount?: boolean
   notes?: boolean
   status?: boolean
   sectorId?: boolean
@@ -2323,10 +2395,11 @@ export type LeadSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type LeadSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   companyName?: boolean
-  rfc?: boolean
   website?: boolean
   linkedInUrl?: boolean
   address?: boolean
+  subOrigin?: boolean
+  employeeCount?: boolean
   notes?: boolean
   status?: boolean
   sectorId?: boolean
@@ -2350,10 +2423,11 @@ export type LeadSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type LeadSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   companyName?: boolean
-  rfc?: boolean
   website?: boolean
   linkedInUrl?: boolean
   address?: boolean
+  subOrigin?: boolean
+  employeeCount?: boolean
   notes?: boolean
   status?: boolean
   sectorId?: boolean
@@ -2377,10 +2451,11 @@ export type LeadSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type LeadSelectScalar = {
   id?: boolean
   companyName?: boolean
-  rfc?: boolean
   website?: boolean
   linkedInUrl?: boolean
   address?: boolean
+  subOrigin?: boolean
+  employeeCount?: boolean
   notes?: boolean
   status?: boolean
   sectorId?: boolean
@@ -2395,7 +2470,7 @@ export type LeadSelectScalar = {
   updatedAt?: boolean
 }
 
-export type LeadOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyName" | "rfc" | "website" | "linkedInUrl" | "address" | "notes" | "status" | "sectorId" | "subsectorId" | "originId" | "assignedToId" | "isDeleted" | "deletedAt" | "tenantId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["lead"]>
+export type LeadOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyName" | "website" | "linkedInUrl" | "address" | "subOrigin" | "employeeCount" | "notes" | "status" | "sectorId" | "subsectorId" | "originId" | "assignedToId" | "isDeleted" | "deletedAt" | "tenantId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["lead"]>
 export type LeadInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sector?: boolean | Prisma.Lead$sectorArgs<ExtArgs>
   subsector?: boolean | Prisma.Lead$subsectorArgs<ExtArgs>
@@ -2441,10 +2516,11 @@ export type $LeadPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     companyName: string
-    rfc: string | null
     website: string | null
     linkedInUrl: string | null
     address: string | null
+    subOrigin: string | null
+    employeeCount: string | null
     notes: string | null
     status: $Enums.LeadStatus
     sectorId: string | null
@@ -2891,10 +2967,11 @@ export interface Prisma__LeadClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface LeadFieldRefs {
   readonly id: Prisma.FieldRef<"Lead", 'String'>
   readonly companyName: Prisma.FieldRef<"Lead", 'String'>
-  readonly rfc: Prisma.FieldRef<"Lead", 'String'>
   readonly website: Prisma.FieldRef<"Lead", 'String'>
   readonly linkedInUrl: Prisma.FieldRef<"Lead", 'String'>
   readonly address: Prisma.FieldRef<"Lead", 'String'>
+  readonly subOrigin: Prisma.FieldRef<"Lead", 'String'>
+  readonly employeeCount: Prisma.FieldRef<"Lead", 'String'>
   readonly notes: Prisma.FieldRef<"Lead", 'String'>
   readonly status: Prisma.FieldRef<"Lead", 'LeadStatus'>
   readonly sectorId: Prisma.FieldRef<"Lead", 'String'>

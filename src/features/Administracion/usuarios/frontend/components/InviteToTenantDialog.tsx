@@ -44,15 +44,11 @@ export function InviteToTenantDialog({
   const [selectedRoleIds, setSelectedRoleIds] = useState<string[]>([]);
 
   // Queries
-  const {
-    data: tenants = [],
-    isLoading: isLoadingTenants,
-  } = useInvitableTenantsQuery();
+  const { data: tenants = [], isLoading: isLoadingTenants } =
+    useInvitableTenantsQuery();
 
-  const {
-    data: roles = [],
-    isLoading: isLoadingRoles,
-  } = useTenantRolesQuery(selectedTenantId);
+  const { data: roles = [], isLoading: isLoadingRoles } =
+    useTenantRolesQuery(selectedTenantId);
 
   // Mutation
   const inviteMutation = useInviteToTenant();
@@ -121,7 +117,9 @@ export function InviteToTenantDialog({
             ) : (
               <Combobox
                 value={selectedTenantId}
-                onValueChange={(value) => setSelectedTenantId(value as string | null)}
+                onValueChange={(value) =>
+                  setSelectedTenantId(value as string | null)
+                }
               >
                 <ComboboxInput
                   placeholder="Selecciona una organizacion..."
@@ -134,7 +132,9 @@ export function InviteToTenantDialog({
                         {tenant.name}
                       </ComboboxItem>
                     ))}
-                    <ComboboxEmpty>No se encontraron organizaciones</ComboboxEmpty>
+                    <ComboboxEmpty>
+                      No se encontraron organizaciones
+                    </ComboboxEmpty>
                   </ComboboxList>
                 </ComboboxContent>
               </Combobox>

@@ -2023,10 +2023,11 @@ export type LeadOriginScalarFieldEnum = (typeof LeadOriginScalarFieldEnum)[keyof
 export const LeadScalarFieldEnum = {
   id: 'id',
   companyName: 'companyName',
-  rfc: 'rfc',
   website: 'website',
   linkedInUrl: 'linkedInUrl',
   address: 'address',
+  subOrigin: 'subOrigin',
+  employeeCount: 'employeeCount',
   notes: 'notes',
   status: 'status',
   sectorId: 'sectorId',

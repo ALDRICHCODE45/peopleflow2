@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
-import { useUpdateLead } from "./useLeads";
+import { useUpdateLead, useUpdateLeadStatus } from "./useLeads";
 import {
   useSectors,
   useSubsectorsBySector,
@@ -19,6 +19,7 @@ export function useEditLeadForm({
   onOpenChange: (open: boolean) => void;
 }) {
   const updateLeadMutation = useUpdateLead();
+  const updateStatusMutation = useUpdateLeadStatus();
   const [selectedSectorId, setSelectedSectorId] = useState<string | undefined>(
     lead.sectorId ?? undefined,
   );
@@ -32,10 +33,11 @@ export function useEditLeadForm({
   const form = useForm({
     defaultValues: {
       companyName: lead.companyName,
-      rfc: lead.rfc ?? "",
       website: lead.website ?? "",
       linkedInUrl: lead.linkedInUrl ?? "",
       address: lead.address ?? "",
+      subOrigin: lead.subOrigin ?? "",
+      employeeCount: lead.employeeCount ?? "",
       notes: lead.notes ?? "",
       status: lead.status,
       sectorId: lead.sectorId ?? undefined,
@@ -47,10 +49,22 @@ export function useEditLeadForm({
       onSubmit: editLeadSchema,
     },
     onSubmit: async ({ value }) => {
+      const { status, ...dataWithoutStatus } = value;
+
+      // Update general fields (without status)
       await updateLeadMutation.mutateAsync({
         leadId: lead.id,
-        data: value,
+        data: dataWithoutStatus,
       });
+
+      // If status changed, use dedicated action (records history)
+      if (status !== lead.status) {
+        await updateStatusMutation.mutateAsync({
+          leadId: lead.id,
+          newStatus: status,
+        });
+      }
+
       onOpenChange(false);
     },
   });
@@ -68,6 +82,6 @@ export function useEditLeadForm({
     origins,
     selectedSectorId,
     handleSectorChange,
-    isSubmitting: updateLeadMutation.isPending,
+    isSubmitting: updateLeadMutation.isPending || updateStatusMutation.isPending,
   };
 }

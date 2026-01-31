@@ -7,7 +7,10 @@ import {
   addInteractionAction,
   getInteractionsByLeadAction,
   getInteractionsByContactAction,
+  updateInteractionAction,
+  deleteInteractionAction,
 } from "../../server/presentation/actions/interaction.actions";
+import type { InteractionType } from "../types";
 
 /**
  * Hook para obtener interacciones de un lead
@@ -74,6 +77,81 @@ export function useAddInteraction() {
         type: "error",
         title: "Error",
         description: error.message || "Error al agregar la interacción",
+      });
+    },
+  });
+}
+
+/**
+ * Hook para actualizar una interacción
+ */
+export function useUpdateInteraction() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      interactionId,
+      data,
+    }: {
+      interactionId: string;
+      data: {
+        type?: InteractionType;
+        subject?: string;
+        content?: string | null;
+        date?: string;
+      };
+    }) => {
+      const result = await updateInteractionAction(interactionId, data);
+      if (result.error) {
+        throw new Error(result.error);
+      }
+      return result.interaction;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["interactions"] });
+      showToast({
+        type: "success",
+        title: "Interacción actualizada",
+        description: "La interacción se ha actualizado correctamente",
+      });
+    },
+    onError: (error: Error) => {
+      showToast({
+        type: "error",
+        title: "Error",
+        description: error.message || "Error al actualizar la interacción",
+      });
+    },
+  });
+}
+
+/**
+ * Hook para eliminar una interacción
+ */
+export function useDeleteInteraction() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (interactionId: string) => {
+      const result = await deleteInteractionAction(interactionId);
+      if (result.error) {
+        throw new Error(result.error);
+      }
+      return result.success;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["interactions"] });
+      showToast({
+        type: "success",
+        title: "Interacción eliminada",
+        description: "La interacción se ha eliminado correctamente",
+      });
+    },
+    onError: (error: Error) => {
+      showToast({
+        type: "error",
+        title: "Error",
+        description: error.message || "Error al eliminar la interacción",
       });
     },
   });

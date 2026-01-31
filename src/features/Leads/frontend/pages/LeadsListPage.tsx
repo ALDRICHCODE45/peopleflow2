@@ -166,7 +166,6 @@ export function LeadsListPage() {
               columns={LeadColumns}
               data={leads}
               config={tableConfig}
-              isLoading={isLoading}
               pagination={pagination}
               sorting={sorting}
               onPaginationChange={createPaginationHandler(totalCount)}

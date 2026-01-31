@@ -18,10 +18,11 @@ export class PrismaLeadRepository implements ILeadRepository {
   private mapToDomain(lead: {
     id: string;
     companyName: string;
-    rfc: string | null;
     website: string | null;
     linkedInUrl: string | null;
     address: string | null;
+    subOrigin: string | null;
+    employeeCount: string | null;
     notes: string | null;
     status: string;
     sectorId: string | null;
@@ -44,10 +45,11 @@ export class PrismaLeadRepository implements ILeadRepository {
     const props: LeadProps = {
       id: lead.id,
       companyName: lead.companyName,
-      rfc: lead.rfc,
       website: lead.website,
       linkedInUrl: lead.linkedInUrl,
       address: lead.address,
+      subOrigin: lead.subOrigin,
+      employeeCount: lead.employeeCount,
       notes: lead.notes,
       status: lead.status as LeadStatusType,
       sectorId: lead.sectorId,
@@ -122,12 +124,13 @@ export class PrismaLeadRepository implements ILeadRepository {
     const lead = await prisma.lead.create({
       data: {
         companyName: data.companyName,
-        rfc: data.rfc || null,
         website: data.website || null,
         linkedInUrl: data.linkedInUrl || null,
         address: data.address || null,
+        subOrigin: data.subOrigin || null,
+        employeeCount: data.employeeCount || null,
         notes: data.notes || null,
-        status: data.status || "CONTACTO_CALIDO",
+        status: data.status || "CONTACTO",
         sectorId: data.sectorId || null,
         subsectorId: data.subsectorId || null,
         originId: data.originId || null,
@@ -154,12 +157,15 @@ export class PrismaLeadRepository implements ILeadRepository {
           ...(data.companyName !== undefined && {
             companyName: data.companyName,
           }),
-          ...(data.rfc !== undefined && { rfc: data.rfc }),
           ...(data.website !== undefined && { website: data.website }),
           ...(data.linkedInUrl !== undefined && {
             linkedInUrl: data.linkedInUrl,
           }),
           ...(data.address !== undefined && { address: data.address }),
+          ...(data.subOrigin !== undefined && { subOrigin: data.subOrigin }),
+          ...(data.employeeCount !== undefined && {
+            employeeCount: data.employeeCount,
+          }),
           ...(data.notes !== undefined && { notes: data.notes }),
           ...(data.sectorId !== undefined && { sectorId: data.sectorId }),
           ...(data.subsectorId !== undefined && {
@@ -327,8 +333,8 @@ export class PrismaLeadRepository implements ILeadRepository {
     if (filters?.search) {
       where.OR = [
         { companyName: { contains: filters.search, mode: "insensitive" } },
-        { rfc: { contains: filters.search, mode: "insensitive" } },
         { notes: { contains: filters.search, mode: "insensitive" } },
+        { address: { contains: filters.search, mode: "insensitive" } },
       ];
     }
 

@@ -17,14 +17,21 @@ import {
 import type { Lead, LeadStatus } from "../types";
 import type { useUpdateLeadStatus } from "./useLeads";
 
+interface IncompleteDataError {
+  leadId: string;
+  missingFields: string[];
+}
+
 interface UseKanbanDragAndDropParams {
   leads: Lead[];
   updateStatusMutation: ReturnType<typeof useUpdateLeadStatus>;
+  onIncompleteData?: (data: IncompleteDataError) => void;
 }
 
 export function useKanbanDragAndDrop({
   leads,
   updateStatusMutation,
+  onIncompleteData,
 }: UseKanbanDragAndDropParams) {
   const [columns, setColumns] = useState<KanbanColumn[]>(
     DEFAULT_KANBAN_COLUMNS,
@@ -144,14 +151,32 @@ export function useKanbanDragAndDrop({
         const currentStatus = findColumnForLead(leadId);
 
         if (currentStatus && currentStatus !== targetColumnId) {
-          updateStatusMutation.mutate({
-            leadId,
-            newStatus: targetColumnId,
-          });
+          updateStatusMutation.mutate(
+            {
+              leadId,
+              newStatus: targetColumnId,
+            },
+            {
+              onError: (error: Error) => {
+                if (
+                  error.message === "INCOMPLETE_DATA" &&
+                  onIncompleteData
+                ) {
+                  const typedError = error as Error & {
+                    missingFields: string[];
+                  };
+                  onIncompleteData({
+                    leadId,
+                    missingFields: typedError.missingFields || [],
+                  });
+                }
+              },
+            },
+          );
         }
       }
     },
-    [resolveDropTargetColumn, findColumnForLead, updateStatusMutation],
+    [resolveDropTargetColumn, findColumnForLead, updateStatusMutation, onIncompleteData],
   );
 
   return {

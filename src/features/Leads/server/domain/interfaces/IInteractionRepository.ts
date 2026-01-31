@@ -16,6 +16,13 @@ export interface CreateInteractionData {
   tenantId: string;
 }
 
+export interface UpdateInteractionData {
+  type?: InteractionType;
+  subject?: string;
+  content?: string | null;
+  date?: Date;
+}
+
 export interface IInteractionRepository {
   /**
    * Encuentra una interacción por su ID
@@ -36,6 +43,15 @@ export interface IInteractionRepository {
    * Crea una nueva interacción
    */
   create(data: CreateInteractionData): Promise<Interaction>;
+
+  /**
+   * Actualiza una interacción existente
+   */
+  update(
+    id: string,
+    tenantId: string,
+    data: UpdateInteractionData
+  ): Promise<Interaction | null>;
 
   /**
    * Elimina una interacción

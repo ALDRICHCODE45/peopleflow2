@@ -32,10 +32,11 @@ export function useCreateLeadForm({
   const form = useForm({
     defaultValues: {
       companyName: "",
-      rfc: "",
       website: "",
       linkedInUrl: "",
       address: "",
+      subOrigin: "",
+      employeeCount: "",
       notes: "",
       sectorId: undefined as string | undefined,
       subsectorId: undefined as string | undefined,

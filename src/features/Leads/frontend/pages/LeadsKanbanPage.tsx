@@ -16,13 +16,20 @@ import { KanbanFilters } from "../components/KanbanView/KanbanFilters";
 import { KanbanBoard } from "../components/KanbanView/KanbanBoard";
 import { LeadDetailSheet } from "../components/TableView/LeadDetailSheet";
 import { LeadSheetForm } from "../components/TableView/LeadSheetForm";
+import { IncompleteLeadDialog } from "../components/TableView/IncompleteLeadDialog";
 import type { Lead } from "../types";
 
 export const LeadsKabanPage = () => {
   const filters = useKanbanFilters();
 
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const [leadToEdit, setLeadToEdit] = useState<Lead | null>(null);
   const [isCreating, setIsCreating] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [incompleteData, setIncompleteData] = useState<{
+    leadId: string;
+    missingFields: string[];
+  } | null>(null);
 
   // Memoize filter object to prevent unnecessary query invalidations
   const queryFilters = useMemo(
@@ -68,8 +75,25 @@ export const LeadsKabanPage = () => {
 
   const updateStatusMutation = useUpdateLeadStatus();
   const prefetchLeadDetails = usePrefetchLeadDetails();
+
+  const handleIncompleteData = useCallback(
+    (data: { leadId: string; missingFields: string[] }) => {
+      // Find the lead and store it for editing (not for detail sheet)
+      const lead = allLeads.find((l) => l.id === data.leadId);
+      if (lead) {
+        setLeadToEdit(lead);
+      }
+      setIncompleteData(data);
+    },
+    [allLeads],
+  );
+
   // Pass allLeads for drag & drop status lookups
-  const dnd = useKanbanDragAndDrop({ leads: allLeads, updateStatusMutation });
+  const dnd = useKanbanDragAndDrop({
+    leads: allLeads,
+    updateStatusMutation,
+    onIncompleteData: handleIncompleteData,
+  });
 
   const handleSelectLead = useCallback((lead: Lead) => {
     prefetchLeadDetails(lead.id); // Backup prefetch in case hover didn't trigger
@@ -134,6 +158,31 @@ export const LeadsKabanPage = () => {
           open={isCreating}
           onOpenChange={(open) => {
             if (!open) setIsCreating(false);
+          }}
+        />
+
+        <LeadSheetForm
+          lead={leadToEdit ?? undefined}
+          open={isEditing}
+          onOpenChange={(open) => {
+            if (!open) {
+              setIsEditing(false);
+              setLeadToEdit(null);
+            }
+          }}
+        />
+
+        <IncompleteLeadDialog
+          open={!!incompleteData}
+          onOpenChange={(open) => {
+            if (!open) {
+              setIncompleteData(null);
+            }
+          }}
+          missingFields={incompleteData?.missingFields ?? []}
+          onEditLead={() => {
+            setIncompleteData(null);
+            setIsEditing(true);
           }}
         />
       </CardContent>

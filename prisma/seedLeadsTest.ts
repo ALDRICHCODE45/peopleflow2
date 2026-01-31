@@ -162,17 +162,28 @@ function generateCompanyName(index: number): string {
   return `${prefix} ${name} ${suffix}`;
 }
 
-function generateRFC(): string {
-  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const digits = "0123456789";
+const EMPLOYEE_COUNT_OPTIONS = [
+  "1-10 empleados",
+  "11-50 empleados",
+  "51-100 empleados",
+  "101-250 empleados",
+  "251-500 empleados",
+  "501-1000 empleados",
+  "1000+ empleados",
+];
 
-  let rfc = "";
-  for (let i = 0; i < 3; i++) rfc += letters[randomInt(0, 25)];
-  for (let i = 0; i < 6; i++) rfc += digits[randomInt(0, 9)];
-  for (let i = 0; i < 3; i++) rfc += letters[randomInt(0, 25)];
-
-  return rfc;
-}
+const SUB_ORIGIN_OPTIONS = [
+  "https://linkedin.com/feed/post/123456",
+  "https://facebook.com/company/post/789",
+  "Referido por cliente actual",
+  "Evento de networking AMECH",
+  "Webinar de HR Tech",
+  "Publicación en blog",
+  "Búsqueda orgánica Google",
+  "Campaña de email marketing",
+  "Feria de empleo CDMX",
+  null, // Some leads may not have a sub-origin
+];
 
 function generateAddress(): string {
   const street = randomElement(STREETS);
@@ -298,10 +309,11 @@ async function seedTestLeads() {
 
         leadsData.push({
           companyName,
-          rfc: generateRFC(),
           website: generateWebsite(companyName),
           linkedInUrl: generateLinkedInUrl(companyName),
           address: generateAddress(),
+          subOrigin: randomElement(SUB_ORIGIN_OPTIONS),
+          employeeCount: randomElement(EMPLOYEE_COUNT_OPTIONS),
           notes: randomElement(NOTES_TEMPLATES),
           status,
           sectorId: sector.id,

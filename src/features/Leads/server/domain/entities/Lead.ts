@@ -9,10 +9,11 @@ import { LeadStatusVO, type LeadStatusType } from "../value-objects/LeadStatus";
 export interface LeadProps {
   id: string;
   companyName: string;
-  rfc: string | null;
   website: string | null;
   linkedInUrl: string | null;
   address: string | null;
+  subOrigin: string | null;
+  employeeCount: string | null;
   notes: string | null;
   status: LeadStatusType;
   sectorId: string | null;
@@ -54,10 +55,6 @@ export class Lead {
     return this.props.companyName;
   }
 
-  get rfc(): string | null {
-    return this.props.rfc;
-  }
-
   get website(): string | null {
     return this.props.website;
   }
@@ -68,6 +65,14 @@ export class Lead {
 
   get address(): string | null {
     return this.props.address;
+  }
+
+  get subOrigin(): string | null {
+    return this.props.subOrigin;
+  }
+
+  get employeeCount(): string | null {
+    return this.props.employeeCount;
   }
 
   get notes(): string | null {
@@ -175,16 +180,48 @@ export class Lead {
   }
 
   /**
+   * Verifica si el lead tiene todos los datos requeridos para transicionar
+   * a CONTACTO_CALIDO o estados posteriores
+   */
+  isDataComplete(): boolean {
+    return !!(
+      this.props.companyName &&
+      this.props.sectorId &&
+      this.props.originId &&
+      this.props.address &&
+      this.props.employeeCount &&
+      this.props.website &&
+      this.props.linkedInUrl
+    );
+  }
+
+  /**
+   * Obtiene los campos faltantes para completar el lead
+   */
+  getMissingFields(): string[] {
+    const missing: string[] = [];
+    if (!this.props.companyName) missing.push("Nombre de empresa");
+    if (!this.props.sectorId) missing.push("Sector");
+    if (!this.props.originId) missing.push("Origen");
+    if (!this.props.address) missing.push("Direccion");
+    if (!this.props.employeeCount) missing.push("Numero de empleados");
+    if (!this.props.website) missing.push("Sitio web");
+    if (!this.props.linkedInUrl) missing.push("LinkedIn");
+    return missing;
+  }
+
+  /**
    * Convierte la entidad a DTO para transferencia
    */
   toJSON(): LeadDTO {
     return {
       id: this.props.id,
       companyName: this.props.companyName,
-      rfc: this.props.rfc,
       website: this.props.website,
       linkedInUrl: this.props.linkedInUrl,
       address: this.props.address,
+      subOrigin: this.props.subOrigin,
+      employeeCount: this.props.employeeCount,
       notes: this.props.notes,
       status: this.props.status,
       sectorId: this.props.sectorId,

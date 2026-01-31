@@ -398,10 +398,11 @@ export async function seedSampleLeads(
   const leadsData = [
     {
       companyName: "TechCorp Solutions",
-      rfc: "TCS123456ABC",
       website: "https://techcorp.com",
       linkedInUrl: "https://linkedin.com/company/techcorp",
       address: "Av. Reforma 123, CDMX",
+      subOrigin: "LinkedIn Ads",
+      employeeCount: "50-100 empleados",
       notes: "Empresa de tecnología interesada en servicios de reclutamiento de desarrolladores",
       status: "CONTACTO_CALIDO" as LeadStatus,
       contacts: [
@@ -425,10 +426,11 @@ export async function seedSampleLeads(
     },
     {
       companyName: "Innovate Labs",
-      rfc: "INL789012DEF",
       website: "https://innovatelabs.mx",
       linkedInUrl: "https://linkedin.com/company/innovatelabs",
       address: "Blvd. Insurgentes Sur 456, CDMX",
+      subOrigin: "Referido por cliente",
+      employeeCount: "10-20 empleados",
       notes: "Startup en crecimiento, necesitan escalar equipo de desarrollo",
       status: "CITA_AGENDADA" as LeadStatus,
       contacts: [
@@ -444,10 +446,11 @@ export async function seedSampleLeads(
     },
     {
       companyName: "Global Fintech",
-      rfc: "GFI345678GHI",
       website: "https://globalfintech.com",
       linkedInUrl: "https://linkedin.com/company/globalfintech",
       address: "Paseo de la Reforma 789, CDMX",
+      subOrigin: "Landing page principal",
+      employeeCount: "100-200 empleados",
       notes: "Fintech en expansión regional, buscan perfiles especializados",
       status: "CITA_VALIDADA" as LeadStatus,
       contacts: [
@@ -471,10 +474,11 @@ export async function seedSampleLeads(
     },
     {
       companyName: "Health Solutions MX",
-      rfc: "HSM901234JKL",
       website: "https://healthsolutions.mx",
       linkedInUrl: null,
       address: "Av. Universidad 321, Monterrey",
+      subOrigin: "Google Ads",
+      employeeCount: "200-500 empleados",
       notes: "Empresa del sector salud, interesados en perfiles de TI para hospitales",
       status: "SOCIAL_SELLING" as LeadStatus,
       contacts: [
@@ -490,10 +494,11 @@ export async function seedSampleLeads(
     },
     {
       companyName: "EcoEnergy Corp",
-      rfc: "EEC567890MNO",
       website: "https://ecoenergy.com.mx",
       linkedInUrl: "https://linkedin.com/company/ecoenergy",
       address: "Av. Chapultepec 654, Guadalajara",
+      subOrigin: "Evento de networking",
+      employeeCount: "20-50 empleados",
       notes: "Empresa de energías renovables en crecimiento",
       status: "STAND_BY" as LeadStatus,
       contacts: [
@@ -525,10 +530,11 @@ export async function seedSampleLeads(
     const lead = await prisma.lead.create({
       data: {
         companyName: leadData.companyName,
-        rfc: leadData.rfc,
         website: leadData.website,
         linkedInUrl: leadData.linkedInUrl,
         address: leadData.address,
+        subOrigin: leadData.subOrigin,
+        employeeCount: leadData.employeeCount,
         notes: leadData.notes,
         status: leadData.status,
         sectorId: sector.id,

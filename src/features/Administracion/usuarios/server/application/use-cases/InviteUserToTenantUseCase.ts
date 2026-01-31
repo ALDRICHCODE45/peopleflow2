@@ -26,10 +26,12 @@ export class InviteUserToTenantUseCase {
     private readonly userRoleRepository: IUserRoleRepository,
     private readonly tenantRepository: ITenantRepository,
     private readonly roleRepository: IRoleRepository,
-    private readonly sendNotificationUseCase?: SendNotificationUseCase
+    private readonly sendNotificationUseCase?: SendNotificationUseCase,
   ) {}
 
-  async execute(input: InviteUserToTenantInput): Promise<InviteUserToTenantOutput> {
+  async execute(
+    input: InviteUserToTenantInput,
+  ): Promise<InviteUserToTenantOutput> {
     try {
       // 1. Validar que el usuario existe
       const user = await prisma.user.findUnique({
@@ -56,7 +58,7 @@ export class InviteUserToTenantUseCase {
       // 3. Verificar que el usuario no esté ya en el tenant
       const alreadyInTenant = await this.userRoleRepository.userBelongsToTenant(
         input.userId,
-        input.tenantId
+        input.tenantId,
       );
 
       if (alreadyInTenant) {
@@ -69,7 +71,9 @@ export class InviteUserToTenantUseCase {
       // 4. Validar que los roles pertenecen al tenant destino
       const roles = await this.roleRepository.findByTenantId(input.tenantId);
       const validRoleIds = roles.map((r) => r.id);
-      const invalidRoles = input.roleIds.filter((id) => !validRoleIds.includes(id));
+      const invalidRoles = input.roleIds.filter(
+        (id) => !validRoleIds.includes(id),
+      );
 
       if (invalidRoles.length > 0) {
         return {
@@ -79,13 +83,13 @@ export class InviteUserToTenantUseCase {
       }
 
       // 5. Crear UserRole para cada rol seleccionado
-      for (const roleId of input.roleIds) {
-        await this.userRoleRepository.create({
-          userId: input.userId,
-          roleId,
-          tenantId: input.tenantId,
-        });
-      }
+      // for (const roleId of input.roleIds) {
+      //   await this.userRoleRepository.create({
+      //     userId: input.userId,
+      //     roleId,
+      //     tenantId: input.tenantId,
+      //   });
+      // }
 
       // 6. Enviar notificación por email (si está disponible)
       if (this.sendNotificationUseCase && user.email) {
@@ -93,7 +97,8 @@ export class InviteUserToTenantUseCase {
           .filter((r) => input.roleIds.includes(r.id))
           .map((r) => r.name);
 
-        const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://app.peopleflow.com";
+        const appUrl =
+          process.env.NEXT_PUBLIC_APP_URL || "https://app.peopleflow.com";
 
         const emailData = {
           recipientName: user.name || user.email,
@@ -103,14 +108,17 @@ export class InviteUserToTenantUseCase {
           appUrl,
         };
 
-        await this.sendNotificationUseCase.execute({
+        const htmlTemplate = generateTenantInvitationEmail(emailData);
+        const plainText = generateTenantInvitationPlainText(emailData);
+
+        const notificationResult = await this.sendNotificationUseCase.execute({
           tenantId: input.tenantId,
           provider: "EMAIL",
           recipient: user.email,
           subject: `Has sido invitado a ${tenant.name}`,
-          body: generateTenantInvitationEmail(emailData),
+          body: plainText,
           metadata: {
-            plainText: generateTenantInvitationPlainText(emailData),
+            htmlTemplate: htmlTemplate,
             type: "tenant-invitation",
             userId: input.userId,
             invitedById: input.invitedById,
@@ -118,6 +126,14 @@ export class InviteUserToTenantUseCase {
           priority: "MEDIUM",
           createdById: input.invitedById,
         });
+
+        console.log(
+          "Email Data y resultado de la notificacion de invitacion a otro tenant",
+        );
+
+        console.log({ notificationResult });
+
+        console.log({ emailData });
       }
 
       return {

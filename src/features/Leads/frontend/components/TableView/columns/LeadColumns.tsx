@@ -15,9 +15,6 @@ export const LeadColumns: ColumnDef<Lead>[] = [
       return (
         <div className="flex flex-col min-w-0 w-full overflow-hidden">
           <p className="font-medium truncate">{lead.companyName}</p>
-          {lead.rfc && (
-            <p className="text-xs text-muted-foreground truncate">{lead.rfc}</p>
-          )}
         </div>
       );
     },

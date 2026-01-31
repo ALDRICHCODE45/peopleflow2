@@ -46,12 +46,13 @@ export function LeadForm({
 
   const [formData, setFormData] = useState({
     companyName: lead?.companyName ?? "",
-    rfc: lead?.rfc ?? "",
     website: lead?.website ?? "",
     linkedInUrl: lead?.linkedInUrl ?? "",
     address: lead?.address ?? "",
+    subOrigin: lead?.subOrigin ?? "",
+    employeeCount: lead?.employeeCount ?? "",
     notes: lead?.notes ?? "",
-    status: lead?.status ?? "CONTACTO_CALIDO",
+    status: lead?.status ?? "CONTACTO",
     sectorId: lead?.sectorId ?? undefined,
     subsectorId: lead?.subsectorId ?? undefined,
     originId: lead?.originId ?? undefined,
@@ -103,18 +104,6 @@ export function LeadForm({
           onChange={(e) => handleChange("companyName", e.target.value)}
           placeholder="Nombre de la empresa"
           required
-        />
-      </div>
-
-      {/* RFC */}
-      <div className="space-y-2">
-        <Label htmlFor="rfc">RFC</Label>
-        <Input
-          id="rfc"
-          value={formData.rfc ?? ""}
-          onChange={(e) => handleChange("rfc", e.target.value)}
-          placeholder="RFC de la empresa"
-          maxLength={13}
         />
       </div>
 
@@ -211,6 +200,28 @@ export function LeadForm({
             ))}
           </SelectContent>
         </Select>
+      </div>
+
+      {/* Sub-Origen */}
+      <div className="space-y-2">
+        <Label htmlFor="subOrigin">Sub-Origen</Label>
+        <Input
+          id="subOrigin"
+          value={formData.subOrigin ?? ""}
+          onChange={(e) => handleChange("subOrigin", e.target.value)}
+          placeholder="URL especifica, publicacion, etc."
+        />
+      </div>
+
+      {/* Empleados */}
+      <div className="space-y-2">
+        <Label htmlFor="employeeCount">Numero de empleados</Label>
+        <Input
+          id="employeeCount"
+          value={formData.employeeCount ?? ""}
+          onChange={(e) => handleChange("employeeCount", e.target.value)}
+          placeholder="Ej: 20-40 empleados"
+        />
       </div>
 
       {/* Website */}

@@ -43,10 +43,11 @@ import type { LeadStatusHistoryItem } from "../../../frontend/types";
  */
 export async function createLeadAction(data: {
   companyName: string;
-  rfc?: string;
   website?: string;
   linkedInUrl?: string;
   address?: string;
+  subOrigin?: string;
+  employeeCount?: string;
   notes?: string;
   status?: LeadStatus;
   sectorId?: string;
@@ -112,10 +113,11 @@ export async function updateLeadAction(
   leadId: string,
   data: {
     companyName?: string;
-    rfc?: string | null;
     website?: string | null;
     linkedInUrl?: string | null;
     address?: string | null;
+    subOrigin?: string | null;
+    employeeCount?: string | null;
     notes?: string | null;
     sectorId?: string | null;
     subsectorId?: string | null;
@@ -363,6 +365,13 @@ export async function updateLeadStatusAction(
     });
 
     if (!result.success) {
+      // Manejar error de datos incompletos
+      if (result.error === "INCOMPLETE_DATA") {
+        return {
+          error: "INCOMPLETE_DATA",
+          missingFields: result.missingFields,
+        };
+      }
       return { error: result.error || "Error al actualizar estado del lead" };
     }
 

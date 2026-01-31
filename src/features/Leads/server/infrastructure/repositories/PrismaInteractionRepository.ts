@@ -4,6 +4,7 @@ import type { InteractionType } from "../../../frontend/types";
 import type {
   IInteractionRepository,
   CreateInteractionData,
+  UpdateInteractionData,
 } from "../../domain/interfaces/IInteractionRepository";
 
 /**
@@ -88,6 +89,30 @@ export class PrismaInteractionRepository implements IInteractionRepository {
     });
 
     return this.mapToDomain(interaction);
+  }
+
+  async update(
+    id: string,
+    tenantId: string,
+    data: UpdateInteractionData
+  ): Promise<Interaction | null> {
+    try {
+      const interaction = await prisma.interaction.update({
+        where: { id, tenantId },
+        data: {
+          ...(data.type !== undefined && { type: data.type }),
+          ...(data.subject !== undefined && { subject: data.subject }),
+          ...(data.content !== undefined && { content: data.content }),
+          ...(data.date !== undefined && { date: data.date }),
+        },
+        include: { createdBy: { select: { name: true } } },
+      });
+
+      return this.mapToDomain(interaction);
+    } catch (error) {
+      console.error("Error updating interaction:", error);
+      return null;
+    }
   }
 
   async delete(id: string, tenantId: string): Promise<boolean> {

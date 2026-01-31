@@ -193,6 +193,14 @@ export function useUpdateLeadStatus() {
     }) => {
       const result = await updateLeadStatusAction(leadId, newStatus);
       if (result.error) {
+        // Lanzar error especial para datos incompletos
+        if (result.error === "INCOMPLETE_DATA") {
+          const error = new Error("INCOMPLETE_DATA") as Error & {
+            missingFields: string[];
+          };
+          error.missingFields = result.missingFields || [];
+          throw error;
+        }
         throw new Error(result.error);
       }
       return result.lead;
@@ -276,62 +284,61 @@ export function useUpdateLeadStatus() {
         };
       });
 
-      // 6. Add lead to destination column (at the top of first page)
-      queryClient.setQueryData<LeadsInfiniteData>(destQueryKey, (old) => {
-        // If destination column has no data yet, create initial structure
-        if (!old?.pages?.length) {
+      // 6. Add lead to destination column (only if query exists and has data)
+      const destQueryExists =
+        previousDestData?.pages && previousDestData.pages.length > 0;
+
+      if (destQueryExists) {
+        // Safe to apply optimistic update
+        queryClient.setQueryData<LeadsInfiniteData>(destQueryKey, (old) => {
+          if (!old?.pages) return old;
           return {
-            pages: [
-              {
-                data: [leadToMove!],
-                pagination: {
-                  pageIndex: 0,
-                  pageSize: 20,
-                  totalCount: 1,
-                  pageCount: 1,
-                },
-              },
-            ],
-            pageParams: [0],
+            ...old,
+            pages: old.pages.map((page, idx) => ({
+              ...page,
+              data: idx === 0 ? [leadToMove!, ...(page.data ?? [])] : page.data,
+              pagination:
+                idx === 0
+                  ? {
+                      ...page.pagination,
+                      totalCount: page.pagination.totalCount + 1,
+                    }
+                  : page.pagination,
+            })),
           };
-        }
-        return {
-          ...old,
-          pages: old.pages.map((page, idx) => ({
-            ...page,
-            data: idx === 0 ? [leadToMove!, ...(page.data ?? [])] : page.data,
-            pagination:
-              idx === 0
-                ? {
-                    ...page.pagination,
-                    totalCount: page.pagination.totalCount + 1,
-                  }
-                : page.pagination,
-          })),
-        };
-      });
+        });
+      }
+      // If dest query doesn't exist, don't create fake structure - will invalidate in onSettled
 
       return {
         previousSourceData,
         previousDestData,
         sourceQueryKey,
         destQueryKey,
+        destQueryExists,
       };
     },
 
     // Rollback on error - restore previous data from both columns
     onError: (error: Error, _variables, context) => {
+      // Rollback source
       if (context?.sourceQueryKey && context?.previousSourceData) {
         queryClient.setQueryData(
           context.sourceQueryKey,
           context.previousSourceData,
         );
       }
+      // Rollback destination only if there was previous data
       if (context?.destQueryKey && context?.previousDestData) {
         queryClient.setQueryData(
           context.destQueryKey,
           context.previousDestData,
         );
+      }
+
+      // No mostrar toast para datos incompletos - se maneja con el dialog
+      if (error.message === "INCOMPLETE_DATA") {
+        return;
       }
 
       showToast({
@@ -349,24 +356,39 @@ export function useUpdateLeadStatus() {
       });
     },
 
-    // Only refetch on error to guarantee consistency
-    // On success, the optimistic update is already correct
-    onSettled: (_data, error, _variables, context) => {
-      if (error && context) {
-        // Refetch only affected columns on error
-        if (context.sourceQueryKey) {
-          queryClient.invalidateQueries({
-            queryKey: context.sourceQueryKey,
-            exact: true,
-          });
-        }
-        if (context.destQueryKey) {
-          queryClient.invalidateQueries({
-            queryKey: context.destQueryKey,
-            exact: true,
-          });
-        }
+    // Always invalidate both columns using partial query keys
+    // This ensures React Query finds the queries regardless of filter object references
+    onSettled: (_data, _error, variables, context) => {
+      if (!context?.sourceQueryKey) return;
+
+      const tenantId = context.sourceQueryKey[2];
+      if (!tenantId) return;
+
+      // Extract the source status from the query key
+      const sourceStatus = context.sourceQueryKey[3];
+      const { newStatus } = variables;
+
+      // Invalidate source column using partial query key (without filters object)
+      // exact: false allows matching regardless of the filter object reference
+      if (sourceStatus) {
+        queryClient.invalidateQueries({
+          queryKey: ["leads", "infinite", tenantId, sourceStatus],
+          exact: false,
+        });
       }
+
+      // Invalidate destination column using partial query key
+      queryClient.invalidateQueries({
+        queryKey: ["leads", "infinite", tenantId, newStatus],
+        exact: false,
+      });
+
+      // Invalidate the specific lead's detail query to ensure fresh data
+      // This is critical for the incomplete data flow where the detail might be cached
+      const { leadId } = variables;
+      queryClient.invalidateQueries({
+        queryKey: ["leads", "detail", leadId],
+      });
     },
   });
 }

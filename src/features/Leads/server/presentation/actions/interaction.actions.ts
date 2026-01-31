@@ -12,12 +12,16 @@ import { prismaContactRepository } from "../../infrastructure/repositories/Prism
 import { AddInteractionUseCase } from "../../application/use-cases/AddInteractionUseCase";
 import { GetInteractionsByLeadUseCase } from "../../application/use-cases/GetInteractionsByLeadUseCase";
 import { GetInteractionsByContactUseCase } from "../../application/use-cases/GetInteractionsByContactUseCase";
+import { UpdateInteractionUseCase } from "../../application/use-cases/UpdateInteractionUseCase";
+import { DeleteInteractionUseCase } from "../../application/use-cases/DeleteInteractionUseCase";
 
 // Types
 import type {
   InteractionType,
   Interaction,
   CreateInteractionResult,
+  UpdateInteractionResult,
+  DeleteInteractionResult,
 } from "../../../frontend/types";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
@@ -206,5 +210,130 @@ export async function getInteractionsByContactAction(
       error: "Error al obtener interacciones del contacto",
       interactions: [],
     };
+  }
+}
+
+/**
+ * Actualiza una interacción existente
+ */
+export async function updateInteractionAction(
+  interactionId: string,
+  data: {
+    type?: InteractionType;
+    subject?: string;
+    content?: string | null;
+    date?: string;
+  }
+): Promise<UpdateInteractionResult> {
+  try {
+    const headersList = await headers();
+    const session = await auth.api.getSession({ headers: headersList });
+
+    if (!session?.user) {
+      return { error: "No autenticado" };
+    }
+
+    const tenantId = await getActiveTenantId();
+
+    if (!tenantId) {
+      return { error: "No hay tenant activo" };
+    }
+
+    // Verificar permisos
+    const hasAnyPermissionUseCase = new CheckAnyPermissonUseCase();
+    const hasPermission = await hasAnyPermissionUseCase.execute({
+      userId: session.user.id,
+      permissions: [
+        PermissionActions.leads.editar,
+        PermissionActions.leads.gestionar,
+      ],
+      tenantId,
+    });
+
+    if (!hasPermission) {
+      return { error: "No tienes permisos para editar interacciones" };
+    }
+
+    const useCase = new UpdateInteractionUseCase(prismaInteractionRepository);
+    const result = await useCase.execute({
+      interactionId,
+      tenantId,
+      data,
+    });
+
+    if (!result.success) {
+      return { error: result.error || "Error al actualizar la interacción" };
+    }
+
+    revalidatePath("/generacion-de-leads/leads");
+    return {
+      error: null,
+      interaction: result.interaction?.toJSON(),
+    };
+  } catch (error) {
+    console.error("Error updating interaction:", error);
+    return { error: "Error al actualizar la interacción" };
+  }
+}
+
+/**
+ * Elimina una interacción
+ */
+export async function deleteInteractionAction(
+  interactionId: string
+): Promise<DeleteInteractionResult> {
+  try {
+    const headersList = await headers();
+    const session = await auth.api.getSession({ headers: headersList });
+
+    if (!session?.user) {
+      return { error: "No autenticado", success: false };
+    }
+
+    const tenantId = await getActiveTenantId();
+
+    if (!tenantId) {
+      return { error: "No hay tenant activo", success: false };
+    }
+
+    // Verificar permisos
+    const hasAnyPermissionUseCase = new CheckAnyPermissonUseCase();
+    const hasPermission = await hasAnyPermissionUseCase.execute({
+      userId: session.user.id,
+      permissions: [
+        PermissionActions.leads.editar,
+        PermissionActions.leads.gestionar,
+      ],
+      tenantId,
+    });
+
+    if (!hasPermission) {
+      return {
+        error: "No tienes permisos para eliminar interacciones",
+        success: false,
+      };
+    }
+
+    const useCase = new DeleteInteractionUseCase(prismaInteractionRepository);
+    const result = await useCase.execute({
+      interactionId,
+      tenantId,
+    });
+
+    if (!result.success) {
+      return {
+        error: result.error || "Error al eliminar la interacción",
+        success: false,
+      };
+    }
+
+    revalidatePath("/generacion-de-leads/leads");
+    return {
+      error: null,
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error deleting interaction:", error);
+    return { error: "Error al eliminar la interacción", success: false };
   }
 }

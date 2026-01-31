@@ -17,6 +17,8 @@ export * from "./GetContactsByLeadUseCase";
 export * from "./AddInteractionUseCase";
 export * from "./GetInteractionsByLeadUseCase";
 export * from "./GetInteractionsByContactUseCase";
+export * from "./UpdateInteractionUseCase";
+export * from "./DeleteInteractionUseCase";
 
 // Catalog Use Cases
 export * from "./GetSectorsUseCase";

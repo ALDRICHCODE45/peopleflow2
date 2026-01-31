@@ -8,10 +8,11 @@ import type { LeadStatusType } from "../value-objects/LeadStatus";
 
 export interface CreateLeadData {
   companyName: string;
-  rfc?: string | null;
   website?: string | null;
   linkedInUrl?: string | null;
   address?: string | null;
+  subOrigin?: string | null;
+  employeeCount?: string | null;
   notes?: string | null;
   status?: LeadStatusType;
   sectorId?: string | null;
@@ -24,10 +25,11 @@ export interface CreateLeadData {
 
 export interface UpdateLeadData {
   companyName?: string;
-  rfc?: string | null;
   website?: string | null;
   linkedInUrl?: string | null;
   address?: string | null;
+  subOrigin?: string | null;
+  employeeCount?: string | null;
   notes?: string | null;
   sectorId?: string | null;
   subsectorId?: string | null;

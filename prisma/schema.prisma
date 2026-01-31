@@ -294,14 +294,15 @@ model LeadOrigin {
 // =============================================
 
 model Lead {
-  id          String     @id @default(uuid())
-  companyName String
-  rfc         String?
-  website     String?
-  linkedInUrl String?
-  address     String?
-  notes       String?    @db.Text
-  status      LeadStatus @default(CONTACTO_CALIDO)
+  id            String     @id @default(uuid())
+  companyName   String
+  website       String?
+  linkedInUrl   String?
+  address       String?
+  subOrigin     String?
+  employeeCount String?
+  notes         String?    @db.Text
+  status        LeadStatus @default(CONTACTO)
 
   // Relaciones con catálogos
   sectorId    String?

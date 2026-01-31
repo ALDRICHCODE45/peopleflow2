@@ -1,14 +1,15 @@
 import type { ILeadRepository } from "../../domain/interfaces/ILeadRepository";
 import { Lead } from "../../domain/entities/Lead";
 import type { LeadStatusType } from "../../domain/value-objects/LeadStatus";
-import { CompanyNameVO, RFCVO, URLVO } from "../../domain/value-objects";
+import { CompanyNameVO, URLVO } from "../../domain/value-objects";
 
 export interface CreateLeadInput {
   companyName: string;
-  rfc?: string;
   website?: string;
   linkedInUrl?: string;
   address?: string;
+  subOrigin?: string;
+  employeeCount?: string;
   notes?: string;
   status?: LeadStatusType;
   sectorId?: string;
@@ -32,18 +33,18 @@ export class CreateLeadUseCase {
     try {
       // Validaciones encapsuladas en Value Objects
       const companyName = CompanyNameVO.create(input.companyName);
-      const rfc = RFCVO.create(input.rfc);
       const website = URLVO.create(input.website);
       const linkedInUrl = URLVO.create(input.linkedInUrl);
 
       const lead = await this.leadRepository.create({
         companyName: companyName.getValue(),
-        rfc: rfc.getValue(),
         website: website.getValue(),
         linkedInUrl: linkedInUrl.getValue(),
         address: input.address?.trim() || null,
+        subOrigin: input.subOrigin?.trim() || null,
+        employeeCount: input.employeeCount?.trim() || null,
         notes: input.notes?.trim() || null,
-        status: input.status || "CONTACTO_CALIDO",
+        status: input.status || "CONTACTO",
         sectorId: input.sectorId || null,
         subsectorId: input.subsectorId || null,
         originId: input.originId || null,
