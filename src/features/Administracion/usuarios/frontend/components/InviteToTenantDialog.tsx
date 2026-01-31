@@ -9,14 +9,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/core/shared/ui/shadcn/dialog";
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxContent,
-  ComboboxList,
-  ComboboxItem,
-  ComboboxEmpty,
-} from "@/core/shared/ui/shadcn/combobox";
 import { Checkbox } from "@/core/shared/ui/shadcn/checkbox";
 import { Label } from "@/core/shared/ui/shadcn/label";
 import { LoadingButton } from "@/core/shared/ui/shadcn/loading-button";
@@ -27,7 +19,16 @@ import {
   useTenantRolesQuery,
   useInviteToTenant,
 } from "../hooks/useInviteToTenant";
-import type { TenantUser, InvitableTenant } from "../types";
+import type { TenantUser } from "../types";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/core/shared/ui/shadcn/select";
 
 interface InviteToTenantDialogProps {
   user: TenantUser;
@@ -40,15 +41,18 @@ export function InviteToTenantDialog({
   open,
   onOpenChange,
 }: InviteToTenantDialogProps) {
-  const [selectedTenantId, setSelectedTenantId] = useState<string | null>(null);
+  const [selectedTenantId, setSelectedTenantId] = useState<string | undefined>(
+    undefined,
+  );
   const [selectedRoleIds, setSelectedRoleIds] = useState<string[]>([]);
 
   // Queries
   const { data: tenants = [], isLoading: isLoadingTenants } =
     useInvitableTenantsQuery();
 
-  const { data: roles = [], isLoading: isLoadingRoles } =
-    useTenantRolesQuery(selectedTenantId);
+  const { data: roles = [], isLoading: isLoadingRoles } = useTenantRolesQuery(
+    selectedTenantId!,
+  );
 
   // Mutation
   const inviteMutation = useInviteToTenant();
@@ -61,7 +65,7 @@ export function InviteToTenantDialog({
   // Reset state cuando se cierra el dialog
   useEffect(() => {
     if (!open) {
-      setSelectedTenantId(null);
+      setSelectedTenantId(undefined);
       setSelectedRoleIds([]);
     }
   }, [open]);
@@ -86,7 +90,6 @@ export function InviteToTenantDialog({
     onOpenChange(false);
   };
 
-  const selectedTenant = tenants.find((t) => t.id === selectedTenantId);
   const isValid = selectedTenantId && selectedRoleIds.length > 0;
   const isLoading = inviteMutation.isPending;
 
@@ -115,29 +118,25 @@ export function InviteToTenantDialog({
                 No tienes permisos para invitar a ninguna organizacion.
               </p>
             ) : (
-              <Combobox
+              <Select
                 value={selectedTenantId}
-                onValueChange={(value) =>
-                  setSelectedTenantId(value as string | null)
-                }
+                onValueChange={setSelectedTenantId}
+                disabled={isLoading}
               >
-                <ComboboxInput
-                  placeholder="Selecciona una organizacion..."
-                  disabled={isLoading}
-                />
-                <ComboboxContent>
-                  <ComboboxList>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Selecciona una organizacion..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Organizaciones disponibles</SelectLabel>
                     {tenants.map((tenant) => (
-                      <ComboboxItem key={tenant.id} value={tenant.id}>
+                      <SelectItem key={tenant.id} value={tenant.id}>
                         {tenant.name}
-                      </ComboboxItem>
+                      </SelectItem>
                     ))}
-                    <ComboboxEmpty>
-                      No se encontraron organizaciones
-                    </ComboboxEmpty>
-                  </ComboboxList>
-                </ComboboxContent>
-              </Combobox>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             )}
           </div>
 
