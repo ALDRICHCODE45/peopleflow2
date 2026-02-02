@@ -35,7 +35,7 @@ export function calculateStickyOffsets<TData>(
       });
       // Acumular el ancho de la columna para la siguiente
       const size = column.getSize();
-      leftOffset += getColumnMinWidth(size);
+      leftOffset += getColumnMinWidth(size, column.id);
     }
   }
 
@@ -53,7 +53,7 @@ export function calculateStickyOffsets<TData>(
       });
       // Acumular el ancho de la columna para la siguiente
       const size = column.getSize();
-      rightOffset += getColumnMinWidth(size);
+      rightOffset += getColumnMinWidth(size, column.id);
     }
   }
 
@@ -76,7 +76,9 @@ export function calculateStickyOffsets<TData>(
  * @param offset - Offset de la columna
  * @returns Objeto con estilos CSS inline
  */
-export function getStickyStyles(offset: StickyOffset | undefined): React.CSSProperties {
+export function getStickyStyles(
+  offset: StickyOffset | undefined
+): React.CSSProperties {
   if (!offset || (!offset.isPinnedLeft && !offset.isPinnedRight)) {
     return {};
   }

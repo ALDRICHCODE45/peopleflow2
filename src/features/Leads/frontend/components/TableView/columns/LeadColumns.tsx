@@ -129,7 +129,6 @@ export const LeadColumns: ColumnDef<Lead>[] = [
   },
   {
     id: "actions",
-    header: "Acciones",
     cell: ({ row }) => <LeadRowActions row={row} />,
     size: 4,
     enableHiding: false,

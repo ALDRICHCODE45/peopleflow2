@@ -5,6 +5,7 @@ import { Badge } from "@shadcn/badge";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { CancelIcon } from "@hugeicons/core-free-icons";
 import { ReactNode } from "react";
+import { Card } from "../../ui/shadcn/card";
 
 export interface BulkAction {
   id: string;
@@ -30,14 +31,16 @@ export function DataTableBulkActionsBar({
   if (!isVisible || selectedCount === 0) return null;
 
   return (
-    <div
-      className="sticky bottom-0 left-0 right-0 z-10 bg-background border-t shadow-lg animate-in slide-in-from-bottom-2 duration-300"
+    <Card
+      className="sticky bottom-0 left-0 right-0 py-0 mx-1 z-10 bg-background border-t shadow-lg animate-in slide-in-from-bottom-2 duration-300"
       role="toolbar"
       aria-label={`${selectedCount} elementos seleccionados`}
+      // Improved touch target size on mobile
+      style={{ touchAction: "manipulation" }}
     >
-      <div className="flex items-center justify-between px-4 py-3">
-        <div className="flex items-center gap-3">
-          <Badge variant="secondary" className="font-medium">
+      <div className="flex flex-col gap-2 px-2 py-2 sm:flex-row sm:items-center sm:justify-between sm:px-4 sm:py-3">
+        <div className="flex items-center gap-2 sm:gap-3 justify-between sm:justify-start w-full sm:w-auto">
+          <Badge variant="secondary" className="px-2 py-1  sm:text-sm">
             {selectedCount} Seleccionado{selectedCount !== 1 ? "s" : ""}
           </Badge>
           {onClearSelection && (
@@ -46,14 +49,17 @@ export function DataTableBulkActionsBar({
               size="sm"
               onClick={onClearSelection}
               aria-label="Limpiar seleccion"
+              className="gap-1 px-2 py-1 sm:px-3 sm:py-2 text-base sm:text-sm"
             >
-              <HugeiconsIcon icon={CancelIcon} className="h-4 w-4 mr-2" />
-              Limpiar
+              <HugeiconsIcon
+                icon={CancelIcon}
+                className="h-5 w-5 sm:h-4 sm:w-4 mr-1 sm:mr-2"
+              />
+              <span className="hidden xs:inline">Limpiar</span>
             </Button>
           )}
         </div>
-
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
           {actions.map((action) => (
             <Button
               key={action.id}
@@ -61,13 +67,26 @@ export function DataTableBulkActionsBar({
               size="sm"
               onClick={action.onClick}
               aria-label={action.label}
+              className="gap-1 px-2 py-1 sm:px-3 sm:py-2 text-base sm:text-sm"
             >
               {action.icon}
-              <span className="ml-2">{action.label}</span>
+              <span className="ml-1 sm:ml-2 hidden xs:inline">
+                {action.label}
+              </span>
             </Button>
           ))}
         </div>
       </div>
-    </div>
+      <style jsx global>{`
+        @media (max-width: 640px) {
+          /* xs: Improve spacing and stacking, smaller font, keep actions big enough to tap */
+          .DataTableBulkActionsBar-btn,
+          .DataTableBulkActionsBar-clear {
+            min-width: 44px;
+            min-height: 44px;
+          }
+        }
+      `}</style>
+    </Card>
   );
 }

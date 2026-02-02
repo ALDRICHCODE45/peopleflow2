@@ -1,12 +1,20 @@
 /**
- * Calcula el ancho mínimo de una columna basándose en su tamaño relativo (%).
- * Usa una escala proporcional más natural: minWidth ≈ size × 7px
+ * Calcula el ancho mínimo de una columna basándose en su tamaño relativo (%)
+ * y su tipo (por id) para casos especiales.
  *
  * @param size - Tamaño de la columna en porcentaje (ej: 8, 10, 30)
+ * @param columnId - Id de la columna (para reglas específicas)
  * @returns Ancho mínimo en píxeles
  */
-export const getColumnMinWidth = (size: number): number => {
-  // Para columnas compactas (checkbox, acciones pequeñas)
+export const getColumnMinWidth = (size: number, columnId?: string): number => {
+  // Columnas compactas (checkbox y acciones)
+  if (columnId === "select") return 36;
+  if (columnId === "actions") return 80;
+
+  // Estado necesita más espacio para badges largos
+  if (columnId === "status") return 160;
+
+  // Para columnas compactas genéricas (checkbox, acciones pequeñas)
   // Checkbox (16px) + padding reducido (16px) = 32px
   if (size < 3) return 32;
 

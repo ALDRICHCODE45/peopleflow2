@@ -18,7 +18,7 @@ export const BreadcrumbNavbar = () => {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem className="block">
-          <BreadcrumbLink>BDP System</BreadcrumbLink>
+          <BreadcrumbLink>PeopleFlow</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator className="block" />
         <BreadcrumbItem>

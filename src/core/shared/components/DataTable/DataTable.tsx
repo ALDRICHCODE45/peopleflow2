@@ -139,14 +139,18 @@ export function DataTable<TData, TValue>({
         config.enableRowSelection ?? defaultConfig.enableRowSelection,
       skeletonRows: config.skeletonRows ?? 5,
       serverSide: { ...defaultConfig.serverSide, ...config.serverSide },
-      columnPinning: { ...defaultConfig.columnPinning, ...config.columnPinning },
+      columnPinning: {
+        ...defaultConfig.columnPinning,
+        ...config.columnPinning,
+      },
       columnOrder: { ...defaultConfig.columnOrder, ...config.columnOrder },
     }),
     [config]
   );
 
   // Calcular estados de carga fuera del useMemo para evitar re-renders innecesarios del config
-  const isLoading = isLoadingProp ?? config.isLoading ?? config.serverSide?.isLoading ?? false;
+  const isLoading =
+    isLoadingProp ?? config.isLoading ?? config.serverSide?.isLoading ?? false;
   const isFetching = isFetchingProp ?? config.serverSide?.isFetching ?? false;
 
   // Mostrar skeleton solo en carga inicial sin datos
@@ -155,10 +159,12 @@ export function DataTable<TData, TValue>({
   const showLoadingOverlay = isFetching && !isLoading && data.length > 0;
 
   // Estado interno para client-side
-  const [internalPagination, setInternalPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: finalConfig.pagination.defaultPageSize || 10,
-  });
+  const [internalPagination, setInternalPagination] = useState<PaginationState>(
+    {
+      pageIndex: 0,
+      pageSize: finalConfig.pagination.defaultPageSize || 10,
+    }
+  );
   const [internalSorting, setInternalSorting] = useState<SortingState>([]);
 
   // Determinar persistKey para column pinning y order
@@ -173,16 +179,21 @@ export function DataTable<TData, TValue>({
     setColumnOrder,
   } = useTablePreferences({
     persistKey: columnPinningPersistKey || columnOrderPersistKey,
-    defaultPinning: finalConfig.columnPinning?.defaultPinning ?? { left: [], right: [] },
+    defaultPinning: finalConfig.columnPinning?.defaultPinning ?? {
+      left: [],
+      right: [],
+    },
     defaultOrder: finalConfig.columnOrder?.defaultOrder ?? [],
   });
 
   // Sincronizar columnOrder con las columnas actuales
   // Si hay columnas nuevas que no están en el orden guardado, agregarlas
   const columnOrder = useMemo(() => {
-    const currentColumnIds = columns.map((col) =>
-      "accessorKey" in col ? String(col.accessorKey) : col.id ?? ""
-    ).filter(Boolean);
+    const currentColumnIds = columns
+      .map((col) =>
+        "accessorKey" in col ? String(col.accessorKey) : (col.id ?? "")
+      )
+      .filter(Boolean);
 
     // Si no hay orden guardado, usar el orden de las columnas definidas
     if (storedColumnOrder.length === 0) {
@@ -212,7 +223,8 @@ export function DataTable<TData, TValue>({
   }, [columns, storedColumnOrder]);
 
   // Usar estado del padre si es server-side, sino usar estado interno
-  const pagination = isServerSide && paginationProp ? paginationProp : internalPagination;
+  const pagination =
+    isServerSide && paginationProp ? paginationProp : internalPagination;
   const sorting = isServerSide && sortingProp ? sortingProp : internalSorting;
 
   // Wrapper para setGlobalFilter que notifica al padre en server-side
@@ -225,7 +237,8 @@ export function DataTable<TData, TValue>({
 
   // Handler para cambios de paginación
   const handlePaginationChange = (updater: Updater<PaginationState>) => {
-    const newPagination = typeof updater === "function" ? updater(pagination) : updater;
+    const newPagination =
+      typeof updater === "function" ? updater(pagination) : updater;
 
     if (isServerSide) {
       // En server-side, notificar al padre
@@ -237,36 +250,52 @@ export function DataTable<TData, TValue>({
   };
 
   // Handler para cambios de sorting
-  const handleSortingChange = useCallback((updater: Updater<SortingState>) => {
-    const newSorting = typeof updater === "function" ? updater(sorting) : updater;
+  const handleSortingChange = useCallback(
+    (updater: Updater<SortingState>) => {
+      const newSorting =
+        typeof updater === "function" ? updater(sorting) : updater;
 
-    if (isServerSide) {
-      // En server-side, notificar al padre y resetear a página 0
-      onSortingChangeProp?.(newSorting);
-      onPaginationChangeProp?.({ ...pagination, pageIndex: 0 });
-    } else {
-      // En client-side, actualizar estado interno
-      setInternalSorting(newSorting);
-    }
-  }, [isServerSide, onSortingChangeProp, onPaginationChangeProp, pagination, sorting]);
+      if (isServerSide) {
+        // En server-side, notificar al padre y resetear a página 0
+        onSortingChangeProp?.(newSorting);
+        onPaginationChangeProp?.({ ...pagination, pageIndex: 0 });
+      } else {
+        // En client-side, actualizar estado interno
+        setInternalSorting(newSorting);
+      }
+    },
+    [
+      isServerSide,
+      onSortingChangeProp,
+      onPaginationChangeProp,
+      pagination,
+      sorting,
+    ]
+  );
 
   // Handler para cambios de column pinning
-  const handleColumnPinningChange = useCallback((updater: Updater<ColumnPinningState>) => {
-    if (typeof updater === "function") {
-      setColumnPinning((prev) => updater(prev));
-    } else {
-      setColumnPinning(updater);
-    }
-  }, [setColumnPinning]);
+  const handleColumnPinningChange = useCallback(
+    (updater: Updater<ColumnPinningState>) => {
+      if (typeof updater === "function") {
+        setColumnPinning((prev) => updater(prev));
+      } else {
+        setColumnPinning(updater);
+      }
+    },
+    [setColumnPinning]
+  );
 
   // Handler para cambios de column order
-  const handleColumnOrderChange = useCallback((updater: Updater<ColumnOrderState>) => {
-    if (typeof updater === "function") {
-      setColumnOrder((prev) => updater(prev));
-    } else {
-      setColumnOrder(updater);
-    }
-  }, [setColumnOrder]);
+  const handleColumnOrderChange = useCallback(
+    (updater: Updater<ColumnOrderState>) => {
+      if (typeof updater === "function") {
+        setColumnOrder((prev) => updater(prev));
+      } else {
+        setColumnOrder(updater);
+      }
+    },
+    [setColumnOrder]
+  );
 
   const table = useReactTable({
     data,
@@ -381,7 +410,7 @@ export function DataTable<TData, TValue>({
                 ? [
                     {
                       id: "duplicate",
-                      label: "Duplicate",
+                      label: "Duplicar",
                       icon: (
                         <HugeiconsIcon icon={Copy01Icon} className="h-4 w-4" />
                       ),
@@ -399,7 +428,7 @@ export function DataTable<TData, TValue>({
                 ? [
                     {
                       id: "print",
-                      label: "Print",
+                      label: "Imprimir",
                       icon: (
                         <HugeiconsIcon icon={Printer} className="h-4 w-4" />
                       ),
@@ -417,7 +446,7 @@ export function DataTable<TData, TValue>({
                 ? [
                     {
                       id: "delete",
-                      label: "Delete",
+                      label: "Eliminar",
                       icon: (
                         <HugeiconsIcon icon={DeleteIcon} className="h-4 w-4" />
                       ),

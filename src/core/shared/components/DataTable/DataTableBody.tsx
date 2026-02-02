@@ -76,7 +76,8 @@ function TableBodyDataTableInner<TData, TValue>({
 
   // Usar props de estado si están disponibles (para reactividad con memo)
   // Si no, obtener del estado interno de la tabla
-  const columnPinningState = columnPinningProp ?? table.getState().columnPinning;
+  const columnPinningState =
+    columnPinningProp ?? table.getState().columnPinning;
   // columnOrderProp y rowSelectionProp se usan implicitamente por el memo para detectar cambios
   void columnOrderProp;
   void rowSelectionProp;
@@ -151,7 +152,10 @@ function TableBodyDataTableInner<TData, TValue>({
   // Calculate total min-width from all columns to enable horizontal scroll on mobile
   const totalMinWidth = table
     .getAllColumns()
-    .reduce((acc, column) => acc + getColumnMinWidth(column.getSize()), 0);
+    .reduce(
+      (acc, column) => acc + getColumnMinWidth(column.getSize(), column.id),
+      0
+    );
 
   // Renderizar la tabla
   const tableContent = (
@@ -183,7 +187,7 @@ function TableBodyDataTableInner<TData, TValue>({
                       header.column.id === "select" ||
                       header.column.id === "actions";
 
-                    const minWidth = getColumnMinWidth(size);
+                    const minWidth = getColumnMinWidth(size, header.column.id);
 
                     return (
                       <TableHead
@@ -195,7 +199,9 @@ function TableBodyDataTableInner<TData, TValue>({
                         style={{
                           width: isCompactColumn ? `${minWidth}px` : `${size}%`,
                           minWidth: `${minWidth}px`,
-                          maxWidth: isCompactColumn ? `${minWidth}px` : `${size}%`,
+                          maxWidth: isCompactColumn
+                            ? `${minWidth}px`
+                            : `${size}%`,
                           ...stickyStyles,
                         }}
                       >
@@ -205,7 +211,9 @@ function TableBodyDataTableInner<TData, TValue>({
                           enableSorting={config.enableSorting}
                           enableColumnPinning={enableColumnPinning}
                           enableColumnDrag={enableColumnDrag}
-                          pinnedPosition={getColumnPinPosition(header.column.id)}
+                          pinnedPosition={getColumnPinPosition(
+                            header.column.id
+                          )}
                         />
                       </TableHead>
                     );
@@ -236,7 +244,7 @@ function TableBodyDataTableInner<TData, TValue>({
                       cell.column.id === "select" ||
                       cell.column.id === "actions";
 
-                    const minWidth = getColumnMinWidth(size);
+                    const minWidth = getColumnMinWidth(size, cell.column.id);
 
                     return (
                       <TableCell
@@ -248,7 +256,9 @@ function TableBodyDataTableInner<TData, TValue>({
                         style={{
                           width: isCompactColumn ? `${minWidth}px` : `${size}%`,
                           minWidth: `${minWidth}px`,
-                          maxWidth: isCompactColumn ? `${minWidth}px` : `${size}%`,
+                          maxWidth: isCompactColumn
+                            ? `${minWidth}px`
+                            : `${size}%`,
                           ...stickyStyles,
                         }}
                       >
