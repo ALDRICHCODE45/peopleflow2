@@ -8,7 +8,7 @@ import {
 } from "@dnd-kit/sortable";
 import { Spinner } from "@shadcn/spinner";
 import { KanbanColumn } from "./KanbanColumn";
-import { LeadKanbanCardOverlay } from "./LeadKanbanCard";
+import { LeadKanbanCardOverlay, type LeadCardActions } from "./LeadKanbanCard";
 import type { Lead, LeadStatus } from "../../types";
 import type { UseKanbanDragAndDropReturn } from "../../hooks/useKanbanDragAndDrop";
 import type { UseInfiniteLeadsByStatusReturn } from "../../hooks/useInfiniteLeadsByStatus";
@@ -20,6 +20,8 @@ interface KanbanBoardProps {
   queryByStatus?: Map<LeadStatus, UseInfiniteLeadsByStatusReturn>;
   onSelectLead: (lead: Lead) => void;
   isFiltersLoading?: boolean;
+  /** Lifted action callbacks for card dialogs - centralized at page level */
+  cardActions: LeadCardActions;
 }
 
 export const KanbanBoard = memo(function KanbanBoard({
@@ -29,6 +31,7 @@ export const KanbanBoard = memo(function KanbanBoard({
   queryByStatus,
   onSelectLead,
   isFiltersLoading = false,
+  cardActions,
 }: KanbanBoardProps) {
   const {
     columns,
@@ -76,6 +79,7 @@ export const KanbanBoard = memo(function KanbanBoard({
                   isFetchingNextPage={query?.isFetchingNextPage}
                   fetchNextPage={query?.fetchNextPage}
                   onSelectLead={onSelectLead}
+                  cardActions={cardActions}
                 />
               );
             })}

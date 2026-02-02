@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, Suspense } from "react";
 import type { Lead } from "../../types";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@shadcn/sheet";
 import { useIsMobile } from "@/core/shared/hooks/use-mobile";
@@ -41,6 +41,15 @@ export function LeadDetailSheet({
   const isMobile = useIsMobile();
   const sheetSide = isMobile ? "bottom" : "right";
   const [activeTab, setActiveTab] = useState("contacts");
+  // Track visited tabs to enable lazy loading - only load data when tab is first visited
+  const [visitedTabs, setVisitedTabs] = useState<Set<string>>(
+    new Set(["contacts"])
+  );
+
+  const handleTabChange = useCallback((value: string) => {
+    setActiveTab(value);
+    setVisitedTabs((prev) => new Set([...prev, value]));
+  }, []);
 
   // Fetch complete lead data (handles Kanban's minimal query case)
   const { data: fullLead } = useLeadById(open ? lead.id : null);
@@ -171,7 +180,7 @@ export function LeadDetailSheet({
         {/* Tabs */}
         <Tabs
           value={activeTab}
-          onValueChange={setActiveTab}
+          onValueChange={handleTabChange}
           className="px-4 pb-4"
           defaultValue="contacts"
         >
@@ -191,12 +200,21 @@ export function LeadDetailSheet({
             <TabsTrigger value="history">Historial</TabsTrigger>
           </TabsList>
 
+          {/* Lazy loading: Only render tab content when active or previously visited */}
           <TabsContent value="contacts" className="mt-4">
-            <ContactsSection leadId={displayLead.id} />
+            {(activeTab === "contacts" || visitedTabs.has("contacts")) && (
+              <Suspense fallback={<ContactsSkeleton />}>
+                <ContactsSection leadId={displayLead.id} />
+              </Suspense>
+            )}
           </TabsContent>
 
           <TabsContent value="history" className="mt-4">
-            <LeadStatusHistoryTimeline leadId={displayLead.id} />
+            {(activeTab === "history" || visitedTabs.has("history")) && (
+              <Suspense fallback={<HistorySkeleton />}>
+                <LeadStatusHistoryTimeline leadId={displayLead.id} />
+              </Suspense>
+            )}
           </TabsContent>
         </Tabs>
       </SheetContent>
@@ -228,6 +246,31 @@ function InfoItem({
         {label}
       </p>
       <p className="text-sm mt-0.5">{value}</p>
+    </div>
+  );
+}
+
+/** Skeleton loading state for contacts tab */
+function ContactsSkeleton() {
+  return (
+    <div className="space-y-3 animate-pulse">
+      {[1, 2, 3].map((i) => (
+        <div key={i} className="h-24 bg-muted rounded-xl" />
+      ))}
+    </div>
+  );
+}
+
+/** Skeleton loading state for history tab */
+function HistorySkeleton() {
+  return (
+    <div className="space-y-4 animate-pulse">
+      {[1, 2, 3, 4].map((i) => (
+        <div key={i} className="flex gap-3">
+          <div className="w-3 h-3 rounded-full bg-muted" />
+          <div className="flex-1 h-16 bg-muted rounded-lg" />
+        </div>
+      ))}
     </div>
   );
 }

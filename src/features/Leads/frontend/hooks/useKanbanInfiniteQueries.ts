@@ -55,45 +55,55 @@ export function useKanbanInfiniteQueries(filters: KanbanFilters) {
   );
 
   // Combine all leads from all pages for each status
+  // Use individual query data as dependencies instead of queries array
+  // This prevents unnecessary recalculations when only one column changes
   const leadsByStatus = useMemo(() => {
     const grouped: Record<LeadStatus, Lead[]> = {
-      CONTACTO: [],
-      SOCIAL_SELLING: [],
-      CONTACTO_CALIDO: [],
-      CITA_AGENDADA: [],
-      CITA_ATENDIDA: [],
-      CITA_VALIDADA: [],
-      POSICIONES_ASIGNADAS: [],
-      STAND_BY: [],
+      CONTACTO: contactoQuery.data?.pages.flatMap((page) => page.data) ?? [],
+      SOCIAL_SELLING: socialSellingQuery.data?.pages.flatMap((page) => page.data) ?? [],
+      CONTACTO_CALIDO: contactoCalidoQuery.data?.pages.flatMap((page) => page.data) ?? [],
+      CITA_AGENDADA: citaAgendadaQuery.data?.pages.flatMap((page) => page.data) ?? [],
+      CITA_ATENDIDA: citaAtendidaQuery.data?.pages.flatMap((page) => page.data) ?? [],
+      CITA_VALIDADA: citaValidadaQuery.data?.pages.flatMap((page) => page.data) ?? [],
+      POSICIONES_ASIGNADAS: posicionesAsignadasQuery.data?.pages.flatMap((page) => page.data) ?? [],
+      STAND_BY: standByQuery.data?.pages.flatMap((page) => page.data) ?? [],
     };
-
-    for (const { status, query } of queries) {
-      grouped[status] = query.data?.pages.flatMap((page) => page.data) ?? [];
-    }
-
     return grouped;
-  }, [queries]);
+  }, [
+    contactoQuery.data,
+    socialSellingQuery.data,
+    contactoCalidoQuery.data,
+    citaAgendadaQuery.data,
+    citaAtendidaQuery.data,
+    citaValidadaQuery.data,
+    posicionesAsignadasQuery.data,
+    standByQuery.data,
+  ]);
 
   // Get total counts for each status (from server pagination)
+  // Use individual query data as dependencies for better memoization
   const totalCountByStatus = useMemo(() => {
     const counts: Record<LeadStatus, number> = {
-      CONTACTO: 0,
-      SOCIAL_SELLING: 0,
-      CONTACTO_CALIDO: 0,
-      CITA_AGENDADA: 0,
-      CITA_ATENDIDA: 0,
-      CITA_VALIDADA: 0,
-      POSICIONES_ASIGNADAS: 0,
-      STAND_BY: 0,
+      CONTACTO: contactoQuery.data?.pages[0]?.pagination.totalCount ?? 0,
+      SOCIAL_SELLING: socialSellingQuery.data?.pages[0]?.pagination.totalCount ?? 0,
+      CONTACTO_CALIDO: contactoCalidoQuery.data?.pages[0]?.pagination.totalCount ?? 0,
+      CITA_AGENDADA: citaAgendadaQuery.data?.pages[0]?.pagination.totalCount ?? 0,
+      CITA_ATENDIDA: citaAtendidaQuery.data?.pages[0]?.pagination.totalCount ?? 0,
+      CITA_VALIDADA: citaValidadaQuery.data?.pages[0]?.pagination.totalCount ?? 0,
+      POSICIONES_ASIGNADAS: posicionesAsignadasQuery.data?.pages[0]?.pagination.totalCount ?? 0,
+      STAND_BY: standByQuery.data?.pages[0]?.pagination.totalCount ?? 0,
     };
-
-    for (const { status, query } of queries) {
-      // Get totalCount from the first page's pagination metadata
-      counts[status] = query.data?.pages[0]?.pagination.totalCount ?? 0;
-    }
-
     return counts;
-  }, [queries]);
+  }, [
+    contactoQuery.data,
+    socialSellingQuery.data,
+    contactoCalidoQuery.data,
+    citaAgendadaQuery.data,
+    citaAtendidaQuery.data,
+    citaValidadaQuery.data,
+    posicionesAsignadasQuery.data,
+    standByQuery.data,
+  ]);
 
   // Create a Map for quick query lookup by status
   const queryByStatus = useMemo(() => {

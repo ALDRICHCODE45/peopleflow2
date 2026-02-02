@@ -4,6 +4,7 @@ import { useMemo, useState, useCallback } from "react";
 import { useModalState } from "@/core/shared/hooks";
 import { useDebouncedValue } from "@/core/shared/hooks/useDebouncedValue";
 import { useSectors } from "./useCatalogs";
+import { arraysEqual } from "@/core/shared/helpers/arraysEqual";
 
 export function useKanbanFilters() {
   const [searchValue, setSearchValue] = useState("");
@@ -49,14 +50,13 @@ export function useKanbanFilters() {
   );
 
   // Detect when filters are pending (user changed but debounce hasn't fired yet)
-  // Note: Array comparison uses JSON.stringify since !== compares references, not content
+  // Uses arraysEqual for efficient O(n) comparison instead of JSON.stringify
   const isFiltersPending = useMemo(
     () =>
       searchValue !== debouncedSearch ||
-      JSON.stringify(selectedSectorIds) !== JSON.stringify(debouncedSectorIds) ||
-      JSON.stringify(selectedOriginIds) !== JSON.stringify(debouncedOriginIds) ||
-      JSON.stringify(selectedAssignedToIds) !==
-        JSON.stringify(debouncedAssignedToIds),
+      !arraysEqual(selectedSectorIds, debouncedSectorIds) ||
+      !arraysEqual(selectedOriginIds, debouncedOriginIds) ||
+      !arraysEqual(selectedAssignedToIds, debouncedAssignedToIds),
     [
       searchValue,
       debouncedSearch,

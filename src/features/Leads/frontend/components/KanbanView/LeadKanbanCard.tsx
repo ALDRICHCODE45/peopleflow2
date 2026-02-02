@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useMemo, useCallback } from "react";
+import { memo, useMemo } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import type { Lead } from "../../types";
@@ -17,30 +17,34 @@ import {
   TooltipTrigger,
 } from "@/core/shared/ui/shadcn/tooltip";
 import { getInitials } from "@/core/shared/helpers/getInitials";
-import { useModalState } from "@/core/shared/hooks";
 import { createKanbanActions } from "./helpers/createKanbanActions";
 import { LeadKanbanActionsDropdown } from "./KanbanActionsDropdown";
-import { LeadSheetForm } from "../TableView/LeadSheetForm";
-import { DeleteLeadAlertDialog } from "../TableView/DeleteLeadAlertDialog";
-import { useDeleteLead } from "../../hooks/useLeads";
 import { usePrefetchLeadDetails } from "../../hooks/usePrefetchLeadDetails";
-import { ReasignLeadDialog } from "./ReasignLeadDialog";
 
 export interface LeadPermissions {
   canEdit: boolean;
   canDelete: boolean;
 }
 
+/** Callbacks for card actions - lifted to page level for performance */
+export interface LeadCardActions {
+  onEdit: (lead: Lead) => void;
+  onDelete: (lead: Lead) => void;
+  onReasign: (lead: Lead) => void;
+}
+
 interface LeadKanbanCardProps {
   lead: Lead;
   onSelect: (lead: Lead) => void;
   permissions: LeadPermissions;
+  actions: LeadCardActions;
 }
 
 export const LeadKanbanCard = memo(function LeadKanbanCard({
   lead,
   onSelect,
   permissions,
+  actions,
 }: LeadKanbanCardProps) {
   const {
     attributes,
@@ -61,25 +65,6 @@ export const LeadKanbanCard = memo(function LeadKanbanCard({
     opacity: isDragging ? 0.5 : 1,
   };
 
-  const {
-    isOpen: isUpdateOpen,
-    openModal: openUpdateModal,
-    closeModal: closeUpdateModal,
-  } = useModalState();
-
-  const {
-    isOpen: isDeleteOpen,
-    openModal: openDeleteModal,
-    closeModal: closeDeleteModal,
-  } = useModalState();
-
-  const {
-    isOpen: isReasignOpen,
-    openModal: openReasignModal,
-    closeModal: closeReasignModal,
-  } = useModalState();
-
-  const deleteLeadMutation = useDeleteLead();
   const prefetchLeadDetails = usePrefetchLeadDetails();
 
   // Memoize date formatting to avoid expensive date-fns calculations on every render
@@ -88,20 +73,15 @@ export const LeadKanbanCard = memo(function LeadKanbanCard({
     [lead.createdAt],
   );
 
-  const handleDelete = useCallback(async () => {
-    await deleteLeadMutation.mutateAsync(lead.id);
-    closeDeleteModal();
-  }, [lead.id, deleteLeadMutation, closeDeleteModal]);
-
-  // Memoize kanban actions to prevent recreation on every render
+  // Memoize kanban actions - callbacks are lifted to page level for performance
   const kanbanActions = useMemo(
     () =>
       createKanbanActions({
-        onEdit: openUpdateModal,
-        onDelete: openDeleteModal,
-        onReasingnar: openReasignModal,
+        onEdit: () => actions.onEdit(lead),
+        onDelete: () => actions.onDelete(lead),
+        onReasingnar: () => actions.onReasign(lead),
       }),
-    [openUpdateModal, openDeleteModal, openReasignModal],
+    [actions, lead],
   );
 
   return (
@@ -183,38 +163,6 @@ export const LeadKanbanCard = memo(function LeadKanbanCard({
           />
           <span className="text-xs font-medium text-primary/80">0</span>
         </div>
-      </div>
-
-      <div
-        onClick={(e) => e.stopPropagation()}
-        onKeyDown={(e) => e.stopPropagation()}
-      >
-        {permissions.canEdit && (
-          <LeadSheetForm
-            lead={lead}
-            open={isUpdateOpen}
-            onOpenChange={closeUpdateModal}
-          />
-        )}
-
-        {/* Modal de eliminación */}
-        {permissions.canDelete && (
-          <DeleteLeadAlertDialog
-            isOpen={isDeleteOpen}
-            onOpenChange={closeDeleteModal}
-            onConfirmDelete={handleDelete}
-            leadName={lead.companyName}
-            isLoading={deleteLeadMutation.isPending}
-          />
-        )}
-
-        {permissions.canEdit && (
-          <ReasignLeadDialog
-            isOpen={isReasignOpen}
-            onOpenChange={closeReasignModal}
-            leadId={lead.id}
-          />
-        )}
       </div>
     </div>
   );

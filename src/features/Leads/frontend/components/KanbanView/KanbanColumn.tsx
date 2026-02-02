@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useMemo, useEffect, useRef } from "react";
+import { memo, useMemo, useEffect, useRef, useCallback } from "react";
 import {
   SortableContext,
   useSortable,
@@ -10,7 +10,11 @@ import { useDroppable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import type { Lead, LeadStatus } from "../../types";
 import type { KanbanColumn as KanbanColumnType } from "./kanbanTypes";
-import { LeadKanbanCard, type LeadPermissions } from "./LeadKanbanCard";
+import {
+  LeadKanbanCard,
+  type LeadPermissions,
+  type LeadCardActions,
+} from "./LeadKanbanCard";
 import { Badge } from "@/core/shared/ui/shadcn/badge";
 import { Spinner } from "@/core/shared/ui/shadcn/spinner";
 import { usePermissions } from "@/core/shared/hooks/use-permissions";
@@ -35,6 +39,8 @@ interface KanbanColumnProps {
   hasNextPage?: boolean;
   isFetchingNextPage?: boolean;
   fetchNextPage?: () => void;
+  /** Lifted action callbacks for card dialogs */
+  cardActions: LeadCardActions;
 }
 
 export const KanbanColumn = memo(function KanbanColumn({
@@ -45,6 +51,7 @@ export const KanbanColumn = memo(function KanbanColumn({
   hasNextPage,
   isFetchingNextPage,
   fetchNextPage,
+  cardActions,
 }: KanbanColumnProps) {
   const {
     attributes,
@@ -91,22 +98,42 @@ export const KanbanColumn = memo(function KanbanColumn({
   // Ref for intersection observer (infinite scroll trigger)
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
-  // Intersection observer for loading more leads when scrolling to bottom
+  // Use refs for volatile values to prevent IntersectionObserver recreation
+  // This avoids GC pressure and lost events when dependencies change frequently
+  const hasNextPageRef = useRef(hasNextPage);
+  const isFetchingRef = useRef(isFetchingNextPage);
+  const fetchNextPageRef = useRef(fetchNextPage);
+
+  // Keep refs in sync with props
   useEffect(() => {
-    if (!loadMoreRef.current || !hasNextPage || isFetchingNextPage) return;
+    hasNextPageRef.current = hasNextPage;
+    isFetchingRef.current = isFetchingNextPage;
+    fetchNextPageRef.current = fetchNextPage;
+  });
+
+  // Intersection observer for loading more leads when scrolling to bottom
+  // Observer is created once and uses refs for volatile values
+  useEffect(() => {
+    const element = loadMoreRef.current;
+    if (!element) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && fetchNextPage) {
-          fetchNextPage();
+        if (
+          entries[0].isIntersecting &&
+          hasNextPageRef.current &&
+          !isFetchingRef.current &&
+          fetchNextPageRef.current
+        ) {
+          fetchNextPageRef.current();
         }
       },
-      { threshold: 0.1, rootMargin: "100px" },
+      { threshold: 0.1, rootMargin: "100px" }
     );
 
-    observer.observe(loadMoreRef.current);
+    observer.observe(element);
     return () => observer.disconnect();
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+  }, []); // Empty deps - observer created once, uses refs for state
 
   // Display count: show totalCount if available (from server), otherwise leads.length
   const displayCount = totalCount ?? leads.length;
@@ -142,6 +169,7 @@ export const KanbanColumn = memo(function KanbanColumn({
               lead={lead}
               onSelect={onSelectLead}
               permissions={leadPermissions}
+              actions={cardActions}
             />
           ))}
         </SortableContext>

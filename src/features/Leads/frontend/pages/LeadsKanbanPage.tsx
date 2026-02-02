@@ -7,7 +7,7 @@ import { Button } from "@/core/shared/ui/shadcn/button";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { PlusSignIcon } from "@hugeicons/core-free-icons";
 import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
-import { useUpdateLeadStatus } from "../hooks/useLeads";
+import { useUpdateLeadStatus, useDeleteLead } from "../hooks/useLeads";
 import { usePrefetchLeadDetails } from "../hooks/usePrefetchLeadDetails";
 import { useKanbanFilters } from "../hooks/useKanbanFilters";
 import { useKanbanDragAndDrop } from "../hooks/useKanbanDragAndDrop";
@@ -16,8 +16,14 @@ import { KanbanFilters } from "../components/KanbanView/KanbanFilters";
 import { KanbanBoard } from "../components/KanbanView/KanbanBoard";
 import { LeadDetailSheet } from "../components/TableView/LeadDetailSheet";
 import { LeadSheetForm } from "../components/TableView/LeadSheetForm";
+import { DeleteLeadAlertDialog } from "../components/TableView/DeleteLeadAlertDialog";
+import { ReasignLeadDialog } from "../components/KanbanView/ReasignLeadDialog";
 import { IncompleteLeadDialog } from "../components/TableView/IncompleteLeadDialog";
 import type { Lead } from "../types";
+import type { LeadCardActions } from "../components/KanbanView/LeadKanbanCard";
+
+/** Type for centralized dialog state - only one dialog can be open at a time */
+type KanbanDialogType = "edit" | "delete" | "reasign" | null;
 
 export const LeadsKabanPage = () => {
   const filters = useKanbanFilters();
@@ -30,6 +36,15 @@ export const LeadsKabanPage = () => {
     leadId: string;
     missingFields: string[];
   } | null>(null);
+
+  // Centralized dialog state - lifted from LeadKanbanCard for performance
+  // Instead of 4000+ dialogs mounted (one per card), we have just 3 at page level
+  const [dialogState, setDialogState] = useState<{
+    type: KanbanDialogType;
+    lead: Lead | null;
+  }>({ type: null, lead: null });
+
+  const deleteLeadMutation = useDeleteLead();
 
   // Memoize filter object to prevent unnecessary query invalidations
   const queryFilters = useMemo(
@@ -100,6 +115,31 @@ export const LeadsKabanPage = () => {
     setSelectedLead(lead);
   }, [prefetchLeadDetails]);
 
+  // Centralized dialog handlers - lifted from LeadKanbanCard for performance
+  const openDialog = useCallback((type: KanbanDialogType, lead: Lead) => {
+    setDialogState({ type, lead });
+  }, []);
+
+  const closeDialog = useCallback(() => {
+    setDialogState({ type: null, lead: null });
+  }, []);
+
+  const handleDeleteConfirm = useCallback(async () => {
+    if (!dialogState.lead) return;
+    await deleteLeadMutation.mutateAsync(dialogState.lead.id);
+    closeDialog();
+  }, [dialogState.lead, deleteLeadMutation, closeDialog]);
+
+  // Memoized card actions passed to all cards - prevents creating new callbacks per card
+  const cardActions: LeadCardActions = useMemo(
+    () => ({
+      onEdit: (lead) => openDialog("edit", lead),
+      onDelete: (lead) => openDialog("delete", lead),
+      onReasign: (lead) => openDialog("reasign", lead),
+    }),
+    [openDialog]
+  );
+
   return (
     <Card className="p-2 m-1">
       <CardContent className="min-h-[75vh]">
@@ -141,6 +181,7 @@ export const LeadsKabanPage = () => {
             queryByStatus={queryByStatus}
             onSelectLead={handleSelectLead}
             isFiltersLoading={isFiltersLoading}
+            cardActions={cardActions}
           />
         </div>
 
@@ -185,6 +226,38 @@ export const LeadsKabanPage = () => {
             setIsEditing(true);
           }}
         />
+
+        {/* Centralized dialogs - lifted from LeadKanbanCard for performance */}
+        {/* Only 3 dialogs mounted instead of 4000+ (one per card) */}
+        {dialogState.lead && dialogState.type === "edit" && (
+          <LeadSheetForm
+            lead={dialogState.lead}
+            open
+            onOpenChange={(open) => {
+              if (!open) closeDialog();
+            }}
+          />
+        )}
+
+        {dialogState.lead && dialogState.type === "delete" && (
+          <DeleteLeadAlertDialog
+            isOpen
+            onOpenChange={(open) => {
+              if (!open) closeDialog();
+            }}
+            onConfirmDelete={handleDeleteConfirm}
+            leadName={dialogState.lead.companyName}
+            isLoading={deleteLeadMutation.isPending}
+          />
+        )}
+
+        {dialogState.lead && dialogState.type === "reasign" && (
+          <ReasignLeadDialog
+            isOpen
+            onOpenChange={closeDialog}
+            leadId={dialogState.lead.id}
+          />
+        )}
       </CardContent>
     </Card>
   );
