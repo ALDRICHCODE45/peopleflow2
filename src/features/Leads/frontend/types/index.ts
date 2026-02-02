@@ -87,6 +87,25 @@ export const INTERACTION_TYPE_OPTIONS: {
   { value: "WHATSAPP", label: "WhatsApp" },
 ];
 
+// Icons mapping for interaction types
+import {
+  Call02Icon,
+  Mail01Icon,
+  Calendar03Icon,
+  Note03Icon,
+  Linkedin01Icon,
+  WhatsappIcon,
+} from "@hugeicons/core-free-icons";
+
+export const INTERACTION_ICONS: Record<InteractionType, typeof Call02Icon> = {
+  CALL: Call02Icon,
+  EMAIL: Mail01Icon,
+  MEETING: Calendar03Icon,
+  NOTE: Note03Icon,
+  LINKEDIN: Linkedin01Icon,
+  WHATSAPP: WhatsappIcon,
+};
+
 // =============================================
 // INTERFACES DE ENTIDADES
 // =============================================

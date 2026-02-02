@@ -24,7 +24,7 @@ const CreateLeadForm = dynamic(
         <Spinner className="size-10" />
       </div>
     ),
-  },
+  }
 );
 
 const EditLeadForm = dynamic(
@@ -39,7 +39,7 @@ const EditLeadForm = dynamic(
         <Spinner className="size-10" />
       </div>
     ),
-  },
+  }
 );
 
 interface LeadSheetFormProps {
