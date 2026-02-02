@@ -22,7 +22,19 @@ export const LeadsTableConfig: TableConfig<Lead> = {
     showAddButton: true,
     addButtonIcon: <HugeiconsIcon icon={Add01Icon} className="h-4 w-4" />,
     addButtonText: "Nuevo Lead",
-    showBulkActions: false,
+    showBulkActions: true,
+    onBulkDelete: (selectedRows) => {
+      console.log("Eliminar:", selectedRows);
+    },
+    onBulkExport: (selectedRows) => {
+      console.log("Exportar:", selectedRows);
+    },
+    onBulkEdit: (selectedRows) => {
+      console.log("Editar:", selectedRows);
+    },
+    onBulkShare: (selectedRows) => {
+      console.log("Compartir:", selectedRows);
+    },
   },
   emptyStateMessage: "No se encontraron leads",
   pagination: {
@@ -32,7 +44,7 @@ export const LeadsTableConfig: TableConfig<Lead> = {
     showPaginationInfo: true,
   },
   enableColumnVisibility: false,
-  enableRowSelection: false,
+  enableRowSelection: true,
   enableSorting: true,
   // Advanced table features: Column Pinning & Drag-and-Drop
   columnPinning: {

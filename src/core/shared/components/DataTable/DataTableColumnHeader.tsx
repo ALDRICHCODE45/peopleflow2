@@ -103,6 +103,14 @@ function DataTableColumnHeaderInner<TData, TValue>({
   );
   const sortDirection = column.getIsSorted();
 
+  // Columnas especiales (select, actions) - solo renderizar el contenido sin drag/dropdown
+  // Estas columnas típicamente tienen header como función (componente) y no texto
+  const isSpecialColumn = column.id === "select" || column.id === "actions";
+
+  if (isSpecialColumn) {
+    return <div className="flex items-center">{headerContent}</div>;
+  }
+
   // Contenido base del header
   const baseContent = (
     <div className="flex items-center gap-1">

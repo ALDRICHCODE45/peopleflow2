@@ -5,6 +5,7 @@ import {
   ColumnDef,
   ColumnOrderState,
   ColumnPinningState,
+  RowSelectionState,
   Table,
   flexRender,
 } from "@tanstack/react-table";
@@ -30,6 +31,7 @@ import {
   TableHeader,
   TableRow,
 } from "@shadcn/table";
+import { cn } from "@lib/utils";
 
 import { HugeiconsIcon } from "@hugeicons/react";
 import { PackageOpen } from "@hugeicons/core-free-icons";
@@ -57,6 +59,8 @@ interface TableBodyProps<TData, TValue> {
   columnPinning?: ColumnPinningState;
   /** Estado de orden para detectar cambios en memo */
   columnOrder?: ColumnOrderState;
+  /** Estado de seleccion para detectar cambios en memo */
+  rowSelection?: RowSelectionState;
 }
 
 function TableBodyDataTableInner<TData, TValue>({
@@ -64,6 +68,7 @@ function TableBodyDataTableInner<TData, TValue>({
   config,
   columnPinning: columnPinningProp,
   columnOrder: columnOrderProp,
+  rowSelection: rowSelectionProp,
 }: TableBodyProps<TData, TValue>) {
   // Determinar si las features están habilitadas
   const enableColumnPinning = config.columnPinning?.enabled ?? false;
@@ -72,8 +77,9 @@ function TableBodyDataTableInner<TData, TValue>({
   // Usar props de estado si están disponibles (para reactividad con memo)
   // Si no, obtener del estado interno de la tabla
   const columnPinningState = columnPinningProp ?? table.getState().columnPinning;
-  // columnOrderProp se usa implícitamente por el memo para detectar cambios de orden
+  // columnOrderProp y rowSelectionProp se usan implicitamente por el memo para detectar cambios
   void columnOrderProp;
+  void rowSelectionProp;
 
   // Helper para obtener posición de pin de una columna desde el estado
   const getColumnPinPosition = useCallback(
@@ -173,15 +179,23 @@ function TableBodyDataTableInner<TData, TValue>({
                     const size = header.getSize();
                     const offset = stickyOffsets.get(header.column.id);
                     const stickyStyles = getStickyStyles(offset);
+                    const isCompactColumn =
+                      header.column.id === "select" ||
+                      header.column.id === "actions";
+
+                    const minWidth = getColumnMinWidth(size);
 
                     return (
                       <TableHead
                         key={header.id}
-                        className="h-12 px-2 sm:px-6 text-left font-medium whitespace-nowrap"
+                        className={cn(
+                          "h-12 text-left font-medium whitespace-nowrap",
+                          isCompactColumn ? "px-2" : "px-2 sm:px-6"
+                        )}
                         style={{
-                          width: `${size}%`,
-                          minWidth: `${getColumnMinWidth(size)}px`,
-                          maxWidth: `${size}%`,
+                          width: isCompactColumn ? `${minWidth}px` : `${size}%`,
+                          minWidth: `${minWidth}px`,
+                          maxWidth: isCompactColumn ? `${minWidth}px` : `${size}%`,
                           ...stickyStyles,
                         }}
                       >
@@ -218,15 +232,23 @@ function TableBodyDataTableInner<TData, TValue>({
                     const size = cell.column.getSize();
                     const offset = stickyOffsets.get(cell.column.id);
                     const stickyStyles = getStickyStyles(offset);
+                    const isCompactColumn =
+                      cell.column.id === "select" ||
+                      cell.column.id === "actions";
+
+                    const minWidth = getColumnMinWidth(size);
 
                     return (
                       <TableCell
                         key={cell.id}
-                        className="px-2 sm:px-6 py-4 overflow-hidden whitespace-normal"
+                        className={cn(
+                          "py-4 overflow-hidden whitespace-normal",
+                          isCompactColumn ? "px-2" : "px-2 sm:px-6"
+                        )}
                         style={{
-                          width: `${size}%`,
-                          minWidth: `${getColumnMinWidth(size)}px`,
-                          maxWidth: `${size}%`,
+                          width: isCompactColumn ? `${minWidth}px` : `${size}%`,
+                          minWidth: `${minWidth}px`,
+                          maxWidth: isCompactColumn ? `${minWidth}px` : `${size}%`,
                           ...stickyStyles,
                         }}
                       >

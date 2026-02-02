@@ -5,8 +5,29 @@ import { LeadRowActions } from "./LeadRowActions";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Badge } from "@/core/shared/ui/shadcn/badge";
+import { Checkbox } from "@/core/shared/ui/shadcn/checkbox";
 
 export const LeadColumns: ColumnDef<Lead>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Seleccionar todas"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Seleccionar fila"
+      />
+    ),
+    size: 2,
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     header: "Empresa",
     accessorKey: "companyName",
@@ -18,13 +39,13 @@ export const LeadColumns: ColumnDef<Lead>[] = [
         </div>
       );
     },
-    size: 22,
+    size: 16,
   },
   {
     header: "Estado",
     accessorKey: "status",
     cell: ({ row }) => <LeadStatusBadge status={row.original.status} />,
-    size: 24,
+    size: 22,
   },
   {
     header: "Sector",
@@ -46,7 +67,7 @@ export const LeadColumns: ColumnDef<Lead>[] = [
         </div>
       );
     },
-    size: 25,
+    size: 16,
   },
   {
     header: "Origen",
@@ -67,7 +88,7 @@ export const LeadColumns: ColumnDef<Lead>[] = [
         </div>
       </>
     ),
-    size: 11,
+    size: 10,
   },
   {
     header: "Asignado",
@@ -77,7 +98,7 @@ export const LeadColumns: ColumnDef<Lead>[] = [
         {row.original.assignedToName || "-"}
       </span>
     ),
-    size: 14,
+    size: 12,
   },
   {
     header: "Contactos",
@@ -104,7 +125,7 @@ export const LeadColumns: ColumnDef<Lead>[] = [
         </span>
       );
     },
-    size: 11,
+    size: 10,
   },
   {
     id: "actions",

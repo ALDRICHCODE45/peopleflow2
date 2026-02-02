@@ -168,7 +168,7 @@ export function DataTable<TData, TValue>({
   // Hook para persistir preferencias de columnas (pinning y orden)
   const {
     columnPinning,
-    columnOrder,
+    columnOrder: storedColumnOrder,
     setColumnPinning,
     setColumnOrder,
   } = useTablePreferences({
@@ -176,6 +176,40 @@ export function DataTable<TData, TValue>({
     defaultPinning: finalConfig.columnPinning?.defaultPinning ?? { left: [], right: [] },
     defaultOrder: finalConfig.columnOrder?.defaultOrder ?? [],
   });
+
+  // Sincronizar columnOrder con las columnas actuales
+  // Si hay columnas nuevas que no están en el orden guardado, agregarlas
+  const columnOrder = useMemo(() => {
+    const currentColumnIds = columns.map((col) =>
+      "accessorKey" in col ? String(col.accessorKey) : col.id ?? ""
+    ).filter(Boolean);
+
+    // Si no hay orden guardado, usar el orden de las columnas definidas
+    if (storedColumnOrder.length === 0) {
+      return currentColumnIds;
+    }
+
+    // Encontrar columnas que no están en el orden guardado
+    const storedSet = new Set(storedColumnOrder);
+    const newColumns = currentColumnIds.filter((id) => !storedSet.has(id));
+
+    // Si no hay columnas nuevas, usar el orden guardado
+    if (newColumns.length === 0) {
+      return storedColumnOrder;
+    }
+
+    // Agregar columnas nuevas: "select" al principio, otras al final
+    const selectColumn = newColumns.find((id) => id === "select");
+    const otherNewColumns = newColumns.filter((id) => id !== "select");
+
+    let result = [...storedColumnOrder];
+    if (selectColumn) {
+      result = [selectColumn, ...result];
+    }
+    result = [...result, ...otherNewColumns];
+
+    return result;
+  }, [columns, storedColumnOrder]);
 
   // Usar estado del padre si es server-side, sino usar estado interno
   const pagination = isServerSide && paginationProp ? paginationProp : internalPagination;
@@ -329,6 +363,7 @@ export function DataTable<TData, TValue>({
               table={table}
               columnPinning={columnPinning}
               columnOrder={columnOrder}
+              rowSelection={rowSelection}
             />
           </div>
         )}
