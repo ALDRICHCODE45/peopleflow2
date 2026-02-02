@@ -178,14 +178,15 @@ export function LeadDetailSheet({
           <TabsList variant="line">
             <TabsTrigger value="contacts">
               Contactos
-              {displayLead.contactsCount !== undefined && displayLead.contactsCount > 0 && (
-                <Badge
-                  variant="secondary"
-                  className="ml-1.5 h-5 min-w-5 px-1.5 text-xs"
-                >
-                  {displayLead.contactsCount}
-                </Badge>
-              )}
+              {displayLead.contactsCount !== undefined &&
+                displayLead.contactsCount > 0 && (
+                  <Badge
+                    variant="secondary"
+                    className="ml-1.5 h-5 min-w-5 px-1.5 text-xs"
+                  >
+                    {displayLead.contactsCount}
+                  </Badge>
+                )}
             </TabsTrigger>
             <TabsTrigger value="history">Historial</TabsTrigger>
           </TabsList>
@@ -210,7 +211,16 @@ function InfoItem({
   label: string;
   value: string | null | undefined;
 }) {
-  if (!value) return null;
+  if (!value) {
+    return (
+      <div>
+        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+          {label}
+        </p>
+        <p className="text-sm mt-0.5 italic">No ingresado</p>
+      </div>
+    );
+  }
 
   return (
     <div>

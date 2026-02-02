@@ -48,7 +48,20 @@ export const LeadColumns: ColumnDef<Lead>[] = [
     header: "Origen",
     accessorKey: "originName",
     cell: ({ row }) => (
-      <span className="truncate block">{row.original.originName || "-"}</span>
+      <>
+        <div className="flex flex-col min-w-0 overflow-hidden">
+          <span className="truncate">{row.original.originName || "-"}</span>
+          {row.original.subOrigin ? (
+            <span className="text-xs text-muted-foreground truncate">
+              {row.original.subOrigin}
+            </span>
+          ) : (
+            <span className="text-xs text-muted-foreground truncate italic">
+              No Ingresado.
+            </span>
+          )}
+        </div>
+      </>
     ),
     size: 11,
   },
