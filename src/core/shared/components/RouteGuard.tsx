@@ -145,16 +145,10 @@ export function RouteGuard({ children, fallback }: RouteGuardProps) {
       {/* Overlay de verificación durante navegación - no desmonta children */}
       {isInitialCheck && wasAccessGranted && (
         <div
-          className="absolute inset-0 z-[100] flex items-center justify-center
-                     bg-white/60 dark:bg-background/60 backdrop-blur-[2px]
-                     transition-opacity duration-150"
+          className="flex items-center justify-center min-h-screen bg-white
+  dark:bg-background"
         >
-          <div
-            className="animate-spin rounded-full h-8 w-8 border-2 border-t-transparent
-                        border-gray-600 dark:border-foreground/40"
-            role="status"
-            aria-label="Verificando permisos..."
-          />
+          <Spinner className="size-10 text-primary" />
         </div>
       )}
       {children}
