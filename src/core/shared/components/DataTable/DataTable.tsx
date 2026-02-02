@@ -1,5 +1,6 @@
 "use client";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
+import { Spinner } from "@shadcn/spinner";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -36,6 +37,8 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   config?: TableConfig<TData>;
   isLoading?: boolean;
+  /** Indica si se está haciendo fetch de nuevos datos (para overlay sutil durante refetch) */
+  isFetching?: boolean;
   // Callbacks para server-side (cuando config.serverSide.enabled = true)
   onPaginationChange?: (pagination: PaginationState) => void;
   onSortingChange?: (sorting: SortingState) => void;
@@ -45,11 +48,21 @@ interface DataTableProps<TData, TValue> {
   sorting?: SortingState;
 }
 
+/** Componente de overlay de carga sutil para refetches */
+function LoadingOverlay() {
+  return (
+    <div className="absolute inset-0 bg-background/50 flex items-center justify-center z-10 rounded-md">
+      <Spinner className="size-6 text-muted-foreground" />
+    </div>
+  );
+}
+
 export function DataTable<TData, TValue>({
   columns,
   data,
   config = {},
   isLoading: isLoadingProp,
+  isFetching: isFetchingProp,
   // Server-side callbacks
   onPaginationChange: onPaginationChangeProp,
   onSortingChange: onSortingChangeProp,
@@ -102,6 +115,7 @@ export function DataTable<TData, TValue>({
   };
 
   // Combinar configuración por defecto con la proporcionada (memoizado)
+  // Nota: isLoading e isFetching se calculan fuera del useMemo para evitar recálculos innecesarios
   const finalConfig = useMemo(
     () => ({
       filters: { ...defaultConfig.filters, ...config.filters },
@@ -114,12 +128,20 @@ export function DataTable<TData, TValue>({
         config.enableColumnVisibility ?? defaultConfig.enableColumnVisibility,
       enableRowSelection:
         config.enableRowSelection ?? defaultConfig.enableRowSelection,
-      isLoading: isLoadingProp ?? config.isLoading ?? false,
       skeletonRows: config.skeletonRows ?? 5,
       serverSide: { ...defaultConfig.serverSide, ...config.serverSide },
     }),
-    [config, isLoadingProp]
+    [config]
   );
+
+  // Calcular estados de carga fuera del useMemo para evitar re-renders innecesarios del config
+  const isLoading = isLoadingProp ?? config.isLoading ?? config.serverSide?.isLoading ?? false;
+  const isFetching = isFetchingProp ?? config.serverSide?.isFetching ?? false;
+
+  // Mostrar skeleton solo en carga inicial sin datos
+  const showSkeleton = isLoading && data.length === 0;
+  // Mostrar overlay sutil cuando hay datos previos y se está haciendo refetch
+  const showLoadingOverlay = isFetching && !isLoading && data.length > 0;
 
   // Estado interno para client-side
   const [internalPagination, setInternalPagination] = useState<PaginationState>({
@@ -239,17 +261,20 @@ export function DataTable<TData, TValue>({
 
       {/* Cuerpo de la tabla*/}
       <div className="w-full min-w-0">
-        {finalConfig.isLoading ? (
+        {showSkeleton ? (
           <TableSkeleton
             columns={columns.length}
             rows={finalConfig.skeletonRows}
           />
         ) : (
-          <TableBodyDataTable<TData, TValue>
-            columns={columns}
-            config={finalConfig}
-            table={table}
-          />
+          <div className="relative">
+            {showLoadingOverlay && <LoadingOverlay />}
+            <TableBodyDataTable<TData, TValue>
+              columns={columns}
+              config={finalConfig}
+              table={table}
+            />
+          </div>
         )}
       </div>
 

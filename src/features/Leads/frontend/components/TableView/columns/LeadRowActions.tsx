@@ -6,8 +6,6 @@ import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import type { Lead } from "../../../types";
 import { useDeleteLead } from "../../../hooks/useLeads";
-import { LoadingModalState } from "@/core/shared/components/LoadingModalState";
-import dynamic from "next/dynamic";
 import { Button } from "@/core/shared/ui/shadcn/button";
 import {
   DropdownMenu,
@@ -19,39 +17,9 @@ import {
 } from "@/core/shared/ui/shadcn/dropdown-menu";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { MoreVerticalIcon } from "@hugeicons/core-free-icons";
-
-const LeadSheetForm = dynamic(
-  () =>
-    import("../LeadSheetForm").then((mod) => ({
-      default: mod.LeadSheetForm,
-    })),
-  {
-    ssr: false,
-    loading: () => <LoadingModalState />,
-  },
-);
-
-const DeleteLeadAlertDialog = dynamic(
-  () =>
-    import("../DeleteLeadAlertDialog").then((mod) => ({
-      default: mod.DeleteLeadAlertDialog,
-    })),
-  {
-    ssr: false,
-    loading: () => <LoadingModalState />,
-  },
-);
-
-const LeadDetailSheet = dynamic(
-  () =>
-    import("../LeadDetailSheet").then((mod) => ({
-      default: mod.LeadDetailSheet,
-    })),
-  {
-    ssr: false,
-    loading: () => <LoadingModalState />,
-  },
-);
+import { LeadSheetForm } from "../LeadSheetForm";
+import { DeleteLeadAlertDialog } from "../DeleteLeadAlertDialog";
+import { LeadDetailSheet } from "../LeadDetailSheet";
 
 export function LeadRowActions({ row }: { row: Row<Lead> }) {
   const lead = row.original;

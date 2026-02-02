@@ -1,11 +1,7 @@
 "use client";
 
-import { memo, useMemo } from "react";
-import {
-  DndContext,
-  DragOverlay,
-  pointerWithin,
-} from "@dnd-kit/core";
+import { memo } from "react";
+import { DndContext, DragOverlay, pointerWithin } from "@dnd-kit/core";
 import {
   SortableContext,
   horizontalListSortingStrategy,

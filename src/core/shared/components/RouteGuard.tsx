@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { canAccessRouteAction } from "@/features/auth-rbac/server/presentation/actions/permission.actions";
+import { Spinner } from "@shadcn/spinner";
 
 interface RouteGuardProps {
   children: React.ReactNode;
@@ -50,10 +51,7 @@ export function RouteGuard({ children, fallback }: RouteGuardProps) {
       isCheckingRef.current = true;
 
       try {
-        const result = await canAccessRouteAction(
-          pathname,
-          tenant?.id || null
-        );
+        const result = await canAccessRouteAction(pathname, tenant?.id || null);
 
         if (!result.canAccess) {
           // Sin acceso - redirigir
@@ -82,7 +80,7 @@ export function RouteGuard({ children, fallback }: RouteGuardProps) {
         }
       }
     },
-    [pathname, tenant?.id, router]
+    [pathname, tenant?.id, router],
   );
 
   // Verificación cuando cambia el pathname o tenant
@@ -125,13 +123,11 @@ export function RouteGuard({ children, fallback }: RouteGuardProps) {
   if ((isTenantLoading || isInitialCheck) && !wasAccessGranted) {
     return (
       fallback || (
-        <div className="flex items-center justify-center min-h-screen bg-white dark:bg-background">
-          <div
-            className="animate-spin rounded-full h-16 w-16 border-4 border-t-transparent
-                        border-gray-900 dark:border-foreground/20 dark:border-t-transparent"
-            role="status"
-            aria-label="Verificando permisos..."
-          />
+        <div
+          className="flex items-center justify-center min-h-screen bg-white
+  dark:bg-background"
+        >
+          <Spinner className="size-10 text-primary" />
         </div>
       )
     );

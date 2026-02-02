@@ -77,7 +77,7 @@ export function LeadsListPage() {
   }, [handleGlobalFilterChange, handleMultiTabChange, setPagination]);
 
   // Query with server-side pagination
-  const { data, isLoading, isFetching } = usePaginatedLeadsQuery({
+  const { data, isLoading, isFetching, isPending } = usePaginatedLeadsQuery({
     pageIndex: pagination.pageIndex,
     pageSize: pagination.pageSize,
     sorting: sorting.map((s) => ({ id: s.id, desc: s.desc })),
@@ -94,6 +94,10 @@ export function LeadsListPage() {
   const paginationMeta = data?.pagination;
   const totalCount = paginationMeta?.totalCount ?? 0;
 
+  // Solo mostrar skeleton si es carga inicial SIN datos previos
+  // isPending es true cuando la query no tiene datos cacheados y está cargando
+  const showInitialLoading = isPending && !data;
+
   // Tabs config with dynamic counts
   const tabsConfig = useMemo(
     () => enrichLeadTabsWithCounts(activeTabs, totalCount),
@@ -105,6 +109,8 @@ export function LeadsListPage() {
   }, [openModal]);
 
   // Table configuration with server-side enabled
+  // Nota: isLoading e isFetching se pasan como props separadas al DataTable
+  // para evitar recálculos del config en cada cambio de estado de carga
   const tableConfig = useMemo(
     () =>
       createTableConfig(LeadsTableConfig, {
@@ -121,15 +127,12 @@ export function LeadsListPage() {
           enabled: true,
           totalCount,
           pageCount: paginationMeta?.pageCount ?? 0,
-          isLoading,
-          isFetching,
+          // No incluir isLoading/isFetching aquí - se pasan como props separadas
         },
       }),
     [
       totalCount,
       paginationMeta?.pageCount,
-      isLoading,
-      isFetching,
       handleAdd,
       selectedSectorIds,
       selectedOriginIds,
@@ -166,6 +169,8 @@ export function LeadsListPage() {
               columns={LeadColumns}
               data={leads}
               config={tableConfig}
+              isLoading={showInitialLoading}
+              isFetching={isFetching && !showInitialLoading}
               pagination={pagination}
               sorting={sorting}
               onPaginationChange={createPaginationHandler(totalCount)}

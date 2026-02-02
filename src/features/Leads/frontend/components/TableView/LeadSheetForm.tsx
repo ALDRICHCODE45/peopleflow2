@@ -10,7 +10,7 @@ import {
 } from "@shadcn/sheet";
 import { useIsMobile } from "@/core/shared/hooks/use-mobile";
 import dynamic from "next/dynamic";
-import { LoadingModalState } from "@/core/shared/components/LoadingModalState";
+import { Spinner } from "@shadcn/spinner";
 
 const CreateLeadForm = dynamic(
   () =>
@@ -19,7 +19,11 @@ const CreateLeadForm = dynamic(
     })),
   {
     ssr: false,
-    loading: () => <LoadingModalState />,
+    loading: () => (
+      <div className="flex justify-center items-center p-8">
+        <Spinner className="size-10" />
+      </div>
+    ),
   },
 );
 
@@ -30,7 +34,11 @@ const EditLeadForm = dynamic(
     })),
   {
     ssr: false,
-    loading: () => <LoadingModalState />,
+    loading: () => (
+      <div className="flex justify-center items-center p-8">
+        <Spinner className="size-10" />
+      </div>
+    ),
   },
 );
 
