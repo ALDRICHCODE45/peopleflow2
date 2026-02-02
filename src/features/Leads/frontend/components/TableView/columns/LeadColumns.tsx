@@ -34,9 +34,13 @@ export const LeadColumns: ColumnDef<Lead>[] = [
       return (
         <div className="flex flex-col min-w-0 overflow-hidden">
           <span className="truncate">{lead.sectorName || "-"}</span>
-          {lead.subsectorName && (
+          {lead.subsectorName ? (
             <span className="text-xs text-muted-foreground truncate">
               {lead.subsectorName}
+            </span>
+          ) : (
+            <span className="text-xs text-muted-foreground truncate italic">
+              No Ingresado.
             </span>
           )}
         </div>
