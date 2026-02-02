@@ -18,3 +18,5 @@ export { useDebouncedValue } from "./useDebouncedValue";
 export { useModalState } from "./useModalState";
 export { useMultiModalState } from "./useMultiModalState";
 export type { UseMultiModalStateReturn } from "./useMultiModalState";
+
+export { useTablePreferences } from "./useTablePreferences";

@@ -53,7 +53,7 @@ export function LeadRowActions({ row }: { row: Row<Lead> }) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-8 w-8">
+          <Button variant="ghost" size="icon" className="w-full ">
             <HugeiconsIcon icon={MoreVerticalIcon} className="h-4 w-4" />
             <span className="sr-only">Abrir menú</span>
           </Button>

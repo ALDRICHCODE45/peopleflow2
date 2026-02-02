@@ -1,9 +1,11 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { Spinner } from "@shadcn/spinner";
 import {
   ColumnDef,
   ColumnFiltersState,
+  ColumnOrderState,
+  ColumnPinningState,
   getCoreRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
@@ -31,6 +33,7 @@ import { TableConfig } from "./TableTypes.types";
 import { TableSkeleton } from "./TableSkeleton";
 import { DataTableFilters } from "./DataTableFilters";
 import { DataTableBulkActionsBar, BulkAction } from "./DataTableBulkActionsBar";
+import { useTablePreferences } from "@/core/shared/hooks/useTablePreferences";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -112,6 +115,12 @@ export function DataTable<TData, TValue>({
       isLoading: false,
       isFetching: false,
     },
+    columnPinning: {
+      enabled: false,
+    },
+    columnOrder: {
+      enabled: false,
+    },
   };
 
   // Combinar configuración por defecto con la proporcionada (memoizado)
@@ -130,6 +139,8 @@ export function DataTable<TData, TValue>({
         config.enableRowSelection ?? defaultConfig.enableRowSelection,
       skeletonRows: config.skeletonRows ?? 5,
       serverSide: { ...defaultConfig.serverSide, ...config.serverSide },
+      columnPinning: { ...defaultConfig.columnPinning, ...config.columnPinning },
+      columnOrder: { ...defaultConfig.columnOrder, ...config.columnOrder },
     }),
     [config]
   );
@@ -149,6 +160,22 @@ export function DataTable<TData, TValue>({
     pageSize: finalConfig.pagination.defaultPageSize || 10,
   });
   const [internalSorting, setInternalSorting] = useState<SortingState>([]);
+
+  // Determinar persistKey para column pinning y order
+  const columnPinningPersistKey = finalConfig.columnPinning?.persistKey;
+  const columnOrderPersistKey = finalConfig.columnOrder?.persistKey;
+
+  // Hook para persistir preferencias de columnas (pinning y orden)
+  const {
+    columnPinning,
+    columnOrder,
+    setColumnPinning,
+    setColumnOrder,
+  } = useTablePreferences({
+    persistKey: columnPinningPersistKey || columnOrderPersistKey,
+    defaultPinning: finalConfig.columnPinning?.defaultPinning ?? { left: [], right: [] },
+    defaultOrder: finalConfig.columnOrder?.defaultOrder ?? [],
+  });
 
   // Usar estado del padre si es server-side, sino usar estado interno
   const pagination = isServerSide && paginationProp ? paginationProp : internalPagination;
@@ -176,7 +203,7 @@ export function DataTable<TData, TValue>({
   };
 
   // Handler para cambios de sorting
-  const handleSortingChange = (updater: Updater<SortingState>) => {
+  const handleSortingChange = useCallback((updater: Updater<SortingState>) => {
     const newSorting = typeof updater === "function" ? updater(sorting) : updater;
 
     if (isServerSide) {
@@ -187,7 +214,25 @@ export function DataTable<TData, TValue>({
       // En client-side, actualizar estado interno
       setInternalSorting(newSorting);
     }
-  };
+  }, [isServerSide, onSortingChangeProp, onPaginationChangeProp, pagination, sorting]);
+
+  // Handler para cambios de column pinning
+  const handleColumnPinningChange = useCallback((updater: Updater<ColumnPinningState>) => {
+    if (typeof updater === "function") {
+      setColumnPinning((prev) => updater(prev));
+    } else {
+      setColumnPinning(updater);
+    }
+  }, [setColumnPinning]);
+
+  // Handler para cambios de column order
+  const handleColumnOrderChange = useCallback((updater: Updater<ColumnOrderState>) => {
+    if (typeof updater === "function") {
+      setColumnOrder((prev) => updater(prev));
+    } else {
+      setColumnOrder(updater);
+    }
+  }, [setColumnOrder]);
 
   const table = useReactTable({
     data,
@@ -230,6 +275,13 @@ export function DataTable<TData, TValue>({
     getFacetedUniqueValues: getFacetedUniqueValues(),
     enableRowSelection: finalConfig.enableRowSelection,
 
+    // Column pinning
+    enableColumnPinning: finalConfig.columnPinning?.enabled ?? false,
+    onColumnPinningChange: handleColumnPinningChange,
+
+    // Column order (drag & drop)
+    onColumnOrderChange: handleColumnOrderChange,
+
     state: {
       sorting,
       pagination,
@@ -237,6 +289,8 @@ export function DataTable<TData, TValue>({
       columnVisibility,
       rowSelection,
       globalFilter,
+      columnPinning,
+      columnOrder,
     },
   });
 
@@ -273,6 +327,8 @@ export function DataTable<TData, TValue>({
               columns={columns}
               config={finalConfig}
               table={table}
+              columnPinning={columnPinning}
+              columnOrder={columnOrder}
             />
           </div>
         )}

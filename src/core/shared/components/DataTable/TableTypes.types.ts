@@ -1,5 +1,9 @@
 import { ReactNode } from "react";
-import { Table } from "@tanstack/react-table";
+import {
+  Table,
+  ColumnPinningState,
+  ColumnOrderState,
+} from "@tanstack/react-table";
 import { IconSvgElement } from "@hugeicons/react";
 
 // Interfaz base para filtros
@@ -96,6 +100,26 @@ export interface ServerSideConfig {
   isFetching?: boolean;
 }
 
+// Configuración para fijar columnas (column pinning)
+export interface ColumnPinningConfig {
+  /** Habilitar la funcionalidad de fijar columnas */
+  enabled?: boolean;
+  /** Estado inicial de columnas fijadas */
+  defaultPinning?: ColumnPinningState;
+  /** Key para persistir preferencias en localStorage */
+  persistKey?: string;
+}
+
+// Configuración para reordenar columnas (drag & drop)
+export interface ColumnOrderConfig {
+  /** Habilitar la funcionalidad de reordenar columnas */
+  enabled?: boolean;
+  /** Orden inicial de columnas */
+  defaultOrder?: ColumnOrderState;
+  /** Key para persistir preferencias en localStorage */
+  persistKey?: string;
+}
+
 // Configuración de la tabla
 export interface TableConfig<TData> {
   filters?: FilterConfig;
@@ -109,4 +133,8 @@ export interface TableConfig<TData> {
   skeletonRows?: number;
   /** Configuración para paginación/sorting/filtrado server-side */
   serverSide?: ServerSideConfig;
+  /** Configuración para fijar columnas (sticky columns) */
+  columnPinning?: ColumnPinningConfig;
+  /** Configuración para reordenar columnas (drag & drop) */
+  columnOrder?: ColumnOrderConfig;
 }

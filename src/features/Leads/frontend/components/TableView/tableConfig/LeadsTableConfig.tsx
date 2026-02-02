@@ -34,4 +34,13 @@ export const LeadsTableConfig: TableConfig<Lead> = {
   enableColumnVisibility: false,
   enableRowSelection: false,
   enableSorting: true,
+  // Advanced table features: Column Pinning & Drag-and-Drop
+  columnPinning: {
+    enabled: true,
+    persistKey: "leads-table",
+  },
+  columnOrder: {
+    enabled: true,
+    persistKey: "leads-table",
+  },
 };
