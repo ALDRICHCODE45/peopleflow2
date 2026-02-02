@@ -87,7 +87,7 @@ export function ContactInteractionsDialog({
 
   // Only fetch when dialog is open (lazy loading)
   const { data: interactions = [], isLoading } = useInteractionsByContact(
-    open ? contact.id : null
+    open ? contact.id : null,
   );
 
   const addInteractionMutation = useAddInteraction();
@@ -132,7 +132,7 @@ export function ContactInteractionsDialog({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-lg max-h-[85vh] overflow-hidden flex flex-col">
+        <DialogContent className="min-w-sm md:min-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
           <DialogHeader>
             <div className="flex items-center justify-between pr-8">
               <DialogTitle className="flex items-center gap-2">
@@ -284,7 +284,7 @@ function InteractionItem({
       className={cn(
         "rounded-lg border border-border/40 p-3",
         "bg-gradient-to-b from-background to-muted/20",
-        "group"
+        "group",
       )}
     >
       <div className="flex items-start gap-3">
@@ -336,7 +336,10 @@ function InteractionItem({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={onEdit}>
-                <HugeiconsIcon icon={PencilEdit01Icon} className="h-4 w-4 mr-2" />
+                <HugeiconsIcon
+                  icon={PencilEdit01Icon}
+                  className="h-4 w-4 mr-2"
+                />
                 Editar
               </DropdownMenuItem>
               <DropdownMenuItem

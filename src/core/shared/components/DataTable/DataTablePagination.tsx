@@ -7,9 +7,8 @@ import {
   SelectValue,
 } from "@shadcn/select";
 import { Button } from "@shadcn/button";
-import { Input } from "@shadcn/input";
 
-import { useState, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { TableConfig } from "./TableTypes.types";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
@@ -26,7 +25,7 @@ interface DataTablePaginationProps<TData> {
 function generatePageNumbers(
   currentPage: number,
   totalPages: number,
-  maxVisible: number = 5
+  maxVisible: number = 5,
 ): (number | "ellipsis")[] {
   if (totalPages <= maxVisible + 2) {
     return Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -79,29 +78,13 @@ export const DataTablePagination = <TData,>({
     totalRows === 0 ? 0 : table.getState().pagination.pageIndex * pageSize + 1;
   const endRow = Math.min(
     table.getState().pagination.pageIndex * pageSize + pageSize,
-    totalRows
+    totalRows,
   );
-
-  const [jumpToValue, setJumpToValue] = useState<string>("");
 
   const pageNumbers = useMemo(
     () => generatePageNumbers(currentPage, pageCount, 3),
-    [currentPage, pageCount]
+    [currentPage, pageCount],
   );
-
-  const handleJumpTo = () => {
-    const pageNumber = parseInt(jumpToValue, 10);
-    if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= pageCount) {
-      table.setPageIndex(pageNumber - 1);
-      setJumpToValue("");
-    }
-  };
-
-  const handleJumpToKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleJumpTo();
-    }
-  };
 
   if (totalRows === 0) {
     return (
@@ -119,18 +102,18 @@ export const DataTablePagination = <TData,>({
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full py-2">
-      {/* Lado izquierdo: Show X */}
+      {/* Lado izquierdo: Mostrar X de Y registros */}
       <div className="flex items-center gap-2">
         {config.pagination?.showPageSizeSelector && (
           <>
-            <span className="text-sm text-muted-foreground">Show</span>
+            <span className="text-sm text-muted-foreground">Mostrar</span>
             <Select
               value={pageSize.toString()}
               onValueChange={(value) => {
                 table.setPageSize(Number(value));
               }}
             >
-              <SelectTrigger className="w-[70px] h-8">
+              <SelectTrigger className="w-17.5 h-8">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -139,7 +122,7 @@ export const DataTablePagination = <TData,>({
                     <SelectItem key={size} value={size.toString()}>
                       {size}
                     </SelectItem>
-                  )
+                  ),
                 )}
               </SelectContent>
             </Select>
@@ -147,7 +130,7 @@ export const DataTablePagination = <TData,>({
         )}
         {config.pagination?.showPaginationInfo && (
           <span className="text-sm text-muted-foreground ml-2">
-            of {totalRows} entries
+            de {totalRows} registros
           </span>
         )}
       </div>
@@ -200,7 +183,7 @@ export const DataTablePagination = <TData,>({
             >
               {page}
             </Button>
-          )
+          ),
         )}
 
         {/* Pagina siguiente */}
@@ -229,21 +212,25 @@ export const DataTablePagination = <TData,>({
         </Button>
       </div>
 
-      {/* Lado derecho: Jump to */}
+      {/* Lado derecho: Selector de página */}
       <div className="flex items-center gap-2">
-        <span className="text-sm text-muted-foreground">Jump to</span>
-        <Input
-          type="number"
-          min={1}
-          max={pageCount}
-          value={jumpToValue}
-          onChange={(e) => setJumpToValue(e.target.value)}
-          onKeyDown={handleJumpToKeyDown}
-          onBlur={handleJumpTo}
-          placeholder=""
-          className="w-16 h-8 text-center text-sm"
-          aria-label="Saltar a pagina"
-        />
+        <span className="text-sm text-muted-foreground">Página</span>
+        <Select
+          value={currentPage.toString()}
+          onValueChange={(value) => table.setPageIndex(Number(value) - 1)}
+        >
+          <SelectTrigger className="w-20 h-8">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent className="h-55">
+            {Array.from({ length: Math.min(pageCount, 100) }, (_, i) => (
+              <SelectItem key={i + 1} value={(i + 1).toString()}>
+                {i + 1}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <span className="text-sm text-muted-foreground">de {pageCount}</span>
       </div>
     </div>
   );

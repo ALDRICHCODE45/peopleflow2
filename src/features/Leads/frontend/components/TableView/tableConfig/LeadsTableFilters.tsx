@@ -66,7 +66,7 @@ export const LeadsTableFilters = ({
         <CardHeader className="pb-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 w-full min-w-0 ">
           <div className="flex items-center gap-2 min-w-0">
             <Badge variant="outline" className="ml-2 shrink">
-              {table.getFilteredRowModel().rows.length} resultados
+              {table.getRowCount()} resultados
             </Badge>
           </div>
 
