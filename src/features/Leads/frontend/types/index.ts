@@ -26,6 +26,14 @@ export type InteractionType =
 
 export type AttachableType = "LEAD" | "CONTACT" | "INTERACTION" | "VACANCY";
 
+export type LEAD_EMPLOYEE_OPTIONS =
+  | "5 a 10"
+  | "10 a 30"
+  | "30 a 70"
+  | "70 a 150"
+  | "150 a 300"
+  | "mas de 500";
+
 // Mapeo de estados para UI
 export const LEAD_STATUS_LABELS: Record<LeadStatus, string> = {
   CONTACTO: "Contacto",
@@ -47,6 +55,15 @@ export const LEAD_STATUS_OPTIONS: { value: LeadStatus; label: string }[] = [
   { value: "CITA_VALIDADA", label: "Cita Validada" },
   { value: "POSICIONES_ASIGNADAS", label: "Posiciones Asignadas" },
   { value: "STAND_BY", label: "Stand By" },
+];
+
+export const LEAD_EMPLOYEE_OPTIONS: LEAD_EMPLOYEE_OPTIONS[] = [
+  "5 a 10",
+  "10 a 30",
+  "30 a 70",
+  "70 a 150",
+  "150 a 300",
+  "mas de 500",
 ];
 
 export const INTERACTION_TYPE_LABELS: Record<InteractionType, string> = {

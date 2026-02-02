@@ -13,7 +13,7 @@ import {
 import { Field, FieldError, FieldLabel } from "@/core/shared/ui/shadcn/field";
 import { useEditLeadForm } from "../../hooks/useEditLeadForm";
 import type { Lead } from "../../types";
-import { LEAD_STATUS_OPTIONS } from "../../types";
+import { LEAD_EMPLOYEE_OPTIONS, LEAD_STATUS_OPTIONS } from "../../types";
 
 interface EditLeadFormProps {
   lead: Lead;
@@ -189,17 +189,29 @@ export function EditLeadForm({ lead, onOpenChange }: EditLeadFormProps) {
       </form.Field>
 
       {/* Empleados */}
+
       <form.Field name="employeeCount">
         {(field) => (
           <Field>
             <FieldLabel htmlFor={field.name}>Numero de empleados</FieldLabel>
-            <Input
-              id={field.name}
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-              placeholder="Ej: 20-40 empleados"
-            />
+            <Select
+              value={field.state.value ?? "none"}
+              onValueChange={(value) =>
+                field.handleChange(value === "none" ? "none" : value)
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Selecciona el numero de empleados" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">No ingresado</SelectItem>
+                {LEAD_EMPLOYEE_OPTIONS.map((value) => (
+                  <SelectItem key={value} value={value}>
+                    {value}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </Field>
         )}
       </form.Field>

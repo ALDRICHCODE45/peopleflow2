@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@shadcn/select";
 import type { Lead, LeadFormData, LeadStatus } from "../../types";
-import { LEAD_STATUS_OPTIONS } from "../../types";
+import { LEAD_EMPLOYEE_OPTIONS, LEAD_STATUS_OPTIONS } from "../../types";
 import {
   useSectors,
   useSubsectorsBySector,
@@ -35,12 +35,12 @@ export function LeadForm({
 }: LeadFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedSectorId, setSelectedSectorId] = useState<string | undefined>(
-    lead?.sectorId ?? undefined,
+    lead?.sectorId ?? undefined
   );
 
   const { data: sectors = [] } = useSectors();
   const { data: subsectors = [] } = useSubsectorsBySector(
-    selectedSectorId ?? null,
+    selectedSectorId ?? null
   );
   const { data: origins = [] } = useLeadOrigins();
 
@@ -85,7 +85,7 @@ export function LeadForm({
 
   const handleChange = (
     field: keyof LeadFormData,
-    value: string | undefined,
+    value: string | undefined
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (field === "sectorId") {
@@ -215,13 +215,25 @@ export function LeadForm({
 
       {/* Empleados */}
       <div className="space-y-2">
-        <Label htmlFor="employeeCount">Numero de empleados</Label>
-        <Input
-          id="employeeCount"
-          value={formData.employeeCount ?? ""}
-          onChange={(e) => handleChange("employeeCount", e.target.value)}
-          placeholder="Ej: 20-40 empleados"
-        />
+        <Label htmlFor="employeeCound">Numero de Empleados</Label>
+        <Select
+          value={formData.originId ?? "none"}
+          onValueChange={(value) =>
+            handleChange("employeeCount", value === "none" ? undefined : value)
+          }
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Selecciona Numero de Empleados" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="none">No ahora</SelectItem>
+            {LEAD_EMPLOYEE_OPTIONS.map((value) => (
+              <SelectItem key={value} value={value}>
+                {value}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Website */}

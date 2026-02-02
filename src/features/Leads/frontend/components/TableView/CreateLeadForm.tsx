@@ -12,6 +12,7 @@ import {
 } from "@/core/shared/ui/shadcn/select";
 import { Field, FieldError, FieldLabel } from "@/core/shared/ui/shadcn/field";
 import { useCreateLeadForm } from "../../hooks/useCreateLeadForm";
+import { LEAD_EMPLOYEE_OPTIONS } from "../../types";
 
 interface CreateLeadFormProps {
   onOpenChange: (open: boolean) => void;
@@ -118,60 +119,74 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
       </div>
 
       {/* Origen */}
-      <form.Field name="originId">
-        {(field) => (
-          <Field>
-            <FieldLabel htmlFor={field.name}>Origen del lead</FieldLabel>
-            <Select
-              value={field.state.value ?? "none"}
-              onValueChange={(value) =>
-                field.handleChange(value === "none" ? undefined : value)
-              }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecciona el origen" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">Sin origen</SelectItem>
-                {origins.map((origin) => (
-                  <SelectItem key={origin.id} value={origin.id}>
-                    {origin.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </Field>
-        )}
-      </form.Field>
 
-      {/* Sub-Origen */}
-      <form.Field name="subOrigin">
-        {(field) => (
-          <Field>
-            <FieldLabel htmlFor={field.name}>Sub-Origen</FieldLabel>
-            <Input
-              id={field.name}
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-              placeholder="URL especifica, publicacion, etc."
-            />
-          </Field>
-        )}
-      </form.Field>
+      <div className="grid grid-cols-2 gap-4">
+        <form.Field name="originId">
+          {(field) => (
+            <Field>
+              <FieldLabel htmlFor={field.name}>Origen del lead</FieldLabel>
+              <Select
+                value={field.state.value ?? "none"}
+                onValueChange={(value) =>
+                  field.handleChange(value === "none" ? undefined : value)
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecciona el origen" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">Sin origen</SelectItem>
+                  {origins.map((origin) => (
+                    <SelectItem key={origin.id} value={origin.id}>
+                      {origin.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </Field>
+          )}
+        </form.Field>
+
+        {/* Sub-Origen */}
+        <form.Field name="subOrigin">
+          {(field) => (
+            <Field>
+              <FieldLabel htmlFor={field.name}>Sub-Origen</FieldLabel>
+              <Input
+                id={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(e) => field.handleChange(e.target.value)}
+                placeholder="URL especifica, publicacion, etc."
+              />
+            </Field>
+          )}
+        </form.Field>
+      </div>
 
       {/* Empleados */}
       <form.Field name="employeeCount">
         {(field) => (
           <Field>
             <FieldLabel htmlFor={field.name}>Numero de empleados</FieldLabel>
-            <Input
-              id={field.name}
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-              placeholder="Ej: 20-40 empleados"
-            />
+            <Select
+              value={field.state.value ?? "none"}
+              onValueChange={(value) =>
+                field.handleChange(value === "none" ? "none" : value)
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Selecciona el numero de empleados" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">No ingresado</SelectItem>
+                {LEAD_EMPLOYEE_OPTIONS.map((value) => (
+                  <SelectItem key={value} value={value}>
+                    {value}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </Field>
         )}
       </form.Field>

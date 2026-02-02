@@ -10,6 +10,7 @@ import {
   UserGroupIcon,
   MessageMultiple02Icon,
   UserIcon,
+  UserCheck,
 } from "@hugeicons/core-free-icons";
 import { IconSvgElement } from "@hugeicons/react";
 import type { LeadStatus } from "../types";
@@ -67,6 +68,12 @@ export const LEAD_TABS_CONFIG: readonly LeadTabConfig[] = [
     label: "Cita Agendada",
     statusFilter: "CITA_AGENDADA",
     icon: Calendar03Icon,
+  },
+  {
+    id: "CITA_ATENDIDA",
+    label: "Cita Atendida",
+    statusFilter: "CITA_ATENDIDA",
+    icon: UserCheck,
   },
   {
     id: "CITA_VALIDADA",
