@@ -434,6 +434,12 @@ export function useUpdateLeadStatus() {
         exact: false,
       });
 
+      // Invalidate paginated view (table) so it reflects status changes
+      queryClient.invalidateQueries({
+        queryKey: ["leads", "paginated"],
+        refetchType: "active",
+      });
+
       // Invalidate the specific lead's detail query to ensure fresh data
       // This is critical for the incomplete data flow where the detail might be cached
       const { leadId } = variables;

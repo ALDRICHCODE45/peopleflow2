@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
-import { useUpdateLead, useUpdateLeadStatus } from "./useLeads";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   useSectors,
   useSubsectorsBySector,
@@ -10,6 +10,11 @@ import {
 import { editLeadSchema } from "../schemas/lead.schema";
 import { useState } from "react";
 import type { Lead } from "../types";
+import { showToast } from "@/core/shared/components/ShowToast";
+import {
+  updateLeadAction,
+  updateLeadStatusAction,
+} from "../../server/presentation/actions/lead.actions";
 
 export function useEditLeadForm({
   lead,
@@ -18,8 +23,7 @@ export function useEditLeadForm({
   lead: Lead;
   onOpenChange: (open: boolean) => void;
 }) {
-  const updateLeadMutation = useUpdateLead();
-  const updateStatusMutation = useUpdateLeadStatus();
+  const queryClient = useQueryClient();
   const [selectedSectorId, setSelectedSectorId] = useState<string | undefined>(
     lead.sectorId ?? undefined,
   );
@@ -29,6 +33,77 @@ export function useEditLeadForm({
     selectedSectorId ?? null,
   );
   const { data: origins = [] } = useLeadOrigins();
+
+  const editLeadMutation = useMutation({
+    mutationFn: async ({
+      leadId,
+      data,
+      newStatus,
+    }: {
+      leadId: string;
+      data: Partial<Omit<Lead, "status">>;
+      newStatus?: string;
+    }) => {
+      // Update general fields
+      const updateResult = await updateLeadAction(leadId, data);
+      if (updateResult.error) {
+        throw new Error(updateResult.error);
+      }
+
+      // If status changed, update it separately (records history)
+      if (newStatus) {
+        const statusResult = await updateLeadStatusAction(
+          leadId,
+          newStatus as Lead["status"],
+        );
+        if (statusResult.error) {
+          throw new Error(statusResult.error);
+        }
+        return statusResult.lead;
+      }
+
+      return updateResult.lead;
+    },
+    onSuccess: (updatedLead) => {
+      // Invalidate paginated (table view)
+      queryClient.invalidateQueries({
+        queryKey: ["leads", "paginated"],
+        refetchType: "active",
+      });
+
+      // Invalidate infinite (kanban) for affected statuses
+      if (updatedLead?.status) {
+        queryClient.invalidateQueries({
+          queryKey: ["leads", "infinite"],
+          predicate: (query) => {
+            const key = query.queryKey as string[];
+            return key[3] === updatedLead.status || key[3] === lead.status;
+          },
+          refetchType: "active",
+        });
+      }
+
+      // Invalidate detail query
+      if (updatedLead?.id) {
+        queryClient.invalidateQueries({
+          queryKey: ["leads", "detail", updatedLead.id],
+        });
+      }
+
+      showToast({
+        type: "success",
+        title: "Lead actualizado",
+        description: "El lead se ha actualizado correctamente",
+      });
+    },
+    onError: (error: Error) => {
+      showToast({
+        type: "error",
+        title: "Error",
+        description: error.message || "Error al actualizar el lead",
+      });
+    },
+  });
 
   const form = useForm({
     defaultValues: {
@@ -51,19 +126,11 @@ export function useEditLeadForm({
     onSubmit: async ({ value }) => {
       const { status, ...dataWithoutStatus } = value;
 
-      // Update general fields (without status)
-      await updateLeadMutation.mutateAsync({
+      await editLeadMutation.mutateAsync({
         leadId: lead.id,
         data: dataWithoutStatus,
+        newStatus: status !== lead.status ? status : undefined,
       });
-
-      // If status changed, use dedicated action (records history)
-      if (status !== lead.status) {
-        await updateStatusMutation.mutateAsync({
-          leadId: lead.id,
-          newStatus: status,
-        });
-      }
 
       onOpenChange(false);
     },
@@ -82,6 +149,6 @@ export function useEditLeadForm({
     origins,
     selectedSectorId,
     handleSectorChange,
-    isSubmitting: updateLeadMutation.isPending || updateStatusMutation.isPending,
+    isSubmitting: editLeadMutation.isPending,
   };
 }

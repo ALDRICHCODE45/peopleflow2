@@ -245,6 +245,7 @@ export type LeadOriginScalarFieldEnum = (typeof LeadOriginScalarFieldEnum)[keyof
 export const LeadScalarFieldEnum = {
   id: 'id',
   companyName: 'companyName',
+  normalizedCompanyName: 'normalizedCompanyName',
   website: 'website',
   linkedInUrl: 'linkedInUrl',
   address: 'address',

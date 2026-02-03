@@ -1,6 +1,7 @@
 import type { ILeadRepository, UpdateLeadData } from "../../domain/interfaces/ILeadRepository";
 import { Lead } from "../../domain/entities/Lead";
 import { CompanyNameVO, URLVO } from "../../domain/value-objects";
+import { CompanyNameNormalizationService } from "../../domain/services/CompanyNameNormalizationService";
 
 export interface UpdateLeadInput {
   leadId: string;
@@ -56,7 +57,25 @@ export class UpdateLeadUseCase {
       // Validar y procesar companyName si se proporciona
       if (input.data.companyName !== undefined) {
         const companyName = CompanyNameVO.create(input.data.companyName);
+        const normalizedCompanyName =
+          CompanyNameNormalizationService.normalize(companyName.getValue());
+
+        // Deteccion de duplicados excluyendo el lead actual
+        const existingLead =
+          await this.leadRepository.findByNormalizedCompanyName(
+            normalizedCompanyName,
+            input.tenantId,
+            input.leadId,
+          );
+        if (existingLead) {
+          return {
+            success: false,
+            error: `Ya existe un lead con un nombre similar: "${existingLead.companyName}"`,
+          };
+        }
+
         updateData.companyName = companyName.getValue();
+        updateData.normalizedCompanyName = normalizedCompanyName;
       }
 
       // Validar y procesar website si se proporciona

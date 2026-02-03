@@ -8,6 +8,7 @@ import type { LeadStatusType } from "../value-objects/LeadStatus";
 
 export interface CreateLeadData {
   companyName: string;
+  normalizedCompanyName: string;
   website?: string | null;
   linkedInUrl?: string | null;
   address?: string | null;
@@ -25,6 +26,7 @@ export interface CreateLeadData {
 
 export interface UpdateLeadData {
   companyName?: string;
+  normalizedCompanyName?: string;
   website?: string | null;
   linkedInUrl?: string | null;
   address?: string | null;
@@ -129,5 +131,15 @@ export interface ILeadRepository {
     leadId: string,
     newUserId: string,
     tenantId: string,
+  ): Promise<Lead | null>;
+
+  /**
+   * Busca un lead por nombre de empresa normalizado
+   * para deteccion de duplicados
+   */
+  findByNormalizedCompanyName(
+    normalizedName: string,
+    tenantId: string,
+    excludeLeadId?: string,
   ): Promise<Lead | null>;
 }

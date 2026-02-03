@@ -10,6 +10,10 @@ import {
   generateLeadStatusChangeEmail,
   generateLeadStatusChangePlainText,
 } from "@features/Notifications/server/infrastructure/templates/leadStatusChangeTemplate";
+import {
+  generateLeadToClientConversionEmail,
+  generateLeadToClientConversionPlainText,
+} from "@features/Notifications/server/infrastructure/templates/leadToClientConversionTemplate";
 import prisma from "@lib/prisma";
 
 export interface UpdateLeadStatusInput {
@@ -140,6 +144,60 @@ export class UpdateLeadStatusUseCase {
         } catch (clientError) {
           // Log error but don't fail the status update
           console.error("Error creating client from lead:", clientError);
+        }
+      }
+
+      // Enviar notificación cuando el lead se convierte a cliente (POSICIONES_ASIGNADAS)
+      if (
+        input.newStatus === "POSICIONES_ASIGNADAS" &&
+        updatedLead.assignedToId
+      ) {
+        try {
+          const assignedUser = await prisma.user.findUnique({
+            where: { id: updatedLead.assignedToId },
+            select: { email: true, name: true },
+          });
+
+          if (assignedUser?.email) {
+            const notificationUseCase = new SendNotificationUseCase(
+              prismaNotificationRepository,
+              [emailProvider],
+            );
+
+            const emailData = {
+              recipientName: assignedUser.name || "Usuario",
+              leadName: updatedLead.companyName,
+              appUrl: "https://peopleflow.space",
+            };
+
+            const htmlTemplate =
+              generateLeadToClientConversionEmail(emailData);
+            const plainTextBody =
+              generateLeadToClientConversionPlainText(emailData);
+
+            await notificationUseCase.execute({
+              tenantId: input.tenantId,
+              provider: "EMAIL",
+              recipient: "nocheblanca92@gmail.com",
+              subject: `Lead "${updatedLead.companyName}" es ahora un Cliente`,
+              body: plainTextBody,
+              priority: "HIGH",
+              metadata: {
+                leadId: updatedLead.id,
+                leadName: updatedLead.companyName,
+                triggerEvent: "LEAD_TO_CLIENT_CONVERSION",
+                newStatus: "POSICIONES_ASIGNADAS",
+                htmlTemplate: htmlTemplate,
+              },
+              createdById: input.userId,
+            });
+          }
+        } catch (notificationError) {
+          // Log error but don't fail the status update
+          console.error(
+            "Error sending conversion notification:",
+            notificationError,
+          );
         }
       }
 

@@ -2,6 +2,7 @@ import type { ILeadRepository } from "../../domain/interfaces/ILeadRepository";
 import { Lead } from "../../domain/entities/Lead";
 import type { LeadStatusType } from "../../domain/value-objects/LeadStatus";
 import { CompanyNameVO, URLVO } from "../../domain/value-objects";
+import { CompanyNameNormalizationService } from "../../domain/services/CompanyNameNormalizationService";
 
 export interface CreateLeadInput {
   companyName: string;
@@ -36,8 +37,25 @@ export class CreateLeadUseCase {
       const website = URLVO.create(input.website);
       const linkedInUrl = URLVO.create(input.linkedInUrl);
 
+      // Deteccion de duplicados por nombre normalizado
+      const normalizedCompanyName = CompanyNameNormalizationService.normalize(
+        companyName.getValue(),
+      );
+      const existingLead =
+        await this.leadRepository.findByNormalizedCompanyName(
+          normalizedCompanyName,
+          input.tenantId,
+        );
+      if (existingLead) {
+        return {
+          success: false,
+          error: `Ya existe un lead con un nombre similar: "${existingLead.companyName}"`,
+        };
+      }
+
       const lead = await this.leadRepository.create({
         companyName: companyName.getValue(),
+        normalizedCompanyName,
         website: website.getValue(),
         linkedInUrl: linkedInUrl.getValue(),
         address: input.address?.trim() || null,

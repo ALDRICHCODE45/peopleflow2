@@ -124,6 +124,7 @@ export class PrismaLeadRepository implements ILeadRepository {
     const lead = await prisma.lead.create({
       data: {
         companyName: data.companyName,
+        normalizedCompanyName: data.normalizedCompanyName,
         website: data.website || null,
         linkedInUrl: data.linkedInUrl || null,
         address: data.address || null,
@@ -156,6 +157,9 @@ export class PrismaLeadRepository implements ILeadRepository {
         data: {
           ...(data.companyName !== undefined && {
             companyName: data.companyName,
+          }),
+          ...(data.normalizedCompanyName !== undefined && {
+            normalizedCompanyName: data.normalizedCompanyName,
           }),
           ...(data.website !== undefined && { website: data.website }),
           ...(data.linkedInUrl !== undefined && {
@@ -352,6 +356,25 @@ export class PrismaLeadRepository implements ILeadRepository {
     }
 
     return where;
+  }
+
+  async findByNormalizedCompanyName(
+    normalizedName: string,
+    tenantId: string,
+    excludeLeadId?: string,
+  ): Promise<Lead | null> {
+    const lead = await prisma.lead.findFirst({
+      where: {
+        tenantId,
+        isDeleted: false,
+        normalizedCompanyName: normalizedName,
+        ...(excludeLeadId && { id: { not: excludeLeadId } }),
+      },
+      include: this.getBaseInclude(),
+    });
+
+    if (!lead) return null;
+    return this.mapToDomain(lead);
   }
 
   async reasignLead(

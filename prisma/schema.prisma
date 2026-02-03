@@ -303,8 +303,9 @@ model LeadOrigin {
 
 model Lead {
   id            String     @id @default(uuid())
-  companyName   String
-  website       String?
+  companyName           String
+  normalizedCompanyName String @default("")
+  website               String?
   linkedInUrl   String?
   address       String?
   subOrigin     String?
@@ -356,6 +357,7 @@ model Lead {
   @@index([tenantId, status])
   @@index([tenantId, isDeleted])
   @@index([tenantId, createdAt])
+  @@index([tenantId, isDeleted, normalizedCompanyName])
   @@map("lead")
 }
 
