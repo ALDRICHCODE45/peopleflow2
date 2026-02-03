@@ -40,6 +40,10 @@ export const sidebarLinks = {
       icon: Wallet,
       items: [
         {
+          title: "Clientes",
+          url: "/finanzas/clientes",
+        },
+        {
           title: "Ingresos",
           url: "/finanzas/ingresos",
         },

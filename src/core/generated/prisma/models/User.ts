@@ -207,6 +207,8 @@ export type UserWhereInput = {
   interactions?: Prisma.InteractionListRelationFilter
   attachments?: Prisma.AttachmentListRelationFilter
   notificationsCreated?: Prisma.NotificationListRelationFilter
+  clientsGenerated?: Prisma.ClientListRelationFilter
+  clientsCreated?: Prisma.ClientListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -226,6 +228,8 @@ export type UserOrderByWithRelationInput = {
   interactions?: Prisma.InteractionOrderByRelationAggregateInput
   attachments?: Prisma.AttachmentOrderByRelationAggregateInput
   notificationsCreated?: Prisma.NotificationOrderByRelationAggregateInput
+  clientsGenerated?: Prisma.ClientOrderByRelationAggregateInput
+  clientsCreated?: Prisma.ClientOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -248,6 +252,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   interactions?: Prisma.InteractionListRelationFilter
   attachments?: Prisma.AttachmentListRelationFilter
   notificationsCreated?: Prisma.NotificationListRelationFilter
+  clientsGenerated?: Prisma.ClientListRelationFilter
+  clientsCreated?: Prisma.ClientListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -293,6 +299,8 @@ export type UserCreateInput = {
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -312,6 +320,8 @@ export type UserUncheckedCreateInput = {
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUpdateInput = {
@@ -331,6 +341,8 @@ export type UserUpdateInput = {
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -350,6 +362,8 @@ export type UserUncheckedUpdateInput = {
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -570,6 +584,38 @@ export type UserUpdateOneWithoutNotificationsCreatedNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationsCreatedInput, Prisma.UserUpdateWithoutNotificationsCreatedInput>, Prisma.UserUncheckedUpdateWithoutNotificationsCreatedInput>
 }
 
+export type UserCreateNestedOneWithoutClientsGeneratedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutClientsGeneratedInput, Prisma.UserUncheckedCreateWithoutClientsGeneratedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClientsGeneratedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutClientsCreatedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutClientsCreatedInput, Prisma.UserUncheckedCreateWithoutClientsCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClientsCreatedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutClientsGeneratedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutClientsGeneratedInput, Prisma.UserUncheckedCreateWithoutClientsGeneratedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClientsGeneratedInput
+  upsert?: Prisma.UserUpsertWithoutClientsGeneratedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutClientsGeneratedInput, Prisma.UserUpdateWithoutClientsGeneratedInput>, Prisma.UserUncheckedUpdateWithoutClientsGeneratedInput>
+}
+
+export type UserUpdateOneWithoutClientsCreatedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutClientsCreatedInput, Prisma.UserUncheckedCreateWithoutClientsCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClientsCreatedInput
+  upsert?: Prisma.UserUpsertWithoutClientsCreatedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutClientsCreatedInput, Prisma.UserUpdateWithoutClientsCreatedInput>, Prisma.UserUncheckedUpdateWithoutClientsCreatedInput>
+}
+
 export type UserCreateWithoutSessionsInput = {
   id?: string
   email: string
@@ -586,6 +632,8 @@ export type UserCreateWithoutSessionsInput = {
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -604,6 +652,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -638,6 +688,8 @@ export type UserUpdateWithoutSessionsInput = {
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -656,6 +708,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -674,6 +728,8 @@ export type UserCreateWithoutAccountsInput = {
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -692,6 +748,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -726,6 +784,8 @@ export type UserUpdateWithoutAccountsInput = {
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -744,6 +804,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutUserRolesInput = {
@@ -762,6 +824,8 @@ export type UserCreateWithoutUserRolesInput = {
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutUserRolesInput = {
@@ -780,6 +844,8 @@ export type UserUncheckedCreateWithoutUserRolesInput = {
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutUserRolesInput = {
@@ -814,6 +880,8 @@ export type UserUpdateWithoutUserRolesInput = {
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserRolesInput = {
@@ -832,6 +900,8 @@ export type UserUncheckedUpdateWithoutUserRolesInput = {
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutLeadsAssignedInput = {
@@ -850,6 +920,8 @@ export type UserCreateWithoutLeadsAssignedInput = {
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutLeadsAssignedInput = {
@@ -868,6 +940,8 @@ export type UserUncheckedCreateWithoutLeadsAssignedInput = {
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutLeadsAssignedInput = {
@@ -891,6 +965,8 @@ export type UserCreateWithoutLeadsCreatedInput = {
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutLeadsCreatedInput = {
@@ -909,6 +985,8 @@ export type UserUncheckedCreateWithoutLeadsCreatedInput = {
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutLeadsCreatedInput = {
@@ -943,6 +1021,8 @@ export type UserUpdateWithoutLeadsAssignedInput = {
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLeadsAssignedInput = {
@@ -961,6 +1041,8 @@ export type UserUncheckedUpdateWithoutLeadsAssignedInput = {
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUpsertWithoutLeadsCreatedInput = {
@@ -990,6 +1072,8 @@ export type UserUpdateWithoutLeadsCreatedInput = {
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLeadsCreatedInput = {
@@ -1008,6 +1092,8 @@ export type UserUncheckedUpdateWithoutLeadsCreatedInput = {
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutLeadStatusChangesInput = {
@@ -1026,6 +1112,8 @@ export type UserCreateWithoutLeadStatusChangesInput = {
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutLeadStatusChangesInput = {
@@ -1044,6 +1132,8 @@ export type UserUncheckedCreateWithoutLeadStatusChangesInput = {
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutLeadStatusChangesInput = {
@@ -1078,6 +1168,8 @@ export type UserUpdateWithoutLeadStatusChangesInput = {
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLeadStatusChangesInput = {
@@ -1096,6 +1188,8 @@ export type UserUncheckedUpdateWithoutLeadStatusChangesInput = {
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutInteractionsInput = {
@@ -1114,6 +1208,8 @@ export type UserCreateWithoutInteractionsInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutInteractionsInput = {
@@ -1132,6 +1228,8 @@ export type UserUncheckedCreateWithoutInteractionsInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutInteractionsInput = {
@@ -1166,6 +1264,8 @@ export type UserUpdateWithoutInteractionsInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInteractionsInput = {
@@ -1184,6 +1284,8 @@ export type UserUncheckedUpdateWithoutInteractionsInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutAttachmentsInput = {
@@ -1202,6 +1304,8 @@ export type UserCreateWithoutAttachmentsInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
   notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutAttachmentsInput = {
@@ -1220,6 +1324,8 @@ export type UserUncheckedCreateWithoutAttachmentsInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
   notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutAttachmentsInput = {
@@ -1254,6 +1360,8 @@ export type UserUpdateWithoutAttachmentsInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
   notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAttachmentsInput = {
@@ -1272,6 +1380,8 @@ export type UserUncheckedUpdateWithoutAttachmentsInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutNotificationsCreatedInput = {
@@ -1290,6 +1400,8 @@ export type UserCreateWithoutNotificationsCreatedInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsCreatedInput = {
@@ -1308,6 +1420,8 @@ export type UserUncheckedCreateWithoutNotificationsCreatedInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsCreatedInput = {
@@ -1342,6 +1456,8 @@ export type UserUpdateWithoutNotificationsCreatedInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsCreatedInput = {
@@ -1360,6 +1476,200 @@ export type UserUncheckedUpdateWithoutNotificationsCreatedInput = {
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutClientsGeneratedInput = {
+  id?: string
+  email: string
+  name?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emailVerified?: boolean
+  image?: string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  leadsAssigned?: Prisma.LeadCreateNestedManyWithoutAssignedToInput
+  leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutClientsGeneratedInput = {
+  id?: string
+  email: string
+  name?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emailVerified?: boolean
+  image?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  leadsAssigned?: Prisma.LeadUncheckedCreateNestedManyWithoutAssignedToInput
+  leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutClientsGeneratedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutClientsGeneratedInput, Prisma.UserUncheckedCreateWithoutClientsGeneratedInput>
+}
+
+export type UserCreateWithoutClientsCreatedInput = {
+  id?: string
+  email: string
+  name?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emailVerified?: boolean
+  image?: string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  leadsAssigned?: Prisma.LeadCreateNestedManyWithoutAssignedToInput
+  leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
+}
+
+export type UserUncheckedCreateWithoutClientsCreatedInput = {
+  id?: string
+  email: string
+  name?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emailVerified?: boolean
+  image?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  leadsAssigned?: Prisma.LeadUncheckedCreateNestedManyWithoutAssignedToInput
+  leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
+}
+
+export type UserCreateOrConnectWithoutClientsCreatedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutClientsCreatedInput, Prisma.UserUncheckedCreateWithoutClientsCreatedInput>
+}
+
+export type UserUpsertWithoutClientsGeneratedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutClientsGeneratedInput, Prisma.UserUncheckedUpdateWithoutClientsGeneratedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutClientsGeneratedInput, Prisma.UserUncheckedCreateWithoutClientsGeneratedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutClientsGeneratedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutClientsGeneratedInput, Prisma.UserUncheckedUpdateWithoutClientsGeneratedInput>
+}
+
+export type UserUpdateWithoutClientsGeneratedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  leadsAssigned?: Prisma.LeadUpdateManyWithoutAssignedToNestedInput
+  leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutClientsGeneratedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  leadsAssigned?: Prisma.LeadUncheckedUpdateManyWithoutAssignedToNestedInput
+  leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUpsertWithoutClientsCreatedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutClientsCreatedInput, Prisma.UserUncheckedUpdateWithoutClientsCreatedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutClientsCreatedInput, Prisma.UserUncheckedCreateWithoutClientsCreatedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutClientsCreatedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutClientsCreatedInput, Prisma.UserUncheckedUpdateWithoutClientsCreatedInput>
+}
+
+export type UserUpdateWithoutClientsCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  leadsAssigned?: Prisma.LeadUpdateManyWithoutAssignedToNestedInput
+  leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutClientsCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  leadsAssigned?: Prisma.LeadUncheckedUpdateManyWithoutAssignedToNestedInput
+  leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
 }
 
 
@@ -1377,6 +1687,8 @@ export type UserCountOutputType = {
   interactions: number
   attachments: number
   notificationsCreated: number
+  clientsGenerated: number
+  clientsCreated: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1389,6 +1701,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   interactions?: boolean | UserCountOutputTypeCountInteractionsArgs
   attachments?: boolean | UserCountOutputTypeCountAttachmentsArgs
   notificationsCreated?: boolean | UserCountOutputTypeCountNotificationsCreatedArgs
+  clientsGenerated?: boolean | UserCountOutputTypeCountClientsGeneratedArgs
+  clientsCreated?: boolean | UserCountOutputTypeCountClientsCreatedArgs
 }
 
 /**
@@ -1464,6 +1778,20 @@ export type UserCountOutputTypeCountNotificationsCreatedArgs<ExtArgs extends run
   where?: Prisma.NotificationWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountClientsGeneratedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClientWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountClientsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClientWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1482,6 +1810,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   interactions?: boolean | Prisma.User$interactionsArgs<ExtArgs>
   attachments?: boolean | Prisma.User$attachmentsArgs<ExtArgs>
   notificationsCreated?: boolean | Prisma.User$notificationsCreatedArgs<ExtArgs>
+  clientsGenerated?: boolean | Prisma.User$clientsGeneratedArgs<ExtArgs>
+  clientsCreated?: boolean | Prisma.User$clientsCreatedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1526,6 +1856,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   interactions?: boolean | Prisma.User$interactionsArgs<ExtArgs>
   attachments?: boolean | Prisma.User$attachmentsArgs<ExtArgs>
   notificationsCreated?: boolean | Prisma.User$notificationsCreatedArgs<ExtArgs>
+  clientsGenerated?: boolean | Prisma.User$clientsGeneratedArgs<ExtArgs>
+  clientsCreated?: boolean | Prisma.User$clientsCreatedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1543,6 +1875,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     interactions: Prisma.$InteractionPayload<ExtArgs>[]
     attachments: Prisma.$AttachmentPayload<ExtArgs>[]
     notificationsCreated: Prisma.$NotificationPayload<ExtArgs>[]
+    clientsGenerated: Prisma.$ClientPayload<ExtArgs>[]
+    clientsCreated: Prisma.$ClientPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1955,6 +2289,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   interactions<T extends Prisma.User$interactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$interactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InteractionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   attachments<T extends Prisma.User$attachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notificationsCreated<T extends Prisma.User$notificationsCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  clientsGenerated<T extends Prisma.User$clientsGeneratedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$clientsGeneratedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  clientsCreated<T extends Prisma.User$clientsCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$clientsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2592,6 +2928,54 @@ export type User$notificationsCreatedArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * User.clientsGenerated
+ */
+export type User$clientsGeneratedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Client
+   */
+  select?: Prisma.ClientSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Client
+   */
+  omit?: Prisma.ClientOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClientInclude<ExtArgs> | null
+  where?: Prisma.ClientWhereInput
+  orderBy?: Prisma.ClientOrderByWithRelationInput | Prisma.ClientOrderByWithRelationInput[]
+  cursor?: Prisma.ClientWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClientScalarFieldEnum | Prisma.ClientScalarFieldEnum[]
+}
+
+/**
+ * User.clientsCreated
+ */
+export type User$clientsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Client
+   */
+  select?: Prisma.ClientSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Client
+   */
+  omit?: Prisma.ClientOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClientInclude<ExtArgs> | null
+  where?: Prisma.ClientWhereInput
+  orderBy?: Prisma.ClientOrderByWithRelationInput | Prisma.ClientOrderByWithRelationInput[]
+  cursor?: Prisma.ClientWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClientScalarFieldEnum | Prisma.ClientScalarFieldEnum[]
 }
 
 /**

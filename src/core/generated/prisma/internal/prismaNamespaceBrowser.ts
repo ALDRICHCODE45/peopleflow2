@@ -69,7 +69,8 @@ export const ModelName = {
   Interaction: 'Interaction',
   Attachment: 'Attachment',
   Vacancy: 'Vacancy',
-  Notification: 'Notification'
+  Notification: 'Notification',
+  Client: 'Client'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -368,6 +369,21 @@ export const NotificationScalarFieldEnum = {
 } as const
 
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const ClientScalarFieldEnum = {
+  id: 'id',
+  nombre: 'nombre',
+  leadId: 'leadId',
+  generadorId: 'generadorId',
+  origenId: 'origenId',
+  tenantId: 'tenantId',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ClientScalarFieldEnum = (typeof ClientScalarFieldEnum)[keyof typeof ClientScalarFieldEnum]
 
 
 export const SortOrder = {

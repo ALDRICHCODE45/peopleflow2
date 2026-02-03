@@ -11,6 +11,7 @@ const uuidSchema = z.string().uuid("ID inválido");
 // Repositories
 import { prismaLeadRepository } from "../../infrastructure/repositories/PrismaLeadRepository";
 import { prismaLeadStatusHistoryRepository } from "../../infrastructure/repositories/PrismaLeadStatusHistoryRepository";
+import { prismaClientRepository } from "@features/Finanzas/Clientes/server/infrastructure/repositories/PrismaClientRepository";
 
 // Use Cases
 import { CreateLeadUseCase } from "../../application/use-cases/CreateLeadUseCase";
@@ -356,6 +357,7 @@ export async function updateLeadStatusAction(
     const useCase = new UpdateLeadStatusUseCase(
       prismaLeadRepository,
       prismaLeadStatusHistoryRepository,
+      prismaClientRepository,
     );
     const result = await useCase.execute({
       leadId,

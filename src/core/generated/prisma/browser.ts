@@ -112,3 +112,8 @@ export type Vacancy = Prisma.VacancyModel
  * 
  */
 export type Notification = Prisma.NotificationModel
+/**
+ * Model Client
+ * 
+ */
+export type Client = Prisma.ClientModel

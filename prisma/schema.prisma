@@ -35,6 +35,10 @@ model User {
   // Relaciones con módulo de Notificaciones
   notificationsCreated Notification[] @relation("NotificationCreatedBy")
 
+  // Relaciones con módulo de Clientes
+  clientsGenerated Client[] @relation("ClientGenerator")
+  clientsCreated   Client[] @relation("ClientCreatedBy")
+
   @@map("user")
 }
 
@@ -116,6 +120,9 @@ model Tenant {
 
   // Relaciones con módulo de Notificaciones
   notifications Notification[]
+
+  // Relaciones con módulo de Clientes
+  clients Client[]
 
   @@map("tenant")
 }
@@ -281,7 +288,8 @@ model LeadOrigin {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  leads Lead[]
+  leads   Lead[]
+  clients Client[]
 
   @@unique([name, tenantId])
   @@index([tenantId])
@@ -334,6 +342,9 @@ model Lead {
   contacts      Contact[]
   statusHistory LeadStatusHistory[]
   attachments   Attachment[]
+
+  // Relación con Cliente (cuando el Lead se convierte)
+  client Client?
 
   @@index([tenantId])
   @@index([status])
@@ -533,4 +544,41 @@ model Notification {
   @@index([provider])
   @@index([tenantId, status])
   @@map("notification")
+}
+
+// =============================================
+// MÓDULO DE CLIENTES (FINANZAS)
+// =============================================
+
+model Client {
+  id     String @id @default(uuid())
+  nombre String // Copiado de Lead.companyName
+
+  // Trazabilidad al Lead original
+  leadId String @unique
+  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Restrict)
+
+  // Usuario que generó el cliente (assignedTo del Lead)
+  generadorId String?
+  generador   User?   @relation("ClientGenerator", fields: [generadorId], references: [id], onDelete: SetNull)
+
+  // Origen del cliente (mismo que el Lead)
+  origenId String?
+  origen   LeadOrigin? @relation(fields: [origenId], references: [id], onDelete: SetNull)
+
+  // Multi-tenancy
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Auditoría
+  createdById String?
+  createdBy   User?    @relation("ClientCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([tenantId])
+  @@index([generadorId])
+  @@index([origenId])
+  @@index([tenantId, createdAt])
+  @@map("client")
 }

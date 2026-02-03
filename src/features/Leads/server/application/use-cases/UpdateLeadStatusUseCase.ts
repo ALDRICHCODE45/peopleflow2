@@ -1,5 +1,6 @@
 import type { ILeadRepository } from "../../domain/interfaces/ILeadRepository";
 import type { ILeadStatusHistoryRepository } from "../../domain/interfaces/ILeadStatusHistoryRepository";
+import type { IClientRepository } from "@features/Finanzas/Clientes/server/domain/interfaces/IClientRepository";
 import { Lead } from "../../domain/entities/Lead";
 import type { LeadStatusType } from "../../domain/value-objects/LeadStatus";
 import { SendNotificationUseCase } from "@features/Notifications/server/application/use-cases/SendNotificationUseCase";
@@ -39,6 +40,7 @@ export class UpdateLeadStatusUseCase {
   constructor(
     private readonly leadRepository: ILeadRepository,
     private readonly leadStatusHistoryRepository: ILeadStatusHistoryRepository,
+    private readonly clientRepository?: IClientRepository,
   ) {}
 
   async execute(input: UpdateLeadStatusInput): Promise<UpdateLeadStatusOutput> {
@@ -116,6 +118,30 @@ export class UpdateLeadStatusUseCase {
         newStatus: input.newStatus,
         changedById: input.userId,
       });
+
+      // Crear cliente automáticamente al llegar a POSICIONES_ASIGNADAS
+      if (input.newStatus === "POSICIONES_ASIGNADAS" && this.clientRepository) {
+        try {
+          const existingClient = await this.clientRepository.findByLeadId(
+            input.leadId,
+            input.tenantId,
+          );
+
+          if (!existingClient) {
+            await this.clientRepository.create({
+              nombre: updatedLead.companyName,
+              leadId: updatedLead.id,
+              generadorId: updatedLead.assignedToId,
+              origenId: updatedLead.originId,
+              tenantId: input.tenantId,
+              createdById: input.userId,
+            });
+          }
+        } catch (clientError) {
+          // Log error but don't fail the status update
+          console.error("Error creating client from lead:", clientError);
+        }
+      }
 
       // Enviar notificación si el nuevo estado es CONTACTO_CALIDO y hay usuario asignado
       if (input.newStatus === "CONTACTO_CALIDO" && updatedLead.assignedToId) {

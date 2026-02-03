@@ -200,6 +200,7 @@ export type LeadOriginWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"LeadOrigin"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantNullableScalarRelationFilter, Prisma.TenantWhereInput> | null
   leads?: Prisma.LeadListRelationFilter
+  clients?: Prisma.ClientListRelationFilter
 }
 
 export type LeadOriginOrderByWithRelationInput = {
@@ -212,6 +213,7 @@ export type LeadOriginOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
   leads?: Prisma.LeadOrderByRelationAggregateInput
+  clients?: Prisma.ClientOrderByRelationAggregateInput
 }
 
 export type LeadOriginWhereUniqueInput = Prisma.AtLeast<{
@@ -228,6 +230,7 @@ export type LeadOriginWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"LeadOrigin"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantNullableScalarRelationFilter, Prisma.TenantWhereInput> | null
   leads?: Prisma.LeadListRelationFilter
+  clients?: Prisma.ClientListRelationFilter
 }, "id" | "name_tenantId">
 
 export type LeadOriginOrderByWithAggregationInput = {
@@ -265,6 +268,7 @@ export type LeadOriginCreateInput = {
   updatedAt?: Date | string
   tenant?: Prisma.TenantCreateNestedOneWithoutLeadOriginsInput
   leads?: Prisma.LeadCreateNestedManyWithoutOriginInput
+  clients?: Prisma.ClientCreateNestedManyWithoutOrigenInput
 }
 
 export type LeadOriginUncheckedCreateInput = {
@@ -276,6 +280,7 @@ export type LeadOriginUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   leads?: Prisma.LeadUncheckedCreateNestedManyWithoutOriginInput
+  clients?: Prisma.ClientUncheckedCreateNestedManyWithoutOrigenInput
 }
 
 export type LeadOriginUpdateInput = {
@@ -287,6 +292,7 @@ export type LeadOriginUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneWithoutLeadOriginsNestedInput
   leads?: Prisma.LeadUpdateManyWithoutOriginNestedInput
+  clients?: Prisma.ClientUpdateManyWithoutOrigenNestedInput
 }
 
 export type LeadOriginUncheckedUpdateInput = {
@@ -298,6 +304,7 @@ export type LeadOriginUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leads?: Prisma.LeadUncheckedUpdateManyWithoutOriginNestedInput
+  clients?: Prisma.ClientUncheckedUpdateManyWithoutOrigenNestedInput
 }
 
 export type LeadOriginCreateManyInput = {
@@ -437,6 +444,22 @@ export type LeadOriginUpdateOneWithoutLeadsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LeadOriginUpdateToOneWithWhereWithoutLeadsInput, Prisma.LeadOriginUpdateWithoutLeadsInput>, Prisma.LeadOriginUncheckedUpdateWithoutLeadsInput>
 }
 
+export type LeadOriginCreateNestedOneWithoutClientsInput = {
+  create?: Prisma.XOR<Prisma.LeadOriginCreateWithoutClientsInput, Prisma.LeadOriginUncheckedCreateWithoutClientsInput>
+  connectOrCreate?: Prisma.LeadOriginCreateOrConnectWithoutClientsInput
+  connect?: Prisma.LeadOriginWhereUniqueInput
+}
+
+export type LeadOriginUpdateOneWithoutClientsNestedInput = {
+  create?: Prisma.XOR<Prisma.LeadOriginCreateWithoutClientsInput, Prisma.LeadOriginUncheckedCreateWithoutClientsInput>
+  connectOrCreate?: Prisma.LeadOriginCreateOrConnectWithoutClientsInput
+  upsert?: Prisma.LeadOriginUpsertWithoutClientsInput
+  disconnect?: Prisma.LeadOriginWhereInput | boolean
+  delete?: Prisma.LeadOriginWhereInput | boolean
+  connect?: Prisma.LeadOriginWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LeadOriginUpdateToOneWithWhereWithoutClientsInput, Prisma.LeadOriginUpdateWithoutClientsInput>, Prisma.LeadOriginUncheckedUpdateWithoutClientsInput>
+}
+
 export type LeadOriginCreateWithoutTenantInput = {
   id?: string
   name: string
@@ -445,6 +468,7 @@ export type LeadOriginCreateWithoutTenantInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   leads?: Prisma.LeadCreateNestedManyWithoutOriginInput
+  clients?: Prisma.ClientCreateNestedManyWithoutOrigenInput
 }
 
 export type LeadOriginUncheckedCreateWithoutTenantInput = {
@@ -455,6 +479,7 @@ export type LeadOriginUncheckedCreateWithoutTenantInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   leads?: Prisma.LeadUncheckedCreateNestedManyWithoutOriginInput
+  clients?: Prisma.ClientUncheckedCreateNestedManyWithoutOrigenInput
 }
 
 export type LeadOriginCreateOrConnectWithoutTenantInput = {
@@ -504,6 +529,7 @@ export type LeadOriginCreateWithoutLeadsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant?: Prisma.TenantCreateNestedOneWithoutLeadOriginsInput
+  clients?: Prisma.ClientCreateNestedManyWithoutOrigenInput
 }
 
 export type LeadOriginUncheckedCreateWithoutLeadsInput = {
@@ -514,6 +540,7 @@ export type LeadOriginUncheckedCreateWithoutLeadsInput = {
   tenantId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  clients?: Prisma.ClientUncheckedCreateNestedManyWithoutOrigenInput
 }
 
 export type LeadOriginCreateOrConnectWithoutLeadsInput = {
@@ -540,6 +567,7 @@ export type LeadOriginUpdateWithoutLeadsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneWithoutLeadOriginsNestedInput
+  clients?: Prisma.ClientUpdateManyWithoutOrigenNestedInput
 }
 
 export type LeadOriginUncheckedUpdateWithoutLeadsInput = {
@@ -550,6 +578,67 @@ export type LeadOriginUncheckedUpdateWithoutLeadsInput = {
   tenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clients?: Prisma.ClientUncheckedUpdateManyWithoutOrigenNestedInput
+}
+
+export type LeadOriginCreateWithoutClientsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant?: Prisma.TenantCreateNestedOneWithoutLeadOriginsInput
+  leads?: Prisma.LeadCreateNestedManyWithoutOriginInput
+}
+
+export type LeadOriginUncheckedCreateWithoutClientsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  isActive?: boolean
+  tenantId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutOriginInput
+}
+
+export type LeadOriginCreateOrConnectWithoutClientsInput = {
+  where: Prisma.LeadOriginWhereUniqueInput
+  create: Prisma.XOR<Prisma.LeadOriginCreateWithoutClientsInput, Prisma.LeadOriginUncheckedCreateWithoutClientsInput>
+}
+
+export type LeadOriginUpsertWithoutClientsInput = {
+  update: Prisma.XOR<Prisma.LeadOriginUpdateWithoutClientsInput, Prisma.LeadOriginUncheckedUpdateWithoutClientsInput>
+  create: Prisma.XOR<Prisma.LeadOriginCreateWithoutClientsInput, Prisma.LeadOriginUncheckedCreateWithoutClientsInput>
+  where?: Prisma.LeadOriginWhereInput
+}
+
+export type LeadOriginUpdateToOneWithWhereWithoutClientsInput = {
+  where?: Prisma.LeadOriginWhereInput
+  data: Prisma.XOR<Prisma.LeadOriginUpdateWithoutClientsInput, Prisma.LeadOriginUncheckedUpdateWithoutClientsInput>
+}
+
+export type LeadOriginUpdateWithoutClientsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneWithoutLeadOriginsNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutOriginNestedInput
+}
+
+export type LeadOriginUncheckedUpdateWithoutClientsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutOriginNestedInput
 }
 
 export type LeadOriginCreateManyTenantInput = {
@@ -569,6 +658,7 @@ export type LeadOriginUpdateWithoutTenantInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leads?: Prisma.LeadUpdateManyWithoutOriginNestedInput
+  clients?: Prisma.ClientUpdateManyWithoutOrigenNestedInput
 }
 
 export type LeadOriginUncheckedUpdateWithoutTenantInput = {
@@ -579,6 +669,7 @@ export type LeadOriginUncheckedUpdateWithoutTenantInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leads?: Prisma.LeadUncheckedUpdateManyWithoutOriginNestedInput
+  clients?: Prisma.ClientUncheckedUpdateManyWithoutOrigenNestedInput
 }
 
 export type LeadOriginUncheckedUpdateManyWithoutTenantInput = {
@@ -597,10 +688,12 @@ export type LeadOriginUncheckedUpdateManyWithoutTenantInput = {
 
 export type LeadOriginCountOutputType = {
   leads: number
+  clients: number
 }
 
 export type LeadOriginCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   leads?: boolean | LeadOriginCountOutputTypeCountLeadsArgs
+  clients?: boolean | LeadOriginCountOutputTypeCountClientsArgs
 }
 
 /**
@@ -620,6 +713,13 @@ export type LeadOriginCountOutputTypeCountLeadsArgs<ExtArgs extends runtime.Type
   where?: Prisma.LeadWhereInput
 }
 
+/**
+ * LeadOriginCountOutputType without action
+ */
+export type LeadOriginCountOutputTypeCountClientsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClientWhereInput
+}
+
 
 export type LeadOriginSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -631,6 +731,7 @@ export type LeadOriginSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   updatedAt?: boolean
   tenant?: boolean | Prisma.LeadOrigin$tenantArgs<ExtArgs>
   leads?: boolean | Prisma.LeadOrigin$leadsArgs<ExtArgs>
+  clients?: boolean | Prisma.LeadOrigin$clientsArgs<ExtArgs>
   _count?: boolean | Prisma.LeadOriginCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["leadOrigin"]>
 
@@ -670,6 +771,7 @@ export type LeadOriginOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type LeadOriginInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.LeadOrigin$tenantArgs<ExtArgs>
   leads?: boolean | Prisma.LeadOrigin$leadsArgs<ExtArgs>
+  clients?: boolean | Prisma.LeadOrigin$clientsArgs<ExtArgs>
   _count?: boolean | Prisma.LeadOriginCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LeadOriginIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -684,6 +786,7 @@ export type $LeadOriginPayload<ExtArgs extends runtime.Types.Extensions.Internal
   objects: {
     tenant: Prisma.$TenantPayload<ExtArgs> | null
     leads: Prisma.$LeadPayload<ExtArgs>[]
+    clients: Prisma.$ClientPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1089,6 +1192,7 @@ export interface Prisma__LeadOriginClient<T, Null = never, ExtArgs extends runti
   readonly [Symbol.toStringTag]: "PrismaPromise"
   tenant<T extends Prisma.LeadOrigin$tenantArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LeadOrigin$tenantArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   leads<T extends Prisma.LeadOrigin$leadsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LeadOrigin$leadsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  clients<T extends Prisma.LeadOrigin$clientsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LeadOrigin$clientsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1561,6 +1665,30 @@ export type LeadOrigin$leadsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.LeadScalarFieldEnum | Prisma.LeadScalarFieldEnum[]
+}
+
+/**
+ * LeadOrigin.clients
+ */
+export type LeadOrigin$clientsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Client
+   */
+  select?: Prisma.ClientSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Client
+   */
+  omit?: Prisma.ClientOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClientInclude<ExtArgs> | null
+  where?: Prisma.ClientWhereInput
+  orderBy?: Prisma.ClientOrderByWithRelationInput | Prisma.ClientOrderByWithRelationInput[]
+  cursor?: Prisma.ClientWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClientScalarFieldEnum | Prisma.ClientScalarFieldEnum[]
 }
 
 /**
