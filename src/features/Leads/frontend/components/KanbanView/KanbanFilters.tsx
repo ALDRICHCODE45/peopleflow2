@@ -20,6 +20,12 @@ export function KanbanFilters({
   setSelectedOriginIds,
   selectedAssignedToIds,
   setSelectedAssignedToIds,
+  selectedEmployeeCounts,
+  setSelectedEmployeeCounts,
+  createdAtFrom,
+  setCreatedAtFrom,
+  createdAtTo,
+  setCreatedAtTo,
   openSheetFilters,
   isSheetOpen,
   closeSheetFilters,
@@ -81,6 +87,12 @@ export function KanbanFilters({
           onOriginChange={setSelectedOriginIds}
           selectedAssignedToIds={selectedAssignedToIds}
           onAssignedToChange={setSelectedAssignedToIds}
+          selectedEmployeesNumbers={selectedEmployeeCounts}
+          onSelectedEmployeeNumberChange={setSelectedEmployeeCounts}
+          createdAtFrom={createdAtFrom}
+          createdAtTo={createdAtTo}
+          onDateFromChange={setCreatedAtFrom}
+          onDateToChange={setCreatedAtTo}
         />
       </div>
 

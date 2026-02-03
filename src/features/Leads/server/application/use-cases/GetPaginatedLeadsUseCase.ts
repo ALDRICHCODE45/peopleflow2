@@ -16,6 +16,9 @@ export interface GetPaginatedLeadsInput {
     sectorIds?: string[];
     originIds?: string[];
     assignedToIds?: string[];
+    employeeCounts?: string[];
+    createdAtFrom?: Date;
+    createdAtTo?: Date;
     search?: string;
   };
   /** If true, uses minimal includes for faster Kanban queries */
@@ -44,6 +47,9 @@ export class GetPaginatedLeadsUseCase {
         ...(input.filters?.sectorIds?.length && { sectorIds: input.filters.sectorIds }),
         ...(input.filters?.originIds?.length && { originIds: input.filters.originIds }),
         ...(input.filters?.assignedToIds?.length && { assignedToIds: input.filters.assignedToIds }),
+        ...(input.filters?.employeeCounts?.length && { employeeCounts: input.filters.employeeCounts }),
+        ...(input.filters?.createdAtFrom && { createdAtFrom: input.filters.createdAtFrom }),
+        ...(input.filters?.createdAtTo && { createdAtTo: input.filters.createdAtTo }),
         ...(input.filters?.search && { search: input.filters.search }),
       };
 

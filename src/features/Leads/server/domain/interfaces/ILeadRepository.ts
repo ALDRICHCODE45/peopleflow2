@@ -42,6 +42,9 @@ export interface FindLeadsFilters {
   sectorIds?: string[];
   originIds?: string[];
   assignedToIds?: string[];
+  employeeCounts?: string[];
+  createdAtFrom?: Date;
+  createdAtTo?: Date;
   search?: string;
   isDeleted?: boolean;
 }

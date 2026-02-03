@@ -62,12 +62,21 @@ export const LeadsKabanPage = () => {
         filters.debouncedAssignedToIds.length > 0
           ? filters.debouncedAssignedToIds
           : undefined,
+      employeeCounts:
+        filters.debouncedEmployeeCounts.length > 0
+          ? filters.debouncedEmployeeCounts
+          : undefined,
+      createdAtFrom: filters.debouncedDateFrom || undefined,
+      createdAtTo: filters.debouncedDateTo || undefined,
     }),
     [
       filters.debouncedSearch,
       filters.debouncedSectorIds,
       filters.debouncedOriginIds,
       filters.debouncedAssignedToIds,
+      filters.debouncedEmployeeCounts,
+      filters.debouncedDateFrom,
+      filters.debouncedDateTo,
     ],
   );
 

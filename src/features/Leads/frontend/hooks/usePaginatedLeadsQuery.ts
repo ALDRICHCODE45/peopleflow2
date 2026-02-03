@@ -19,6 +19,9 @@ export interface PaginatedLeadsQueryParams {
   sectorIds?: string[];
   originIds?: string[];
   assignedToIds?: string[];
+  employeeCounts?: string[];
+  createdAtFrom?: string;
+  createdAtTo?: string;
 }
 
 /** Query Key Factory */
@@ -39,6 +42,9 @@ export const getPaginatedLeadsQueryKey = (
       sectorIds: params.sectorIds,
       originIds: params.originIds,
       assignedToIds: params.assignedToIds,
+      employeeCounts: params.employeeCounts,
+      createdAtFrom: params.createdAtFrom,
+      createdAtTo: params.createdAtTo,
     },
   ] as const;
 
@@ -62,6 +68,9 @@ export function usePaginatedLeadsQuery(params: PaginatedLeadsQueryParams) {
         sectorIds: params.sectorIds,
         originIds: params.originIds,
         assignedToIds: params.assignedToIds,
+        employeeCounts: params.employeeCounts,
+        createdAtFrom: params.createdAtFrom,
+        createdAtTo: params.createdAtTo,
       });
 
       if ("error" in result && result.error) {

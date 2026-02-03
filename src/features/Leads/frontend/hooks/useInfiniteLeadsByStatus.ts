@@ -17,6 +17,9 @@ export interface KanbanFilters {
   sectorIds?: string[];
   originIds?: string[];
   assignedToIds?: string[];
+  employeeCounts?: string[];
+  createdAtFrom?: string;
+  createdAtTo?: string;
 }
 
 interface InfiniteLeadsPage {
@@ -43,6 +46,9 @@ export const getInfiniteLeadsQueryOptions = (
         sectorIds: filters.sectorIds,
         originIds: filters.originIds,
         assignedToIds: filters.assignedToIds,
+        employeeCounts: filters.employeeCounts,
+        createdAtFrom: filters.createdAtFrom,
+        createdAtTo: filters.createdAtTo,
       },
     ] as const,
     queryFn: async ({ pageParam }): Promise<InfiniteLeadsPage> => {
@@ -54,6 +60,9 @@ export const getInfiniteLeadsQueryOptions = (
         sectorIds: filters.sectorIds,
         originIds: filters.originIds,
         assignedToIds: filters.assignedToIds,
+        employeeCounts: filters.employeeCounts,
+        createdAtFrom: filters.createdAtFrom,
+        createdAtTo: filters.createdAtTo,
         minimal: true, // Use minimal includes for Kanban cards
       });
 
@@ -102,6 +111,9 @@ export function useInfiniteLeadsByStatus(
         sectorIds: filters.sectorIds,
         originIds: filters.originIds,
         assignedToIds: filters.assignedToIds,
+        employeeCounts: filters.employeeCounts,
+        createdAtFrom: filters.createdAtFrom,
+        createdAtTo: filters.createdAtTo,
       },
     ] as const,
     queryFn: async ({ pageParam }): Promise<InfiniteLeadsPage> => {
@@ -125,6 +137,9 @@ export function useInfiniteLeadsByStatus(
         sectorIds: filters.sectorIds,
         originIds: filters.originIds,
         assignedToIds: filters.assignedToIds,
+        employeeCounts: filters.employeeCounts,
+        createdAtFrom: filters.createdAtFrom,
+        createdAtTo: filters.createdAtTo,
         minimal: true, // Use minimal includes for Kanban cards
       });
 

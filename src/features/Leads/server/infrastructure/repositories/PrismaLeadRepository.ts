@@ -330,6 +330,19 @@ export class PrismaLeadRepository implements ILeadRepository {
       where.assignedToId = { in: filters.assignedToIds };
     }
 
+    // Filtro por numero de empleados (match exacto en rangos de string)
+    if (filters?.employeeCounts?.length) {
+      where.employeeCount = { in: filters.employeeCounts };
+    }
+
+    // Filtro por rango de fechas (inclusivo)
+    if (filters?.createdAtFrom || filters?.createdAtTo) {
+      where.createdAt = {
+        ...(filters.createdAtFrom && { gte: filters.createdAtFrom }),
+        ...(filters.createdAtTo && { lte: filters.createdAtTo }),
+      };
+    }
+
     if (filters?.search) {
       where.OR = [
         { companyName: { contains: filters.search, mode: "insensitive" } },

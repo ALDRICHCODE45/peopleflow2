@@ -26,6 +26,14 @@ interface LeadsTableFilterProps extends BaseFilterProps {
   // Multi-select assigned user filter
   selectedAssignedToIds?: string[];
   onAssignedToChange?: (ids: string[]) => void;
+  // Employee counts filter
+  selectedEmployeeCounts?: string[];
+  onEmployeeCountsChange?: (counts: string[]) => void;
+  // Date range filter
+  createdAtFrom?: string;
+  createdAtTo?: string;
+  onDateFromChange?: (date: string) => void;
+  onDateToChange?: (date: string) => void;
 }
 
 export const LeadsTableFilters = ({
@@ -43,6 +51,12 @@ export const LeadsTableFilters = ({
   onClearFilters,
   selectedAssignedToIds,
   onAssignedToChange,
+  selectedEmployeeCounts,
+  onEmployeeCountsChange,
+  createdAtFrom,
+  createdAtTo,
+  onDateFromChange,
+  onDateToChange,
 }: LeadsTableFilterProps) => {
   const { data: sectors = [] } = useSectors();
 
@@ -145,6 +159,12 @@ export const LeadsTableFilters = ({
                 selectedOriginIds={selectedOriginIds}
                 selectedAssignedToIds={selectedAssignedToIds}
                 onAssignedToChange={onAssignedToChange}
+                selectedEmployeesNumbers={selectedEmployeeCounts}
+                onSelectedEmployeeNumberChange={onEmployeeCountsChange}
+                createdAtFrom={createdAtFrom}
+                createdAtTo={createdAtTo}
+                onDateFromChange={onDateFromChange}
+                onDateToChange={onDateToChange}
               />
             </div>
           </div>

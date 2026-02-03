@@ -28,6 +28,9 @@ export interface GetPaginatedLeadsParams {
   sectorIds?: string[];
   originIds?: string[];
   assignedToIds?: string[];
+  employeeCounts?: string[];
+  createdAtFrom?: string; // ISO string YYYY-MM-DD
+  createdAtTo?: string; // ISO string YYYY-MM-DD
   /** If true, uses minimal includes for faster Kanban queries */
   minimal?: boolean;
 }
@@ -84,6 +87,13 @@ export async function getPaginatedLeadsAction(
         sectorIds: params.sectorIds,
         originIds: params.originIds,
         assignedToIds: params.assignedToIds,
+        employeeCounts: params.employeeCounts,
+        createdAtFrom: params.createdAtFrom
+          ? new Date(params.createdAtFrom)
+          : undefined,
+        createdAtTo: params.createdAtTo
+          ? adjustEndOfDay(params.createdAtTo)
+          : undefined,
         search: params.globalFilter,
       },
       minimal: params.minimal,
@@ -109,4 +119,14 @@ export async function getPaginatedLeadsAction(
     console.error("Error getting paginated leads:", error);
     return { error: "Error al obtener leads" };
   }
+}
+
+/**
+ * Adjusts a date string to end of day (23:59:59.999)
+ * This ensures the "to" date is inclusive of the entire day
+ */
+function adjustEndOfDay(dateStr: string): Date {
+  const date = new Date(dateStr);
+  date.setHours(23, 59, 59, 999);
+  return date;
 }

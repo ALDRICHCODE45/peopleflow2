@@ -21,6 +21,17 @@ export function useKanbanFilters() {
   );
   const debouncedAssignedToIds = useDebouncedValue(selectedAssignedToIds, 300);
 
+  const [selectedEmployeeCounts, setSelectedEmployeeCounts] = useState<string[]>(
+    [],
+  );
+  const debouncedEmployeeCounts = useDebouncedValue(selectedEmployeeCounts, 300);
+
+  const [createdAtFrom, setCreatedAtFrom] = useState<string>("");
+  const debouncedDateFrom = useDebouncedValue(createdAtFrom, 500); // 500ms for date inputs
+
+  const [createdAtTo, setCreatedAtTo] = useState<string>("");
+  const debouncedDateTo = useDebouncedValue(createdAtTo, 500);
+
   const {
     openModal: openSheetFilters,
     isOpen: isSheetOpen,
@@ -38,6 +49,9 @@ export function useKanbanFilters() {
     setSelectedSectorIds([]);
     setSelectedOriginIds([]);
     setSelectedAssignedToIds([]);
+    setSelectedEmployeeCounts([]);
+    setCreatedAtFrom("");
+    setCreatedAtTo("");
   }, []);
 
   const hasActiveFilters = useMemo(
@@ -45,8 +59,19 @@ export function useKanbanFilters() {
       searchValue.length > 0 ||
       selectedSectorIds.length > 0 ||
       selectedOriginIds.length > 0 ||
-      selectedAssignedToIds.length > 0,
-    [searchValue, selectedSectorIds, selectedOriginIds, selectedAssignedToIds],
+      selectedAssignedToIds.length > 0 ||
+      selectedEmployeeCounts.length > 0 ||
+      createdAtFrom.length > 0 ||
+      createdAtTo.length > 0,
+    [
+      searchValue,
+      selectedSectorIds,
+      selectedOriginIds,
+      selectedAssignedToIds,
+      selectedEmployeeCounts,
+      createdAtFrom,
+      createdAtTo,
+    ],
   );
 
   // Detect when filters are pending (user changed but debounce hasn't fired yet)
@@ -56,7 +81,10 @@ export function useKanbanFilters() {
       searchValue !== debouncedSearch ||
       !arraysEqual(selectedSectorIds, debouncedSectorIds) ||
       !arraysEqual(selectedOriginIds, debouncedOriginIds) ||
-      !arraysEqual(selectedAssignedToIds, debouncedAssignedToIds),
+      !arraysEqual(selectedAssignedToIds, debouncedAssignedToIds) ||
+      !arraysEqual(selectedEmployeeCounts, debouncedEmployeeCounts) ||
+      createdAtFrom !== debouncedDateFrom ||
+      createdAtTo !== debouncedDateTo,
     [
       searchValue,
       debouncedSearch,
@@ -66,6 +94,12 @@ export function useKanbanFilters() {
       debouncedOriginIds,
       selectedAssignedToIds,
       debouncedAssignedToIds,
+      selectedEmployeeCounts,
+      debouncedEmployeeCounts,
+      createdAtFrom,
+      debouncedDateFrom,
+      createdAtTo,
+      debouncedDateTo,
     ],
   );
 
@@ -82,6 +116,15 @@ export function useKanbanFilters() {
     selectedAssignedToIds,
     setSelectedAssignedToIds,
     debouncedAssignedToIds,
+    selectedEmployeeCounts,
+    setSelectedEmployeeCounts,
+    debouncedEmployeeCounts,
+    createdAtFrom,
+    setCreatedAtFrom,
+    debouncedDateFrom,
+    createdAtTo,
+    setCreatedAtTo,
+    debouncedDateTo,
     openSheetFilters,
     isSheetOpen,
     closeSheetFilters,

@@ -344,6 +344,7 @@ model Lead {
   @@index([isDeleted])
   @@index([tenantId, status])
   @@index([tenantId, isDeleted])
+  @@index([tenantId, createdAt])
   @@map("lead")
 }
 

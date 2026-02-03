@@ -24,8 +24,13 @@ export function LeadsListPage() {
   const [selectedSectorIds, setSelectedSectorIds] = useState<string[]>([]);
   const [selectedOriginIds, setSelectedOriginIds] = useState<string[]>([]);
   const [selectedAssignedToIds, setSelectedAssignedToIds] = useState<string[]>(
-    [],
+    []
   );
+  const [selectedEmployeeCounts, setSelectedEmployeeCounts] = useState<string[]>(
+    []
+  );
+  const [createdAtFrom, setCreatedAtFrom] = useState<string>("");
+  const [createdAtTo, setCreatedAtTo] = useState<string>("");
 
   // Server-side pagination state with multi-tab support
   const {
@@ -47,7 +52,7 @@ export function LeadsListPage() {
       setSelectedSectorIds(ids);
       setPagination((prev) => ({ ...prev, pageIndex: 0 }));
     },
-    [setPagination],
+    [setPagination]
   );
 
   const handleOriginChange = useCallback(
@@ -55,7 +60,7 @@ export function LeadsListPage() {
       setSelectedOriginIds(ids);
       setPagination((prev) => ({ ...prev, pageIndex: 0 }));
     },
-    [setPagination],
+    [setPagination]
   );
 
   const handleAssignedToChange = useCallback(
@@ -63,7 +68,31 @@ export function LeadsListPage() {
       setSelectedAssignedToIds(ids);
       setPagination((prev) => ({ ...prev, pageIndex: 0 }));
     },
-    [setPagination],
+    [setPagination]
+  );
+
+  const handleEmployeeCountsChange = useCallback(
+    (counts: string[]) => {
+      setSelectedEmployeeCounts(counts);
+      setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+    },
+    [setPagination]
+  );
+
+  const handleDateFromChange = useCallback(
+    (date: string) => {
+      setCreatedAtFrom(date);
+      setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+    },
+    [setPagination]
+  );
+
+  const handleDateToChange = useCallback(
+    (date: string) => {
+      setCreatedAtTo(date);
+      setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+    },
+    [setPagination]
   );
 
   // Handler to clear all filters
@@ -71,6 +100,9 @@ export function LeadsListPage() {
     setSelectedSectorIds([]);
     setSelectedOriginIds([]);
     setSelectedAssignedToIds([]);
+    setSelectedEmployeeCounts([]);
+    setCreatedAtFrom("");
+    setCreatedAtTo("");
     handleMultiTabChange([]);
     handleGlobalFilterChange("");
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
@@ -87,6 +119,10 @@ export function LeadsListPage() {
     originIds: selectedOriginIds.length > 0 ? selectedOriginIds : undefined,
     assignedToIds:
       selectedAssignedToIds.length > 0 ? selectedAssignedToIds : undefined,
+    employeeCounts:
+      selectedEmployeeCounts.length > 0 ? selectedEmployeeCounts : undefined,
+    createdAtFrom: createdAtFrom || undefined,
+    createdAtTo: createdAtTo || undefined,
   });
 
   // Extract data from paginated response
@@ -101,7 +137,7 @@ export function LeadsListPage() {
   // Tabs config with dynamic counts
   const tabsConfig = useMemo(
     () => enrichLeadTabsWithCounts(activeTabs, totalCount),
-    [activeTabs, totalCount],
+    [activeTabs, totalCount]
   );
 
   const handleAdd = useCallback(() => {
@@ -123,6 +159,15 @@ export function LeadsListPage() {
         onClearFilters: handleClearFilters,
         selectedAssignedToIds,
         onAssignedToChange: handleAssignedToChange,
+        // Employee counts filter
+        selectedEmployeeCounts,
+        onEmployeeCountsChange: handleEmployeeCountsChange,
+        // Date range filter
+        createdAtFrom,
+        createdAtTo,
+        onDateFromChange: handleDateFromChange,
+        onDateToChange: handleDateToChange,
+
         serverSide: {
           enabled: true,
           totalCount,
@@ -141,7 +186,13 @@ export function LeadsListPage() {
       handleClearFilters,
       selectedAssignedToIds,
       handleAssignedToChange,
-    ],
+      selectedEmployeeCounts,
+      handleEmployeeCountsChange,
+      createdAtFrom,
+      createdAtTo,
+      handleDateFromChange,
+      handleDateToChange,
+    ]
   );
 
   return (
