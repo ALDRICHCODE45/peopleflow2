@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build --turbopack && bun run better:generate && bunx prisma db push && bun run prisma:generate",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "db:seed": "bunx tsx prisma/seed.ts",
