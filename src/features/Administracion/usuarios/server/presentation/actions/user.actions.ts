@@ -14,11 +14,11 @@ import { prismaRoleRepository } from "@/features/auth-rbac/server/infrastructure
 import {
   GetTenantUsersUseCase,
   CreateUserUseCase,
-  AssignUserToTenantUseCase,
   UpdateUserUseCase,
   DeleteUserFromTenantUseCase,
   UpdateUserRolesUseCase,
   InviteUserToTenantUseCase,
+  GetUserByIdUseCase,
 } from "../../application/use-cases";
 
 // Tenant repository
@@ -86,6 +86,12 @@ export interface InviteToTenantResult {
   success: boolean;
 }
 
+export interface getUserByIdResult {
+  error: string | null;
+  success: boolean;
+  user?: { id: string; name: string; image: string | null; email: string };
+}
+
 /**
  * Obtiene los usuarios del tenant activo
  */
@@ -122,6 +128,40 @@ export async function getTenantUsersAction(): Promise<GetTenantUsersResult> {
 }
 
 /**
+ * Obtiene un usuario por medio del Id.
+ * SEGURIDAD: Valida que el usueraio obtenido pertenezca al tenant actual
+ */
+
+export const getUserById = async (data: {
+  userId: string;
+}): Promise<getUserByIdResult> => {
+  try {
+    const headersList = await headers();
+    const session = await auth.api.getSession({ headers: headersList });
+
+    if (!session?.user) {
+      return { error: "No autenticado", success: false };
+    }
+
+    const useCase = new GetUserByIdUseCase(prismaUserRoleRepository);
+    const result = await useCase.execute({ userId: data.userId });
+
+    if (!result.success || !result.user) {
+      return { error: result.error || "Usuario no encontrado", success: false };
+    }
+
+    return {
+      success: true,
+      user: result.user,
+      error: null,
+    };
+  } catch (error) {
+    console.error("Error in getUserById:", error);
+    return { error: "Error al obtener usuario", success: false };
+  }
+};
+
+/**
  * Crea un nuevo usuario y opcionalmente lo asigna al tenant actual
  * SEGURIDAD: Valida que el creador tenga todos los permisos del rol a asignar
  */
@@ -141,7 +181,7 @@ export async function createUserAction(data: {
 
     // Verificar permisos
     const isSuperAdmin = await prismaUserRoleRepository.isSuperAdmin(
-      session.user.id,
+      session.user.id
     );
     const tenantResult = await getCurrentTenantAction();
 
@@ -156,7 +196,7 @@ export async function createUserAction(data: {
       // Verificar permiso de crear usuarios
       creatorPermissions = await prismaUserRoleRepository.getUserPermissions(
         session.user.id,
-        tenantResult.tenant.id,
+        tenantResult.tenant.id
       );
 
       const canCreate =
@@ -206,11 +246,11 @@ export async function createUserAction(data: {
       // todos los permisos del rol que está asignando (previene privilege escalation)
       if (!isSuperAdmin) {
         const rolePermissions = role.permissions.map(
-          (rp) => rp.permission.name,
+          (rp) => rp.permission.name
         );
 
         const unauthorizedPermissions = rolePermissions.filter(
-          (perm) => !creatorPermissions.includes(perm),
+          (perm) => !creatorPermissions.includes(perm)
         );
 
         if (unauthorizedPermissions.length > 0) {
@@ -243,7 +283,7 @@ export async function createUserAction(data: {
  */
 export async function updateUserAction(
   userId: string,
-  data: { name?: string; email?: string },
+  data: { name?: string; email?: string }
 ): Promise<UpdateUserResult> {
   try {
     const headersList = await headers();
@@ -284,7 +324,7 @@ export async function updateUserAction(
  * Elimina un usuario del tenant (elimina el UserRole, no el usuario)
  */
 export async function deleteUserFromTenantAction(
-  userId: string,
+  userId: string
 ): Promise<DeleteUserResult> {
   try {
     const headersList = await headers();
@@ -327,7 +367,7 @@ export async function deleteUserFromTenantAction(
  */
 export async function updateUserRolesAction(
   userId: string,
-  roleIds: string[],
+  roleIds: string[]
 ): Promise<UpdateUserRolesResult> {
   try {
     const headersList = await headers();
@@ -345,7 +385,7 @@ export async function updateUserRolesAction(
 
     const useCase = new UpdateUserRolesUseCase(
       prismaUserRoleRepository,
-      prismaRoleRepository,
+      prismaRoleRepository
     );
     const result = await useCase.execute({
       userId,
@@ -381,7 +421,7 @@ export async function updateUserRolesAction(
  * SEGURIDAD: Valida que el usuario tenga acceso al tenant solicitado
  */
 export async function getAvailableRolesAction(
-  tenantId: string,
+  tenantId: string
 ): Promise<GetRolesResult> {
   try {
     const headersList = await headers();
@@ -393,7 +433,7 @@ export async function getAvailableRolesAction(
 
     // SEGURIDAD: Verificar que el usuario tenga acceso al tenant solicitado
     const isSuperAdmin = await prismaUserRoleRepository.isSuperAdmin(
-      session.user.id,
+      session.user.id
     );
 
     if (!isSuperAdmin) {
@@ -401,7 +441,7 @@ export async function getAvailableRolesAction(
       const belongsToTenant =
         await prismaUserRoleRepository.userBelongsToTenant(
           session.user.id,
-          tenantId,
+          tenantId
         );
 
       if (!belongsToTenant) {
@@ -417,7 +457,7 @@ export async function getAvailableRolesAction(
 
     // SEGURIDAD: Filtrar el rol de administrador
     const filteredRoles = roles.filter(
-      (role) => role.name !== HIDDEN_ADMIN_ROLE_NAME,
+      (role) => role.name !== HIDDEN_ADMIN_ROLE_NAME
     );
 
     return {
@@ -446,7 +486,7 @@ export async function getInvitableTenantsAction(): Promise<GetInvitableTenantsRe
     }
 
     const isSuperAdmin = await prismaUserRoleRepository.isSuperAdmin(
-      session.user.id,
+      session.user.id
     );
 
     if (isSuperAdmin) {
@@ -464,14 +504,14 @@ export async function getInvitableTenantsAction(): Promise<GetInvitableTenantsRe
 
     // Usuario normal: filtrar por permisos
     const userTenants = await prismaTenantRepository.findByUserId(
-      session.user.id,
+      session.user.id
     );
     const tenantsWithPermission: InvitableTenant[] = [];
 
     for (const tenant of userTenants) {
       const permissions = await prismaUserRoleRepository.getUserPermissions(
         session.user.id,
-        tenant.id,
+        tenant.id
       );
 
       const canInvite =
@@ -528,7 +568,7 @@ export async function inviteUserToTenantAction(data: {
     }
 
     const isSuperAdmin = await prismaUserRoleRepository.isSuperAdmin(
-      session.user.id,
+      session.user.id
     );
 
     // SEGURIDAD: Si no es SuperAdmin, verificar permiso en tenant destino
@@ -536,7 +576,7 @@ export async function inviteUserToTenantAction(data: {
       const permissionsInTargetTenant =
         await prismaUserRoleRepository.getUserPermissions(
           session.user.id,
-          data.tenantId,
+          data.tenantId
         );
 
       const canInvite =
@@ -555,7 +595,7 @@ export async function inviteUserToTenantAction(data: {
 
     const notificationUseCase = new SendNotificationUseCase(
       prismaNotificationRepository,
-      [emailProvider],
+      [emailProvider]
     );
 
     // Ejecutar caso de uso
@@ -563,7 +603,7 @@ export async function inviteUserToTenantAction(data: {
       prismaUserRoleRepository,
       prismaTenantRepository,
       prismaRoleRepository,
-      notificationUseCase,
+      notificationUseCase
     );
 
     const result = await useCase.execute({

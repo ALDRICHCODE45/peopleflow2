@@ -45,3 +45,9 @@ export {
   type InviteUserToTenantInput,
   type InviteUserToTenantOutput,
 } from "./InviteUserToTenantUseCase";
+
+export {
+  GetUserByIdUseCase,
+  type GetUserByIdUseCaseInput,
+  type GetUserByIdUseCaseOutput,
+} from "./GetUserByIdUseCase";

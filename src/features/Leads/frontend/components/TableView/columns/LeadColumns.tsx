@@ -2,6 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import type { Lead } from "../../../types";
 import { LeadStatusBadge } from "../LeadStatusBadge";
 import { LeadRowActions } from "./LeadRowActions";
+import { AsignToUserColumn } from "../AsignToUserColumn";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Badge } from "@/core/shared/ui/shadcn/badge";
@@ -92,13 +93,9 @@ export const LeadColumns: ColumnDef<Lead>[] = [
   },
   {
     header: "Asignado",
-    accessorKey: "assignedToName",
-    cell: ({ row }) => (
-      <span className="truncate block">
-        {row.original.assignedToName || "-"}
-      </span>
-    ),
-    size: 12,
+    accessorKey: "assignedToId",
+    cell: ({ row }) => <AsignToUserColumn userId={row.original.assignedToId} />,
+    size: 14,
   },
   {
     header: "Contactos",

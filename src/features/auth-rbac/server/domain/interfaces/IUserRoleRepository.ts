@@ -10,6 +10,7 @@ export interface UserWithRoles {
   id: string;
   email: string;
   name: string | null;
+  image: string | null;
   roles: Array<{ id: string; name: string }>;
   createdAt?: Date;
 }
@@ -49,7 +50,11 @@ export interface IUserRoleRepository {
   /**
    * Verifica si existe una asignación de usuario-rol-tenant
    */
-  exists(userId: string, roleId: string, tenantId: string | null): Promise<boolean>;
+  exists(
+    userId: string,
+    roleId: string,
+    tenantId: string | null
+  ): Promise<boolean>;
 
   /**
    * Crea una nueva asignación de rol a usuario
@@ -72,14 +77,26 @@ export interface IUserRoleRepository {
   isSuperAdmin(userId: string): Promise<boolean>;
 
   /**
+   * Busca un usuario por ID
+   */
+  findUserById(
+    userId: string
+  ): Promise<{ name: string; id: string; email: string; image: string | null } | null>;
+
+  /**
    * Obtiene todos los permisos de un usuario en un tenant específico
    * Si tenantId es null, busca roles globales (como super:admin)
    */
-  getUserPermissions(userId: string, tenantId: string | null): Promise<string[]>;
+  getUserPermissions(
+    userId: string,
+    tenantId: string | null
+  ): Promise<string[]>;
 
   /**
    * Obtiene usuarios de un tenant con paginación server-side
    * Soporta búsqueda por email/name y ordenamiento
    */
-  findPaginatedUsers(params: FindPaginatedUsersParams): Promise<PaginatedUsersResult>;
+  findPaginatedUsers(
+    params: FindPaginatedUsersParams
+  ): Promise<PaginatedUsersResult>;
 }

@@ -22,7 +22,7 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
    */
   async findById(
     id: string,
-    tenantId: string | null,
+    tenantId: string | null
   ): Promise<UserRole | null> {
     const userRole = await prisma.userRole.findFirst({
       where: {
@@ -45,7 +45,7 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
   async exists(
     userId: string,
     roleId: string,
-    tenantId: string | null,
+    tenantId: string | null
   ): Promise<boolean> {
     const userRole = await prisma.userRole.findFirst({
       where: {
@@ -98,6 +98,7 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
           id: userRole.user.id,
           email: userRole.user.email,
           name: userRole.user.name,
+          image: userRole.user.image,
           roles: [],
         });
       }
@@ -110,9 +111,28 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
     return Array.from(userMap.values());
   }
 
+  async findUserById(
+    userId: string
+  ): Promise<{ name: string; id: string; image: string | null; email: string } | null> {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) return null;
+
+    return {
+      name: user.name ?? "",
+      image: user.image,
+      email: user.email,
+      id: user.id,
+    };
+  }
+
   async userBelongsToTenant(
     userId: string,
-    tenantId: string,
+    tenantId: string
   ): Promise<boolean> {
     const userRole = await prisma.userRole.findFirst({
       where: {
@@ -166,7 +186,7 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
    */
   async getUserPermissions(
     userId: string,
-    tenantId: string | null,
+    tenantId: string | null
   ): Promise<string[]> {
     // PASO 1: Verificar primero si es SuperAdmin
     const isSuperAdmin = await this.isSuperAdmin(userId);
@@ -236,7 +256,7 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
           };
         }>;
       };
-    }>,
+    }>
   ): string[] {
     const permissionSet = new Set<string>();
 
@@ -255,7 +275,7 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
    * SEGURIDAD: Filtrado obligatorio por tenantId
    */
   async findPaginatedUsers(
-    params: FindPaginatedUsersParams,
+    params: FindPaginatedUsersParams
   ): Promise<PaginatedUsersResult> {
     const { tenantId, skip, take, sorting, filters } = params;
 
@@ -312,6 +332,7 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
           id: userRole.user.id,
           email: userRole.user.email,
           name: userRole.user.name,
+          image: userRole.user.image,
           roles: [],
           createdAt: userRole.user.createdAt,
         });
@@ -369,7 +390,7 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
    */
   private buildUserSorting(
     sorting: FindPaginatedUsersParams["sorting"],
-    allowedColumns: string[],
+    allowedColumns: string[]
   ): Prisma.UserRoleOrderByWithRelationInput[] | undefined {
     if (!sorting || sorting.length === 0) {
       return [{ user: { createdAt: "desc" } }];
