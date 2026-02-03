@@ -34,3 +34,21 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Better Auth (Produccion)
+
+Variables de entorno recomendadas:
+
+- `BETTER_AUTH_SECRET`: Secret para firmar sesiones.
+- `BETTER_AUTH_URL`: URL base del backend (por ejemplo `https://peopleflow.tech`).
+- `TRUST_URLS`: Lista de origenes confiables separados por coma.
+- `NEXT_PUBLIC_BETTER_AUTH_URL`: URL base para el cliente.
+
+Ejemplo:
+
+```
+BETTER_AUTH_SECRET=tu_secret
+BETTER_AUTH_URL=https://peopleflow.tech
+TRUST_URLS=https://peopleflow.tech,https://www.peopleflow.tech
+NEXT_PUBLIC_BETTER_AUTH_URL=https://peopleflow.tech
+```

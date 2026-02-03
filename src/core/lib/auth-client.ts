@@ -17,8 +17,15 @@ import { createAuthClient } from "better-auth/react";
  * const { data: session } = authClient.useSession()
  * ```
  */
+const baseURL = process.env.NEXT_PUBLIC_BETTER_AUTH_URL;
+
+if (!baseURL && process.env.NODE_ENV === "production") {
+  console.warn(
+    "[Better Auth] NEXT_PUBLIC_BETTER_AUTH_URL no está definida; se usará detección automática."
+  );
+}
+
 export const authClient = createAuthClient({
-  // Better Auth automáticamente detecta la URL base si no se especifica
-  // pero puedes configurarlo explícitamente con NEXT_PUBLIC_BETTER_AUTH_URL
-  baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
+  // Configura explícitamente la URL base en producción
+  baseURL,
 });
