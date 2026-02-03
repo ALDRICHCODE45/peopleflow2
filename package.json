@@ -4,14 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
     "db:seed": "bunx tsx prisma/seed.ts",
     "db:seed:leads": "bun prisma/seedLeadsTest.ts",
     "prisma:generate": "bunx prisma generate",
     "prisma:studio": "bunx prisma studio",
-    "better:generate": "bunx @better-auth/cli@latest generate --config src/core/lib/auth.ts"
+    "better:generate": "bunx @better-auth/cli@latest generate --config src/core/lib/auth.ts",
+    "prisma:deploy": "bun run better:generate && bunx prisma migrate deploy && bunx prisma db push"
   },
   "prisma": {
     "seed": "bunx tsx prisma/seed.ts"

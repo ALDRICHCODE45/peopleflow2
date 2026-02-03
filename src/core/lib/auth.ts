@@ -18,6 +18,7 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql", // PostgreSQL según tu configuración
   }),
+  trustedOrigins: [process.env.TRUST_URLS!],
   emailAndPassword: {
     enabled: true, // Habilita autenticación con email y contraseña
   },
