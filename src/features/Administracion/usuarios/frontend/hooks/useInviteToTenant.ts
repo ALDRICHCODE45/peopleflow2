@@ -1,7 +1,6 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import {
   getInvitableTenantsAction,
   getAvailableRolesAction,
@@ -10,6 +9,7 @@ import {
 import type { InvitableTenant } from "../types";
 import { getUsersQueryKey } from "./useUsers";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
+import { showToast } from "@/core/shared/components/ShowToast";
 
 // Query Key Factories
 export const getInvitableTenantsQueryKey = () => ["invitable-tenants"] as const;
@@ -38,7 +38,9 @@ export function useInvitableTenantsQuery() {
  */
 export function useTenantRolesQuery(tenantId: string | null) {
   return useQuery({
-    queryKey: tenantId ? getTenantRolesQueryKey(tenantId) : ["tenant-roles", "no-tenant"],
+    queryKey: tenantId
+      ? getTenantRolesQueryKey(tenantId)
+      : ["tenant-roles", "no-tenant"],
     queryFn: async () => {
       if (!tenantId) {
         return [];
@@ -73,7 +75,11 @@ export function useInviteToTenant() {
       return result;
     },
     onSuccess: async () => {
-      toast.success("Usuario invitado exitosamente");
+      showToast({
+        title: "Operacion Exitosa",
+        description: "Usuario invitado exitosamente",
+        type: "success",
+      });
       // Invalidar queries relacionadas
       if (tenant?.id) {
         await queryClient.invalidateQueries({
@@ -82,7 +88,11 @@ export function useInviteToTenant() {
       }
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Error al invitar usuario");
+      showToast({
+        title: "Ocurrió un Error",
+        description: "Error al invitar usuario",
+        type: "error",
+      });
     },
   });
 }

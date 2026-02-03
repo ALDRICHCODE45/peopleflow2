@@ -12,6 +12,7 @@ import {
 } from "../../server/presentation/actions/user.actions";
 import type { TenantUser, CreateUserData, UpdateUserData } from "../types";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
+import { showToast } from "@/core/shared/components/ShowToast";
 
 // Query Key Factories - Incluyen tenantId para evitar cache stale entre tenants
 export const getUsersQueryKey = (tenantId: string) =>
@@ -26,7 +27,9 @@ export function useTenantUsersQuery() {
   const { tenant } = useTenant();
 
   return useQuery({
-    queryKey: tenant?.id ? getUsersQueryKey(tenant.id) : ["tenant-users", "no-tenant"],
+    queryKey: tenant?.id
+      ? getUsersQueryKey(tenant.id)
+      : ["tenant-users", "no-tenant"],
     queryFn: async (): Promise<TenantUser[]> => {
       const result = await getTenantUsersAction();
       if (result.error) {
@@ -77,7 +80,11 @@ export function useCreateUser() {
       return result.user;
     },
     onSuccess: async () => {
-      toast.success("Usuario creado exitosamente");
+      showToast({
+        title: "Operación Exitosa",
+        description: "Usuario creado exitosamente",
+        type: "success",
+      });
       if (tenant?.id) {
         await queryClient.invalidateQueries({
           queryKey: getUsersQueryKey(tenant.id),
@@ -85,7 +92,11 @@ export function useCreateUser() {
       }
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Error al crear usuario");
+      showToast({
+        title: "Ocurrió un Error",
+        description: "Error al crear usuario",
+        type: "error",
+      });
     },
   });
 }
@@ -112,7 +123,11 @@ export function useUpdateUser() {
       return result.user;
     },
     onSuccess: async () => {
-      toast.success("Usuario actualizado exitosamente");
+      showToast({
+        title: "Operación Exitosa",
+        description: "Usuario actualizado exitosamente",
+        type: "success",
+      });
       if (tenant?.id) {
         await queryClient.invalidateQueries({
           queryKey: getUsersQueryKey(tenant.id),
@@ -120,7 +135,11 @@ export function useUpdateUser() {
       }
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Error al actualizar usuario");
+      showToast({
+        title: "Ocurrió un Error",
+        description: "Error al actualizar usuario",
+        type: "error",
+      });
     },
   });
 }
@@ -141,7 +160,11 @@ export function useDeleteUserFromTenant() {
       return result;
     },
     onSuccess: async () => {
-      toast.success("Usuario eliminado del tenant exitosamente");
+      showToast({
+        title: "Operación Exitosa",
+        description: "Usuario eliminado exitosamente",
+        type: "success",
+      });
       if (tenant?.id) {
         await queryClient.invalidateQueries({
           queryKey: getUsersQueryKey(tenant.id),
@@ -149,7 +172,11 @@ export function useDeleteUserFromTenant() {
       }
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Error al eliminar usuario");
+      showToast({
+        title: "Ocurrió un Error",
+        description: "Error al eliminar usuario",
+        type: "error",
+      });
     },
   });
 }
@@ -176,7 +203,11 @@ export function useUpdateUserRoles() {
       return result;
     },
     onSuccess: async () => {
-      toast.success("Roles actualizados exitosamente");
+      showToast({
+        title: "Operación Exitosa",
+        description: "Roles actualizados exitosamente",
+        type: "success",
+      });
       if (tenant?.id) {
         await queryClient.invalidateQueries({
           queryKey: getUsersQueryKey(tenant.id),
@@ -184,7 +215,11 @@ export function useUpdateUserRoles() {
       }
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Error al actualizar roles");
+      showToast({
+        title: "Ocurrió un Error",
+        description: "Error al actualizar roles",
+        type: "success",
+      });
     },
   });
 }

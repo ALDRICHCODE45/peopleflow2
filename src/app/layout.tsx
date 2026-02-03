@@ -37,9 +37,14 @@ export default function RootLayout({
     <>
       <Toaster
         position="top-center"
-        closeButton
-        richColors
         expand
+        duration={4000}
+        toastOptions={{
+          className: "font-sans",
+          style: {
+            "--toast-duration": "4000ms",
+          } as React.CSSProperties,
+        }}
         icons={{
           success: (
             <HugeiconsIcon icon={CheckmarkCircle02Icon} className="size-4" />

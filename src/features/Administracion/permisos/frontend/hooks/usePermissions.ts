@@ -10,6 +10,7 @@ import {
 import type { PermissionsByModule } from "../types";
 import { getRolesQueryKey } from "@/features/Administracion/roles/frontend/hooks/useRoles";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
+import { showToast } from "@/core/shared/components/ShowToast";
 
 // Query Key Factories - Incluyen tenantId para evitar cache stale entre tenants
 export const getAllPermissionsQueryKey = (tenantId: string) =>
@@ -84,7 +85,11 @@ export function useAssignPermissionsToRole() {
       return result;
     },
     onSuccess: async (_, variables) => {
-      toast.success("Permisos asignados exitosamente");
+      showToast({
+        title: "Operacion Exitosa",
+        description: "Permisos asignados exitosamente",
+        type: "success",
+      });
       if (tenant?.id) {
         await queryClient.invalidateQueries({
           queryKey: getRolePermissionsQueryKey(tenant.id, variables.roleId),
@@ -95,7 +100,11 @@ export function useAssignPermissionsToRole() {
       }
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Error al asignar permisos");
+      showToast({
+        title: "Ocurrió un Error",
+        description: "Error al asignar permisos",
+        type: "error",
+      });
     },
   });
 }

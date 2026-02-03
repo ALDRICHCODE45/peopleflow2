@@ -7,6 +7,7 @@ export type ShowToastOptions = {
   title: string;
   description: string;
   onClose?: () => void;
+  duration?: number;
 };
 
 export function showToast({
@@ -14,11 +15,16 @@ export function showToast({
   title,
   description,
   onClose,
+  duration = 4000,
 }: ShowToastOptions) {
   const options = {
     description,
+    duration,
     onAutoClose: onClose,
     onDismiss: onClose,
+    style: {
+      "--toast-duration": `${duration}ms`,
+    } as React.CSSProperties,
   } as const;
   switch (type) {
     case "info":
