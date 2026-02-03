@@ -129,9 +129,18 @@ export const SignInPage = () => {
               </FieldGroup>
 
               <div className="w-full mt-6">
-                <Button type="submit" className="w-full rounded-xl" size="lg">
-                  Sign In
-                </Button>
+                <form.Subscribe selector={(state) => state.isSubmitting}>
+                  {(isSubmitting) => (
+                    <Button
+                      type="submit"
+                      className="w-full rounded-xl"
+                      size="lg"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Ingresando..." : "Sign In"}
+                    </Button>
+                  )}
+                </form.Subscribe>
               </div>
             </form>
 

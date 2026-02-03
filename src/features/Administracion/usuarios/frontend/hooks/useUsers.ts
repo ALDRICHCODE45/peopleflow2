@@ -89,6 +89,9 @@ export function useCreateUser() {
         await queryClient.invalidateQueries({
           queryKey: getUsersQueryKey(tenant.id),
         });
+        await queryClient.invalidateQueries({
+          queryKey: ["users", "paginated", tenant.id],
+        });
       }
     },
     onError: (error: Error) => {
@@ -132,6 +135,9 @@ export function useUpdateUser() {
         await queryClient.invalidateQueries({
           queryKey: getUsersQueryKey(tenant.id),
         });
+        await queryClient.invalidateQueries({
+          queryKey: ["users", "paginated", tenant.id],
+        });
       }
     },
     onError: (error: Error) => {
@@ -168,6 +174,9 @@ export function useDeleteUserFromTenant() {
       if (tenant?.id) {
         await queryClient.invalidateQueries({
           queryKey: getUsersQueryKey(tenant.id),
+        });
+        await queryClient.invalidateQueries({
+          queryKey: ["users", "paginated", tenant.id],
         });
       }
     },
@@ -212,13 +221,16 @@ export function useUpdateUserRoles() {
         await queryClient.invalidateQueries({
           queryKey: getUsersQueryKey(tenant.id),
         });
+        await queryClient.invalidateQueries({
+          queryKey: ["users", "paginated", tenant.id],
+        });
       }
     },
     onError: (error: Error) => {
       showToast({
         title: "Ocurrió un Error",
         description: "Error al actualizar roles",
-        type: "success",
+        type: "error",
       });
     },
   });

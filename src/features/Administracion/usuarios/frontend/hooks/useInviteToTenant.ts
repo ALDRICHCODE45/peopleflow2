@@ -85,6 +85,9 @@ export function useInviteToTenant() {
         await queryClient.invalidateQueries({
           queryKey: getUsersQueryKey(tenant.id),
         });
+        await queryClient.invalidateQueries({
+          queryKey: ["users", "paginated", tenant.id],
+        });
       }
     },
     onError: (error: Error) => {

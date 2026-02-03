@@ -97,6 +97,9 @@ export function useAssignPermissionsToRole() {
         await queryClient.invalidateQueries({
           queryKey: getRolesQueryKey(tenant.id),
         });
+        await queryClient.invalidateQueries({
+          queryKey: ["roles", "paginated", tenant.id],
+        });
       }
     },
     onError: (error: Error) => {

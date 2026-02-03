@@ -61,13 +61,16 @@ export function useCreateRole() {
         await queryClient.invalidateQueries({
           queryKey: getRolesQueryKey(tenant.id),
         });
+        await queryClient.invalidateQueries({
+          queryKey: ["roles", "paginated", tenant.id],
+        });
       }
     },
     onError: (error: Error) => {
       showToast({
         title: "Error",
         description: "El role no se pude crear correctamente",
-        type: "success",
+        type: "error",
       });
     },
   });
@@ -97,6 +100,9 @@ export function useUpdateRole() {
       if (tenant?.id) {
         await queryClient.invalidateQueries({
           queryKey: getRolesQueryKey(tenant.id),
+        });
+        await queryClient.invalidateQueries({
+          queryKey: ["roles", "paginated", tenant.id],
         });
       }
     },
@@ -135,11 +141,14 @@ export function useDeleteRole() {
         await queryClient.invalidateQueries({
           queryKey: getRolesQueryKey(tenant.id),
         });
+        await queryClient.invalidateQueries({
+          queryKey: ["roles", "paginated", tenant.id],
+        });
       }
     },
     onError: (error: Error) => {
       showToast({
-        title: "Operacion Exitosa",
+        title: "Error",
         description: "Ha ocurrido un problema eliminando el role",
         type: "error",
       });
