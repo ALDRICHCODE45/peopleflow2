@@ -5,7 +5,7 @@ export interface LeadToClientConversionEmailData {
 }
 
 export function generateLeadToClientConversionEmail(
-  data: LeadToClientConversionEmailData,
+  data: LeadToClientConversionEmailData
 ): string {
   const { recipientName, leadName, appUrl } = data;
 
@@ -69,15 +69,6 @@ export function generateLeadToClientConversionEmail(
                 Da seguimiento desde el modulo de clientes para continuar brindando un servicio excepcional.
               </p>
 
-              <!-- Hero Image -->
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom: 32px;">
-                <tr>
-                  <td align="center">
-                    <img src="https://res.cloudinary.com/dpvxqsf6s/image/upload/v1769654321/EmailImage_b2jvjj.webp" alt="ERP Solutions" width="520" style="display: block; max-width: 100%; height: auto; border-radius: 12px; border: 1px solid #e4e4e7;">
-                  </td>
-                </tr>
-              </table>
-
               <!-- CTA Button -->
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
                 <tr>
@@ -131,7 +122,7 @@ export function generateLeadToClientConversionEmail(
 }
 
 export function generateLeadToClientConversionPlainText(
-  data: LeadToClientConversionEmailData,
+  data: LeadToClientConversionEmailData
 ): string {
   const { recipientName, leadName, appUrl } = data;
 

@@ -6,7 +6,7 @@ export interface LeadStatusChangeEmailData {
 }
 
 export function generateLeadStatusChangeEmail(
-  data: LeadStatusChangeEmailData,
+  data: LeadStatusChangeEmailData
 ): string {
   const { recipientName, leadName, newStatus, appUrl } = data;
 
@@ -67,13 +67,6 @@ export function generateLeadStatusChangeEmail(
               </p>
 
               <!-- Hero Image -->
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom: 32px;">
-                <tr>
-                  <td align="center">
-                    <img src="https://res.cloudinary.com/dpvxqsf6s/image/upload/v1769654321/EmailImage_b2jvjj.webp" alt="ERP Solutions" width="520" style="display: block; max-width: 100%; height: auto; border-radius: 12px; border: 1px solid #e4e4e7;">
-                  </td>
-                </tr>
-              </table>
 
               <!-- CTA Button -->
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
@@ -128,7 +121,7 @@ export function generateLeadStatusChangeEmail(
 }
 
 export function generateLeadStatusChangePlainText(
-  data: LeadStatusChangeEmailData,
+  data: LeadStatusChangeEmailData
 ): string {
   const { recipientName, leadName, newStatus, appUrl } = data;
 
