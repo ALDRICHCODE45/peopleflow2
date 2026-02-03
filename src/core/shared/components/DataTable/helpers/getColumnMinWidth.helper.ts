@@ -12,7 +12,7 @@ export const getColumnMinWidth = (size: number, columnId?: string): number => {
   if (columnId === "actions") return 80;
 
   // Estado necesita más espacio para badges largos
-  if (columnId === "status") return 160;
+  if (columnId === "status") return 260;
 
   // Para columnas compactas genéricas (checkbox, acciones pequeñas)
   // Checkbox (16px) + padding reducido (16px) = 32px
