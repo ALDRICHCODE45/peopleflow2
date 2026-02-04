@@ -58,7 +58,10 @@ export function SuperAdminDashboard({
         // - Next.js Router Cache
         // - Better Auth session cache
         // Esto garantiza datos frescos del nuevo tenant
-        window.location.href = result.redirectUrl || "/admin/usuarios";
+        // Nota: No usar result.redirectUrl porque para super admins siempre
+        // retorna /super-admin (tiene permiso super:admin). Al "entrar" a un
+        // tenant, el destino correcto es el dashboard del tenant.
+        window.location.href = "/admin/usuarios";
       }
     } catch (error) {
       console.error("Error al entrar al tenant:", error);
