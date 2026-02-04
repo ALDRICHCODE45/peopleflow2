@@ -42,8 +42,8 @@ export function SelectTenantPage({ tenants, userName }: SelectTenantPageProps) {
       }
 
       // Full page reload para limpiar todos los cachés
-      // Consistente con TeamSwitcher
-      window.location.href = "/";
+      // Navega directamente a la ruta del dashboard sin pasar por page.tsx
+      window.location.href = result.redirectUrl || "/";
     } catch (err) {
       console.error("Error al seleccionar tenant:", err);
       setError("Error al seleccionar la organización");

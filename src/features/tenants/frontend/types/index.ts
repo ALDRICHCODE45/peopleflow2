@@ -38,6 +38,7 @@ export interface CreateTenantResult {
 
 export interface SwitchTenantResult {
   error: string | null;
+  redirectUrl?: string;
 }
 
 export interface GetCurrentTenantResult {

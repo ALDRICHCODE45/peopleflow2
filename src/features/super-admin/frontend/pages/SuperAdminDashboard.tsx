@@ -58,7 +58,7 @@ export function SuperAdminDashboard({
         // - Next.js Router Cache
         // - Better Auth session cache
         // Esto garantiza datos frescos del nuevo tenant
-        window.location.href = "/admin/usuarios";
+        window.location.href = result.redirectUrl || "/admin/usuarios";
       }
     } catch (error) {
       console.error("Error al entrar al tenant:", error);

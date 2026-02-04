@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 // Repositories
 import { prismaTenantRepository } from "../../infrastructure/repositories/PrismaTenantRepository";
 import { prismaUserRoleRepository } from "@/features/auth-rbac/server/infrastructure/repositories/PrismaUserRoleRepository";
+import { getDefaultRoute } from "@/core/lib/permissions/get-default-route";
 
 // Use Cases
 import { GetUserTenantsUseCase } from "../../application/use-cases/GetUserTenantsUseCase";
@@ -125,8 +126,14 @@ export async function switchTenantAction(
       return { error: result.error || "Error al cambiar tenant" };
     }
 
+    const userPermissions = await prismaUserRoleRepository.getUserPermissions(
+      session.user.id,
+      tenantId
+    );
+    const redirectUrl = getDefaultRoute(userPermissions);
+
     revalidatePath("/", "layout");
-    return { error: null };
+    return { error: null, redirectUrl };
   } catch (error) {
     console.error("Error switching tenant:", error);
     return { error: "Error al cambiar tenant" };

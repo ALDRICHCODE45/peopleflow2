@@ -25,9 +25,6 @@ import {
   useSwitchTenant,
 } from "@/features/tenants/frontend/hooks/useTenant";
 
-// Server actions
-import { getDefaultRouteForTenantAction } from "@/features/auth-rbac/server/presentation/actions/permission.actions";
-
 export function TeamSwitcher() {
   const { isMobile } = useSidebar();
 
@@ -47,16 +44,12 @@ export function TeamSwitcher() {
   const handleTenantChange = async (tenantId: string) => {
     if (tenantId === activeTenant?.id || isSwitching) return;
 
-    const success = await switchTenant(tenantId);
+    const redirectUrl = await switchTenant(tenantId);
 
-    if (success) {
-      // Obtener la ruta por defecto para el nuevo tenant
-      const { route: defaultRoute } =
-        await getDefaultRouteForTenantAction(tenantId);
-
+    if (redirectUrl) {
       // Full page reload para limpiar todos los cachés (Better Auth, Next.js Router Cache, etc.)
       // Esto garantiza que la sesión se lea fresca desde la BD
-      window.location.href = defaultRoute;
+      window.location.href = redirectUrl;
     }
   };
 
