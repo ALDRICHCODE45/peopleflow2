@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { captcha } from "better-auth/plugins";
 import prisma from "./prisma";
 
 /**
@@ -26,6 +27,12 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true, // Habilita autenticación con email y contraseña
   },
+  plugins: [
+    captcha({
+      provider: "cloudflare-turnstile",
+      secretKey: process.env.CLOUDFLARE_SECRET_KEY!,
+    }),
+  ],
   // La URL y el secret se toman automáticamente de las variables de entorno:
   // BETTER_AUTH_URL y BETTER_AUTH_SECRET
 });

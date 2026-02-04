@@ -69,13 +69,16 @@ export function useAuth() {
    * Inicia sesión con email y contraseña
    */
   const login = useCallback(
-    async (email: string, password: string): Promise<AuthResult> => {
+    async (email: string, password: string, captchaToken?: string): Promise<AuthResult> => {
       setIsOperationLoading(true);
 
       try {
         const result = await authClient.signIn.email({
           email,
           password,
+          fetchOptions: captchaToken
+            ? { headers: { "x-captcha-response": captchaToken } }
+            : undefined,
         });
 
         if (result.error) {
