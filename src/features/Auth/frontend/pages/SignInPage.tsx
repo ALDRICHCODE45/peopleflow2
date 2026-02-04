@@ -107,7 +107,7 @@ export const SignInPage = () => {
         widgetIdRef.current = null;
       }
     };
-  }, []);
+  }, [isPending]);
 
   if (isPending) {
     return (
