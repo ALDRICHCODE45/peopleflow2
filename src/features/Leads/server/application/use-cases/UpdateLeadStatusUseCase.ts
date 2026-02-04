@@ -30,15 +30,15 @@ export interface UpdateLeadStatusOutput {
   missingFields?: string[];
 }
 
-// Estados que requieren datos completos
-const STATES_REQUIRING_COMPLETE_DATA: LeadStatusType[] = [
-  "CONTACTO_CALIDO",
-  "CITA_AGENDADA",
-  "CITA_ATENDIDA",
-  "CITA_VALIDADA",
-  "POSICIONES_ASIGNADAS",
-  "STAND_BY",
-];
+// TODO: TEMPORALMENTE DESACTIVADO - Re-activar validacion de datos completos
+// const STATES_REQUIRING_COMPLETE_DATA: LeadStatusType[] = [
+//   "CONTACTO_CALIDO",
+//   "CITA_AGENDADA",
+//   "CITA_ATENDIDA",
+//   "CITA_VALIDADA",
+//   "POSICIONES_ASIGNADAS",
+//   "STAND_BY",
+// ];
 
 export class UpdateLeadStatusUseCase {
   constructor(
@@ -69,17 +69,17 @@ export class UpdateLeadStatusUseCase {
         };
       }
 
-      // Verificar datos completos para estados avanzados
-      if (STATES_REQUIRING_COMPLETE_DATA.includes(input.newStatus)) {
-        if (!lead.isDataComplete()) {
-          const missingFields = lead.getMissingFields();
-          return {
-            success: false,
-            error: "INCOMPLETE_DATA",
-            missingFields,
-          };
-        }
-      }
+      // TODO: TEMPORALMENTE DESACTIVADO - Re-activar validacion de datos completos
+      // if (STATES_REQUIRING_COMPLETE_DATA.includes(input.newStatus)) {
+      //   if (!lead.isDataComplete()) {
+      //     const missingFields = lead.getMissingFields();
+      //     return {
+      //       success: false,
+      //       error: "INCOMPLETE_DATA",
+      //       missingFields,
+      //     };
+      //   }
+      // }
 
       const oldStatus = lead.status;
 

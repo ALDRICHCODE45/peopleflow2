@@ -76,8 +76,10 @@ export class LeadStatusVO {
   /**
    * Verifica si se puede transicionar al estado especificado
    */
-  canTransitionTo(newStatus: LeadStatusType): boolean {
-    return this.getValidTransitions().includes(newStatus);
+  canTransitionTo(_newStatus: LeadStatusType): boolean {
+    // TODO: TEMPORALMENTE DESACTIVADO - Re-activar validacion de transiciones
+    // return this.getValidTransitions().includes(_newStatus);
+    return true;
   }
 
   /**

@@ -42,6 +42,15 @@ export function useCreateLeadForm({
       subsectorId: undefined as string | undefined,
       originId: undefined as string | undefined,
       assignedToId: "",
+      status: "CONTACTO" as
+        | "CONTACTO"
+        | "CONTACTO_CALIDO"
+        | "SOCIAL_SELLING"
+        | "CITA_AGENDADA"
+        | "CITA_ATENDIDA"
+        | "CITA_VALIDADA"
+        | "POSICIONES_ASIGNADAS"
+        | "STAND_BY",
     },
     validators: {
       onSubmit: createLeadSchema,

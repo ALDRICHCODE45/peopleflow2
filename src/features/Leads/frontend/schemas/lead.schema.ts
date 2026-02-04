@@ -20,9 +20,6 @@ export const createLeadSchema = z.object({
   subsectorId: z.string().or(z.undefined()),
   originId: z.string().or(z.undefined()),
   assignedToId: z.string().min(1, "Debes seleccionar un usuario asignado."),
-});
-
-export const editLeadSchema = createLeadSchema.extend({
   status: z.enum([
     "CONTACTO",
     "CONTACTO_CALIDO",
@@ -34,3 +31,5 @@ export const editLeadSchema = createLeadSchema.extend({
     "STAND_BY",
   ]),
 });
+
+export const editLeadSchema = createLeadSchema;

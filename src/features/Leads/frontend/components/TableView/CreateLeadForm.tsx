@@ -12,7 +12,7 @@ import {
 } from "@/core/shared/ui/shadcn/select";
 import { Field, FieldError, FieldLabel } from "@/core/shared/ui/shadcn/field";
 import { useCreateLeadForm } from "../../hooks/useCreateLeadForm";
-import { LEAD_EMPLOYEE_OPTIONS } from "../../types";
+import { LEAD_EMPLOYEE_OPTIONS, LEAD_STATUS_OPTIONS } from "../../types";
 
 interface CreateLeadFormProps {
   onOpenChange: (open: boolean) => void;
@@ -60,6 +60,32 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
             </Field>
           );
         }}
+      </form.Field>
+
+      {/* Estado del lead */}
+      <form.Field name="status">
+        {(field) => (
+          <Field>
+            <FieldLabel htmlFor={field.name}>Estado del lead</FieldLabel>
+            <Select
+              value={field.state.value}
+              onValueChange={(value) =>
+                field.handleChange(value as typeof field.state.value)
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Selecciona el estado" />
+              </SelectTrigger>
+              <SelectContent>
+                {LEAD_STATUS_OPTIONS.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Field>
+        )}
       </form.Field>
 
       {/* Sector y Subsector */}

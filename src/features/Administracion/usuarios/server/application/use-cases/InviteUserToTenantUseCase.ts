@@ -26,11 +26,11 @@ export class InviteUserToTenantUseCase {
     private readonly userRoleRepository: IUserRoleRepository,
     private readonly tenantRepository: ITenantRepository,
     private readonly roleRepository: IRoleRepository,
-    private readonly sendNotificationUseCase?: SendNotificationUseCase
+    private readonly sendNotificationUseCase?: SendNotificationUseCase,
   ) {}
 
   async execute(
-    input: InviteUserToTenantInput
+    input: InviteUserToTenantInput,
   ): Promise<InviteUserToTenantOutput> {
     try {
       // 1. Validar que el usuario existe
@@ -58,7 +58,7 @@ export class InviteUserToTenantUseCase {
       // 3. Verificar que el usuario no esté ya en el tenant
       const alreadyInTenant = await this.userRoleRepository.userBelongsToTenant(
         input.userId,
-        input.tenantId
+        input.tenantId,
       );
 
       if (alreadyInTenant) {
@@ -72,7 +72,7 @@ export class InviteUserToTenantUseCase {
       const roles = await this.roleRepository.findByTenantId(input.tenantId);
       const validRoleIds = roles.map((r) => r.id);
       const invalidRoles = input.roleIds.filter(
-        (id) => !validRoleIds.includes(id)
+        (id) => !validRoleIds.includes(id),
       );
 
       if (invalidRoles.length > 0) {
@@ -98,7 +98,7 @@ export class InviteUserToTenantUseCase {
           .map((r) => r.name);
 
         const appUrl =
-          process.env.NEXT_PUBLIC_APP_URL || "https://app.peopleflow.com";
+          process.env.NEXT_PUBLIC_APP_URL || "https://peopleflow.tech";
 
         const emailData = {
           recipientName: user.name || user.email,
@@ -128,7 +128,7 @@ export class InviteUserToTenantUseCase {
         });
 
         console.log(
-          "Email Data y resultado de la notificacion de invitacion a otro tenant"
+          "Email Data y resultado de la notificacion de invitacion a otro tenant",
         );
 
         console.log({ notificationResult });
