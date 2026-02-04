@@ -16,7 +16,11 @@ import { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 
 export const metadata: Metadata = {
-  title: "PeopleFlow ERP",
+  title: {
+    default: "Dashboard",
+    template: "%s | PeopleFlow",
+  },
+  robots: { index: false, follow: false },
 };
 
 export default function DashboardLayout({

@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import { auth } from "@/core/lib/auth";
 import { headers } from "next/headers";
 import prisma from "@/core/lib/prisma";
 import { redirect } from "next/navigation";
 import { SuperAdminDashboard } from "@/features/super-admin/frontend/pages/SuperAdminDashboard";
+
+export const metadata: Metadata = {
+  title: "Super Admin",
+  description:
+    "Panel de administración global del sistema PeopleFlow. Gestión de tenants, usuarios y configuración del sistema.",
+};
 
 /**
  * Página principal del Super Admin

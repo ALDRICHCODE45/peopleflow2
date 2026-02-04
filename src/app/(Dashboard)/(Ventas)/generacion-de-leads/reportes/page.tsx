@@ -1,3 +1,11 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Reportes de Ventas",
+  description:
+    "Reportes, métricas y análisis del rendimiento comercial y generación de leads.",
+};
+
 export default function GLReportesPagae() {
   return (
     <div className="container mx-auto py-8">

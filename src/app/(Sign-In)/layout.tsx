@@ -1,5 +1,4 @@
 import { FloatingPaths } from "@/features/Auth/frontend/components/floating-paths";
-import Image from "next/image";
 
 export default function SignInLayout({
   children,

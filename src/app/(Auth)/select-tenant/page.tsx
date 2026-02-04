@@ -1,9 +1,16 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { auth } from "@/core/lib/auth";
 import { headers } from "next/headers";
 import prisma from "@/core/lib/prisma";
 import { SelectTenantPage } from "@/features/tenants/frontend/pages/SelectTenantPage";
 import { getDefaultRoute } from "@/core/lib/permissions/get-default-route";
+
+export const metadata: Metadata = {
+  title: "Seleccionar Organización",
+  description:
+    "Selecciona la organización con la que deseas trabajar en PeopleFlow.",
+};
 
 /**
  * Página de selección de tenant
