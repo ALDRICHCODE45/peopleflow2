@@ -94,11 +94,11 @@ export function useSwitchTenant() {
     if (result.error) {
       setError(result.error);
       setIsLoading(false);
-      return false;
+      return null;
     }
 
     setIsLoading(false);
-    return true;
+    return result.redirectUrl || null;
   }, []);
 
   return {

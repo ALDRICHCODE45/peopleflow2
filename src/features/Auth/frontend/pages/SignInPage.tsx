@@ -23,10 +23,91 @@ import {
   PasswordInputAdornmentToggle,
   PasswordInputInput,
 } from "@/core/shared/ui/shadcn/password-input";
+import { useCallback, useEffect, useRef } from "react";
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (
+        container: HTMLElement,
+        options: {
+          sitekey: string;
+          callback?: (token: string) => void;
+          "expired-callback"?: () => void;
+          "error-callback"?: () => void;
+          theme?: "light" | "dark" | "auto";
+          size?: "normal" | "compact";
+        },
+      ) => string;
+      reset: (widgetId: string) => void;
+      getResponse: (widgetId: string) => string | undefined;
+      remove: (widgetId: string) => void;
+    };
+  }
+}
 
 export const SignInPage = () => {
   const { isPending } = useAuth();
-  const form = useSignInForm();
+
+  const turnstileRef = useRef<HTMLDivElement>(null);
+  const widgetIdRef = useRef<string | null>(null);
+  const tokenRef = useRef<string | null>(null);
+
+  const getCaptchaToken = useCallback((): string | null => {
+    return tokenRef.current;
+  }, []);
+
+  const form = useSignInForm(getCaptchaToken);
+
+  const resetTurnstile = useCallback(() => {
+    tokenRef.current = null;
+    if (widgetIdRef.current && window.turnstile) {
+      window.turnstile.reset(widgetIdRef.current);
+    }
+  }, []);
+
+  useEffect(() => {
+    const container = turnstileRef.current;
+    if (!container) return;
+
+    const renderWidget = () => {
+      if (!window.turnstile || widgetIdRef.current) return;
+
+      widgetIdRef.current = window.turnstile.render(container, {
+        sitekey: process.env.NEXT_PUBLIC_CLOUDFLARE_SITE_KEY!,
+        callback: (token: string) => {
+          tokenRef.current = token;
+        },
+        "expired-callback": () => {
+          tokenRef.current = null;
+        },
+        "error-callback": () => {
+          tokenRef.current = null;
+        },
+        theme: "auto",
+      });
+    };
+
+    // The script may already be loaded or still loading
+    if (window.turnstile) {
+      renderWidget();
+    } else {
+      const interval = setInterval(() => {
+        if (window.turnstile) {
+          clearInterval(interval);
+          renderWidget();
+        }
+      }, 100);
+      return () => clearInterval(interval);
+    }
+
+    return () => {
+      if (widgetIdRef.current && window.turnstile) {
+        window.turnstile.remove(widgetIdRef.current);
+        widgetIdRef.current = null;
+      }
+    };
+  }, [isPending]);
 
   if (isPending) {
     return (
@@ -69,7 +150,10 @@ export const SignInPage = () => {
               id="sign-in-form"
               onSubmit={(e) => {
                 e.preventDefault();
-                form.handleSubmit();
+                form.handleSubmit().then(() => {
+                  // Reset turnstile after each submit attempt
+                  resetTurnstile();
+                });
               }}
               className="w-full"
             >
@@ -128,7 +212,11 @@ export const SignInPage = () => {
                 </form.Field>
               </FieldGroup>
 
-              <div className="w-full mt-6">
+              <div className="flex justify-center mt-4">
+                <div ref={turnstileRef} />
+              </div>
+
+              <div className="w-full mt-4">
                 <form.Subscribe selector={(state) => state.isSubmitting}>
                   {(isSubmitting) => (
                     <Button
