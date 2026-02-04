@@ -174,6 +174,40 @@ const FINANZAS_PERMISSIONS: PermissionDefinition[] = [
     description:
       "Gestionar completamente el módulo de egresos (incluye todas las acciones)",
   },
+
+  // Clientes - Granulares
+  {
+    name: "clientes:acceder",
+    resource: "clientes",
+    action: "acceder",
+    description: "Acceder al módulo de clientes",
+  },
+  {
+    name: "clientes:crear",
+    resource: "clientes",
+    action: "crear",
+    description: "Crear nuevos clientes",
+  },
+  {
+    name: "clientes:editar",
+    resource: "clientes",
+    action: "editar",
+    description: "Editar clientes existentes",
+  },
+  {
+    name: "clientes:eliminar",
+    resource: "clientes",
+    action: "eliminar",
+    description: "Eliminar clientes",
+  },
+  // Clientes - Modular
+  {
+    name: "clientes:gestionar",
+    resource: "clientes",
+    action: "gestionar",
+    description:
+      "Gestionar completamente el módulo de clientes (incluye todas las acciones)",
+  },
 ];
 
 /**
@@ -521,6 +555,13 @@ export const PermissionActions = {
     editar: "egresos:editar",
     eliminar: "egresos:eliminar",
     gestionar: "egresos:gestionar",
+  },
+  clientes: {
+    acceder: "clientes:acceder",
+    crear: "clientes:crear",
+    editar: "clientes:editar",
+    eliminar: "clientes:eliminar",
+    gestionar: "clientes:gestionar",
   },
 
   // Módulo: Reclutamiento

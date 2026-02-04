@@ -153,6 +153,7 @@ export async function seedRoles(
   await assignPermissionsToRole(gerenteFinanzasRoleA.id, [
     "ingresos:gestionar",
     "egresos:gestionar",
+    "clientes:gestionar",
   ]);
   await assignPermissionsToRole(gerenteReclutamientoRoleA.id, [
     "vacantes:gestionar",
@@ -176,6 +177,7 @@ export async function seedRoles(
   await assignPermissionsToRole(gerenteFinanzasRoleB.id, [
     "ingresos:gestionar",
     "egresos:gestionar",
+    "clientes:gestionar",
   ]);
   await assignPermissionsToRole(gerenteReclutamientoRoleB.id, [
     "vacantes:gestionar",
