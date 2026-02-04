@@ -1,6 +1,5 @@
 "use client";
 
-import { Badge } from "@shadcn/badge";
 import { ScrollArea, ScrollBar } from "../../ui/shadcn/scroll-area";
 import { cn } from "@lib/utils";
 import { HugeiconsIcon, IconSvgElement } from "@hugeicons/react";
@@ -73,23 +72,11 @@ export function DataTableMultiTabs({
   );
 
   return (
-    <>
-      {/* Mobile with ScrollArea */}
-      <div className="block sm:hidden w-full">
-        <ScrollArea className="w-full">
-          <div className="flex gap-6 min-w-fit border-b border-border">
-            {tabs.map(renderTab)}
-          </div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
+    <ScrollArea className="w-full">
+      <div className="flex gap-6 min-w-fit border-b border-border">
+        {tabs.map(renderTab)}
       </div>
-
-      {/* Desktop */}
-      <div className="hidden sm:block w-full">
-        <div className="flex flex-wrap gap-6 border-b border-border">
-          {tabs.map(renderTab)}
-        </div>
-      </div>
-    </>
+      <ScrollBar orientation="horizontal" />
+    </ScrollArea>
   );
 }
