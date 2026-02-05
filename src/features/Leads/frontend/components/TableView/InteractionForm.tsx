@@ -67,7 +67,10 @@ export function InteractionForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onSubmit(formData);
+    await onSubmit({
+      ...formData,
+      date: new Date(formData.date).toISOString(),
+    });
   };
 
   const handleChange = (field: keyof InteractionFormData, value: string) => {
