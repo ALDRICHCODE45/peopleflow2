@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { format } from "date-fns";
 import { Button } from "@/core/shared/ui/shadcn/button";
 import { Input } from "@/core/shared/ui/shadcn/input";
 import { Label } from "@/core/shared/ui/shadcn/label";
+import { DateTimePicker } from "@/core/shared/ui/shadcn/date-time-picker";
 import { Textarea } from "@/core/shared/ui/shadcn/textarea";
 import {
   Select,
@@ -47,7 +49,7 @@ export function InteractionForm({
     type: initialData?.type ?? "CALL",
     subject: initialData?.subject ?? "",
     content: initialData?.content ?? "",
-    date: initialData?.date ?? new Date().toISOString().slice(0, 16),
+    date: initialData?.date ?? format(new Date(), "yyyy-MM-dd'T'HH:mm"),
   });
 
   // Reset form when initialData changes (for edit mode)
@@ -58,7 +60,7 @@ export function InteractionForm({
         type: initialData.type ?? "CALL",
         subject: initialData.subject ?? "",
         content: initialData.content ?? "",
-        date: initialData.date ?? new Date().toISOString().slice(0, 16),
+        date: initialData.date ?? format(new Date(), "yyyy-MM-dd'T'HH:mm"),
       });
     }
   }, [initialData, contacts, fixedContactId]);
@@ -144,12 +146,10 @@ export function InteractionForm({
       )}
 
       <div className="space-y-2">
-        <Label htmlFor="date">Fecha y hora</Label>
-        <Input
-          id="date"
-          type="datetime-local"
+        <Label>Fecha y hora</Label>
+        <DateTimePicker
           value={formData.date}
-          onChange={(e) => handleChange("date", e.target.value)}
+          onChange={(value) => handleChange("date", value)}
         />
       </div>
 

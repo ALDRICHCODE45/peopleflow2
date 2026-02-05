@@ -47,18 +47,14 @@ export const ContactInteractionDialog = ({
           <DialogHeader>
             <DialogTitle>Ingresa una nueva interaccion</DialogTitle>
             <DialogDescription></DialogDescription>
-            <Card>
-              <CardContent className="pt-4">
-                <InteractionForm
-                  contacts={[contact]}
-                  onSubmit={onSubmit}
-                  onCancel={onCancel}
-                  isLoading={isLoading}
-                  hideContactSelector
-                  fixedContactId={contact.id}
-                />
-              </CardContent>
-            </Card>
+            <InteractionForm
+              contacts={[contact]}
+              onSubmit={onSubmit}
+              onCancel={onCancel}
+              isLoading={isLoading}
+              hideContactSelector
+              fixedContactId={contact.id}
+            />
           </DialogHeader>
         </DialogContent>
       </Dialog>

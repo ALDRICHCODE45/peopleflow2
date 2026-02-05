@@ -1,5 +1,6 @@
 "use client";
 
+import { format } from "date-fns";
 import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
 import {
   Dialog,
@@ -54,7 +55,7 @@ export function EditInteractionDialog({
                 type: interaction.type,
                 subject: interaction.subject,
                 content: interaction.content ?? "",
-                date: new Date(interaction.date).toISOString().slice(0, 16),
+                date: format(new Date(interaction.date), "yyyy-MM-dd'T'HH:mm"),
                 contactId: interaction.contactId,
               }}
             />
