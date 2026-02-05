@@ -1,4 +1,5 @@
 import { createAuthClient } from "better-auth/react";
+import { emailOTPClient } from "better-auth/client/plugins";
 
 /**
  * Cliente de Better Auth para React
@@ -28,4 +29,5 @@ if (!baseURL && process.env.NODE_ENV === "production") {
 export const authClient = createAuthClient({
   // Configura explícitamente la URL base en producción
   baseURL,
+  plugins: [emailOTPClient()],
 });
