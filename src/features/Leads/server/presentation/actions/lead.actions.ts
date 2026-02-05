@@ -89,7 +89,7 @@ export async function createLeadAction(data: {
     const result = await useCase.execute({
       ...data,
       tenantId,
-      createdById: data.assignedToId,
+      createdById: session.user.id,
     });
 
     if (!result.success) {

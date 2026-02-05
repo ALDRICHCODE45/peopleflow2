@@ -37,12 +37,11 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar();
   const { logout } = useAuth();
-  const { setTheme, theme } = useTheme();
+  const { setTheme } = useTheme();
 
   const handleLogout = async () => {
     setTheme("light");
     await logout();
-    console.log({ theme });
   };
 
   const twoFirstNameLetters = user.name.slice(0, 2);

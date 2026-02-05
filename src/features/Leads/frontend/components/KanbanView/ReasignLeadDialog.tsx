@@ -51,7 +51,7 @@ export const ReasignLeadDialog = ({ isOpen, onOpenChange, leadId }: Props) => {
         newUserId: selectedUser,
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

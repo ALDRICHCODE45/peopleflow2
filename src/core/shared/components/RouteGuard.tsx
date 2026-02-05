@@ -145,7 +145,7 @@ export function RouteGuard({ children, fallback }: RouteGuardProps) {
       {/* Overlay de verificación durante navegación - no desmonta children */}
       {isInitialCheck && wasAccessGranted && (
         <div
-          className="flex items-center justify-center min-h-screen bg-white
+          className="absolute inset-0 z-50 flex items-center justify-center bg-white
   dark:bg-background"
         >
           <Spinner className="size-10 text-primary" />

@@ -111,7 +111,7 @@ export class InviteUserToTenantUseCase {
         const htmlTemplate = generateTenantInvitationEmail(emailData);
         const plainText = generateTenantInvitationPlainText(emailData);
 
-        const notificationResult = await this.sendNotificationUseCase.execute({
+        await this.sendNotificationUseCase.execute({
           tenantId: input.tenantId,
           provider: "EMAIL",
           recipient: user.email,
@@ -127,13 +127,6 @@ export class InviteUserToTenantUseCase {
           createdById: input.invitedById,
         });
 
-        console.log(
-          "Email Data y resultado de la notificacion de invitacion a otro tenant",
-        );
-
-        console.log({ notificationResult });
-
-        console.log({ emailData });
       }
 
       return {

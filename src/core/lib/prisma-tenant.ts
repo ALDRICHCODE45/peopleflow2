@@ -6,30 +6,38 @@
  *
  * IMPORTANTE: Este extension es ADICIONAL a la validación en los repositorios.
  * Funciona como una capa de seguridad adicional (defense in depth).
- *
- * Modelos con tenant scoping:
- * - UserRole: Los roles de usuario están asociados a un tenant específico
- *
- * @example
- * ```typescript
- * import { prismaWithTenant } from "@/core/lib/prisma";
- * import { runWithTenant } from "@/core/lib/tenant-context";
- *
- * // Las consultas automáticamente filtran por tenantId
- * const result = await runWithTenant(
- *   { tenantId: "tenant-123", userId: "user-456" },
- *   () => prismaWithTenant.userRole.findMany({})
- * );
- * ```
  */
 
 import { PrismaClient } from "../generated/prisma/client";
 import { getTenantContext } from "./tenant-context";
 
 /**
- * Tipo para las operaciones de Prisma que soportamos
+ * Crea interceptores de tenant scoping para un modelo.
+ * Inyecta tenantId en findMany, findFirst y count cuando hay contexto activo.
  */
-type PrismaOperation = "findMany" | "findFirst" | "findUnique" | "count";
+function createTenantInterceptors() {
+  const injectTenantId = ({ args }: { args: { where?: Record<string, unknown> } }) => {
+    const context = getTenantContext();
+    if (context?.tenantId && args.where?.tenantId === undefined) {
+      args.where = { ...args.where, tenantId: context.tenantId };
+    }
+  };
+
+  return {
+    async findMany({ args, query }: { args: { where?: Record<string, unknown> }; query: (args: unknown) => Promise<unknown> }) {
+      injectTenantId({ args });
+      return query(args);
+    },
+    async findFirst({ args, query }: { args: { where?: Record<string, unknown> }; query: (args: unknown) => Promise<unknown> }) {
+      injectTenantId({ args });
+      return query(args);
+    },
+    async count({ args, query }: { args: { where?: Record<string, unknown> }; query: (args: unknown) => Promise<unknown> }) {
+      injectTenantId({ args });
+      return query(args);
+    },
+  };
+}
 
 /**
  * Crea un Prisma Client con extension para tenant scoping automático
@@ -41,124 +49,19 @@ export function createTenantScopedPrisma(basePrisma: PrismaClient) {
   return basePrisma.$extends({
     name: "tenant-scoping",
     query: {
-      userRole: {
-        /**
-         * Intercepta findMany para inyectar tenantId automáticamente
-         */
-        async findMany({ args, query }) {
-          const context = getTenantContext();
-
-          // Solo inyectar si hay contexto Y tenantId está definido
-          // Y el where no tiene ya un tenantId explícito
-          if (
-            context?.tenantId &&
-            args.where?.tenantId === undefined
-          ) {
-            args.where = {
-              ...args.where,
-              tenantId: context.tenantId,
-            };
-          }
-
-          return query(args);
-        },
-
-        /**
-         * Intercepta findFirst para inyectar tenantId automáticamente
-         */
-        async findFirst({ args, query }) {
-          const context = getTenantContext();
-
-          if (
-            context?.tenantId &&
-            args.where?.tenantId === undefined
-          ) {
-            args.where = {
-              ...args.where,
-              tenantId: context.tenantId,
-            };
-          }
-
-          return query(args);
-        },
-
-        /**
-         * Intercepta count para inyectar tenantId automáticamente
-         */
-        async count({ args, query }) {
-          const context = getTenantContext();
-
-          if (
-            context?.tenantId &&
-            args.where?.tenantId === undefined
-          ) {
-            args.where = {
-              ...args.where,
-              tenantId: context.tenantId,
-            };
-          }
-
-          return query(args);
-        },
-      },
-      vacancy: {
-        /**
-         * Intercepta findMany para inyectar tenantId automáticamente
-         */
-        async findMany({ args, query }) {
-          const context = getTenantContext();
-
-          if (
-            context?.tenantId &&
-            args.where?.tenantId === undefined
-          ) {
-            args.where = {
-              ...args.where,
-              tenantId: context.tenantId,
-            };
-          }
-
-          return query(args);
-        },
-
-        /**
-         * Intercepta findFirst para inyectar tenantId automáticamente
-         */
-        async findFirst({ args, query }) {
-          const context = getTenantContext();
-
-          if (
-            context?.tenantId &&
-            args.where?.tenantId === undefined
-          ) {
-            args.where = {
-              ...args.where,
-              tenantId: context.tenantId,
-            };
-          }
-
-          return query(args);
-        },
-
-        /**
-         * Intercepta count para inyectar tenantId automáticamente
-         */
-        async count({ args, query }) {
-          const context = getTenantContext();
-
-          if (
-            context?.tenantId &&
-            args.where?.tenantId === undefined
-          ) {
-            args.where = {
-              ...args.where,
-              tenantId: context.tenantId,
-            };
-          }
-
-          return query(args);
-        },
-      },
+      userRole: createTenantInterceptors(),
+      vacancy: createTenantInterceptors(),
+      role: createTenantInterceptors(),
+      sector: createTenantInterceptors(),
+      subsector: createTenantInterceptors(),
+      leadOrigin: createTenantInterceptors(),
+      lead: createTenantInterceptors(),
+      contact: createTenantInterceptors(),
+      interaction: createTenantInterceptors(),
+      leadStatusHistory: createTenantInterceptors(),
+      attachment: createTenantInterceptors(),
+      notification: createTenantInterceptors(),
+      client: createTenantInterceptors(),
     },
   });
 }
