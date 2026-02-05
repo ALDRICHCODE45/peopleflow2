@@ -10,9 +10,10 @@ import { prismaUserRoleRepository } from "@/features/auth-rbac/server/infrastruc
  *
  * Flujo:
  * 1. Si no está autenticado → /sign-in
- * 2. Si es super:admin → /super-admin
- * 3. Si tiene múltiples tenants sin seleccionar → /select-tenant
- * 4. Si tiene un solo tenant o ya seleccionó → ruta según permisos
+ * 2. Si email no verificado → /verify-otp
+ * 3. Si es super:admin → /super-admin
+ * 4. Si tiene múltiples tenants sin seleccionar → /select-tenant
+ * 5. Si tiene un solo tenant o ya seleccionó → ruta según permisos
  *
  * IMPORTANTE: Los permisos se obtienen SOLO del tenant activo para evitar
  * permission leakage entre tenants (fix de bug de seguridad).
@@ -24,6 +25,11 @@ export default async function HomePage() {
   // 1. Si no hay sesión, redirigir a sign-in
   if (!session?.user) {
     return redirect("/sign-in");
+  }
+
+  // 2. Si el email no está verificado, redirigir a verificación OTP
+  if (!session.user.emailVerified) {
+    return redirect("/verify-otp");
   }
 
   const userId = session.user.id;

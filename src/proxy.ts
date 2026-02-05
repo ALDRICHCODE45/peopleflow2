@@ -22,14 +22,14 @@ const PUBLIC_PATHS = ["/sign-in", "/api/auth", "/access-denied"];
 /**
  * Rutas que requieren autenticación pero son para flujo de auth
  */
-const AUTH_FLOW_PATHS = ["/select-tenant"];
+const AUTH_FLOW_PATHS = ["/select-tenant", "/verify-otp"];
 
 /**
  * Verifica si es una ruta pública
  */
 function isPublicPath(pathname: string): boolean {
   return PUBLIC_PATHS.some(
-    (path) => pathname === path || pathname.startsWith(path + "/")
+    (path) => pathname === path || pathname.startsWith(path + "/"),
   );
 }
 
@@ -38,7 +38,7 @@ function isPublicPath(pathname: string): boolean {
  */
 function isAuthFlowPath(pathname: string): boolean {
   return AUTH_FLOW_PATHS.some(
-    (path) => pathname === path || pathname.startsWith(path + "/")
+    (path) => pathname === path || pathname.startsWith(path + "/"),
   );
 }
 
