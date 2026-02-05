@@ -98,7 +98,7 @@ export class InviteUserToTenantUseCase {
           .map((r) => r.name);
 
         const appUrl =
-          process.env.NEXT_PUBLIC_APP_URL || "https://peopleflow.tech";
+          process.env.NEXT_PUBLIC_APP_URL || "https://www.peopleflow.tech";
 
         const emailData = {
           recipientName: user.name || user.email,

@@ -44,7 +44,7 @@ export class UpdateLeadStatusUseCase {
   constructor(
     private readonly leadRepository: ILeadRepository,
     private readonly leadStatusHistoryRepository: ILeadStatusHistoryRepository,
-    private readonly clientRepository?: IClientRepository
+    private readonly clientRepository?: IClientRepository,
   ) {}
 
   async execute(input: UpdateLeadStatusInput): Promise<UpdateLeadStatusOutput> {
@@ -52,7 +52,7 @@ export class UpdateLeadStatusUseCase {
       // Obtener el lead actual
       const lead = await this.leadRepository.findById(
         input.leadId,
-        input.tenantId
+        input.tenantId,
       );
 
       if (!lead) {
@@ -104,7 +104,7 @@ export class UpdateLeadStatusUseCase {
         input.leadId,
         input.tenantId,
         input.newStatus,
-        input.userId
+        input.userId,
       );
 
       if (!updatedLead) {
@@ -128,7 +128,7 @@ export class UpdateLeadStatusUseCase {
         try {
           const existingClient = await this.clientRepository.findByLeadId(
             input.leadId,
-            input.tenantId
+            input.tenantId,
           );
 
           if (!existingClient) {
@@ -161,13 +161,13 @@ export class UpdateLeadStatusUseCase {
           if (assignedUser?.email) {
             const notificationUseCase = new SendNotificationUseCase(
               prismaNotificationRepository,
-              [emailProvider]
+              [emailProvider],
             );
 
             const emailData = {
               recipientName: assignedUser.name || "Usuario",
               leadName: updatedLead.companyName,
-              appUrl: "https://peopleflow.space",
+              appUrl: "https://www.peopleflow.tech",
             };
 
             const htmlTemplate = generateLeadToClientConversionEmail(emailData);
@@ -195,7 +195,7 @@ export class UpdateLeadStatusUseCase {
           // Log error but don't fail the status update
           console.error(
             "Error sending conversion notification:",
-            notificationError
+            notificationError,
           );
         }
       }
@@ -211,14 +211,14 @@ export class UpdateLeadStatusUseCase {
           if (assignedUser?.email) {
             const notificationUseCase = new SendNotificationUseCase(
               prismaNotificationRepository,
-              [emailProvider]
+              [emailProvider],
             );
 
             const emailData = {
               recipientName: assignedUser.name || "Usuario",
               leadName: updatedLead.companyName,
               newStatus: "Contacto Calido",
-              appUrl: "https://peopleflow.space",
+              appUrl: "https://www.peopleflow.tech",
             };
 
             const htmlTemplate = generateLeadStatusChangeEmail(emailData);
