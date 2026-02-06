@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -21,39 +20,14 @@ import {
 import { useIsMobile } from "@/core/shared/hooks/use-mobile";
 import { useUserSheetForm } from "../hooks/useUserSheetForm";
 import type { TenantUser } from "../types";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/core/shared/ui/shadcn/avatar";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/core/shared/ui/shadcn/dialog";
-import { Separator } from "@/core/shared/ui/shadcn/separator";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/core/shared/ui/shadcn/tooltip";
 import { Field, FieldError, FieldLabel } from "@/core/shared/ui/shadcn/field";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { Camera01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
+import { AvatarPicker } from "./AvatarPicker";
 
 interface UserSheetFormProps {
   user?: TenantUser;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
-
-const avatarOptions = Array.from({ length: 19 }, (_, i) => ({
-  id: String(i + 1),
-  label: `Avatar ${i + 1}`,
-  image: `/avatars/avatar${i + 1}.webp`,
-}));
 
 export function UserSheetForm({
   user,
@@ -62,7 +36,6 @@ export function UserSheetForm({
 }: UserSheetFormProps) {
   const isMobile = useIsMobile();
   const sheetSide = isMobile ? "bottom" : "right";
-  const [avatarDialogOpen, setAvatarDialogOpen] = useState(false);
 
   const { form, roles, isEditing, isSubmitting } = useUserSheetForm({
     user,
@@ -98,103 +71,10 @@ export function UserSheetForm({
           <div className="flex flex-col items-center gap-3 pb-2">
             <form.Field name="avatar">
               {(field) => (
-                <Dialog
-                  open={avatarDialogOpen}
-                  onOpenChange={setAvatarDialogOpen}
-                >
-                  <DialogTrigger asChild>
-                    <button
-                      type="button"
-                      className="group relative rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                    >
-                      <Avatar className="size-20 ring-2 ring-border transition-all group-hover:ring-primary/50 group-hover:scale-105">
-                        {field.state.value ? (
-                          <AvatarImage
-                            src={field.state.value}
-                            alt="Avatar seleccionado"
-                          />
-                        ) : (
-                          <AvatarFallback className="bg-muted text-muted-foreground">
-                            <HugeiconsIcon
-                              icon={Camera01Icon}
-                              className="size-6"
-                            />
-                          </AvatarFallback>
-                        )}
-                      </Avatar>
-                      <span className="absolute -bottom-1 -right-1 flex size-7 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm transition-transform group-hover:scale-110">
-                        <HugeiconsIcon
-                          icon={Camera01Icon}
-                          className="size-3.5"
-                        />
-                      </span>
-                    </button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-md">
-                    <DialogHeader>
-                      <DialogTitle>Elige un avatar</DialogTitle>
-                    </DialogHeader>
-                    <Separator />
-                    <div className="grid grid-cols-5 gap-3 py-2">
-                      {avatarOptions.map((avatar) => {
-                        const isSelected = field.state.value === avatar.image;
-                        return (
-                          <Tooltip key={avatar.id}>
-                            <TooltipTrigger asChild>
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  field.handleChange(avatar.image);
-                                  setAvatarDialogOpen(false);
-                                }}
-                                className={`relative size-14 rounded-full p-1 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-                                  isSelected
-                                    ? "ring-2 ring-primary scale-110"
-                                    : "hover:ring-2 hover:ring-muted-foreground/30 hover:scale-105"
-                                }`}
-                              >
-                                <Avatar className="size-full">
-                                  <AvatarImage
-                                    src={avatar.image}
-                                    alt={avatar.label}
-                                  />
-                                  <AvatarFallback className="text-[10px]">
-                                    {avatar.id}
-                                  </AvatarFallback>
-                                </Avatar>
-                                {isSelected && (
-                                  <span className="absolute -bottom-0.5 -right-0.5 flex size-5 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm">
-                                    <HugeiconsIcon
-                                      icon={Tick02Icon}
-                                      className="size-3"
-                                    />
-                                  </span>
-                                )}
-                              </button>
-                            </TooltipTrigger>
-                            <TooltipContent side="bottom" className="text-xs">
-                              {avatar.label}
-                            </TooltipContent>
-                          </Tooltip>
-                        );
-                      })}
-                    </div>
-                    {field.state.value && (
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="mx-auto w-fit text-muted-foreground"
-                        onClick={() => {
-                          field.handleChange("");
-                          setAvatarDialogOpen(false);
-                        }}
-                      >
-                        Quitar avatar
-                      </Button>
-                    )}
-                  </DialogContent>
-                </Dialog>
+                <AvatarPicker
+                  currentAvatar={field.state.value}
+                  onAvatarChange={field.handleChange}
+                />
               )}
             </form.Field>
             <p className="text-xs text-muted-foreground">
@@ -313,20 +193,13 @@ export function UserSheetForm({
             >
               Cancelar
             </Button>
-            <form.Subscribe selector={(state) => state.isSubmitting}>
-              {(formIsSubmitting) => (
-                <Button
-                  type="submit"
-                  disabled={isSubmitting || formIsSubmitting}
-                >
-                  {isSubmitting || formIsSubmitting
-                    ? "Guardando..."
-                    : isEditing
-                      ? "Guardar Cambios"
-                      : "Crear Usuario"}
-                </Button>
-              )}
-            </form.Subscribe>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting
+                ? "Guardando..."
+                : isEditing
+                  ? "Guardar Cambios"
+                  : "Crear Usuario"}
+            </Button>
           </SheetFooter>
         </form>
       </SheetContent>
