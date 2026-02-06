@@ -2,11 +2,7 @@ import z from "zod";
 
 const avatarPattern = /^\/avatars\/.*\.webp$/;
 
-const avatarField = z
-  .string()
-  .refine((val) => val === "" || avatarPattern.test(val), {
-    message: "Avatar no válido.",
-  });
+const avatarField = z.string();
 
 export const createUserSchema = z.object({
   email: z.email("El correo electrónico no es válido."),
