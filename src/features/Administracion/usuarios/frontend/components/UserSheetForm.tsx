@@ -50,20 +50,21 @@ export function UserSheetForm({
         side={sheetSide}
       >
         <SheetHeader>
-          {/* DEBUG: Eliminar después de solucionar */}
-          <div>
-            <p>Avatar Value: {JSON.stringify(form.state.values.avatar)}</p>
-            <p>Form Valid: {JSON.stringify(form.state.isValid)}</p>
-            <p>Is Submitting: {JSON.stringify(isSubmitting)}</p>
-            <p>Errors: {JSON.stringify(form.state.errors)}</p>
-          </div>
           <SheetTitle>
             {isEditing ? "Editar Usuario" : "Nuevo Usuario"}
           </SheetTitle>
           <SheetDescription>
             {isEditing
-              ? "Modifica los datos del usuario"
+              ? "Modifica los datos del usuarioooo"
               : "Completa los datos para crear un nuevo usuario"}
+
+            {/* DEBUG: Eliminar después de solucionar */}
+            <div>
+              <p>Avatar Value: {JSON.stringify(form.state.values.avatar)}</p>
+              <p>Form Valid: {JSON.stringify(form.state.isValid)}</p>
+              <p>Is Submitting: {JSON.stringify(isSubmitting)}</p>
+              <p>Errors: {JSON.stringify(form.state.errors)}</p>
+            </div>
           </SheetDescription>
         </SheetHeader>
 
