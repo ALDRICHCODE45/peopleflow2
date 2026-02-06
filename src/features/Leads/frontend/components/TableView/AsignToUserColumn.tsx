@@ -45,7 +45,7 @@ export const AsignToUserColumn = ({ userId }: Props) => {
   return (
     <div className="flex items-center gap-3 max-w-[200px]">
       <Avatar className="h-10 w-10 flex-shrink-0">
-        <AvatarImage src={user.image ?? undefined} alt={user.name} />
+        <AvatarImage src={user.avatar ?? undefined} alt={user.name} />
         <AvatarFallback>{initials}</AvatarFallback>
       </Avatar>
       <div className="min-w-0 flex-1">
