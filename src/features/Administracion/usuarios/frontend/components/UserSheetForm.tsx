@@ -67,20 +67,23 @@ export function UserSheetForm({
           }}
           className="space-y-4 p-4"
         >
-          {/* Avatar Picker */}
-          <div className="flex flex-col items-center gap-3 pb-2">
-            <form.Field name="avatar">
-              {(field) => (
+          <form.Field name="avatar">
+            {(field) => (
+              <div className="flex flex-col items-center gap-3 pb-2">
                 <AvatarPicker
                   currentAvatar={field.state.value}
                   onAvatarChange={field.handleChange}
                 />
-              )}
-            </form.Field>
-            <p className="text-xs text-muted-foreground">
-              Haz clic para elegir un avatar
-            </p>
-          </div>
+                {field.state.meta.errors ? (
+                  <FieldError errors={field.state.meta.errors} />
+                ) : (
+                  <p className="text-xs text-muted-foreground">
+                    Haz clic para elegir un avatar
+                  </p>
+                )}
+              </div>
+            )}
+          </form.Field>
 
           {/* Email Field */}
           <form.Field name="email">

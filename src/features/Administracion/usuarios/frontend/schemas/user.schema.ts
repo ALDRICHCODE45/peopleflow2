@@ -1,6 +1,6 @@
 import z from "zod";
 
-const avatarPattern = /^\/avatars\/avatar\d+\.webp$/;
+const avatarPattern = /^\/avatars\/.*\.webp$/;
 
 const avatarField = z
   .string()
