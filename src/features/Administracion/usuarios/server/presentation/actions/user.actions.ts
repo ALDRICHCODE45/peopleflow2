@@ -182,7 +182,7 @@ export const getUserById = async (data: {
  * Crea un nuevo usuario y opcionalmente lo asigna al tenant actual
  * SEGURIDAD: Valida que el creador tenga todos los permisos del rol a asignar
  */
-const VALID_AVATAR_PATTERN = /^\/avatars\/avatar([1-9]|1[0-9]|2[0-8])\.webp$/;
+const VALID_AVATAR_PATTERN = /^\/avatars\/avatar\d+\.webp$/;
 
 export async function createUserAction(data: {
   email: string;
