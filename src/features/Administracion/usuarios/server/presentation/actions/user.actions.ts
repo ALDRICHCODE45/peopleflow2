@@ -337,10 +337,14 @@ export async function updateUserAction(
       return { error: "No autenticado" };
     }
 
+    console.log("Antes de la validacion en la accion", data.avatar);
     // Validar avatar si se proporciona
     if (data.avatar && !VALID_AVATAR_PATTERN.test(data.avatar)) {
+      console.log("No paso la validacion en la accion");
       return { error: "Avatar no válido" };
+      // Validar avatar si se proporciona
     }
+    console.log("Paso la validacion en la accion", data.avatar);
 
     // Obtener tenant activo
     const tenantResult = await getCurrentTenantAction();

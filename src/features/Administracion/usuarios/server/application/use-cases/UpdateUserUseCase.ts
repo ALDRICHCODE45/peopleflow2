@@ -34,14 +34,15 @@ export class UpdateUserUseCase {
     try {
       // Verificar permisos: superadmin o pertenece al tenant
       const isSuperAdmin = await this.userRoleRepository.isSuperAdmin(
-        input.requestingUserId
+        input.requestingUserId,
       );
 
       if (!isSuperAdmin) {
-        const belongsToTenant = await this.userRoleRepository.userBelongsToTenant(
-          input.requestingUserId,
-          input.tenantId
-        );
+        const belongsToTenant =
+          await this.userRoleRepository.userBelongsToTenant(
+            input.requestingUserId,
+            input.tenantId,
+          );
 
         if (!belongsToTenant) {
           return {
@@ -65,10 +66,11 @@ export class UpdateUserUseCase {
 
       // Verificar que el usuario pertenece al tenant (excepto si es superadmin)
       if (!isSuperAdmin) {
-        const userBelongsToTenant = await this.userRoleRepository.userBelongsToTenant(
-          input.userId,
-          input.tenantId
-        );
+        const userBelongsToTenant =
+          await this.userRoleRepository.userBelongsToTenant(
+            input.userId,
+            input.tenantId,
+          );
 
         if (!userBelongsToTenant) {
           return {
@@ -101,11 +103,17 @@ export class UpdateUserUseCase {
         updateData.email = input.email;
       }
       if (input.avatar !== undefined) {
+        console.log("en el caso de uso avatar es valido");
         updateData.avatar = input.avatar;
       }
 
+      console.log(
+        "avatar despues de validarla en el casao de uso",
+        input.avatar,
+      );
       // Si no hay nada que actualizar
       if (Object.keys(updateData).length === 0) {
+        console.log("No hay nada que actualizar", input.avatar);
         return {
           success: false,
           error: "No se proporcionaron datos para actualizar",
@@ -117,6 +125,12 @@ export class UpdateUserUseCase {
         where: { id: input.userId },
         data: updateData,
       });
+
+      console.log(
+        { updatedUser },
+        "user regresado despues de actualizarlo",
+        updatedUser.avatar,
+      );
 
       return {
         success: true,

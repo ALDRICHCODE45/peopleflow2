@@ -119,6 +119,7 @@ export function useUpdateUser() {
       userId: string;
       data: UpdateUserData;
     }) => {
+      console.log("data desde el useUpdateMutation", { data });
       const result = await updateUserAction(userId, data);
       if (result.error) {
         throw new Error(result.error);

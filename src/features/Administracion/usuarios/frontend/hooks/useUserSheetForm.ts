@@ -34,6 +34,12 @@ export function useUserSheetForm({
     },
     onSubmit: async ({ value }) => {
       if (isEditing) {
+        console.log({
+          nombre: value.name || "No hay nombre",
+          email: value.email || "No hay email",
+          avatar: value.avatar || "No hay avatar",
+        });
+
         await updateUserMutation.mutateAsync({
           userId: user.id,
           data: {
@@ -43,6 +49,12 @@ export function useUserSheetForm({
           },
         });
       } else {
+        console.log({
+          nombre: value.name || "No hay nombre",
+          email: value.email || "No hay email",
+          avatar: value.avatar || "No hay avatar",
+        });
+
         await createUserMutation.mutateAsync({
           email: value.email,
           password: value.password,
@@ -59,7 +71,6 @@ export function useUserSheetForm({
     form,
     roles,
     isEditing,
-    isSubmitting:
-      createUserMutation.isPending || updateUserMutation.isPending,
+    isSubmitting: createUserMutation.isPending || updateUserMutation.isPending,
   };
 }
