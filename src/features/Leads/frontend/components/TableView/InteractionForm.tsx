@@ -69,7 +69,7 @@ export function InteractionForm({
     e.preventDefault();
     await onSubmit({
       ...formData,
-      date: new Date(formData.date).toISOString(),
+      date: formData.date ? new Date(formData.date).toISOString() : formData.date,
     });
   };
 
