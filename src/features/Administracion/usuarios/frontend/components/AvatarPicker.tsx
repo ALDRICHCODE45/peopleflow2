@@ -1,7 +1,6 @@
 "use client";
 
 import React, { memo, useCallback } from "react";
-import { Tooltip as TooltipPrimitive } from "radix-ui";
 import {
   Dialog,
   DialogContent,
@@ -11,7 +10,7 @@ import {
 } from "@/core/shared/ui/shadcn/dialog";
 import { Separator } from "@/core/shared/ui/shadcn/separator";
 import {
-  TooltipProvider,
+  Tooltip,
   TooltipTrigger,
   TooltipContent,
 } from "@/core/shared/ui/shadcn/tooltip";
@@ -48,7 +47,7 @@ const AvatarOption = memo(function AvatarOption({
   }, [onSelect, avatar.image]);
 
   return (
-    <TooltipPrimitive.Root>
+    <Tooltip>
       <TooltipTrigger asChild>
         <button
           type="button"
@@ -77,7 +76,7 @@ const AvatarOption = memo(function AvatarOption({
       <TooltipContent side="bottom" className="text-xs">
         {avatar.label}
       </TooltipContent>
-    </TooltipPrimitive.Root>
+    </Tooltip>
   );
 });
 
@@ -142,18 +141,16 @@ export const AvatarPicker = memo(function AvatarPicker({
           <DialogTitle>Elige un avatar</DialogTitle>
         </DialogHeader>
         <Separator />
-        <TooltipProvider>
-          <div className="grid grid-cols-5 gap-3 py-2">
-            {avatarOptions.map((avatar) => (
-              <AvatarOption
-                key={avatar.id}
-                avatar={avatar}
-                isSelected={currentAvatar === avatar.image}
-                onSelect={handleSelect}
-              />
-            ))}
-          </div>
-        </TooltipProvider>
+        <div className="grid grid-cols-5 gap-3 py-2">
+          {avatarOptions.map((avatar) => (
+            <AvatarOption
+              key={avatar.id}
+              avatar={avatar}
+              isSelected={currentAvatar === avatar.image}
+              onSelect={handleSelect}
+            />
+          ))}
+        </div>
         {currentAvatar && (
           <Button
             type="button"
