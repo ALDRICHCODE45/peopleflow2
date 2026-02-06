@@ -50,6 +50,13 @@ export function UserSheetForm({
         side={sheetSide}
       >
         <SheetHeader>
+          {/* DEBUG: Eliminar después de solucionar */}
+          <div>
+            <p>Avatar Value: {JSON.stringify(form.state.values.avatar)}</p>
+            <p>Form Valid: {JSON.stringify(form.state.isValid)}</p>
+            <p>Is Submitting: {JSON.stringify(isSubmitting)}</p>
+            <p>Errors: {JSON.stringify(form.state.errors)}</p>
+          </div>
           <SheetTitle>
             {isEditing ? "Editar Usuario" : "Nuevo Usuario"}
           </SheetTitle>
@@ -188,14 +195,6 @@ export function UserSheetForm({
           )}
 
           <SheetFooter className="pt-4">
-            {/* DEBUG: Eliminar después de solucionar */}
-            <div className="w-full text-[10px] font-mono bg-muted p-2 rounded mb-2 overflow-auto max-h-20">
-              <p>Avatar Value: {JSON.stringify(form.state.values.avatar)}</p>
-              <p>Form Valid: {JSON.stringify(form.state.isValid)}</p>
-              <p>Is Submitting: {JSON.stringify(isSubmitting)}</p>
-              <p>Errors: {JSON.stringify(form.state.errors)}</p>
-            </div>
-            
             <Button
               type="button"
               variant="outline"
