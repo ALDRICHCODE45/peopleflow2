@@ -11,6 +11,7 @@ export interface UserWithRoles {
   email: string;
   name: string | null;
   image: string | null;
+  avatar: string | null;
   roles: Array<{ id: string; name: string }>;
   createdAt?: Date;
 }
@@ -81,7 +82,7 @@ export interface IUserRoleRepository {
    */
   findUserById(
     userId: string
-  ): Promise<{ name: string; id: string; email: string; image: string | null } | null>;
+  ): Promise<{ name: string; id: string; email: string; image: string | null; avatar: string | null } | null>;
 
   /**
    * Obtiene todos los permisos de un usuario en un tenant específico

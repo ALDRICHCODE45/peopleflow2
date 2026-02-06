@@ -7,6 +7,8 @@ import { userLoginSchema } from "../schemas/userLoginSchema";
 import { authClient } from "@lib/auth-client";
 import { setOTPVerificationEmail } from "./useVerifyOTPForm";
 
+const isDev = process.env.NODE_ENV !== "production";
+
 export function useSignInForm(getCaptchaToken: () => string | null) {
   const { login } = useAuth();
   const router = useRouter();
@@ -20,16 +22,19 @@ export function useSignInForm(getCaptchaToken: () => string | null) {
       onSubmit: userLoginSchema,
     },
     onSubmit: async ({ value }) => {
-      const token = getCaptchaToken();
-      if (!token) {
-        showToast({
-          type: "error",
-          title: "Captcha requerido",
-          description: "Por favor, completa la verificación de seguridad.",
-        });
-        return;
+      if (!isDev) {
+        const token = getCaptchaToken();
+        if (!token) {
+          showToast({
+            type: "error",
+            title: "Captcha requerido",
+            description: "Por favor, completa la verificación de seguridad.",
+          });
+          return;
+        }
       }
 
+      const token = isDev ? undefined : getCaptchaToken() ?? undefined;
       const result = await login(value.email, value.password, token);
 
       if (!result.success) {
@@ -38,6 +43,12 @@ export function useSignInForm(getCaptchaToken: () => string | null) {
           title: "Error de autenticacion",
           description: result.error || "Credenciales incorrectas",
         });
+        return;
+      }
+
+      // In development, skip OTP and redirect directly to dashboard
+      if (isDev) {
+        router.push("/");
         return;
       }
 

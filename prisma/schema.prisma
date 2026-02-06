@@ -17,6 +17,7 @@ model User {
   id            String     @id @default(cuid())
   email         String     @unique
   name          String?
+  avatar        String?
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
   emailVerified Boolean    @default(false)
@@ -26,11 +27,11 @@ model User {
   userRoles     UserRole[]
 
   // Relaciones con módulo de Leads
-  leadsAssigned      Lead[]              @relation("LeadAssignedTo")
-  leadsCreated       Lead[]              @relation("LeadCreatedBy")
-  leadStatusChanges  LeadStatusHistory[]
-  interactions       Interaction[]
-  attachments        Attachment[]
+  leadsAssigned     Lead[]              @relation("LeadAssignedTo")
+  leadsCreated      Lead[]              @relation("LeadCreatedBy")
+  leadStatusChanges LeadStatusHistory[]
+  interactions      Interaction[]
+  attachments       Attachment[]
 
   // Relaciones con módulo de Notificaciones
   notificationsCreated Notification[] @relation("NotificationCreatedBy")
@@ -241,13 +242,13 @@ enum AttachableType {
 // =============================================
 
 model Sector {
-  id        String      @id @default(uuid())
+  id        String   @id @default(uuid())
   name      String
-  isActive  Boolean     @default(true)
+  isActive  Boolean  @default(true)
   tenantId  String?
-  tenant    Tenant?     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  tenant    Tenant?  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   subsectors Subsector[]
   leads      Lead[]
@@ -302,22 +303,22 @@ model LeadOrigin {
 // =============================================
 
 model Lead {
-  id            String     @id @default(uuid())
+  id                    String     @id @default(uuid())
   companyName           String
-  normalizedCompanyName String @default("")
+  normalizedCompanyName String     @default("")
   website               String?
-  linkedInUrl   String?
-  address       String?
-  subOrigin     String?
-  employeeCount String?
-  notes         String?    @db.Text
-  status        LeadStatus @default(CONTACTO)
+  linkedInUrl           String?
+  address               String?
+  subOrigin             String?
+  employeeCount         String?
+  notes                 String?    @db.Text
+  status                LeadStatus @default(CONTACTO)
 
   // Relaciones con catálogos
   sectorId    String?
-  sector      Sector?    @relation(fields: [sectorId], references: [id], onDelete: SetNull)
+  sector      Sector?     @relation(fields: [sectorId], references: [id], onDelete: SetNull)
   subsectorId String?
-  subsector   Subsector? @relation(fields: [subsectorId], references: [id], onDelete: SetNull)
+  subsector   Subsector?  @relation(fields: [subsectorId], references: [id], onDelete: SetNull)
   originId    String?
   origin      LeadOrigin? @relation(fields: [originId], references: [id], onDelete: SetNull)
 
@@ -381,15 +382,15 @@ model LeadStatusHistory {
 }
 
 model Contact {
-  id           String   @id @default(uuid())
-  firstName    String
-  lastName     String
-  email        String?
-  phone        String?
-  position     String?
-  linkedInUrl  String?
-  isPrimary    Boolean  @default(false)
-  notes        String?  @db.Text
+  id          String  @id @default(uuid())
+  firstName   String
+  lastName    String
+  email       String?
+  phone       String?
+  position    String?
+  linkedInUrl String?
+  isPrimary   Boolean @default(false)
+  notes       String? @db.Text
 
   // Relación con Lead (Aggregate Root)
   leadId String
@@ -414,11 +415,11 @@ model Contact {
 }
 
 model Interaction {
-  id        String   @id @default(uuid())
-  type      String   // "CALL", "EMAIL", "MEETING", "NOTE", "LINKEDIN", etc.
-  subject   String
-  content   String?  @db.Text
-  date      DateTime @default(now())
+  id      String   @id @default(uuid())
+  type    String // "CALL", "EMAIL", "MEETING", "NOTE", "LINKEDIN", etc.
+  subject String
+  content String?  @db.Text
+  date    DateTime @default(now())
 
   // Relación con Contact
   contactId String
@@ -516,17 +517,17 @@ model Vacancy {
 // =============================================
 
 model Notification {
-  id        String               @id @default(uuid())
-  tenantId  String
-  tenant    Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  id       String @id @default(uuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-  provider  NotificationProvider
-  status    NotificationStatus   @default(PENDING)
-  priority  NotificationPriority @default(MEDIUM)
+  provider NotificationProvider
+  status   NotificationStatus   @default(PENDING)
+  priority NotificationPriority @default(MEDIUM)
 
   recipient String
   subject   String?
-  body      String               @db.Text
+  body      String  @db.Text
   metadata  Json?
 
   sentAt     DateTime?

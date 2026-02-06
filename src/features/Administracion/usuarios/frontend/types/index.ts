@@ -6,6 +6,7 @@ export interface TenantUser {
   id: string;
   email: string;
   name: string | null;
+  avatar?: string | null;
   roles: Array<{ id: string; name: string }>;
   createdAt?: Date;
 }
@@ -15,11 +16,13 @@ export interface CreateUserData {
   password: string;
   name: string;
   roleId?: string;
+  avatar?: string;
 }
 
 export interface UpdateUserData {
   name?: string;
   email?: string;
+  avatar?: string;
 }
 
 // Result types from server actions
@@ -30,12 +33,12 @@ export interface GetTenantUsersResult {
 
 export interface CreateUserResult {
   error: string | null;
-  user?: { id: string; email: string; name: string | null };
+  user?: { id: string; email: string; name: string | null; avatar?: string | null };
 }
 
 export interface UpdateUserResult {
   error: string | null;
-  user?: { id: string; email: string; name: string | null };
+  user?: { id: string; email: string; name: string | null; avatar?: string | null };
 }
 
 export interface DeleteUserResult {

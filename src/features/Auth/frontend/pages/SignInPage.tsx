@@ -21,6 +21,8 @@ import {
 import { useCallback, useEffect, useRef } from "react";
 import CookieConsent from "@/core/shared/components/cookie-consent";
 
+const isDev = process.env.NODE_ENV !== "production";
+
 declare global {
   interface Window {
     turnstile?: {
@@ -63,6 +65,8 @@ export const SignInPage = () => {
   }, []);
 
   useEffect(() => {
+    if (isDev) return;
+
     const container = turnstileRef.current;
     if (!container) return;
 
@@ -211,9 +215,11 @@ export const SignInPage = () => {
                   </form.Field>
                 </FieldGroup>
 
-                <div className="flex justify-center mt-4">
-                  <div ref={turnstileRef} />
-                </div>
+                {!isDev && (
+                  <div className="flex justify-center mt-4">
+                    <div ref={turnstileRef} />
+                  </div>
+                )}
 
                 <div className="w-full mt-4">
                   <form.Subscribe selector={(state) => state.isSubmitting}>

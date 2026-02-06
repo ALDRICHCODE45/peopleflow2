@@ -7,7 +7,7 @@ export interface GetUserByIdUseCaseInput {
 export interface GetUserByIdUseCaseOutput {
   success: boolean;
   error?: string;
-  user?: { name: string; email: string; image: string | null; id: string };
+  user?: { name: string; email: string; image: string | null; avatar: string | null; id: string };
 }
 
 export class GetUserByIdUseCase {

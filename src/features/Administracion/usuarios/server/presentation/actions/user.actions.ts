@@ -35,6 +35,7 @@ export interface TenantUser {
   id: string;
   email: string;
   name: string | null;
+  avatar?: string | null;
   roles: Array<{ id: string; name: string }>;
   createdAt?: Date;
 }
@@ -46,12 +47,12 @@ export interface GetTenantUsersResult {
 
 export interface CreateUserResult {
   error: string | null;
-  user?: { id: string; email: string; name: string | null };
+  user?: { id: string; email: string; name: string | null; avatar?: string | null };
 }
 
 export interface UpdateUserResult {
   error: string | null;
-  user?: { id: string; email: string; name: string | null };
+  user?: { id: string; email: string; name: string | null; avatar?: string | null };
 }
 
 export interface DeleteUserResult {
@@ -89,7 +90,7 @@ export interface InviteToTenantResult {
 export interface getUserByIdResult {
   error: string | null;
   success: boolean;
-  user?: { id: string; name: string; image: string | null; email: string };
+  user?: { id: string; name: string; image: string | null; avatar: string | null; email: string };
 }
 
 /**
@@ -165,11 +166,14 @@ export const getUserById = async (data: {
  * Crea un nuevo usuario y opcionalmente lo asigna al tenant actual
  * SEGURIDAD: Valida que el creador tenga todos los permisos del rol a asignar
  */
+const VALID_AVATAR_PATTERN = /^\/avatars\/avatar([1-9]|1[0-9])\.webp$/;
+
 export async function createUserAction(data: {
   email: string;
   password: string;
   name: string;
   roleId?: string;
+  avatar?: string;
 }): Promise<CreateUserResult> {
   try {
     const headersList = await headers();
@@ -177,6 +181,11 @@ export async function createUserAction(data: {
 
     if (!session?.user) {
       return { error: "No autenticado" };
+    }
+
+    // Validar avatar si se proporciona
+    if (data.avatar && !VALID_AVATAR_PATTERN.test(data.avatar)) {
+      return { error: "Avatar no válido" };
     }
 
     // Verificar permisos
@@ -270,8 +279,27 @@ export async function createUserAction(data: {
       });
     }
 
+    // Actualizar avatar si se proporciona (graceful degradation)
+    let userAvatar: string | null = null;
+    if (data.avatar && createResult.user) {
+      try {
+        await prisma.user.update({
+          where: { id: createResult.user.id },
+          data: { avatar: data.avatar },
+        });
+        userAvatar = data.avatar;
+      } catch (avatarError) {
+        console.error("Error setting avatar:", avatarError);
+      }
+    }
+
     revalidatePath("/admin/usuarios");
-    return { error: null, user: createResult.user };
+    return {
+      error: null,
+      user: createResult.user
+        ? { ...createResult.user, avatar: userAvatar }
+        : undefined,
+    };
   } catch (error) {
     console.error("Error in createUserAction:", error);
     return { error: "Error al crear usuario" };
@@ -283,7 +311,7 @@ export async function createUserAction(data: {
  */
 export async function updateUserAction(
   userId: string,
-  data: { name?: string; email?: string }
+  data: { name?: string; email?: string; avatar?: string }
 ): Promise<UpdateUserResult> {
   try {
     const headersList = await headers();
@@ -291,6 +319,11 @@ export async function updateUserAction(
 
     if (!session?.user) {
       return { error: "No autenticado" };
+    }
+
+    // Validar avatar si se proporciona
+    if (data.avatar && !VALID_AVATAR_PATTERN.test(data.avatar)) {
+      return { error: "Avatar no válido" };
     }
 
     // Obtener tenant activo
@@ -306,6 +339,7 @@ export async function updateUserAction(
       requestingUserId: session.user.id,
       name: data.name,
       email: data.email,
+      avatar: data.avatar,
     });
 
     if (!result.success) {

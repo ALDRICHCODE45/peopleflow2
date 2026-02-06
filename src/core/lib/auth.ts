@@ -8,6 +8,8 @@ import {
   generateOTPVerificationPlainText,
 } from "@features/Notifications/server/infrastructure/templates/otpVerificationTemplate";
 
+const isDev = process.env.NODE_ENV !== "production";
+
 // Create email transporter for OTP emails
 const otpEmailTransporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -44,10 +46,14 @@ export const auth = betterAuth({
     enabled: true, // Habilita autenticación con email y contraseña
   },
   plugins: [
-    captcha({
-      provider: "cloudflare-turnstile",
-      secretKey: process.env.CLOUDFLARE_SECRET_KEY!,
-    }),
+    ...(isDev
+      ? []
+      : [
+          captcha({
+            provider: "cloudflare-turnstile",
+            secretKey: process.env.CLOUDFLARE_SECRET_KEY!,
+          }),
+        ]),
     emailOTP({
       otpLength: 6,
       expiresIn: 300, // 5 minutes

@@ -99,6 +99,7 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
           email: userRole.user.email,
           name: userRole.user.name,
           image: userRole.user.image,
+          avatar: userRole.user.avatar,
           roles: [],
         });
       }
@@ -113,7 +114,7 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
 
   async findUserById(
     userId: string
-  ): Promise<{ name: string; id: string; image: string | null; email: string } | null> {
+  ): Promise<{ name: string; id: string; image: string | null; avatar: string | null; email: string } | null> {
     const user = await prisma.user.findUnique({
       where: {
         id: userId,
@@ -125,6 +126,7 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
     return {
       name: user.name ?? "",
       image: user.image,
+      avatar: user.avatar,
       email: user.email,
       id: user.id,
     };
@@ -333,6 +335,7 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
           email: userRole.user.email,
           name: userRole.user.name,
           image: userRole.user.image,
+          avatar: userRole.user.avatar,
           roles: [],
           createdAt: userRole.user.createdAt,
         });

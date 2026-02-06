@@ -13,6 +13,7 @@ export interface UpdateUserInput {
   requestingUserId: string;
   name?: string;
   email?: string;
+  avatar?: string;
 }
 
 export interface UpdateUserOutput {
@@ -21,6 +22,7 @@ export interface UpdateUserOutput {
     id: string;
     email: string;
     name: string | null;
+    avatar: string | null;
   };
   error?: string;
 }
@@ -91,12 +93,15 @@ export class UpdateUserUseCase {
       }
 
       // Preparar datos para actualizar
-      const updateData: { name?: string; email?: string } = {};
+      const updateData: { name?: string; email?: string; avatar?: string } = {};
       if (input.name !== undefined) {
         updateData.name = input.name;
       }
       if (input.email !== undefined) {
         updateData.email = input.email;
+      }
+      if (input.avatar !== undefined) {
+        updateData.avatar = input.avatar;
       }
 
       // Si no hay nada que actualizar
@@ -119,6 +124,7 @@ export class UpdateUserUseCase {
           id: updatedUser.id,
           email: updatedUser.email,
           name: updatedUser.name,
+          avatar: updatedUser.avatar,
         },
       };
     } catch (error) {
