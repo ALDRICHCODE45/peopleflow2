@@ -26,7 +26,7 @@ import { Camera01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
 import { useModalState } from "@/core/shared/hooks";
 import { cn } from "@/core/lib/utils";
 
-const avatarOptions = Array.from({ length: 19 }, (_, i) => ({
+const avatarOptions = Array.from({ length: 28 }, (_, i) => ({
   id: String(i + 1),
   label: `Avatar ${i + 1}`,
   image: `/avatars/avatar${i + 1}.webp`,
@@ -62,9 +62,7 @@ const AvatarOption = memo(function AvatarOption({
         >
           <Avatar className="size-full">
             <AvatarImage src={avatar.image} alt={avatar.label} />
-            <AvatarFallback className="text-[10px]">
-              {avatar.id}
-            </AvatarFallback>
+            <AvatarFallback className="text-[10px]">{avatar.id}</AvatarFallback>
           </Avatar>
           <span
             className={cn(
