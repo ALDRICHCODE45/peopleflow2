@@ -116,7 +116,7 @@ export const AvatarPicker = memo(function AvatarPicker({
   }, [onAvatarChange, closeModal]);
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange} modal={false}>
       <DialogTrigger asChild>
         <button
           type="button"
@@ -136,7 +136,7 @@ export const AvatarPicker = memo(function AvatarPicker({
           </span>
         </button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Elige un avatar</DialogTitle>
         </DialogHeader>
