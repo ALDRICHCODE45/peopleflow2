@@ -37,6 +37,13 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED=1
 
+# Cache-busting: forces Docker to invalidate layers from this point onward
+ARG CACHE_BUST=1
+RUN echo "Cache bust: ${CACHE_BUST}"
+
+# Ensure clean build - no stale Next.js cache
+RUN rm -rf .next
+
 RUN \
     if [ -f yarn.lock ]; then yarn run build; \
     elif [ -f package-lock.json ]; then npm run build; \

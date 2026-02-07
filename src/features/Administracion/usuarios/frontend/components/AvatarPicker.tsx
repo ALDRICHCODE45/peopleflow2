@@ -10,11 +10,6 @@ import {
 } from "@/core/shared/ui/shadcn/dialog";
 import { Separator } from "@/core/shared/ui/shadcn/separator";
 import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@/core/shared/ui/shadcn/tooltip";
-import {
   Avatar,
   AvatarFallback,
   AvatarImage,
