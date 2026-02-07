@@ -47,36 +47,29 @@ const AvatarOption = memo(function AvatarOption({
   }, [onSelect, avatar.image]);
 
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <button
-          type="button"
-          onClick={handleClick}
-          className={cn(
-            "relative size-14 rounded-full p-1 transition-[transform,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-            isSelected
-              ? "ring-2 ring-primary scale-110"
-              : "hover:ring-2 hover:ring-muted-foreground/30 hover:scale-105",
-          )}
-        >
-          <Avatar className="size-full">
-            <AvatarImage src={avatar.image} alt={avatar.label} />
-            <AvatarFallback className="text-[10px]">{avatar.id}</AvatarFallback>
-          </Avatar>
-          <span
-            className={cn(
-              "absolute -bottom-0.5 -right-0.5 flex size-5 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm transition-opacity",
-              isSelected ? "opacity-100" : "opacity-0",
-            )}
-          >
-            <HugeiconsIcon icon={Tick02Icon} className="size-3" />
-          </span>
-        </button>
-      </TooltipTrigger>
-      <TooltipContent side="bottom" className="text-xs">
-        {avatar.label}
-      </TooltipContent>
-    </Tooltip>
+    <button
+      type="button"
+      onClick={handleClick}
+      className={cn(
+        "relative size-14 rounded-full p-1 transition-[transform,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        isSelected
+          ? "ring-2 ring-primary scale-110"
+          : "hover:ring-2 hover:ring-muted-foreground/30 hover:scale-105",
+      )}
+    >
+      <Avatar className="size-full">
+        <AvatarImage src={avatar.image} alt={avatar.label} />
+        <AvatarFallback className="text-[10px]">{avatar.id}</AvatarFallback>
+      </Avatar>
+      <span
+        className={cn(
+          "absolute -bottom-0.5 -right-0.5 flex size-5 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm transition-opacity",
+          isSelected ? "opacity-100" : "opacity-0",
+        )}
+      >
+        <HugeiconsIcon icon={Tick02Icon} className="size-3" />
+      </span>
+    </button>
   );
 });
 
