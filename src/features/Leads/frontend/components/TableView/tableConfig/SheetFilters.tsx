@@ -171,8 +171,10 @@ export const SheetFilters = ({
           </div>
 
           {/* Filtro por fecha de creacion */}
-          <div className="space-y-2">
-            <Label className="text-xs font-medium">Fecha de creacion</Label>
+          <div className="space-y-2 mt-3">
+            <Label className="text-xs font-medium text-muted-foreground">
+              Fecha de creacion
+            </Label>
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1">
                 <Label className="text-xs text-muted-foreground">Desde</Label>
