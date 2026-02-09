@@ -96,7 +96,7 @@ export const SheetFilters = ({
   const hasCountrySelected = selectedCountryCodes.length > 0;
 
   const regionOptions = useMemo(
-    () => hasCountrySelected ? getRegionOptions(selectedCountryCodes) : [],
+    () => (hasCountrySelected ? getRegionOptions(selectedCountryCodes) : []),
     [hasCountrySelected, selectedCountryCodes],
   );
 
@@ -139,14 +139,6 @@ export const SheetFilters = ({
           />
 
           <FilterMultiSelect
-            label="Estado"
-            options={employeesOptions}
-            selected={selectedEmployeesNumbers}
-            onChange={onSelectedEmployeeNumberChange}
-            placeholder="Todos los estados"
-          />
-
-          <FilterMultiSelect
             label="Pais"
             options={countryOptions}
             selected={selectedCountryCodes}
@@ -159,7 +151,11 @@ export const SheetFilters = ({
             options={regionOptions}
             selected={selectedRegionCodes}
             onChange={onRegionChange}
-            placeholder={hasCountrySelected ? "Todas las regiones" : "Selecciona un pais primero"}
+            placeholder={
+              hasCountrySelected
+                ? "Todas las regiones"
+                : "Selecciona un pais primero"
+            }
             disabled={!hasCountrySelected}
           />
 
