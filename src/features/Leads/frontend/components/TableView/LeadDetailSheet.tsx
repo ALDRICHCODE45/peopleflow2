@@ -44,7 +44,7 @@ export function LeadDetailSheet({
   const [activeTab, setActiveTab] = useState("contacts");
   // Track visited tabs to enable lazy loading - only load data when tab is first visited
   const [visitedTabs, setVisitedTabs] = useState<Set<string>>(
-    new Set(["contacts"])
+    new Set(["contacts"]),
   );
 
   const handleTabChange = useCallback((value: string) => {
@@ -144,9 +144,29 @@ export function LeadDetailSheet({
             <InfoItem label="Empleados" value={displayLead.employeeCount} />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <InfoItem label="Pais" value={displayLead.countryCode ? getCountryName(displayLead.countryCode) : null} />
-            <InfoItem label="Region" value={displayLead.countryCode && displayLead.regionCode ? getRegionName(displayLead.countryCode, displayLead.regionCode) : null} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <InfoItem
+              label="Pais"
+              value={
+                displayLead.countryCode
+                  ? getCountryName(displayLead.countryCode)
+                  : null
+              }
+            />
+            <InfoItem
+              label="Region"
+              value={
+                displayLead.countryCode && displayLead.regionCode
+                  ? getRegionName(
+                      displayLead.countryCode,
+                      displayLead.regionCode,
+                    )
+                  : null
+              }
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <InfoItem label="Codigo Postal" value={displayLead.postalCode} />
           </div>
 

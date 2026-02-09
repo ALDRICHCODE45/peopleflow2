@@ -104,7 +104,7 @@ export const SheetFilters = ({
     <Sheet open={isSheetOpen} onOpenChange={onOpenChange}>
       <SheetContent
         width="md"
-        className="md:mr-8 ml-0 rounded-3xl dark:bg-[#18181B]"
+        className="md:mr-8 ml-0 rounded-3xl dark:bg-[#18181B] "
         side={sheetSide}
       >
         <SheetHeader>
@@ -113,7 +113,7 @@ export const SheetFilters = ({
             Filtra tus leads con opciones adicionales
           </SheetDescription>
         </SheetHeader>
-        <div className=" space-y-4 p-3">
+        <div className=" space-y-4 p-3 mb-10">
           <FilterMultiSelect
             label="Origen"
             options={originOptions}
