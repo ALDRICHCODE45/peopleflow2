@@ -44,7 +44,11 @@ declare global {
   }
 }
 
-export const SignInPage = () => {
+interface SignInPageProps {
+  cloudflareSiteKey: string;
+}
+
+export const SignInPage = ({ cloudflareSiteKey }: SignInPageProps) => {
   const { isPending } = useAuth();
 
   const turnstileRef = useRef<HTMLDivElement>(null);
@@ -74,7 +78,7 @@ export const SignInPage = () => {
       if (!window.turnstile || widgetIdRef.current) return;
 
       widgetIdRef.current = window.turnstile.render(container, {
-        sitekey: process.env.NEXT_PUBLIC_CLOUDFLARE_SITE_KEY!,
+        sitekey: cloudflareSiteKey,
         callback: (token: string) => {
           tokenRef.current = token;
         },

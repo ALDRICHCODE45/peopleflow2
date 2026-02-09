@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { SignInPage } from "@/features/Auth/frontend/pages/SignInPage";
+import { auth } from "@/core/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Iniciar Sesión",
@@ -7,12 +10,15 @@ export const metadata: Metadata = {
     "Accede a tu cuenta de PeopleFlow ERP para gestionar tu organización.",
 };
 
-const Page = () => {
-  return (
-    <>
-      <SignInPage />
-    </>
-  );
-};
+export default async function Page() {
+  const headersList = await headers();
+  const session = await auth.api.getSession({ headers: headersList });
 
-export default Page;
+  if (session?.user) {
+    redirect("/");
+  }
+
+  const cloudflareSiteKey = process.env.CLOUDFLARE_SITE_KEY ?? "";
+
+  return <SignInPage cloudflareSiteKey={cloudflareSiteKey} />;
+}

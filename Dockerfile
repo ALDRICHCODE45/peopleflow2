@@ -30,16 +30,18 @@ ENV PATH=$BUN_INSTALL/bin:$PATH
 RUN apk add --no-cache curl bash
 RUN curl -fsSL https://bun.sh/install | bash
 COPY --from=deps /app/node_modules ./node_modules
+
+# Cache-busting: forces Docker to invalidate layers from this point onward
+# MUST be before COPY . . so that .env and source files are always fresh
+ARG CACHE_BUST=1
+RUN echo "Cache bust: ${CACHE_BUST}"
+
 COPY . .
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED=1
-
-# Cache-busting: forces Docker to invalidate layers from this point onward
-ARG CACHE_BUST=1
-RUN echo "Cache bust: ${CACHE_BUST}"
 
 # Ensure clean build - no stale Next.js cache
 RUN rm -rf .next

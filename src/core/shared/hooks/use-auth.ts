@@ -1,7 +1,6 @@
 "use client";
 
 import { authClient } from "@lib/auth-client";
-import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 
 /**
@@ -62,7 +61,6 @@ export interface AuthResult {
  */
 export function useAuth() {
   const { data: session, isPending, refetch } = authClient.useSession();
-  const router = useRouter();
   const [isOperationLoading, setIsOperationLoading] = useState(false);
 
   /**
@@ -109,13 +107,16 @@ export function useAuth() {
    * Cierra la sesión del usuario
    */
   const logout = useCallback(
-    async (redirectTo: string = "/"): Promise<AuthResult> => {
+    async (redirectTo: string = "/sign-in"): Promise<AuthResult> => {
       setIsOperationLoading(true);
 
       try {
         await authClient.signOut();
-        await refetch();
-
+        // Hard navigation para forzar recarga completa:
+        // - Limpia el Next.js Router Cache
+        // - Asegura que el Set-Cookie del signOut se procese
+        // - Hace un request fresco sin cookies inválidas
+        window.location.href = redirectTo;
         return { success: true };
       } catch (error) {
         console.error("Error en logout:", error);
@@ -127,7 +128,7 @@ export function useAuth() {
         setIsOperationLoading(false);
       }
     },
-    [refetch, router],
+    [],
   );
 
   /**

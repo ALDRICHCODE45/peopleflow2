@@ -77,19 +77,14 @@ export function proxy(request: NextRequest) {
   const sessionToken = getSessionToken(request);
   const isLoggedIn = !!sessionToken;
 
-  // 3. Si está logueado y accede a sign-in, redirigir a la raíz
-  //    (la página raíz se encargará de redirigir según permisos)
-  if (isLoggedIn && pathname === "/sign-in") {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
-
-  // 4. Rutas públicas - permitir acceso sin autenticación
-  //    (solo si no está logueado, porque si está logueado ya se manejó arriba)
+  // 3. Rutas públicas - permitir acceso sin autenticación
+  //    La validación de sesión para /sign-in se hace en el server component
+  //    porque el proxy no puede verificar si la sesión es válida en la DB
   if (isPublicPath(pathname)) {
     return NextResponse.next();
   }
 
-  // 5. Si no está logueado y no es ruta pública, redirigir a sign-in
+  // 4. Si no está logueado y no es ruta pública, redirigir a sign-in
   if (!isLoggedIn) {
     // Si es la ruta raíz, redirigir a sign-in
     if (pathname === "/") {
@@ -99,12 +94,12 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
-  // 6. Para rutas del flujo de autenticación, permitir si está logueado
+  // 5. Para rutas del flujo de autenticación, permitir si está logueado
   if (isAuthFlowPath(pathname)) {
     return NextResponse.next();
   }
 
-  // 7. Para todas las demás rutas, permitir el acceso
+  // 6. Para todas las demás rutas, permitir el acceso
   //    La verificación de permisos específicos se hace en los Server Components
   //    usando AuthGuard y PermissionGate
   return NextResponse.next();

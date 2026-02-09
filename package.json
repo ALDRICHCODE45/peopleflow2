@@ -9,6 +9,7 @@
     "lint": "eslint",
     "db:seed": "bunx tsx prisma/seed.ts",
     "db:seed:leads": "bun prisma/seedLeadsTest.ts",
+    "db:seed:sectors": "bunx tsx prisma/seedExpandSectors.ts",
     "prisma:generate": "bunx prisma generate",
     "prisma:studio": "bunx prisma studio",
     "better:generate": "bunx @better-auth/cli@latest generate --config src/core/lib/auth.ts",

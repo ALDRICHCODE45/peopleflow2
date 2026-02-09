@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@shadcn/button";
 import {
   Card,
@@ -45,7 +44,6 @@ export function SuperAdminDashboard({
   stats,
   currentUser,
 }: SuperAdminDashboardProps) {
-  const router = useRouter();
   const [isEntering, setIsEntering] = useState<string | null>(null);
 
   const handleEnterTenant = async (tenantId: string) => {
@@ -71,7 +69,7 @@ export function SuperAdminDashboard({
 
   const handleLogout = async () => {
     await authClient.signOut();
-    router.push("/sign-in");
+    window.location.href = "/sign-in";
   };
 
   return (
