@@ -11,6 +11,8 @@ import {
   SelectValue,
 } from "@/core/shared/ui/shadcn/select";
 import { Field, FieldError, FieldLabel } from "@/core/shared/ui/shadcn/field";
+import CountrySelect from "@/core/shared/components/CountrySelect";
+import RegionSelect from "@/core/shared/components/RegionSelect";
 import { useEditLeadForm } from "../../hooks/useEditLeadForm";
 import type { Lead } from "../../types";
 import { LEAD_EMPLOYEE_OPTIONS, LEAD_STATUS_OPTIONS } from "../../types";
@@ -260,17 +262,52 @@ export function EditLeadForm({ lead, onOpenChange }: EditLeadFormProps) {
         }}
       </form.Field>
 
-      {/* Direccion */}
-      <form.Field name="address">
+      {/* Pais */}
+      <form.Field name="countryCode">
         {(field) => (
           <Field>
-            <FieldLabel htmlFor={field.name}>Direccion</FieldLabel>
+            <FieldLabel htmlFor={field.name}>Pais</FieldLabel>
+            <CountrySelect
+              className="w-full"
+              value={field.state.value}
+              onChange={(value) => {
+                field.handleChange(value);
+                form.setFieldValue("regionCode", "");
+              }}
+              priorityOptions={["MX"]}
+              placeholder="Seleccionar pais"
+            />
+          </Field>
+        )}
+      </form.Field>
+
+      {/* Region */}
+      <form.Field name="regionCode">
+        {(field) => (
+          <Field>
+            <FieldLabel htmlFor={field.name}>Region</FieldLabel>
+            <RegionSelect
+              className="w-full"
+              value={field.state.value}
+              countryCode={form.getFieldValue("countryCode")}
+              onChange={(value) => field.handleChange(value)}
+              placeholder="Seleccionar region"
+            />
+          </Field>
+        )}
+      </form.Field>
+
+      {/* Codigo Postal */}
+      <form.Field name="postalCode">
+        {(field) => (
+          <Field>
+            <FieldLabel htmlFor={field.name}>Codigo Postal</FieldLabel>
             <Input
               id={field.name}
               value={field.state.value}
               onBlur={field.handleBlur}
               onChange={(e) => field.handleChange(e.target.value)}
-              placeholder="Direccion de la empresa"
+              placeholder="Codigo postal"
             />
           </Field>
         )}

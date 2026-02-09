@@ -11,7 +11,9 @@ export interface CreateLeadData {
   normalizedCompanyName: string;
   website?: string | null;
   linkedInUrl?: string | null;
-  address?: string | null;
+  countryCode?: string | null;
+  regionCode?: string | null;
+  postalCode?: string | null;
   subOrigin?: string | null;
   employeeCount?: string | null;
   notes?: string | null;
@@ -29,7 +31,9 @@ export interface UpdateLeadData {
   normalizedCompanyName?: string;
   website?: string | null;
   linkedInUrl?: string | null;
-  address?: string | null;
+  countryCode?: string | null;
+  regionCode?: string | null;
+  postalCode?: string | null;
   subOrigin?: string | null;
   employeeCount?: string | null;
   notes?: string | null;
@@ -45,6 +49,9 @@ export interface FindLeadsFilters {
   originIds?: string[];
   assignedToIds?: string[];
   employeeCounts?: string[];
+  countryCodes?: string[];
+  regionCodes?: string[];
+  postalCode?: string;
   createdAtFrom?: Date;
   createdAtTo?: Date;
   search?: string;

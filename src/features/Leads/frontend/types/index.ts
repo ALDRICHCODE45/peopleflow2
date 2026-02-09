@@ -179,7 +179,9 @@ export interface Lead {
   companyName: string;
   website: string | null;
   linkedInUrl: string | null;
-  address: string | null;
+  countryCode: string | null;
+  regionCode: string | null;
+  postalCode: string | null;
   subOrigin: string | null;
   employeeCount: string | null;
   notes: string | null;
@@ -297,7 +299,9 @@ export interface LeadFormData {
   companyName: string;
   website?: string;
   linkedInUrl?: string;
-  address?: string;
+  countryCode?: string;
+  regionCode?: string;
+  postalCode?: string;
   subOrigin?: string;
   employeeCount?: string;
   notes?: string;
@@ -312,7 +316,9 @@ export interface CreateLeadFormData {
   companyName: string;
   website?: string;
   linkedInUrl?: string;
-  address?: string;
+  countryCode?: string;
+  regionCode?: string;
+  postalCode?: string;
   subOrigin?: string;
   employeeCount?: string;
   notes?: string;

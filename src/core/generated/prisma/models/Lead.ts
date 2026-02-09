@@ -30,7 +30,9 @@ export type LeadMinAggregateOutputType = {
   normalizedCompanyName: string | null
   website: string | null
   linkedInUrl: string | null
-  address: string | null
+  countryCode: string | null
+  regionCode: string | null
+  postalCode: string | null
   subOrigin: string | null
   employeeCount: string | null
   notes: string | null
@@ -53,7 +55,9 @@ export type LeadMaxAggregateOutputType = {
   normalizedCompanyName: string | null
   website: string | null
   linkedInUrl: string | null
-  address: string | null
+  countryCode: string | null
+  regionCode: string | null
+  postalCode: string | null
   subOrigin: string | null
   employeeCount: string | null
   notes: string | null
@@ -76,7 +80,9 @@ export type LeadCountAggregateOutputType = {
   normalizedCompanyName: number
   website: number
   linkedInUrl: number
-  address: number
+  countryCode: number
+  regionCode: number
+  postalCode: number
   subOrigin: number
   employeeCount: number
   notes: number
@@ -101,7 +107,9 @@ export type LeadMinAggregateInputType = {
   normalizedCompanyName?: true
   website?: true
   linkedInUrl?: true
-  address?: true
+  countryCode?: true
+  regionCode?: true
+  postalCode?: true
   subOrigin?: true
   employeeCount?: true
   notes?: true
@@ -124,7 +132,9 @@ export type LeadMaxAggregateInputType = {
   normalizedCompanyName?: true
   website?: true
   linkedInUrl?: true
-  address?: true
+  countryCode?: true
+  regionCode?: true
+  postalCode?: true
   subOrigin?: true
   employeeCount?: true
   notes?: true
@@ -147,7 +157,9 @@ export type LeadCountAggregateInputType = {
   normalizedCompanyName?: true
   website?: true
   linkedInUrl?: true
-  address?: true
+  countryCode?: true
+  regionCode?: true
+  postalCode?: true
   subOrigin?: true
   employeeCount?: true
   notes?: true
@@ -243,7 +255,9 @@ export type LeadGroupByOutputType = {
   normalizedCompanyName: string
   website: string | null
   linkedInUrl: string | null
-  address: string | null
+  countryCode: string | null
+  regionCode: string | null
+  postalCode: string | null
   subOrigin: string | null
   employeeCount: string | null
   notes: string | null
@@ -287,7 +301,9 @@ export type LeadWhereInput = {
   normalizedCompanyName?: Prisma.StringFilter<"Lead"> | string
   website?: Prisma.StringNullableFilter<"Lead"> | string | null
   linkedInUrl?: Prisma.StringNullableFilter<"Lead"> | string | null
-  address?: Prisma.StringNullableFilter<"Lead"> | string | null
+  countryCode?: Prisma.StringNullableFilter<"Lead"> | string | null
+  regionCode?: Prisma.StringNullableFilter<"Lead"> | string | null
+  postalCode?: Prisma.StringNullableFilter<"Lead"> | string | null
   subOrigin?: Prisma.StringNullableFilter<"Lead"> | string | null
   employeeCount?: Prisma.StringNullableFilter<"Lead"> | string | null
   notes?: Prisma.StringNullableFilter<"Lead"> | string | null
@@ -320,7 +336,9 @@ export type LeadOrderByWithRelationInput = {
   normalizedCompanyName?: Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
   linkedInUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  address?: Prisma.SortOrderInput | Prisma.SortOrder
+  countryCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  regionCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  postalCode?: Prisma.SortOrderInput | Prisma.SortOrder
   subOrigin?: Prisma.SortOrderInput | Prisma.SortOrder
   employeeCount?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -356,7 +374,9 @@ export type LeadWhereUniqueInput = Prisma.AtLeast<{
   normalizedCompanyName?: Prisma.StringFilter<"Lead"> | string
   website?: Prisma.StringNullableFilter<"Lead"> | string | null
   linkedInUrl?: Prisma.StringNullableFilter<"Lead"> | string | null
-  address?: Prisma.StringNullableFilter<"Lead"> | string | null
+  countryCode?: Prisma.StringNullableFilter<"Lead"> | string | null
+  regionCode?: Prisma.StringNullableFilter<"Lead"> | string | null
+  postalCode?: Prisma.StringNullableFilter<"Lead"> | string | null
   subOrigin?: Prisma.StringNullableFilter<"Lead"> | string | null
   employeeCount?: Prisma.StringNullableFilter<"Lead"> | string | null
   notes?: Prisma.StringNullableFilter<"Lead"> | string | null
@@ -389,7 +409,9 @@ export type LeadOrderByWithAggregationInput = {
   normalizedCompanyName?: Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
   linkedInUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  address?: Prisma.SortOrderInput | Prisma.SortOrder
+  countryCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  regionCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  postalCode?: Prisma.SortOrderInput | Prisma.SortOrder
   subOrigin?: Prisma.SortOrderInput | Prisma.SortOrder
   employeeCount?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -418,7 +440,9 @@ export type LeadScalarWhereWithAggregatesInput = {
   normalizedCompanyName?: Prisma.StringWithAggregatesFilter<"Lead"> | string
   website?: Prisma.StringNullableWithAggregatesFilter<"Lead"> | string | null
   linkedInUrl?: Prisma.StringNullableWithAggregatesFilter<"Lead"> | string | null
-  address?: Prisma.StringNullableWithAggregatesFilter<"Lead"> | string | null
+  countryCode?: Prisma.StringNullableWithAggregatesFilter<"Lead"> | string | null
+  regionCode?: Prisma.StringNullableWithAggregatesFilter<"Lead"> | string | null
+  postalCode?: Prisma.StringNullableWithAggregatesFilter<"Lead"> | string | null
   subOrigin?: Prisma.StringNullableWithAggregatesFilter<"Lead"> | string | null
   employeeCount?: Prisma.StringNullableWithAggregatesFilter<"Lead"> | string | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"Lead"> | string | null
@@ -441,7 +465,9 @@ export type LeadCreateInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -468,7 +494,9 @@ export type LeadUncheckedCreateInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -495,7 +523,9 @@ export type LeadUpdateInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -522,7 +552,9 @@ export type LeadUncheckedUpdateInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -549,7 +581,9 @@ export type LeadCreateManyInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -572,7 +606,9 @@ export type LeadUpdateManyMutationInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -589,7 +625,9 @@ export type LeadUncheckedUpdateManyInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -622,7 +660,9 @@ export type LeadCountOrderByAggregateInput = {
   normalizedCompanyName?: Prisma.SortOrder
   website?: Prisma.SortOrder
   linkedInUrl?: Prisma.SortOrder
-  address?: Prisma.SortOrder
+  countryCode?: Prisma.SortOrder
+  regionCode?: Prisma.SortOrder
+  postalCode?: Prisma.SortOrder
   subOrigin?: Prisma.SortOrder
   employeeCount?: Prisma.SortOrder
   notes?: Prisma.SortOrder
@@ -645,7 +685,9 @@ export type LeadMaxOrderByAggregateInput = {
   normalizedCompanyName?: Prisma.SortOrder
   website?: Prisma.SortOrder
   linkedInUrl?: Prisma.SortOrder
-  address?: Prisma.SortOrder
+  countryCode?: Prisma.SortOrder
+  regionCode?: Prisma.SortOrder
+  postalCode?: Prisma.SortOrder
   subOrigin?: Prisma.SortOrder
   employeeCount?: Prisma.SortOrder
   notes?: Prisma.SortOrder
@@ -668,7 +710,9 @@ export type LeadMinOrderByAggregateInput = {
   normalizedCompanyName?: Prisma.SortOrder
   website?: Prisma.SortOrder
   linkedInUrl?: Prisma.SortOrder
-  address?: Prisma.SortOrder
+  countryCode?: Prisma.SortOrder
+  regionCode?: Prisma.SortOrder
+  postalCode?: Prisma.SortOrder
   subOrigin?: Prisma.SortOrder
   employeeCount?: Prisma.SortOrder
   notes?: Prisma.SortOrder
@@ -1015,7 +1059,9 @@ export type LeadCreateWithoutAssignedToInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -1041,7 +1087,9 @@ export type LeadUncheckedCreateWithoutAssignedToInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -1077,7 +1125,9 @@ export type LeadCreateWithoutCreatedByInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -1103,7 +1153,9 @@ export type LeadUncheckedCreateWithoutCreatedByInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -1158,7 +1210,9 @@ export type LeadScalarWhereInput = {
   normalizedCompanyName?: Prisma.StringFilter<"Lead"> | string
   website?: Prisma.StringNullableFilter<"Lead"> | string | null
   linkedInUrl?: Prisma.StringNullableFilter<"Lead"> | string | null
-  address?: Prisma.StringNullableFilter<"Lead"> | string | null
+  countryCode?: Prisma.StringNullableFilter<"Lead"> | string | null
+  regionCode?: Prisma.StringNullableFilter<"Lead"> | string | null
+  postalCode?: Prisma.StringNullableFilter<"Lead"> | string | null
   subOrigin?: Prisma.StringNullableFilter<"Lead"> | string | null
   employeeCount?: Prisma.StringNullableFilter<"Lead"> | string | null
   notes?: Prisma.StringNullableFilter<"Lead"> | string | null
@@ -1197,7 +1251,9 @@ export type LeadCreateWithoutTenantInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -1223,7 +1279,9 @@ export type LeadUncheckedCreateWithoutTenantInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -1275,7 +1333,9 @@ export type LeadCreateWithoutSectorInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -1301,7 +1361,9 @@ export type LeadUncheckedCreateWithoutSectorInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -1353,7 +1415,9 @@ export type LeadCreateWithoutSubsectorInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -1379,7 +1443,9 @@ export type LeadUncheckedCreateWithoutSubsectorInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -1431,7 +1497,9 @@ export type LeadCreateWithoutOriginInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -1457,7 +1525,9 @@ export type LeadUncheckedCreateWithoutOriginInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -1509,7 +1579,9 @@ export type LeadCreateWithoutStatusHistoryInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -1535,7 +1607,9 @@ export type LeadUncheckedCreateWithoutStatusHistoryInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -1577,7 +1651,9 @@ export type LeadUpdateWithoutStatusHistoryInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1603,7 +1679,9 @@ export type LeadUncheckedUpdateWithoutStatusHistoryInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1629,7 +1707,9 @@ export type LeadCreateWithoutContactsInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -1655,7 +1735,9 @@ export type LeadUncheckedCreateWithoutContactsInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -1697,7 +1779,9 @@ export type LeadUpdateWithoutContactsInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1723,7 +1807,9 @@ export type LeadUncheckedUpdateWithoutContactsInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1749,7 +1835,9 @@ export type LeadCreateWithoutAttachmentsInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -1775,7 +1863,9 @@ export type LeadUncheckedCreateWithoutAttachmentsInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -1817,7 +1907,9 @@ export type LeadUpdateWithoutAttachmentsInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1843,7 +1935,9 @@ export type LeadUncheckedUpdateWithoutAttachmentsInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1869,7 +1963,9 @@ export type LeadCreateWithoutClientInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -1895,7 +1991,9 @@ export type LeadUncheckedCreateWithoutClientInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -1937,7 +2035,9 @@ export type LeadUpdateWithoutClientInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1963,7 +2063,9 @@ export type LeadUncheckedUpdateWithoutClientInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1989,7 +2091,9 @@ export type LeadCreateManyAssignedToInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -2011,7 +2115,9 @@ export type LeadCreateManyCreatedByInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -2033,7 +2139,9 @@ export type LeadUpdateWithoutAssignedToInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2059,7 +2167,9 @@ export type LeadUncheckedUpdateWithoutAssignedToInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2085,7 +2195,9 @@ export type LeadUncheckedUpdateManyWithoutAssignedToInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2107,7 +2219,9 @@ export type LeadUpdateWithoutCreatedByInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2133,7 +2247,9 @@ export type LeadUncheckedUpdateWithoutCreatedByInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2159,7 +2275,9 @@ export type LeadUncheckedUpdateManyWithoutCreatedByInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2181,7 +2299,9 @@ export type LeadCreateManyTenantInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -2203,7 +2323,9 @@ export type LeadUpdateWithoutTenantInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2229,7 +2351,9 @@ export type LeadUncheckedUpdateWithoutTenantInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2255,7 +2379,9 @@ export type LeadUncheckedUpdateManyWithoutTenantInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2277,7 +2403,9 @@ export type LeadCreateManySectorInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -2299,7 +2427,9 @@ export type LeadUpdateWithoutSectorInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2325,7 +2455,9 @@ export type LeadUncheckedUpdateWithoutSectorInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2351,7 +2483,9 @@ export type LeadUncheckedUpdateManyWithoutSectorInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2373,7 +2507,9 @@ export type LeadCreateManySubsectorInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -2395,7 +2531,9 @@ export type LeadUpdateWithoutSubsectorInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2421,7 +2559,9 @@ export type LeadUncheckedUpdateWithoutSubsectorInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2447,7 +2587,9 @@ export type LeadUncheckedUpdateManyWithoutSubsectorInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2469,7 +2611,9 @@ export type LeadCreateManyOriginInput = {
   normalizedCompanyName?: string
   website?: string | null
   linkedInUrl?: string | null
-  address?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  postalCode?: string | null
   subOrigin?: string | null
   employeeCount?: string | null
   notes?: string | null
@@ -2491,7 +2635,9 @@ export type LeadUpdateWithoutOriginInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2517,7 +2663,9 @@ export type LeadUncheckedUpdateWithoutOriginInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2543,7 +2691,9 @@ export type LeadUncheckedUpdateManyWithoutOriginInput = {
   normalizedCompanyName?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2614,7 +2764,9 @@ export type LeadSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   normalizedCompanyName?: boolean
   website?: boolean
   linkedInUrl?: boolean
-  address?: boolean
+  countryCode?: boolean
+  regionCode?: boolean
+  postalCode?: boolean
   subOrigin?: boolean
   employeeCount?: boolean
   notes?: boolean
@@ -2648,7 +2800,9 @@ export type LeadSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   normalizedCompanyName?: boolean
   website?: boolean
   linkedInUrl?: boolean
-  address?: boolean
+  countryCode?: boolean
+  regionCode?: boolean
+  postalCode?: boolean
   subOrigin?: boolean
   employeeCount?: boolean
   notes?: boolean
@@ -2677,7 +2831,9 @@ export type LeadSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   normalizedCompanyName?: boolean
   website?: boolean
   linkedInUrl?: boolean
-  address?: boolean
+  countryCode?: boolean
+  regionCode?: boolean
+  postalCode?: boolean
   subOrigin?: boolean
   employeeCount?: boolean
   notes?: boolean
@@ -2706,7 +2862,9 @@ export type LeadSelectScalar = {
   normalizedCompanyName?: boolean
   website?: boolean
   linkedInUrl?: boolean
-  address?: boolean
+  countryCode?: boolean
+  regionCode?: boolean
+  postalCode?: boolean
   subOrigin?: boolean
   employeeCount?: boolean
   notes?: boolean
@@ -2723,7 +2881,7 @@ export type LeadSelectScalar = {
   updatedAt?: boolean
 }
 
-export type LeadOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyName" | "normalizedCompanyName" | "website" | "linkedInUrl" | "address" | "subOrigin" | "employeeCount" | "notes" | "status" | "sectorId" | "subsectorId" | "originId" | "assignedToId" | "isDeleted" | "deletedAt" | "tenantId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["lead"]>
+export type LeadOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyName" | "normalizedCompanyName" | "website" | "linkedInUrl" | "countryCode" | "regionCode" | "postalCode" | "subOrigin" | "employeeCount" | "notes" | "status" | "sectorId" | "subsectorId" | "originId" | "assignedToId" | "isDeleted" | "deletedAt" | "tenantId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["lead"]>
 export type LeadInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sector?: boolean | Prisma.Lead$sectorArgs<ExtArgs>
   subsector?: boolean | Prisma.Lead$subsectorArgs<ExtArgs>
@@ -2774,7 +2932,9 @@ export type $LeadPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     normalizedCompanyName: string
     website: string | null
     linkedInUrl: string | null
-    address: string | null
+    countryCode: string | null
+    regionCode: string | null
+    postalCode: string | null
     subOrigin: string | null
     employeeCount: string | null
     notes: string | null
@@ -3227,7 +3387,9 @@ export interface LeadFieldRefs {
   readonly normalizedCompanyName: Prisma.FieldRef<"Lead", 'String'>
   readonly website: Prisma.FieldRef<"Lead", 'String'>
   readonly linkedInUrl: Prisma.FieldRef<"Lead", 'String'>
-  readonly address: Prisma.FieldRef<"Lead", 'String'>
+  readonly countryCode: Prisma.FieldRef<"Lead", 'String'>
+  readonly regionCode: Prisma.FieldRef<"Lead", 'String'>
+  readonly postalCode: Prisma.FieldRef<"Lead", 'String'>
   readonly subOrigin: Prisma.FieldRef<"Lead", 'String'>
   readonly employeeCount: Prisma.FieldRef<"Lead", 'String'>
   readonly notes: Prisma.FieldRef<"Lead", 'String'>

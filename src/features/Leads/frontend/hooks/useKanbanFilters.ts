@@ -26,6 +26,15 @@ export function useKanbanFilters() {
   );
   const debouncedEmployeeCounts = useDebouncedValue(selectedEmployeeCounts, 300);
 
+  const [selectedCountryCodes, setSelectedCountryCodes] = useState<string[]>([]);
+  const debouncedCountryCodes = useDebouncedValue(selectedCountryCodes, 300);
+
+  const [selectedRegionCodes, setSelectedRegionCodes] = useState<string[]>([]);
+  const debouncedRegionCodes = useDebouncedValue(selectedRegionCodes, 300);
+
+  const [postalCode, setPostalCode] = useState("");
+  const debouncedPostalCode = useDebouncedValue(postalCode, 300);
+
   const [createdAtFrom, setCreatedAtFrom] = useState<string>("");
   const debouncedDateFrom = useDebouncedValue(createdAtFrom, 500); // 500ms for date inputs
 
@@ -44,12 +53,20 @@ export function useKanbanFilters() {
     [sectors],
   );
 
+  const handleCountryChange = useCallback((codes: string[]) => {
+    setSelectedCountryCodes(codes);
+    setSelectedRegionCodes([]);
+  }, []);
+
   const handleClearFilters = useCallback(() => {
     setSearchValue("");
     setSelectedSectorIds([]);
     setSelectedOriginIds([]);
     setSelectedAssignedToIds([]);
     setSelectedEmployeeCounts([]);
+    setSelectedCountryCodes([]);
+    setSelectedRegionCodes([]);
+    setPostalCode("");
     setCreatedAtFrom("");
     setCreatedAtTo("");
   }, []);
@@ -61,6 +78,9 @@ export function useKanbanFilters() {
       selectedOriginIds.length > 0 ||
       selectedAssignedToIds.length > 0 ||
       selectedEmployeeCounts.length > 0 ||
+      selectedCountryCodes.length > 0 ||
+      selectedRegionCodes.length > 0 ||
+      postalCode.length > 0 ||
       createdAtFrom.length > 0 ||
       createdAtTo.length > 0,
     [
@@ -69,6 +89,9 @@ export function useKanbanFilters() {
       selectedOriginIds,
       selectedAssignedToIds,
       selectedEmployeeCounts,
+      selectedCountryCodes,
+      selectedRegionCodes,
+      postalCode,
       createdAtFrom,
       createdAtTo,
     ],
@@ -83,6 +106,9 @@ export function useKanbanFilters() {
       !arraysEqual(selectedOriginIds, debouncedOriginIds) ||
       !arraysEqual(selectedAssignedToIds, debouncedAssignedToIds) ||
       !arraysEqual(selectedEmployeeCounts, debouncedEmployeeCounts) ||
+      !arraysEqual(selectedCountryCodes, debouncedCountryCodes) ||
+      !arraysEqual(selectedRegionCodes, debouncedRegionCodes) ||
+      postalCode !== debouncedPostalCode ||
       createdAtFrom !== debouncedDateFrom ||
       createdAtTo !== debouncedDateTo,
     [
@@ -96,6 +122,12 @@ export function useKanbanFilters() {
       debouncedAssignedToIds,
       selectedEmployeeCounts,
       debouncedEmployeeCounts,
+      selectedCountryCodes,
+      debouncedCountryCodes,
+      selectedRegionCodes,
+      debouncedRegionCodes,
+      postalCode,
+      debouncedPostalCode,
       createdAtFrom,
       debouncedDateFrom,
       createdAtTo,
@@ -119,6 +151,15 @@ export function useKanbanFilters() {
     selectedEmployeeCounts,
     setSelectedEmployeeCounts,
     debouncedEmployeeCounts,
+    selectedCountryCodes,
+    handleCountryChange,
+    debouncedCountryCodes,
+    selectedRegionCodes,
+    setSelectedRegionCodes,
+    debouncedRegionCodes,
+    postalCode,
+    setPostalCode,
+    debouncedPostalCode,
     createdAtFrom,
     setCreatedAtFrom,
     debouncedDateFrom,

@@ -308,7 +308,9 @@ model Lead {
   normalizedCompanyName String     @default("")
   website               String?
   linkedInUrl           String?
-  address               String?
+  countryCode           String?
+  regionCode            String?
+  postalCode            String?
   subOrigin             String?
   employeeCount         String?
   notes                 String?    @db.Text
@@ -359,6 +361,10 @@ model Lead {
   @@index([tenantId, isDeleted])
   @@index([tenantId, createdAt])
   @@index([tenantId, isDeleted, normalizedCompanyName])
+  @@index([countryCode])
+  @@index([regionCode])
+  @@index([tenantId, countryCode])
+  @@index([tenantId, countryCode, regionCode])
   @@map("lead")
 }
 

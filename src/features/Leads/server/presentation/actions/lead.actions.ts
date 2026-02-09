@@ -46,7 +46,9 @@ export async function createLeadAction(data: {
   companyName: string;
   website?: string;
   linkedInUrl?: string;
-  address?: string;
+  countryCode?: string;
+  regionCode?: string;
+  postalCode?: string;
   subOrigin?: string;
   employeeCount?: string;
   notes?: string;
@@ -116,7 +118,9 @@ export async function updateLeadAction(
     companyName?: string;
     website?: string | null;
     linkedInUrl?: string | null;
-    address?: string | null;
+    countryCode?: string | null;
+    regionCode?: string | null;
+    postalCode?: string | null;
     subOrigin?: string | null;
     employeeCount?: string | null;
     notes?: string | null;

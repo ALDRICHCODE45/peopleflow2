@@ -66,6 +66,15 @@ export const LeadsKabanPage = () => {
         filters.debouncedEmployeeCounts.length > 0
           ? filters.debouncedEmployeeCounts
           : undefined,
+      countryCodes:
+        filters.debouncedCountryCodes.length > 0
+          ? filters.debouncedCountryCodes
+          : undefined,
+      regionCodes:
+        filters.debouncedRegionCodes.length > 0
+          ? filters.debouncedRegionCodes
+          : undefined,
+      postalCode: filters.debouncedPostalCode || undefined,
       createdAtFrom: filters.debouncedDateFrom || undefined,
       createdAtTo: filters.debouncedDateTo || undefined,
     }),
@@ -75,6 +84,9 @@ export const LeadsKabanPage = () => {
       filters.debouncedOriginIds,
       filters.debouncedAssignedToIds,
       filters.debouncedEmployeeCounts,
+      filters.debouncedCountryCodes,
+      filters.debouncedRegionCodes,
+      filters.debouncedPostalCode,
       filters.debouncedDateFrom,
       filters.debouncedDateTo,
     ],

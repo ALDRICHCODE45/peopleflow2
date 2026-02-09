@@ -11,6 +11,8 @@ import {
   SelectValue,
 } from "@/core/shared/ui/shadcn/select";
 import { Field, FieldError, FieldLabel } from "@/core/shared/ui/shadcn/field";
+import CountrySelect from "@/core/shared/components/CountrySelect";
+import RegionSelect from "@/core/shared/components/RegionSelect";
 import { useCreateLeadForm } from "../../hooks/useCreateLeadForm";
 import { LEAD_EMPLOYEE_OPTIONS, LEAD_STATUS_OPTIONS } from "../../types";
 
@@ -290,17 +292,50 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
         }}
       </form.Field>
 
-      {/* Direccion */}
-      <form.Field name="address">
+      {/* Pais */}
+      <form.Field name="countryCode">
         {(field) => (
           <Field>
-            <FieldLabel htmlFor={field.name}>Direccion</FieldLabel>
+            <FieldLabel htmlFor={field.name}>Pais</FieldLabel>
+            <CountrySelect
+              className="w-full"
+              onChange={(value) => {
+                field.handleChange(value);
+                form.setFieldValue("regionCode", "");
+              }}
+              priorityOptions={["MX"]}
+              placeholder="Seleccionar pais"
+            />
+          </Field>
+        )}
+      </form.Field>
+
+      {/* Region */}
+      <form.Field name="regionCode">
+        {(field) => (
+          <Field>
+            <FieldLabel htmlFor={field.name}>Region</FieldLabel>
+            <RegionSelect
+              className="w-full"
+              countryCode={form.getFieldValue("countryCode")}
+              onChange={(value) => field.handleChange(value)}
+              placeholder="Seleccionar region"
+            />
+          </Field>
+        )}
+      </form.Field>
+
+      {/* Codigo Postal */}
+      <form.Field name="postalCode">
+        {(field) => (
+          <Field>
+            <FieldLabel htmlFor={field.name}>Codigo Postal</FieldLabel>
             <Input
               id={field.name}
               value={field.state.value}
               onBlur={field.handleBlur}
               onChange={(e) => field.handleChange(e.target.value)}
-              placeholder="Direccion de la empresa"
+              placeholder="Codigo postal"
             />
           </Field>
         )}

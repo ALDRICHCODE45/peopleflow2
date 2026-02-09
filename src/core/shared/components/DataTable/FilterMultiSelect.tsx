@@ -29,6 +29,7 @@ interface FilterMultiSelectProps {
   selected: string[];
   onChange: (selected: string[]) => void;
   placeholder?: string;
+  disabled?: boolean;
 }
 
 export const FilterMultiSelect = memo(function FilterMultiSelect({
@@ -37,6 +38,7 @@ export const FilterMultiSelect = memo(function FilterMultiSelect({
   selected,
   onChange,
   placeholder = "Seleccionar...",
+  disabled = false,
 }: FilterMultiSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -53,11 +55,13 @@ export const FilterMultiSelect = memo(function FilterMultiSelect({
 
   return (
     <div className="space-y-2 w-full min-w-0">
-      <Label className="text-xs font-medium">{label}</Label>
+      <Label className="text-xs font-medium text-muted-foreground">
+        {label}
+      </Label>
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="w-full justify-between min-w-0">
-            <span className="truncate text-sm">
+          <Button variant="outline" className="w-full justify-between min-w-0" disabled={disabled}>
+            <span className="truncate text-sm text-muted-foreground">
               {selected.length > 0
                 ? `${selected.length} seleccionado${selected.length > 1 ? "s" : ""}`
                 : placeholder}
@@ -102,7 +106,9 @@ export const FilterMultiSelect = memo(function FilterMultiSelect({
                     />
                   )}
                 </span>
-                <span className="text-sm truncate">{option.label}</span>
+                <span className="text-sm truncate text-muted-foreground">
+                  {option.label}
+                </span>
               </DropdownMenuItem>
             );
           })}

@@ -11,7 +11,9 @@ export interface LeadProps {
   companyName: string;
   website: string | null;
   linkedInUrl: string | null;
-  address: string | null;
+  countryCode: string | null;
+  regionCode: string | null;
+  postalCode: string | null;
   subOrigin: string | null;
   employeeCount: string | null;
   notes: string | null;
@@ -63,8 +65,16 @@ export class Lead {
     return this.props.linkedInUrl;
   }
 
-  get address(): string | null {
-    return this.props.address;
+  get countryCode(): string | null {
+    return this.props.countryCode;
+  }
+
+  get regionCode(): string | null {
+    return this.props.regionCode;
+  }
+
+  get postalCode(): string | null {
+    return this.props.postalCode;
   }
 
   get subOrigin(): string | null {
@@ -188,7 +198,9 @@ export class Lead {
       this.props.companyName &&
       this.props.sectorId &&
       this.props.originId &&
-      this.props.address &&
+      this.props.countryCode &&
+      this.props.regionCode &&
+      this.props.postalCode &&
       this.props.employeeCount &&
       this.props.website &&
       this.props.linkedInUrl
@@ -203,7 +215,9 @@ export class Lead {
     if (!this.props.companyName) missing.push("Nombre de empresa");
     if (!this.props.sectorId) missing.push("Sector");
     if (!this.props.originId) missing.push("Origen");
-    if (!this.props.address) missing.push("Direccion");
+    if (!this.props.countryCode) missing.push("Pais");
+    if (!this.props.regionCode) missing.push("Region");
+    if (!this.props.postalCode) missing.push("Codigo postal");
     if (!this.props.employeeCount) missing.push("Numero de empleados");
     if (!this.props.website) missing.push("Sitio web");
     if (!this.props.linkedInUrl) missing.push("LinkedIn");
@@ -219,7 +233,9 @@ export class Lead {
       companyName: this.props.companyName,
       website: this.props.website,
       linkedInUrl: this.props.linkedInUrl,
-      address: this.props.address,
+      countryCode: this.props.countryCode,
+      regionCode: this.props.regionCode,
+      postalCode: this.props.postalCode,
       subOrigin: this.props.subOrigin,
       employeeCount: this.props.employeeCount,
       notes: this.props.notes,

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useCallback, useState } from "react";
+import { useDebouncedValue } from "@/core/shared/hooks/useDebouncedValue";
 import { usePaginatedLeadsQuery } from "../hooks/usePaginatedLeadsQuery";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
@@ -29,6 +30,10 @@ export function LeadsListPage() {
   const [selectedEmployeeCounts, setSelectedEmployeeCounts] = useState<string[]>(
     []
   );
+  const [selectedCountryCodes, setSelectedCountryCodes] = useState<string[]>([]);
+  const [selectedRegionCodes, setSelectedRegionCodes] = useState<string[]>([]);
+  const [postalCode, setPostalCode] = useState<string>("");
+  const debouncedPostalCode = useDebouncedValue(postalCode, 300);
   const [createdAtFrom, setCreatedAtFrom] = useState<string>("");
   const [createdAtTo, setCreatedAtTo] = useState<string>("");
 
@@ -79,6 +84,31 @@ export function LeadsListPage() {
     [setPagination]
   );
 
+  const handleCountryChange = useCallback(
+    (codes: string[]) => {
+      setSelectedCountryCodes(codes);
+      setSelectedRegionCodes([]);
+      setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+    },
+    [setPagination]
+  );
+
+  const handleRegionChange = useCallback(
+    (codes: string[]) => {
+      setSelectedRegionCodes(codes);
+      setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+    },
+    [setPagination]
+  );
+
+  const handlePostalCodeChange = useCallback(
+    (value: string) => {
+      setPostalCode(value);
+      setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+    },
+    [setPagination]
+  );
+
   const handleDateFromChange = useCallback(
     (date: string) => {
       setCreatedAtFrom(date);
@@ -101,6 +131,9 @@ export function LeadsListPage() {
     setSelectedOriginIds([]);
     setSelectedAssignedToIds([]);
     setSelectedEmployeeCounts([]);
+    setSelectedCountryCodes([]);
+    setSelectedRegionCodes([]);
+    setPostalCode("");
     setCreatedAtFrom("");
     setCreatedAtTo("");
     handleMultiTabChange([]);
@@ -121,6 +154,11 @@ export function LeadsListPage() {
       selectedAssignedToIds.length > 0 ? selectedAssignedToIds : undefined,
     employeeCounts:
       selectedEmployeeCounts.length > 0 ? selectedEmployeeCounts : undefined,
+    countryCodes:
+      selectedCountryCodes.length > 0 ? selectedCountryCodes : undefined,
+    regionCodes:
+      selectedRegionCodes.length > 0 ? selectedRegionCodes : undefined,
+    postalCode: debouncedPostalCode || undefined,
     createdAtFrom: createdAtFrom || undefined,
     createdAtTo: createdAtTo || undefined,
   });
@@ -162,6 +200,14 @@ export function LeadsListPage() {
         // Employee counts filter
         selectedEmployeeCounts,
         onEmployeeCountsChange: handleEmployeeCountsChange,
+        // Country/region filter
+        selectedCountryCodes,
+        selectedRegionCodes,
+        onCountryChange: handleCountryChange,
+        onRegionChange: handleRegionChange,
+        // Postal code filter
+        postalCode,
+        onPostalCodeChange: handlePostalCodeChange,
         // Date range filter
         createdAtFrom,
         createdAtTo,
@@ -188,6 +234,12 @@ export function LeadsListPage() {
       handleAssignedToChange,
       selectedEmployeeCounts,
       handleEmployeeCountsChange,
+      selectedCountryCodes,
+      selectedRegionCodes,
+      handleCountryChange,
+      handleRegionChange,
+      postalCode,
+      handlePostalCodeChange,
       createdAtFrom,
       createdAtTo,
       handleDateFromChange,

@@ -18,6 +18,7 @@ import { Badge } from "@/core/shared/ui/shadcn/badge";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Separator } from "@/core/shared/ui/shadcn/separator";
+import { getCountryName, getRegionName } from "@/core/lib/filter-countries";
 import Link from "next/link";
 import { Button } from "@/core/shared/ui/shadcn/button";
 import { NotesDialog } from "./NotesDialog";
@@ -143,7 +144,11 @@ export function LeadDetailSheet({
             <InfoItem label="Empleados" value={displayLead.employeeCount} />
           </div>
 
-          <InfoItem label="Direccion" value={displayLead.address} />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <InfoItem label="Pais" value={displayLead.countryCode ? getCountryName(displayLead.countryCode) : null} />
+            <InfoItem label="Region" value={displayLead.countryCode && displayLead.regionCode ? getRegionName(displayLead.countryCode, displayLead.regionCode) : null} />
+            <InfoItem label="Codigo Postal" value={displayLead.postalCode} />
+          </div>
 
           {/* Dates */}
           <div className="pt-3 border-t">

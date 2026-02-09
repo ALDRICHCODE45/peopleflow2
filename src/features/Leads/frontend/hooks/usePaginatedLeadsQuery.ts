@@ -20,6 +20,9 @@ export interface PaginatedLeadsQueryParams {
   originIds?: string[];
   assignedToIds?: string[];
   employeeCounts?: string[];
+  countryCodes?: string[];
+  regionCodes?: string[];
+  postalCode?: string;
   createdAtFrom?: string;
   createdAtTo?: string;
 }
@@ -43,6 +46,9 @@ export const getPaginatedLeadsQueryKey = (
       originIds: params.originIds,
       assignedToIds: params.assignedToIds,
       employeeCounts: params.employeeCounts,
+      countryCodes: params.countryCodes,
+      regionCodes: params.regionCodes,
+      postalCode: params.postalCode,
       createdAtFrom: params.createdAtFrom,
       createdAtTo: params.createdAtTo,
     },
@@ -69,6 +75,9 @@ export function usePaginatedLeadsQuery(params: PaginatedLeadsQueryParams) {
         originIds: params.originIds,
         assignedToIds: params.assignedToIds,
         employeeCounts: params.employeeCounts,
+        countryCodes: params.countryCodes,
+        regionCodes: params.regionCodes,
+        postalCode: params.postalCode,
         createdAtFrom: params.createdAtFrom,
         createdAtTo: params.createdAtTo,
       });

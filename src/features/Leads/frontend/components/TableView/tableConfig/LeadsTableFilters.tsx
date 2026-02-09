@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Badge } from "@shadcn/badge";
 import { Card, CardContent, CardHeader } from "@shadcn/card";
 import { Input } from "@shadcn/input";
@@ -29,6 +30,14 @@ interface LeadsTableFilterProps extends BaseFilterProps {
   // Employee counts filter
   selectedEmployeeCounts?: string[];
   onEmployeeCountsChange?: (counts: string[]) => void;
+  // Country/region filter
+  selectedCountryCodes?: string[];
+  selectedRegionCodes?: string[];
+  onCountryChange?: (codes: string[]) => void;
+  onRegionChange?: (codes: string[]) => void;
+  // Postal code filter
+  postalCode?: string;
+  onPostalCodeChange?: (value: string) => void;
   // Date range filter
   createdAtFrom?: string;
   createdAtTo?: string;
@@ -53,6 +62,12 @@ export const LeadsTableFilters = ({
   onAssignedToChange,
   selectedEmployeeCounts,
   onEmployeeCountsChange,
+  selectedCountryCodes,
+  selectedRegionCodes,
+  onCountryChange,
+  onRegionChange,
+  postalCode,
+  onPostalCodeChange,
   createdAtFrom,
   createdAtTo,
   onDateFromChange,
@@ -67,7 +82,10 @@ export const LeadsTableFilters = ({
   } = useModalState();
 
   // Convert sectors to filter options using IDs
-  const sectorOptions = sectors.map((s) => ({ value: s.id, label: s.name }));
+  const sectorOptions = useMemo(
+    () => sectors.map((s) => ({ value: s.id, label: s.name })),
+    [sectors],
+  );
 
   // Handler for clearing all filters
   const handleClearAllFilters = () => {
@@ -161,6 +179,12 @@ export const LeadsTableFilters = ({
                 onAssignedToChange={onAssignedToChange}
                 selectedEmployeesNumbers={selectedEmployeeCounts}
                 onSelectedEmployeeNumberChange={onEmployeeCountsChange}
+                selectedCountryCodes={selectedCountryCodes}
+                onCountryChange={onCountryChange}
+                selectedRegionCodes={selectedRegionCodes}
+                onRegionChange={onRegionChange}
+                postalCode={postalCode}
+                onPostalCodeChange={onPostalCodeChange}
                 createdAtFrom={createdAtFrom}
                 createdAtTo={createdAtTo}
                 onDateFromChange={onDateFromChange}

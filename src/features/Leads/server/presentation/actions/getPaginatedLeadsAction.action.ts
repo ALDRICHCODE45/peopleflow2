@@ -29,6 +29,9 @@ export interface GetPaginatedLeadsParams {
   originIds?: string[];
   assignedToIds?: string[];
   employeeCounts?: string[];
+  countryCodes?: string[];
+  regionCodes?: string[];
+  postalCode?: string;
   createdAtFrom?: string; // ISO string YYYY-MM-DD
   createdAtTo?: string; // ISO string YYYY-MM-DD
   /** If true, uses minimal includes for faster Kanban queries */
@@ -88,6 +91,9 @@ export async function getPaginatedLeadsAction(
         originIds: params.originIds,
         assignedToIds: params.assignedToIds,
         employeeCounts: params.employeeCounts,
+        countryCodes: params.countryCodes,
+        regionCodes: params.regionCodes,
+        postalCode: params.postalCode,
         createdAtFrom: params.createdAtFrom
           ? new Date(params.createdAtFrom)
           : undefined,

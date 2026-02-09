@@ -17,6 +17,9 @@ export interface GetPaginatedLeadsInput {
     originIds?: string[];
     assignedToIds?: string[];
     employeeCounts?: string[];
+    countryCodes?: string[];
+    regionCodes?: string[];
+    postalCode?: string;
     createdAtFrom?: Date;
     createdAtTo?: Date;
     search?: string;
@@ -48,6 +51,9 @@ export class GetPaginatedLeadsUseCase {
         ...(input.filters?.originIds?.length && { originIds: input.filters.originIds }),
         ...(input.filters?.assignedToIds?.length && { assignedToIds: input.filters.assignedToIds }),
         ...(input.filters?.employeeCounts?.length && { employeeCounts: input.filters.employeeCounts }),
+        ...(input.filters?.countryCodes?.length && { countryCodes: input.filters.countryCodes }),
+        ...(input.filters?.regionCodes?.length && { regionCodes: input.filters.regionCodes }),
+        ...(input.filters?.postalCode && { postalCode: input.filters.postalCode }),
         ...(input.filters?.createdAtFrom && { createdAtFrom: input.filters.createdAtFrom }),
         ...(input.filters?.createdAtTo && { createdAtTo: input.filters.createdAtTo }),
         ...(input.filters?.search && { search: input.filters.search }),

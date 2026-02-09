@@ -10,7 +10,9 @@ export interface UpdateLeadInput {
     companyName?: string;
     website?: string | null;
     linkedInUrl?: string | null;
-    address?: string | null;
+    countryCode?: string | null;
+    regionCode?: string | null;
+    postalCode?: string | null;
     subOrigin?: string | null;
     employeeCount?: string | null;
     notes?: string | null;
@@ -90,8 +92,14 @@ export class UpdateLeadUseCase {
         updateData.linkedInUrl = linkedInUrl.getValue();
       }
 
-      if (input.data.address !== undefined) {
-        updateData.address = input.data.address?.trim() || null;
+      if (input.data.countryCode !== undefined) {
+        updateData.countryCode = input.data.countryCode?.trim() || null;
+      }
+      if (input.data.regionCode !== undefined) {
+        updateData.regionCode = input.data.regionCode?.trim() || null;
+      }
+      if (input.data.postalCode !== undefined) {
+        updateData.postalCode = input.data.postalCode?.trim() || null;
       }
       if (input.data.subOrigin !== undefined) {
         updateData.subOrigin = input.data.subOrigin?.trim() || null;

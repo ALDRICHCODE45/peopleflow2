@@ -18,6 +18,9 @@ export interface KanbanFilters {
   originIds?: string[];
   assignedToIds?: string[];
   employeeCounts?: string[];
+  countryCodes?: string[];
+  regionCodes?: string[];
+  postalCode?: string;
   createdAtFrom?: string;
   createdAtTo?: string;
 }
@@ -47,6 +50,9 @@ export const getInfiniteLeadsQueryOptions = (
         originIds: filters.originIds,
         assignedToIds: filters.assignedToIds,
         employeeCounts: filters.employeeCounts,
+        countryCodes: filters.countryCodes,
+        regionCodes: filters.regionCodes,
+        postalCode: filters.postalCode,
         createdAtFrom: filters.createdAtFrom,
         createdAtTo: filters.createdAtTo,
       },
@@ -61,6 +67,9 @@ export const getInfiniteLeadsQueryOptions = (
         originIds: filters.originIds,
         assignedToIds: filters.assignedToIds,
         employeeCounts: filters.employeeCounts,
+        countryCodes: filters.countryCodes,
+        regionCodes: filters.regionCodes,
+        postalCode: filters.postalCode,
         createdAtFrom: filters.createdAtFrom,
         createdAtTo: filters.createdAtTo,
         minimal: true, // Use minimal includes for Kanban cards
@@ -112,6 +121,9 @@ export function useInfiniteLeadsByStatus(
         originIds: filters.originIds,
         assignedToIds: filters.assignedToIds,
         employeeCounts: filters.employeeCounts,
+        countryCodes: filters.countryCodes,
+        regionCodes: filters.regionCodes,
+        postalCode: filters.postalCode,
         createdAtFrom: filters.createdAtFrom,
         createdAtTo: filters.createdAtTo,
       },
@@ -138,6 +150,9 @@ export function useInfiniteLeadsByStatus(
         originIds: filters.originIds,
         assignedToIds: filters.assignedToIds,
         employeeCounts: filters.employeeCounts,
+        countryCodes: filters.countryCodes,
+        regionCodes: filters.regionCodes,
+        postalCode: filters.postalCode,
         createdAtFrom: filters.createdAtFrom,
         createdAtTo: filters.createdAtTo,
         minimal: true, // Use minimal includes for Kanban cards

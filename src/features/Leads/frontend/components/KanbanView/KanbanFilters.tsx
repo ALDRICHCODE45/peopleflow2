@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Filter, Search } from "@hugeicons/core-free-icons";
 import { Button } from "@/core/shared/ui/shadcn/button";
@@ -11,7 +12,7 @@ import type { UseKanbanFiltersReturn } from "../../hooks/useKanbanFilters";
 
 type KanbanFiltersProps = UseKanbanFiltersReturn;
 
-export function KanbanFilters({
+export const KanbanFilters = memo(function KanbanFilters({
   searchValue,
   setSearchValue,
   selectedSectorIds,
@@ -22,6 +23,12 @@ export function KanbanFilters({
   setSelectedAssignedToIds,
   selectedEmployeeCounts,
   setSelectedEmployeeCounts,
+  selectedCountryCodes,
+  handleCountryChange,
+  selectedRegionCodes,
+  setSelectedRegionCodes,
+  postalCode,
+  setPostalCode,
   createdAtFrom,
   setCreatedAtFrom,
   createdAtTo,
@@ -89,6 +96,12 @@ export function KanbanFilters({
           onAssignedToChange={setSelectedAssignedToIds}
           selectedEmployeesNumbers={selectedEmployeeCounts}
           onSelectedEmployeeNumberChange={setSelectedEmployeeCounts}
+          selectedCountryCodes={selectedCountryCodes}
+          onCountryChange={handleCountryChange}
+          selectedRegionCodes={selectedRegionCodes}
+          onRegionChange={setSelectedRegionCodes}
+          postalCode={postalCode}
+          onPostalCodeChange={setPostalCode}
           createdAtFrom={createdAtFrom}
           createdAtTo={createdAtTo}
           onDateFromChange={setCreatedAtFrom}
@@ -104,4 +117,4 @@ export function KanbanFilters({
       )}
     </div>
   );
-}
+});

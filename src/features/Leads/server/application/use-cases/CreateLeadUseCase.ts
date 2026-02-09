@@ -8,7 +8,9 @@ export interface CreateLeadInput {
   companyName: string;
   website?: string;
   linkedInUrl?: string;
-  address?: string;
+  countryCode?: string;
+  regionCode?: string;
+  postalCode?: string;
   subOrigin?: string;
   employeeCount?: string;
   notes?: string;
@@ -58,7 +60,9 @@ export class CreateLeadUseCase {
         normalizedCompanyName,
         website: website.getValue(),
         linkedInUrl: linkedInUrl.getValue(),
-        address: input.address?.trim() || null,
+        countryCode: input.countryCode?.trim() || null,
+        regionCode: input.regionCode?.trim() || null,
+        postalCode: input.postalCode?.trim() || null,
         subOrigin: input.subOrigin?.trim() || null,
         employeeCount: input.employeeCount?.trim() || null,
         notes: input.notes?.trim() || null,

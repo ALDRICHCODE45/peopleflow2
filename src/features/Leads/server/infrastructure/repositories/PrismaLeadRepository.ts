@@ -20,7 +20,9 @@ export class PrismaLeadRepository implements ILeadRepository {
     companyName: string;
     website: string | null;
     linkedInUrl: string | null;
-    address: string | null;
+    countryCode: string | null;
+    regionCode: string | null;
+    postalCode: string | null;
     subOrigin: string | null;
     employeeCount: string | null;
     notes: string | null;
@@ -47,7 +49,9 @@ export class PrismaLeadRepository implements ILeadRepository {
       companyName: lead.companyName,
       website: lead.website,
       linkedInUrl: lead.linkedInUrl,
-      address: lead.address,
+      countryCode: lead.countryCode,
+      regionCode: lead.regionCode,
+      postalCode: lead.postalCode,
       subOrigin: lead.subOrigin,
       employeeCount: lead.employeeCount,
       notes: lead.notes,
@@ -127,7 +131,9 @@ export class PrismaLeadRepository implements ILeadRepository {
         normalizedCompanyName: data.normalizedCompanyName,
         website: data.website || null,
         linkedInUrl: data.linkedInUrl || null,
-        address: data.address || null,
+        countryCode: data.countryCode || null,
+        regionCode: data.regionCode || null,
+        postalCode: data.postalCode || null,
         subOrigin: data.subOrigin || null,
         employeeCount: data.employeeCount || null,
         notes: data.notes || null,
@@ -165,7 +171,9 @@ export class PrismaLeadRepository implements ILeadRepository {
           ...(data.linkedInUrl !== undefined && {
             linkedInUrl: data.linkedInUrl,
           }),
-          ...(data.address !== undefined && { address: data.address }),
+          ...(data.countryCode !== undefined && { countryCode: data.countryCode }),
+          ...(data.regionCode !== undefined && { regionCode: data.regionCode }),
+          ...(data.postalCode !== undefined && { postalCode: data.postalCode }),
           ...(data.subOrigin !== undefined && { subOrigin: data.subOrigin }),
           ...(data.employeeCount !== undefined && {
             employeeCount: data.employeeCount,
@@ -339,6 +347,18 @@ export class PrismaLeadRepository implements ILeadRepository {
       where.employeeCount = { in: filters.employeeCounts };
     }
 
+    if (filters?.countryCodes?.length) {
+      where.countryCode = { in: filters.countryCodes };
+    }
+
+    if (filters?.regionCodes?.length) {
+      where.regionCode = { in: filters.regionCodes };
+    }
+
+    if (filters?.postalCode) {
+      where.postalCode = { contains: filters.postalCode, mode: "insensitive" };
+    }
+
     // Filtro por rango de fechas (inclusivo)
     if (filters?.createdAtFrom || filters?.createdAtTo) {
       where.createdAt = {
@@ -351,7 +371,7 @@ export class PrismaLeadRepository implements ILeadRepository {
       where.OR = [
         { companyName: { contains: filters.search, mode: "insensitive" } },
         { notes: { contains: filters.search, mode: "insensitive" } },
-        { address: { contains: filters.search, mode: "insensitive" } },
+        { postalCode: { contains: filters.search, mode: "insensitive" } },
       ];
     }
 
