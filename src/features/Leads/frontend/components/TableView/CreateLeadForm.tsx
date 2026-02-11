@@ -299,6 +299,7 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
             <FieldLabel htmlFor={field.name}>Pais</FieldLabel>
             <CountrySelect
               className="w-full"
+              value={field.state.value}
               onChange={(value) => {
                 field.handleChange(value);
                 form.setFieldValue("regionCode", "");
@@ -317,6 +318,7 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
             <FieldLabel htmlFor={field.name}>Region</FieldLabel>
             <RegionSelect
               className="w-full"
+              value={field.state.value}
               countryCode={form.getFieldValue("countryCode")}
               onChange={(value) => field.handleChange(value)}
               placeholder="Seleccionar region"
