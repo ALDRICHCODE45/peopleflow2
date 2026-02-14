@@ -10,9 +10,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/core/shared/ui/shadcn/select";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/core/shared/ui/shadcn/avatar";
 import { Field, FieldError, FieldLabel } from "@/core/shared/ui/shadcn/field";
 import CountrySelect from "@/core/shared/components/CountrySelect";
 import RegionSelect from "@/core/shared/components/RegionSelect";
+import { SearchableSelect } from "@/core/shared/components/SearchableSelect";
+import { useMemo } from "react";
 import { useCreateLeadForm } from "../../hooks/useCreateLeadForm";
 import { LEAD_EMPLOYEE_OPTIONS, LEAD_STATUS_OPTIONS } from "../../types";
 
@@ -31,6 +38,32 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
     isSubmitting,
     users,
   } = useCreateLeadForm({ onOpenChange });
+
+  const userOptions = useMemo(
+    () =>
+      users.map((u) => ({
+        value: u.id,
+        label: u.name ?? u.email,
+        avatar: u.avatar,
+      })),
+    [users],
+  );
+  const sectorOptions = useMemo(
+    () =>
+      sectors.map((u) => ({
+        value: u.id,
+        label: u.name,
+      })),
+    [sectors],
+  );
+  const employeeOptions = useMemo(
+    () =>
+      LEAD_EMPLOYEE_OPTIONS.map((u) => ({
+        value: u,
+        label: u,
+      })),
+    [sectors],
+  );
 
   return (
     <form
@@ -96,24 +129,22 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>Sector</FieldLabel>
-              <Select
-                value={field.state.value ?? "none"}
-                onValueChange={(value) =>
-                  handleSectorChange(value === "none" ? undefined : value)
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecciona un sector" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">Sin sector</SelectItem>
-                  {sectors.map((sector) => (
-                    <SelectItem key={sector.id} value={sector.id}>
-                      {sector.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+
+              <SearchableSelect
+                options={sectorOptions}
+                value={field.state.value}
+                onChange={(v) => handleSectorChange(v)}
+                placeholder="Selecciona el sector"
+                searchPlaceholder="Buscar sector..."
+                renderOption={(opt) => (
+                  <>
+                    <span className="truncate">{opt.label}</span>
+                  </>
+                )}
+                renderSelected={(opt) => (
+                  <div className="flex items-center">{opt.label}</div>
+                )}
+              />
             </Field>
           )}
         </form.Field>
@@ -197,24 +228,22 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
         {(field) => (
           <Field>
             <FieldLabel htmlFor={field.name}>Numero de empleados</FieldLabel>
-            <Select
-              value={field.state.value ?? "none"}
-              onValueChange={(value) =>
-                field.handleChange(value === "none" ? "none" : value)
-              }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecciona el numero de empleados" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">No ingresado</SelectItem>
-                {LEAD_EMPLOYEE_OPTIONS.map((value) => (
-                  <SelectItem key={value} value={value}>
-                    {value}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+
+            <SearchableSelect
+              options={employeeOptions}
+              value={field.state.value}
+              onChange={(v) => field.handleChange(v)}
+              placeholder="Selecciona el No. de empleados"
+              searchPlaceholder="Buscar el No. de empleados..."
+              renderOption={(opt) => (
+                <>
+                  <span className="truncate">{opt.label}</span>
+                </>
+              )}
+              renderSelected={(opt) => (
+                <div className="flex items-center">{opt.label}</div>
+              )}
+            />
           </Field>
         )}
       </form.Field>
@@ -227,21 +256,31 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
           return (
             <Field data-invalid={isInvalid}>
               <FieldLabel htmlFor={field.name}>Usuario asignado *</FieldLabel>
-              <Select
+              <SearchableSelect
+                options={userOptions}
                 value={field.state.value}
-                onValueChange={(value) => field.handleChange(value)}
-              >
-                <SelectTrigger onBlur={field.handleBlur}>
-                  <SelectValue placeholder="Selecciona el usuario" />
-                </SelectTrigger>
-                <SelectContent>
-                  {users.map((origin) => (
-                    <SelectItem key={origin.id} value={origin.id}>
-                      {origin.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                onChange={(v) => field.handleChange(v)}
+                placeholder="Selecciona el usuario"
+                searchPlaceholder="Buscar usuario..."
+                renderOption={(opt) => (
+                  <>
+                    <Avatar className="size-6">
+                      <AvatarImage src={opt.avatar ?? ""} />
+                      <AvatarFallback className="text-xs">U</AvatarFallback>
+                    </Avatar>
+                    <span className="truncate">{opt.label}</span>
+                  </>
+                )}
+                renderSelected={(opt) => (
+                  <span className="flex items-center gap-2 truncate">
+                    <Avatar className="size-6">
+                      <AvatarImage src={opt.avatar ?? ""} />
+                      <AvatarFallback className="text-xs">U</AvatarFallback>
+                    </Avatar>
+                    {opt.label}
+                  </span>
+                )}
+              />
               {isInvalid && <FieldError errors={field.state.meta.errors} />}
             </Field>
           );

@@ -7,6 +7,7 @@ import {
   useSubsectorsBySector,
   useLeadOrigins,
 } from "./useCatalogs";
+import { useTenantUsersQuery } from "@/features/Administracion/usuarios/frontend/hooks/useUsers";
 import { editLeadSchema } from "../schemas/lead.schema";
 import { useState } from "react";
 import type { Lead } from "../types";
@@ -33,6 +34,7 @@ export function useEditLeadForm({
     selectedSectorId ?? null,
   );
   const { data: origins = [] } = useLeadOrigins();
+  const { data: users = [] } = useTenantUsersQuery();
 
   const editLeadMutation = useMutation({
     mutationFn: async ({
@@ -152,5 +154,6 @@ export function useEditLeadForm({
     selectedSectorId,
     handleSectorChange,
     isSubmitting: editLeadMutation.isPending,
+    users,
   };
 }

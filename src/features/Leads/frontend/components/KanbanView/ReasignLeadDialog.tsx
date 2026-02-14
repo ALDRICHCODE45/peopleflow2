@@ -1,5 +1,9 @@
 "use client";
-import { Avatar, AvatarFallback } from "@/core/shared/ui/shadcn/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/core/shared/ui/shadcn/avatar";
 import { Button } from "@/core/shared/ui/shadcn/button";
 import {
   Dialog,
@@ -11,19 +15,11 @@ import {
   DialogTitle,
 } from "@/core/shared/ui/shadcn/dialog";
 import { useTenantUsersQuery } from "@/features/Administracion/usuarios/frontend/hooks/useUsers";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectGroup,
-  SelectLabel,
-  SelectItem,
-} from "@shadcn/select";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useReasignLead } from "../../hooks/useLeads";
 import { IconSvgElement } from "@hugeicons/react";
 import { LoadingButton } from "@/core/shared/ui/shadcn/loading-button";
+import { SearchableSelect } from "@/core/shared/components/SearchableSelect";
 
 interface Props {
   isOpen: boolean;
@@ -38,6 +34,16 @@ export const ReasignLeadDialog = ({ isOpen, onOpenChange, leadId }: Props) => {
 
   const [selectedUser, setSelectedUser] = useState<string | undefined>(
     undefined,
+  );
+
+  const userOptions = useMemo(
+    () =>
+      (users ?? []).map((u) => ({
+        value: u.id,
+        label: u.name ?? u.email,
+        avatar: u.avatar,
+      })),
+    [users],
   );
 
   const handleSubmit = async () => {
@@ -64,27 +70,33 @@ export const ReasignLeadDialog = ({ isOpen, onOpenChange, leadId }: Props) => {
             Selecciona el generador nuevo a continuacion:
           </DialogDescription>
         </DialogHeader>
-        <Select
-          onValueChange={(value) => setSelectedUser(value)}
+
+        <SearchableSelect
+          options={userOptions}
           value={selectedUser}
-        >
-          <SelectTrigger className="w-full ">
-            <SelectValue placeholder="Selecciona el usuario" />
-          </SelectTrigger>
-          <SelectContent className="">
-            <SelectGroup>
-              <SelectLabel className="pl-2">Reasignar Lead</SelectLabel>
-              {users?.map((item) => (
-                <SelectItem key={item.id} value={item.id}>
-                  <Avatar className="size-5">
-                    <AvatarFallback className="text-xs">U</AvatarFallback>
-                  </Avatar>
-                  <span className="truncate">{item.name}</span>
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+          onChange={(value) => setSelectedUser(value)}
+          placeholder="Selecciona el usuario"
+          searchPlaceholder="Buscar usuario..."
+          renderOption={(opt) => (
+            <>
+              <Avatar className="size-6">
+                <AvatarImage src={opt.avatar ?? ""} alt="usuario" />
+                <AvatarFallback className="text-xs">U</AvatarFallback>
+              </Avatar>
+              <span className="truncate">{opt.label}</span>
+            </>
+          )}
+          renderSelected={(opt) => (
+            <span className="flex items-center gap-2 truncate">
+              <Avatar className="size-6">
+                <AvatarImage src={opt.avatar ?? ""} alt="usuario" />
+                <AvatarFallback className="text-xs">U</AvatarFallback>
+              </Avatar>
+              {opt.label}
+            </span>
+          )}
+        />
+
         <DialogFooter>
           <DialogClose asChild>
             <Button variant={"outline"}>cancelar</Button>
