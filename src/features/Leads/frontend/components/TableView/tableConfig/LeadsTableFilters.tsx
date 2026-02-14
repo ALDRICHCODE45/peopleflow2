@@ -110,6 +110,8 @@ export const LeadsTableFilters = ({
               buttonTooltipText="crear lead"
               onClearFilters={handleClearAllFilters}
               onAdd={onAdd}
+              table={table}
+              enableColumnVisibility
             />
           </div>
         </CardHeader>

@@ -43,7 +43,7 @@ export const LeadsTableConfig: TableConfig<Lead> = {
     showPageSizeSelector: true,
     showPaginationInfo: true,
   },
-  enableColumnVisibility: false,
+  enableColumnVisibility: true,
   enableRowSelection: true,
   enableSorting: true,
   // Advanced table features: Column Pinning & Drag-and-Drop

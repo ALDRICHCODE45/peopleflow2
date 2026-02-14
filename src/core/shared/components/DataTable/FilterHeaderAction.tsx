@@ -2,6 +2,7 @@ import { HugeiconsIcon, IconSvgElement } from "@hugeicons/react";
 import { Button } from "@shadcn/button";
 import { Refresh } from "@hugeicons/core-free-icons";
 import { Table } from "@tanstack/react-table";
+import { ColumnVisibilitySelector } from "./ColumnVisibilitySelector";
 
 interface FilterHeaderActions {
   showAddButton?: boolean;
@@ -13,6 +14,7 @@ interface FilterHeaderActions {
   onExport?: (table: Table<unknown>) => void;
   table?: Table<unknown>;
   exportFileName?: string;
+  enableColumnVisibility?: boolean;
 }
 
 export const FilterHeaderActions = ({
@@ -25,6 +27,7 @@ export const FilterHeaderActions = ({
   onExport,
   table,
   exportFileName,
+  enableColumnVisibility = false,
 }: FilterHeaderActions) => {
   return (
     <>
@@ -61,10 +64,11 @@ export const FilterHeaderActions = ({
         className="h-8 px-3 flex items-center gap-1"
       >
         <HugeiconsIcon icon={Refresh} />
-
         <span>Limpiar</span>
       </Button>
-      {table && <Button>Exportar</Button>}
+      {enableColumnVisibility && table && (
+        <ColumnVisibilitySelector table={table} />
+      )}
     </>
   );
 };

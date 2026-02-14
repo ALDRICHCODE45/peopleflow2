@@ -16,6 +16,7 @@ import { Button } from "@shadcn/button";
 import { Table as TanstackTable } from "@tanstack/react-table";
 import { Checkbox } from "@shadcn/checkbox";
 import { TableConfig } from "./TableTypes.types";
+import { ColumnVisibilitySelector } from "./ColumnVisibilitySelector";
 
 interface DataTableFiltersProps<TData> {
   config: TableConfig<TData>;
@@ -32,7 +33,8 @@ export function DataTableFilters<TData>({
   const id = useId();
 
   const searchColumn = config.filters?.searchColumn || "nombre";
-  const searchValue = (table.getColumn(searchColumn)?.getFilterValue() ?? "") as string;
+  const searchValue = (table.getColumn(searchColumn)?.getFilterValue() ??
+    "") as string;
   const selectedCount = table.getSelectedRowModel().rows.length;
   const hasSelection = selectedCount > 0;
 
@@ -55,7 +57,8 @@ export function DataTableFilters<TData>({
   const CustomFilterComponent = config.filters?.customFilter?.component;
   const customFilterProps = config.filters?.customFilter?.props || {};
 
-  const CustomActionComponent = config.actions?.customActionComponent?.component;
+  const CustomActionComponent =
+    config.actions?.customActionComponent?.component;
   const customActionProps = config.actions?.customActionComponent?.props || {};
 
   if (CustomFilterComponent) {
@@ -134,6 +137,11 @@ export function DataTableFilters<TData>({
                 {config.actions.addButtonIcon}
                 <span>{config.actions.addButtonText || "Agregar"}</span>
               </Button>
+            )}
+            {config.enableColumnVisibility && (
+              <ColumnVisibilitySelector
+                table={table as TanstackTable<unknown>}
+              />
             )}
             {config.actions?.customActions}
           </div>

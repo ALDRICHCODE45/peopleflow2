@@ -22,7 +22,6 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import {
   UserPlus,
   DeleteIcon,
-  FileDownloadIcon,
   Copy01Icon,
   Printer,
 } from "@hugeicons/core-free-icons";
@@ -75,7 +74,6 @@ export function DataTable<TData, TValue>({
   sorting: sortingProp,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [globalFilter, setGlobalFilterState] = useState<string>("");
 
@@ -104,7 +102,7 @@ export function DataTable<TData, TValue>({
     },
     emptyStateMessage: "No se encontraron resultados.",
     enableSorting: true,
-    enableColumnVisibility: false,
+    enableColumnVisibility: true,
     enableRowSelection: false,
     isLoading: false,
     skeletonRows: 5,
@@ -145,7 +143,7 @@ export function DataTable<TData, TValue>({
       },
       columnOrder: { ...defaultConfig.columnOrder, ...config.columnOrder },
     }),
-    [config]
+    [config],
   );
 
   // Calcular estados de carga fuera del useMemo para evitar re-renders innecesarios del config
@@ -163,7 +161,7 @@ export function DataTable<TData, TValue>({
     {
       pageIndex: 0,
       pageSize: finalConfig.pagination.defaultPageSize || 10,
-    }
+    },
   );
   const [internalSorting, setInternalSorting] = useState<SortingState>([]);
 
@@ -175,8 +173,10 @@ export function DataTable<TData, TValue>({
   const {
     columnPinning,
     columnOrder: storedColumnOrder,
+    columnVisibility,
     setColumnPinning,
     setColumnOrder,
+    setColumnVisibility,
   } = useTablePreferences({
     persistKey: columnPinningPersistKey || columnOrderPersistKey,
     defaultPinning: finalConfig.columnPinning?.defaultPinning ?? {
@@ -191,7 +191,7 @@ export function DataTable<TData, TValue>({
   const columnOrder = useMemo(() => {
     const currentColumnIds = columns
       .map((col) =>
-        "accessorKey" in col ? String(col.accessorKey) : (col.id ?? "")
+        "accessorKey" in col ? String(col.accessorKey) : (col.id ?? ""),
       )
       .filter(Boolean);
 
@@ -270,7 +270,7 @@ export function DataTable<TData, TValue>({
       onPaginationChangeProp,
       pagination,
       sorting,
-    ]
+    ],
   );
 
   // Handler para cambios de column pinning
@@ -282,7 +282,7 @@ export function DataTable<TData, TValue>({
         setColumnPinning(updater);
       }
     },
-    [setColumnPinning]
+    [setColumnPinning],
   );
 
   // Handler para cambios de column order
@@ -294,7 +294,19 @@ export function DataTable<TData, TValue>({
         setColumnOrder(updater);
       }
     },
-    [setColumnOrder]
+    [setColumnOrder],
+  );
+
+  // Handler para cambios de visibilidad de columnas
+  const handleColumnVisibilityChange = useCallback(
+    (updater: Updater<VisibilityState>) => {
+      if (typeof updater === "function") {
+        setColumnVisibility((prev) => updater(prev));
+      } else {
+        setColumnVisibility(updater);
+      }
+    },
+    [setColumnVisibility],
   );
 
   const table = useReactTable({
@@ -330,7 +342,7 @@ export function DataTable<TData, TValue>({
     enableSortingRemoval: false,
     onPaginationChange: handlePaginationChange,
     onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
+    onColumnVisibilityChange: handleColumnVisibilityChange,
     onRowSelectionChange: setRowSelection,
     onGlobalFilterChange: setGlobalFilter,
 
@@ -393,6 +405,7 @@ export function DataTable<TData, TValue>({
               columnPinning={columnPinning}
               columnOrder={columnOrder}
               rowSelection={rowSelection}
+              columnVisibility={columnVisibility}
             />
           </div>
         )}

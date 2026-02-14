@@ -6,6 +6,7 @@ import {
   ColumnOrderState,
   ColumnPinningState,
   RowSelectionState,
+  VisibilityState,
   Table,
   flexRender,
 } from "@tanstack/react-table";
@@ -61,6 +62,8 @@ interface TableBodyProps<TData, TValue> {
   columnOrder?: ColumnOrderState;
   /** Estado de seleccion para detectar cambios en memo */
   rowSelection?: RowSelectionState;
+  /** Estado de visibilidad para detectar cambios en memo */
+  columnVisibility?: VisibilityState;
 }
 
 function TableBodyDataTableInner<TData, TValue>({
@@ -69,6 +72,7 @@ function TableBodyDataTableInner<TData, TValue>({
   columnPinning: columnPinningProp,
   columnOrder: columnOrderProp,
   rowSelection: rowSelectionProp,
+  columnVisibility: columnVisibilityProp,
 }: TableBodyProps<TData, TValue>) {
   // Determinar si las features están habilitadas
   const enableColumnPinning = config.columnPinning?.enabled ?? false;
@@ -81,6 +85,7 @@ function TableBodyDataTableInner<TData, TValue>({
   // columnOrderProp y rowSelectionProp se usan implicitamente por el memo para detectar cambios
   void columnOrderProp;
   void rowSelectionProp;
+  void columnVisibilityProp;
 
   // Helper para obtener posición de pin de una columna desde el estado
   const getColumnPinPosition = useCallback(
