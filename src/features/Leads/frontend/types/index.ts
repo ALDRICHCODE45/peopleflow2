@@ -66,6 +66,11 @@ export const LEAD_EMPLOYEE_OPTIONS: LEAD_EMPLOYEE_OPTIONS[] = [
   "mas de 500",
 ];
 
+export const LINKEDIN_SUB_ORIGIN_OPTIONS = [
+  { value: "Buscando servicios de headhunting activamente", label: "Buscando servicios de headhunting activamente" },
+  { value: "Prospección desde cero", label: "Prospección desde cero" },
+];
+
 export const CONTACT_POSITION_OPTIONS = [
   { value: "Director de RH", label: "Director de RH" },
   { value: "Gerente de RH", label: "Gerente de RH" },

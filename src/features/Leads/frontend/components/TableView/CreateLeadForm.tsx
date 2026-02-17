@@ -19,9 +19,10 @@ import { Field, FieldError, FieldLabel } from "@/core/shared/ui/shadcn/field";
 import CountrySelect from "@/core/shared/components/CountrySelect";
 import RegionSelect from "@/core/shared/components/RegionSelect";
 import { SearchableSelect } from "@/core/shared/components/SearchableSelect";
-import { useMemo } from "react";
+import { CreatableSelect } from "@/core/shared/components/CreatableSelect";
+import { useMemo, useState } from "react";
 import { useCreateLeadForm } from "../../hooks/useCreateLeadForm";
-import { LEAD_EMPLOYEE_OPTIONS, LEAD_STATUS_OPTIONS } from "../../types";
+import { LEAD_EMPLOYEE_OPTIONS, LEAD_STATUS_OPTIONS, LINKEDIN_SUB_ORIGIN_OPTIONS } from "../../types";
 
 interface CreateLeadFormProps {
   onOpenChange: (open: boolean) => void;
@@ -64,6 +65,12 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
       })),
     [sectors],
   );
+
+  const [selectedOriginId, setSelectedOriginId] = useState<string | undefined>(undefined);
+  const isLinkedInOrigin = useMemo(() => {
+    if (!selectedOriginId) return false;
+    return origins.some((o) => o.id === selectedOriginId && o.name.toLowerCase() === "linkedin");
+  }, [selectedOriginId, origins]);
 
   return (
     <form
@@ -186,9 +193,12 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
               <FieldLabel htmlFor={field.name}>Origen del lead</FieldLabel>
               <Select
                 value={field.state.value ?? "none"}
-                onValueChange={(value) =>
-                  field.handleChange(value === "none" ? undefined : value)
-                }
+                onValueChange={(value) => {
+                  const v = value === "none" ? undefined : value;
+                  field.handleChange(v);
+                  setSelectedOriginId(v);
+                  form.setFieldValue("subOrigin", "");
+                }}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecciona el origen" />
@@ -211,13 +221,24 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
           {(field) => (
             <Field>
               <FieldLabel htmlFor={field.name}>Sub-Origen</FieldLabel>
-              <Input
-                id={field.name}
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
-                placeholder="URL especifica, publicacion, etc."
-              />
+              {isLinkedInOrigin ? (
+                <CreatableSelect
+                  options={LINKEDIN_SUB_ORIGIN_OPTIONS}
+                  value={field.state.value}
+                  onChange={(v) => field.handleChange(v)}
+                  onBlur={field.handleBlur}
+                  placeholder="Selecciona o escribe el sub-origen"
+                  searchPlaceholder="Buscar sub-origen..."
+                />
+              ) : (
+                <Input
+                  id={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  placeholder="URL especifica, publicacion, etc."
+                />
+              )}
             </Field>
           )}
         </form.Field>
