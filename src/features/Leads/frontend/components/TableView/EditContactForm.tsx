@@ -7,7 +7,9 @@ import { Switch } from "@/core/shared/ui/shadcn/switch";
 import { PhoneInput } from "@/core/shared/components/phone-input";
 import { Field, FieldError, FieldLabel } from "@/core/shared/ui/shadcn/field";
 import { Label } from "@/core/shared/ui/shadcn/label";
+import { CreatableSelect } from "@/core/shared/components/CreatableSelect";
 import { useEditContactForm } from "../../hooks/useEditContactForm";
+import { CONTACT_POSITION_OPTIONS } from "../../types";
 import type { Contact } from "../../types";
 
 interface EditContactFormProps {
@@ -79,12 +81,14 @@ export function EditContactForm({
         {(field) => (
           <Field>
             <FieldLabel htmlFor={field.name}>Puesto</FieldLabel>
-            <Input
-              id={field.name}
+            <CreatableSelect
+              options={CONTACT_POSITION_OPTIONS}
               value={field.state.value}
+              onChange={(val) => field.handleChange(val)}
               onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-              placeholder="Director de RH, CEO, etc."
+              placeholder="Seleccionar puesto..."
+              searchPlaceholder="Buscar puesto..."
+              createLabel="Agregar"
             />
           </Field>
         )}

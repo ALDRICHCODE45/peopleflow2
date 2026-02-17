@@ -66,6 +66,17 @@ export const LEAD_EMPLOYEE_OPTIONS: LEAD_EMPLOYEE_OPTIONS[] = [
   "mas de 500",
 ];
 
+export const CONTACT_POSITION_OPTIONS = [
+  { value: "Director de RH", label: "Director de RH" },
+  { value: "Gerente de RH", label: "Gerente de RH" },
+  { value: "Director de Atracción de Talento", label: "Director de Atracción de Talento" },
+  { value: "Gerente de Atracción de Talento", label: "Gerente de Atracción de Talento" },
+  { value: "Analista de RH", label: "Analista de RH" },
+  { value: "CEO", label: "CEO" },
+  { value: "CTO", label: "CTO" },
+  { value: "COO", label: "COO" },
+];
+
 export const INTERACTION_TYPE_LABELS: Record<InteractionType, string> = {
   CALL: "Llamada",
   EMAIL: "Email",
