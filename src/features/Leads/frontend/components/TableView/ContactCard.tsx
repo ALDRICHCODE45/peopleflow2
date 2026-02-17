@@ -1,8 +1,4 @@
-import type {
-  Contact,
-  ContactFormData,
-  EditContactFormData,
-} from "../../types";
+import type { Contact, EditContactFormData } from "../../types";
 
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
@@ -13,7 +9,7 @@ import {
 import { createLeadContactActions } from "./createLeadContactActions";
 import { LeadContactActionsDropdown } from "./LeadContactActionsDropdown";
 import { useModalState } from "@/core/shared/hooks";
-import { ContactDialogFormSheet } from "./ContactDialogFormSheet";
+import { EditContactDialogSheet } from "./ContactDialogFormSheet";
 import { ContactInteractionsDialog } from "./ContactInteractionsDialog";
 import { useUpdateContact } from "../../hooks/useContacts";
 import { cn } from "@/core/lib/utils";
@@ -24,7 +20,6 @@ import {
   TooltipTrigger,
 } from "@/core/shared/ui/shadcn/tooltip";
 import { LeadStatusBadge } from "./LeadStatusBadge";
-import { LeadStatus } from "@/core/generated/prisma/enums";
 
 export function ContactCard({
   contact,
@@ -52,19 +47,6 @@ export function ContactCard({
     onEdit: openEditModal,
     onShowInteracciones: openInteractionModal,
   });
-
-  const handleEditContact = async (data: EditContactFormData) => {
-    try {
-      await editContactMutation.mutateAsync({
-        contactId: contact.id,
-        data,
-      });
-      closeEditModal();
-    } catch {
-      // Error already shown via toast in hook
-      // Keep dialog open so user can retry
-    }
-  };
 
   const handleTagEdit = async (data: EditContactFormData) => {
     await editContactMutation.mutateAsync({
@@ -205,13 +187,6 @@ export function ContactCard({
               </Tooltip>
             </Link>
           )}
-
-          {/* Inline contact info - show primary method */}
-          {contact.email && (
-            <span className="ml-1 text-xs text-muted-foreground truncate max-w-[140px]">
-              {contact.email}
-            </span>
-          )}
         </div>
       )}
 
@@ -222,22 +197,11 @@ export function ContactCard({
         </p>
       )}
 
-      <ContactDialogFormSheet
+      <EditContactDialogSheet
+        contact={contact}
         open={isEditModalOpen}
         onOpenChange={(open) => {
           if (!open) closeEditModal();
-        }}
-        onSubmit={handleEditContact}
-        isLoading={editContactMutation.isPending}
-        initialData={{
-          firstName: contact.firstName,
-          lastName: contact.lastName,
-          email: contact.email ?? undefined,
-          phone: contact.phone ?? undefined,
-          position: contact.position ?? undefined,
-          linkedInUrl: contact.linkedInUrl ?? undefined,
-          isPrimary: contact.isPrimary,
-          notes: contact.notes ?? undefined,
         }}
       />
 

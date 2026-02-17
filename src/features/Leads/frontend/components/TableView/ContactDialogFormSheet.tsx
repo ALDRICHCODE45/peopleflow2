@@ -1,54 +1,64 @@
 import { Separator } from "@/core/shared/ui/shadcn/separator";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@shadcn/dialog";
-import { ContactFormData, EditContactFormData } from "../../types";
-import { ContactForm } from "./ContactForm";
-import { Button } from "@/core/shared/ui/shadcn/button";
+import { CreateContactForm } from "./CreateContactForm";
+import { EditContactForm } from "./EditContactForm";
+import type { Contact } from "../../types";
 
-interface Props {
-  onSubmit: (data: ContactFormData) => Promise<void>;
-  isLoading?: boolean;
-  initialData?: ContactFormData;
-
+interface CreateContactDialogSheetProps {
+  leadId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-export const ContactDialogFormSheet = ({
-  onSubmit,
-  isLoading,
-  initialData,
-
+export const CreateContactDialogSheet = ({
+  leadId,
   open,
   onOpenChange,
-}: Props) => {
+}: CreateContactDialogSheetProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-sm  md:min-w-xl">
+      <DialogContent className="w-sm md:min-w-xl">
         <DialogHeader>
-          <DialogTitle>Formulario de contacto</DialogTitle>
+          <DialogTitle>Agregar contacto</DialogTitle>
           <DialogDescription>
             Ingresa los siguientes campos para completar el registro:
           </DialogDescription>
         </DialogHeader>
         <Separator />
-        <ContactForm
-          onSubmit={onSubmit}
-          isLoading={isLoading}
-          initialData={initialData}
-        />
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DialogClose>
-        </DialogFooter>
+        <CreateContactForm leadId={leadId} onOpenChange={onOpenChange} />
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+interface EditContactDialogSheetProps {
+  contact: Contact;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export const EditContactDialogSheet = ({
+  contact,
+  open,
+  onOpenChange,
+}: EditContactDialogSheetProps) => {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="w-sm md:min-w-xl">
+        <DialogHeader>
+          <DialogTitle>Editar contacto</DialogTitle>
+          <DialogDescription>
+            Modifica los campos necesarios del contacto:
+          </DialogDescription>
+        </DialogHeader>
+        <Separator />
+        <EditContactForm contact={contact} onOpenChange={onOpenChange} />
       </DialogContent>
     </Dialog>
   );

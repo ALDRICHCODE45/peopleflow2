@@ -4,19 +4,14 @@ import { useState } from "react";
 import { Button } from "@/core/shared/ui/shadcn/button";
 import {
   useContactsByLead,
-  useAddContact,
   useDeleteContact,
 } from "../../hooks/useContacts";
-import type {
-  Contact,
-  ContactFormData,
-  EditContactFormData,
-} from "../../types";
+import type { Contact } from "../../types";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Add01Icon, UserCircleIcon } from "@hugeicons/core-free-icons";
 import { DeleteContactAlertDialog } from "./DeleteContacAlertDialot";
 import { ContactCard } from "./ContactCard";
-import { ContactDialogFormSheet } from "./ContactDialogFormSheet";
+import { CreateContactDialogSheet } from "./ContactDialogFormSheet";
 import { useModalState } from "@/core/shared/hooks";
 
 interface ContactsSectionProps {
@@ -25,24 +20,15 @@ interface ContactsSectionProps {
 
 export function ContactsSection({ leadId }: ContactsSectionProps) {
   const { data: contacts = [], isLoading } = useContactsByLead(leadId);
-  const addContactMutation = useAddContact();
   const deleteContactMutation = useDeleteContact();
 
   const {
-    openModal: openEditDialog,
-    isOpen: isOpenEditDialog,
-    closeModal: closeEditDialog,
+    openModal: openCreateDialog,
+    isOpen: isCreateDialogOpen,
+    closeModal: closeCreateDialog,
   } = useModalState();
 
   const [contactToDelete, setContactToDelete] = useState<Contact | null>(null);
-
-  const handleAddContact = async (data: ContactFormData) => {
-    await addContactMutation.mutateAsync({
-      leadId,
-      data,
-    });
-    closeEditDialog();
-  };
 
   const handleDeleteContact = async () => {
     if (contactToDelete) {
@@ -68,19 +54,18 @@ export function ContactsSection({ leadId }: ContactsSectionProps) {
           {contacts.length} {contacts.length === 1 ? "contacto" : "contactos"}
         </p>
 
-        {isOpenEditDialog && (
-          <ContactDialogFormSheet
+        {isCreateDialogOpen && (
+          <CreateContactDialogSheet
+            leadId={leadId}
             open={true}
-            onOpenChange={closeEditDialog}
-            onSubmit={handleAddContact}
-            isLoading={addContactMutation.isPending}
+            onOpenChange={closeCreateDialog}
           />
         )}
 
         <Button
           variant="ghost"
           size="sm"
-          onClick={openEditDialog}
+          onClick={openCreateDialog}
           className="h-8 px-3 text-xs font-medium hover:bg-primary/5 hover:text-primary"
         >
           <HugeiconsIcon icon={Add01Icon} className="mr-1.5 size-3.5" />
@@ -106,7 +91,7 @@ export function ContactsSection({ leadId }: ContactsSectionProps) {
           <Button
             variant="outline"
             size="sm"
-            onClick={openEditDialog}
+            onClick={openCreateDialog}
             className="mt-4 h-8 text-xs"
           >
             <HugeiconsIcon icon={Add01Icon} className="mr-1.5 size-3.5" />
