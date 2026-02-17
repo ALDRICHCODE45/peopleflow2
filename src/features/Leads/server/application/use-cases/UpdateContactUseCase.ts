@@ -1,6 +1,10 @@
-import type { IContactRepository, UpdateContactData } from "../../domain/interfaces/IContactRepository";
+import type {
+  IContactRepository,
+  UpdateContactData,
+} from "../../domain/interfaces/IContactRepository";
 import { Contact } from "../../domain/entities/Contact";
 import { PersonNameVO, EmailVO, URLVO } from "../../domain/value-objects";
+import { LeadStatus } from "@/features/Leads/frontend/types";
 
 export interface UpdateContactInput {
   contactId: string;
@@ -14,6 +18,7 @@ export interface UpdateContactInput {
     linkedInUrl?: string | null;
     isPrimary?: boolean;
     notes?: string | null;
+    tag?: LeadStatus | null;
   };
 }
 
@@ -31,7 +36,7 @@ export class UpdateContactUseCase {
       // Verificar que el contacto existe
       const existingContact = await this.contactRepository.findById(
         input.contactId,
-        input.tenantId
+        input.tenantId,
       );
 
       if (!existingContact) {
@@ -44,14 +49,17 @@ export class UpdateContactUseCase {
       const updateData: UpdateContactData = {};
 
       // Validar nombre usando PersonNameVO.createPartial si se actualiza firstName o lastName
-      if (input.data.firstName !== undefined || input.data.lastName !== undefined) {
+      if (
+        input.data.firstName !== undefined ||
+        input.data.lastName !== undefined
+      ) {
         const personName = PersonNameVO.createPartial(
           input.data.firstName,
           input.data.lastName,
           {
             firstName: existingContact.firstName,
             lastName: existingContact.lastName,
-          }
+          },
         );
 
         if (input.data.firstName !== undefined) {
@@ -88,10 +96,14 @@ export class UpdateContactUseCase {
         updateData.notes = input.data.notes?.trim() || null;
       }
 
+      if (input.data.tag !== undefined) {
+        updateData.tag = input.data.tag;
+      }
+
       const contact = await this.contactRepository.update(
         input.contactId,
         input.tenantId,
-        updateData
+        updateData,
       );
 
       if (!contact) {

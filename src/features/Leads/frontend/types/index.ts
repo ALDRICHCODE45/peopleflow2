@@ -140,6 +140,7 @@ export interface Contact {
   email: string | null;
   phone: string | null;
   position: string | null;
+  tag: LeadStatus | null;
   linkedInUrl: string | null;
   isPrimary: boolean;
   notes: string | null;
@@ -339,8 +340,10 @@ export interface ContactFormData {
   position?: string;
   linkedInUrl?: string;
   isPrimary?: boolean;
+  tag?: LeadStatus;
   notes?: string;
 }
+export type EditContactFormData = Partial<ContactFormData>;
 
 export interface InteractionFormData {
   type: InteractionType;

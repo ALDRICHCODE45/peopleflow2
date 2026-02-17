@@ -1,4 +1,8 @@
-import type { Contact, ContactFormData } from "../../types";
+import type {
+  Contact,
+  ContactFormData,
+  EditContactFormData,
+} from "../../types";
 
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
@@ -19,6 +23,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/core/shared/ui/shadcn/tooltip";
+import { LeadStatusBadge } from "./LeadStatusBadge";
+import { LeadStatus } from "@/core/generated/prisma/enums";
 
 export function ContactCard({
   contact,
@@ -47,7 +53,7 @@ export function ContactCard({
     onShowInteracciones: openInteractionModal,
   });
 
-  const handleEditContact = async (data: ContactFormData) => {
+  const handleEditContact = async (data: EditContactFormData) => {
     try {
       await editContactMutation.mutateAsync({
         contactId: contact.id,
@@ -58,6 +64,13 @@ export function ContactCard({
       // Error already shown via toast in hook
       // Keep dialog open so user can retry
     }
+  };
+
+  const handleTagEdit = async (data: EditContactFormData) => {
+    await editContactMutation.mutateAsync({
+      contactId: contact.id,
+      data,
+    });
   };
 
   // Generate initials for avatar
@@ -106,6 +119,8 @@ export function ContactCard({
                 Principal
               </span>
             )}
+
+            {contact.tag && <LeadStatusBadge status={contact.tag} />}
           </div>
 
           {/* Position */}
@@ -121,7 +136,10 @@ export function ContactCard({
           className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
           onClick={(e) => e.stopPropagation()}
         >
-          <LeadContactActionsDropdown actions={contactCardActions} />
+          <LeadContactActionsDropdown
+            actions={contactCardActions}
+            onTagEdit={handleTagEdit}
+          />
         </div>
       </div>
 

@@ -3,6 +3,7 @@
  * Define el contrato para la capa de infraestructura
  */
 
+import { LeadStatus } from "@/features/Leads/frontend/types";
 import { Contact } from "../entities/Contact";
 
 export interface CreateContactData {
@@ -27,6 +28,7 @@ export interface UpdateContactData {
   linkedInUrl?: string | null;
   isPrimary?: boolean;
   notes?: string | null;
+  tag?: LeadStatus | null;
 }
 
 export interface IContactRepository {
@@ -51,7 +53,7 @@ export interface IContactRepository {
   update(
     id: string,
     tenantId: string,
-    data: UpdateContactData
+    data: UpdateContactData,
   ): Promise<Contact | null>;
 
   /**
@@ -65,7 +67,7 @@ export interface IContactRepository {
   setPrimary(
     contactId: string,
     leadId: string,
-    tenantId: string
+    tenantId: string,
   ): Promise<boolean>;
 
   /**

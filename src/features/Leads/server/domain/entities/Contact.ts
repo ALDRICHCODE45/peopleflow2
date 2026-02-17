@@ -3,7 +3,10 @@
  * Representa un contacto (persona) dentro de un Lead
  */
 
-import type { Contact as ContactDTO } from "../../../frontend/types";
+import type {
+  Contact as ContactDTO,
+  LeadStatus,
+} from "../../../frontend/types";
 
 export interface ContactProps {
   id: string;
@@ -14,6 +17,7 @@ export interface ContactProps {
   position: string | null;
   linkedInUrl: string | null;
   isPrimary: boolean;
+  tag: LeadStatus | null;
   notes: string | null;
   leadId: string;
   tenantId: string;
@@ -87,6 +91,9 @@ export class Contact {
   get updatedAt(): Date {
     return this.props.updatedAt;
   }
+  get tag(): LeadStatus | null {
+    return this.props.tag;
+  }
 
   // =============================================
   // MÉTODOS DE NEGOCIO
@@ -109,6 +116,7 @@ export class Contact {
       lastName: this.props.lastName,
       email: this.props.email,
       phone: this.props.phone,
+      tag: this.tag,
       position: this.props.position,
       linkedInUrl: this.props.linkedInUrl,
       isPrimary: this.props.isPrimary,

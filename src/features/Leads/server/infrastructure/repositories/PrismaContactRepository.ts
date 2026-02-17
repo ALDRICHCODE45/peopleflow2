@@ -5,6 +5,7 @@ import type {
   CreateContactData,
   UpdateContactData,
 } from "../../domain/interfaces/IContactRepository";
+import { LeadStatus } from "@/features/Leads/frontend/types";
 
 /**
  * Implementación del repositorio de Contacts usando Prisma
@@ -21,12 +22,14 @@ export class PrismaContactRepository implements IContactRepository {
     linkedInUrl: string | null;
     isPrimary: boolean;
     notes: string | null;
+    tag: LeadStatus | null;
     leadId: string;
     tenantId: string;
     createdAt: Date;
     updatedAt: Date;
   }): Contact {
     const props: ContactProps = {
+      tag: contact.tag,
       id: contact.id,
       firstName: contact.firstName,
       lastName: contact.lastName,
@@ -97,7 +100,7 @@ export class PrismaContactRepository implements IContactRepository {
   async update(
     id: string,
     tenantId: string,
-    data: UpdateContactData
+    data: UpdateContactData,
   ): Promise<Contact | null> {
     try {
       // Si se está marcando como primario, quitar primario de los demás
@@ -122,9 +125,12 @@ export class PrismaContactRepository implements IContactRepository {
           ...(data.email !== undefined && { email: data.email }),
           ...(data.phone !== undefined && { phone: data.phone }),
           ...(data.position !== undefined && { position: data.position }),
-          ...(data.linkedInUrl !== undefined && { linkedInUrl: data.linkedInUrl }),
+          ...(data.linkedInUrl !== undefined && {
+            linkedInUrl: data.linkedInUrl,
+          }),
           ...(data.isPrimary !== undefined && { isPrimary: data.isPrimary }),
           ...(data.notes !== undefined && { notes: data.notes }),
+          ...(data.tag !== undefined && { tag: data.tag }),
         },
       });
 
@@ -160,7 +166,7 @@ export class PrismaContactRepository implements IContactRepository {
   async setPrimary(
     contactId: string,
     leadId: string,
-    tenantId: string
+    tenantId: string,
   ): Promise<boolean> {
     try {
       // Quitar primario de todos los contactos del lead

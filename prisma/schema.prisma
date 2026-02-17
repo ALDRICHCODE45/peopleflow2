@@ -388,15 +388,16 @@ model LeadStatusHistory {
 }
 
 model Contact {
-  id          String  @id @default(uuid())
+  id          String      @id @default(uuid())
   firstName   String
   lastName    String
   email       String?
   phone       String?
   position    String?
   linkedInUrl String?
-  isPrimary   Boolean @default(false)
-  notes       String? @db.Text
+  isPrimary   Boolean     @default(false)
+  tag         LeadStatus?
+  notes       String?     @db.Text
 
   // Relación con Lead (Aggregate Root)
   leadId String

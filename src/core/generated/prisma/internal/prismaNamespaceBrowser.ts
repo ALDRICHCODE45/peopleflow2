@@ -293,6 +293,7 @@ export const ContactScalarFieldEnum = {
   position: 'position',
   linkedInUrl: 'linkedInUrl',
   isPrimary: 'isPrimary',
+  tag: 'tag',
   notes: 'notes',
   leadId: 'leadId',
   tenantId: 'tenantId',

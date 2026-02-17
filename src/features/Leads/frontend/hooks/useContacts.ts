@@ -50,7 +50,9 @@ export function useAddContact() {
       return result.contact;
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["contacts", "by-lead", variables.leadId] });
+      queryClient.invalidateQueries({
+        queryKey: ["contacts", "by-lead", variables.leadId],
+      });
       queryClient.invalidateQueries({ queryKey: ["leads"] });
       showToast({
         type: "success",

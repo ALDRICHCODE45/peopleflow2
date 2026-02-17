@@ -33,6 +33,7 @@ export type ContactMinAggregateOutputType = {
   position: string | null
   linkedInUrl: string | null
   isPrimary: boolean | null
+  tag: $Enums.LeadStatus | null
   notes: string | null
   leadId: string | null
   tenantId: string | null
@@ -49,6 +50,7 @@ export type ContactMaxAggregateOutputType = {
   position: string | null
   linkedInUrl: string | null
   isPrimary: boolean | null
+  tag: $Enums.LeadStatus | null
   notes: string | null
   leadId: string | null
   tenantId: string | null
@@ -65,6 +67,7 @@ export type ContactCountAggregateOutputType = {
   position: number
   linkedInUrl: number
   isPrimary: number
+  tag: number
   notes: number
   leadId: number
   tenantId: number
@@ -83,6 +86,7 @@ export type ContactMinAggregateInputType = {
   position?: true
   linkedInUrl?: true
   isPrimary?: true
+  tag?: true
   notes?: true
   leadId?: true
   tenantId?: true
@@ -99,6 +103,7 @@ export type ContactMaxAggregateInputType = {
   position?: true
   linkedInUrl?: true
   isPrimary?: true
+  tag?: true
   notes?: true
   leadId?: true
   tenantId?: true
@@ -115,6 +120,7 @@ export type ContactCountAggregateInputType = {
   position?: true
   linkedInUrl?: true
   isPrimary?: true
+  tag?: true
   notes?: true
   leadId?: true
   tenantId?: true
@@ -204,6 +210,7 @@ export type ContactGroupByOutputType = {
   position: string | null
   linkedInUrl: string | null
   isPrimary: boolean
+  tag: $Enums.LeadStatus | null
   notes: string | null
   leadId: string
   tenantId: string
@@ -241,6 +248,7 @@ export type ContactWhereInput = {
   position?: Prisma.StringNullableFilter<"Contact"> | string | null
   linkedInUrl?: Prisma.StringNullableFilter<"Contact"> | string | null
   isPrimary?: Prisma.BoolFilter<"Contact"> | boolean
+  tag?: Prisma.EnumLeadStatusNullableFilter<"Contact"> | $Enums.LeadStatus | null
   notes?: Prisma.StringNullableFilter<"Contact"> | string | null
   leadId?: Prisma.StringFilter<"Contact"> | string
   tenantId?: Prisma.StringFilter<"Contact"> | string
@@ -261,6 +269,7 @@ export type ContactOrderByWithRelationInput = {
   position?: Prisma.SortOrderInput | Prisma.SortOrder
   linkedInUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   isPrimary?: Prisma.SortOrder
+  tag?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   leadId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
@@ -284,6 +293,7 @@ export type ContactWhereUniqueInput = Prisma.AtLeast<{
   position?: Prisma.StringNullableFilter<"Contact"> | string | null
   linkedInUrl?: Prisma.StringNullableFilter<"Contact"> | string | null
   isPrimary?: Prisma.BoolFilter<"Contact"> | boolean
+  tag?: Prisma.EnumLeadStatusNullableFilter<"Contact"> | $Enums.LeadStatus | null
   notes?: Prisma.StringNullableFilter<"Contact"> | string | null
   leadId?: Prisma.StringFilter<"Contact"> | string
   tenantId?: Prisma.StringFilter<"Contact"> | string
@@ -304,6 +314,7 @@ export type ContactOrderByWithAggregationInput = {
   position?: Prisma.SortOrderInput | Prisma.SortOrder
   linkedInUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   isPrimary?: Prisma.SortOrder
+  tag?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   leadId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
@@ -326,6 +337,7 @@ export type ContactScalarWhereWithAggregatesInput = {
   position?: Prisma.StringNullableWithAggregatesFilter<"Contact"> | string | null
   linkedInUrl?: Prisma.StringNullableWithAggregatesFilter<"Contact"> | string | null
   isPrimary?: Prisma.BoolWithAggregatesFilter<"Contact"> | boolean
+  tag?: Prisma.EnumLeadStatusNullableWithAggregatesFilter<"Contact"> | $Enums.LeadStatus | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"Contact"> | string | null
   leadId?: Prisma.StringWithAggregatesFilter<"Contact"> | string
   tenantId?: Prisma.StringWithAggregatesFilter<"Contact"> | string
@@ -342,6 +354,7 @@ export type ContactCreateInput = {
   position?: string | null
   linkedInUrl?: string | null
   isPrimary?: boolean
+  tag?: $Enums.LeadStatus | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -360,6 +373,7 @@ export type ContactUncheckedCreateInput = {
   position?: string | null
   linkedInUrl?: string | null
   isPrimary?: boolean
+  tag?: $Enums.LeadStatus | null
   notes?: string | null
   leadId: string
   tenantId: string
@@ -378,6 +392,7 @@ export type ContactUpdateInput = {
   position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tag?: Prisma.NullableEnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -396,6 +411,7 @@ export type ContactUncheckedUpdateInput = {
   position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tag?: Prisma.NullableEnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadId?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -414,6 +430,7 @@ export type ContactCreateManyInput = {
   position?: string | null
   linkedInUrl?: string | null
   isPrimary?: boolean
+  tag?: $Enums.LeadStatus | null
   notes?: string | null
   leadId: string
   tenantId: string
@@ -430,6 +447,7 @@ export type ContactUpdateManyMutationInput = {
   position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tag?: Prisma.NullableEnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -444,6 +462,7 @@ export type ContactUncheckedUpdateManyInput = {
   position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tag?: Prisma.NullableEnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadId?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -470,6 +489,7 @@ export type ContactCountOrderByAggregateInput = {
   position?: Prisma.SortOrder
   linkedInUrl?: Prisma.SortOrder
   isPrimary?: Prisma.SortOrder
+  tag?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   leadId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
@@ -486,6 +506,7 @@ export type ContactMaxOrderByAggregateInput = {
   position?: Prisma.SortOrder
   linkedInUrl?: Prisma.SortOrder
   isPrimary?: Prisma.SortOrder
+  tag?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   leadId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
@@ -502,6 +523,7 @@ export type ContactMinOrderByAggregateInput = {
   position?: Prisma.SortOrder
   linkedInUrl?: Prisma.SortOrder
   isPrimary?: Prisma.SortOrder
+  tag?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   leadId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
@@ -603,6 +625,10 @@ export type ContactUncheckedUpdateManyWithoutLeadNestedInput = {
   deleteMany?: Prisma.ContactScalarWhereInput | Prisma.ContactScalarWhereInput[]
 }
 
+export type NullableEnumLeadStatusFieldUpdateOperationsInput = {
+  set?: $Enums.LeadStatus | null
+}
+
 export type ContactCreateNestedOneWithoutInteractionsInput = {
   create?: Prisma.XOR<Prisma.ContactCreateWithoutInteractionsInput, Prisma.ContactUncheckedCreateWithoutInteractionsInput>
   connectOrCreate?: Prisma.ContactCreateOrConnectWithoutInteractionsInput
@@ -642,6 +668,7 @@ export type ContactCreateWithoutTenantInput = {
   position?: string | null
   linkedInUrl?: string | null
   isPrimary?: boolean
+  tag?: $Enums.LeadStatus | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -659,6 +686,7 @@ export type ContactUncheckedCreateWithoutTenantInput = {
   position?: string | null
   linkedInUrl?: string | null
   isPrimary?: boolean
+  tag?: $Enums.LeadStatus | null
   notes?: string | null
   leadId: string
   createdAt?: Date | string
@@ -705,6 +733,7 @@ export type ContactScalarWhereInput = {
   position?: Prisma.StringNullableFilter<"Contact"> | string | null
   linkedInUrl?: Prisma.StringNullableFilter<"Contact"> | string | null
   isPrimary?: Prisma.BoolFilter<"Contact"> | boolean
+  tag?: Prisma.EnumLeadStatusNullableFilter<"Contact"> | $Enums.LeadStatus | null
   notes?: Prisma.StringNullableFilter<"Contact"> | string | null
   leadId?: Prisma.StringFilter<"Contact"> | string
   tenantId?: Prisma.StringFilter<"Contact"> | string
@@ -721,6 +750,7 @@ export type ContactCreateWithoutLeadInput = {
   position?: string | null
   linkedInUrl?: string | null
   isPrimary?: boolean
+  tag?: $Enums.LeadStatus | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -738,6 +768,7 @@ export type ContactUncheckedCreateWithoutLeadInput = {
   position?: string | null
   linkedInUrl?: string | null
   isPrimary?: boolean
+  tag?: $Enums.LeadStatus | null
   notes?: string | null
   tenantId: string
   createdAt?: Date | string
@@ -781,6 +812,7 @@ export type ContactCreateWithoutInteractionsInput = {
   position?: string | null
   linkedInUrl?: string | null
   isPrimary?: boolean
+  tag?: $Enums.LeadStatus | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -798,6 +830,7 @@ export type ContactUncheckedCreateWithoutInteractionsInput = {
   position?: string | null
   linkedInUrl?: string | null
   isPrimary?: boolean
+  tag?: $Enums.LeadStatus | null
   notes?: string | null
   leadId: string
   tenantId: string
@@ -831,6 +864,7 @@ export type ContactUpdateWithoutInteractionsInput = {
   position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tag?: Prisma.NullableEnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -848,6 +882,7 @@ export type ContactUncheckedUpdateWithoutInteractionsInput = {
   position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tag?: Prisma.NullableEnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadId?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -865,6 +900,7 @@ export type ContactCreateWithoutAttachmentsInput = {
   position?: string | null
   linkedInUrl?: string | null
   isPrimary?: boolean
+  tag?: $Enums.LeadStatus | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -882,6 +918,7 @@ export type ContactUncheckedCreateWithoutAttachmentsInput = {
   position?: string | null
   linkedInUrl?: string | null
   isPrimary?: boolean
+  tag?: $Enums.LeadStatus | null
   notes?: string | null
   leadId: string
   tenantId: string
@@ -915,6 +952,7 @@ export type ContactUpdateWithoutAttachmentsInput = {
   position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tag?: Prisma.NullableEnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -932,6 +970,7 @@ export type ContactUncheckedUpdateWithoutAttachmentsInput = {
   position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tag?: Prisma.NullableEnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadId?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -949,6 +988,7 @@ export type ContactCreateManyTenantInput = {
   position?: string | null
   linkedInUrl?: string | null
   isPrimary?: boolean
+  tag?: $Enums.LeadStatus | null
   notes?: string | null
   leadId: string
   createdAt?: Date | string
@@ -964,6 +1004,7 @@ export type ContactUpdateWithoutTenantInput = {
   position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tag?: Prisma.NullableEnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -981,6 +1022,7 @@ export type ContactUncheckedUpdateWithoutTenantInput = {
   position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tag?: Prisma.NullableEnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -998,6 +1040,7 @@ export type ContactUncheckedUpdateManyWithoutTenantInput = {
   position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tag?: Prisma.NullableEnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1013,6 +1056,7 @@ export type ContactCreateManyLeadInput = {
   position?: string | null
   linkedInUrl?: string | null
   isPrimary?: boolean
+  tag?: $Enums.LeadStatus | null
   notes?: string | null
   tenantId: string
   createdAt?: Date | string
@@ -1028,6 +1072,7 @@ export type ContactUpdateWithoutLeadInput = {
   position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tag?: Prisma.NullableEnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1045,6 +1090,7 @@ export type ContactUncheckedUpdateWithoutLeadInput = {
   position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tag?: Prisma.NullableEnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1062,6 +1108,7 @@ export type ContactUncheckedUpdateManyWithoutLeadInput = {
   position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedInUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tag?: Prisma.NullableEnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1117,6 +1164,7 @@ export type ContactSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   position?: boolean
   linkedInUrl?: boolean
   isPrimary?: boolean
+  tag?: boolean
   notes?: boolean
   leadId?: boolean
   tenantId?: boolean
@@ -1138,6 +1186,7 @@ export type ContactSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   position?: boolean
   linkedInUrl?: boolean
   isPrimary?: boolean
+  tag?: boolean
   notes?: boolean
   leadId?: boolean
   tenantId?: boolean
@@ -1156,6 +1205,7 @@ export type ContactSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   position?: boolean
   linkedInUrl?: boolean
   isPrimary?: boolean
+  tag?: boolean
   notes?: boolean
   leadId?: boolean
   tenantId?: boolean
@@ -1174,6 +1224,7 @@ export type ContactSelectScalar = {
   position?: boolean
   linkedInUrl?: boolean
   isPrimary?: boolean
+  tag?: boolean
   notes?: boolean
   leadId?: boolean
   tenantId?: boolean
@@ -1181,7 +1232,7 @@ export type ContactSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ContactOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "phone" | "position" | "linkedInUrl" | "isPrimary" | "notes" | "leadId" | "tenantId" | "createdAt" | "updatedAt", ExtArgs["result"]["contact"]>
+export type ContactOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "phone" | "position" | "linkedInUrl" | "isPrimary" | "tag" | "notes" | "leadId" | "tenantId" | "createdAt" | "updatedAt", ExtArgs["result"]["contact"]>
 export type ContactInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lead?: boolean | Prisma.LeadDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1215,6 +1266,7 @@ export type $ContactPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     position: string | null
     linkedInUrl: string | null
     isPrimary: boolean
+    tag: $Enums.LeadStatus | null
     notes: string | null
     leadId: string
     tenantId: string
@@ -1655,6 +1707,7 @@ export interface ContactFieldRefs {
   readonly position: Prisma.FieldRef<"Contact", 'String'>
   readonly linkedInUrl: Prisma.FieldRef<"Contact", 'String'>
   readonly isPrimary: Prisma.FieldRef<"Contact", 'Boolean'>
+  readonly tag: Prisma.FieldRef<"Contact", 'LeadStatus'>
   readonly notes: Prisma.FieldRef<"Contact", 'String'>
   readonly leadId: Prisma.FieldRef<"Contact", 'String'>
   readonly tenantId: Prisma.FieldRef<"Contact", 'String'>

@@ -21,6 +21,7 @@ import type {
   UpdateContactResult,
   DeleteContactResult,
   GetContactsResult,
+  LeadStatus,
 } from "../../../frontend/types";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
@@ -40,7 +41,7 @@ export async function addContactToLeadAction(
     linkedInUrl?: string;
     isPrimary?: boolean;
     notes?: string;
-  }
+  },
 ): Promise<CreateContactResult> {
   try {
     const headersList = await headers();
@@ -73,7 +74,7 @@ export async function addContactToLeadAction(
 
     const useCase = new AddContactToLeadUseCase(
       prismaContactRepository,
-      prismaLeadRepository
+      prismaLeadRepository,
     );
     const result = await useCase.execute({
       leadId,
@@ -110,7 +111,8 @@ export async function updateContactAction(
     linkedInUrl?: string | null;
     isPrimary?: boolean;
     notes?: string | null;
-  }
+    tag?: LeadStatus | null;
+  },
 ): Promise<UpdateContactResult> {
   try {
     const headersList = await headers();
@@ -167,7 +169,7 @@ export async function updateContactAction(
  * Elimina un contacto
  */
 export async function deleteContactAction(
-  contactId: string
+  contactId: string,
 ): Promise<DeleteContactResult> {
   try {
     const headersList = await headers();
@@ -205,7 +207,10 @@ export async function deleteContactAction(
     });
 
     if (!result.success) {
-      return { error: result.error || "Error al eliminar contacto", success: false };
+      return {
+        error: result.error || "Error al eliminar contacto",
+        success: false,
+      };
     }
 
     revalidatePath("/generacion-de-leads/leads");
@@ -223,7 +228,7 @@ export async function deleteContactAction(
  * Obtiene los contactos de un lead
  */
 export async function getContactsByLeadAction(
-  leadId: string
+  leadId: string,
 ): Promise<GetContactsResult> {
   try {
     const headersList = await headers();
@@ -261,7 +266,10 @@ export async function getContactsByLeadAction(
     });
 
     if (!result.success) {
-      return { error: result.error || "Error al obtener contactos", contacts: [] };
+      return {
+        error: result.error || "Error al obtener contactos",
+        contacts: [],
+      };
     }
 
     return {

@@ -7,7 +7,11 @@ import {
   useAddContact,
   useDeleteContact,
 } from "../../hooks/useContacts";
-import type { Contact, ContactFormData } from "../../types";
+import type {
+  Contact,
+  ContactFormData,
+  EditContactFormData,
+} from "../../types";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Add01Icon, UserCircleIcon } from "@hugeicons/core-free-icons";
 import { DeleteContactAlertDialog } from "./DeleteContacAlertDialot";
