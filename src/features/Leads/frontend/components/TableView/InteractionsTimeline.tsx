@@ -4,16 +4,9 @@ import { useState } from "react";
 import { Button } from "@/core/shared/ui/shadcn/button";
 import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
 import { Badge } from "@/core/shared/ui/shadcn/badge";
-import {
-  useInteractionsByLead,
-  useAddInteraction,
-} from "../../hooks/useInteractions";
+import { useInteractionsByLead } from "../../hooks/useInteractions";
 import { useContactsByLead } from "../../hooks/useContacts";
-import type {
-  Interaction,
-  InteractionFormData,
-  InteractionType,
-} from "../../types";
+import type { Interaction, InteractionType } from "../../types";
 import { INTERACTION_TYPE_LABELS } from "../../types";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
@@ -26,7 +19,7 @@ import {
   WhatsappIcon,
   TimeQuarterPassIcon,
 } from "@hugeicons/core-free-icons";
-import { InteractionForm } from "./InteractionForm";
+import { CreateInteractionForm } from "./CreateInteractionForm";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
@@ -46,14 +39,8 @@ interface InteractionsTimelineProps {
 export function InteractionsTimeline({ leadId }: InteractionsTimelineProps) {
   const { data: interactions = [], isLoading } = useInteractionsByLead(leadId);
   const { data: contacts = [] } = useContactsByLead(leadId);
-  const addInteractionMutation = useAddInteraction();
 
   const [showForm, setShowForm] = useState(false);
-
-  const handleAddInteraction = async (data: InteractionFormData) => {
-    await addInteractionMutation.mutateAsync(data);
-    setShowForm(false);
-  };
 
   if (isLoading) {
     return (
@@ -90,11 +77,10 @@ export function InteractionsTimeline({ leadId }: InteractionsTimelineProps) {
       {showForm && contacts.length > 0 && (
         <Card>
           <CardContent className="pt-4">
-            <InteractionForm
+            <CreateInteractionForm
               contacts={contacts}
-              onSubmit={handleAddInteraction}
+              onSuccess={() => setShowForm(false)}
               onCancel={() => setShowForm(false)}
-              isLoading={addInteractionMutation.isPending}
             />
           </CardContent>
         </Card>

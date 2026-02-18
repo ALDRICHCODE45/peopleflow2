@@ -1,7 +1,5 @@
 "use client";
 
-import { format } from "date-fns";
-import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
 import {
   Dialog,
   DialogContent,
@@ -9,17 +7,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/core/shared/ui/shadcn/dialog";
-import { InteractionForm } from "./InteractionForm";
-import type { Contact, Interaction, InteractionFormData } from "../../types";
+import { EditInteractionForm } from "./EditInteractionForm";
+import type { Contact, Interaction } from "../../types";
 
 interface Props {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   contact: Contact;
   interaction: Interaction;
-  onSubmit: (data: InteractionFormData) => Promise<void>;
+  onSuccess: () => void;
   onCancel: () => void;
-  isLoading?: boolean;
 }
 
 export function EditInteractionDialog({
@@ -27,9 +24,8 @@ export function EditInteractionDialog({
   onOpenChange,
   contact,
   interaction,
-  onSubmit,
+  onSuccess,
   onCancel,
-  isLoading,
 }: Props) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -41,26 +37,11 @@ export function EditInteractionDialog({
             {contact.lastName}
           </DialogDescription>
         </DialogHeader>
-        <Card>
-          <CardContent className="pt-4">
-            <InteractionForm
-              contacts={[contact]}
-              onSubmit={onSubmit}
-              onCancel={onCancel}
-              isLoading={isLoading}
-              isEditMode
-              hideContactSelector
-              fixedContactId={contact.id}
-              initialData={{
-                type: interaction.type,
-                subject: interaction.subject,
-                content: interaction.content ?? "",
-                date: format(new Date(interaction.date), "yyyy-MM-dd'T'HH:mm"),
-                contactId: interaction.contactId,
-              }}
-            />
-          </CardContent>
-        </Card>
+        <EditInteractionForm
+          interaction={interaction}
+          onSuccess={onSuccess}
+          onCancel={onCancel}
+        />
       </DialogContent>
     </Dialog>
   );

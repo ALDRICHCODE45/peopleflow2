@@ -15,11 +15,9 @@ import { Add01Icon, TimeQuarterPassIcon } from "@hugeicons/core-free-icons";
 import { useModalState } from "@/core/shared/hooks";
 import {
   useInteractionsByContact,
-  useAddInteraction,
-  useUpdateInteraction,
   useDeleteInteraction,
 } from "../../hooks/useInteractions";
-import type { Interaction, Contact, InteractionFormData } from "../../types";
+import type { Interaction, Contact } from "../../types";
 import { InteractionItem } from "./InteractionItem";
 
 const DeleteInteractionAlertDialog = dynamic(
@@ -34,7 +32,7 @@ const DeleteInteractionAlertDialog = dynamic(
       </div>
     ),
     ssr: true,
-  }
+  },
 );
 
 const ContactInteractionDialog = dynamic(
@@ -49,7 +47,7 @@ const ContactInteractionDialog = dynamic(
       </div>
     ),
     ssr: true,
-  }
+  },
 );
 
 const EditInteractionDialog = dynamic(
@@ -64,7 +62,7 @@ const EditInteractionDialog = dynamic(
       </div>
     ),
     ssr: true,
-  }
+  },
 );
 
 interface ContactInteractionsDialogProps {
@@ -102,38 +100,10 @@ export function ContactInteractionsDialog({
 
   // Only fetch when dialog is open (lazy loading)
   const { data: interactions = [], isLoading } = useInteractionsByContact(
-    open ? contact.id : null
+    open ? contact.id : null,
   );
 
-  const addInteractionMutation = useAddInteraction();
-  const updateInteractionMutation = useUpdateInteraction();
   const deleteInteractionMutation = useDeleteInteraction();
-
-  const handleAddInteraction = useCallback(
-    async (data: InteractionFormData) => {
-      await addInteractionMutation.mutateAsync(data);
-      closeInteraction();
-    },
-    [addInteractionMutation, closeInteraction]
-  );
-
-  const handleEditInteraction = useCallback(
-    async (data: InteractionFormData) => {
-      if (!editingInteraction) return;
-      await updateInteractionMutation.mutateAsync({
-        interactionId: editingInteraction.id,
-        data: {
-          type: data.type,
-          subject: data.subject,
-          content: data.content ?? null,
-          date: data.date,
-        },
-      });
-      setEditingInteraction(null);
-      closeEdit();
-    },
-    [editingInteraction, updateInteractionMutation, closeEdit]
-  );
 
   const handleDeleteInteraction = useCallback(async () => {
     if (!deletingInteractionId) return;
@@ -147,7 +117,7 @@ export function ContactInteractionsDialog({
       setEditingInteraction(interaction);
       openEdit();
     },
-    [openEdit]
+    [openEdit],
   );
 
   const handleOpenDelete = useCallback(
@@ -155,12 +125,8 @@ export function ContactInteractionsDialog({
       setDeletingInteractionId(interactionId);
       openDeleteModal();
     },
-    [openDeleteModal]
+    [openDeleteModal],
   );
-
-  const handleCancelAdd = useCallback(() => {
-    closeInteraction();
-  }, [closeInteraction]);
 
   const handleCancelEdit = useCallback(() => {
     setEditingInteraction(null);
@@ -196,7 +162,6 @@ export function ContactInteractionsDialog({
           </DialogHeader>
 
           <div className="flex-1 overflow-y-auto space-y-4">
-            {/* List */}
             {isLoading ? (
               <div className="flex items-center justify-center py-8">
                 <p className="text-muted-foreground">
@@ -244,11 +209,8 @@ export function ContactInteractionsDialog({
       {isInteractionOpen && (
         <ContactInteractionDialog
           contact={contact}
-          onSubmit={handleAddInteraction}
-          onCancel={handleCancelAdd}
-          isLoading={addInteractionMutation.isPending}
-          hideContactSelector
-          fixedContactId={contact.id}
+          onSuccess={() => closeInteraction()}
+          onCancel={() => closeInteraction()}
           onOpenChange={() => closeInteraction()}
           isOpen={isInteractionOpen}
         />
@@ -257,12 +219,14 @@ export function ContactInteractionsDialog({
       {isEditOpen && editingInteraction && (
         <EditInteractionDialog
           isOpen={isEditOpen}
-          onOpenChange={(open) => !open && handleCancelEdit()}
+          onOpenChange={(o) => !o && handleCancelEdit()}
           contact={contact}
           interaction={editingInteraction}
-          onSubmit={handleEditInteraction}
+          onSuccess={() => {
+            setEditingInteraction(null);
+            closeEdit();
+          }}
           onCancel={handleCancelEdit}
-          isLoading={updateInteractionMutation.isPending}
         />
       )}
     </>
