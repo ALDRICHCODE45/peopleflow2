@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Avatar,
   AvatarFallback,
@@ -17,23 +18,29 @@ import {
 import { useTenantUsersQuery } from "@/features/Administracion/usuarios/frontend/hooks/useUsers";
 import { useMemo, useState } from "react";
 import { useReasignLead } from "../../hooks/useLeads";
-import { IconSvgElement } from "@hugeicons/react";
 import { LoadingButton } from "@/core/shared/ui/shadcn/loading-button";
 import { SearchableSelect } from "@/core/shared/components/SearchableSelect";
 
 interface Props {
   isOpen: boolean;
-  onOpenChange: () => void;
+  onOpenChange: (open: boolean) => void;
   leadId: string;
-  icon?: IconSvgElement;
+  leadName?: string;
+  currentAssignedToId?: string | null;
 }
 
-export const ReasignLeadDialog = ({ isOpen, onOpenChange, leadId }: Props) => {
-  const { data: users, isPending } = useTenantUsersQuery();
+export const ReasignLeadDialog = ({
+  isOpen,
+  onOpenChange,
+  leadId,
+  leadName,
+  currentAssignedToId,
+}: Props) => {
+  const { data: users, isPending: isLoadingUsers } = useTenantUsersQuery();
   const reasignLeadMutation = useReasignLead();
 
   const [selectedUser, setSelectedUser] = useState<string | undefined>(
-    undefined,
+    currentAssignedToId ?? undefined,
   );
 
   const userOptions = useMemo(
@@ -46,16 +53,18 @@ export const ReasignLeadDialog = ({ isOpen, onOpenChange, leadId }: Props) => {
     [users],
   );
 
+  const hasChanged =
+    selectedUser !== undefined && selectedUser !== currentAssignedToId;
+
   const handleSubmit = async () => {
-    if (!selectedUser || !leadId) {
-      return;
-    }
+    if (!selectedUser || !leadId || !hasChanged) return;
 
     try {
       await reasignLeadMutation.mutateAsync({
         leadId,
         newUserId: selectedUser,
       });
+      onOpenChange(false);
     } catch (error) {
       console.error(error);
     }
@@ -67,7 +76,9 @@ export const ReasignLeadDialog = ({ isOpen, onOpenChange, leadId }: Props) => {
         <DialogHeader>
           <DialogTitle>Reasignar Lead</DialogTitle>
           <DialogDescription>
-            Selecciona el generador nuevo a continuacion:
+            {leadName
+              ? `Selecciona el nuevo generador para "${leadName}":`
+              : "Selecciona el generador nuevo a continuacion:"}
           </DialogDescription>
         </DialogHeader>
 
@@ -77,6 +88,7 @@ export const ReasignLeadDialog = ({ isOpen, onOpenChange, leadId }: Props) => {
           onChange={(value) => setSelectedUser(value)}
           placeholder="Selecciona el usuario"
           searchPlaceholder="Buscar usuario..."
+          disabled={isLoadingUsers}
           renderOption={(opt) => (
             <>
               <Avatar className="size-6">
@@ -99,7 +111,12 @@ export const ReasignLeadDialog = ({ isOpen, onOpenChange, leadId }: Props) => {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant={"outline"}>cancelar</Button>
+            <Button
+              variant="outline"
+              disabled={reasignLeadMutation.isPending}
+            >
+              Cancelar
+            </Button>
           </DialogClose>
 
           <LoadingButton
@@ -107,6 +124,7 @@ export const ReasignLeadDialog = ({ isOpen, onOpenChange, leadId }: Props) => {
             isLoading={reasignLeadMutation.isPending}
             loadingText="Reasignando..."
             onClick={handleSubmit}
+            disabled={!hasChanged || isLoadingUsers}
           >
             Reasignar
           </LoadingButton>

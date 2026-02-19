@@ -58,7 +58,7 @@ export class ReasignLeadUseCase {
         lead,
       };
     } catch (error) {
-      console.error("Error in CreateLeadUseCase:", error);
+      console.error("Error in ReasignLeadUseCase:", error);
       if (error instanceof Error) {
         return {
           success: false,
@@ -67,7 +67,7 @@ export class ReasignLeadUseCase {
       }
       return {
         success: false,
-        error: "Error al crear lead",
+        error: "Error al reasignar el lead",
       };
     }
   }

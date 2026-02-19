@@ -275,8 +275,12 @@ export const LeadsKabanPage = () => {
         {dialogState.lead && dialogState.type === "reasign" && (
           <ReasignLeadDialog
             isOpen
-            onOpenChange={closeDialog}
+            onOpenChange={(open) => {
+              if (!open) closeDialog();
+            }}
             leadId={dialogState.lead.id}
+            leadName={dialogState.lead.companyName}
+            currentAssignedToId={dialogState.lead.assignedToId}
           />
         )}
       </CardContent>

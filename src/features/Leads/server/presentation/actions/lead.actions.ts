@@ -5,8 +5,11 @@ import { auth } from "@lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 
-// UUID validation schema
-const uuidSchema = z.string().uuid("ID inválido");
+// UUID validation schema (Lead IDs use @default(uuid()))
+const uuidSchema = z.uuid("ID inválido");
+
+// Better Auth generates 32-char alphanumeric IDs (not UUID/CUID)
+const userIdSchema = z.string().min(1, "ID inválido");
 
 // Repositories
 import { prismaLeadRepository } from "../../infrastructure/repositories/PrismaLeadRepository";
@@ -403,8 +406,9 @@ export const reasignLeadAction = async (
       return { error: "ID de lead inválido" };
     }
 
-    const parsedUserId = uuidSchema.safeParse(newUserId);
+    const parsedUserId = userIdSchema.safeParse(newUserId);
     if (!parsedUserId.success) {
+      console.log(parsedUserId.error);
       return { error: "ID de usuario inválido" };
     }
 
@@ -461,7 +465,7 @@ export const reasignLeadAction = async (
  * Obtiene el historial de cambios de estado de un lead
  */
 export async function getLeadStatusHistoryAction(
-  leadId: string
+  leadId: string,
 ): Promise<{ error: string | null; history: LeadStatusHistoryItem[] }> {
   try {
     // Validar UUID
@@ -499,7 +503,7 @@ export async function getLeadStatusHistoryAction(
     }
 
     const useCase = new GetLeadStatusHistoryUseCase(
-      prismaLeadStatusHistoryRepository
+      prismaLeadStatusHistoryRepository,
     );
     const result = await useCase.execute({
       leadId,
