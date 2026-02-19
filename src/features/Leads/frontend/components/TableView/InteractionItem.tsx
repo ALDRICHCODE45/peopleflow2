@@ -32,7 +32,7 @@ export const InteractionItem = memo(function InteractionItem({
       format(new Date(interaction.date), "d MMM yyyy, HH:mm", {
         locale: es,
       }),
-    [interaction.date]
+    [interaction.date],
   );
 
   const actions = useMemo(
@@ -41,20 +41,20 @@ export const InteractionItem = memo(function InteractionItem({
         onEdit,
         onDelete,
       }),
-    [onEdit, onDelete]
+    [onEdit, onDelete],
   );
 
   return (
     <div
       className={cn(
         "rounded-lg border border-border/40 p-3",
-        "bg-gradient-to-b from-background to-muted/20",
-        "group"
+        "bg-linear-to-b from-background to-muted/20",
+        "group",
       )}
     >
       <div className="flex items-start gap-3">
         {/* Icon */}
-        <div className="flex-shrink-0 size-8 rounded-full bg-primary/10 flex items-center justify-center">
+        <div className="shrink-0 size-8 rounded-full bg-primary/10 flex items-center justify-center">
           <HugeiconsIcon icon={IconComponent} className="size-4 text-primary" />
         </div>
 
@@ -64,7 +64,9 @@ export const InteractionItem = memo(function InteractionItem({
             <Badge variant="outline" className="text-xs">
               {INTERACTION_TYPE_LABELS[interaction.type]}
             </Badge>
-            <span className="text-xs text-muted-foreground">{formattedDate}</span>
+            <span className="text-xs text-muted-foreground">
+              {formattedDate}
+            </span>
           </div>
 
           <h4 className="font-medium text-sm">{interaction.subject}</h4>
@@ -83,7 +85,7 @@ export const InteractionItem = memo(function InteractionItem({
         </div>
 
         {/* Actions */}
-        <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
           <InteractionActionsDropdown actions={actions} disabled={disabled} />
         </div>
       </div>

@@ -23,7 +23,11 @@ import { CreatableSelect } from "@/core/shared/components/CreatableSelect";
 import { useMemo, useState } from "react";
 import { useEditLeadForm } from "../../hooks/useEditLeadForm";
 import type { Lead } from "../../types";
-import { LEAD_EMPLOYEE_OPTIONS, LEAD_STATUS_OPTIONS, LINKEDIN_SUB_ORIGIN_OPTIONS } from "../../types";
+import {
+  LEAD_EMPLOYEE_OPTIONS,
+  LEAD_STATUS_OPTIONS,
+  LINKEDIN_SUB_ORIGIN_OPTIONS,
+} from "../../types";
 
 interface EditLeadFormProps {
   lead: Lead;
@@ -67,13 +71,17 @@ export function EditLeadForm({ lead, onOpenChange }: EditLeadFormProps) {
         value: u,
         label: u,
       })),
-    [sectors],
+    [],
   );
 
-  const [selectedOriginId, setSelectedOriginId] = useState<string | undefined>(lead.originId ?? undefined);
+  const [selectedOriginId, setSelectedOriginId] = useState<string | undefined>(
+    lead.originId ?? undefined,
+  );
   const isLinkedInOrigin = useMemo(() => {
     if (!selectedOriginId) return false;
-    return origins.some((o) => o.id === selectedOriginId && o.name.toLowerCase() === "linkedin");
+    return origins.some(
+      (o) => o.id === selectedOriginId && o.name.toLowerCase() === "linkedin",
+    );
   }, [selectedOriginId, origins]);
 
   return (

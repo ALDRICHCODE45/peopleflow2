@@ -22,13 +22,11 @@ export const createInteractionActions = ({
     {
       id: "edit",
       label: "Editar",
-      icon: PencilEdit01Icon,
       onClick: onEdit,
     },
     {
       id: "delete",
       label: "Eliminar",
-      icon: Delete02Icon,
       variant: "destructive",
       onClick: onDelete,
     },

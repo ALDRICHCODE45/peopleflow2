@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Badge } from "@/core/shared/ui/shadcn/badge";
 import { Checkbox } from "@/core/shared/ui/shadcn/checkbox";
+import { EmpresaNameDetials } from "../EmpresaNameDetails";
 
 export const LeadColumns: ColumnDef<Lead>[] = [
   {
@@ -34,11 +35,7 @@ export const LeadColumns: ColumnDef<Lead>[] = [
     accessorKey: "companyName",
     cell: ({ row }) => {
       const lead = row.original;
-      return (
-        <div className="flex flex-col min-w-0 w-full overflow-hidden">
-          <p className="font-medium truncate">{lead.companyName}</p>
-        </div>
-      );
+      return <EmpresaNameDetials row={row} />;
     },
     size: 16,
   },
@@ -55,7 +52,12 @@ export const LeadColumns: ColumnDef<Lead>[] = [
       const lead = row.original;
       return (
         <div className="flex flex-col min-w-0 overflow-hidden">
-          <span className="truncate">{lead.sectorName || "-"}</span>
+          {lead.sectorName ? (
+            <span className="truncate">{lead.sectorName}</span>
+          ) : (
+            <span className="truncate">No Ingresado.</span>
+          )}
+
           {lead.subsectorName ? (
             <span className="text-xs text-muted-foreground truncate">
               {lead.subsectorName}
