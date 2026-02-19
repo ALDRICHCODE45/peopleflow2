@@ -70,7 +70,7 @@
   --chart-2: oklch(0.72 0.18 306);
   --chart-3: oklch(0.63 0.23 304);
   --chart-4: oklch(0.56 0.25 302);
-  --chart-5: oklch(0.50 0.24 302);
+  --chart-5: oklch(0.5 0.24 302);
   --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.141 0.005 285.823);
@@ -105,7 +105,7 @@
   --chart-2: oklch(0.72 0.18 306);
   --chart-3: oklch(0.63 0.23 304);
   --chart-4: oklch(0.56 0.25 302);
-  --chart-5: oklch(0.50 0.24 302);
+  --chart-5: oklch(0.5 0.24 302);
   --sidebar: oklch(0.21 0.006 285.885);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.72 0.18 306);
@@ -128,164 +128,84 @@
 /* ─── Toast Design Tokens ─── */
 
 :root {
-  --toast-bg: oklch(0.985 0 0);
-  --toast-border: oklch(0.92 0.004 286.32);
+  --toast-bg: oklch(0.98 0 302);
   --toast-fg: oklch(0.141 0.005 285.823);
   --toast-muted: oklch(0.552 0.016 285.938);
 
   --toast-success: oklch(0.62 0.17 155);
-  --toast-info: oklch(0.60 0.15 230);
+  --toast-info: oklch(0.6 0.15 230);
   --toast-warning: oklch(0.75 0.16 70);
-  --toast-error: oklch(0.60 0.22 25);
+  --toast-error: oklch(0.6 0.22 25);
   --toast-loading: var(--primary);
 }
 
 .dark {
-  --toast-bg: oklch(0.22 0.006 285.885 / 92%);
-  --toast-border: oklch(1 0 0 / 10%);
+  --toast-bg: oklch(0.23 0.01 290);
   --toast-fg: oklch(0.985 0 0);
   --toast-muted: oklch(0.705 0.015 286.067);
 
-  --toast-success: oklch(0.70 0.17 155);
+  --toast-success: oklch(0.7 0.17 155);
   --toast-info: oklch(0.68 0.15 230);
-  --toast-warning: oklch(0.80 0.14 70);
-  --toast-error: oklch(0.70 0.20 25);
+  --toast-warning: oklch(0.8 0.14 70);
+  --toast-error: oklch(0.7 0.2 25);
   --toast-loading: var(--primary);
 }
 
-/* ─── Toast Progress Bar Animation ─── */
+/* ─── Sileo Toast Overrides ─── */
 
-@keyframes toast-progress {
-  from {
-    transform: scaleX(1);
-  }
-  to {
-    transform: scaleX(0);
-  }
-}
-
-/* ─── Sonner Toast Overrides ─── */
-
-/* Toast card base */
-[data-sonner-toast] {
-  --toast-accent: var(--toast-info);
-
-  background: var(--toast-bg) !important;
-  border: 1px solid var(--toast-border) !important;
-  border-left: 3.5px solid var(--toast-accent) !important;
-  border-radius: var(--radius) !important;
-  box-shadow:
-    0 1px 3px oklch(0 0 0 / 6%),
-    0 4px 12px oklch(0 0 0 / 4%) !important;
-  backdrop-filter: blur(12px);
-  color: var(--toast-fg) !important;
-  overflow: hidden;
-  position: relative;
+:root {
+  --sileo-state-success: var(--toast-success);
+  --sileo-state-error: var(--toast-error);
+  --sileo-state-warning: var(--toast-warning);
+  --sileo-state-info: var(--toast-info);
+  --sileo-state-loading: var(--toast-loading);
 }
 
-.dark [data-sonner-toast] {
-  box-shadow:
-    0 2px 6px oklch(0 0 0 / 20%),
-    0 8px 24px oklch(0 0 0 / 16%) !important;
-  backdrop-filter: blur(16px);
+/* Viewport — font + z-index */
+[data-sileo-viewport] {
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  z-index: 9999;
 }
 
-/* Accent color per type */
-[data-sonner-toast][data-type="success"] {
-  --toast-accent: var(--toast-success);
-}
-[data-sonner-toast][data-type="info"] {
-  --toast-accent: var(--toast-info);
-}
-[data-sonner-toast][data-type="warning"] {
-  --toast-accent: var(--toast-warning);
-}
-[data-sonner-toast][data-type="error"] {
-  --toast-accent: var(--toast-error);
-}
-[data-sonner-toast][data-type="loading"] {
-  --toast-accent: var(--toast-loading);
+/* SVG fill — theme-aware background (no filter/stroke on rects to avoid seam) */
+[data-sileo-pill],
+[data-sileo-body] {
+  fill: var(--toast-bg) !important;
 }
 
-/* Progress bar */
-[data-sonner-toast]::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: oklch(from var(--toast-accent) l c h / 35%);
-  transform-origin: left;
-  animation: toast-progress var(--toast-duration, 4000ms) linear forwards;
+/* Shadow on the canvas container — applies to merged gooey shape as a whole */
+[data-sileo-canvas] {
+  filter: drop-shadow(0 2px 6px oklch(0 0 0 / 8%))
+    drop-shadow(0 8px 20px oklch(0 0 0 / 7%));
 }
 
-[data-sonner-toast]:hover::after {
-  animation-play-state: paused;
-}
-
-/* Loading toast: no progress bar */
-[data-sonner-toast][data-type="loading"]::after {
-  display: none;
-}
-
-/* Icon pill */
-[data-sonner-toast] [data-icon] {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  min-width: 28px;
-  border-radius: 8px;
-  background: oklch(from var(--toast-accent) l c h / 12%);
-  color: var(--toast-accent) !important;
-}
-
-[data-sonner-toast] [data-icon] svg {
-  color: var(--toast-accent) !important;
+.dark [data-sileo-canvas] {
+  filter: drop-shadow(0 2px 8px oklch(0 0 0 / 30%))
+    drop-shadow(0 10px 28px oklch(0 0 0 / 22%));
 }
 
 /* Title */
-[data-sonner-toast] [data-title] {
-  font-weight: 600 !important;
-  font-size: 14px !important;
-  color: var(--toast-fg) !important;
+[data-sileo-title] {
+  font-weight: 600;
+  font-size: 0.8125rem;
+  text-transform: none;
 }
 
 /* Description */
-[data-sonner-toast] [data-description] {
-  font-weight: 400 !important;
-  font-size: 13px !important;
-  color: var(--toast-muted) !important;
+[data-sileo-description] {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--toast-muted);
+  padding: 0.75rem 1rem;
 }
 
-/* Close button - ghost style */
-[data-sonner-toast] [data-close-button] {
-  opacity: 0 !important;
-  border: none !important;
-  border-radius: 6px !important;
-  background: transparent !important;
-  color: var(--toast-muted) !important;
-  transition: opacity 150ms ease, background 150ms ease !important;
+/* Badge */
+[data-sileo-badge] {
+  width: 22px;
+  height: 22px;
 }
 
-[data-sonner-toast]:hover [data-close-button] {
-  opacity: 1 !important;
-}
-
-[data-sonner-toast] [data-close-button]:hover {
-  background: oklch(from var(--toast-fg) l c h / 8%) !important;
-  color: var(--toast-fg) !important;
-}
-
-/* ─── Neutralize richColors (safety net) ─── */
-
-[data-rich-colors="true"] [data-sonner-toast][data-type="success"],
-[data-rich-colors="true"] [data-sonner-toast][data-type="info"],
-[data-rich-colors="true"] [data-sonner-toast][data-type="warning"],
-[data-rich-colors="true"] [data-sonner-toast][data-type="error"] {
-  background: var(--toast-bg) !important;
-  border-color: var(--toast-border) !important;
-  color: var(--toast-fg) !important;
+[data-sileo-badge] svg {
+  width: 14px;
+  height: 14px;
 }

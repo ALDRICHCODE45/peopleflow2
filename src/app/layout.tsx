@@ -1,15 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Outfit } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "sonner";
-import {
-  CheckmarkCircle02Icon,
-  InformationCircleIcon,
-  Alert02Icon,
-  Cancel01Icon,
-  Loading03Icon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { Toaster } from "sileo";
 
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -80,39 +72,19 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <Toaster
-        position="top-center"
-        expand
-        duration={4000}
-        toastOptions={{
-          className: "font-sans",
-          style: {
-            "--toast-duration": "4000ms",
-          } as React.CSSProperties,
-        }}
-        icons={{
-          success: (
-            <HugeiconsIcon icon={CheckmarkCircle02Icon} className="size-4" />
-          ),
-          info: (
-            <HugeiconsIcon icon={InformationCircleIcon} className="size-4" />
-          ),
-          warning: <HugeiconsIcon icon={Alert02Icon} className="size-4" />,
-          error: <HugeiconsIcon icon={Cancel01Icon} className="size-4" />,
-          loading: (
-            <HugeiconsIcon
-              icon={Loading03Icon}
-              className="size-4 animate-spin"
-            />
-          ),
-        }}
-      />
-
       <html lang="es" className={outfit.variable}>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           {children}
+          <Toaster
+            position="top-center"
+            offset={{ top: 16 }}
+            options={{
+              duration: 4000,
+              roundness: 12,
+            }}
+          />
           {process.env.NODE_ENV === "production" && (
             <script
               src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
