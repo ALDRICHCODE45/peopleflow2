@@ -5,7 +5,6 @@ import { PermissionActions } from "@/core/shared/constants/permissions";
 import { Row } from "@tanstack/react-table";
 import { Lead } from "../../types";
 import { useModalState } from "@/core/shared/hooks";
-import { Spinner } from "@/core/shared/ui/shadcn/spinner";
 
 const LeadDetailSheet = lazy(() =>
   import("./LeadDetailSheet").then((mod) => ({
