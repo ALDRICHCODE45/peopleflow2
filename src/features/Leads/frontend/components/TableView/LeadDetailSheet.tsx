@@ -80,7 +80,7 @@ export function LeadDetailSheet({
                 </TooltipContent>
               </Tooltip>
             </div>
-            <div className="md:mr-4">
+            <div className="md:mr-8">
               <LeadStatusBadge status={displayLead.status} />
             </div>
           </div>
