@@ -30,6 +30,7 @@ export function useEditInteractionForm({
     onSubmit: async ({ value }) => {
       await updateInteractionMutation.mutateAsync({
         interactionId: interaction.id,
+        contactId: interaction.contactId,
         data: {
           type: value.type,
           subject: value.subject,

@@ -31,6 +31,7 @@ export function useEditContactForm({
     onSubmit: async ({ value }) => {
       await updateContactMutation.mutateAsync({
         contactId: contact.id,
+        leadId: contact.leadId,
         data: value,
       });
       onOpenChange(false);

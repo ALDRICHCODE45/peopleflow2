@@ -51,6 +51,7 @@ export function ContactCard({
   const handleTagEdit = async (data: EditContactFormData) => {
     await editContactMutation.mutateAsync({
       contactId: contact.id,
+      leadId: contact.leadId,
       data,
     });
   };

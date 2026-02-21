@@ -53,7 +53,9 @@ export function useAddContact() {
       queryClient.invalidateQueries({
         queryKey: ["contacts", "by-lead", variables.leadId],
       });
-      queryClient.invalidateQueries({ queryKey: ["leads"] });
+      queryClient.invalidateQueries({
+        queryKey: ["leads", "detail", variables.leadId],
+      });
       showToast({
         type: "success",
         title: "Contacto agregado",
@@ -79,9 +81,11 @@ export function useUpdateContact() {
   return useMutation({
     mutationFn: async ({
       contactId,
+      leadId,
       data,
     }: {
       contactId: string;
+      leadId: string;
       data: Partial<ContactFormData>;
     }) => {
       const result = await updateContactAction(contactId, data);
@@ -90,9 +94,13 @@ export function useUpdateContact() {
       }
       return result.contact;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["contacts"] });
-      queryClient.invalidateQueries({ queryKey: ["leads"] });
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["contacts", "by-lead", variables.leadId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["leads", "detail", variables.leadId],
+      });
       showToast({
         type: "success",
         title: "Contacto actualizado",
@@ -116,16 +124,26 @@ export function useDeleteContact() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (contactId: string) => {
+    mutationFn: async ({
+      contactId,
+      leadId,
+    }: {
+      contactId: string;
+      leadId: string;
+    }) => {
       const result = await deleteContactAction(contactId);
       if (result.error) {
         throw new Error(result.error);
       }
       return result.success;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["contacts"] });
-      queryClient.invalidateQueries({ queryKey: ["leads"] });
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["contacts", "by-lead", variables.leadId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["leads", "detail", variables.leadId],
+      });
       showToast({
         type: "success",
         title: "Contacto eliminado",

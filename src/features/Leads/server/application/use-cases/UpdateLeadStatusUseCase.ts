@@ -48,7 +48,7 @@ export class UpdateLeadStatusUseCase {
 
   async execute(input: UpdateLeadStatusInput): Promise<UpdateLeadStatusOutput> {
     try {
-      // Obtener el lead actual
+      // Obtener el lead actual (lectura fuera de transacción — validaciones previas)
       const lead = await this.leadRepository.findById(
         input.leadId,
         input.tenantId,
@@ -97,13 +97,65 @@ export class UpdateLeadStatusUseCase {
         };
       }
 
-      // Actualizar el estado del lead
-      const updatedLead = await this.leadRepository.updateStatus(
-        input.leadId,
-        input.tenantId,
-        input.newStatus,
-        input.userId,
-      );
+      // TRANSACCIÓN: Envolver operaciones críticas para garantizar consistencia
+      // Si falla cualquier paso, todos se revierten
+      const updatedLead = await prisma.$transaction(async (tx) => {
+        // 1. Actualizar el estado del lead
+        const statusResult = await tx.lead.updateMany({
+          where: { id: input.leadId, tenantId: input.tenantId, isDeleted: false },
+          data: { status: input.newStatus },
+        });
+
+        if (statusResult.count === 0) {
+          throw new Error("Error al actualizar estado del lead");
+        }
+
+        // 2. Crear registro en el historial de estados
+        await tx.leadStatusHistory.create({
+          data: {
+            leadId: input.leadId,
+            tenantId: input.tenantId,
+            previousStatus: oldStatus,
+            newStatus: input.newStatus,
+            changedById: input.userId,
+          },
+        });
+
+        // 3. Crear cliente automáticamente al llegar a POSICIONES_ASIGNADAS
+        if (input.newStatus === "POSICIONES_ASIGNADAS") {
+          const existingClient = await tx.client.findUnique({
+            where: { leadId: input.leadId },
+          });
+
+          if (!existingClient) {
+            await tx.client.create({
+              data: {
+                nombre: lead.companyName,
+                leadId: lead.id,
+                generadorId: lead.assignedToId,
+                origenId: lead.originId,
+                tenantId: input.tenantId,
+                createdById: input.userId,
+              },
+            });
+          }
+        }
+
+        // 4. Re-fetch el lead actualizado con relaciones
+        const freshLead = await tx.lead.findFirst({
+          where: { id: input.leadId, tenantId: input.tenantId },
+          include: {
+            sector: { select: { name: true } },
+            subsector: { select: { name: true } },
+            origin: { select: { name: true } },
+            assignedTo: { select: { name: true } },
+            createdBy: { select: { name: true } },
+            _count: { select: { contacts: true } },
+          },
+        });
+
+        return freshLead;
+      });
 
       if (!updatedLead) {
         return {
@@ -112,142 +164,32 @@ export class UpdateLeadStatusUseCase {
         };
       }
 
-      // Crear registro en el historial de estados
-      await this.leadStatusHistoryRepository.create({
-        leadId: input.leadId,
-        tenantId: input.tenantId,
-        previousStatus: oldStatus,
-        newStatus: input.newStatus,
-        changedById: input.userId,
-      });
+      // Construir Lead domain object desde el resultado de la transacción
+      const resultLead = this.leadRepository.findById(input.leadId, input.tenantId);
 
-      // Crear cliente automáticamente al llegar a POSICIONES_ASIGNADAS
-      if (input.newStatus === "POSICIONES_ASIGNADAS" && this.clientRepository) {
-        try {
-          const existingClient = await this.clientRepository.findByLeadId(
-            input.leadId,
-            input.tenantId,
-          );
-
-          if (!existingClient) {
-            await this.clientRepository.create({
-              nombre: updatedLead.companyName,
-              leadId: updatedLead.id,
-              generadorId: updatedLead.assignedToId,
-              origenId: updatedLead.originId,
-              tenantId: input.tenantId,
-              createdById: input.userId,
-            });
-          }
-        } catch (clientError) {
-          // Log error but don't fail the status update
-          console.error("Error creating client from lead:", clientError);
-        }
-      }
-
+      // SIDE-EFFECTS (no-críticos): Notificaciones fuera de la transacción
       // Enviar notificación cuando el lead se convierte a cliente (POSICIONES_ASIGNADAS)
       if (
         input.newStatus === "POSICIONES_ASIGNADAS" &&
         updatedLead.assignedToId
       ) {
-        try {
-          const assignedUser = await prisma.user.findUnique({
-            where: { id: updatedLead.assignedToId },
-            select: { email: true, name: true },
-          });
-
-          if (assignedUser?.email) {
-            const notificationUseCase = new SendNotificationUseCase(
-              prismaNotificationRepository,
-              [emailProvider],
-            );
-
-            const emailData = {
-              recipientName: assignedUser.name || "Usuario",
-              leadName: updatedLead.companyName,
-              appUrl: "https://www.peopleflow.tech",
-            };
-
-            const htmlTemplate = generateLeadToClientConversionEmail(emailData);
-            const plainTextBody =
-              generateLeadToClientConversionPlainText(emailData);
-
-            await notificationUseCase.execute({
-              tenantId: input.tenantId,
-              provider: "EMAIL",
-              recipient: "nocheblanca92@gmail.com",
-              subject: `Lead "${updatedLead.companyName}" es ahora un Cliente`,
-              body: plainTextBody,
-              priority: "HIGH",
-              metadata: {
-                leadId: updatedLead.id,
-                leadName: updatedLead.companyName,
-                triggerEvent: "LEAD_TO_CLIENT_CONVERSION",
-                newStatus: "POSICIONES_ASIGNADAS",
-                htmlTemplate: htmlTemplate,
-              },
-              createdById: input.userId,
-            });
-          }
-        } catch (notificationError) {
-          // Log error but don't fail the status update
-          console.error(
-            "Error sending conversion notification:",
-            notificationError,
-          );
-        }
+        this.sendConversionNotification(input, updatedLead).catch((err) =>
+          console.error("Error sending conversion notification:", err),
+        );
       }
 
       // Enviar notificación si el nuevo estado es CONTACTO_CALIDO y hay usuario asignado
       if (input.newStatus === "CONTACTO_CALIDO" && updatedLead.assignedToId) {
-        try {
-          const assignedUser = await prisma.user.findUnique({
-            where: { id: updatedLead.assignedToId },
-            select: { email: true, name: true },
-          });
-
-          if (assignedUser?.email) {
-            const notificationUseCase = new SendNotificationUseCase(
-              prismaNotificationRepository,
-              [emailProvider],
-            );
-
-            const emailData = {
-              recipientName: assignedUser.name || "Usuario",
-              leadName: updatedLead.companyName,
-              newStatus: "Contacto Calido",
-              appUrl: "https://www.peopleflow.tech",
-            };
-
-            const htmlTemplate = generateLeadStatusChangeEmail(emailData);
-            const plainTextBody = generateLeadStatusChangePlainText(emailData);
-
-            await notificationUseCase.execute({
-              tenantId: input.tenantId,
-              provider: "EMAIL",
-              recipient: "salvador@topsales.expert",
-              subject: `Lead "${updatedLead.companyName}" es ahora Contacto Calido`,
-              body: plainTextBody,
-              priority: "HIGH",
-              metadata: {
-                leadId: updatedLead.id,
-                leadName: updatedLead.companyName,
-                triggerEvent: "LEAD_STATUS_CHANGE",
-                newStatus: "CONTACTO_CALIDO",
-                htmlTemplate: htmlTemplate,
-              },
-              createdById: input.userId,
-            });
-          }
-        } catch (notificationError) {
-          // Log error but don't fail the status update
-          console.error("Error sending notification:", notificationError);
-        }
+        this.sendStatusChangeNotification(input, updatedLead).catch((err) =>
+          console.error("Error sending notification:", err),
+        );
       }
+
+      const finalLead = await resultLead;
 
       return {
         success: true,
-        lead: updatedLead,
+        lead: finalLead ?? undefined,
       };
     } catch (error) {
       console.error("Error in UpdateLeadStatusUseCase:", error);
@@ -256,5 +198,96 @@ export class UpdateLeadStatusUseCase {
         error: "Error al actualizar estado del lead",
       };
     }
+  }
+
+  private async sendConversionNotification(
+    input: UpdateLeadStatusInput,
+    lead: { assignedToId: string | null; companyName: string; id: string },
+  ): Promise<void> {
+    if (!lead.assignedToId) return;
+
+    const assignedUser = await prisma.user.findUnique({
+      where: { id: lead.assignedToId },
+      select: { email: true, name: true },
+    });
+
+    if (!assignedUser?.email) return;
+
+    const notificationUseCase = new SendNotificationUseCase(
+      prismaNotificationRepository,
+      [emailProvider],
+    );
+
+    const emailData = {
+      recipientName: assignedUser.name || "Usuario",
+      leadName: lead.companyName,
+      appUrl: "https://www.peopleflow.tech",
+    };
+
+    const htmlTemplate = generateLeadToClientConversionEmail(emailData);
+    const plainTextBody = generateLeadToClientConversionPlainText(emailData);
+
+    await notificationUseCase.execute({
+      tenantId: input.tenantId,
+      provider: "EMAIL",
+      recipient: "nocheblanca92@gmail.com",
+      subject: `Lead "${lead.companyName}" es ahora un Cliente`,
+      body: plainTextBody,
+      priority: "HIGH",
+      metadata: {
+        leadId: lead.id,
+        leadName: lead.companyName,
+        triggerEvent: "LEAD_TO_CLIENT_CONVERSION",
+        newStatus: "POSICIONES_ASIGNADAS",
+        htmlTemplate: htmlTemplate,
+      },
+      createdById: input.userId,
+    });
+  }
+
+  private async sendStatusChangeNotification(
+    input: UpdateLeadStatusInput,
+    lead: { assignedToId: string | null; companyName: string; id: string },
+  ): Promise<void> {
+    if (!lead.assignedToId) return;
+
+    const assignedUser = await prisma.user.findUnique({
+      where: { id: lead.assignedToId },
+      select: { email: true, name: true },
+    });
+
+    if (!assignedUser?.email) return;
+
+    const notificationUseCase = new SendNotificationUseCase(
+      prismaNotificationRepository,
+      [emailProvider],
+    );
+
+    const emailData = {
+      recipientName: assignedUser.name || "Usuario",
+      leadName: lead.companyName,
+      newStatus: "Contacto Calido",
+      appUrl: "https://www.peopleflow.tech",
+    };
+
+    const htmlTemplate = generateLeadStatusChangeEmail(emailData);
+    const plainTextBody = generateLeadStatusChangePlainText(emailData);
+
+    await notificationUseCase.execute({
+      tenantId: input.tenantId,
+      provider: "EMAIL",
+      recipient: "salvador@topsales.expert",
+      subject: `Lead "${lead.companyName}" es ahora Contacto Calido`,
+      body: plainTextBody,
+      priority: "HIGH",
+      metadata: {
+        leadId: lead.id,
+        leadName: lead.companyName,
+        triggerEvent: "LEAD_STATUS_CHANGE",
+        newStatus: "CONTACTO_CALIDO",
+        htmlTemplate: htmlTemplate,
+      },
+      createdById: input.userId,
+    });
   }
 }

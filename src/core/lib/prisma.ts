@@ -49,11 +49,33 @@ const globalForPrisma = global as GlobalWithPrisma;
  * Instancia base de Prisma Client
  * Usar para consultas que NO requieren filtrado por tenant
  */
+const isDev = process.env.NODE_ENV !== "production";
+
 const prisma: PrismaClient =
   globalForPrisma.prisma ||
   new PrismaClient({
     adapter,
+    log: isDev
+      ? [
+          { emit: "event", level: "query" },
+          { emit: "stdout", level: "warn" },
+          { emit: "stdout", level: "error" },
+        ]
+      : ["warn", "error"],
   });
+
+// Slow query logging en desarrollo (> 100ms)
+if (isDev && !globalForPrisma.prisma) {
+  (prisma.$on as (event: string, callback: (e: { duration: number; query: string; params: string }) => void) => void)(
+    "query",
+    (e) => {
+      if (e.duration > 100) {
+        console.warn(`🐢 Slow query (${e.duration}ms):`, e.query);
+        console.warn("   Params:", e.params);
+      }
+    },
+  );
+}
 
 /**
  * Instancia de Prisma Client con tenant scoping automático

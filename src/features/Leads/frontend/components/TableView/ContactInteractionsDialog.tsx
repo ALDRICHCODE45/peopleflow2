@@ -107,10 +107,13 @@ export function ContactInteractionsDialog({
 
   const handleDeleteInteraction = useCallback(async () => {
     if (!deletingInteractionId) return;
-    await deleteInteractionMutation.mutateAsync(deletingInteractionId);
+    await deleteInteractionMutation.mutateAsync({
+      interactionId: deletingInteractionId,
+      contactId: contact.id,
+    });
     setDeletingInteractionId(null);
     closeDeleteModal();
-  }, [deletingInteractionId, deleteInteractionMutation, closeDeleteModal]);
+  }, [deletingInteractionId, deleteInteractionMutation, closeDeleteModal, contact.id]);
 
   const handleOpenEdit = useCallback(
     (interaction: Interaction) => {

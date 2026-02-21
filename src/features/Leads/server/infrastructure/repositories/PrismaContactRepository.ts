@@ -103,43 +103,47 @@ export class PrismaContactRepository implements IContactRepository {
     data: UpdateContactData,
   ): Promise<Contact | null> {
     try {
-      // Si se está marcando como primario, quitar primario de los demás
-      if (data.isPrimary === true) {
-        const contact = await prisma.contact.findFirst({
+      const updateData = {
+        ...(data.firstName !== undefined && { firstName: data.firstName }),
+        ...(data.lastName !== undefined && { lastName: data.lastName }),
+        ...(data.email !== undefined && { email: data.email }),
+        ...(data.phone !== undefined && { phone: data.phone }),
+        ...(data.position !== undefined && { position: data.position }),
+        ...(data.linkedInUrl !== undefined && {
+          linkedInUrl: data.linkedInUrl,
+        }),
+        ...(data.isPrimary !== undefined && { isPrimary: data.isPrimary }),
+        ...(data.notes !== undefined && { notes: data.notes }),
+        ...(data.tag !== undefined && { tag: data.tag }),
+      };
+
+      // Wrap in transaction for atomicity when isPrimary changes
+      const contact = await prisma.$transaction(async (tx) => {
+        if (data.isPrimary === true) {
+          const existing = await tx.contact.findFirst({
+            where: { id, tenantId },
+          });
+
+          if (existing) {
+            await tx.contact.updateMany({
+              where: { leadId: existing.leadId, tenantId, id: { not: id } },
+              data: { isPrimary: false },
+            });
+          }
+        }
+
+        const result = await tx.contact.updateMany({
           where: { id, tenantId },
+          data: updateData,
         });
 
-        if (contact) {
-          await prisma.contact.updateMany({
-            where: { leadId: contact.leadId, tenantId, id: { not: id } },
-            data: { isPrimary: false },
-          });
+        if (result.count === 0) {
+          return null;
         }
-      }
 
-      const result = await prisma.contact.updateMany({
-        where: { id, tenantId },
-        data: {
-          ...(data.firstName !== undefined && { firstName: data.firstName }),
-          ...(data.lastName !== undefined && { lastName: data.lastName }),
-          ...(data.email !== undefined && { email: data.email }),
-          ...(data.phone !== undefined && { phone: data.phone }),
-          ...(data.position !== undefined && { position: data.position }),
-          ...(data.linkedInUrl !== undefined && {
-            linkedInUrl: data.linkedInUrl,
-          }),
-          ...(data.isPrimary !== undefined && { isPrimary: data.isPrimary }),
-          ...(data.notes !== undefined && { notes: data.notes }),
-          ...(data.tag !== undefined && { tag: data.tag }),
-        },
-      });
-
-      if (result.count === 0) {
-        return null;
-      }
-
-      const contact = await prisma.contact.findFirst({
-        where: { id, tenantId },
+        return tx.contact.findFirst({
+          where: { id, tenantId },
+        });
       });
 
       if (!contact) return null;

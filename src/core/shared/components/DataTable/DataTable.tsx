@@ -418,6 +418,7 @@ export function DataTable<TData, TValue>({
           <DataTableBulkActionsBar
             selectedCount={table.getSelectedRowModel().rows.length}
             onClearSelection={() => table.toggleAllRowsSelected(false)}
+            //actions={finalConfig.actions}
             actions={[
               ...(finalConfig.actions?.onBulkExport
                 ? [

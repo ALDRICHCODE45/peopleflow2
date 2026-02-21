@@ -8,7 +8,7 @@ import { LeadStatusBadge } from "../TableView/LeadStatusBadge";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Calendar, Document, Link, People } from "@hugeicons/core-free-icons";
+import { Calendar, People } from "@hugeicons/core-free-icons";
 import { Separator } from "@/core/shared/ui/shadcn/separator";
 import { Avatar, AvatarFallback } from "@/core/shared/ui/shadcn/avatar";
 import {
@@ -150,18 +150,6 @@ export const LeadKanbanCard = memo(function LeadKanbanCard({
           <span className="text-xs font-medium text-primary/80">
             {lead.contactsCount ?? 0}
           </span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <HugeiconsIcon icon={Link} className="text-primary/80" size={14} />
-          <span className="text-xs font-medium text-primary/80">0</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <HugeiconsIcon
-            icon={Document}
-            className="text-primary/80"
-            size={14}
-          />
-          <span className="text-xs font-medium text-primary/80">0</span>
         </div>
       </div>
     </div>

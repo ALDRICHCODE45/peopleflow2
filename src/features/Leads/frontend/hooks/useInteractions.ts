@@ -64,8 +64,10 @@ export function useAddInteraction() {
       }
       return result.interaction;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["interactions"] });
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["interactions", "by-contact", variables.contactId],
+      });
       showToast({
         type: "success",
         title: "Interacción agregada",
@@ -91,9 +93,11 @@ export function useUpdateInteraction() {
   return useMutation({
     mutationFn: async ({
       interactionId,
+      contactId,
       data,
     }: {
       interactionId: string;
+      contactId: string;
       data: {
         type?: InteractionType;
         subject?: string;
@@ -107,8 +111,10 @@ export function useUpdateInteraction() {
       }
       return result.interaction;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["interactions"] });
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["interactions", "by-contact", variables.contactId],
+      });
       showToast({
         type: "success",
         title: "Interacción actualizada",
@@ -132,15 +138,23 @@ export function useDeleteInteraction() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (interactionId: string) => {
+    mutationFn: async ({
+      interactionId,
+      contactId,
+    }: {
+      interactionId: string;
+      contactId: string;
+    }) => {
       const result = await deleteInteractionAction(interactionId);
       if (result.error) {
         throw new Error(result.error);
       }
       return result.success;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["interactions"] });
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["interactions", "by-contact", variables.contactId],
+      });
       showToast({
         type: "success",
         title: "Interacción eliminada",

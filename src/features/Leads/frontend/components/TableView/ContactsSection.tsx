@@ -32,7 +32,10 @@ export function ContactsSection({ leadId }: ContactsSectionProps) {
 
   const handleDeleteContact = async () => {
     if (contactToDelete) {
-      await deleteContactMutation.mutateAsync(contactToDelete.id);
+      await deleteContactMutation.mutateAsync({
+        contactId: contactToDelete.id,
+        leadId,
+      });
       setContactToDelete(null);
     }
   };

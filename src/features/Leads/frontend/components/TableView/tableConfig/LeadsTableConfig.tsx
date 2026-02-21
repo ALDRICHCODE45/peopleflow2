@@ -32,8 +32,8 @@ export const LeadsTableConfig: TableConfig<Lead> = {
     onBulkEdit: (selectedRows) => {
       console.log("Editar:", selectedRows);
     },
-    onBulkShare: (selectedRows) => {
-      console.log("Compartir:", selectedRows);
+    onBulkReasign: (selectedRows) => {
+      console.log("Reasignar:", selectedRows);
     },
   },
   emptyStateMessage: "No se encontraron leads",

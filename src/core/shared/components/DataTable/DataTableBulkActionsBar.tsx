@@ -32,9 +32,9 @@ export function DataTableBulkActionsBar({
 
   return (
     <Card
-      className="sticky bottom-0 left-0 right-0 py-0 mx-1 z-10 bg-background border-t shadow-lg animate-in slide-in-from-bottom-2 duration-300"
+      className="sticky bottom-0 left-0 right-0 py-0 mx-1 z-10 bg-background border-t shadow-sm animate-in slide-in-from-bottom-2 duration-300"
       role="toolbar"
-      aria-label={`${selectedCount} elementos seleccionados`}
+      aria-label={`${selectedCount} seleccionados`}
       // Improved touch target size on mobile
       style={{ touchAction: "manipulation" }}
     >
@@ -68,6 +68,8 @@ export function DataTableBulkActionsBar({
               onClick={action.onClick}
               aria-label={action.label}
               className="gap-1 px-2 py-1 sm:px-3 sm:py-2 text-base sm:text-sm"
+              buttonTooltip
+              buttonTooltipText={action.label}
             >
               {action.icon}
               <span className="ml-1 sm:ml-2 hidden xs:inline">

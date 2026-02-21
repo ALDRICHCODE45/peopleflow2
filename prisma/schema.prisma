@@ -418,6 +418,7 @@ model Contact {
   @@index([leadId])
   @@index([tenantId])
   @@index([email])
+  @@index([tenantId, leadId]) // Optimiza findByLeadId con tenant scope
   @@map("contact")
 }
 
@@ -452,6 +453,8 @@ model Interaction {
   @@index([createdById])
   @@index([date])
   @@index([type])
+  @@index([contactId, date])    // Optimiza orderBy: { date: "desc" } por contacto
+  @@index([tenantId, contactId]) // Optimiza queries con tenant scope
   @@map("interaction")
 }
 

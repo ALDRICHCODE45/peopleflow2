@@ -185,56 +185,39 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
    * - SuperAdmin: Obtiene permisos de sus roles globales (tenantId = null)
    * - Usuario normal: SOLO obtiene permisos del tenant especificado
    * - Sin tenant: Retorna array vacío (fail-closed)
+   *
+   * OPTIMIZACIÓN: Una sola query obtiene roles globales (tenantId=null) Y del tenant,
+   * luego determina SuperAdmin y extrae permisos en memoria.
    */
   async getUserPermissions(
     userId: string,
     tenantId: string | null
   ): Promise<string[]> {
-    // PASO 1: Verificar primero si es SuperAdmin
-    const isSuperAdmin = await this.isSuperAdmin(userId);
+    // FAIL-CLOSED: Sin tenant, sin permisos (para usuarios normales)
+    // Pero aún necesitamos verificar SuperAdmin con roles globales
+    const whereConditions: Prisma.UserRoleWhereInput[] = [
+      { tenantId: null }, // Roles globales (SuperAdmin)
+    ];
 
-    if (isSuperAdmin) {
-      // SuperAdmin: Obtener permisos de roles globales (sin tenant)
-      const globalRoles = await prisma.userRole.findMany({
-        where: {
-          userId,
-          tenantId: null, // Roles globales de superadmin
-        },
-        include: {
-          role: {
-            include: {
-              permissions: {
-                include: {
-                  permission: true,
-                },
-              },
-            },
-          },
-        },
-      });
-
-      return this.extractPermissionsFromRoles(globalRoles);
+    if (tenantId) {
+      whereConditions.push({ tenantId }); // Roles del tenant específico
     }
 
-    // PASO 2: Usuario normal - Requiere tenantId obligatorio
-    // FAIL-CLOSED: Sin tenant, sin permisos
-    if (!tenantId) {
-      return [];
-    }
-
-    // PASO 3: Obtener SOLO permisos del tenant específico
-    // NO hay fallback a roles globales para usuarios normales
+    // UNA SOLA QUERY: Obtiene roles globales + del tenant con solo nombres de permisos
     const userRoles = await prisma.userRole.findMany({
       where: {
         userId,
-        tenantId, // Filtrado ESTRICTO por tenant
+        OR: whereConditions,
       },
-      include: {
+      select: {
+        tenantId: true,
         role: {
-          include: {
+          select: {
             permissions: {
-              include: {
-                permission: true,
+              select: {
+                permission: {
+                  select: { name: true },
+                },
               },
             },
           },
@@ -242,7 +225,27 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
       },
     });
 
-    return this.extractPermissionsFromRoles(userRoles);
+    // Determinar si es SuperAdmin: tiene algún rol global con permiso super:admin
+    const globalRoles = userRoles.filter((ur) => ur.tenantId === null);
+    const isSuperAdmin = globalRoles.some((ur) =>
+      ur.role.permissions.some(
+        (rp) => rp.permission.name === SUPER_ADMIN_PERMISSION_NAME
+      )
+    );
+
+    if (isSuperAdmin) {
+      // SuperAdmin: Extraer permisos de roles globales
+      return this.extractPermissionNames(globalRoles);
+    }
+
+    // Usuario normal: FAIL-CLOSED sin tenant
+    if (!tenantId) {
+      return [];
+    }
+
+    // Usuario normal: Extraer SOLO permisos del tenant específico
+    const tenantRoles = userRoles.filter((ur) => ur.tenantId === tenantId);
+    return this.extractPermissionNames(tenantRoles);
   }
 
   /**
@@ -260,9 +263,26 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
       };
     }>
   ): string[] {
+    return this.extractPermissionNames(userRoles);
+  }
+
+  /**
+   * Extrae nombres de permisos únicos de roles con select optimizado
+   */
+  private extractPermissionNames(
+    roles: Array<{
+      role: {
+        permissions: Array<{
+          permission: {
+            name: string;
+          };
+        }>;
+      };
+    }>
+  ): string[] {
     const permissionSet = new Set<string>();
 
-    for (const userRole of userRoles) {
+    for (const userRole of roles) {
       for (const rolePermission of userRole.role.permissions) {
         permissionSet.add(rolePermission.permission.name);
       }
@@ -273,7 +293,10 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
 
   /**
    * Obtiene usuarios de un tenant con paginación server-side
-   * Ejecuta COUNT y SELECT en paralelo para mejor rendimiento
+   * OPTIMIZACIÓN: Paginación a nivel de BD en vez de en memoria
+   * 1. Obtener IDs de usuarios paginados con distinct + skip/take
+   * 2. Obtener count total de usuarios distintos
+   * 3. Cargar roles solo para los usuarios de la página actual
    * SEGURIDAD: Filtrado obligatorio por tenantId
    */
   async findPaginatedUsers(
@@ -284,128 +307,81 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
     // Whitelist de columnas permitidas para sorting (previene SQL injection)
     const allowedSortColumns = ["email", "name", "createdAt"];
 
-    // Construir where clause base
-    const baseWhere: Prisma.UserRoleWhereInput = {
-      tenantId, // Filtrado OBLIGATORIO por tenant
+    // Construir where clause para User
+    const userWhere: Prisma.UserWhereInput = {
+      userRoles: { some: { tenantId } }, // Usuario pertenece al tenant
+      ...(filters?.search
+        ? {
+            OR: [
+              { email: { contains: filters.search, mode: "insensitive" as const } },
+              { name: { contains: filters.search, mode: "insensitive" as const } },
+            ],
+          }
+        : {}),
     };
 
-    // Agregar filtro de búsqueda si existe
-    const userWhere: Prisma.UserWhereInput | undefined = filters?.search
-      ? {
-          OR: [
-            { email: { contains: filters.search, mode: "insensitive" } },
-            { name: { contains: filters.search, mode: "insensitive" } },
-          ],
-        }
-      : undefined;
+    // Construir orderBy para User
+    const orderBy = this.buildUserDirectSorting(sorting, allowedSortColumns);
 
-    // Ejecutar COUNT y SELECT en paralelo
-    const [totalUserRoles, userRoles] = await Promise.all([
-      // COUNT: Total de usuarios únicos en el tenant
-      prisma.userRole.findMany({
-        where: {
-          ...baseWhere,
-          user: userWhere,
+    // Ejecutar COUNT y paginated SELECT en paralelo a nivel de User
+    const [totalCount, paginatedUsers] = await Promise.all([
+      prisma.user.count({ where: userWhere }),
+      prisma.user.findMany({
+        where: userWhere,
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          image: true,
+          avatar: true,
+          createdAt: true,
+          userRoles: {
+            where: { tenantId },
+            select: {
+              role: { select: { id: true, name: true } },
+            },
+          },
         },
-        select: { userId: true },
-        distinct: ["userId"],
-      }),
-      // SELECT: Datos paginados
-      prisma.userRole.findMany({
-        where: {
-          ...baseWhere,
-          user: userWhere,
-        },
-        include: {
-          user: true,
-          role: true,
-        },
-        orderBy: this.buildUserSorting(sorting, allowedSortColumns),
+        orderBy,
+        skip,
+        take,
       }),
     ]);
 
-    // Agrupar por usuario (ya que un usuario puede tener múltiples roles)
-    const userMap = new Map<string, UserWithRoles>();
+    const data: UserWithRoles[] = paginatedUsers.map((user) => ({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      image: user.image,
+      avatar: user.avatar,
+      createdAt: user.createdAt,
+      roles: user.userRoles.map((ur) => ({
+        id: ur.role.id,
+        name: ur.role.name,
+      })),
+    }));
 
-    for (const userRole of userRoles) {
-      const userId = userRole.userId;
-      if (!userMap.has(userId)) {
-        userMap.set(userId, {
-          id: userRole.user.id,
-          email: userRole.user.email,
-          name: userRole.user.name,
-          image: userRole.user.image,
-          avatar: userRole.user.avatar,
-          roles: [],
-          createdAt: userRole.user.createdAt,
-        });
-      }
-      userMap.get(userId)!.roles.push({
-        id: userRole.role.id,
-        name: userRole.role.name,
-      });
-    }
-
-    // Convertir a array y aplicar paginación manual (necesario por el groupBy)
-    let usersArray = Array.from(userMap.values());
-
-    // Aplicar sorting en memoria si es necesario
-    if (sorting && sorting.length > 0) {
-      const sortField = sorting[0].id;
-      const sortDesc = sorting[0].desc;
-
-      if (allowedSortColumns.includes(sortField)) {
-        usersArray.sort((a, b) => {
-          let aVal: string | Date | null | undefined;
-          let bVal: string | Date | null | undefined;
-
-          if (sortField === "email") {
-            aVal = a.email;
-            bVal = b.email;
-          } else if (sortField === "name") {
-            aVal = a.name;
-            bVal = b.name;
-          } else if (sortField === "createdAt") {
-            aVal = a.createdAt;
-            bVal = b.createdAt;
-          }
-
-          if (aVal === null || aVal === undefined) return sortDesc ? -1 : 1;
-          if (bVal === null || bVal === undefined) return sortDesc ? 1 : -1;
-          if (aVal < bVal) return sortDesc ? 1 : -1;
-          if (aVal > bVal) return sortDesc ? -1 : 1;
-          return 0;
-        });
-      }
-    }
-
-    // Aplicar paginación manual
-    const paginatedUsers = usersArray.slice(skip, skip + take);
-
-    return {
-      data: paginatedUsers,
-      totalCount: totalUserRoles.length,
-    };
+    return { data, totalCount };
   }
 
   /**
-   * Construye el orderBy para las queries de usuarios
+   * Construye el orderBy directo para User model
    */
-  private buildUserSorting(
+  private buildUserDirectSorting(
     sorting: FindPaginatedUsersParams["sorting"],
     allowedColumns: string[]
-  ): Prisma.UserRoleOrderByWithRelationInput[] | undefined {
+  ): Prisma.UserOrderByWithRelationInput[] {
     if (!sorting || sorting.length === 0) {
-      return [{ user: { createdAt: "desc" } }];
+      return [{ createdAt: "desc" }];
     }
 
     const validSorting = sorting.filter((s) => allowedColumns.includes(s.id));
     if (validSorting.length === 0) {
-      return [{ user: { createdAt: "desc" } }];
+      return [{ createdAt: "desc" }];
     }
 
     return validSorting.map((s) => ({
-      user: { [s.id]: s.desc ? "desc" : "asc" },
+      [s.id]: s.desc ? "desc" : "asc",
     }));
   }
 }

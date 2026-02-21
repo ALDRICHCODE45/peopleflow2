@@ -60,10 +60,11 @@ export class PrismaVacancyRepository implements IVacancyRepository {
 
     const vacancies = await prisma.vacancy.findMany({
       where,
+      select: this.getListingSelect(),
       orderBy: { createdAt: "desc" },
     });
 
-    return vacancies.map((v) => this.mapToDomain(v));
+    return vacancies.map((v) => this.mapToDomain({ ...v, description: "" }));
   }
 
   async create(data: CreateVacancyData): Promise<Vacancy> {
@@ -172,10 +173,12 @@ export class PrismaVacancyRepository implements IVacancyRepository {
         : [{ createdAt: "desc" as const }];
 
     // Ejecutar count y findMany en paralelo para mejor performance
+    // Excluir description (campo @db.Text potencialmente largo) en listados
     const [totalCount, vacancies] = await Promise.all([
       prisma.vacancy.count({ where }),
       prisma.vacancy.findMany({
         where,
+        select: this.getListingSelect(),
         orderBy,
         skip,
         take,
@@ -183,9 +186,25 @@ export class PrismaVacancyRepository implements IVacancyRepository {
     ]);
 
     return {
-      data: vacancies.map((v) => this.mapToDomain(v)),
+      data: vacancies.map((v) => this.mapToDomain({ ...v, description: "" })),
       totalCount,
     };
+  }
+
+  /**
+   * Select para listados: excluye description (campo @db.Text largo)
+   */
+  private getListingSelect() {
+    return {
+      id: true,
+      title: true,
+      status: true,
+      department: true,
+      location: true,
+      tenantId: true,
+      createdAt: true,
+      updatedAt: true,
+    } as const;
   }
 
   /**
