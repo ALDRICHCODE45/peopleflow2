@@ -3,17 +3,7 @@ import type { ILeadStatusHistoryRepository } from "../../domain/interfaces/ILead
 import type { IClientRepository } from "@features/Finanzas/Clientes/server/domain/interfaces/IClientRepository";
 import { Lead } from "../../domain/entities/Lead";
 import type { LeadStatusType } from "../../domain/value-objects/LeadStatus";
-import { SendNotificationUseCase } from "@features/Notifications/server/application/use-cases/SendNotificationUseCase";
-import { prismaNotificationRepository } from "@features/Notifications/server/infrastructure/repositories/PrismaNotificationRepository";
-import { emailProvider } from "@features/Notifications/server/infrastructure/providers/EmailProvider";
-import {
-  generateLeadStatusChangeEmail,
-  generateLeadStatusChangePlainText,
-} from "@features/Notifications/server/infrastructure/templates/leadStatusChangeTemplate";
-import {
-  generateLeadToClientConversionEmail,
-  generateLeadToClientConversionPlainText,
-} from "@features/Notifications/server/infrastructure/templates/leadToClientConversionTemplate";
+import { inngest } from "@core/shared/inngest/inngest";
 import prisma from "@lib/prisma";
 
 export interface UpdateLeadStatusInput {
@@ -167,23 +157,21 @@ export class UpdateLeadStatusUseCase {
       // Construir Lead domain object desde el resultado de la transacción
       const resultLead = this.leadRepository.findById(input.leadId, input.tenantId);
 
-      // SIDE-EFFECTS (no-críticos): Notificaciones fuera de la transacción
-      // Enviar notificación cuando el lead se convierte a cliente (POSICIONES_ASIGNADAS)
-      if (
-        input.newStatus === "POSICIONES_ASIGNADAS" &&
-        updatedLead.assignedToId
-      ) {
-        this.sendConversionNotification(input, updatedLead).catch((err) =>
-          console.error("Error sending conversion notification:", err),
-        );
-      }
-
-      // Enviar notificación si el nuevo estado es CONTACTO_CALIDO y hay usuario asignado
-      if (input.newStatus === "CONTACTO_CALIDO" && updatedLead.assignedToId) {
-        this.sendStatusChangeNotification(input, updatedLead).catch((err) =>
-          console.error("Error sending notification:", err),
-        );
-      }
+      // SIDE-EFFECTS (no-críticos): Emitir evento Inngest para notificaciones configurables
+      inngest
+        .send({
+          name: "lead/status.changed",
+          data: {
+            leadId: input.leadId,
+            tenantId: input.tenantId,
+            oldStatus,
+            newStatus: input.newStatus,
+            companyName: updatedLead.companyName,
+            assignedToId: updatedLead.assignedToId,
+            changedById: input.userId,
+          },
+        })
+        .catch((err) => console.error("Error emitting Inngest event:", err));
 
       const finalLead = await resultLead;
 
@@ -200,94 +188,4 @@ export class UpdateLeadStatusUseCase {
     }
   }
 
-  private async sendConversionNotification(
-    input: UpdateLeadStatusInput,
-    lead: { assignedToId: string | null; companyName: string; id: string },
-  ): Promise<void> {
-    if (!lead.assignedToId) return;
-
-    const assignedUser = await prisma.user.findUnique({
-      where: { id: lead.assignedToId },
-      select: { email: true, name: true },
-    });
-
-    if (!assignedUser?.email) return;
-
-    const notificationUseCase = new SendNotificationUseCase(
-      prismaNotificationRepository,
-      [emailProvider],
-    );
-
-    const emailData = {
-      recipientName: assignedUser.name || "Usuario",
-      leadName: lead.companyName,
-      appUrl: "https://www.peopleflow.tech",
-    };
-
-    const htmlTemplate = generateLeadToClientConversionEmail(emailData);
-    const plainTextBody = generateLeadToClientConversionPlainText(emailData);
-
-    await notificationUseCase.execute({
-      tenantId: input.tenantId,
-      provider: "EMAIL",
-      recipient: "nocheblanca92@gmail.com",
-      subject: `Lead "${lead.companyName}" es ahora un Cliente`,
-      body: plainTextBody,
-      priority: "HIGH",
-      metadata: {
-        leadId: lead.id,
-        leadName: lead.companyName,
-        triggerEvent: "LEAD_TO_CLIENT_CONVERSION",
-        newStatus: "POSICIONES_ASIGNADAS",
-        htmlTemplate: htmlTemplate,
-      },
-      createdById: input.userId,
-    });
-  }
-
-  private async sendStatusChangeNotification(
-    input: UpdateLeadStatusInput,
-    lead: { assignedToId: string | null; companyName: string; id: string },
-  ): Promise<void> {
-    if (!lead.assignedToId) return;
-
-    const assignedUser = await prisma.user.findUnique({
-      where: { id: lead.assignedToId },
-      select: { email: true, name: true },
-    });
-
-    if (!assignedUser?.email) return;
-
-    const notificationUseCase = new SendNotificationUseCase(
-      prismaNotificationRepository,
-      [emailProvider],
-    );
-
-    const emailData = {
-      recipientName: assignedUser.name || "Usuario",
-      leadName: lead.companyName,
-      newStatus: "Contacto Calido",
-      appUrl: "https://www.peopleflow.tech",
-    };
-
-    const htmlTemplate = generateLeadStatusChangeEmail(emailData);
-    const plainTextBody = generateLeadStatusChangePlainText(emailData);
-
-    await notificationUseCase.execute({
-      tenantId: input.tenantId,
-      provider: "EMAIL",
-      recipient: "salvador@topsales.expert",
-      subject: `Lead "${lead.companyName}" es ahora Contacto Calido`,
-      body: plainTextBody,
-      priority: "HIGH",
-      metadata: {
-        leadId: lead.id,
-        leadName: lead.companyName,
-        triggerEvent: "LEAD_STATUS_CHANGE",
-        newStatus: "CONTACTO_CALIDO",
-        htmlTemplate: htmlTemplate,
-      },
-      createdById: input.userId,
-    });
-  }
 }

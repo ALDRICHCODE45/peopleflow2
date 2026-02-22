@@ -125,6 +125,9 @@ model Tenant {
   // Relaciones con módulo de Clientes
   clients Client[]
 
+  // Relación con configuración de notificaciones
+  notificationConfig NotificationConfig?
+
   @@map("tenant")
 }
 
@@ -594,4 +597,36 @@ model Client {
   @@index([origenId])
   @@index([tenantId, createdAt])
   @@map("client")
+}
+
+// =============================================
+// CONFIGURACIÓN DE NOTIFICACIONES
+// =============================================
+
+enum InactiveTimeUnit {
+  HOURS
+  DAYS
+}
+
+model NotificationConfig {
+  id       String  @id @default(uuid())
+  tenantId String  @unique
+  tenant   Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  enabled          Boolean  @default(true)
+  recipientUserIds String[] @default([])
+
+  leadStatusChangeEnabled  Boolean      @default(false)
+  leadStatusChangeTriggers LeadStatus[] @default([])
+
+  leadInactiveEnabled  Boolean          @default(false)
+  leadInactiveStatuses LeadStatus[]     @default([])
+  leadInactiveTimeValue Int             @default(48)
+  leadInactiveTimeUnit InactiveTimeUnit @default(HOURS)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tenantId])
+  @@map("notification_config")
 }

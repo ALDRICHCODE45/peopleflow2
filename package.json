@@ -37,6 +37,7 @@
     "country-data-list": "^1.6.0",
     "country-region-data": "^4.1.0",
     "date-fns": "^4.1.0",
+    "inngest": "^3.52.3",
     "input-otp": "^1.4.2",
     "libphonenumber-js": "^1.12.36",
     "motion": "^12.24.12",

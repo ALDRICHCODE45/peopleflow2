@@ -345,6 +345,23 @@ export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
   _max?: Prisma.NestedJsonNullableFilter<$PrismaModel>
 }
 
+export type EnumInactiveTimeUnitFilter<$PrismaModel = never> = {
+  equals?: $Enums.InactiveTimeUnit | Prisma.EnumInactiveTimeUnitFieldRefInput<$PrismaModel>
+  in?: $Enums.InactiveTimeUnit[] | Prisma.ListEnumInactiveTimeUnitFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InactiveTimeUnit[] | Prisma.ListEnumInactiveTimeUnitFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInactiveTimeUnitFilter<$PrismaModel> | $Enums.InactiveTimeUnit
+}
+
+export type EnumInactiveTimeUnitWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.InactiveTimeUnit | Prisma.EnumInactiveTimeUnitFieldRefInput<$PrismaModel>
+  in?: $Enums.InactiveTimeUnit[] | Prisma.ListEnumInactiveTimeUnitFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InactiveTimeUnit[] | Prisma.ListEnumInactiveTimeUnitFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInactiveTimeUnitWithAggregatesFilter<$PrismaModel> | $Enums.InactiveTimeUnit
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumInactiveTimeUnitFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumInactiveTimeUnitFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -660,6 +677,23 @@ export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
   gt?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   gte?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+}
+
+export type NestedEnumInactiveTimeUnitFilter<$PrismaModel = never> = {
+  equals?: $Enums.InactiveTimeUnit | Prisma.EnumInactiveTimeUnitFieldRefInput<$PrismaModel>
+  in?: $Enums.InactiveTimeUnit[] | Prisma.ListEnumInactiveTimeUnitFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InactiveTimeUnit[] | Prisma.ListEnumInactiveTimeUnitFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInactiveTimeUnitFilter<$PrismaModel> | $Enums.InactiveTimeUnit
+}
+
+export type NestedEnumInactiveTimeUnitWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.InactiveTimeUnit | Prisma.EnumInactiveTimeUnitFieldRefInput<$PrismaModel>
+  in?: $Enums.InactiveTimeUnit[] | Prisma.ListEnumInactiveTimeUnitFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InactiveTimeUnit[] | Prisma.ListEnumInactiveTimeUnitFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInactiveTimeUnitWithAggregatesFilter<$PrismaModel> | $Enums.InactiveTimeUnit
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumInactiveTimeUnitFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumInactiveTimeUnitFilter<$PrismaModel>
 }
 
 

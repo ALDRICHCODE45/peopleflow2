@@ -403,7 +403,8 @@ export const ModelName = {
   Attachment: 'Attachment',
   Vacancy: 'Vacancy',
   Notification: 'Notification',
-  Client: 'Client'
+  Client: 'Client',
+  NotificationConfig: 'NotificationConfig'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -419,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "tenant" | "role" | "userRole" | "rolePermission" | "permission" | "sector" | "subsector" | "leadOrigin" | "lead" | "leadStatusHistory" | "contact" | "interaction" | "attachment" | "vacancy" | "notification" | "client"
+    modelProps: "user" | "session" | "account" | "verification" | "tenant" | "role" | "userRole" | "rolePermission" | "permission" | "sector" | "subsector" | "leadOrigin" | "lead" | "leadStatusHistory" | "contact" | "interaction" | "attachment" | "vacancy" | "notification" | "client" | "notificationConfig"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1903,6 +1904,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    NotificationConfig: {
+      payload: Prisma.$NotificationConfigPayload<ExtArgs>
+      fields: Prisma.NotificationConfigFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NotificationConfigFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationConfigPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NotificationConfigFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationConfigPayload>
+        }
+        findFirst: {
+          args: Prisma.NotificationConfigFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationConfigPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NotificationConfigFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationConfigPayload>
+        }
+        findMany: {
+          args: Prisma.NotificationConfigFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationConfigPayload>[]
+        }
+        create: {
+          args: Prisma.NotificationConfigCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationConfigPayload>
+        }
+        createMany: {
+          args: Prisma.NotificationConfigCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NotificationConfigCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationConfigPayload>[]
+        }
+        delete: {
+          args: Prisma.NotificationConfigDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationConfigPayload>
+        }
+        update: {
+          args: Prisma.NotificationConfigUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationConfigPayload>
+        }
+        deleteMany: {
+          args: Prisma.NotificationConfigDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NotificationConfigUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NotificationConfigUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationConfigPayload>[]
+        }
+        upsert: {
+          args: Prisma.NotificationConfigUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationConfigPayload>
+        }
+        aggregate: {
+          args: Prisma.NotificationConfigAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNotificationConfig>
+        }
+        groupBy: {
+          args: Prisma.NotificationConfigGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NotificationConfigGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NotificationConfigCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NotificationConfigCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2244,6 +2319,24 @@ export const ClientScalarFieldEnum = {
 export type ClientScalarFieldEnum = (typeof ClientScalarFieldEnum)[keyof typeof ClientScalarFieldEnum]
 
 
+export const NotificationConfigScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  enabled: 'enabled',
+  recipientUserIds: 'recipientUserIds',
+  leadStatusChangeEnabled: 'leadStatusChangeEnabled',
+  leadStatusChangeTriggers: 'leadStatusChangeTriggers',
+  leadInactiveEnabled: 'leadInactiveEnabled',
+  leadInactiveStatuses: 'leadInactiveStatuses',
+  leadInactiveTimeValue: 'leadInactiveTimeValue',
+  leadInactiveTimeUnit: 'leadInactiveTimeUnit',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NotificationConfigScalarFieldEnum = (typeof NotificationConfigScalarFieldEnum)[keyof typeof NotificationConfigScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2439,6 +2532,20 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 
 
 /**
+ * Reference to a field of type 'InactiveTimeUnit'
+ */
+export type EnumInactiveTimeUnitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InactiveTimeUnit'>
+    
+
+
+/**
+ * Reference to a field of type 'InactiveTimeUnit[]'
+ */
+export type ListEnumInactiveTimeUnitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InactiveTimeUnit[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -2566,6 +2673,7 @@ export type GlobalOmitConfig = {
   vacancy?: Prisma.VacancyOmit
   notification?: Prisma.NotificationOmit
   client?: Prisma.ClientOmit
+  notificationConfig?: Prisma.NotificationConfigOmit
 }
 
 /* Types for Logging */

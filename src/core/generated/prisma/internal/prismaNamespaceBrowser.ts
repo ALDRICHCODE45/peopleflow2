@@ -70,7 +70,8 @@ export const ModelName = {
   Attachment: 'Attachment',
   Vacancy: 'Vacancy',
   Notification: 'Notification',
-  Client: 'Client'
+  Client: 'Client',
+  NotificationConfig: 'NotificationConfig'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -389,6 +390,24 @@ export const ClientScalarFieldEnum = {
 } as const
 
 export type ClientScalarFieldEnum = (typeof ClientScalarFieldEnum)[keyof typeof ClientScalarFieldEnum]
+
+
+export const NotificationConfigScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  enabled: 'enabled',
+  recipientUserIds: 'recipientUserIds',
+  leadStatusChangeEnabled: 'leadStatusChangeEnabled',
+  leadStatusChangeTriggers: 'leadStatusChangeTriggers',
+  leadInactiveEnabled: 'leadInactiveEnabled',
+  leadInactiveStatuses: 'leadInactiveStatuses',
+  leadInactiveTimeValue: 'leadInactiveTimeValue',
+  leadInactiveTimeUnit: 'leadInactiveTimeUnit',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NotificationConfigScalarFieldEnum = (typeof NotificationConfigScalarFieldEnum)[keyof typeof NotificationConfigScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Collapsible,
@@ -33,6 +33,10 @@ import { SwitchActionNotification } from "../components/SwitchActionNotification
 import { LeadStatusSelector } from "../components/LeadStatusSelector";
 import { LeadInactivityConfig } from "../components/LeadInactivityConfig";
 import type { LeadStatus } from "@features/Leads/frontend/types";
+import {
+  useNotificationConfigQuery,
+  useSaveNotificationConfig,
+} from "../hooks/useNotificationConfig";
 
 const NOTIFICATION_MODULES = [
   {
@@ -129,6 +133,38 @@ export function ConfiguracionPage() {
   const id = useId();
 
   const { data: users = [] } = useTenantUsersQuery();
+  const { data: savedConfig } = useNotificationConfigQuery();
+  const saveConfigMutation = useSaveNotificationConfig();
+
+  // Hydrate local state from saved config
+  useEffect(() => {
+    if (!savedConfig) return;
+    setNotificationsEnabled(savedConfig.enabled);
+    setSelectedAssignedToIds(savedConfig.recipientUserIds);
+    setActiveActions({
+      "lead-status-change": savedConfig.leadStatusChangeEnabled,
+      "lead-inactive": savedConfig.leadInactiveEnabled,
+    });
+    setSelectedStatuses(savedConfig.leadStatusChangeTriggers);
+    setInactiveStatuses(savedConfig.leadInactiveStatuses);
+    setInactiveTimeValue(savedConfig.leadInactiveTimeValue);
+    setInactiveTimeUnit(
+      savedConfig.leadInactiveTimeUnit === "HOURS" ? "horas" : "dias",
+    );
+  }, [savedConfig]);
+
+  const handleSave = () => {
+    saveConfigMutation.mutate({
+      enabled: notificationsEnabled,
+      recipientUserIds: selectedAssignedToIds,
+      leadStatusChangeEnabled: activeActions["lead-status-change"] ?? false,
+      leadStatusChangeTriggers: selectedStatuses,
+      leadInactiveEnabled: activeActions["lead-inactive"] ?? false,
+      leadInactiveStatuses: inactiveStatuses,
+      leadInactiveTimeValue: inactiveTimeValue,
+      leadInactiveTimeUnit: inactiveTimeUnit === "horas" ? "HOURS" : "DAYS",
+    });
+  };
 
   const userOptions = useMemo(
     () => users.map((u) => ({ value: u.id, label: u.name || u.email })),
@@ -326,7 +362,14 @@ export function ConfiguracionPage() {
                   </div>
 
                   <div className="flex justify-end">
-                    <Button disabled>Guardar cambios</Button>
+                    <Button
+                      onClick={handleSave}
+                      disabled={saveConfigMutation.isPending}
+                    >
+                      {saveConfigMutation.isPending
+                        ? "Guardando..."
+                        : "Guardar cambios"}
+                    </Button>
                   </div>
                 </CardContent>
               </Card>

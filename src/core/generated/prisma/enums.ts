@@ -71,3 +71,11 @@ export const VacancyStatus = {
 } as const
 
 export type VacancyStatus = (typeof VacancyStatus)[keyof typeof VacancyStatus]
+
+
+export const InactiveTimeUnit = {
+  HOURS: 'HOURS',
+  DAYS: 'DAYS'
+} as const
+
+export type InactiveTimeUnit = (typeof InactiveTimeUnit)[keyof typeof InactiveTimeUnit]
