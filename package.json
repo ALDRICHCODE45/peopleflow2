@@ -14,7 +14,7 @@
     "prisma:studio": "bunx prisma studio",
     "better:generate": "bunx @better-auth/cli@latest generate --config src/core/lib/auth.ts",
     "prisma:deploy": "bun run better:generate && bunx prisma db push --accept-data-loss",
-    "cron:example": "bunx tsx src/core/cronjobs/example.ts"
+    "cron:example": "npx tsx src/core/cronjobs/example.ts"
   },
   "prisma": {
     "seed": "bunx tsx prisma/seed.ts"
