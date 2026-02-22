@@ -453,7 +453,7 @@ model Interaction {
   @@index([createdById])
   @@index([date])
   @@index([type])
-  @@index([contactId, date])    // Optimiza orderBy: { date: "desc" } por contacto
+  @@index([contactId, date]) // Optimiza orderBy: { date: "desc" } por contacto
   @@index([tenantId, contactId]) // Optimiza queries con tenant scope
   @@map("interaction")
 }
