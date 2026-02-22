@@ -31,12 +31,16 @@ import type {
   DeleteLeadResult,
   UpdateLeadStatusResult,
   ReasignLeadResult,
+  BulkDeleteLeadsResult,
+  BulkReasignLeadsResult,
 } from "../../../frontend/types";
 import type { Lead } from "../../../frontend/types";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { ReasignLeadUseCase } from "../../application/use-cases/ReasignLeadUseCase";
+import { BulkDeleteLeadsUseCase } from "../../application/use-cases/BulkDeleteLeadsUseCase";
+import { BulkReasignLeadsUseCase } from "../../application/use-cases/BulkReasignLeadsUseCase";
 import { GetLeadStatusHistoryUseCase } from "../../application/use-cases/GetLeadStatusHistoryUseCase";
 
 // Types for status history
@@ -460,6 +464,149 @@ export const reasignLeadAction = async (
     };
   }
 };
+
+/**
+ * Elimina múltiples leads (soft delete)
+ */
+export async function bulkDeleteLeadsAction(
+  leadIds: string[],
+): Promise<BulkDeleteLeadsResult> {
+  try {
+    const parsedIds = z.array(uuidSchema).safeParse(leadIds);
+    if (!parsedIds.success) {
+      return { error: "IDs de leads inválidos", success: false };
+    }
+
+    const headersList = await headers();
+    const session = await auth.api.getSession({ headers: headersList });
+
+    if (!session?.user) {
+      return { error: "No autenticado", success: false };
+    }
+
+    const tenantId = await getActiveTenantId();
+
+    if (!tenantId) {
+      return { error: "No hay tenant activo", success: false };
+    }
+
+    const hasAnyPermissionUseCase = new CheckAnyPermissonUseCase();
+    const hasPermission = await hasAnyPermissionUseCase.execute({
+      userId: session.user.id,
+      permissions: [
+        PermissionActions.leads.eliminar,
+        PermissionActions.leads.gestionar,
+      ],
+      tenantId,
+    });
+
+    if (!hasPermission) {
+      return {
+        error: "No tienes permisos para eliminar leads",
+        success: false,
+      };
+    }
+
+    const useCase = new BulkDeleteLeadsUseCase(prismaLeadRepository);
+    const result = await useCase.execute({
+      leadIds: parsedIds.data,
+      tenantId,
+    });
+
+    if (!result.success) {
+      return {
+        error: result.error || "Error al eliminar leads",
+        success: false,
+      };
+    }
+
+    revalidatePath("/generacion-de-leads/leads");
+    revalidatePath("/generacion-de-leads/kanban");
+    return {
+      error: null,
+      success: true,
+      deletedCount: result.deletedCount,
+    };
+  } catch (error) {
+    console.error("Error bulk deleting leads:", error);
+    return { error: "Error al eliminar leads", success: false };
+  }
+}
+
+/**
+ * Reasigna múltiples leads a un nuevo usuario
+ */
+export async function bulkReasignLeadsAction(
+  leadIds: string[],
+  newUserId: string,
+): Promise<BulkReasignLeadsResult> {
+  try {
+    const parsedIds = z.array(uuidSchema).safeParse(leadIds);
+    if (!parsedIds.success) {
+      return { error: "IDs de leads inválidos", success: false };
+    }
+
+    const parsedUserId = userIdSchema.safeParse(newUserId);
+    if (!parsedUserId.success) {
+      return { error: "ID de usuario inválido", success: false };
+    }
+
+    const headersList = await headers();
+    const session = await auth.api.getSession({ headers: headersList });
+
+    if (!session?.user) {
+      return { error: "No autenticado", success: false };
+    }
+
+    const tenantId = await getActiveTenantId();
+
+    if (!tenantId) {
+      return { error: "No hay tenant activo", success: false };
+    }
+
+    const hasAnyPermissionUseCase = new CheckAnyPermissonUseCase();
+    const hasPermission = await hasAnyPermissionUseCase.execute({
+      userId: session.user.id,
+      permissions: [
+        PermissionActions.leads.editar,
+        PermissionActions.leads.gestionar,
+      ],
+      tenantId,
+    });
+
+    if (!hasPermission) {
+      return {
+        error: "No tienes permisos para reasignar leads",
+        success: false,
+      };
+    }
+
+    const useCase = new BulkReasignLeadsUseCase(prismaLeadRepository);
+    const result = await useCase.execute({
+      leadIds: parsedIds.data,
+      newUserId: parsedUserId.data,
+      tenantId,
+    });
+
+    if (!result.success) {
+      return {
+        error: result.error || "Error al reasignar leads",
+        success: false,
+      };
+    }
+
+    revalidatePath("/generacion-de-leads/leads");
+    revalidatePath("/generacion-de-leads/kanban");
+    return {
+      error: null,
+      success: true,
+      reasignedCount: result.reasignedCount,
+    };
+  } catch (error) {
+    console.error("Error bulk reassigning leads:", error);
+    return { error: "Error al reasignar leads", success: false };
+  }
+}
 
 /**
  * Obtiene el historial de cambios de estado de un lead

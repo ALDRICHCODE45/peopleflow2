@@ -34,9 +34,10 @@ export const createTableConfig = <T>(
     },
     actions: {
       ...baseConfig.actions,
-      // Actualizar onAdd directamente si no hay customFilter o si se necesita sobrescribir
       onAdd: restHandlers.onAdd || baseConfig.actions?.onAdd,
-    },
+      ...(restHandlers.onBulkDelete ? { onBulkDelete: restHandlers.onBulkDelete } : {}),
+      ...(restHandlers.onBulkReasign ? { onBulkReasign: restHandlers.onBulkReasign } : {}),
+    } as TableConfig<T>["actions"],
     // Agregar configuración server-side si se proporciona
     ...(serverSide && { serverSide }),
   };

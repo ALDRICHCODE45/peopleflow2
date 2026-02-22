@@ -258,6 +258,18 @@ export interface ReasignLeadResult {
   lead?: Lead;
 }
 
+export interface BulkDeleteLeadsResult {
+  error: string | null;
+  success: boolean;
+  deletedCount?: number;
+}
+
+export interface BulkReasignLeadsResult {
+  error: string | null;
+  success: boolean;
+  reasignedCount?: number;
+}
+
 export interface GetContactsResult {
   error: string | null;
   contacts: Contact[];

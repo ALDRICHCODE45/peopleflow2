@@ -14,6 +14,8 @@ import {
   deleteLeadAction,
   updateLeadStatusAction,
   reasignLeadAction,
+  bulkDeleteLeadsAction,
+  bulkReasignLeadsAction,
 } from "../../server/presentation/actions/lead.actions";
 import type { PaginationMeta } from "@/core/shared/types/pagination.types";
 
@@ -222,6 +224,90 @@ export function useReasignLead() {
         type: "error",
         title: "Error",
         description: error.message || "Error al reasignar el contacto",
+      });
+    },
+  });
+}
+
+/**
+ * Hook para eliminar múltiples leads
+ */
+export function useBulkDeleteLeads() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (leadIds: string[]) => {
+      const result = await bulkDeleteLeadsAction(leadIds);
+      if (result.error) {
+        throw new Error(result.error);
+      }
+      return result;
+    },
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({
+        queryKey: ["leads", "infinite"],
+        refetchType: "active",
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["leads", "paginated"],
+        refetchType: "active",
+      });
+      showToast({
+        type: "success",
+        title: "Leads eliminados",
+        description: `Se eliminaron ${result.deletedCount} lead${result.deletedCount !== 1 ? "s" : ""} correctamente`,
+      });
+    },
+    onError: (error: Error) => {
+      showToast({
+        type: "error",
+        title: "Error",
+        description: error.message || "Error al eliminar los leads",
+      });
+    },
+  });
+}
+
+/**
+ * Hook para reasignar múltiples leads
+ */
+export function useBulkReasignLeads() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      leadIds,
+      newUserId,
+    }: {
+      leadIds: string[];
+      newUserId: string;
+    }) => {
+      const result = await bulkReasignLeadsAction(leadIds, newUserId);
+      if (result.error) {
+        throw new Error(result.error);
+      }
+      return result;
+    },
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({
+        queryKey: ["leads", "infinite"],
+        refetchType: "active",
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["leads", "paginated"],
+        refetchType: "active",
+      });
+      showToast({
+        type: "success",
+        title: "Leads reasignados",
+        description: `Se reasignaron ${result.reasignedCount} lead${result.reasignedCount !== 1 ? "s" : ""} correctamente`,
+      });
+    },
+    onError: (error: Error) => {
+      showToast({
+        type: "error",
+        title: "Error",
+        description: error.message || "Error al reasignar los leads",
       });
     },
   });

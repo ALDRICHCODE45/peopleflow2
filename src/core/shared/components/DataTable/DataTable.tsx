@@ -22,8 +22,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import {
   UserPlus,
   DeleteIcon,
-  Copy01Icon,
-  Printer,
+  UserSwitchIcon,
 } from "@hugeicons/core-free-icons";
 
 import { TableBodyDataTable } from "./DataTableBody";
@@ -418,63 +417,37 @@ export function DataTable<TData, TValue>({
           <DataTableBulkActionsBar
             selectedCount={table.getSelectedRowModel().rows.length}
             onClearSelection={() => table.toggleAllRowsSelected(false)}
-            //actions={finalConfig.actions}
-            actions={[
-              ...(finalConfig.actions?.onBulkExport
-                ? [
-                    {
-                      id: "duplicate",
-                      label: "Duplicar",
-                      icon: (
-                        <HugeiconsIcon icon={Copy01Icon} className="h-4 w-4" />
-                      ),
-                      onClick: () => {
-                        const selectedRows = table
-                          .getSelectedRowModel()
-                          .rows.map((row) => row.original);
-                        console.log("Duplicating:", selectedRows);
-                      },
-                      variant: "outline" as const,
-                    },
-                  ]
-                : []),
-              ...(finalConfig.actions?.onBulkExport
-                ? [
-                    {
-                      id: "print",
-                      label: "Imprimir",
-                      icon: (
-                        <HugeiconsIcon icon={Printer} className="h-4 w-4" />
-                      ),
-                      onClick: () => {
-                        const selectedRows = table
-                          .getSelectedRowModel()
-                          .rows.map((row) => row.original);
-                        console.log("Printing:", selectedRows);
-                      },
-                      variant: "outline" as const,
-                    },
-                  ]
-                : []),
-              ...(finalConfig.actions?.onBulkDelete
-                ? [
-                    {
-                      id: "delete",
-                      label: "Eliminar",
-                      icon: (
-                        <HugeiconsIcon icon={DeleteIcon} className="h-4 w-4" />
-                      ),
-                      onClick: () => {
-                        const selectedRows = table
-                          .getSelectedRowModel()
-                          .rows.map((row) => row.original);
-                        finalConfig.actions?.onBulkDelete?.(selectedRows);
-                      },
-                      variant: "destructive" as const,
-                    },
-                  ]
-                : []),
-            ]}
+            actions={(() => {
+              const getSelectedRows = () =>
+                table.getSelectedRowModel().rows.map((row) => row.original);
+              const actions: BulkAction[] = [];
+
+              if (finalConfig.actions?.onBulkReasign) {
+                actions.push({
+                  id: "reasign",
+                  label: "Reasignar",
+                  icon: (
+                    <HugeiconsIcon icon={UserSwitchIcon} className="h-4 w-4" />
+                  ),
+                  onClick: () => finalConfig.actions?.onBulkReasign?.(getSelectedRows()),
+                  variant: "outline",
+                });
+              }
+
+              if (finalConfig.actions?.onBulkDelete) {
+                actions.push({
+                  id: "delete",
+                  label: "Eliminar",
+                  icon: (
+                    <HugeiconsIcon icon={DeleteIcon} className="h-4 w-4" />
+                  ),
+                  onClick: () => finalConfig.actions?.onBulkDelete?.(getSelectedRows()),
+                  variant: "destructive",
+                });
+              }
+
+              return actions;
+            })()}
           />
         )}
 

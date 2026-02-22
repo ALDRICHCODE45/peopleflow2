@@ -14,12 +14,37 @@ import { DataTableMultiTabs } from "@/core/shared/components/DataTable/DataTable
 import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
 import { LeadSheetForm } from "../components/TableView/LeadSheetForm";
 import { useServerPaginatedTable } from "@/core/shared/hooks/useServerPaginatedTable";
-import type { LeadStatus } from "../types";
+import type { Lead, LeadStatus } from "../types";
 import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
 import { enrichLeadTabsWithCounts } from "../config/leadTabsConfig";
+import { useBulkDeleteLeads } from "../hooks/useLeads";
+import { BulkDeleteLeadsAlertDialog } from "../components/TableView/BulkDeleteLeadsAlertDialog";
+import { BulkReasignLeadsDialog } from "../components/TableView/BulkReasignLeadsDialog";
 
 export function LeadsListPage() {
   const { isOpen, openModal, closeModal } = useModalState();
+
+  // Bulk actions state
+  const [bulkDialogState, setBulkDialogState] = useState<{
+    type: "bulkDelete" | "bulkReasign" | null;
+    selectedLeads: Lead[];
+  }>({ type: null, selectedLeads: [] });
+
+  const bulkDeleteMutation = useBulkDeleteLeads();
+
+  const handleBulkDelete = useCallback((rows: Lead[]) => {
+    setBulkDialogState({ type: "bulkDelete", selectedLeads: rows });
+  }, []);
+
+  const handleBulkReasign = useCallback((rows: Lead[]) => {
+    setBulkDialogState({ type: "bulkReasign", selectedLeads: rows });
+  }, []);
+
+  const handleBulkDeleteConfirm = useCallback(async () => {
+    const ids = bulkDialogState.selectedLeads.map((l) => l.id);
+    await bulkDeleteMutation.mutateAsync(ids);
+    setBulkDialogState({ type: null, selectedLeads: [] });
+  }, [bulkDialogState.selectedLeads, bulkDeleteMutation]);
 
   // Server-side filter state for sector and origin (now multi-select)
   const [selectedSectorIds, setSelectedSectorIds] = useState<string[]>([]);
@@ -189,6 +214,8 @@ export function LeadsListPage() {
     () =>
       createTableConfig(LeadsTableConfig, {
         onAdd: handleAdd,
+        onBulkDelete: handleBulkDelete,
+        onBulkReasign: handleBulkReasign,
         // Props for controlled filter component
         selectedSectorIds,
         selectedOriginIds,
@@ -225,6 +252,8 @@ export function LeadsListPage() {
       totalCount,
       paginationMeta?.pageCount,
       handleAdd,
+      handleBulkDelete,
+      handleBulkReasign,
       selectedSectorIds,
       selectedOriginIds,
       handleSectorChange,
@@ -290,6 +319,25 @@ export function LeadsListPage() {
           >
             <LeadSheetForm open={isOpen} onOpenChange={closeModal} />
           </PermissionGuard>
+
+          <BulkDeleteLeadsAlertDialog
+            isOpen={bulkDialogState.type === "bulkDelete"}
+            onOpenChange={(open) => {
+              if (!open) setBulkDialogState({ type: null, selectedLeads: [] });
+            }}
+            onConfirmDelete={handleBulkDeleteConfirm}
+            selectedCount={bulkDialogState.selectedLeads.length}
+            isLoading={bulkDeleteMutation.isPending}
+          />
+
+          <BulkReasignLeadsDialog
+            isOpen={bulkDialogState.type === "bulkReasign"}
+            onOpenChange={(open) => {
+              if (!open) setBulkDialogState({ type: null, selectedLeads: [] });
+            }}
+            selectedLeadIds={bulkDialogState.selectedLeads.map((l) => l.id)}
+            selectedCount={bulkDialogState.selectedLeads.length}
+          />
         </div>
       </CardContent>
     </Card>

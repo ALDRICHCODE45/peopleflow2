@@ -23,18 +23,6 @@ export const LeadsTableConfig: TableConfig<Lead> = {
     addButtonIcon: <HugeiconsIcon icon={Add01Icon} className="h-4 w-4" />,
     addButtonText: "Nuevo Lead",
     showBulkActions: true,
-    onBulkDelete: (selectedRows) => {
-      console.log("Eliminar:", selectedRows);
-    },
-    onBulkExport: (selectedRows) => {
-      console.log("Exportar:", selectedRows);
-    },
-    onBulkEdit: (selectedRows) => {
-      console.log("Editar:", selectedRows);
-    },
-    onBulkReasign: (selectedRows) => {
-      console.log("Reasignar:", selectedRows);
-    },
   },
   emptyStateMessage: "No se encontraron leads",
   pagination: {

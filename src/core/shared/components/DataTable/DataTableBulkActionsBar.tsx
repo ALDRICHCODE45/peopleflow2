@@ -79,16 +79,6 @@ export function DataTableBulkActionsBar({
           ))}
         </div>
       </div>
-      <style jsx global>{`
-        @media (max-width: 640px) {
-          /* xs: Improve spacing and stacking, smaller font, keep actions big enough to tap */
-          .DataTableBulkActionsBar-btn,
-          .DataTableBulkActionsBar-clear {
-            min-width: 44px;
-            min-height: 44px;
-          }
-        }
-      `}</style>
     </Card>
   );
 }

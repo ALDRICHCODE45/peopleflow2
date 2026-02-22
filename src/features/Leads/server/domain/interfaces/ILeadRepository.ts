@@ -141,6 +141,20 @@ export interface ILeadRepository {
   ): Promise<Lead | null>;
 
   /**
+   * Elimina múltiples leads (soft delete)
+   */
+  deleteMany(leadIds: string[], tenantId: string): Promise<number>;
+
+  /**
+   * Reasigna múltiples leads a un nuevo usuario
+   */
+  reasignMany(
+    leadIds: string[],
+    newUserId: string,
+    tenantId: string,
+  ): Promise<number>;
+
+  /**
    * Busca un lead por nombre de empresa normalizado
    * para deteccion de duplicados
    */

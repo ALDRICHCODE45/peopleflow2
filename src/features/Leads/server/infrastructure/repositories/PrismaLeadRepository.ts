@@ -397,6 +397,59 @@ export class PrismaLeadRepository implements ILeadRepository {
     return this.mapToDomain(lead);
   }
 
+  async deleteMany(leadIds: string[], tenantId: string): Promise<number> {
+    try {
+      const result = await prisma.lead.updateMany({
+        where: {
+          id: { in: leadIds },
+          tenantId,
+          isDeleted: false,
+        },
+        data: {
+          isDeleted: true,
+          deletedAt: new Date(),
+        },
+      });
+      return result.count;
+    } catch (error) {
+      console.error("Error bulk deleting leads:", error);
+      return 0;
+    }
+  }
+
+  async reasignMany(
+    leadIds: string[],
+    newUserId: string,
+    tenantId: string,
+  ): Promise<number> {
+    try {
+      return await prisma.$transaction(async (tx) => {
+        // Verificar que el usuario pertenece al tenant
+        const userBelongsToTenant = await tx.userRole.findFirst({
+          where: { userId: newUserId, tenantId },
+        });
+
+        if (!userBelongsToTenant) {
+          return 0;
+        }
+
+        const result = await tx.lead.updateMany({
+          where: {
+            id: { in: leadIds },
+            tenantId,
+            isDeleted: false,
+          },
+          data: { assignedToId: newUserId },
+        });
+
+        return result.count;
+      });
+    } catch (error) {
+      console.error("Error bulk reassigning leads:", error);
+      return 0;
+    }
+  }
+
   async reasignLead(
     leadId: string,
     newUserId: string,
