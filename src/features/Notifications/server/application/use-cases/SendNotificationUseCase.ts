@@ -31,7 +31,29 @@ export class SendNotificationUseCase {
 
   async execute(input: SendNotificationInput): Promise<SendNotificationOutput> {
     try {
-      // 1. Persistir intención en DB
+      // 1. Verificar proveedor ANTES de persistir (fail-fast)
+      const provider = this.providers.find((p) => p.supports(input.provider));
+
+      if (!provider) {
+        const notification = await this.repository.create({
+          tenantId: input.tenantId,
+          provider: input.provider,
+          recipient: input.recipient,
+          subject: input.subject,
+          body: input.body,
+          metadata: input.metadata,
+          priority: input.priority,
+          status: "FAILED",
+          createdById: input.createdById,
+        });
+        return {
+          success: false,
+          error: "Proveedor no encontrado",
+          notification,
+        };
+      }
+
+      // 2. Crear con status SENDING directamente (1 INSERT en vez de INSERT + UPDATE)
       const notification = await this.repository.create({
         tenantId: input.tenantId,
         provider: input.provider,
@@ -40,31 +62,14 @@ export class SendNotificationUseCase {
         body: input.body,
         metadata: input.metadata,
         priority: input.priority,
+        status: "SENDING",
         createdById: input.createdById,
       });
 
-      // 2. Buscar el proveedor correcto
-      const provider = this.providers.find((p) => p.supports(input.provider));
-
-      if (!provider) {
-        await this.repository.updateStatus(
-          notification.id,
-          "FAILED",
-          "Proveedor no soportado"
-        );
-        return {
-          success: false,
-          error: "Proveedor no encontrado",
-          notification,
-        };
-      }
-
-      // 3. Actualizar estado a SENDING
-      await this.repository.updateStatus(notification.id, "SENDING");
-
-      // 4. Intentar envío
+      // 3. Intentar envío
       const result = await provider.send(notification);
 
+      // 4. Actualizar estado final (1 UPDATE)
       if (result.success) {
         const updated = await this.repository.updateStatus(
           notification.id,

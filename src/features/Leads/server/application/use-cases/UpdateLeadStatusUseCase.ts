@@ -154,8 +154,36 @@ export class UpdateLeadStatusUseCase {
         };
       }
 
-      // Construir Lead domain object desde el resultado de la transacción
-      const resultLead = this.leadRepository.findById(input.leadId, input.tenantId);
+      // Construir Lead domain object directamente desde el resultado de la transacción
+      const finalLead = new Lead({
+        id: updatedLead.id,
+        companyName: updatedLead.companyName,
+        website: updatedLead.website,
+        linkedInUrl: updatedLead.linkedInUrl,
+        countryCode: updatedLead.countryCode,
+        regionCode: updatedLead.regionCode,
+        postalCode: updatedLead.postalCode,
+        subOrigin: updatedLead.subOrigin,
+        employeeCount: updatedLead.employeeCount,
+        notes: updatedLead.notes,
+        status: updatedLead.status as LeadStatusType,
+        sectorId: updatedLead.sectorId,
+        sectorName: updatedLead.sector?.name,
+        subsectorId: updatedLead.subsectorId,
+        subsectorName: updatedLead.subsector?.name,
+        originId: updatedLead.originId,
+        originName: updatedLead.origin?.name,
+        assignedToId: updatedLead.assignedToId,
+        assignedToName: updatedLead.assignedTo?.name,
+        isDeleted: updatedLead.isDeleted,
+        deletedAt: updatedLead.deletedAt,
+        tenantId: updatedLead.tenantId,
+        createdById: updatedLead.createdById,
+        createdByName: updatedLead.createdBy?.name,
+        createdAt: updatedLead.createdAt,
+        updatedAt: updatedLead.updatedAt,
+        contactsCount: updatedLead._count?.contacts,
+      });
 
       // SIDE-EFFECTS (no-críticos): Emitir evento Inngest para notificaciones configurables
       inngest
@@ -173,11 +201,9 @@ export class UpdateLeadStatusUseCase {
         })
         .catch((err) => console.error("Error emitting Inngest event:", err));
 
-      const finalLead = await resultLead;
-
       return {
         success: true,
-        lead: finalLead ?? undefined,
+        lead: finalLead,
       };
     } catch (error) {
       console.error("Error in UpdateLeadStatusUseCase:", error);

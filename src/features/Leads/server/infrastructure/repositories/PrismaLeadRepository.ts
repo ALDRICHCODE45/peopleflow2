@@ -100,12 +100,12 @@ export class PrismaLeadRepository implements ILeadRepository {
   }
 
   async findById(id: string, tenantId: string): Promise<Lead | null> {
-    const lead = await prisma.lead.findFirst({
-      where: { id, tenantId },
+    const lead = await prisma.lead.findUnique({
+      where: { id },
       include: this.getBaseInclude(),
     });
 
-    if (!lead) return null;
+    if (!lead || lead.tenantId !== tenantId) return null;
     return this.mapToDomain(lead);
   }
 
@@ -194,12 +194,12 @@ export class PrismaLeadRepository implements ILeadRepository {
         return null;
       }
 
-      const lead = await prisma.lead.findFirst({
-        where: { id, tenantId },
+      const lead = await prisma.lead.findUnique({
+        where: { id },
         include: this.getBaseInclude(),
       });
 
-      if (!lead) return null;
+      if (!lead || lead.tenantId !== tenantId) return null;
       return this.mapToDomain(lead);
     } catch (error) {
       console.error("Error updating lead:", error);
@@ -223,12 +223,12 @@ export class PrismaLeadRepository implements ILeadRepository {
         return null;
       }
 
-      const lead = await prisma.lead.findFirst({
-        where: { id, tenantId },
+      const lead = await prisma.lead.findUnique({
+        where: { id },
         include: this.getBaseInclude(),
       });
 
-      if (!lead) return null;
+      if (!lead || lead.tenantId !== tenantId) return null;
       return this.mapToDomain(lead);
     } catch (error) {
       console.error("Error updating lead status:", error);
@@ -457,11 +457,11 @@ export class PrismaLeadRepository implements ILeadRepository {
   ): Promise<Lead | null> {
     try {
       // Verificar que el lead pertenece al tenant
-      const lead = await prisma.lead.findFirst({
-        where: { id: leadId, tenantId, isDeleted: false },
+      const lead = await prisma.lead.findUnique({
+        where: { id: leadId },
       });
 
-      if (!lead) {
+      if (!lead || lead.tenantId !== tenantId || lead.isDeleted) {
         return null;
       }
 

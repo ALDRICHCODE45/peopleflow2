@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useState } from "react";
+import { useCallback, useId, useMemo } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Collapsible,
@@ -32,11 +32,11 @@ import { useTenantUsersQuery } from "@/features/Administracion/usuarios/frontend
 import { SwitchActionNotification } from "../components/SwitchActionNotification";
 import { LeadStatusSelector } from "../components/LeadStatusSelector";
 import { LeadInactivityConfig } from "../components/LeadInactivityConfig";
-import type { LeadStatus } from "@features/Leads/frontend/types";
 import {
   useNotificationConfigQuery,
   useSaveNotificationConfig,
 } from "../hooks/useNotificationConfig";
+import { useNotificationDraft } from "../hooks/useNotificationDraft";
 
 const NOTIFICATION_MODULES = [
   {
@@ -116,85 +116,53 @@ const TAB_CONFIG = [
 ] as const;
 
 export function ConfiguracionPage() {
-  const [selectedAssignedToIds, setSelectedAssignedToIds] = useState<string[]>(
-    [],
-  );
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-  const [activeActions, setActiveActions] = useState<Record<string, boolean>>(
-    {},
-  );
-  const [selectedStatuses, setSelectedStatuses] = useState<LeadStatus[]>([]);
-  const [inactiveStatuses, setInactiveStatuses] = useState<LeadStatus[]>([]);
-  const [inactiveTimeValue, setInactiveTimeValue] = useState(48);
-  const [inactiveTimeUnit, setInactiveTimeUnit] = useState<"horas" | "dias">(
-    "horas",
-  );
-
   const id = useId();
 
   const { data: users = [] } = useTenantUsersQuery();
   const { data: savedConfig } = useNotificationConfigQuery();
   const saveConfigMutation = useSaveNotificationConfig();
 
-  // Hydrate local state from saved config
-  useEffect(() => {
-    if (!savedConfig) return;
-    setNotificationsEnabled(savedConfig.enabled);
-    setSelectedAssignedToIds(savedConfig.recipientUserIds);
-    setActiveActions({
-      "lead-status-change": savedConfig.leadStatusChangeEnabled,
-      "lead-inactive": savedConfig.leadInactiveEnabled,
-    });
-    setSelectedStatuses(savedConfig.leadStatusChangeTriggers);
-    setInactiveStatuses(savedConfig.leadInactiveStatuses);
-    setInactiveTimeValue(savedConfig.leadInactiveTimeValue);
-    setInactiveTimeUnit(
-      savedConfig.leadInactiveTimeUnit === "HOURS" ? "horas" : "dias",
-    );
-  }, [savedConfig]);
-
-  const handleSave = () => {
-    saveConfigMutation.mutate({
-      enabled: notificationsEnabled,
-      recipientUserIds: selectedAssignedToIds,
-      leadStatusChangeEnabled: activeActions["lead-status-change"] ?? false,
-      leadStatusChangeTriggers: selectedStatuses,
-      leadInactiveEnabled: activeActions["lead-inactive"] ?? false,
-      leadInactiveStatuses: inactiveStatuses,
-      leadInactiveTimeValue: inactiveTimeValue,
-      leadInactiveTimeUnit: inactiveTimeUnit === "horas" ? "HOURS" : "DAYS",
-    });
-  };
+  const {
+    state,
+    setEnabled,
+    setRecipients,
+    toggleAction,
+    toggleStatus,
+    toggleInactiveStatus,
+    setTimeValue,
+    setTimeUnit,
+  } = useNotificationDraft(savedConfig);
 
   const userOptions = useMemo(
     () => users.map((u) => ({ value: u.id, label: u.name || u.email })),
     [users],
   );
 
-  const toggleAction = (actionId: string, checked: boolean) => {
-    setActiveActions((prev) => ({ ...prev, [actionId]: checked }));
-  };
+  const moduleCounts = useMemo(() => {
+    const counts: Record<string, string> = {};
+    for (const notification_module of NOTIFICATION_MODULES) {
+      const active = notification_module.actions.filter(
+        (a) => state.activeActions[a.id] === true,
+      ).length;
+      counts[module.id] = `${active}/${notification_module.actions.length}`;
+    }
+    return counts;
+  }, [state.activeActions]);
 
-  const handleStatusChange = (status: LeadStatus, checked: boolean) => {
-    setSelectedStatuses((prev) =>
-      checked ? [...prev, status] : prev.filter((s) => s !== status),
-    );
-  };
-
-  const handleInactiveStatusChange = (status: LeadStatus, checked: boolean) => {
-    setInactiveStatuses((prev) =>
-      checked ? [...prev, status] : prev.filter((s) => s !== status),
-    );
-  };
-
-  const getModuleCount = (
-    module: (typeof NOTIFICATION_MODULES)[number],
-  ): string => {
-    const active = module.actions.filter(
-      (a) => activeActions[a.id] === true,
-    ).length;
-    return `${active}/${module.actions.length}`;
-  };
+  const handleSave = useCallback(() => {
+    saveConfigMutation.mutate({
+      enabled: state.enabled,
+      recipientUserIds: state.recipientUserIds,
+      leadStatusChangeEnabled:
+        state.activeActions["lead-status-change"] ?? false,
+      leadStatusChangeTriggers: state.selectedStatuses,
+      leadInactiveEnabled: state.activeActions["lead-inactive"] ?? false,
+      leadInactiveStatuses: state.inactiveStatuses,
+      leadInactiveTimeValue: state.inactiveTimeValue,
+      leadInactiveTimeUnit:
+        state.inactiveTimeUnit === "horas" ? "HOURS" : "DAYS",
+    });
+  }, [state, saveConfigMutation]);
 
   return (
     <Card className="p-2 m-1">
@@ -249,14 +217,14 @@ export function ConfiguracionPage() {
                       <h3 className="text-lg font-semibold">Notificaciones</h3>
                       <Switch
                         id={`${id}-switch`}
-                        checked={notificationsEnabled}
-                        onCheckedChange={setNotificationsEnabled}
+                        checked={state.enabled}
+                        onCheckedChange={setEnabled}
                         aria-describedby={`${id}-hint`}
                       />
                     </div>
                     <p id={`${id}-status`} className="text-sm">
                       Las notificaciones están actualmente{" "}
-                      {notificationsEnabled ? (
+                      {state.enabled ? (
                         <Badge variant="outline" className="text-primary">
                           Activadas
                         </Badge>
@@ -287,8 +255,8 @@ export function ConfiguracionPage() {
                       <FilterMultiSelect
                         label="Usuarios a notificar"
                         options={userOptions}
-                        selected={selectedAssignedToIds}
-                        onChange={setSelectedAssignedToIds}
+                        selected={state.recipientUserIds}
+                        onChange={setRecipients}
                         placeholder="Todos los usuarios"
                       />
                     </div>
@@ -319,38 +287,37 @@ export function ConfiguracionPage() {
                               <span>{module.label}</span>
                             </div>
                             <Badge variant="secondary">
-                              {getModuleCount(module)}
+                              {moduleCounts[module.id]}
                             </Badge>
                           </CollapsibleTrigger>
                           <CollapsibleContent className="mt-2 space-y-2 pl-6">
                             {module.actions.map((action) => (
                               <SwitchActionNotification
                                 key={action.id}
+                                actionId={action.id}
                                 label={action.label}
                                 description={action.description}
-                                checked={activeActions[action.id] === true}
-                                onCheckedChange={(checked) =>
-                                  toggleAction(action.id, checked)
+                                checked={
+                                  state.activeActions[action.id] === true
                                 }
+                                onToggle={toggleAction}
                               >
                                 {action.id === "lead-status-change" &&
-                                  activeActions[action.id] === true && (
+                                  state.activeActions[action.id] === true && (
                                     <LeadStatusSelector
-                                      selectedStatuses={selectedStatuses}
-                                      onStatusChange={handleStatusChange}
+                                      selectedStatuses={state.selectedStatuses}
+                                      onStatusChange={toggleStatus}
                                     />
                                   )}
                                 {action.id === "lead-inactive" &&
-                                  activeActions[action.id] === true && (
+                                  state.activeActions[action.id] === true && (
                                     <LeadInactivityConfig
-                                      selectedStatuses={inactiveStatuses}
-                                      onStatusChange={
-                                        handleInactiveStatusChange
-                                      }
-                                      timeValue={inactiveTimeValue}
-                                      onTimeValueChange={setInactiveTimeValue}
-                                      timeUnit={inactiveTimeUnit}
-                                      onTimeUnitChange={setInactiveTimeUnit}
+                                      selectedStatuses={state.inactiveStatuses}
+                                      onStatusChange={toggleInactiveStatus}
+                                      timeValue={state.inactiveTimeValue}
+                                      onTimeValueChange={setTimeValue}
+                                      timeUnit={state.inactiveTimeUnit}
+                                      onTimeUnitChange={setTimeUnit}
                                     />
                                   )}
                               </SwitchActionNotification>

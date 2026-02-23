@@ -1,24 +1,30 @@
 "use client";
-import { useId } from "react";
+import { memo, useId } from "react";
 import { Label } from "@shadcn/label";
 import { Switch } from "@shadcn/switch";
 
 interface SwitchActionNotificationProps {
+  actionId: string;
   label: string;
   description?: string;
   checked: boolean;
-  onCheckedChange: (checked: boolean) => void;
+  onToggle: (actionId: string, checked: boolean) => void;
   children?: React.ReactNode;
 }
 
-export function SwitchActionNotification({
+export const SwitchActionNotification = memo(function SwitchActionNotification({
+  actionId,
   label,
   description,
   checked,
-  onCheckedChange,
+  onToggle,
   children,
 }: SwitchActionNotificationProps) {
   const id = useId();
+
+  const handleCheckedChange = (value: boolean) => {
+    onToggle(actionId, value);
+  };
 
   return (
     <div className="rounded-md border px-4 py-3">
@@ -39,11 +45,11 @@ export function SwitchActionNotification({
         <Switch
           id={id}
           checked={checked}
-          onCheckedChange={onCheckedChange}
+          onCheckedChange={handleCheckedChange}
           aria-describedby={description ? `${id}-description` : undefined}
         />
       </div>
       {children}
     </div>
   );
-}
+});

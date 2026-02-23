@@ -1,5 +1,6 @@
 "use client";
 
+import { memo, useCallback, useMemo } from "react";
 import { Checkbox } from "@shadcn/checkbox";
 import { Label } from "@shadcn/label";
 import { Input } from "@shadcn/input";
@@ -14,19 +15,10 @@ import {
   type LeadStatus,
   LEAD_STATUS_LABELS,
 } from "@features/Leads/frontend/types";
-
-const STATUS_DOT_COLORS: Record<LeadStatus, string> = {
-  CONTACTO: "bg-cyan-500",
-  CONTACTO_CALIDO: "bg-blue-500",
-  SOCIAL_SELLING: "bg-purple-500",
-  CITA_AGENDADA: "bg-yellow-500",
-  CITA_ATENDIDA: "bg-orange-500",
-  CITA_VALIDADA: "bg-green-500",
-  POSICIONES_ASIGNADAS: "bg-emerald-500",
-  STAND_BY: "bg-gray-400",
-};
-
-const ALL_STATUSES = Object.keys(LEAD_STATUS_LABELS) as LeadStatus[];
+import {
+  STATUS_DOT_COLORS,
+  ALL_STATUSES,
+} from "../constants/leadStatusDisplay";
 
 interface LeadInactivityConfigProps {
   selectedStatuses: LeadStatus[];
@@ -37,7 +29,7 @@ interface LeadInactivityConfigProps {
   onTimeUnitChange: (unit: "horas" | "dias") => void;
 }
 
-export function LeadInactivityConfig({
+export const LeadInactivityConfig = memo(function LeadInactivityConfig({
   selectedStatuses,
   onStatusChange,
   timeValue,
@@ -46,6 +38,19 @@ export function LeadInactivityConfig({
   onTimeUnitChange,
 }: LeadInactivityConfigProps) {
   const unitLabel = timeUnit === "horas" ? "horas" : "días";
+
+  const selectedSet = useMemo(
+    () => new Set(selectedStatuses),
+    [selectedStatuses],
+  );
+
+  const handleTimeChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const val = Number.parseInt(e.target.value, 10);
+      if (!Number.isNaN(val) && val > 0) onTimeValueChange(val);
+    },
+    [onTimeValueChange],
+  );
 
   return (
     <div className="mt-3 rounded-md border bg-muted/30 p-3 space-y-4">
@@ -57,7 +62,7 @@ export function LeadInactivityConfig({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {ALL_STATUSES.map((status) => {
-            const isChecked = selectedStatuses.includes(status);
+            const isChecked = selectedSet.has(status);
             return (
               <Label
                 key={status}
@@ -95,10 +100,7 @@ export function LeadInactivityConfig({
             type="number"
             min={1}
             value={timeValue}
-            onChange={(e) => {
-              const val = Number.parseInt(e.target.value, 10);
-              if (!Number.isNaN(val) && val > 0) onTimeValueChange(val);
-            }}
+            onChange={handleTimeChange}
             className="w-24"
           />
           <Select value={timeUnit} onValueChange={(v) => onTimeUnitChange(v as "horas" | "dias")}>
@@ -118,4 +120,4 @@ export function LeadInactivityConfig({
       </div>
     </div>
   );
-}
+});

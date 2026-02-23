@@ -13,6 +13,7 @@ export interface CreateNotificationData {
   body: string;
   metadata?: Record<string, unknown>;
   priority?: NotificationPriority;
+  status?: NotificationStatus;
   createdById?: string;
 }
 

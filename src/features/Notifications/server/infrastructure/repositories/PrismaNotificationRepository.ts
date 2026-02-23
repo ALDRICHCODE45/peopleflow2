@@ -64,6 +64,7 @@ export class PrismaNotificationRepository implements INotificationRepository {
         body: data.body,
         metadata: data.metadata as Prisma.InputJsonValue ?? undefined,
         priority: data.priority || "MEDIUM",
+        status: data.status || "PENDING",
         createdById: data.createdById || null,
       },
     });
@@ -73,11 +74,11 @@ export class PrismaNotificationRepository implements INotificationRepository {
   }
 
   async findById(id: string, tenantId: string): Promise<Notification | null> {
-    const record = await prisma.notification.findFirst({
-      where: { id, tenantId },
+    const record = await prisma.notification.findUnique({
+      where: { id },
     });
 
-    if (!record) {
+    if (!record || record.tenantId !== tenantId) {
       return null;
     }
 
