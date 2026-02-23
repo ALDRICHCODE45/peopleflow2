@@ -144,7 +144,8 @@ export function ConfiguracionPage() {
       const active = notification_module.actions.filter(
         (a) => state.activeActions[a.id] === true,
       ).length;
-      counts[module.id] = `${active}/${notification_module.actions.length}`;
+      counts[notification_module.id] =
+        `${active}/${notification_module.actions.length}`;
     }
     return counts;
   }, [state.activeActions]);
@@ -275,8 +276,8 @@ export function ConfiguracionPage() {
                     </div>
 
                     <div className="space-y-2">
-                      {NOTIFICATION_MODULES.map((module) => (
-                        <Collapsible key={module.id}>
+                      {NOTIFICATION_MODULES.map((notification_module) => (
+                        <Collapsible key={notification_module.id}>
                           <CollapsibleTrigger className="group flex w-full items-center justify-between rounded-md border px-4 py-3 text-sm font-medium hover:bg-muted/50 transition-colors">
                             <div className="flex items-center gap-2">
                               <HugeiconsIcon
@@ -284,14 +285,14 @@ export function ConfiguracionPage() {
                                 className="size-4 transition-transform group-data-[state=open]:rotate-90"
                                 strokeWidth={2}
                               />
-                              <span>{module.label}</span>
+                              <span>{notification_module.label}</span>
                             </div>
                             <Badge variant="secondary">
-                              {moduleCounts[module.id]}
+                              {moduleCounts[notification_module.id]}
                             </Badge>
                           </CollapsibleTrigger>
                           <CollapsibleContent className="mt-2 space-y-2 pl-6">
-                            {module.actions.map((action) => (
+                            {notification_module.actions.map((action) => (
                               <SwitchActionNotification
                                 key={action.id}
                                 actionId={action.id}
