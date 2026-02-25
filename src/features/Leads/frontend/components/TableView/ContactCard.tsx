@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from "react";
 import type { Contact, EditContactFormData } from "../../types";
 
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -29,6 +30,16 @@ export function ContactCard({
   onDelete: () => void;
 }) {
   const editContactMutation = useUpdateContact();
+  const [isNotesExpanded, setIsNotesExpanded] = useState(false);
+  const [isNotesTruncated, setIsNotesTruncated] = useState(false);
+  const notesRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    const el = notesRef.current;
+    if (el) {
+      setIsNotesTruncated(el.scrollHeight > el.clientHeight);
+    }
+  }, [contact.notes]);
 
   const {
     openModal: openInteractionModal,
@@ -191,11 +202,28 @@ export function ContactCard({
         </div>
       )}
 
-      {/* Notes - subtle display */}
+      {/* Notes - expandable display */}
       {contact.notes && (
-        <p className="mt-3 ml-13 text-xs text-muted-foreground/80 line-clamp-2 italic">
-          {contact.notes}
-        </p>
+        <div className="mt-3 ml-13">
+          <p
+            ref={notesRef}
+            className={cn(
+              "text-xs text-muted-foreground/80 italic",
+              !isNotesExpanded && "line-clamp-2",
+            )}
+          >
+            {contact.notes}
+          </p>
+          {(isNotesTruncated || isNotesExpanded) && (
+            <button
+              type="button"
+              onClick={() => setIsNotesExpanded((prev) => !prev)}
+              className="mt-1 text-xs font-medium text-primary hover:text-primary/80 transition-colors"
+            >
+              {isNotesExpanded ? "Ver menos" : "Ver más"}
+            </button>
+          )}
+        </div>
       )}
 
       <EditContactDialogSheet
