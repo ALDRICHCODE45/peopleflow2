@@ -219,6 +219,7 @@ export type ClientWhereInput = {
   origen?: Prisma.XOR<Prisma.LeadOriginNullableScalarRelationFilter, Prisma.LeadOriginWhereInput> | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  vacancies?: Prisma.VacancyListRelationFilter
 }
 
 export type ClientOrderByWithRelationInput = {
@@ -236,6 +237,7 @@ export type ClientOrderByWithRelationInput = {
   origen?: Prisma.LeadOriginOrderByWithRelationInput
   tenant?: Prisma.TenantOrderByWithRelationInput
   createdBy?: Prisma.UserOrderByWithRelationInput
+  vacancies?: Prisma.VacancyOrderByRelationAggregateInput
 }
 
 export type ClientWhereUniqueInput = Prisma.AtLeast<{
@@ -256,6 +258,7 @@ export type ClientWhereUniqueInput = Prisma.AtLeast<{
   origen?: Prisma.XOR<Prisma.LeadOriginNullableScalarRelationFilter, Prisma.LeadOriginWhereInput> | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  vacancies?: Prisma.VacancyListRelationFilter
 }, "id" | "leadId">
 
 export type ClientOrderByWithAggregationInput = {
@@ -298,6 +301,7 @@ export type ClientCreateInput = {
   origen?: Prisma.LeadOriginCreateNestedOneWithoutClientsInput
   tenant: Prisma.TenantCreateNestedOneWithoutClientsInput
   createdBy?: Prisma.UserCreateNestedOneWithoutClientsCreatedInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateInput = {
@@ -310,6 +314,7 @@ export type ClientUncheckedCreateInput = {
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientUpdateInput = {
@@ -322,6 +327,7 @@ export type ClientUpdateInput = {
   origen?: Prisma.LeadOriginUpdateOneWithoutClientsNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutClientsNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutClientsCreatedNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateInput = {
@@ -334,6 +340,7 @@ export type ClientUncheckedUpdateInput = {
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateManyInput = {
@@ -380,6 +387,11 @@ export type ClientOrderByRelationAggregateInput = {
 export type ClientNullableScalarRelationFilter = {
   is?: Prisma.ClientWhereInput | null
   isNot?: Prisma.ClientWhereInput | null
+}
+
+export type ClientScalarRelationFilter = {
+  is?: Prisma.ClientWhereInput
+  isNot?: Prisma.ClientWhereInput
 }
 
 export type ClientCountOrderByAggregateInput = {
@@ -618,6 +630,20 @@ export type ClientUncheckedUpdateOneWithoutLeadNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ClientUpdateToOneWithWhereWithoutLeadInput, Prisma.ClientUpdateWithoutLeadInput>, Prisma.ClientUncheckedUpdateWithoutLeadInput>
 }
 
+export type ClientCreateNestedOneWithoutVacanciesInput = {
+  create?: Prisma.XOR<Prisma.ClientCreateWithoutVacanciesInput, Prisma.ClientUncheckedCreateWithoutVacanciesInput>
+  connectOrCreate?: Prisma.ClientCreateOrConnectWithoutVacanciesInput
+  connect?: Prisma.ClientWhereUniqueInput
+}
+
+export type ClientUpdateOneRequiredWithoutVacanciesNestedInput = {
+  create?: Prisma.XOR<Prisma.ClientCreateWithoutVacanciesInput, Prisma.ClientUncheckedCreateWithoutVacanciesInput>
+  connectOrCreate?: Prisma.ClientCreateOrConnectWithoutVacanciesInput
+  upsert?: Prisma.ClientUpsertWithoutVacanciesInput
+  connect?: Prisma.ClientWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClientUpdateToOneWithWhereWithoutVacanciesInput, Prisma.ClientUpdateWithoutVacanciesInput>, Prisma.ClientUncheckedUpdateWithoutVacanciesInput>
+}
+
 export type ClientCreateWithoutGeneradorInput = {
   id?: string
   nombre: string
@@ -627,6 +653,7 @@ export type ClientCreateWithoutGeneradorInput = {
   origen?: Prisma.LeadOriginCreateNestedOneWithoutClientsInput
   tenant: Prisma.TenantCreateNestedOneWithoutClientsInput
   createdBy?: Prisma.UserCreateNestedOneWithoutClientsCreatedInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutGeneradorInput = {
@@ -638,6 +665,7 @@ export type ClientUncheckedCreateWithoutGeneradorInput = {
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutGeneradorInput = {
@@ -659,6 +687,7 @@ export type ClientCreateWithoutCreatedByInput = {
   generador?: Prisma.UserCreateNestedOneWithoutClientsGeneratedInput
   origen?: Prisma.LeadOriginCreateNestedOneWithoutClientsInput
   tenant: Prisma.TenantCreateNestedOneWithoutClientsInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutCreatedByInput = {
@@ -670,6 +699,7 @@ export type ClientUncheckedCreateWithoutCreatedByInput = {
   tenantId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutCreatedByInput = {
@@ -738,6 +768,7 @@ export type ClientCreateWithoutTenantInput = {
   generador?: Prisma.UserCreateNestedOneWithoutClientsGeneratedInput
   origen?: Prisma.LeadOriginCreateNestedOneWithoutClientsInput
   createdBy?: Prisma.UserCreateNestedOneWithoutClientsCreatedInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutTenantInput = {
@@ -749,6 +780,7 @@ export type ClientUncheckedCreateWithoutTenantInput = {
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutTenantInput = {
@@ -786,6 +818,7 @@ export type ClientCreateWithoutOrigenInput = {
   generador?: Prisma.UserCreateNestedOneWithoutClientsGeneratedInput
   tenant: Prisma.TenantCreateNestedOneWithoutClientsInput
   createdBy?: Prisma.UserCreateNestedOneWithoutClientsCreatedInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutOrigenInput = {
@@ -797,6 +830,7 @@ export type ClientUncheckedCreateWithoutOrigenInput = {
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutOrigenInput = {
@@ -834,6 +868,7 @@ export type ClientCreateWithoutLeadInput = {
   origen?: Prisma.LeadOriginCreateNestedOneWithoutClientsInput
   tenant: Prisma.TenantCreateNestedOneWithoutClientsInput
   createdBy?: Prisma.UserCreateNestedOneWithoutClientsCreatedInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutLeadInput = {
@@ -845,6 +880,7 @@ export type ClientUncheckedCreateWithoutLeadInput = {
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutLeadInput = {
@@ -872,11 +908,77 @@ export type ClientUpdateWithoutLeadInput = {
   origen?: Prisma.LeadOriginUpdateOneWithoutClientsNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutClientsNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutClientsCreatedNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutLeadInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutClientNestedInput
+}
+
+export type ClientCreateWithoutVacanciesInput = {
+  id?: string
+  nombre: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lead: Prisma.LeadCreateNestedOneWithoutClientInput
+  generador?: Prisma.UserCreateNestedOneWithoutClientsGeneratedInput
+  origen?: Prisma.LeadOriginCreateNestedOneWithoutClientsInput
+  tenant: Prisma.TenantCreateNestedOneWithoutClientsInput
+  createdBy?: Prisma.UserCreateNestedOneWithoutClientsCreatedInput
+}
+
+export type ClientUncheckedCreateWithoutVacanciesInput = {
+  id?: string
+  nombre: string
+  leadId: string
+  generadorId?: string | null
+  origenId?: string | null
+  tenantId: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ClientCreateOrConnectWithoutVacanciesInput = {
+  where: Prisma.ClientWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClientCreateWithoutVacanciesInput, Prisma.ClientUncheckedCreateWithoutVacanciesInput>
+}
+
+export type ClientUpsertWithoutVacanciesInput = {
+  update: Prisma.XOR<Prisma.ClientUpdateWithoutVacanciesInput, Prisma.ClientUncheckedUpdateWithoutVacanciesInput>
+  create: Prisma.XOR<Prisma.ClientCreateWithoutVacanciesInput, Prisma.ClientUncheckedCreateWithoutVacanciesInput>
+  where?: Prisma.ClientWhereInput
+}
+
+export type ClientUpdateToOneWithWhereWithoutVacanciesInput = {
+  where?: Prisma.ClientWhereInput
+  data: Prisma.XOR<Prisma.ClientUpdateWithoutVacanciesInput, Prisma.ClientUncheckedUpdateWithoutVacanciesInput>
+}
+
+export type ClientUpdateWithoutVacanciesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lead?: Prisma.LeadUpdateOneRequiredWithoutClientNestedInput
+  generador?: Prisma.UserUpdateOneWithoutClientsGeneratedNestedInput
+  origen?: Prisma.LeadOriginUpdateOneWithoutClientsNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutClientsNestedInput
+  createdBy?: Prisma.UserUpdateOneWithoutClientsCreatedNestedInput
+}
+
+export type ClientUncheckedUpdateWithoutVacanciesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  leadId?: Prisma.StringFieldUpdateOperationsInput | string
   generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -916,6 +1018,7 @@ export type ClientUpdateWithoutGeneradorInput = {
   origen?: Prisma.LeadOriginUpdateOneWithoutClientsNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutClientsNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutClientsCreatedNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutGeneradorInput = {
@@ -927,6 +1030,7 @@ export type ClientUncheckedUpdateWithoutGeneradorInput = {
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateManyWithoutGeneradorInput = {
@@ -949,6 +1053,7 @@ export type ClientUpdateWithoutCreatedByInput = {
   generador?: Prisma.UserUpdateOneWithoutClientsGeneratedNestedInput
   origen?: Prisma.LeadOriginUpdateOneWithoutClientsNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutClientsNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutCreatedByInput = {
@@ -960,6 +1065,7 @@ export type ClientUncheckedUpdateWithoutCreatedByInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateManyWithoutCreatedByInput = {
@@ -993,6 +1099,7 @@ export type ClientUpdateWithoutTenantInput = {
   generador?: Prisma.UserUpdateOneWithoutClientsGeneratedNestedInput
   origen?: Prisma.LeadOriginUpdateOneWithoutClientsNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutClientsCreatedNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutTenantInput = {
@@ -1004,6 +1111,7 @@ export type ClientUncheckedUpdateWithoutTenantInput = {
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateManyWithoutTenantInput = {
@@ -1037,6 +1145,7 @@ export type ClientUpdateWithoutOrigenInput = {
   generador?: Prisma.UserUpdateOneWithoutClientsGeneratedNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutClientsNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutClientsCreatedNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutOrigenInput = {
@@ -1048,6 +1157,7 @@ export type ClientUncheckedUpdateWithoutOrigenInput = {
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateManyWithoutOrigenInput = {
@@ -1061,6 +1171,35 @@ export type ClientUncheckedUpdateManyWithoutOrigenInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type ClientCountOutputType
+ */
+
+export type ClientCountOutputType = {
+  vacancies: number
+}
+
+export type ClientCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  vacancies?: boolean | ClientCountOutputTypeCountVacanciesArgs
+}
+
+/**
+ * ClientCountOutputType without action
+ */
+export type ClientCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClientCountOutputType
+   */
+  select?: Prisma.ClientCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ClientCountOutputType without action
+ */
+export type ClientCountOutputTypeCountVacanciesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VacancyWhereInput
+}
 
 
 export type ClientSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1078,6 +1217,8 @@ export type ClientSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   origen?: boolean | Prisma.Client$origenArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Client$createdByArgs<ExtArgs>
+  vacancies?: boolean | Prisma.Client$vacanciesArgs<ExtArgs>
+  _count?: boolean | Prisma.ClientCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["client"]>
 
 export type ClientSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1133,6 +1274,8 @@ export type ClientInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   origen?: boolean | Prisma.Client$origenArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Client$createdByArgs<ExtArgs>
+  vacancies?: boolean | Prisma.Client$vacanciesArgs<ExtArgs>
+  _count?: boolean | Prisma.ClientCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ClientIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lead?: boolean | Prisma.LeadDefaultArgs<ExtArgs>
@@ -1157,6 +1300,7 @@ export type $ClientPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     origen: Prisma.$LeadOriginPayload<ExtArgs> | null
     tenant: Prisma.$TenantPayload<ExtArgs>
     createdBy: Prisma.$UserPayload<ExtArgs> | null
+    vacancies: Prisma.$VacancyPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1567,6 +1711,7 @@ export interface Prisma__ClientClient<T, Null = never, ExtArgs extends runtime.T
   origen<T extends Prisma.Client$origenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$origenArgs<ExtArgs>>): Prisma.Prisma__LeadOriginClient<runtime.Types.Result.GetResult<Prisma.$LeadOriginPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   createdBy<T extends Prisma.Client$createdByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$createdByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  vacancies<T extends Prisma.Client$vacanciesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$vacanciesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2055,6 +2200,30 @@ export type Client$createdByArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   include?: Prisma.UserInclude<ExtArgs> | null
   where?: Prisma.UserWhereInput
+}
+
+/**
+ * Client.vacancies
+ */
+export type Client$vacanciesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Vacancy
+   */
+  select?: Prisma.VacancySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Vacancy
+   */
+  omit?: Prisma.VacancyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VacancyInclude<ExtArgs> | null
+  where?: Prisma.VacancyWhereInput
+  orderBy?: Prisma.VacancyOrderByWithRelationInput | Prisma.VacancyOrderByWithRelationInput[]
+  cursor?: Prisma.VacancyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VacancyScalarFieldEnum | Prisma.VacancyScalarFieldEnum[]
 }
 
 /**

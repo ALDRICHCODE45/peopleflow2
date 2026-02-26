@@ -1,7 +1,10 @@
-export const vacancyStatusOptions = [
+import type { VacancyStatusType } from "../../../types/vacancy.types";
+import { VACANCY_STATUS_LABELS } from "../../../types/vacancy.types";
+
+export const vacancyStatusOptions: { value: VacancyStatusType | "todos"; label: string }[] = [
   { value: "todos", label: "Todos los Estados" },
-  { value: "DRAFT", label: "Borrador" },
-  { value: "OPEN", label: "Abierta" },
-  { value: "CLOSED", label: "Cerrada" },
-  { value: "ARCHIVED", label: "Archivada" },
+  ...Object.entries(VACANCY_STATUS_LABELS).map(([value, label]) => ({
+    value: value as VacancyStatusType,
+    label,
+  })),
 ];

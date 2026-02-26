@@ -50,7 +50,7 @@ export function VacancyDeleteDialog({
           <AlertDialogTitle>Eliminar Vacante</AlertDialogTitle>
           <AlertDialogDescription>
             Esta accion no se puede deshacer. Se eliminara permanentemente la
-            vacante &quot;{vacancy.title}&quot;.
+            vacante &quot;{vacancy.position}&quot;.
           </AlertDialogDescription>
         </AlertDialogHeader>
         {error && (

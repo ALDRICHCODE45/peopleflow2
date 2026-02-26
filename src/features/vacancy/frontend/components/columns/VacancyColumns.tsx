@@ -1,88 +1,137 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Vacancy } from "../../types/vacancy.types";
-import { Badge } from "@/core/shared/ui/shadcn/badge";
+import type { VacancyDTO } from "../../types/vacancy.types";
+import { VACANCY_MODALITY_LABELS } from "../../types/vacancy.types";
+import { VacancyStatusBadge } from "../VacancyStatusBadge";
 import { VacancyRowActions } from "./VacancyRowActions";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { Badge } from "@/core/shared/ui/shadcn/badge";
+import { Checkbox } from "@/core/shared/ui/shadcn/checkbox";
+import { VacancySalesTypeBadge } from "../VacancyVentaTypeBadge";
 
-export const VacancyColumns: ColumnDef<Vacancy>[] = [
-  {
-    header: "Status",
-    accessorKey: "status",
-    cell: ({ row }) => {
-      const value = row.original.status;
-
-      return (
-        <>
-          <Badge variant="secondary">{value}</Badge>
-        </>
-      );
+export function createVacancyColumns(
+  onViewDetail?: (id: string) => void,
+): ColumnDef<VacancyDTO>[] {
+  return [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={table.getIsAllPageRowsSelected()}
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Seleccionar todas"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Seleccionar fila"
+        />
+      ),
+      size: 2,
+      enableSorting: false,
+      enableHiding: false,
     },
-    size: 20,
-  },
-  {
-    header: "Titulo",
-    accessorKey: "title",
-    size: 20,
-  },
-
-  {
-    header: "Description",
-    accessorKey: "description",
-    size: 20,
-  },
-  {
-    header: "Departamento",
-    accessorKey: "department",
-    size: 20,
-  },
-  {
-    header: "Location",
-    accessorKey: "location",
-    size: 20,
-  },
-  {
-    header: "Creacion",
-    accessorKey: "createdAt",
-
-    cell: ({ row }) => {
-      const date = row.getValue("createdAt") as Date;
-      const fechaFormateada = format(date, "eee d MMM yyyy", { locale: es });
-
-      return (
-        <>
-          <div className="flex justify-between items-center text-center">
-            {fechaFormateada}
-          </div>
-        </>
-      );
+    {
+      header: "Posición",
+      accessorKey: "position",
+      cell: ({ row }) => (
+        <span className="font-medium truncate block max-w-50">
+          {row.original.position}
+        </span>
+      ),
+      size: 22,
     },
-    size: 20,
-  },
-
-  {
-    header: "Actualizado",
-    accessorKey: "updatedAt",
-    cell: ({ row }) => {
-      const date = row.getValue("updatedAt") as Date;
-      const fechaFormateada = format(date, "eee d MMM yyyy", { locale: es });
-
-      return (
-        <>
-          <div className="flex justify-between items-center text-center">
-            {fechaFormateada}
-          </div>
-        </>
-      );
+    {
+      header: "Estado",
+      accessorKey: "status",
+      cell: ({ row }) => <VacancyStatusBadge status={row.original.status} />,
+      size: 16,
+      enableSorting: false,
     },
-    size: 20,
-  },
+    {
+      header: "Cliente",
+      accessorKey: "clientName",
+      cell: ({ row }) => {
+        const { clientName, clientId } = row.original;
+        return (
+          <span className="truncate block max-w-37.5">
+            {clientName ?? clientId}
+          </span>
+        );
+      },
+      size: 14,
+      enableSorting: false,
+    },
+    {
+      header: "Recruiter",
+      accessorKey: "recruiterName",
+      cell: ({ row }) => {
+        const { recruiterName, recruiterId } = row.original;
+        return (
+          <span className="truncate block max-w-37.5">
+            {recruiterName ?? recruiterId}
+          </span>
+        );
+      },
+      size: 14,
+      enableSorting: false,
+    },
+    {
+      header: "Modalidad",
+      accessorKey: "modality",
+      cell: ({ row }) => {
+        const modality = row.original.modality;
+        if (!modality)
+          return (
+            <span className="text-muted-foreground italic text-xs">—</span>
+          );
+        return (
+          <Badge variant="outline" className="font-normal whitespace-nowrap">
+            {VACANCY_MODALITY_LABELS[modality]}
+          </Badge>
+        );
+      },
+      size: 10,
+      enableSorting: false,
+    },
+    {
+      header: "Tipo Venta",
+      accessorKey: "saleType",
+      cell: ({ row }) => {
+        const saleType = row.original.saleType;
+        return <VacancySalesTypeBadge type={saleType} />;
+      },
+      size: 10,
+      enableSorting: false,
+    },
+    {
+      header: "Asignación",
+      accessorKey: "assignedAt",
+      cell: ({ row }) => {
+        const dateStr = row.original.assignedAt;
+        const date = new Date(dateStr);
+        return (
+          <span className="whitespace-nowrap text-sm">
+            {format(date, "d MMM yyyy", { locale: es })}
+          </span>
+        );
+      },
+      size: 12,
+    },
+    {
+      id: "actions",
+      header: () => <span className="sr-only">Acciones</span>,
+      cell: ({ row }) => (
+        <VacancyRowActions row={row} onViewDetail={onViewDetail} />
+      ),
+      size: 4,
+      enableHiding: false,
+      enableSorting: false,
+    },
+  ];
+}
 
-  {
-    id: "actions",
-    header: () => <span className="sr-only">Acciones</span>,
-    cell: ({ row }) => <VacancyRowActions row={row} />,
-    size: 5,
-    enableHiding: false,
-  },
-];
+/** Backward-compat export: columns without detail handler */
+export const VacancyColumns: ColumnDef<VacancyDTO>[] = createVacancyColumns();

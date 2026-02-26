@@ -1,33 +1,21 @@
 "use server";
+
 import { auth } from "@lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
-
-// Repository
-import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
-
-// Use Cases
-import { UpdateVacancyUseCase } from "../../application/use-cases/UpdateVacancyUseCase";
-
-// Types
-import type { VacancyStatus } from "../../../frontend/types/vacancy.types";
-import type { UpdateVacancyResult } from "../../../frontend/types/vacancy.types";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
+import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
+import { UpdateVacancyUseCase } from "../../application/use-cases/UpdateVacancyUseCase";
+import type {
+  UpdateVacancyFormData,
+  UpdateVacancyResult,
+} from "../../../frontend/types/vacancy.types";
 
-/**
- * Actualiza una vacante existente
- */
 export async function updateVacancyAction(
   id: string,
-  data: {
-    title?: string;
-    description?: string;
-    status?: VacancyStatus;
-    department?: string | null;
-    location?: string | null;
-  },
+  data: UpdateVacancyFormData,
 ): Promise<UpdateVacancyResult> {
   try {
     const headersList = await headers();
@@ -42,10 +30,7 @@ export async function updateVacancyAction(
       return { error: "No hay tenant activo" };
     }
 
-    //verificar los permisos necesarios para ejecutar la accion
-    const hasAnyPermissionUseCase = new CheckAnyPermissonUseCase();
-
-    const hasAnyPermission = await hasAnyPermissionUseCase.execute({
+    const hasPermission = await new CheckAnyPermissonUseCase().execute({
       userId: session.user.id,
       permissions: [
         PermissionActions.vacantes.editar,
@@ -54,30 +39,46 @@ export async function updateVacancyAction(
       tenantId,
     });
 
-    if (!hasAnyPermission) {
-      return {
-        error: "Error al obtener vacantes",
-      };
+    if (!hasPermission) {
+      return { error: "Sin permisos para editar vacantes" };
     }
 
     const useCase = new UpdateVacancyUseCase(prismaVacancyRepository);
     const result = await useCase.execute({
       id,
       tenantId,
-      ...data,
+      position: data.position,
+      salaryMin: data.salaryMin,
+      salaryMax: data.salaryMax,
+      salaryFixed: data.salaryFixed,
+      commissions: data.commissions,
+      benefits: data.benefits,
+      tools: data.tools,
+      modality: data.modality,
+      schedule: data.schedule,
+      countryCode: data.countryCode,
+      regionCode: data.regionCode,
+      requiresPsychometry: data.requiresPsychometry,
+      targetDeliveryDate: data.targetDeliveryDate
+        ? new Date(data.targetDeliveryDate)
+        : data.targetDeliveryDate === null
+          ? null
+          : undefined,
+      entryDate: data.entryDate
+        ? new Date(data.entryDate)
+        : data.entryDate === null
+          ? null
+          : undefined,
     });
 
     if (!result.success) {
-      return { error: result.error || "Error al actualizar vacante" };
+      return { error: result.error ?? "Error al actualizar la vacante" };
     }
 
     revalidatePath("/reclutamiento/vacantes");
-    return {
-      error: null,
-      vacancy: result.vacancy?.toJSON(),
-    };
+    return { error: null, vacancy: result.vacancy?.toJSON() };
   } catch (error) {
-    console.error("Error updating vacancy:", error);
-    return { error: "Error al actualizar vacante" };
+    console.error("Error in updateVacancyAction:", error);
+    return { error: "Error inesperado al actualizar la vacante" };
   }
 }

@@ -1,11 +1,14 @@
-import { IVacancyRepository } from "../../domain/interfaces/IVacancyRepository";
-import { VacancyStatus } from "../../domain/entities/Vacancy";
-import {
+import type { VacancyStatusType } from "@features/vacancy/frontend/types/vacancy.types";
+import type { VacancyDTO } from "@features/vacancy/frontend/types/vacancy.types";
+import type {
+  IVacancyRepository,
+  FindVacanciesFilters,
+} from "../../domain/interfaces/IVacancyRepository";
+import type {
   PaginatedResponse,
   SortingParam,
-  calculatePageCount,
 } from "@/core/shared/types/pagination.types";
-import { Vacancy as VacancyType } from "@/features/vacancy/frontend/types/vacancy.types";
+import { calculatePageCount } from "@/core/shared/types/pagination.types";
 
 export interface GetPaginatedVacanciesInput {
   tenantId: string;
@@ -13,58 +16,63 @@ export interface GetPaginatedVacanciesInput {
   pageSize: number;
   sorting?: SortingParam[];
   filters?: {
-    status?: VacancyStatus;
+    statuses?: VacancyStatusType[];
+    recruiterId?: string;
+    clientId?: string;
+    countryCode?: string;
     search?: string;
-    department?: string;
   };
 }
 
 export interface GetPaginatedVacanciesOutput {
   success: boolean;
-  data?: PaginatedResponse<VacancyType>;
+  data?: PaginatedResponse<VacancyDTO>;
   error?: string;
 }
 
 /**
- * Use Case para obtener vacantes con paginación server-side
- * Optimizado para TanStack Table con manualPagination
+ * Use Case para obtener vacantes con paginación server-side.
+ * Optimizado para TanStack Table con manualPagination.
  */
 export class GetPaginatedVacanciesUseCase {
-  constructor(private readonly vacancyRepository: IVacancyRepository) {}
+  constructor(private readonly vacancyRepo: IVacancyRepository) {}
 
   async execute(
     input: GetPaginatedVacanciesInput
   ): Promise<GetPaginatedVacanciesOutput> {
     try {
-      const { tenantId, pageIndex, pageSize, sorting, filters } = input;
+      // 1. Clamp pagination params
+      const validPageIndex = Math.max(0, input.pageIndex);
+      const validPageSize = Math.min(100, Math.max(1, input.pageSize));
 
-      // Validar parámetros de paginación
-      const validPageIndex = Math.max(0, pageIndex);
-      const validPageSize = Math.min(100, Math.max(1, pageSize));
-
-      // Calcular skip para la base de datos
+      // 2. Calculate skip
       const skip = validPageIndex * validPageSize;
 
-      // Ejecutar query paginada
-      const result = await this.vacancyRepository.findPaginated({
-        tenantId,
+      // 3. Build filters
+      const filters: FindVacanciesFilters = {};
+      if (input.filters?.statuses?.length) filters.statuses = input.filters.statuses;
+      if (input.filters?.recruiterId) filters.recruiterId = input.filters.recruiterId;
+      if (input.filters?.clientId) filters.clientId = input.filters.clientId;
+      if (input.filters?.countryCode) filters.countryCode = input.filters.countryCode;
+      if (input.filters?.search) filters.search = input.filters.search;
+
+      // 4. Execute paginated query
+      const result = await this.vacancyRepo.findPaginated({
+        tenantId: input.tenantId,
         skip,
         take: validPageSize,
-        sorting,
-        filters: {
-          status: filters?.status,
-          search: filters?.search,
-          department: filters?.department,
-        },
+        sorting: input.sorting,
+        filters,
       });
 
-      // Mapear entidades de dominio a DTOs
-      const vacanciesDto: VacancyType[] = result.data.map((v) => v.toJSON());
+      // 5. Map entities to DTOs
+      const data: VacancyDTO[] = result.data.map((v) => v.toJSON());
 
+      // 6. Calculate page count and return
       return {
         success: true,
         data: {
-          data: vacanciesDto,
+          data,
           pagination: {
             pageIndex: validPageIndex,
             pageSize: validPageSize,
@@ -77,7 +85,7 @@ export class GetPaginatedVacanciesUseCase {
       console.error("Error in GetPaginatedVacanciesUseCase:", error);
       return {
         success: false,
-        error: "Error al obtener vacantes paginadas",
+        error: "Error al obtener las vacantes paginadas",
       };
     }
   }

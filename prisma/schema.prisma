@@ -31,7 +31,8 @@ model User {
   leadsCreated      Lead[]              @relation("LeadCreatedBy")
   leadStatusChanges LeadStatusHistory[]
   interactions      Interaction[]
-  attachments       Attachment[]
+  attachmentsUploaded  Attachment[] @relation("AttachmentUploadedBy")
+  attachmentsValidated Attachment[] @relation("AttachmentValidatedBy")
 
   // Relaciones con módulo de Notificaciones
   notificationsCreated Notification[] @relation("NotificationCreatedBy")
@@ -39,6 +40,12 @@ model User {
   // Relaciones con módulo de Clientes
   clientsGenerated Client[] @relation("ClientGenerator")
   clientsCreated   Client[] @relation("ClientCreatedBy")
+
+  // Relaciones con módulo de Vacantes
+  vacanciesAsRecruiter      Vacancy[]              @relation("VacancyRecruiter")
+  vacanciesCreated          Vacancy[]              @relation("VacancyCreatedBy")
+  vacancyStatusChanges      VacancyStatusHistory[] @relation("VacancyStatusChangedBy")
+  vacancyChecklistValidated Vacancy[]              @relation("VacancyChecklistValidator")
 
   @@map("user")
 }
@@ -106,7 +113,6 @@ model Tenant {
   updatedAt DateTime   @updatedAt
   userRoles UserRole[]
   sessions  Session[]
-  vacancies Vacancy[]
   roles     Role[]
 
   // Relaciones con módulo de Leads
@@ -124,6 +130,14 @@ model Tenant {
 
   // Relaciones con módulo de Clientes
   clients Client[]
+
+  // Relaciones con módulo de Vacantes
+  vacancies              Vacancy[]
+  vacancyChecklistItems  VacancyChecklistItem[]
+  vacancyCandidates      VacancyCandidate[]
+  vacancyCandidateMatchs VacancyCandidateMatch[]
+  vacancyStatusHistory   VacancyStatusHistory[]
+  vacancyConfig          VacancyConfig?
 
   // Relación con configuración de notificaciones
   notificationConfig NotificationConfig?
@@ -238,6 +252,14 @@ enum AttachableType {
   CONTACT
   INTERACTION
   VACANCY
+  VACANCY_CANDIDATE
+}
+
+enum AttachmentSubType {
+  JOB_DESCRIPTION
+  PERFIL_MUESTRA
+  CV
+  OTHER
 }
 
 // =============================================
@@ -466,20 +488,32 @@ model Interaction {
 // =============================================
 
 model Attachment {
-  id             String         @id @default(uuid())
+  id             String            @id @default(uuid())
   fileName       String
   fileUrl        String
   fileSize       Int
   mimeType       String
   attachableType AttachableType
+  subType        AttachmentSubType @default(OTHER)
 
   // Relaciones polimórficas opcionales
-  leadId        String?
-  lead          Lead?        @relation(fields: [leadId], references: [id], onDelete: Cascade)
-  contactId     String?
-  contact       Contact?     @relation(fields: [contactId], references: [id], onDelete: Cascade)
-  interactionId String?
-  interaction   Interaction? @relation(fields: [interactionId], references: [id], onDelete: Cascade)
+  leadId             String?
+  lead               Lead?            @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  contactId          String?
+  contact            Contact?         @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  interactionId      String?
+  interaction        Interaction?     @relation(fields: [interactionId], references: [id], onDelete: Cascade)
+  vacancyId          String?
+  vacancy            Vacancy?         @relation("VacancyAttachments", fields: [vacancyId], references: [id], onDelete: Cascade)
+  vacancyCandidateId String?
+  vacancyCandidate   VacancyCandidate? @relation("CandidateAttachments", fields: [vacancyCandidateId], references: [id], onDelete: Cascade)
+
+  // Validación (para JOB_DESCRIPTION y PERFIL_MUESTRA)
+  isValidated     Boolean   @default(false)
+  validatedById   String?
+  validatedBy     User?     @relation("AttachmentValidatedBy", fields: [validatedById], references: [id], onDelete: SetNull)
+  validatedAt     DateTime?
+  rejectionReason String?   @db.Text
 
   // Relación con tenant
   tenantId String
@@ -487,42 +521,313 @@ model Attachment {
 
   // Auditoría
   uploadedById String
-  uploadedBy   User     @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+  uploadedBy   User     @relation("AttachmentUploadedBy", fields: [uploadedById], references: [id], onDelete: Cascade)
   createdAt    DateTime @default(now())
 
   @@index([leadId])
   @@index([contactId])
   @@index([interactionId])
+  @@index([vacancyId])
+  @@index([vacancyCandidateId])
   @@index([tenantId])
   @@index([attachableType])
+  @@index([subType])
+  @@index([validatedById])
+  @@index([isValidated])
   @@map("attachment")
 }
 
-// Vacantes
+// =============================================
+// MÓDULO DE VACANTES
+// =============================================
 
 enum VacancyStatus {
-  DRAFT
-  OPEN
-  CLOSED
-  ARCHIVED
+  QUICK_MEETING
+  HUNTING
+  FOLLOW_UP
+  PRE_PLACEMENT
+  PLACEMENT
+  STAND_BY
+  PERDIDA
+  CANCELADA
+}
+
+enum VacancySaleType {
+  NUEVA
+  RECOMPRA
+}
+
+enum VacancyModality {
+  PRESENCIAL
+  REMOTO
+  HIBRIDO
+}
+
+enum CandidateStatus {
+  EN_PROCESO
+  PRESENTADO
+  FINALISTA
+  CONTRATADO
+  DESCARTADO
 }
 
 model Vacancy {
-  id          String        @id @default(cuid())
-  title       String
-  description String        @db.Text
-  status      VacancyStatus @default(DRAFT)
-  department  String?
-  location    String?
-  tenantId    String
-  tenant      Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  id       String        @id @default(cuid())
+  // Identificación
+  position String // Nombre del puesto (ej. "Full Stack Developer")
+  status   VacancyStatus @default(QUICK_MEETING)
+
+  // Reclutador asignado
+  recruiterId String
+  recruiter   User   @relation("VacancyRecruiter", fields: [recruiterId], references: [id], onDelete: Restrict)
+
+  // Cliente que solicita la posición
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id], onDelete: Restrict)
+
+  // Tipo de venta (calculado automáticamente al crear)
+  // RECOMPRA si el cliente ya tiene historial de vacantes, NUEVA si es su primera
+  saleType VacancySaleType
+
+  // Condiciones económicas
+  // Rango inicial permitido; en PRE_PLACEMENT se cierra con salaryFixed
+  salaryMin   Float?
+  salaryMax   Float?
+  salaryFixed Float? // Monto cerrado y exacto — obligatorio en PRE_PLACEMENT
+
+  commissions String? @db.Text // Descripción de bonos/comisiones
+  benefits    String? @db.Text // Descripción de prestaciones
+  tools       String? @db.Text // Herramientas de trabajo necesarias
+
+  // Logística
+  modality            VacancyModality?
+  schedule            String? // Horario laboral específico (texto libre)
+
+  countryCode           String?
+  regionCode            String? // Dirección física o ciudad base
+
+  //location            String? // Dirección física o ciudad base
+  requiresPsychometry Boolean          @default(false)
+
+  // Validación de checklist por admin (requisito para transición a HUNTING)
+  checklistValidatedAt      DateTime?
+  checklistValidatedById    String?
+  checklistValidatedBy      User?     @relation("VacancyChecklistValidator", fields: [checklistValidatedById], references: [id], onDelete: SetNull)
+  checklistRejectionReason  String?   @db.Text
+
+  // Fechas y SLA
+  assignedAt         DateTime  @default(now()) // Inicio del SLA — automático al crear
+  targetDeliveryDate DateTime? // Fecha tentativa pactada con el cliente
+  actualDeliveryDate DateTime? // Automático al validar la terna (detiene el cronómetro)
+
+  // Fecha de ingreso del candidato (obligatorio en PRE_PLACEMENT)
+  entryDate DateTime?
+
+  // Contador de retrocesos — se incrementa cada rollback FOLLOW_UP → HUNTING
+  rollbackCount Int @default(0)
+
+  // Sub-flujo de Placement
+  placementConfirmedAt DateTime? // Timestamp exacto de confirmación de ingreso
+  commissionDate       DateTime? // Día 15 del mes siguiente — generado automáticamente
+  congratsEmailSent    Boolean   @default(false) // Si se envió correo de felicitaciones
+
+  // Multi-tenancy
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Auditoría
+  createdById String?
+  createdBy   User?    @relation("VacancyCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relaciones hijas
+  checklistItems VacancyChecklistItem[]
+  candidates     VacancyCandidate[]
+  statusHistory  VacancyStatusHistory[]
+  attachments    Attachment[]           @relation("VacancyAttachments")
 
   @@index([tenantId])
   @@index([status])
+  @@index([recruiterId])
+  @@index([clientId])
   @@index([tenantId, status])
+  @@index([tenantId, recruiterId])
+  @@index([tenantId, createdAt])
   @@map("vacancy")
+}
+
+// Requisitos específicos de la vacante (N items configurables)
+// Son el eje del match cualitativo con candidatos
+model VacancyChecklistItem {
+  id        String  @id @default(uuid())
+  vacancyId String
+  vacancy   Vacancy @relation(fields: [vacancyId], references: [id], onDelete: Cascade)
+
+  requirement String // Ej. "Inglés Intermedio", "5 años de experiencia en React"
+  isCompleted Boolean @default(false)
+  order       Int     @default(0) // Para ordenar los ítems en la UI
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Feedback cualitativo del reclutador por candidato
+  candidateMatches VacancyCandidateMatch[]
+
+  @@index([vacancyId])
+  @@index([tenantId])
+  @@index([vacancyId, order])
+  @@map("vacancy_checklist_item")
+}
+
+// Candidatos que participan en el proceso de una vacante
+model VacancyCandidate {
+  id        String  @id @default(uuid())
+  vacancyId String
+  vacancy   Vacancy @relation(fields: [vacancyId], references: [id], onDelete: Cascade)
+
+  // Datos básicos
+  firstName String
+  lastName  String
+  email     String?
+  phone     String?
+
+  // Situación laboral actual
+  isCurrentlyEmployed Boolean?        // ¿Empleado actualmente? (Sí/No)
+  currentCompany      String?         // Empresa actual o última
+  currentSalary       Float?          // Sueldo actual/último (bruto)
+  salaryExpectation   Float?          // Expectativa económica (bruto)
+  currentModality     VacancyModality? // Modalidad actual o última
+  currentLocation     String?         // Ubicación último trabajo (ciudad/país)
+  currentCommissions  String?         // Bonos/comisiones en trabajo actual o último
+  currentBenefits     String?         // Prestaciones actuales o últimas
+  candidateLocation   String?         // Dirección del candidato (Ciudad/País)
+  otherBenefits       String? @db.Text // Otros beneficios (campo abierto)
+
+  // Estado del candidato en este proceso
+  status CandidateStatus @default(EN_PROCESO)
+
+  // Flags de flujo
+  isInTerna  Boolean @default(false) // Presentado al cliente en la validación de terna
+  isFinalist Boolean @default(false) // Seleccionado como finalista en PRE_PLACEMENT
+
+  // Salario final acordado (solo cuando es finalista — PRE_PLACEMENT)
+  finalSalary Float?
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // CV y otros archivos del candidato
+  attachments Attachment[] @relation("CandidateAttachments")
+
+  // Match cualitativo contra el checklist
+  checklistMatches VacancyCandidateMatch[]
+
+  @@index([vacancyId])
+  @@index([tenantId])
+  @@index([status])
+  @@index([vacancyId, status])
+  @@index([vacancyId, isInTerna])
+  @@map("vacancy_candidate")
+}
+
+// Tabla de cruce: feedback cualitativo del reclutador
+// Candidato vs cada ítem del checklist de la vacante
+model VacancyCandidateMatch {
+  id              String               @id @default(uuid())
+  candidateId     String
+  candidate       VacancyCandidate     @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  checklistItemId String
+  checklistItem   VacancyChecklistItem @relation(fields: [checklistItemId], references: [id], onDelete: Cascade)
+
+  // Texto libre del reclutador (columna derecha del match cualitativo)
+  feedback String? @db.Text
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([candidateId, checklistItemId])
+  @@index([candidateId])
+  @@index([checklistItemId])
+  @@index([tenantId])
+  @@map("vacancy_candidate_match")
+}
+
+// Auditoría completa de transiciones de estado
+// Incluye rollbacks con motivo y nueva fecha tentativa
+model VacancyStatusHistory {
+  id        String        @id @default(uuid())
+  vacancyId String
+  vacancy   Vacancy       @relation(fields: [vacancyId], references: [id], onDelete: Cascade)
+
+  previousStatus VacancyStatus
+  newStatus      VacancyStatus
+
+  // Motivo del cambio — obligatorio en rollbacks y estados manuales (STAND_BY, CANCELADA, PERDIDA)
+  isRollback            Boolean   @default(false)
+  reason                String?   @db.Text // Obligatorio en rollbacks y estados secundarios manuales
+  newTargetDeliveryDate DateTime? // Nueva fecha tentativa pactada tras el rollback
+
+  changedById String
+  changedBy   User   @relation("VacancyStatusChangedBy", fields: [changedById], references: [id], onDelete: Restrict)
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([vacancyId])
+  @@index([tenantId])
+  @@index([changedById])
+  @@index([createdAt])
+  @@index([vacancyId, createdAt])
+  @@map("vacancy_status_history")
+}
+
+// Configuración del módulo de vacantes por tenant
+// Controla obligatoriedad de campos de candidato y SLA inicial
+model VacancyConfig {
+  id       String @id @default(uuid())
+  tenantId String @unique
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // SLA del estado Quick Meeting (default 24h, configurable por tenant)
+  quickMeetingSlaHours Int @default(24)
+
+  // Configurador de obligatoriedad de campos del candidato
+  // Campos Básicos
+  requirePhone Boolean @default(false)
+  requireEmail Boolean @default(false)
+
+  // Situación Laboral
+  requireIsCurrentlyEmployed Boolean @default(false)
+  requireCurrentCompany      Boolean @default(false)
+  requireCurrentSalary       Boolean @default(false)
+  requireSalaryExpectation   Boolean @default(false)
+  requireCurrentModality     Boolean @default(false)
+  requireCurrentLocation     Boolean @default(false)
+  requireCurrentCommissions  Boolean @default(false)
+  requireCurrentBenefits     Boolean @default(false)
+  requireCandidateLocation   Boolean @default(false)
+  requireOtherBenefits       Boolean @default(false)
+
+  // CV
+  requireCv Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tenantId])
+  @@map("vacancy_config")
 }
 
 // =============================================
@@ -591,6 +896,9 @@ model Client {
   createdBy   User?    @relation("ClientCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  // Relación con Vacantes
+  vacancies Vacancy[]
 
   @@index([tenantId])
   @@index([generadorId])

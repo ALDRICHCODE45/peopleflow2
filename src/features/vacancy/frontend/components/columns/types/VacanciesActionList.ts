@@ -11,8 +11,19 @@ export interface VacancyAction {
 export const createVacancyActions = (
   onEdit: () => void,
   onDelete: () => void,
+  onViewDetail?: () => void,
 ): VacancyAction[] => {
-  const actions: VacancyAction[] = [
+  const actions: VacancyAction[] = [];
+
+  if (onViewDetail) {
+    actions.push({
+      id: "view",
+      label: "Ver detalle",
+      onClick: onViewDetail,
+    });
+  }
+
+  actions.push(
     {
       id: "edit",
       label: "Editar",
@@ -24,7 +35,7 @@ export const createVacancyActions = (
       variant: "destructive",
       onClick: onDelete,
     },
-  ];
+  );
 
   return actions;
 };

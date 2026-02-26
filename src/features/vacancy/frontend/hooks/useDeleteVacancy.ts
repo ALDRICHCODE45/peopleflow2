@@ -1,7 +1,6 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { getVacanciesQueryKey } from "./useVacanciesQuery";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { showToast } from "@/core/shared/components/ShowToast";
 import { deleteVacancyAction } from "../../server/presentation/actions/deleteVacancy.action";
@@ -18,24 +17,23 @@ export function useDeleteVacancy() {
       }
       return result;
     },
-    onSuccess: async () => {
+    onSuccess: () => {
       showToast({
         type: "success",
-        title: "Operacion Exitosa!",
-        description: "Vacante eliminada exitosamente",
+        title: "Vacante eliminada",
+        description: "La vacante fue eliminada exitosamente",
       });
-
       if (tenant?.id) {
-        await queryClient.invalidateQueries({
-          queryKey: getVacanciesQueryKey(tenant.id),
+        queryClient.invalidateQueries({
+          queryKey: ["vacancies", "paginated", tenant.id],
         });
       }
     },
-    onError: (error: Error) => {
+    onError: () => {
       showToast({
         type: "error",
-        title: "Ha ocurrido un error",
-        description: "No se pudo crear la vacante",
+        title: "Error",
+        description: "No se pudo eliminar la vacante",
       });
     },
   });

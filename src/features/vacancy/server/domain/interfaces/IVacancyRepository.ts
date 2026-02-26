@@ -1,35 +1,66 @@
-import { Vacancy, VacancyStatus } from "../entities/Vacancy";
-
-/**
- * Interfaz del repositorio de Vacancies
- * Define el contrato para la capa de infraestructura
- */
+import type {
+  VacancyStatusType,
+  VacancySaleType,
+  VacancyModality,
+} from "@features/vacancy/frontend/types/vacancy.types";
+import type { Vacancy } from "../entities/Vacancy";
 
 export interface CreateVacancyData {
-  title: string;
-  description: string;
-  status?: VacancyStatus;
-  department?: string;
-  location?: string;
+  position: string;
+  recruiterId: string;
+  clientId: string;
+  saleType: VacancySaleType;
+  salaryMin?: number | null;
+  salaryMax?: number | null;
+  salaryFixed?: number | null;
+  commissions?: string | null;
+  benefits?: string | null;
+  tools?: string | null;
+  modality?: VacancyModality | null;
+  schedule?: string | null;
+  countryCode?: string | null;
+  regionCode?: string | null;
+  requiresPsychometry?: boolean;
+  targetDeliveryDate?: Date | null;
   tenantId: string;
+  createdById?: string | null;
 }
 
 export interface UpdateVacancyData {
-  title?: string;
-  description?: string;
-  status?: VacancyStatus;
-  department?: string | null;
-  location?: string | null;
+  position?: string;
+  salaryMin?: number | null;
+  salaryMax?: number | null;
+  salaryFixed?: number | null;
+  commissions?: string | null;
+  benefits?: string | null;
+  tools?: string | null;
+  modality?: VacancyModality | null;
+  schedule?: string | null;
+  countryCode?: string | null;
+  regionCode?: string | null;
+  requiresPsychometry?: boolean;
+  targetDeliveryDate?: Date | null;
+  actualDeliveryDate?: Date | null;
+  entryDate?: Date | null;
+  rollbackCount?: number;
+  placementConfirmedAt?: Date | null;
+  commissionDate?: Date | null;
+  congratsEmailSent?: boolean;
+  status?: VacancyStatusType;
+  checklistValidatedAt?: Date | null;
+  checklistValidatedById?: string | null;
+  checklistRejectionReason?: string | null;
 }
 
 export interface FindVacanciesFilters {
-  status?: VacancyStatus;
-  department?: string;
+  statuses?: VacancyStatusType[];
+  recruiterId?: string;
+  clientId?: string;
+  countryCode?: string;
   search?: string;
 }
 
-/** Parámetros para paginación server-side */
-export interface FindPaginatedParams {
+export interface FindPaginatedVacanciesParams {
   tenantId: string;
   skip: number;
   take: number;
@@ -37,53 +68,27 @@ export interface FindPaginatedParams {
   filters?: FindVacanciesFilters;
 }
 
-/** Resultado de búsqueda paginada */
 export interface PaginatedResult<T> {
   data: T[];
   totalCount: number;
 }
 
 export interface IVacancyRepository {
-  /**
-   * Encuentra una vacante por su ID
-   */
   findById(id: string, tenantId: string): Promise<Vacancy | null>;
-
-  /**
-   * Obtiene todas las vacantes de un tenant
-   */
   findByTenantId(
     tenantId: string,
     filters?: FindVacanciesFilters
   ): Promise<Vacancy[]>;
-
-  /**
-   * Crea una nueva vacante
-   */
+  findByClientId(clientId: string, tenantId: string): Promise<Vacancy[]>;
   create(data: CreateVacancyData): Promise<Vacancy>;
-
-  /**
-   * Actualiza una vacante existente
-   */
   update(
     id: string,
     tenantId: string,
     data: UpdateVacancyData
   ): Promise<Vacancy | null>;
-
-  /**
-   * Elimina una vacante
-   */
   delete(id: string, tenantId: string): Promise<boolean>;
-
-  /**
-   * Cuenta vacantes por tenant y filtros
-   */
   count(tenantId: string, filters?: FindVacanciesFilters): Promise<number>;
-
-  /**
-   * Obtiene vacantes paginadas con filtros y ordenamiento
-   * Para server-side pagination con TanStack Table
-   */
-  findPaginated(params: FindPaginatedParams): Promise<PaginatedResult<Vacancy>>;
+  findPaginated(
+    params: FindPaginatedVacanciesParams
+  ): Promise<PaginatedResult<Vacancy>>;
 }

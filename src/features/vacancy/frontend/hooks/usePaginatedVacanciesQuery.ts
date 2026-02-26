@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import type { VacancyStatus, Vacancy } from "../types/vacancy.types";
+import type { VacancyStatusType, VacancyDTO } from "../types/vacancy.types";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { getPaginatedVacanciesAction } from "../../server/presentation/actions/getPaginatedVacanciesAction.action";
 import type {
@@ -15,7 +15,7 @@ export interface PaginatedVacanciesQueryParams {
   pageSize: number;
   sorting?: SortingParam[];
   globalFilter?: string;
-  status?: VacancyStatus;
+  statuses?: VacancyStatusType[];
 }
 
 /** Query Key Factory - CRÍTICO: incluir TODOS los parámetros */
@@ -32,7 +32,7 @@ export const getPaginatedVacanciesQueryKey = (
       pageSize: params.pageSize,
       sorting: params.sorting,
       globalFilter: params.globalFilter,
-      status: params.status,
+      statuses: params.statuses,
     },
   ] as const;
 
@@ -62,13 +62,13 @@ export function usePaginatedVacanciesQuery(
     queryKey: tenant?.id
       ? getPaginatedVacanciesQueryKey(tenant.id, params)
       : ["vacancies", "paginated", "no-tenant"],
-    queryFn: async (): Promise<PaginatedResponse<Vacancy>> => {
+    queryFn: async (): Promise<PaginatedResponse<VacancyDTO>> => {
       const result = await getPaginatedVacanciesAction({
         pageIndex: params.pageIndex,
         pageSize: params.pageSize,
         sorting: params.sorting,
         globalFilter: params.globalFilter,
-        status: params.status,
+        statuses: params.statuses,
       });
 
       if ("error" in result && result.error) {

@@ -1,7 +1,6 @@
 "use server";
 
 import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
-import { VacancyStatus } from "@/core/generated/prisma/enums";
 import { auth } from "@/core/lib/auth";
 import { headers } from "next/headers";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
@@ -12,7 +11,7 @@ import {
   PaginatedActionResponse,
   SortingParam,
 } from "@/core/shared/types/pagination.types";
-import { Vacancy } from "@/features/vacancy/frontend/types/vacancy.types";
+import type { VacancyDTO, VacancyStatusType } from "@/features/vacancy/frontend/types/vacancy.types";
 
 /** Parámetros de entrada para la acción paginada */
 export interface GetPaginatedVacanciesParams {
@@ -20,7 +19,7 @@ export interface GetPaginatedVacanciesParams {
   pageSize: number;
   sorting?: SortingParam[];
   globalFilter?: string;
-  status?: VacancyStatus;
+  statuses?: VacancyStatusType[];
 }
 
 /**
@@ -29,7 +28,7 @@ export interface GetPaginatedVacanciesParams {
  */
 export async function getPaginatedVacanciesAction(
   params: GetPaginatedVacanciesParams
-): Promise<PaginatedActionResponse<Vacancy>> {
+): Promise<PaginatedActionResponse<VacancyDTO>> {
   try {
     // Obtener la sesión del usuario
     const headersList = await headers();
@@ -113,7 +112,7 @@ export async function getPaginatedVacanciesAction(
       pageSize,
       sorting: validatedSorting,
       filters: {
-        status: params.status,
+        statuses: params.statuses,
         search: params.globalFilter,
       },
     });

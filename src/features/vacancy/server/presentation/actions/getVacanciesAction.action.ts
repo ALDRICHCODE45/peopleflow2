@@ -1,23 +1,15 @@
 "use server";
-import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
-import { VacancyStatus } from "@/core/generated/prisma/enums";
-import { auth } from "@/core/lib/auth";
-import { GetVacanciesResult } from "@/features/vacancy/frontend/types/vacancy.types";
+
+import { auth } from "@lib/auth";
 import { headers } from "next/headers";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
-import { GetVacanciesUseCase } from "../../application/use-cases/GetVacanciesUseCase";
+import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
+import type { GetVacanciesResult } from "@/features/vacancy/frontend/types/vacancy.types";
 
-/**
- * Obtiene todas las vacantes del tenant activo
- */
-export async function getVacanciesAction(filters?: {
-  status?: VacancyStatus;
-  search?: string;
-}): Promise<GetVacanciesResult> {
+export async function getVacanciesAction(): Promise<GetVacanciesResult> {
   try {
-    //obtener la session del usuario
     const headersList = await headers();
     const session = await auth.api.getSession({ headers: headersList });
 
@@ -25,16 +17,12 @@ export async function getVacanciesAction(filters?: {
       return { error: "No autenticado", vacancies: [] };
     }
 
-    //obtener el tenant activo del usuario
     const tenantId = await getActiveTenantId();
     if (!tenantId) {
       return { error: "No hay tenant activo", vacancies: [] };
     }
 
-    //verificar los permisos necesarios para ejecutar la accion
-    const hasAnyPermissionUseCase = new CheckAnyPermissonUseCase();
-
-    const hasAnyPermission = await hasAnyPermissionUseCase.execute({
+    const hasPermission = await new CheckAnyPermissonUseCase().execute({
       userId: session.user.id,
       permissions: [
         PermissionActions.vacantes.acceder,
@@ -43,34 +31,14 @@ export async function getVacanciesAction(filters?: {
       tenantId,
     });
 
-    if (!hasAnyPermission) {
-      return {
-        error: "Error al obtener vacantes",
-        vacancies: [],
-      };
+    if (!hasPermission) {
+      return { error: "Sin permisos para acceder a vacantes", vacancies: [] };
     }
 
-    //obtener las vacantes actuales
-    const useCase = new GetVacanciesUseCase(prismaVacancyRepository);
-    const result = await useCase.execute({
-      tenantId,
-      status: filters?.status,
-      search: filters?.search,
-    });
-
-    if (!result.success) {
-      return {
-        error: result.error || "Error al obtener vacantes",
-        vacancies: [],
-      };
-    }
-
-    return {
-      error: null,
-      vacancies: result.vacancies.map((v) => v.toJSON()),
-    };
+    const vacancies = await prismaVacancyRepository.findByTenantId(tenantId);
+    return { error: null, vacancies: vacancies.map((v) => v.toJSON()) };
   } catch (error) {
-    console.error("Error getting vacancies:", error);
-    return { error: "Error al obtener vacantes", vacancies: [] };
+    console.error("Error in getVacanciesAction:", error);
+    return { error: "Error inesperado al obtener vacantes", vacancies: [] };
   }
 }

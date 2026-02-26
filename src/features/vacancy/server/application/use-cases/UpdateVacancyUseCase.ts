@@ -1,17 +1,28 @@
-import {
+import type { VacancyModality } from "@features/vacancy/frontend/types/vacancy.types";
+import type { Vacancy } from "../../domain/entities/Vacancy";
+import type {
   IVacancyRepository,
   UpdateVacancyData,
 } from "../../domain/interfaces/IVacancyRepository";
-import { Vacancy, VacancyStatus } from "../../domain/entities/Vacancy";
+import { SalaryRangeVO } from "../../domain/value-objects/SalaryRange";
 
 export interface UpdateVacancyInput {
   id: string;
   tenantId: string;
-  title?: string;
-  description?: string;
-  status?: VacancyStatus;
-  department?: string | null;
-  location?: string | null;
+  position?: string;
+  salaryMin?: number | null;
+  salaryMax?: number | null;
+  commissions?: string | null;
+  benefits?: string | null;
+  tools?: string | null;
+  modality?: VacancyModality | null;
+  schedule?: string | null;
+  countryCode?: string | null;
+  regionCode?: string | null;
+  requiresPsychometry?: boolean;
+  targetDeliveryDate?: Date | null;
+  entryDate?: Date | null;
+  salaryFixed?: number | null;
 }
 
 export interface UpdateVacancyOutput {
@@ -21,122 +32,97 @@ export interface UpdateVacancyOutput {
 }
 
 export class UpdateVacancyUseCase {
-  constructor(private readonly vacancyRepository: IVacancyRepository) {}
+  constructor(private readonly vacancyRepo: IVacancyRepository) {}
 
   async execute(input: UpdateVacancyInput): Promise<UpdateVacancyOutput> {
     try {
-      // Verificar que la vacante existe y pertenece al tenant
-      const existingVacancy = await this.vacancyRepository.findById(
+      // 1. Find existing vacancy
+      const existing = await this.vacancyRepo.findById(
         input.id,
         input.tenantId
       );
+      if (!existing) {
+        return { success: false, error: "Vacante no encontrada" };
+      }
 
-      if (!existingVacancy) {
+      // 2. Check if vacancy can be edited
+      if (!existing.canEdit()) {
         return {
           success: false,
-          error: "Vacante no encontrada",
+          error: "Esta vacante no puede ser editada",
         };
       }
 
-      // Verificar si puede ser editada
-      if (!existingVacancy.canEdit()) {
-        return {
-          success: false,
-          error: "Esta vacante esta archivada y no puede ser editada",
-        };
-      }
-
-      // Validar transicion de estado si se proporciona
-      if (input.status && input.status !== existingVacancy.status) {
-        const validTransitions = existingVacancy.getValidTransitions();
-        if (!validTransitions.includes(input.status)) {
+      // 3. Validate position if provided
+      if (input.position !== undefined) {
+        const position = input.position.trim();
+        if (position.length < 2) {
           return {
             success: false,
-            error: `No se puede cambiar el estado de ${existingVacancy.status} a ${input.status}`,
+            error: "El nombre del puesto debe tener al menos 2 caracteres",
+          };
+        }
+        if (position.length > 200) {
+          return {
+            success: false,
+            error: "El nombre del puesto no puede exceder 200 caracteres",
           };
         }
       }
 
-      // Validar longitudes maximas
-      const title = input.title?.trim();
-      const description = input.description?.trim();
-      const department =
-        input.department === null ? null : input.department?.trim();
-      const location = input.location === null ? null : input.location?.trim();
+      // 4. Validate salary fields if provided
+      const hasSalaryFields =
+        input.salaryMin !== undefined ||
+        input.salaryMax !== undefined ||
+        input.salaryFixed !== undefined;
 
-      if (title !== undefined && title.length < 3) {
-        return {
-          success: false,
-          error: "El titulo debe tener al menos 3 caracteres",
-        };
+      if (hasSalaryFields) {
+        try {
+          SalaryRangeVO.create({
+            min: input.salaryMin !== undefined ? input.salaryMin : existing.salaryMin,
+            max: input.salaryMax !== undefined ? input.salaryMax : existing.salaryMax,
+            fixed: input.salaryFixed !== undefined ? input.salaryFixed : existing.salaryFixed,
+          });
+        } catch (e) {
+          return {
+            success: false,
+            error: e instanceof Error ? e.message : "Rango salarial inválido",
+          };
+        }
       }
 
-      if (title !== undefined && title.length > 200) {
-        return {
-          success: false,
-          error: "El titulo no puede exceder 200 caracteres",
-        };
-      }
-
-      if (description !== undefined && description.length < 10) {
-        return {
-          success: false,
-          error: "La descripcion debe tener al menos 10 caracteres",
-        };
-      }
-
-      if (description !== undefined && description.length > 5000) {
-        return {
-          success: false,
-          error: "La descripcion no puede exceder 5000 caracteres",
-        };
-      }
-
-      if (department && department.length > 100) {
-        return {
-          success: false,
-          error: "El departamento no puede exceder 100 caracteres",
-        };
-      }
-
-      if (location && location.length > 200) {
-        return {
-          success: false,
-          error: "La ubicacion no puede exceder 200 caracteres",
-        };
-      }
-
-      // Preparar datos de actualizacion
+      // 5. Build updateData with only defined fields
       const updateData: UpdateVacancyData = {};
-      if (title !== undefined) updateData.title = title;
-      if (description !== undefined) updateData.description = description;
-      if (input.status !== undefined) updateData.status = input.status;
-      if (department !== undefined) updateData.department = department;
-      if (location !== undefined) updateData.location = location;
+      if (input.position !== undefined) updateData.position = input.position.trim();
+      if (input.salaryMin !== undefined) updateData.salaryMin = input.salaryMin;
+      if (input.salaryMax !== undefined) updateData.salaryMax = input.salaryMax;
+      if (input.salaryFixed !== undefined) updateData.salaryFixed = input.salaryFixed;
+      if (input.commissions !== undefined) updateData.commissions = input.commissions;
+      if (input.benefits !== undefined) updateData.benefits = input.benefits;
+      if (input.tools !== undefined) updateData.tools = input.tools;
+      if (input.modality !== undefined) updateData.modality = input.modality;
+      if (input.schedule !== undefined) updateData.schedule = input.schedule;
+      if (input.countryCode !== undefined) updateData.countryCode = input.countryCode;
+      if (input.regionCode !== undefined) updateData.regionCode = input.regionCode;
+      if (input.requiresPsychometry !== undefined) updateData.requiresPsychometry = input.requiresPsychometry;
+      if (input.targetDeliveryDate !== undefined) updateData.targetDeliveryDate = input.targetDeliveryDate;
+      if (input.entryDate !== undefined) updateData.entryDate = input.entryDate;
 
-      const vacancy = await this.vacancyRepository.update(
+      // 6. Update vacancy
+      const vacancy = await this.vacancyRepo.update(
         input.id,
         input.tenantId,
         updateData
       );
 
       if (!vacancy) {
-        return {
-          success: false,
-          error: "Error al actualizar vacante",
-        };
+        return { success: false, error: "Error al actualizar la vacante" };
       }
 
-      return {
-        success: true,
-        vacancy,
-      };
+      return { success: true, vacancy };
     } catch (error) {
       console.error("Error in UpdateVacancyUseCase:", error);
-      return {
-        success: false,
-        error: "Error al actualizar vacante",
-      };
+      return { success: false, error: "Error al actualizar la vacante" };
     }
   }
 }

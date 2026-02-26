@@ -1,20 +1,20 @@
 import { Add01Icon, FilePlus } from "@hugeicons/core-free-icons";
 import { TableConfig } from "@/core/shared/components/DataTable/TableTypes.types";
-import { Vacancy } from "../../types/vacancy.types";
+import type { VacancyDTO } from "../../types/vacancy.types";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { VacanciesTableFilters } from "./VacanciesTableFilters";
 
-export const VacanciesTableConfig: TableConfig<Vacancy> = {
+export const VacanciesTableConfig: TableConfig<VacancyDTO> = {
   filters: {
     customFilter: {
       component: VacanciesTableFilters,
       props: {
-        addButtonText: "Crear Vacante",
+        addButtonText: "Agregar Vacante",
         addButtonIcon: FilePlus,
         showAddButton: true,
       },
     },
-    searchColumn: "title",
+    searchColumn: "position",
     searchPlaceholder: "Buscar vacantes...",
     showSearch: true,
   },
@@ -23,21 +23,23 @@ export const VacanciesTableConfig: TableConfig<Vacancy> = {
     addButtonIcon: <HugeiconsIcon icon={Add01Icon} className="h-4 w-4" />,
     addButtonText: "Agregar Vacante",
     showBulkActions: true,
-    onBulkDelete: (selectedRows) => {
-      console.log("Eliminar vacantes:", selectedRows);
-    },
-    onBulkExport: (selectedRows) => {
-      console.log("Exportar vacantes:", selectedRows);
-    },
   },
   emptyStateMessage: "No se encontraron vacantes",
   pagination: {
-    defaultPageSize: 7,
-    pageSizeOptions: [5, 7, 10, 15, 20],
+    defaultPageSize: 10,
+    pageSizeOptions: [5, 10, 15, 20, 50],
     showPageSizeSelector: true,
     showPaginationInfo: true,
   },
-  enableColumnVisibility: false,
+  enableColumnVisibility: true,
   enableRowSelection: true,
   enableSorting: true,
+  columnPinning: {
+    enabled: true,
+    persistKey: "vacancies-table",
+  },
+  columnOrder: {
+    enabled: true,
+    persistKey: "vacancies-table",
+  },
 };

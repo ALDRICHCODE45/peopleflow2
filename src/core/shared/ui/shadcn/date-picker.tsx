@@ -87,7 +87,7 @@ export function DatePicker({
           className={cn(
             "w-full justify-start text-left font-normal",
             !selectedDate && "text-muted-foreground",
-            className
+            className,
           )}
         >
           <HugeiconsIcon

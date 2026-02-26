@@ -239,6 +239,21 @@ const RECLUTAMIENTO_PERMISSIONS: PermissionDefinition[] = [
     action: "eliminar",
     description: "Eliminar vacantes",
   },
+  // Vacantes - Acciones críticas del workflow
+  {
+    name: "vacantes:validar-terna",
+    resource: "vacantes",
+    action: "validar-terna",
+    description:
+      "Validar la terna de candidatos y mover la vacante a Follow Up (requiere permiso de Manager o Líder de Reclutamiento)",
+  },
+  {
+    name: "vacantes:autorizar-retroceso",
+    resource: "vacantes",
+    action: "autorizar-retroceso",
+    description:
+      "Autorizar el retroceso de una vacante al estado Hunting desde Follow Up o Pre-Placement",
+  },
   // Vacantes - Modular
   {
     name: "vacantes:gestionar",
@@ -570,6 +585,8 @@ export const PermissionActions = {
     crear: "vacantes:crear",
     editar: "vacantes:editar",
     eliminar: "vacantes:eliminar",
+    validarTerna: "vacantes:validar-terna",
+    autorizarRetroceso: "vacantes:autorizar-retroceso",
     gestionar: "vacantes:gestionar",
   },
   candidatos: {

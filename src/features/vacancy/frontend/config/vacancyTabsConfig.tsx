@@ -3,18 +3,22 @@
  */
 import {
   Layers,
-  PlayCircleIcon,
-  FileEditIcon,
-  Lock,
-  Archive,
+  ClockIcon,
+  Search01Icon,
+  Target01Icon,
+  UserGroup03Icon,
+  CheckmarkSquare01Icon,
+  PauseIcon,
+  Cancel01Icon,
+  SadIcon,
 } from "@hugeicons/core-free-icons";
 import { IconSvgElement } from "@hugeicons/react";
-import type { VacancyStatus } from "../types/vacancy.types";
+import type { VacancyStatusType } from "../types/vacancy.types";
 
 /**
  * Union type for all valid tab IDs in the Vacancies page
  */
-export type VacancyTabId = "all" | VacancyStatus;
+export type VacancyTabId = "all" | VacancyStatusType;
 
 /**
  * Configuration interface for a single tab
@@ -27,7 +31,7 @@ export interface VacancyTabConfig {
   /** Optional count to display (usually set dynamically) */
   count?: number;
   /** Status filter value (undefined for "all" tab) */
-  statusFilter?: VacancyStatus;
+  statusFilter?: VacancyStatusType;
   /** Icon component for the tab */
   icon: IconSvgElement;
 }
@@ -42,52 +46,82 @@ export const VACANCY_TABS_CONFIG: readonly VacancyTabConfig[] = [
     icon: Layers,
   },
   {
-    id: "OPEN",
-    label: "Abiertas",
-    statusFilter: "OPEN",
-    icon: PlayCircleIcon,
+    id: "QUICK_MEETING",
+    label: "Quick Meeting",
+    statusFilter: "QUICK_MEETING",
+    icon: ClockIcon,
   },
   {
-    id: "DRAFT",
-    label: "Borrador",
-    statusFilter: "DRAFT",
-    icon: FileEditIcon,
+    id: "HUNTING",
+    label: "Hunting",
+    statusFilter: "HUNTING",
+    icon: Search01Icon,
   },
   {
-    id: "CLOSED",
-    label: "Cerradas",
-    statusFilter: "CLOSED",
-    icon: Lock,
+    id: "FOLLOW_UP",
+    label: "Follow Up",
+    statusFilter: "FOLLOW_UP",
+    icon: Target01Icon,
   },
   {
-    id: "ARCHIVED",
-    label: "Archivadas",
-    statusFilter: "ARCHIVED",
-    icon: Archive,
+    id: "PRE_PLACEMENT",
+    label: "Pre-Placement",
+    statusFilter: "PRE_PLACEMENT",
+    icon: UserGroup03Icon,
+  },
+  {
+    id: "PLACEMENT",
+    label: "Placement",
+    statusFilter: "PLACEMENT",
+    icon: CheckmarkSquare01Icon,
+  },
+  {
+    id: "STAND_BY",
+    label: "Stand By",
+    statusFilter: "STAND_BY",
+    icon: PauseIcon,
+  },
+  {
+    id: "CANCELADA",
+    label: "Cancelada",
+    statusFilter: "CANCELADA",
+    icon: Cancel01Icon,
+  },
+  {
+    id: "PERDIDA",
+    label: "Perdida",
+    statusFilter: "PERDIDA",
+    icon: SadIcon,
   },
 ] as const;
 
 /**
  * Enriches the tabs config with dynamic counts.
- * Only the currently active tab displays its count.
+ * Supports multi-select tabs: shows count on "all" when no tabs selected,
+ * or on each selected tab.
  *
- * @param activeTab - The currently active tab ID
+ * @param activeTabs - The currently active tab IDs (empty = "all")
  * @param totalCount - The total count from the current query (optional)
- * @returns Tabs config with count set on the active tab
+ * @returns Tabs config with count set on the active tabs
  *
  * @example
  * ```tsx
- * const tabsConfig = enrichVacancyTabsWithCounts(activeTab, paginationMeta?.totalCount);
- * <DataTableTabs tabs={tabsConfig} activeTab={activeTab} onTabChange={handleTabChange} />
+ * const tabsConfig = enrichVacancyTabsWithCounts(activeTabs, paginationMeta?.totalCount);
+ * <DataTableMultiTabs tabs={tabsConfig} activeTabs={activeTabs} onTabsChange={handleMultiTabChange} />
  * ```
  */
 export function enrichVacancyTabsWithCounts(
-  activeTab: VacancyTabId,
+  activeTabs: string[],
   totalCount?: number
 ): VacancyTabConfig[] {
   return VACANCY_TABS_CONFIG.map((tab) => ({
     ...tab,
-    count: tab.id === activeTab ? totalCount : undefined,
+    count:
+      activeTabs.length === 0 && tab.id === "all"
+        ? totalCount
+        : activeTabs.includes(tab.id)
+          ? totalCount
+          : undefined,
   }));
 }
 
@@ -95,11 +129,11 @@ export function enrichVacancyTabsWithCounts(
  * Get the status filter for a given tab ID
  *
  * @param tabId - The tab ID to get the status filter for
- * @returns The VacancyStatus if the tab has a filter, undefined otherwise
+ * @returns The VacancyStatusType if the tab has a filter, undefined otherwise
  */
 export function getVacancyStatusFromTab(
   tabId: string
-): VacancyStatus | undefined {
+): VacancyStatusType | undefined {
   const tab = VACANCY_TABS_CONFIG.find((t) => t.id === tabId);
   return tab?.statusFilter;
 }

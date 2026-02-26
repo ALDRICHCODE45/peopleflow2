@@ -213,10 +213,15 @@ export type UserWhereInput = {
   leadsCreated?: Prisma.LeadListRelationFilter
   leadStatusChanges?: Prisma.LeadStatusHistoryListRelationFilter
   interactions?: Prisma.InteractionListRelationFilter
-  attachments?: Prisma.AttachmentListRelationFilter
+  attachmentsUploaded?: Prisma.AttachmentListRelationFilter
+  attachmentsValidated?: Prisma.AttachmentListRelationFilter
   notificationsCreated?: Prisma.NotificationListRelationFilter
   clientsGenerated?: Prisma.ClientListRelationFilter
   clientsCreated?: Prisma.ClientListRelationFilter
+  vacanciesAsRecruiter?: Prisma.VacancyListRelationFilter
+  vacanciesCreated?: Prisma.VacancyListRelationFilter
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryListRelationFilter
+  vacancyChecklistValidated?: Prisma.VacancyListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -235,10 +240,15 @@ export type UserOrderByWithRelationInput = {
   leadsCreated?: Prisma.LeadOrderByRelationAggregateInput
   leadStatusChanges?: Prisma.LeadStatusHistoryOrderByRelationAggregateInput
   interactions?: Prisma.InteractionOrderByRelationAggregateInput
-  attachments?: Prisma.AttachmentOrderByRelationAggregateInput
+  attachmentsUploaded?: Prisma.AttachmentOrderByRelationAggregateInput
+  attachmentsValidated?: Prisma.AttachmentOrderByRelationAggregateInput
   notificationsCreated?: Prisma.NotificationOrderByRelationAggregateInput
   clientsGenerated?: Prisma.ClientOrderByRelationAggregateInput
   clientsCreated?: Prisma.ClientOrderByRelationAggregateInput
+  vacanciesAsRecruiter?: Prisma.VacancyOrderByRelationAggregateInput
+  vacanciesCreated?: Prisma.VacancyOrderByRelationAggregateInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryOrderByRelationAggregateInput
+  vacancyChecklistValidated?: Prisma.VacancyOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -260,10 +270,15 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   leadsCreated?: Prisma.LeadListRelationFilter
   leadStatusChanges?: Prisma.LeadStatusHistoryListRelationFilter
   interactions?: Prisma.InteractionListRelationFilter
-  attachments?: Prisma.AttachmentListRelationFilter
+  attachmentsUploaded?: Prisma.AttachmentListRelationFilter
+  attachmentsValidated?: Prisma.AttachmentListRelationFilter
   notificationsCreated?: Prisma.NotificationListRelationFilter
   clientsGenerated?: Prisma.ClientListRelationFilter
   clientsCreated?: Prisma.ClientListRelationFilter
+  vacanciesAsRecruiter?: Prisma.VacancyListRelationFilter
+  vacanciesCreated?: Prisma.VacancyListRelationFilter
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryListRelationFilter
+  vacancyChecklistValidated?: Prisma.VacancyListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -310,10 +325,15 @@ export type UserCreateInput = {
   leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
-  attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentCreateNestedManyWithoutValidatedByInput
   notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
   clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
   clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -332,10 +352,15 @@ export type UserUncheckedCreateInput = {
   leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
-  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedCreateNestedManyWithoutValidatedByInput
   notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
   clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
   clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserUpdateInput = {
@@ -354,10 +379,15 @@ export type UserUpdateInput = {
   leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
-  attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUpdateManyWithoutValidatedByNestedInput
   notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
   clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
   clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -376,10 +406,15 @@ export type UserUncheckedUpdateInput = {
   leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
-  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedUpdateManyWithoutValidatedByNestedInput
   notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
   clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
   clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -576,18 +611,94 @@ export type UserUpdateOneRequiredWithoutInteractionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInteractionsInput, Prisma.UserUpdateWithoutInteractionsInput>, Prisma.UserUncheckedUpdateWithoutInteractionsInput>
 }
 
-export type UserCreateNestedOneWithoutAttachmentsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAttachmentsInput, Prisma.UserUncheckedCreateWithoutAttachmentsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAttachmentsInput
+export type UserCreateNestedOneWithoutAttachmentsValidatedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAttachmentsValidatedInput, Prisma.UserUncheckedCreateWithoutAttachmentsValidatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAttachmentsValidatedInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutAttachmentsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAttachmentsInput, Prisma.UserUncheckedCreateWithoutAttachmentsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAttachmentsInput
-  upsert?: Prisma.UserUpsertWithoutAttachmentsInput
+export type UserCreateNestedOneWithoutAttachmentsUploadedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAttachmentsUploadedInput, Prisma.UserUncheckedCreateWithoutAttachmentsUploadedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAttachmentsUploadedInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAttachmentsInput, Prisma.UserUpdateWithoutAttachmentsInput>, Prisma.UserUncheckedUpdateWithoutAttachmentsInput>
+}
+
+export type UserUpdateOneWithoutAttachmentsValidatedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAttachmentsValidatedInput, Prisma.UserUncheckedCreateWithoutAttachmentsValidatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAttachmentsValidatedInput
+  upsert?: Prisma.UserUpsertWithoutAttachmentsValidatedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAttachmentsValidatedInput, Prisma.UserUpdateWithoutAttachmentsValidatedInput>, Prisma.UserUncheckedUpdateWithoutAttachmentsValidatedInput>
+}
+
+export type UserUpdateOneRequiredWithoutAttachmentsUploadedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAttachmentsUploadedInput, Prisma.UserUncheckedCreateWithoutAttachmentsUploadedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAttachmentsUploadedInput
+  upsert?: Prisma.UserUpsertWithoutAttachmentsUploadedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAttachmentsUploadedInput, Prisma.UserUpdateWithoutAttachmentsUploadedInput>, Prisma.UserUncheckedUpdateWithoutAttachmentsUploadedInput>
+}
+
+export type UserCreateNestedOneWithoutVacanciesAsRecruiterInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVacanciesAsRecruiterInput, Prisma.UserUncheckedCreateWithoutVacanciesAsRecruiterInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVacanciesAsRecruiterInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutVacancyChecklistValidatedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVacancyChecklistValidatedInput, Prisma.UserUncheckedCreateWithoutVacancyChecklistValidatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVacancyChecklistValidatedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutVacanciesCreatedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVacanciesCreatedInput, Prisma.UserUncheckedCreateWithoutVacanciesCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVacanciesCreatedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutVacanciesAsRecruiterNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVacanciesAsRecruiterInput, Prisma.UserUncheckedCreateWithoutVacanciesAsRecruiterInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVacanciesAsRecruiterInput
+  upsert?: Prisma.UserUpsertWithoutVacanciesAsRecruiterInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutVacanciesAsRecruiterInput, Prisma.UserUpdateWithoutVacanciesAsRecruiterInput>, Prisma.UserUncheckedUpdateWithoutVacanciesAsRecruiterInput>
+}
+
+export type UserUpdateOneWithoutVacancyChecklistValidatedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVacancyChecklistValidatedInput, Prisma.UserUncheckedCreateWithoutVacancyChecklistValidatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVacancyChecklistValidatedInput
+  upsert?: Prisma.UserUpsertWithoutVacancyChecklistValidatedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutVacancyChecklistValidatedInput, Prisma.UserUpdateWithoutVacancyChecklistValidatedInput>, Prisma.UserUncheckedUpdateWithoutVacancyChecklistValidatedInput>
+}
+
+export type UserUpdateOneWithoutVacanciesCreatedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVacanciesCreatedInput, Prisma.UserUncheckedCreateWithoutVacanciesCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVacanciesCreatedInput
+  upsert?: Prisma.UserUpsertWithoutVacanciesCreatedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutVacanciesCreatedInput, Prisma.UserUpdateWithoutVacanciesCreatedInput>, Prisma.UserUncheckedUpdateWithoutVacanciesCreatedInput>
+}
+
+export type UserCreateNestedOneWithoutVacancyStatusChangesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVacancyStatusChangesInput, Prisma.UserUncheckedCreateWithoutVacancyStatusChangesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVacancyStatusChangesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutVacancyStatusChangesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVacancyStatusChangesInput, Prisma.UserUncheckedCreateWithoutVacancyStatusChangesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVacancyStatusChangesInput
+  upsert?: Prisma.UserUpsertWithoutVacancyStatusChangesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutVacancyStatusChangesInput, Prisma.UserUpdateWithoutVacancyStatusChangesInput>, Prisma.UserUncheckedUpdateWithoutVacancyStatusChangesInput>
 }
 
 export type UserCreateNestedOneWithoutNotificationsCreatedInput = {
@@ -653,10 +764,15 @@ export type UserCreateWithoutSessionsInput = {
   leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
-  attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentCreateNestedManyWithoutValidatedByInput
   notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
   clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
   clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -674,10 +790,15 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
-  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedCreateNestedManyWithoutValidatedByInput
   notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
   clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
   clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -711,10 +832,15 @@ export type UserUpdateWithoutSessionsInput = {
   leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
-  attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUpdateManyWithoutValidatedByNestedInput
   notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
   clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
   clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -732,10 +858,15 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
-  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedUpdateManyWithoutValidatedByNestedInput
   notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
   clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
   clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -753,10 +884,15 @@ export type UserCreateWithoutAccountsInput = {
   leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
-  attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentCreateNestedManyWithoutValidatedByInput
   notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
   clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
   clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -774,10 +910,15 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
-  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedCreateNestedManyWithoutValidatedByInput
   notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
   clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
   clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -811,10 +952,15 @@ export type UserUpdateWithoutAccountsInput = {
   leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
-  attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUpdateManyWithoutValidatedByNestedInput
   notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
   clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
   clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -832,10 +978,15 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
-  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedUpdateManyWithoutValidatedByNestedInput
   notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
   clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
   clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserCreateWithoutUserRolesInput = {
@@ -853,10 +1004,15 @@ export type UserCreateWithoutUserRolesInput = {
   leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
-  attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentCreateNestedManyWithoutValidatedByInput
   notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
   clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
   clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserUncheckedCreateWithoutUserRolesInput = {
@@ -874,10 +1030,15 @@ export type UserUncheckedCreateWithoutUserRolesInput = {
   leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
-  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedCreateNestedManyWithoutValidatedByInput
   notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
   clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
   clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserCreateOrConnectWithoutUserRolesInput = {
@@ -911,10 +1072,15 @@ export type UserUpdateWithoutUserRolesInput = {
   leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
-  attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUpdateManyWithoutValidatedByNestedInput
   notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
   clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
   clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserRolesInput = {
@@ -932,10 +1098,15 @@ export type UserUncheckedUpdateWithoutUserRolesInput = {
   leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
-  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedUpdateManyWithoutValidatedByNestedInput
   notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
   clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
   clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserCreateWithoutLeadsAssignedInput = {
@@ -953,10 +1124,15 @@ export type UserCreateWithoutLeadsAssignedInput = {
   leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
-  attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentCreateNestedManyWithoutValidatedByInput
   notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
   clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
   clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserUncheckedCreateWithoutLeadsAssignedInput = {
@@ -974,10 +1150,15 @@ export type UserUncheckedCreateWithoutLeadsAssignedInput = {
   leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
-  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedCreateNestedManyWithoutValidatedByInput
   notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
   clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
   clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserCreateOrConnectWithoutLeadsAssignedInput = {
@@ -1000,10 +1181,15 @@ export type UserCreateWithoutLeadsCreatedInput = {
   leadsAssigned?: Prisma.LeadCreateNestedManyWithoutAssignedToInput
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
-  attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentCreateNestedManyWithoutValidatedByInput
   notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
   clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
   clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserUncheckedCreateWithoutLeadsCreatedInput = {
@@ -1021,10 +1207,15 @@ export type UserUncheckedCreateWithoutLeadsCreatedInput = {
   leadsAssigned?: Prisma.LeadUncheckedCreateNestedManyWithoutAssignedToInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
-  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedCreateNestedManyWithoutValidatedByInput
   notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
   clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
   clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserCreateOrConnectWithoutLeadsCreatedInput = {
@@ -1058,10 +1249,15 @@ export type UserUpdateWithoutLeadsAssignedInput = {
   leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
-  attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUpdateManyWithoutValidatedByNestedInput
   notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
   clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
   clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLeadsAssignedInput = {
@@ -1079,10 +1275,15 @@ export type UserUncheckedUpdateWithoutLeadsAssignedInput = {
   leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
-  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedUpdateManyWithoutValidatedByNestedInput
   notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
   clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
   clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserUpsertWithoutLeadsCreatedInput = {
@@ -1111,10 +1312,15 @@ export type UserUpdateWithoutLeadsCreatedInput = {
   leadsAssigned?: Prisma.LeadUpdateManyWithoutAssignedToNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
-  attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUpdateManyWithoutValidatedByNestedInput
   notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
   clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
   clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLeadsCreatedInput = {
@@ -1132,10 +1338,15 @@ export type UserUncheckedUpdateWithoutLeadsCreatedInput = {
   leadsAssigned?: Prisma.LeadUncheckedUpdateManyWithoutAssignedToNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
-  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedUpdateManyWithoutValidatedByNestedInput
   notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
   clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
   clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserCreateWithoutLeadStatusChangesInput = {
@@ -1153,10 +1364,15 @@ export type UserCreateWithoutLeadStatusChangesInput = {
   leadsAssigned?: Prisma.LeadCreateNestedManyWithoutAssignedToInput
   leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
-  attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentCreateNestedManyWithoutValidatedByInput
   notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
   clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
   clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserUncheckedCreateWithoutLeadStatusChangesInput = {
@@ -1174,10 +1390,15 @@ export type UserUncheckedCreateWithoutLeadStatusChangesInput = {
   leadsAssigned?: Prisma.LeadUncheckedCreateNestedManyWithoutAssignedToInput
   leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
-  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedCreateNestedManyWithoutValidatedByInput
   notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
   clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
   clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserCreateOrConnectWithoutLeadStatusChangesInput = {
@@ -1211,10 +1432,15 @@ export type UserUpdateWithoutLeadStatusChangesInput = {
   leadsAssigned?: Prisma.LeadUpdateManyWithoutAssignedToNestedInput
   leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
-  attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUpdateManyWithoutValidatedByNestedInput
   notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
   clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
   clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLeadStatusChangesInput = {
@@ -1232,10 +1458,15 @@ export type UserUncheckedUpdateWithoutLeadStatusChangesInput = {
   leadsAssigned?: Prisma.LeadUncheckedUpdateManyWithoutAssignedToNestedInput
   leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
-  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedUpdateManyWithoutValidatedByNestedInput
   notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
   clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
   clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserCreateWithoutInteractionsInput = {
@@ -1253,10 +1484,15 @@ export type UserCreateWithoutInteractionsInput = {
   leadsAssigned?: Prisma.LeadCreateNestedManyWithoutAssignedToInput
   leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
-  attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentCreateNestedManyWithoutValidatedByInput
   notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
   clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
   clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserUncheckedCreateWithoutInteractionsInput = {
@@ -1274,10 +1510,15 @@ export type UserUncheckedCreateWithoutInteractionsInput = {
   leadsAssigned?: Prisma.LeadUncheckedCreateNestedManyWithoutAssignedToInput
   leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
-  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedCreateNestedManyWithoutValidatedByInput
   notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
   clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
   clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserCreateOrConnectWithoutInteractionsInput = {
@@ -1311,10 +1552,15 @@ export type UserUpdateWithoutInteractionsInput = {
   leadsAssigned?: Prisma.LeadUpdateManyWithoutAssignedToNestedInput
   leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
-  attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUpdateManyWithoutValidatedByNestedInput
   notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
   clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
   clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInteractionsInput = {
@@ -1332,13 +1578,18 @@ export type UserUncheckedUpdateWithoutInteractionsInput = {
   leadsAssigned?: Prisma.LeadUncheckedUpdateManyWithoutAssignedToNestedInput
   leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
-  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedUpdateManyWithoutValidatedByNestedInput
   notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
   clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
   clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
-export type UserCreateWithoutAttachmentsInput = {
+export type UserCreateWithoutAttachmentsValidatedInput = {
   id?: string
   email: string
   name?: string | null
@@ -1354,12 +1605,17 @@ export type UserCreateWithoutAttachmentsInput = {
   leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
+  attachmentsUploaded?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
   clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
   clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
 }
 
-export type UserUncheckedCreateWithoutAttachmentsInput = {
+export type UserUncheckedCreateWithoutAttachmentsValidatedInput = {
   id?: string
   email: string
   name?: string | null
@@ -1375,28 +1631,90 @@ export type UserUncheckedCreateWithoutAttachmentsInput = {
   leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
   clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
   clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
 }
 
-export type UserCreateOrConnectWithoutAttachmentsInput = {
+export type UserCreateOrConnectWithoutAttachmentsValidatedInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutAttachmentsInput, Prisma.UserUncheckedCreateWithoutAttachmentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAttachmentsValidatedInput, Prisma.UserUncheckedCreateWithoutAttachmentsValidatedInput>
 }
 
-export type UserUpsertWithoutAttachmentsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutAttachmentsInput, Prisma.UserUncheckedUpdateWithoutAttachmentsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutAttachmentsInput, Prisma.UserUncheckedCreateWithoutAttachmentsInput>
+export type UserCreateWithoutAttachmentsUploadedInput = {
+  id?: string
+  email: string
+  name?: string | null
+  avatar?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emailVerified?: boolean
+  image?: string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  leadsAssigned?: Prisma.LeadCreateNestedManyWithoutAssignedToInput
+  leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
+  attachmentsValidated?: Prisma.AttachmentCreateNestedManyWithoutValidatedByInput
+  notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
+}
+
+export type UserUncheckedCreateWithoutAttachmentsUploadedInput = {
+  id?: string
+  email: string
+  name?: string | null
+  avatar?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emailVerified?: boolean
+  image?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  leadsAssigned?: Prisma.LeadUncheckedCreateNestedManyWithoutAssignedToInput
+  leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedCreateNestedManyWithoutValidatedByInput
+  notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
+}
+
+export type UserCreateOrConnectWithoutAttachmentsUploadedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAttachmentsUploadedInput, Prisma.UserUncheckedCreateWithoutAttachmentsUploadedInput>
+}
+
+export type UserUpsertWithoutAttachmentsValidatedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAttachmentsValidatedInput, Prisma.UserUncheckedUpdateWithoutAttachmentsValidatedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAttachmentsValidatedInput, Prisma.UserUncheckedCreateWithoutAttachmentsValidatedInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutAttachmentsInput = {
+export type UserUpdateToOneWithWhereWithoutAttachmentsValidatedInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutAttachmentsInput, Prisma.UserUncheckedUpdateWithoutAttachmentsInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAttachmentsValidatedInput, Prisma.UserUncheckedUpdateWithoutAttachmentsValidatedInput>
 }
 
-export type UserUpdateWithoutAttachmentsInput = {
+export type UserUpdateWithoutAttachmentsValidatedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1412,12 +1730,17 @@ export type UserUpdateWithoutAttachmentsInput = {
   leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
   clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
   clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
-export type UserUncheckedUpdateWithoutAttachmentsInput = {
+export type UserUncheckedUpdateWithoutAttachmentsValidatedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1433,9 +1756,557 @@ export type UserUncheckedUpdateWithoutAttachmentsInput = {
   leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
   clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
   clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
+}
+
+export type UserUpsertWithoutAttachmentsUploadedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAttachmentsUploadedInput, Prisma.UserUncheckedUpdateWithoutAttachmentsUploadedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAttachmentsUploadedInput, Prisma.UserUncheckedCreateWithoutAttachmentsUploadedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAttachmentsUploadedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAttachmentsUploadedInput, Prisma.UserUncheckedUpdateWithoutAttachmentsUploadedInput>
+}
+
+export type UserUpdateWithoutAttachmentsUploadedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  leadsAssigned?: Prisma.LeadUpdateManyWithoutAssignedToNestedInput
+  leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUpdateManyWithoutValidatedByNestedInput
+  notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAttachmentsUploadedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  leadsAssigned?: Prisma.LeadUncheckedUpdateManyWithoutAssignedToNestedInput
+  leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedUpdateManyWithoutValidatedByNestedInput
+  notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
+}
+
+export type UserCreateWithoutVacanciesAsRecruiterInput = {
+  id?: string
+  email: string
+  name?: string | null
+  avatar?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emailVerified?: boolean
+  image?: string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  leadsAssigned?: Prisma.LeadCreateNestedManyWithoutAssignedToInput
+  leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
+  attachmentsUploaded?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentCreateNestedManyWithoutValidatedByInput
+  notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
+}
+
+export type UserUncheckedCreateWithoutVacanciesAsRecruiterInput = {
+  id?: string
+  email: string
+  name?: string | null
+  avatar?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emailVerified?: boolean
+  image?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  leadsAssigned?: Prisma.LeadUncheckedCreateNestedManyWithoutAssignedToInput
+  leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedCreateNestedManyWithoutValidatedByInput
+  notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
+}
+
+export type UserCreateOrConnectWithoutVacanciesAsRecruiterInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutVacanciesAsRecruiterInput, Prisma.UserUncheckedCreateWithoutVacanciesAsRecruiterInput>
+}
+
+export type UserCreateWithoutVacancyChecklistValidatedInput = {
+  id?: string
+  email: string
+  name?: string | null
+  avatar?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emailVerified?: boolean
+  image?: string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  leadsAssigned?: Prisma.LeadCreateNestedManyWithoutAssignedToInput
+  leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
+  attachmentsUploaded?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentCreateNestedManyWithoutValidatedByInput
+  notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
+}
+
+export type UserUncheckedCreateWithoutVacancyChecklistValidatedInput = {
+  id?: string
+  email: string
+  name?: string | null
+  avatar?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emailVerified?: boolean
+  image?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  leadsAssigned?: Prisma.LeadUncheckedCreateNestedManyWithoutAssignedToInput
+  leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedCreateNestedManyWithoutValidatedByInput
+  notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+}
+
+export type UserCreateOrConnectWithoutVacancyChecklistValidatedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutVacancyChecklistValidatedInput, Prisma.UserUncheckedCreateWithoutVacancyChecklistValidatedInput>
+}
+
+export type UserCreateWithoutVacanciesCreatedInput = {
+  id?: string
+  email: string
+  name?: string | null
+  avatar?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emailVerified?: boolean
+  image?: string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  leadsAssigned?: Prisma.LeadCreateNestedManyWithoutAssignedToInput
+  leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
+  attachmentsUploaded?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentCreateNestedManyWithoutValidatedByInput
+  notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyCreateNestedManyWithoutRecruiterInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
+}
+
+export type UserUncheckedCreateWithoutVacanciesCreatedInput = {
+  id?: string
+  email: string
+  name?: string | null
+  avatar?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emailVerified?: boolean
+  image?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  leadsAssigned?: Prisma.LeadUncheckedCreateNestedManyWithoutAssignedToInput
+  leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedCreateNestedManyWithoutValidatedByInput
+  notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedCreateNestedManyWithoutRecruiterInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
+}
+
+export type UserCreateOrConnectWithoutVacanciesCreatedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutVacanciesCreatedInput, Prisma.UserUncheckedCreateWithoutVacanciesCreatedInput>
+}
+
+export type UserUpsertWithoutVacanciesAsRecruiterInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutVacanciesAsRecruiterInput, Prisma.UserUncheckedUpdateWithoutVacanciesAsRecruiterInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutVacanciesAsRecruiterInput, Prisma.UserUncheckedCreateWithoutVacanciesAsRecruiterInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutVacanciesAsRecruiterInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutVacanciesAsRecruiterInput, Prisma.UserUncheckedUpdateWithoutVacanciesAsRecruiterInput>
+}
+
+export type UserUpdateWithoutVacanciesAsRecruiterInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  leadsAssigned?: Prisma.LeadUpdateManyWithoutAssignedToNestedInput
+  leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUpdateManyWithoutValidatedByNestedInput
+  notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutVacanciesAsRecruiterInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  leadsAssigned?: Prisma.LeadUncheckedUpdateManyWithoutAssignedToNestedInput
+  leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedUpdateManyWithoutValidatedByNestedInput
+  notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
+}
+
+export type UserUpsertWithoutVacancyChecklistValidatedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutVacancyChecklistValidatedInput, Prisma.UserUncheckedUpdateWithoutVacancyChecklistValidatedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutVacancyChecklistValidatedInput, Prisma.UserUncheckedCreateWithoutVacancyChecklistValidatedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutVacancyChecklistValidatedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutVacancyChecklistValidatedInput, Prisma.UserUncheckedUpdateWithoutVacancyChecklistValidatedInput>
+}
+
+export type UserUpdateWithoutVacancyChecklistValidatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  leadsAssigned?: Prisma.LeadUpdateManyWithoutAssignedToNestedInput
+  leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUpdateManyWithoutValidatedByNestedInput
+  notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutVacancyChecklistValidatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  leadsAssigned?: Prisma.LeadUncheckedUpdateManyWithoutAssignedToNestedInput
+  leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedUpdateManyWithoutValidatedByNestedInput
+  notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+}
+
+export type UserUpsertWithoutVacanciesCreatedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutVacanciesCreatedInput, Prisma.UserUncheckedUpdateWithoutVacanciesCreatedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutVacanciesCreatedInput, Prisma.UserUncheckedCreateWithoutVacanciesCreatedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutVacanciesCreatedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutVacanciesCreatedInput, Prisma.UserUncheckedUpdateWithoutVacanciesCreatedInput>
+}
+
+export type UserUpdateWithoutVacanciesCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  leadsAssigned?: Prisma.LeadUpdateManyWithoutAssignedToNestedInput
+  leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUpdateManyWithoutValidatedByNestedInput
+  notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUpdateManyWithoutRecruiterNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutVacanciesCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  leadsAssigned?: Prisma.LeadUncheckedUpdateManyWithoutAssignedToNestedInput
+  leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedUpdateManyWithoutValidatedByNestedInput
+  notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedUpdateManyWithoutRecruiterNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
+}
+
+export type UserCreateWithoutVacancyStatusChangesInput = {
+  id?: string
+  email: string
+  name?: string | null
+  avatar?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emailVerified?: boolean
+  image?: string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  leadsAssigned?: Prisma.LeadCreateNestedManyWithoutAssignedToInput
+  leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
+  attachmentsUploaded?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentCreateNestedManyWithoutValidatedByInput
+  notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
+  vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
+}
+
+export type UserUncheckedCreateWithoutVacancyStatusChangesInput = {
+  id?: string
+  email: string
+  name?: string | null
+  avatar?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emailVerified?: boolean
+  image?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  leadsAssigned?: Prisma.LeadUncheckedCreateNestedManyWithoutAssignedToInput
+  leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedCreateNestedManyWithoutValidatedByInput
+  notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
+}
+
+export type UserCreateOrConnectWithoutVacancyStatusChangesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutVacancyStatusChangesInput, Prisma.UserUncheckedCreateWithoutVacancyStatusChangesInput>
+}
+
+export type UserUpsertWithoutVacancyStatusChangesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutVacancyStatusChangesInput, Prisma.UserUncheckedUpdateWithoutVacancyStatusChangesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutVacancyStatusChangesInput, Prisma.UserUncheckedCreateWithoutVacancyStatusChangesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutVacancyStatusChangesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutVacancyStatusChangesInput, Prisma.UserUncheckedUpdateWithoutVacancyStatusChangesInput>
+}
+
+export type UserUpdateWithoutVacancyStatusChangesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  leadsAssigned?: Prisma.LeadUpdateManyWithoutAssignedToNestedInput
+  leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUpdateManyWithoutValidatedByNestedInput
+  notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutVacancyStatusChangesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  leadsAssigned?: Prisma.LeadUncheckedUpdateManyWithoutAssignedToNestedInput
+  leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedUpdateManyWithoutValidatedByNestedInput
+  notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserCreateWithoutNotificationsCreatedInput = {
@@ -1454,9 +2325,14 @@ export type UserCreateWithoutNotificationsCreatedInput = {
   leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
-  attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentCreateNestedManyWithoutValidatedByInput
   clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
   clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsCreatedInput = {
@@ -1475,9 +2351,14 @@ export type UserUncheckedCreateWithoutNotificationsCreatedInput = {
   leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
-  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedCreateNestedManyWithoutValidatedByInput
   clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
   clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsCreatedInput = {
@@ -1512,9 +2393,14 @@ export type UserUpdateWithoutNotificationsCreatedInput = {
   leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
-  attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUpdateManyWithoutValidatedByNestedInput
   clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
   clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsCreatedInput = {
@@ -1533,9 +2419,14 @@ export type UserUncheckedUpdateWithoutNotificationsCreatedInput = {
   leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
-  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedUpdateManyWithoutValidatedByNestedInput
   clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
   clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserCreateWithoutClientsGeneratedInput = {
@@ -1554,9 +2445,14 @@ export type UserCreateWithoutClientsGeneratedInput = {
   leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
-  attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentCreateNestedManyWithoutValidatedByInput
   notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
   clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserUncheckedCreateWithoutClientsGeneratedInput = {
@@ -1575,9 +2471,14 @@ export type UserUncheckedCreateWithoutClientsGeneratedInput = {
   leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
-  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedCreateNestedManyWithoutValidatedByInput
   notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
   clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserCreateOrConnectWithoutClientsGeneratedInput = {
@@ -1601,9 +2502,14 @@ export type UserCreateWithoutClientsCreatedInput = {
   leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
-  attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentCreateNestedManyWithoutValidatedByInput
   notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
   clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
+  vacanciesAsRecruiter?: Prisma.VacancyCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserUncheckedCreateWithoutClientsCreatedInput = {
@@ -1622,9 +2528,14 @@ export type UserUncheckedCreateWithoutClientsCreatedInput = {
   leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
-  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedCreateNestedManyWithoutValidatedByInput
   notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
   clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
 }
 
 export type UserCreateOrConnectWithoutClientsCreatedInput = {
@@ -1659,9 +2570,14 @@ export type UserUpdateWithoutClientsGeneratedInput = {
   leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
-  attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUpdateManyWithoutValidatedByNestedInput
   notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
   clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutClientsGeneratedInput = {
@@ -1680,9 +2596,14 @@ export type UserUncheckedUpdateWithoutClientsGeneratedInput = {
   leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
-  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedUpdateManyWithoutValidatedByNestedInput
   notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
   clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserUpsertWithoutClientsCreatedInput = {
@@ -1712,9 +2633,14 @@ export type UserUpdateWithoutClientsCreatedInput = {
   leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
-  attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUpdateManyWithoutValidatedByNestedInput
   notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
   clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutClientsCreatedInput = {
@@ -1733,9 +2659,14 @@ export type UserUncheckedUpdateWithoutClientsCreatedInput = {
   leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
   leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
-  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedUpdateManyWithoutValidatedByNestedInput
   notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
   clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
 }
 
 
@@ -1751,10 +2682,15 @@ export type UserCountOutputType = {
   leadsCreated: number
   leadStatusChanges: number
   interactions: number
-  attachments: number
+  attachmentsUploaded: number
+  attachmentsValidated: number
   notificationsCreated: number
   clientsGenerated: number
   clientsCreated: number
+  vacanciesAsRecruiter: number
+  vacanciesCreated: number
+  vacancyStatusChanges: number
+  vacancyChecklistValidated: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1765,10 +2701,15 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   leadsCreated?: boolean | UserCountOutputTypeCountLeadsCreatedArgs
   leadStatusChanges?: boolean | UserCountOutputTypeCountLeadStatusChangesArgs
   interactions?: boolean | UserCountOutputTypeCountInteractionsArgs
-  attachments?: boolean | UserCountOutputTypeCountAttachmentsArgs
+  attachmentsUploaded?: boolean | UserCountOutputTypeCountAttachmentsUploadedArgs
+  attachmentsValidated?: boolean | UserCountOutputTypeCountAttachmentsValidatedArgs
   notificationsCreated?: boolean | UserCountOutputTypeCountNotificationsCreatedArgs
   clientsGenerated?: boolean | UserCountOutputTypeCountClientsGeneratedArgs
   clientsCreated?: boolean | UserCountOutputTypeCountClientsCreatedArgs
+  vacanciesAsRecruiter?: boolean | UserCountOutputTypeCountVacanciesAsRecruiterArgs
+  vacanciesCreated?: boolean | UserCountOutputTypeCountVacanciesCreatedArgs
+  vacancyStatusChanges?: boolean | UserCountOutputTypeCountVacancyStatusChangesArgs
+  vacancyChecklistValidated?: boolean | UserCountOutputTypeCountVacancyChecklistValidatedArgs
 }
 
 /**
@@ -1833,7 +2774,14 @@ export type UserCountOutputTypeCountInteractionsArgs<ExtArgs extends runtime.Typ
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountAttachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type UserCountOutputTypeCountAttachmentsUploadedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AttachmentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAttachmentsValidatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AttachmentWhereInput
 }
 
@@ -1858,6 +2806,34 @@ export type UserCountOutputTypeCountClientsCreatedArgs<ExtArgs extends runtime.T
   where?: Prisma.ClientWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountVacanciesAsRecruiterArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VacancyWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountVacanciesCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VacancyWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountVacancyStatusChangesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VacancyStatusHistoryWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountVacancyChecklistValidatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VacancyWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1875,10 +2851,15 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   leadsCreated?: boolean | Prisma.User$leadsCreatedArgs<ExtArgs>
   leadStatusChanges?: boolean | Prisma.User$leadStatusChangesArgs<ExtArgs>
   interactions?: boolean | Prisma.User$interactionsArgs<ExtArgs>
-  attachments?: boolean | Prisma.User$attachmentsArgs<ExtArgs>
+  attachmentsUploaded?: boolean | Prisma.User$attachmentsUploadedArgs<ExtArgs>
+  attachmentsValidated?: boolean | Prisma.User$attachmentsValidatedArgs<ExtArgs>
   notificationsCreated?: boolean | Prisma.User$notificationsCreatedArgs<ExtArgs>
   clientsGenerated?: boolean | Prisma.User$clientsGeneratedArgs<ExtArgs>
   clientsCreated?: boolean | Prisma.User$clientsCreatedArgs<ExtArgs>
+  vacanciesAsRecruiter?: boolean | Prisma.User$vacanciesAsRecruiterArgs<ExtArgs>
+  vacanciesCreated?: boolean | Prisma.User$vacanciesCreatedArgs<ExtArgs>
+  vacancyStatusChanges?: boolean | Prisma.User$vacancyStatusChangesArgs<ExtArgs>
+  vacancyChecklistValidated?: boolean | Prisma.User$vacancyChecklistValidatedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1924,10 +2905,15 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   leadsCreated?: boolean | Prisma.User$leadsCreatedArgs<ExtArgs>
   leadStatusChanges?: boolean | Prisma.User$leadStatusChangesArgs<ExtArgs>
   interactions?: boolean | Prisma.User$interactionsArgs<ExtArgs>
-  attachments?: boolean | Prisma.User$attachmentsArgs<ExtArgs>
+  attachmentsUploaded?: boolean | Prisma.User$attachmentsUploadedArgs<ExtArgs>
+  attachmentsValidated?: boolean | Prisma.User$attachmentsValidatedArgs<ExtArgs>
   notificationsCreated?: boolean | Prisma.User$notificationsCreatedArgs<ExtArgs>
   clientsGenerated?: boolean | Prisma.User$clientsGeneratedArgs<ExtArgs>
   clientsCreated?: boolean | Prisma.User$clientsCreatedArgs<ExtArgs>
+  vacanciesAsRecruiter?: boolean | Prisma.User$vacanciesAsRecruiterArgs<ExtArgs>
+  vacanciesCreated?: boolean | Prisma.User$vacanciesCreatedArgs<ExtArgs>
+  vacancyStatusChanges?: boolean | Prisma.User$vacancyStatusChangesArgs<ExtArgs>
+  vacancyChecklistValidated?: boolean | Prisma.User$vacancyChecklistValidatedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1943,10 +2929,15 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     leadsCreated: Prisma.$LeadPayload<ExtArgs>[]
     leadStatusChanges: Prisma.$LeadStatusHistoryPayload<ExtArgs>[]
     interactions: Prisma.$InteractionPayload<ExtArgs>[]
-    attachments: Prisma.$AttachmentPayload<ExtArgs>[]
+    attachmentsUploaded: Prisma.$AttachmentPayload<ExtArgs>[]
+    attachmentsValidated: Prisma.$AttachmentPayload<ExtArgs>[]
     notificationsCreated: Prisma.$NotificationPayload<ExtArgs>[]
     clientsGenerated: Prisma.$ClientPayload<ExtArgs>[]
     clientsCreated: Prisma.$ClientPayload<ExtArgs>[]
+    vacanciesAsRecruiter: Prisma.$VacancyPayload<ExtArgs>[]
+    vacanciesCreated: Prisma.$VacancyPayload<ExtArgs>[]
+    vacancyStatusChanges: Prisma.$VacancyStatusHistoryPayload<ExtArgs>[]
+    vacancyChecklistValidated: Prisma.$VacancyPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2358,10 +3349,15 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   leadsCreated<T extends Prisma.User$leadsCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$leadsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   leadStatusChanges<T extends Prisma.User$leadStatusChangesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$leadStatusChangesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeadStatusHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   interactions<T extends Prisma.User$interactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$interactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InteractionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  attachments<T extends Prisma.User$attachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  attachmentsUploaded<T extends Prisma.User$attachmentsUploadedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$attachmentsUploadedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  attachmentsValidated<T extends Prisma.User$attachmentsValidatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$attachmentsValidatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notificationsCreated<T extends Prisma.User$notificationsCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   clientsGenerated<T extends Prisma.User$clientsGeneratedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$clientsGeneratedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   clientsCreated<T extends Prisma.User$clientsCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$clientsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  vacanciesAsRecruiter<T extends Prisma.User$vacanciesAsRecruiterArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$vacanciesAsRecruiterArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  vacanciesCreated<T extends Prisma.User$vacanciesCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$vacanciesCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  vacancyStatusChanges<T extends Prisma.User$vacancyStatusChangesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$vacancyStatusChangesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyStatusHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  vacancyChecklistValidated<T extends Prisma.User$vacancyChecklistValidatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$vacancyChecklistValidatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2955,9 +3951,33 @@ export type User$interactionsArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * User.attachments
+ * User.attachmentsUploaded
  */
-export type User$attachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$attachmentsUploadedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Attachment
+   */
+  select?: Prisma.AttachmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Attachment
+   */
+  omit?: Prisma.AttachmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AttachmentInclude<ExtArgs> | null
+  where?: Prisma.AttachmentWhereInput
+  orderBy?: Prisma.AttachmentOrderByWithRelationInput | Prisma.AttachmentOrderByWithRelationInput[]
+  cursor?: Prisma.AttachmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AttachmentScalarFieldEnum | Prisma.AttachmentScalarFieldEnum[]
+}
+
+/**
+ * User.attachmentsValidated
+ */
+export type User$attachmentsValidatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Attachment
    */
@@ -3048,6 +4068,102 @@ export type User$clientsCreatedArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.ClientScalarFieldEnum | Prisma.ClientScalarFieldEnum[]
+}
+
+/**
+ * User.vacanciesAsRecruiter
+ */
+export type User$vacanciesAsRecruiterArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Vacancy
+   */
+  select?: Prisma.VacancySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Vacancy
+   */
+  omit?: Prisma.VacancyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VacancyInclude<ExtArgs> | null
+  where?: Prisma.VacancyWhereInput
+  orderBy?: Prisma.VacancyOrderByWithRelationInput | Prisma.VacancyOrderByWithRelationInput[]
+  cursor?: Prisma.VacancyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VacancyScalarFieldEnum | Prisma.VacancyScalarFieldEnum[]
+}
+
+/**
+ * User.vacanciesCreated
+ */
+export type User$vacanciesCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Vacancy
+   */
+  select?: Prisma.VacancySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Vacancy
+   */
+  omit?: Prisma.VacancyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VacancyInclude<ExtArgs> | null
+  where?: Prisma.VacancyWhereInput
+  orderBy?: Prisma.VacancyOrderByWithRelationInput | Prisma.VacancyOrderByWithRelationInput[]
+  cursor?: Prisma.VacancyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VacancyScalarFieldEnum | Prisma.VacancyScalarFieldEnum[]
+}
+
+/**
+ * User.vacancyStatusChanges
+ */
+export type User$vacancyStatusChangesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VacancyStatusHistory
+   */
+  select?: Prisma.VacancyStatusHistorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VacancyStatusHistory
+   */
+  omit?: Prisma.VacancyStatusHistoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VacancyStatusHistoryInclude<ExtArgs> | null
+  where?: Prisma.VacancyStatusHistoryWhereInput
+  orderBy?: Prisma.VacancyStatusHistoryOrderByWithRelationInput | Prisma.VacancyStatusHistoryOrderByWithRelationInput[]
+  cursor?: Prisma.VacancyStatusHistoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VacancyStatusHistoryScalarFieldEnum | Prisma.VacancyStatusHistoryScalarFieldEnum[]
+}
+
+/**
+ * User.vacancyChecklistValidated
+ */
+export type User$vacancyChecklistValidatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Vacancy
+   */
+  select?: Prisma.VacancySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Vacancy
+   */
+  omit?: Prisma.VacancyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VacancyInclude<ExtArgs> | null
+  where?: Prisma.VacancyWhereInput
+  orderBy?: Prisma.VacancyOrderByWithRelationInput | Prisma.VacancyOrderByWithRelationInput[]
+  cursor?: Prisma.VacancyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VacancyScalarFieldEnum | Prisma.VacancyScalarFieldEnum[]
 }
 
 /**

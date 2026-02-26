@@ -184,7 +184,6 @@ export type TenantWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   userRoles?: Prisma.UserRoleListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
-  vacancies?: Prisma.VacancyListRelationFilter
   roles?: Prisma.RoleListRelationFilter
   leads?: Prisma.LeadListRelationFilter
   sectors?: Prisma.SectorListRelationFilter
@@ -196,6 +195,12 @@ export type TenantWhereInput = {
   attachments?: Prisma.AttachmentListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   clients?: Prisma.ClientListRelationFilter
+  vacancies?: Prisma.VacancyListRelationFilter
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemListRelationFilter
+  vacancyCandidates?: Prisma.VacancyCandidateListRelationFilter
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchListRelationFilter
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryListRelationFilter
+  vacancyConfig?: Prisma.XOR<Prisma.VacancyConfigNullableScalarRelationFilter, Prisma.VacancyConfigWhereInput> | null
   notificationConfig?: Prisma.XOR<Prisma.NotificationConfigNullableScalarRelationFilter, Prisma.NotificationConfigWhereInput> | null
 }
 
@@ -207,7 +212,6 @@ export type TenantOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   userRoles?: Prisma.UserRoleOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
-  vacancies?: Prisma.VacancyOrderByRelationAggregateInput
   roles?: Prisma.RoleOrderByRelationAggregateInput
   leads?: Prisma.LeadOrderByRelationAggregateInput
   sectors?: Prisma.SectorOrderByRelationAggregateInput
@@ -219,6 +223,12 @@ export type TenantOrderByWithRelationInput = {
   attachments?: Prisma.AttachmentOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   clients?: Prisma.ClientOrderByRelationAggregateInput
+  vacancies?: Prisma.VacancyOrderByRelationAggregateInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemOrderByRelationAggregateInput
+  vacancyCandidates?: Prisma.VacancyCandidateOrderByRelationAggregateInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchOrderByRelationAggregateInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryOrderByRelationAggregateInput
+  vacancyConfig?: Prisma.VacancyConfigOrderByWithRelationInput
   notificationConfig?: Prisma.NotificationConfigOrderByWithRelationInput
 }
 
@@ -233,7 +243,6 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   userRoles?: Prisma.UserRoleListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
-  vacancies?: Prisma.VacancyListRelationFilter
   roles?: Prisma.RoleListRelationFilter
   leads?: Prisma.LeadListRelationFilter
   sectors?: Prisma.SectorListRelationFilter
@@ -245,6 +254,12 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   attachments?: Prisma.AttachmentListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   clients?: Prisma.ClientListRelationFilter
+  vacancies?: Prisma.VacancyListRelationFilter
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemListRelationFilter
+  vacancyCandidates?: Prisma.VacancyCandidateListRelationFilter
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchListRelationFilter
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryListRelationFilter
+  vacancyConfig?: Prisma.XOR<Prisma.VacancyConfigNullableScalarRelationFilter, Prisma.VacancyConfigWhereInput> | null
   notificationConfig?: Prisma.XOR<Prisma.NotificationConfigNullableScalarRelationFilter, Prisma.NotificationConfigWhereInput> | null
 }, "id" | "name" | "slug">
 
@@ -278,7 +293,6 @@ export type TenantCreateInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
@@ -290,6 +304,12 @@ export type TenantCreateInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
 }
 
@@ -301,7 +321,6 @@ export type TenantUncheckedCreateInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
@@ -313,6 +332,12 @@ export type TenantUncheckedCreateInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
 }
 
@@ -324,7 +349,6 @@ export type TenantUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
@@ -336,6 +360,12 @@ export type TenantUpdateInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
 }
 
@@ -347,7 +377,6 @@ export type TenantUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
@@ -359,6 +388,12 @@ export type TenantUncheckedUpdateInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
 }
 
@@ -600,6 +635,76 @@ export type TenantUpdateOneRequiredWithoutVacanciesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutVacanciesInput, Prisma.TenantUpdateWithoutVacanciesInput>, Prisma.TenantUncheckedUpdateWithoutVacanciesInput>
 }
 
+export type TenantCreateNestedOneWithoutVacancyChecklistItemsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutVacancyChecklistItemsInput, Prisma.TenantUncheckedCreateWithoutVacancyChecklistItemsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutVacancyChecklistItemsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutVacancyChecklistItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutVacancyChecklistItemsInput, Prisma.TenantUncheckedCreateWithoutVacancyChecklistItemsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutVacancyChecklistItemsInput
+  upsert?: Prisma.TenantUpsertWithoutVacancyChecklistItemsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutVacancyChecklistItemsInput, Prisma.TenantUpdateWithoutVacancyChecklistItemsInput>, Prisma.TenantUncheckedUpdateWithoutVacancyChecklistItemsInput>
+}
+
+export type TenantCreateNestedOneWithoutVacancyCandidatesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutVacancyCandidatesInput, Prisma.TenantUncheckedCreateWithoutVacancyCandidatesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutVacancyCandidatesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutVacancyCandidatesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutVacancyCandidatesInput, Prisma.TenantUncheckedCreateWithoutVacancyCandidatesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutVacancyCandidatesInput
+  upsert?: Prisma.TenantUpsertWithoutVacancyCandidatesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutVacancyCandidatesInput, Prisma.TenantUpdateWithoutVacancyCandidatesInput>, Prisma.TenantUncheckedUpdateWithoutVacancyCandidatesInput>
+}
+
+export type TenantCreateNestedOneWithoutVacancyCandidateMatchsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutVacancyCandidateMatchsInput, Prisma.TenantUncheckedCreateWithoutVacancyCandidateMatchsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutVacancyCandidateMatchsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutVacancyCandidateMatchsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutVacancyCandidateMatchsInput, Prisma.TenantUncheckedCreateWithoutVacancyCandidateMatchsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutVacancyCandidateMatchsInput
+  upsert?: Prisma.TenantUpsertWithoutVacancyCandidateMatchsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutVacancyCandidateMatchsInput, Prisma.TenantUpdateWithoutVacancyCandidateMatchsInput>, Prisma.TenantUncheckedUpdateWithoutVacancyCandidateMatchsInput>
+}
+
+export type TenantCreateNestedOneWithoutVacancyStatusHistoryInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutVacancyStatusHistoryInput, Prisma.TenantUncheckedCreateWithoutVacancyStatusHistoryInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutVacancyStatusHistoryInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutVacancyStatusHistoryNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutVacancyStatusHistoryInput, Prisma.TenantUncheckedCreateWithoutVacancyStatusHistoryInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutVacancyStatusHistoryInput
+  upsert?: Prisma.TenantUpsertWithoutVacancyStatusHistoryInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutVacancyStatusHistoryInput, Prisma.TenantUpdateWithoutVacancyStatusHistoryInput>, Prisma.TenantUncheckedUpdateWithoutVacancyStatusHistoryInput>
+}
+
+export type TenantCreateNestedOneWithoutVacancyConfigInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutVacancyConfigInput, Prisma.TenantUncheckedCreateWithoutVacancyConfigInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutVacancyConfigInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutVacancyConfigNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutVacancyConfigInput, Prisma.TenantUncheckedCreateWithoutVacancyConfigInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutVacancyConfigInput
+  upsert?: Prisma.TenantUpsertWithoutVacancyConfigInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutVacancyConfigInput, Prisma.TenantUpdateWithoutVacancyConfigInput>, Prisma.TenantUncheckedUpdateWithoutVacancyConfigInput>
+}
+
 export type TenantCreateNestedOneWithoutNotificationsInput = {
   create?: Prisma.XOR<Prisma.TenantCreateWithoutNotificationsInput, Prisma.TenantUncheckedCreateWithoutNotificationsInput>
   connectOrCreate?: Prisma.TenantCreateOrConnectWithoutNotificationsInput
@@ -649,7 +754,6 @@ export type TenantCreateWithoutSessionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
-  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
@@ -661,6 +765,12 @@ export type TenantCreateWithoutSessionsInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
 }
 
@@ -671,7 +781,6 @@ export type TenantUncheckedCreateWithoutSessionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
-  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
@@ -683,6 +792,12 @@ export type TenantUncheckedCreateWithoutSessionsInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
 }
 
@@ -709,7 +824,6 @@ export type TenantUpdateWithoutSessionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
-  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
@@ -721,6 +835,12 @@ export type TenantUpdateWithoutSessionsInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
 }
 
@@ -731,7 +851,6 @@ export type TenantUncheckedUpdateWithoutSessionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
-  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
@@ -743,6 +862,12 @@ export type TenantUncheckedUpdateWithoutSessionsInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
 }
 
@@ -754,7 +879,6 @@ export type TenantCreateWithoutRolesInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
   subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
@@ -765,6 +889,12 @@ export type TenantCreateWithoutRolesInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
 }
 
@@ -776,7 +906,6 @@ export type TenantUncheckedCreateWithoutRolesInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
   subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
@@ -787,6 +916,12 @@ export type TenantUncheckedCreateWithoutRolesInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
 }
 
@@ -814,7 +949,6 @@ export type TenantUpdateWithoutRolesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
   subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
@@ -825,6 +959,12 @@ export type TenantUpdateWithoutRolesInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
 }
 
@@ -836,7 +976,6 @@ export type TenantUncheckedUpdateWithoutRolesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
   subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
@@ -847,6 +986,12 @@ export type TenantUncheckedUpdateWithoutRolesInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
 }
 
@@ -857,7 +1002,6 @@ export type TenantCreateWithoutUserRolesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
@@ -869,6 +1013,12 @@ export type TenantCreateWithoutUserRolesInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
 }
 
@@ -879,7 +1029,6 @@ export type TenantUncheckedCreateWithoutUserRolesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
@@ -891,6 +1040,12 @@ export type TenantUncheckedCreateWithoutUserRolesInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
 }
 
@@ -917,7 +1072,6 @@ export type TenantUpdateWithoutUserRolesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
@@ -929,6 +1083,12 @@ export type TenantUpdateWithoutUserRolesInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
 }
 
@@ -939,7 +1099,6 @@ export type TenantUncheckedUpdateWithoutUserRolesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
@@ -951,6 +1110,12 @@ export type TenantUncheckedUpdateWithoutUserRolesInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
 }
 
@@ -962,7 +1127,6 @@ export type TenantCreateWithoutSectorsInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
   subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
@@ -973,6 +1137,12 @@ export type TenantCreateWithoutSectorsInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
 }
 
@@ -984,7 +1154,6 @@ export type TenantUncheckedCreateWithoutSectorsInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
   subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
@@ -995,6 +1164,12 @@ export type TenantUncheckedCreateWithoutSectorsInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
 }
 
@@ -1022,7 +1197,6 @@ export type TenantUpdateWithoutSectorsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
   subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
@@ -1033,6 +1207,12 @@ export type TenantUpdateWithoutSectorsInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
 }
 
@@ -1044,7 +1224,6 @@ export type TenantUncheckedUpdateWithoutSectorsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
   subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
@@ -1055,6 +1234,12 @@ export type TenantUncheckedUpdateWithoutSectorsInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
 }
 
@@ -1066,7 +1251,6 @@ export type TenantCreateWithoutSubsectorsInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
@@ -1077,6 +1261,12 @@ export type TenantCreateWithoutSubsectorsInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
 }
 
@@ -1088,7 +1278,6 @@ export type TenantUncheckedCreateWithoutSubsectorsInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
@@ -1099,6 +1288,12 @@ export type TenantUncheckedCreateWithoutSubsectorsInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
 }
 
@@ -1126,7 +1321,6 @@ export type TenantUpdateWithoutSubsectorsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
@@ -1137,6 +1331,12 @@ export type TenantUpdateWithoutSubsectorsInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
 }
 
@@ -1148,7 +1348,6 @@ export type TenantUncheckedUpdateWithoutSubsectorsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
@@ -1159,6 +1358,12 @@ export type TenantUncheckedUpdateWithoutSubsectorsInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
 }
 
@@ -1170,7 +1375,6 @@ export type TenantCreateWithoutLeadOriginsInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
@@ -1181,6 +1385,12 @@ export type TenantCreateWithoutLeadOriginsInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
 }
 
@@ -1192,7 +1402,6 @@ export type TenantUncheckedCreateWithoutLeadOriginsInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
@@ -1203,6 +1412,12 @@ export type TenantUncheckedCreateWithoutLeadOriginsInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
 }
 
@@ -1230,7 +1445,6 @@ export type TenantUpdateWithoutLeadOriginsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
@@ -1241,6 +1455,12 @@ export type TenantUpdateWithoutLeadOriginsInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
 }
 
@@ -1252,7 +1472,6 @@ export type TenantUncheckedUpdateWithoutLeadOriginsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
@@ -1263,6 +1482,12 @@ export type TenantUncheckedUpdateWithoutLeadOriginsInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
 }
 
@@ -1274,7 +1499,6 @@ export type TenantCreateWithoutLeadsInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
   subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
@@ -1285,6 +1509,12 @@ export type TenantCreateWithoutLeadsInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
 }
 
@@ -1296,7 +1526,6 @@ export type TenantUncheckedCreateWithoutLeadsInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
   subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
@@ -1307,6 +1536,12 @@ export type TenantUncheckedCreateWithoutLeadsInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
 }
 
@@ -1334,7 +1569,6 @@ export type TenantUpdateWithoutLeadsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
   subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
@@ -1345,6 +1579,12 @@ export type TenantUpdateWithoutLeadsInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
 }
 
@@ -1356,7 +1596,6 @@ export type TenantUncheckedUpdateWithoutLeadsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
   subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
@@ -1367,6 +1606,12 @@ export type TenantUncheckedUpdateWithoutLeadsInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
 }
 
@@ -1378,7 +1623,6 @@ export type TenantCreateWithoutLeadStatusHistoryInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
@@ -1389,6 +1633,12 @@ export type TenantCreateWithoutLeadStatusHistoryInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
 }
 
@@ -1400,7 +1650,6 @@ export type TenantUncheckedCreateWithoutLeadStatusHistoryInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
@@ -1411,6 +1660,12 @@ export type TenantUncheckedCreateWithoutLeadStatusHistoryInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
 }
 
@@ -1438,7 +1693,6 @@ export type TenantUpdateWithoutLeadStatusHistoryInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
@@ -1449,6 +1703,12 @@ export type TenantUpdateWithoutLeadStatusHistoryInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
 }
 
@@ -1460,7 +1720,6 @@ export type TenantUncheckedUpdateWithoutLeadStatusHistoryInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
@@ -1471,6 +1730,12 @@ export type TenantUncheckedUpdateWithoutLeadStatusHistoryInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
 }
 
@@ -1482,7 +1747,6 @@ export type TenantCreateWithoutContactsInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
@@ -1493,6 +1757,12 @@ export type TenantCreateWithoutContactsInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
 }
 
@@ -1504,7 +1774,6 @@ export type TenantUncheckedCreateWithoutContactsInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
@@ -1515,6 +1784,12 @@ export type TenantUncheckedCreateWithoutContactsInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
 }
 
@@ -1542,7 +1817,6 @@ export type TenantUpdateWithoutContactsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
@@ -1553,6 +1827,12 @@ export type TenantUpdateWithoutContactsInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
 }
 
@@ -1564,7 +1844,6 @@ export type TenantUncheckedUpdateWithoutContactsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
@@ -1575,6 +1854,12 @@ export type TenantUncheckedUpdateWithoutContactsInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
 }
 
@@ -1586,7 +1871,6 @@ export type TenantCreateWithoutInteractionsInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
@@ -1597,6 +1881,12 @@ export type TenantCreateWithoutInteractionsInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
 }
 
@@ -1608,7 +1898,6 @@ export type TenantUncheckedCreateWithoutInteractionsInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
@@ -1619,6 +1908,12 @@ export type TenantUncheckedCreateWithoutInteractionsInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
 }
 
@@ -1646,7 +1941,6 @@ export type TenantUpdateWithoutInteractionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
@@ -1657,6 +1951,12 @@ export type TenantUpdateWithoutInteractionsInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
 }
 
@@ -1668,7 +1968,6 @@ export type TenantUncheckedUpdateWithoutInteractionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
@@ -1679,6 +1978,12 @@ export type TenantUncheckedUpdateWithoutInteractionsInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
 }
 
@@ -1690,7 +1995,6 @@ export type TenantCreateWithoutAttachmentsInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
@@ -1701,6 +2005,12 @@ export type TenantCreateWithoutAttachmentsInput = {
   leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
 }
 
@@ -1712,7 +2022,6 @@ export type TenantUncheckedCreateWithoutAttachmentsInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
@@ -1723,6 +2032,12 @@ export type TenantUncheckedCreateWithoutAttachmentsInput = {
   leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
 }
 
@@ -1750,7 +2065,6 @@ export type TenantUpdateWithoutAttachmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
@@ -1761,6 +2075,12 @@ export type TenantUpdateWithoutAttachmentsInput = {
   leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
 }
 
@@ -1772,7 +2092,6 @@ export type TenantUncheckedUpdateWithoutAttachmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
@@ -1783,6 +2102,12 @@ export type TenantUncheckedUpdateWithoutAttachmentsInput = {
   leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
 }
 
@@ -1805,6 +2130,11 @@ export type TenantCreateWithoutVacanciesInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
 }
 
@@ -1827,6 +2157,11 @@ export type TenantUncheckedCreateWithoutVacanciesInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
 }
 
@@ -1865,6 +2200,11 @@ export type TenantUpdateWithoutVacanciesInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
 }
 
@@ -1887,6 +2227,631 @@ export type TenantUncheckedUpdateWithoutVacanciesInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
+  notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutVacancyChecklistItemsInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
+  notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutVacancyChecklistItemsInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginUncheckedCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
+  notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutVacancyChecklistItemsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutVacancyChecklistItemsInput, Prisma.TenantUncheckedCreateWithoutVacancyChecklistItemsInput>
+}
+
+export type TenantUpsertWithoutVacancyChecklistItemsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutVacancyChecklistItemsInput, Prisma.TenantUncheckedUpdateWithoutVacancyChecklistItemsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutVacancyChecklistItemsInput, Prisma.TenantUncheckedCreateWithoutVacancyChecklistItemsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutVacancyChecklistItemsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutVacancyChecklistItemsInput, Prisma.TenantUncheckedUpdateWithoutVacancyChecklistItemsInput>
+}
+
+export type TenantUpdateWithoutVacancyChecklistItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
+  notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutVacancyChecklistItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUncheckedUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
+  notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutVacancyCandidatesInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
+  notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutVacancyCandidatesInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginUncheckedCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
+  notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutVacancyCandidatesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutVacancyCandidatesInput, Prisma.TenantUncheckedCreateWithoutVacancyCandidatesInput>
+}
+
+export type TenantUpsertWithoutVacancyCandidatesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutVacancyCandidatesInput, Prisma.TenantUncheckedUpdateWithoutVacancyCandidatesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutVacancyCandidatesInput, Prisma.TenantUncheckedCreateWithoutVacancyCandidatesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutVacancyCandidatesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutVacancyCandidatesInput, Prisma.TenantUncheckedUpdateWithoutVacancyCandidatesInput>
+}
+
+export type TenantUpdateWithoutVacancyCandidatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
+  notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutVacancyCandidatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUncheckedUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
+  notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutVacancyCandidateMatchsInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
+  notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutVacancyCandidateMatchsInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginUncheckedCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
+  notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutVacancyCandidateMatchsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutVacancyCandidateMatchsInput, Prisma.TenantUncheckedCreateWithoutVacancyCandidateMatchsInput>
+}
+
+export type TenantUpsertWithoutVacancyCandidateMatchsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutVacancyCandidateMatchsInput, Prisma.TenantUncheckedUpdateWithoutVacancyCandidateMatchsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutVacancyCandidateMatchsInput, Prisma.TenantUncheckedCreateWithoutVacancyCandidateMatchsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutVacancyCandidateMatchsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutVacancyCandidateMatchsInput, Prisma.TenantUncheckedUpdateWithoutVacancyCandidateMatchsInput>
+}
+
+export type TenantUpdateWithoutVacancyCandidateMatchsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
+  notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutVacancyCandidateMatchsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUncheckedUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
+  notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutVacancyStatusHistoryInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
+  notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutVacancyStatusHistoryInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginUncheckedCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
+  notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutVacancyStatusHistoryInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutVacancyStatusHistoryInput, Prisma.TenantUncheckedCreateWithoutVacancyStatusHistoryInput>
+}
+
+export type TenantUpsertWithoutVacancyStatusHistoryInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutVacancyStatusHistoryInput, Prisma.TenantUncheckedUpdateWithoutVacancyStatusHistoryInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutVacancyStatusHistoryInput, Prisma.TenantUncheckedCreateWithoutVacancyStatusHistoryInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutVacancyStatusHistoryInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutVacancyStatusHistoryInput, Prisma.TenantUncheckedUpdateWithoutVacancyStatusHistoryInput>
+}
+
+export type TenantUpdateWithoutVacancyStatusHistoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
+  notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutVacancyStatusHistoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUncheckedUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
+  notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutVacancyConfigInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutVacancyConfigInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginUncheckedCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutVacancyConfigInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutVacancyConfigInput, Prisma.TenantUncheckedCreateWithoutVacancyConfigInput>
+}
+
+export type TenantUpsertWithoutVacancyConfigInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutVacancyConfigInput, Prisma.TenantUncheckedUpdateWithoutVacancyConfigInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutVacancyConfigInput, Prisma.TenantUncheckedCreateWithoutVacancyConfigInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutVacancyConfigInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutVacancyConfigInput, Prisma.TenantUncheckedUpdateWithoutVacancyConfigInput>
+}
+
+export type TenantUpdateWithoutVacancyConfigInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutVacancyConfigInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUncheckedUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
 }
 
@@ -1898,7 +2863,6 @@ export type TenantCreateWithoutNotificationsInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
@@ -1909,6 +2873,12 @@ export type TenantCreateWithoutNotificationsInput = {
   leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
 }
 
@@ -1920,7 +2890,6 @@ export type TenantUncheckedCreateWithoutNotificationsInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
@@ -1931,6 +2900,12 @@ export type TenantUncheckedCreateWithoutNotificationsInput = {
   leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
 }
 
@@ -1958,7 +2933,6 @@ export type TenantUpdateWithoutNotificationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
@@ -1969,6 +2943,12 @@ export type TenantUpdateWithoutNotificationsInput = {
   leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
 }
 
@@ -1980,7 +2960,6 @@ export type TenantUncheckedUpdateWithoutNotificationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
@@ -1991,6 +2970,12 @@ export type TenantUncheckedUpdateWithoutNotificationsInput = {
   leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
 }
 
@@ -2002,7 +2987,6 @@ export type TenantCreateWithoutClientsInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
@@ -2013,6 +2997,12 @@ export type TenantCreateWithoutClientsInput = {
   leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
 }
 
@@ -2024,7 +3014,6 @@ export type TenantUncheckedCreateWithoutClientsInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
@@ -2035,6 +3024,12 @@ export type TenantUncheckedCreateWithoutClientsInput = {
   leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
 }
 
@@ -2062,7 +3057,6 @@ export type TenantUpdateWithoutClientsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
@@ -2073,6 +3067,12 @@ export type TenantUpdateWithoutClientsInput = {
   leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
 }
 
@@ -2084,7 +3084,6 @@ export type TenantUncheckedUpdateWithoutClientsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
@@ -2095,6 +3094,12 @@ export type TenantUncheckedUpdateWithoutClientsInput = {
   leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
 }
 
@@ -2106,7 +3111,6 @@ export type TenantCreateWithoutNotificationConfigInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
@@ -2118,6 +3122,12 @@ export type TenantCreateWithoutNotificationConfigInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutNotificationConfigInput = {
@@ -2128,7 +3138,6 @@ export type TenantUncheckedCreateWithoutNotificationConfigInput = {
   updatedAt?: Date | string
   userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
-  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
   leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
   sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
@@ -2140,6 +3149,12 @@ export type TenantUncheckedCreateWithoutNotificationConfigInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutNotificationConfigInput = {
@@ -2166,7 +3181,6 @@ export type TenantUpdateWithoutNotificationConfigInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
@@ -2178,6 +3192,12 @@ export type TenantUpdateWithoutNotificationConfigInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutNotificationConfigInput = {
@@ -2188,7 +3208,6 @@ export type TenantUncheckedUpdateWithoutNotificationConfigInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
-  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
   leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
   sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
@@ -2200,6 +3219,12 @@ export type TenantUncheckedUpdateWithoutNotificationConfigInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 
@@ -2210,7 +3235,6 @@ export type TenantUncheckedUpdateWithoutNotificationConfigInput = {
 export type TenantCountOutputType = {
   userRoles: number
   sessions: number
-  vacancies: number
   roles: number
   leads: number
   sectors: number
@@ -2222,12 +3246,16 @@ export type TenantCountOutputType = {
   attachments: number
   notifications: number
   clients: number
+  vacancies: number
+  vacancyChecklistItems: number
+  vacancyCandidates: number
+  vacancyCandidateMatchs: number
+  vacancyStatusHistory: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   userRoles?: boolean | TenantCountOutputTypeCountUserRolesArgs
   sessions?: boolean | TenantCountOutputTypeCountSessionsArgs
-  vacancies?: boolean | TenantCountOutputTypeCountVacanciesArgs
   roles?: boolean | TenantCountOutputTypeCountRolesArgs
   leads?: boolean | TenantCountOutputTypeCountLeadsArgs
   sectors?: boolean | TenantCountOutputTypeCountSectorsArgs
@@ -2239,6 +3267,11 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   attachments?: boolean | TenantCountOutputTypeCountAttachmentsArgs
   notifications?: boolean | TenantCountOutputTypeCountNotificationsArgs
   clients?: boolean | TenantCountOutputTypeCountClientsArgs
+  vacancies?: boolean | TenantCountOutputTypeCountVacanciesArgs
+  vacancyChecklistItems?: boolean | TenantCountOutputTypeCountVacancyChecklistItemsArgs
+  vacancyCandidates?: boolean | TenantCountOutputTypeCountVacancyCandidatesArgs
+  vacancyCandidateMatchs?: boolean | TenantCountOutputTypeCountVacancyCandidateMatchsArgs
+  vacancyStatusHistory?: boolean | TenantCountOutputTypeCountVacancyStatusHistoryArgs
 }
 
 /**
@@ -2263,13 +3296,6 @@ export type TenantCountOutputTypeCountUserRolesArgs<ExtArgs extends runtime.Type
  */
 export type TenantCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SessionWhereInput
-}
-
-/**
- * TenantCountOutputType without action
- */
-export type TenantCountOutputTypeCountVacanciesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.VacancyWhereInput
 }
 
 /**
@@ -2349,6 +3375,41 @@ export type TenantCountOutputTypeCountClientsArgs<ExtArgs extends runtime.Types.
   where?: Prisma.ClientWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountVacanciesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VacancyWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountVacancyChecklistItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VacancyChecklistItemWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountVacancyCandidatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VacancyCandidateWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountVacancyCandidateMatchsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VacancyCandidateMatchWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountVacancyStatusHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VacancyStatusHistoryWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2358,7 +3419,6 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   updatedAt?: boolean
   userRoles?: boolean | Prisma.Tenant$userRolesArgs<ExtArgs>
   sessions?: boolean | Prisma.Tenant$sessionsArgs<ExtArgs>
-  vacancies?: boolean | Prisma.Tenant$vacanciesArgs<ExtArgs>
   roles?: boolean | Prisma.Tenant$rolesArgs<ExtArgs>
   leads?: boolean | Prisma.Tenant$leadsArgs<ExtArgs>
   sectors?: boolean | Prisma.Tenant$sectorsArgs<ExtArgs>
@@ -2370,6 +3430,12 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   attachments?: boolean | Prisma.Tenant$attachmentsArgs<ExtArgs>
   notifications?: boolean | Prisma.Tenant$notificationsArgs<ExtArgs>
   clients?: boolean | Prisma.Tenant$clientsArgs<ExtArgs>
+  vacancies?: boolean | Prisma.Tenant$vacanciesArgs<ExtArgs>
+  vacancyChecklistItems?: boolean | Prisma.Tenant$vacancyChecklistItemsArgs<ExtArgs>
+  vacancyCandidates?: boolean | Prisma.Tenant$vacancyCandidatesArgs<ExtArgs>
+  vacancyCandidateMatchs?: boolean | Prisma.Tenant$vacancyCandidateMatchsArgs<ExtArgs>
+  vacancyStatusHistory?: boolean | Prisma.Tenant$vacancyStatusHistoryArgs<ExtArgs>
+  vacancyConfig?: boolean | Prisma.Tenant$vacancyConfigArgs<ExtArgs>
   notificationConfig?: boolean | Prisma.Tenant$notificationConfigArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
@@ -2402,7 +3468,6 @@ export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   userRoles?: boolean | Prisma.Tenant$userRolesArgs<ExtArgs>
   sessions?: boolean | Prisma.Tenant$sessionsArgs<ExtArgs>
-  vacancies?: boolean | Prisma.Tenant$vacanciesArgs<ExtArgs>
   roles?: boolean | Prisma.Tenant$rolesArgs<ExtArgs>
   leads?: boolean | Prisma.Tenant$leadsArgs<ExtArgs>
   sectors?: boolean | Prisma.Tenant$sectorsArgs<ExtArgs>
@@ -2414,6 +3479,12 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   attachments?: boolean | Prisma.Tenant$attachmentsArgs<ExtArgs>
   notifications?: boolean | Prisma.Tenant$notificationsArgs<ExtArgs>
   clients?: boolean | Prisma.Tenant$clientsArgs<ExtArgs>
+  vacancies?: boolean | Prisma.Tenant$vacanciesArgs<ExtArgs>
+  vacancyChecklistItems?: boolean | Prisma.Tenant$vacancyChecklistItemsArgs<ExtArgs>
+  vacancyCandidates?: boolean | Prisma.Tenant$vacancyCandidatesArgs<ExtArgs>
+  vacancyCandidateMatchs?: boolean | Prisma.Tenant$vacancyCandidateMatchsArgs<ExtArgs>
+  vacancyStatusHistory?: boolean | Prisma.Tenant$vacancyStatusHistoryArgs<ExtArgs>
+  vacancyConfig?: boolean | Prisma.Tenant$vacancyConfigArgs<ExtArgs>
   notificationConfig?: boolean | Prisma.Tenant$notificationConfigArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -2425,7 +3496,6 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     userRoles: Prisma.$UserRolePayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
-    vacancies: Prisma.$VacancyPayload<ExtArgs>[]
     roles: Prisma.$RolePayload<ExtArgs>[]
     leads: Prisma.$LeadPayload<ExtArgs>[]
     sectors: Prisma.$SectorPayload<ExtArgs>[]
@@ -2437,6 +3507,12 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     attachments: Prisma.$AttachmentPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     clients: Prisma.$ClientPayload<ExtArgs>[]
+    vacancies: Prisma.$VacancyPayload<ExtArgs>[]
+    vacancyChecklistItems: Prisma.$VacancyChecklistItemPayload<ExtArgs>[]
+    vacancyCandidates: Prisma.$VacancyCandidatePayload<ExtArgs>[]
+    vacancyCandidateMatchs: Prisma.$VacancyCandidateMatchPayload<ExtArgs>[]
+    vacancyStatusHistory: Prisma.$VacancyStatusHistoryPayload<ExtArgs>[]
+    vacancyConfig: Prisma.$VacancyConfigPayload<ExtArgs> | null
     notificationConfig: Prisma.$NotificationConfigPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -2841,7 +3917,6 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   userRoles<T extends Prisma.Tenant$userRolesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$userRolesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.Tenant$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  vacancies<T extends Prisma.Tenant$vacanciesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$vacanciesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   roles<T extends Prisma.Tenant$rolesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$rolesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   leads<T extends Prisma.Tenant$leadsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$leadsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sectors<T extends Prisma.Tenant$sectorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$sectorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SectorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2853,6 +3928,12 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   attachments<T extends Prisma.Tenant$attachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.Tenant$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   clients<T extends Prisma.Tenant$clientsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$clientsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  vacancies<T extends Prisma.Tenant$vacanciesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$vacanciesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  vacancyChecklistItems<T extends Prisma.Tenant$vacancyChecklistItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$vacancyChecklistItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyChecklistItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  vacancyCandidates<T extends Prisma.Tenant$vacancyCandidatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$vacancyCandidatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyCandidatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  vacancyCandidateMatchs<T extends Prisma.Tenant$vacancyCandidateMatchsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$vacancyCandidateMatchsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyCandidateMatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  vacancyStatusHistory<T extends Prisma.Tenant$vacancyStatusHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$vacancyStatusHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyStatusHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  vacancyConfig<T extends Prisma.Tenant$vacancyConfigArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$vacancyConfigArgs<ExtArgs>>): Prisma.Prisma__VacancyConfigClient<runtime.Types.Result.GetResult<Prisma.$VacancyConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   notificationConfig<T extends Prisma.Tenant$notificationConfigArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$notificationConfigArgs<ExtArgs>>): Prisma.Prisma__NotificationConfigClient<runtime.Types.Result.GetResult<Prisma.$NotificationConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3324,30 +4405,6 @@ export type Tenant$sessionsArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
- * Tenant.vacancies
- */
-export type Tenant$vacanciesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Vacancy
-   */
-  select?: Prisma.VacancySelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Vacancy
-   */
-  omit?: Prisma.VacancyOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VacancyInclude<ExtArgs> | null
-  where?: Prisma.VacancyWhereInput
-  orderBy?: Prisma.VacancyOrderByWithRelationInput | Prisma.VacancyOrderByWithRelationInput[]
-  cursor?: Prisma.VacancyWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.VacancyScalarFieldEnum | Prisma.VacancyScalarFieldEnum[]
-}
-
-/**
  * Tenant.roles
  */
 export type Tenant$rolesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3609,6 +4666,145 @@ export type Tenant$clientsArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.ClientScalarFieldEnum | Prisma.ClientScalarFieldEnum[]
+}
+
+/**
+ * Tenant.vacancies
+ */
+export type Tenant$vacanciesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Vacancy
+   */
+  select?: Prisma.VacancySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Vacancy
+   */
+  omit?: Prisma.VacancyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VacancyInclude<ExtArgs> | null
+  where?: Prisma.VacancyWhereInput
+  orderBy?: Prisma.VacancyOrderByWithRelationInput | Prisma.VacancyOrderByWithRelationInput[]
+  cursor?: Prisma.VacancyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VacancyScalarFieldEnum | Prisma.VacancyScalarFieldEnum[]
+}
+
+/**
+ * Tenant.vacancyChecklistItems
+ */
+export type Tenant$vacancyChecklistItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VacancyChecklistItem
+   */
+  select?: Prisma.VacancyChecklistItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VacancyChecklistItem
+   */
+  omit?: Prisma.VacancyChecklistItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VacancyChecklistItemInclude<ExtArgs> | null
+  where?: Prisma.VacancyChecklistItemWhereInput
+  orderBy?: Prisma.VacancyChecklistItemOrderByWithRelationInput | Prisma.VacancyChecklistItemOrderByWithRelationInput[]
+  cursor?: Prisma.VacancyChecklistItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VacancyChecklistItemScalarFieldEnum | Prisma.VacancyChecklistItemScalarFieldEnum[]
+}
+
+/**
+ * Tenant.vacancyCandidates
+ */
+export type Tenant$vacancyCandidatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VacancyCandidate
+   */
+  select?: Prisma.VacancyCandidateSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VacancyCandidate
+   */
+  omit?: Prisma.VacancyCandidateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VacancyCandidateInclude<ExtArgs> | null
+  where?: Prisma.VacancyCandidateWhereInput
+  orderBy?: Prisma.VacancyCandidateOrderByWithRelationInput | Prisma.VacancyCandidateOrderByWithRelationInput[]
+  cursor?: Prisma.VacancyCandidateWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VacancyCandidateScalarFieldEnum | Prisma.VacancyCandidateScalarFieldEnum[]
+}
+
+/**
+ * Tenant.vacancyCandidateMatchs
+ */
+export type Tenant$vacancyCandidateMatchsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VacancyCandidateMatch
+   */
+  select?: Prisma.VacancyCandidateMatchSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VacancyCandidateMatch
+   */
+  omit?: Prisma.VacancyCandidateMatchOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VacancyCandidateMatchInclude<ExtArgs> | null
+  where?: Prisma.VacancyCandidateMatchWhereInput
+  orderBy?: Prisma.VacancyCandidateMatchOrderByWithRelationInput | Prisma.VacancyCandidateMatchOrderByWithRelationInput[]
+  cursor?: Prisma.VacancyCandidateMatchWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VacancyCandidateMatchScalarFieldEnum | Prisma.VacancyCandidateMatchScalarFieldEnum[]
+}
+
+/**
+ * Tenant.vacancyStatusHistory
+ */
+export type Tenant$vacancyStatusHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VacancyStatusHistory
+   */
+  select?: Prisma.VacancyStatusHistorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VacancyStatusHistory
+   */
+  omit?: Prisma.VacancyStatusHistoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VacancyStatusHistoryInclude<ExtArgs> | null
+  where?: Prisma.VacancyStatusHistoryWhereInput
+  orderBy?: Prisma.VacancyStatusHistoryOrderByWithRelationInput | Prisma.VacancyStatusHistoryOrderByWithRelationInput[]
+  cursor?: Prisma.VacancyStatusHistoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VacancyStatusHistoryScalarFieldEnum | Prisma.VacancyStatusHistoryScalarFieldEnum[]
+}
+
+/**
+ * Tenant.vacancyConfig
+ */
+export type Tenant$vacancyConfigArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VacancyConfig
+   */
+  select?: Prisma.VacancyConfigSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VacancyConfig
+   */
+  omit?: Prisma.VacancyConfigOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VacancyConfigInclude<ExtArgs> | null
+  where?: Prisma.VacancyConfigWhereInput
 }
 
 /**

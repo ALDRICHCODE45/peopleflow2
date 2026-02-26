@@ -1,6 +1,18 @@
 "use client";
 import { Table } from "@tanstack/react-table";
 import { useCallback, useState } from "react";
+import type { VacancyStatusType } from "../../../types/vacancy.types";
+
+const VALID_STATUSES: Set<string> = new Set<VacancyStatusType>([
+  "QUICK_MEETING",
+  "HUNTING",
+  "FOLLOW_UP",
+  "PRE_PLACEMENT",
+  "PLACEMENT",
+  "STAND_BY",
+  "CANCELADA",
+  "PERDIDA",
+]);
 
 export const useVacanciesTableFilters = (table: Table<unknown>) => {
   const [selectedEstado, setSelectedEstado] = useState<string>("todos");
@@ -14,26 +26,9 @@ export const useVacanciesTableFilters = (table: Table<unknown>) => {
         return;
       }
 
-      switch (newEstado) {
-        case "DRAFT":
-          table.getColumn("status")?.setFilterValue(newEstado);
-          table.setPageIndex(0);
-          break;
-        case "OPEN":
-          table.getColumn("status")?.setFilterValue(newEstado);
-          table.setPageIndex(0);
-          break;
-
-        case "CLOSED":
-          table.getColumn("status")?.setFilterValue(newEstado);
-          table.setPageIndex(0);
-          break;
-        case "ARCHIVED":
-          table.getColumn("status")?.setFilterValue(newEstado);
-          table.setPageIndex(0);
-          break;
-        default:
-          break;
+      if (VALID_STATUSES.has(newEstado)) {
+        table.getColumn("status")?.setFilterValue(newEstado);
+        table.setPageIndex(0);
       }
     },
     [table]

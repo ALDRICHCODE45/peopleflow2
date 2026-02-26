@@ -130,6 +130,31 @@ export type Attachment = Prisma.AttachmentModel
  */
 export type Vacancy = Prisma.VacancyModel
 /**
+ * Model VacancyChecklistItem
+ * 
+ */
+export type VacancyChecklistItem = Prisma.VacancyChecklistItemModel
+/**
+ * Model VacancyCandidate
+ * 
+ */
+export type VacancyCandidate = Prisma.VacancyCandidateModel
+/**
+ * Model VacancyCandidateMatch
+ * 
+ */
+export type VacancyCandidateMatch = Prisma.VacancyCandidateMatchModel
+/**
+ * Model VacancyStatusHistory
+ * 
+ */
+export type VacancyStatusHistory = Prisma.VacancyStatusHistoryModel
+/**
+ * Model VacancyConfig
+ * 
+ */
+export type VacancyConfig = Prisma.VacancyConfigModel
+/**
  * Model Notification
  * 
  */

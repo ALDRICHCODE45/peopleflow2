@@ -69,6 +69,11 @@ export const ModelName = {
   Interaction: 'Interaction',
   Attachment: 'Attachment',
   Vacancy: 'Vacancy',
+  VacancyChecklistItem: 'VacancyChecklistItem',
+  VacancyCandidate: 'VacancyCandidate',
+  VacancyCandidateMatch: 'VacancyCandidateMatch',
+  VacancyStatusHistory: 'VacancyStatusHistory',
+  VacancyConfig: 'VacancyConfig',
   Notification: 'Notification',
   Client: 'Client',
   NotificationConfig: 'NotificationConfig'
@@ -328,9 +333,16 @@ export const AttachmentScalarFieldEnum = {
   fileSize: 'fileSize',
   mimeType: 'mimeType',
   attachableType: 'attachableType',
+  subType: 'subType',
   leadId: 'leadId',
   contactId: 'contactId',
   interactionId: 'interactionId',
+  vacancyId: 'vacancyId',
+  vacancyCandidateId: 'vacancyCandidateId',
+  isValidated: 'isValidated',
+  validatedById: 'validatedById',
+  validatedAt: 'validatedAt',
+  rejectionReason: 'rejectionReason',
   tenantId: 'tenantId',
   uploadedById: 'uploadedById',
   createdAt: 'createdAt'
@@ -341,17 +353,136 @@ export type AttachmentScalarFieldEnum = (typeof AttachmentScalarFieldEnum)[keyof
 
 export const VacancyScalarFieldEnum = {
   id: 'id',
-  title: 'title',
-  description: 'description',
+  position: 'position',
   status: 'status',
-  department: 'department',
-  location: 'location',
+  recruiterId: 'recruiterId',
+  clientId: 'clientId',
+  saleType: 'saleType',
+  salaryMin: 'salaryMin',
+  salaryMax: 'salaryMax',
+  salaryFixed: 'salaryFixed',
+  commissions: 'commissions',
+  benefits: 'benefits',
+  tools: 'tools',
+  modality: 'modality',
+  schedule: 'schedule',
+  countryCode: 'countryCode',
+  regionCode: 'regionCode',
+  requiresPsychometry: 'requiresPsychometry',
+  checklistValidatedAt: 'checklistValidatedAt',
+  checklistValidatedById: 'checklistValidatedById',
+  checklistRejectionReason: 'checklistRejectionReason',
+  assignedAt: 'assignedAt',
+  targetDeliveryDate: 'targetDeliveryDate',
+  actualDeliveryDate: 'actualDeliveryDate',
+  entryDate: 'entryDate',
+  rollbackCount: 'rollbackCount',
+  placementConfirmedAt: 'placementConfirmedAt',
+  commissionDate: 'commissionDate',
+  congratsEmailSent: 'congratsEmailSent',
   tenantId: 'tenantId',
+  createdById: 'createdById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type VacancyScalarFieldEnum = (typeof VacancyScalarFieldEnum)[keyof typeof VacancyScalarFieldEnum]
+
+
+export const VacancyChecklistItemScalarFieldEnum = {
+  id: 'id',
+  vacancyId: 'vacancyId',
+  requirement: 'requirement',
+  isCompleted: 'isCompleted',
+  order: 'order',
+  tenantId: 'tenantId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VacancyChecklistItemScalarFieldEnum = (typeof VacancyChecklistItemScalarFieldEnum)[keyof typeof VacancyChecklistItemScalarFieldEnum]
+
+
+export const VacancyCandidateScalarFieldEnum = {
+  id: 'id',
+  vacancyId: 'vacancyId',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  email: 'email',
+  phone: 'phone',
+  isCurrentlyEmployed: 'isCurrentlyEmployed',
+  currentCompany: 'currentCompany',
+  currentSalary: 'currentSalary',
+  salaryExpectation: 'salaryExpectation',
+  currentModality: 'currentModality',
+  currentLocation: 'currentLocation',
+  currentCommissions: 'currentCommissions',
+  currentBenefits: 'currentBenefits',
+  candidateLocation: 'candidateLocation',
+  otherBenefits: 'otherBenefits',
+  status: 'status',
+  isInTerna: 'isInTerna',
+  isFinalist: 'isFinalist',
+  finalSalary: 'finalSalary',
+  tenantId: 'tenantId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VacancyCandidateScalarFieldEnum = (typeof VacancyCandidateScalarFieldEnum)[keyof typeof VacancyCandidateScalarFieldEnum]
+
+
+export const VacancyCandidateMatchScalarFieldEnum = {
+  id: 'id',
+  candidateId: 'candidateId',
+  checklistItemId: 'checklistItemId',
+  feedback: 'feedback',
+  tenantId: 'tenantId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VacancyCandidateMatchScalarFieldEnum = (typeof VacancyCandidateMatchScalarFieldEnum)[keyof typeof VacancyCandidateMatchScalarFieldEnum]
+
+
+export const VacancyStatusHistoryScalarFieldEnum = {
+  id: 'id',
+  vacancyId: 'vacancyId',
+  previousStatus: 'previousStatus',
+  newStatus: 'newStatus',
+  isRollback: 'isRollback',
+  reason: 'reason',
+  newTargetDeliveryDate: 'newTargetDeliveryDate',
+  changedById: 'changedById',
+  tenantId: 'tenantId',
+  createdAt: 'createdAt'
+} as const
+
+export type VacancyStatusHistoryScalarFieldEnum = (typeof VacancyStatusHistoryScalarFieldEnum)[keyof typeof VacancyStatusHistoryScalarFieldEnum]
+
+
+export const VacancyConfigScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  quickMeetingSlaHours: 'quickMeetingSlaHours',
+  requirePhone: 'requirePhone',
+  requireEmail: 'requireEmail',
+  requireIsCurrentlyEmployed: 'requireIsCurrentlyEmployed',
+  requireCurrentCompany: 'requireCurrentCompany',
+  requireCurrentSalary: 'requireCurrentSalary',
+  requireSalaryExpectation: 'requireSalaryExpectation',
+  requireCurrentModality: 'requireCurrentModality',
+  requireCurrentLocation: 'requireCurrentLocation',
+  requireCurrentCommissions: 'requireCurrentCommissions',
+  requireCurrentBenefits: 'requireCurrentBenefits',
+  requireCandidateLocation: 'requireCandidateLocation',
+  requireOtherBenefits: 'requireOtherBenefits',
+  requireCv: 'requireCv',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VacancyConfigScalarFieldEnum = (typeof VacancyConfigScalarFieldEnum)[keyof typeof VacancyConfigScalarFieldEnum]
 
 
 export const NotificationScalarFieldEnum = {

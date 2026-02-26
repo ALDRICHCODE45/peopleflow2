@@ -57,20 +57,63 @@ export const AttachableType = {
   LEAD: 'LEAD',
   CONTACT: 'CONTACT',
   INTERACTION: 'INTERACTION',
-  VACANCY: 'VACANCY'
+  VACANCY: 'VACANCY',
+  VACANCY_CANDIDATE: 'VACANCY_CANDIDATE'
 } as const
 
 export type AttachableType = (typeof AttachableType)[keyof typeof AttachableType]
 
 
+export const AttachmentSubType = {
+  JOB_DESCRIPTION: 'JOB_DESCRIPTION',
+  PERFIL_MUESTRA: 'PERFIL_MUESTRA',
+  CV: 'CV',
+  OTHER: 'OTHER'
+} as const
+
+export type AttachmentSubType = (typeof AttachmentSubType)[keyof typeof AttachmentSubType]
+
+
 export const VacancyStatus = {
-  DRAFT: 'DRAFT',
-  OPEN: 'OPEN',
-  CLOSED: 'CLOSED',
-  ARCHIVED: 'ARCHIVED'
+  QUICK_MEETING: 'QUICK_MEETING',
+  HUNTING: 'HUNTING',
+  FOLLOW_UP: 'FOLLOW_UP',
+  PRE_PLACEMENT: 'PRE_PLACEMENT',
+  PLACEMENT: 'PLACEMENT',
+  STAND_BY: 'STAND_BY',
+  PERDIDA: 'PERDIDA',
+  CANCELADA: 'CANCELADA'
 } as const
 
 export type VacancyStatus = (typeof VacancyStatus)[keyof typeof VacancyStatus]
+
+
+export const VacancySaleType = {
+  NUEVA: 'NUEVA',
+  RECOMPRA: 'RECOMPRA'
+} as const
+
+export type VacancySaleType = (typeof VacancySaleType)[keyof typeof VacancySaleType]
+
+
+export const VacancyModality = {
+  PRESENCIAL: 'PRESENCIAL',
+  REMOTO: 'REMOTO',
+  HIBRIDO: 'HIBRIDO'
+} as const
+
+export type VacancyModality = (typeof VacancyModality)[keyof typeof VacancyModality]
+
+
+export const CandidateStatus = {
+  EN_PROCESO: 'EN_PROCESO',
+  PRESENTADO: 'PRESENTADO',
+  FINALISTA: 'FINALISTA',
+  CONTRATADO: 'CONTRATADO',
+  DESCARTADO: 'DESCARTADO'
+} as const
+
+export type CandidateStatus = (typeof CandidateStatus)[keyof typeof CandidateStatus]
 
 
 export const InactiveTimeUnit = {

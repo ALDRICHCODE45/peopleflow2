@@ -1,0 +1,150 @@
+import type {
+  VacancyStatusType,
+  VacancyDTO,
+} from "@features/vacancy/frontend/types/vacancy.types";
+import type { IVacancyRepository } from "../../domain/interfaces/IVacancyRepository";
+import type { IVacancyStatusHistoryRepository } from "../../domain/interfaces/IVacancyStatusHistoryRepository";
+import {
+  evaluateTransition,
+  isRollbackTransition,
+  type VacancyTransitionContext,
+} from "../../domain/services/VacancyStateMachine";
+
+export interface TransitionVacancyStatusInput {
+  vacancyId: string;
+  tenantId: string;
+  newStatus: VacancyStatusType;
+  changedById: string;
+  /** For rollbacks (→ HUNTING from FOLLOW_UP / PRE_PLACEMENT) and secondary states */
+  reason?: string | null;
+  newTargetDeliveryDate?: Date | null;
+  /** Attachment data provided by the server action (queried before calling the use case) */
+  hasJobDescription?: boolean;
+  hasValidatedPerfilMuestra?: boolean;
+}
+
+export interface TransitionVacancyStatusOutput {
+  success: boolean;
+  vacancy?: VacancyDTO;
+  error?: string;
+}
+
+export class TransitionVacancyStatusUseCase {
+  constructor(
+    private readonly vacancyRepo: IVacancyRepository,
+    private readonly statusHistoryRepo: IVacancyStatusHistoryRepository
+  ) {}
+
+  async execute(
+    input: TransitionVacancyStatusInput
+  ): Promise<TransitionVacancyStatusOutput> {
+    try {
+      const {
+        vacancyId,
+        tenantId,
+        newStatus,
+        changedById,
+        reason,
+        newTargetDeliveryDate,
+        hasJobDescription = false,
+        hasValidatedPerfilMuestra = false,
+      } = input;
+
+      // 1. Load vacancy
+      const vacancy = await this.vacancyRepo.findById(vacancyId, tenantId);
+      if (!vacancy) {
+        return { success: false, error: "Vacante no encontrada" };
+      }
+
+      const currentStatus = vacancy.status;
+      const isRollback = isRollbackTransition(currentStatus, newStatus);
+
+      // 2. Build context for the state machine
+      // Candidate counts are derived from the loaded vacancy relations (if available)
+      const candidates = vacancy.toJSON().candidates ?? [];
+      const inTernaCount = candidates.filter((c) => c.isInTerna).length;
+      const finalistCount = candidates.filter((c) => c.isFinalist).length;
+
+      const ctx: VacancyTransitionContext = {
+        vacancy: {
+          id: vacancy.id,
+          status: currentStatus,
+          salaryFixed: vacancy.salaryFixed,
+          entryDate: vacancy.entryDate?.toISOString() ?? null,
+          checklistValidatedAt:
+            vacancy.checklistValidatedAt?.toISOString() ?? null,
+          rollbackCount: vacancy.rollbackCount,
+        },
+        attachments: {
+          hasJobDescription,
+          hasValidatedPerfilMuestra,
+        },
+        candidates: {
+          inTernaCount,
+          finalistCount,
+        },
+        input: {
+          reason,
+          newTargetDeliveryDate: newTargetDeliveryDate?.toISOString() ?? null,
+        },
+      };
+
+      // 3. Evaluate transition via state machine
+      const evaluation = evaluateTransition(currentStatus, newStatus, ctx);
+      if (!evaluation.valid) {
+        if (evaluation.failedGuard) {
+          console.warn(
+            `[TransitionVacancyStatus] Guard failed: ${evaluation.failedGuard} for ${currentStatus} → ${newStatus}`
+          );
+        }
+        return { success: false, error: evaluation.reason };
+      }
+
+      // 4. Build update payload
+      let updateData: Record<string, unknown>;
+      let historyData: {
+        isRollback: boolean;
+        reason?: string | null;
+        newTargetDeliveryDate?: Date | null;
+      };
+
+      if (isRollback) {
+        updateData = {
+          status: newStatus,
+          rollbackCount: vacancy.rollbackCount + 1,
+          targetDeliveryDate: newTargetDeliveryDate,
+          actualDeliveryDate: null,
+        };
+        historyData = { isRollback: true, reason, newTargetDeliveryDate };
+      } else {
+        updateData = { status: newStatus };
+        historyData = { isRollback: false, reason: reason ?? null };
+      }
+
+      // 5. Execute update + history creation in parallel
+      const [updatedVacancy] = await Promise.all([
+        this.vacancyRepo.update(vacancyId, tenantId, updateData),
+        this.statusHistoryRepo.create({
+          vacancyId,
+          previousStatus: currentStatus,
+          newStatus,
+          changedById,
+          tenantId,
+          ...historyData,
+        }),
+      ]);
+
+      if (!updatedVacancy) {
+        return { success: false, error: "Error al actualizar la vacante" };
+      }
+
+      return { success: true, vacancy: updatedVacancy.toJSON() };
+    } catch (error) {
+      console.error("Error in TransitionVacancyStatusUseCase:", error);
+      return {
+        success: false,
+        error: "Error al cambiar el estado de la vacante",
+      };
+    }
+  }
+}

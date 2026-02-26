@@ -1,13 +1,28 @@
-import { IVacancyRepository } from "../../domain/interfaces/IVacancyRepository";
-import { Vacancy, VacancyStatus } from "../../domain/entities/Vacancy";
+import type {
+  VacancyModality,
+} from "@features/vacancy/frontend/types/vacancy.types";
+import type { Vacancy } from "../../domain/entities/Vacancy";
+import type { IVacancyRepository } from "../../domain/interfaces/IVacancyRepository";
+import { SalaryRangeVO } from "../../domain/value-objects/SalaryRange";
+import { VacancySaleTypeService } from "../../domain/services/VacancySaleTypeService";
 
 export interface CreateVacancyInput {
-  title: string;
-  description: string;
-  status?: VacancyStatus;
-  department?: string;
-  location?: string;
+  position: string;
+  recruiterId: string;
+  clientId: string;
+  salaryMin?: number | null;
+  salaryMax?: number | null;
+  commissions?: string | null;
+  benefits?: string | null;
+  tools?: string | null;
+  modality?: VacancyModality | null;
+  schedule?: string | null;
+  countryCode?: string | null;
+  regionCode?: string | null;
+  requiresPsychometry?: boolean;
+  targetDeliveryDate?: Date | null;
   tenantId: string;
+  createdById?: string | null;
 }
 
 export interface CreateVacancyOutput {
@@ -17,86 +32,70 @@ export interface CreateVacancyOutput {
 }
 
 export class CreateVacancyUseCase {
-  constructor(private readonly vacancyRepository: IVacancyRepository) {}
+  constructor(private readonly vacancyRepo: IVacancyRepository) {}
 
   async execute(input: CreateVacancyInput): Promise<CreateVacancyOutput> {
     try {
-      const title = input.title?.trim() || "";
-      const description = input.description?.trim() || "";
-      const department = input.department?.trim() || null;
-      const location = input.location?.trim() || null;
-
-      // Validacion de longitud minima
-      if (title.length < 3) {
+      // 1. Validate position
+      const position = input.position?.trim() ?? "";
+      if (position.length < 2) {
         return {
           success: false,
-          error: "El titulo debe tener al menos 3 caracteres",
+          error: "El nombre del puesto debe tener al menos 2 caracteres",
+        };
+      }
+      if (position.length > 200) {
+        return {
+          success: false,
+          error: "El nombre del puesto no puede exceder 200 caracteres",
         };
       }
 
-      if (description.length < 10) {
+      // 2. Validate salary range via VO
+      try {
+        SalaryRangeVO.create({
+          min: input.salaryMin,
+          max: input.salaryMax,
+        });
+      } catch (e) {
         return {
           success: false,
-          error: "La descripcion debe tener al menos 10 caracteres",
+          error: e instanceof Error ? e.message : "Rango salarial inválido",
         };
       }
 
-      // Validacion de longitud maxima
-      if (title.length > 200) {
-        return {
-          success: false,
-          error: "El titulo no puede exceder 200 caracteres",
-        };
-      }
+      // 3. Determine sale type based on existing vacancies for this client
+      const existingVacancies = await this.vacancyRepo.findByClientId(
+        input.clientId,
+        input.tenantId
+      );
+      const saleType = VacancySaleTypeService.determine(existingVacancies.length);
 
-      if (description.length > 5000) {
-        return {
-          success: false,
-          error: "La descripcion no puede exceder 5000 caracteres",
-        };
-      }
-
-      if (department && department.length > 100) {
-        return {
-          success: false,
-          error: "El departamento no puede exceder 100 caracteres",
-        };
-      }
-
-      if (location && location.length > 200) {
-        return {
-          success: false,
-          error: "La ubicacion no puede exceder 200 caracteres",
-        };
-      }
-
-      // Validar que las nuevas vacantes solo pueden ser DRAFT u OPEN
-      if (input.status && !["DRAFT", "OPEN"].includes(input.status)) {
-        return {
-          success: false,
-          error: "Las nuevas vacantes solo pueden crearse como Borrador o Abierta",
-        };
-      }
-
-      const vacancy = await this.vacancyRepository.create({
-        title,
-        description,
-        status: input.status || "DRAFT",
-        department: department || undefined,
-        location: location || undefined,
+      // 4. Create vacancy
+      const vacancy = await this.vacancyRepo.create({
+        position,
+        recruiterId: input.recruiterId,
+        clientId: input.clientId,
+        saleType,
+        salaryMin: input.salaryMin ?? null,
+        salaryMax: input.salaryMax ?? null,
+        commissions: input.commissions ?? null,
+        benefits: input.benefits ?? null,
+        tools: input.tools ?? null,
+        modality: input.modality ?? null,
+        schedule: input.schedule ?? null,
+        countryCode: input.countryCode ?? null,
+        regionCode: input.regionCode ?? null,
+        requiresPsychometry: input.requiresPsychometry ?? false,
+        targetDeliveryDate: input.targetDeliveryDate ?? null,
         tenantId: input.tenantId,
+        createdById: input.createdById ?? null,
       });
 
-      return {
-        success: true,
-        vacancy,
-      };
+      return { success: true, vacancy };
     } catch (error) {
       console.error("Error in CreateVacancyUseCase:", error);
-      return {
-        success: false,
-        error: "Error al crear vacante",
-      };
+      return { success: false, error: "Error al crear la vacante" };
     }
   }
 }

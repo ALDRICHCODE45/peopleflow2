@@ -1,31 +1,21 @@
 "use server";
+
 import { auth } from "@lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
-
-// Repository
-import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
-
-// Use Cases
-import { CreateVacancyUseCase } from "../../application/use-cases/CreateVacancyUseCase";
-
-// Types
-import type { VacancyStatus } from "../../../frontend/types/vacancy.types";
-import type { CreateVacancyResult } from "../../../frontend/types/vacancy.types";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
+import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
+import { CreateVacancyUseCase } from "../../application/use-cases/CreateVacancyUseCase";
+import type {
+  CreateVacancyFormData,
+  CreateVacancyResult,
+} from "../../../frontend/types/vacancy.types";
 
-/**
- * Crea una nueva vacante
- */
-export async function createVacancyAction(data: {
-  title: string;
-  description: string;
-  status?: VacancyStatus;
-  department?: string;
-  location?: string;
-}): Promise<CreateVacancyResult> {
+export async function createVacancyAction(
+  data: CreateVacancyFormData,
+): Promise<CreateVacancyResult> {
   try {
     const headersList = await headers();
     const session = await auth.api.getSession({ headers: headersList });
@@ -35,15 +25,11 @@ export async function createVacancyAction(data: {
     }
 
     const tenantId = await getActiveTenantId();
-
     if (!tenantId) {
       return { error: "No hay tenant activo" };
     }
 
-    //verificar los permisos necesarios para ejecutar la accion
-    const hasAnyPermissionUseCase = new CheckAnyPermissonUseCase();
-
-    const hasAnyPermission = await hasAnyPermissionUseCase.execute({
+    const hasPermission = await new CheckAnyPermissonUseCase().execute({
       userId: session.user.id,
       permissions: [
         PermissionActions.vacantes.crear,
@@ -52,29 +38,40 @@ export async function createVacancyAction(data: {
       tenantId,
     });
 
-    if (!hasAnyPermission) {
-      return {
-        error: "Error al obtener vacantes",
-      };
+    if (!hasPermission) {
+      return { error: "Sin permisos para crear vacantes" };
     }
 
     const useCase = new CreateVacancyUseCase(prismaVacancyRepository);
     const result = await useCase.execute({
-      ...data,
+      position: data.position,
+      recruiterId: data.recruiterId,
+      clientId: data.clientId,
+      salaryMin: data.salaryMin ?? null,
+      salaryMax: data.salaryMax ?? null,
+      commissions: data.commissions ?? null,
+      benefits: data.benefits ?? null,
+      tools: data.tools ?? null,
+      modality: data.modality ?? null,
+      schedule: data.schedule ?? null,
+      countryCode: data.countryCode ?? null,
+      regionCode: data.regionCode ?? null,
+      requiresPsychometry: data.requiresPsychometry,
+      targetDeliveryDate: data.targetDeliveryDate
+        ? new Date(data.targetDeliveryDate)
+        : null,
       tenantId,
+      createdById: session.user.id,
     });
 
     if (!result.success) {
-      return { error: result.error || "Error al crear vacante" };
+      return { error: result.error ?? "Error al crear la vacante" };
     }
 
     revalidatePath("/reclutamiento/vacantes");
-    return {
-      error: null,
-      vacancy: result.vacancy?.toJSON(),
-    };
+    return { error: null, vacancy: result.vacancy?.toJSON() };
   } catch (error) {
-    console.error("Error creating vacancy:", error);
-    return { error: "Error al crear vacante" };
+    console.error("Error in createVacancyAction:", error);
+    return { error: "Error inesperado al crear la vacante" };
   }
 }
