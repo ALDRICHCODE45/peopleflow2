@@ -27,6 +27,8 @@ export interface VacancyTransitionContext {
   input: {
     reason?: string | null;
     newTargetDeliveryDate?: string | null; // ISO string
+    salaryFixed?: number | null;
+    entryDate?: string | null; // ISO string
   };
 }
 
@@ -110,6 +112,27 @@ function HasRollbackDateGuard(ctx: VacancyTransitionContext): GuardResult {
   };
 }
 
+function HasFinalistInTernaGuard(ctx: VacancyTransitionContext): GuardResult {
+  return {
+    passes: ctx.candidates.inTernaCount > 0,
+    reason: "Debe haber al menos un candidato validado en la terna",
+  };
+}
+
+function HasFinalSalaryInputGuard(ctx: VacancyTransitionContext): GuardResult {
+  return {
+    passes: ctx.input.salaryFixed != null && ctx.input.salaryFixed > 0,
+    reason: "Debe ingresar el salario final acordado con el candidato",
+  };
+}
+
+function HasEntryDateInputGuard(ctx: VacancyTransitionContext): GuardResult {
+  return {
+    passes: !!(ctx.input.entryDate),
+    reason: "Debe ingresar la fecha de ingreso del candidato",
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Transition rules map
 // ---------------------------------------------------------------------------
@@ -140,7 +163,8 @@ const TRANSITION_RULES: TransitionRulesMap = {
   },
   FOLLOW_UP: {
     HUNTING: [HasReasonGuard, HasRollbackDateGuard], // rollback
-    PRE_PLACEMENT: [HasFinalistWithSalaryGuard],
+    PRE_PLACEMENT: [HasFinalistInTernaGuard, HasFinalSalaryInputGuard, HasEntryDateInputGuard],
+    PLACEMENT: [HasFinalistInTernaGuard, HasFinalSalaryInputGuard, HasEntryDateInputGuard],
     STAND_BY: [HasReasonGuard],
     CANCELADA: [HasReasonGuard],
     PERDIDA: [HasReasonGuard],
@@ -152,7 +176,12 @@ const TRANSITION_RULES: TransitionRulesMap = {
     CANCELADA: [HasReasonGuard],
     PERDIDA: [HasReasonGuard],
   },
-  PLACEMENT: {}, // terminal
+  PLACEMENT: {
+    HUNTING: [HasReasonGuard, HasRollbackDateGuard], // candidate backed out — restart search
+    STAND_BY: [HasReasonGuard],
+    CANCELADA: [HasReasonGuard],
+    PERDIDA: [HasReasonGuard],
+  },
   STAND_BY: {
     QUICK_MEETING: [],
     HUNTING: [],
@@ -207,12 +236,15 @@ export function evaluateTransition(
 // Helpers
 // ---------------------------------------------------------------------------
 
-/** Returns true if this is a rollback transition (→ HUNTING from FOLLOW_UP / PRE_PLACEMENT) */
+/** Returns true if this is a rollback transition (→ HUNTING from FOLLOW_UP / PRE_PLACEMENT / PLACEMENT) */
 export function isRollbackTransition(
   from: VacancyStatusType,
   to: VacancyStatusType
 ): boolean {
-  return to === "HUNTING" && (from === "FOLLOW_UP" || from === "PRE_PLACEMENT");
+  return (
+    to === "HUNTING" &&
+    (from === "FOLLOW_UP" || from === "PRE_PLACEMENT" || from === "PLACEMENT")
+  );
 }
 
 /** Returns the list of valid next states from the current state */

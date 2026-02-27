@@ -453,6 +453,7 @@ export type VacancyWhereInput = {
   candidates?: Prisma.VacancyCandidateListRelationFilter
   statusHistory?: Prisma.VacancyStatusHistoryListRelationFilter
   attachments?: Prisma.AttachmentListRelationFilter
+  ternaHistories?: Prisma.VacancyTernaHistoryListRelationFilter
 }
 
 export type VacancyOrderByWithRelationInput = {
@@ -497,6 +498,7 @@ export type VacancyOrderByWithRelationInput = {
   candidates?: Prisma.VacancyCandidateOrderByRelationAggregateInput
   statusHistory?: Prisma.VacancyStatusHistoryOrderByRelationAggregateInput
   attachments?: Prisma.AttachmentOrderByRelationAggregateInput
+  ternaHistories?: Prisma.VacancyTernaHistoryOrderByRelationAggregateInput
 }
 
 export type VacancyWhereUniqueInput = Prisma.AtLeast<{
@@ -544,6 +546,7 @@ export type VacancyWhereUniqueInput = Prisma.AtLeast<{
   candidates?: Prisma.VacancyCandidateListRelationFilter
   statusHistory?: Prisma.VacancyStatusHistoryListRelationFilter
   attachments?: Prisma.AttachmentListRelationFilter
+  ternaHistories?: Prisma.VacancyTernaHistoryListRelationFilter
 }, "id">
 
 export type VacancyOrderByWithAggregationInput = {
@@ -661,6 +664,7 @@ export type VacancyCreateInput = {
   candidates?: Prisma.VacancyCandidateCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyUncheckedCreateInput = {
@@ -700,6 +704,7 @@ export type VacancyUncheckedCreateInput = {
   candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyUpdateInput = {
@@ -739,6 +744,7 @@ export type VacancyUpdateInput = {
   candidates?: Prisma.VacancyCandidateUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyUncheckedUpdateInput = {
@@ -778,6 +784,7 @@ export type VacancyUncheckedUpdateInput = {
   candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyCreateManyInput = {
@@ -1307,6 +1314,20 @@ export type VacancyUncheckedUpdateManyWithoutClientNestedInput = {
   deleteMany?: Prisma.VacancyScalarWhereInput | Prisma.VacancyScalarWhereInput[]
 }
 
+export type VacancyCreateNestedOneWithoutTernaHistoriesInput = {
+  create?: Prisma.XOR<Prisma.VacancyCreateWithoutTernaHistoriesInput, Prisma.VacancyUncheckedCreateWithoutTernaHistoriesInput>
+  connectOrCreate?: Prisma.VacancyCreateOrConnectWithoutTernaHistoriesInput
+  connect?: Prisma.VacancyWhereUniqueInput
+}
+
+export type VacancyUpdateOneRequiredWithoutTernaHistoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.VacancyCreateWithoutTernaHistoriesInput, Prisma.VacancyUncheckedCreateWithoutTernaHistoriesInput>
+  connectOrCreate?: Prisma.VacancyCreateOrConnectWithoutTernaHistoriesInput
+  upsert?: Prisma.VacancyUpsertWithoutTernaHistoriesInput
+  connect?: Prisma.VacancyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.VacancyUpdateToOneWithWhereWithoutTernaHistoriesInput, Prisma.VacancyUpdateWithoutTernaHistoriesInput>, Prisma.VacancyUncheckedUpdateWithoutTernaHistoriesInput>
+}
+
 export type VacancyCreateWithoutRecruiterInput = {
   id?: string
   position: string
@@ -1343,6 +1364,7 @@ export type VacancyCreateWithoutRecruiterInput = {
   candidates?: Prisma.VacancyCandidateCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyUncheckedCreateWithoutRecruiterInput = {
@@ -1381,6 +1403,7 @@ export type VacancyUncheckedCreateWithoutRecruiterInput = {
   candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyCreateOrConnectWithoutRecruiterInput = {
@@ -1429,6 +1452,7 @@ export type VacancyCreateWithoutCreatedByInput = {
   candidates?: Prisma.VacancyCandidateCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyUncheckedCreateWithoutCreatedByInput = {
@@ -1467,6 +1491,7 @@ export type VacancyUncheckedCreateWithoutCreatedByInput = {
   candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyCreateOrConnectWithoutCreatedByInput = {
@@ -1515,6 +1540,7 @@ export type VacancyCreateWithoutChecklistValidatedByInput = {
   candidates?: Prisma.VacancyCandidateCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyUncheckedCreateWithoutChecklistValidatedByInput = {
@@ -1553,6 +1579,7 @@ export type VacancyUncheckedCreateWithoutChecklistValidatedByInput = {
   candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyCreateOrConnectWithoutChecklistValidatedByInput = {
@@ -1687,6 +1714,7 @@ export type VacancyCreateWithoutTenantInput = {
   candidates?: Prisma.VacancyCandidateCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyUncheckedCreateWithoutTenantInput = {
@@ -1725,6 +1753,7 @@ export type VacancyUncheckedCreateWithoutTenantInput = {
   candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyCreateOrConnectWithoutTenantInput = {
@@ -1789,6 +1818,7 @@ export type VacancyCreateWithoutAttachmentsInput = {
   checklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutVacancyInput
   candidates?: Prisma.VacancyCandidateCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyUncheckedCreateWithoutAttachmentsInput = {
@@ -1827,6 +1857,7 @@ export type VacancyUncheckedCreateWithoutAttachmentsInput = {
   checklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutVacancyInput
   candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyCreateOrConnectWithoutAttachmentsInput = {
@@ -1881,6 +1912,7 @@ export type VacancyUpdateWithoutAttachmentsInput = {
   checklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutVacancyNestedInput
   candidates?: Prisma.VacancyCandidateUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyUncheckedUpdateWithoutAttachmentsInput = {
@@ -1919,6 +1951,7 @@ export type VacancyUncheckedUpdateWithoutAttachmentsInput = {
   checklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutVacancyNestedInput
   candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyCreateWithoutChecklistItemsInput = {
@@ -1957,6 +1990,7 @@ export type VacancyCreateWithoutChecklistItemsInput = {
   candidates?: Prisma.VacancyCandidateCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyUncheckedCreateWithoutChecklistItemsInput = {
@@ -1995,6 +2029,7 @@ export type VacancyUncheckedCreateWithoutChecklistItemsInput = {
   candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyCreateOrConnectWithoutChecklistItemsInput = {
@@ -2049,6 +2084,7 @@ export type VacancyUpdateWithoutChecklistItemsInput = {
   candidates?: Prisma.VacancyCandidateUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyUncheckedUpdateWithoutChecklistItemsInput = {
@@ -2087,6 +2123,7 @@ export type VacancyUncheckedUpdateWithoutChecklistItemsInput = {
   candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyCreateWithoutCandidatesInput = {
@@ -2125,6 +2162,7 @@ export type VacancyCreateWithoutCandidatesInput = {
   checklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyUncheckedCreateWithoutCandidatesInput = {
@@ -2163,6 +2201,7 @@ export type VacancyUncheckedCreateWithoutCandidatesInput = {
   checklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyCreateOrConnectWithoutCandidatesInput = {
@@ -2217,6 +2256,7 @@ export type VacancyUpdateWithoutCandidatesInput = {
   checklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyUncheckedUpdateWithoutCandidatesInput = {
@@ -2255,6 +2295,7 @@ export type VacancyUncheckedUpdateWithoutCandidatesInput = {
   checklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyCreateWithoutStatusHistoryInput = {
@@ -2293,6 +2334,7 @@ export type VacancyCreateWithoutStatusHistoryInput = {
   checklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutVacancyInput
   candidates?: Prisma.VacancyCandidateCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyUncheckedCreateWithoutStatusHistoryInput = {
@@ -2331,6 +2373,7 @@ export type VacancyUncheckedCreateWithoutStatusHistoryInput = {
   checklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutVacancyInput
   candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyCreateOrConnectWithoutStatusHistoryInput = {
@@ -2385,6 +2428,7 @@ export type VacancyUpdateWithoutStatusHistoryInput = {
   checklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutVacancyNestedInput
   candidates?: Prisma.VacancyCandidateUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyUncheckedUpdateWithoutStatusHistoryInput = {
@@ -2423,6 +2467,7 @@ export type VacancyUncheckedUpdateWithoutStatusHistoryInput = {
   checklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutVacancyNestedInput
   candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyCreateWithoutClientInput = {
@@ -2461,6 +2506,7 @@ export type VacancyCreateWithoutClientInput = {
   candidates?: Prisma.VacancyCandidateCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyUncheckedCreateWithoutClientInput = {
@@ -2499,6 +2545,7 @@ export type VacancyUncheckedCreateWithoutClientInput = {
   candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyCreateOrConnectWithoutClientInput = {
@@ -2525,6 +2572,178 @@ export type VacancyUpdateWithWhereUniqueWithoutClientInput = {
 export type VacancyUpdateManyWithWhereWithoutClientInput = {
   where: Prisma.VacancyScalarWhereInput
   data: Prisma.XOR<Prisma.VacancyUpdateManyMutationInput, Prisma.VacancyUncheckedUpdateManyWithoutClientInput>
+}
+
+export type VacancyCreateWithoutTernaHistoriesInput = {
+  id?: string
+  position: string
+  status?: $Enums.VacancyStatus
+  saleType: $Enums.VacancySaleType
+  salaryMin?: number | null
+  salaryMax?: number | null
+  salaryFixed?: number | null
+  commissions?: string | null
+  benefits?: string | null
+  tools?: string | null
+  modality?: $Enums.VacancyModality | null
+  schedule?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  requiresPsychometry?: boolean
+  checklistValidatedAt?: Date | string | null
+  checklistRejectionReason?: string | null
+  assignedAt?: Date | string
+  targetDeliveryDate?: Date | string | null
+  actualDeliveryDate?: Date | string | null
+  entryDate?: Date | string | null
+  rollbackCount?: number
+  placementConfirmedAt?: Date | string | null
+  commissionDate?: Date | string | null
+  congratsEmailSent?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  recruiter: Prisma.UserCreateNestedOneWithoutVacanciesAsRecruiterInput
+  client: Prisma.ClientCreateNestedOneWithoutVacanciesInput
+  checklistValidatedBy?: Prisma.UserCreateNestedOneWithoutVacancyChecklistValidatedInput
+  tenant: Prisma.TenantCreateNestedOneWithoutVacanciesInput
+  createdBy?: Prisma.UserCreateNestedOneWithoutVacanciesCreatedInput
+  checklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutVacancyInput
+  candidates?: Prisma.VacancyCandidateCreateNestedManyWithoutVacancyInput
+  statusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutVacancyInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
+}
+
+export type VacancyUncheckedCreateWithoutTernaHistoriesInput = {
+  id?: string
+  position: string
+  status?: $Enums.VacancyStatus
+  recruiterId: string
+  clientId: string
+  saleType: $Enums.VacancySaleType
+  salaryMin?: number | null
+  salaryMax?: number | null
+  salaryFixed?: number | null
+  commissions?: string | null
+  benefits?: string | null
+  tools?: string | null
+  modality?: $Enums.VacancyModality | null
+  schedule?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  requiresPsychometry?: boolean
+  checklistValidatedAt?: Date | string | null
+  checklistValidatedById?: string | null
+  checklistRejectionReason?: string | null
+  assignedAt?: Date | string
+  targetDeliveryDate?: Date | string | null
+  actualDeliveryDate?: Date | string | null
+  entryDate?: Date | string | null
+  rollbackCount?: number
+  placementConfirmedAt?: Date | string | null
+  commissionDate?: Date | string | null
+  congratsEmailSent?: boolean
+  tenantId: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  checklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutVacancyInput
+  candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
+  statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
+}
+
+export type VacancyCreateOrConnectWithoutTernaHistoriesInput = {
+  where: Prisma.VacancyWhereUniqueInput
+  create: Prisma.XOR<Prisma.VacancyCreateWithoutTernaHistoriesInput, Prisma.VacancyUncheckedCreateWithoutTernaHistoriesInput>
+}
+
+export type VacancyUpsertWithoutTernaHistoriesInput = {
+  update: Prisma.XOR<Prisma.VacancyUpdateWithoutTernaHistoriesInput, Prisma.VacancyUncheckedUpdateWithoutTernaHistoriesInput>
+  create: Prisma.XOR<Prisma.VacancyCreateWithoutTernaHistoriesInput, Prisma.VacancyUncheckedCreateWithoutTernaHistoriesInput>
+  where?: Prisma.VacancyWhereInput
+}
+
+export type VacancyUpdateToOneWithWhereWithoutTernaHistoriesInput = {
+  where?: Prisma.VacancyWhereInput
+  data: Prisma.XOR<Prisma.VacancyUpdateWithoutTernaHistoriesInput, Prisma.VacancyUncheckedUpdateWithoutTernaHistoriesInput>
+}
+
+export type VacancyUpdateWithoutTernaHistoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  position?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
+  saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresPsychometry?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rollbackCount?: Prisma.IntFieldUpdateOperationsInput | number
+  placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recruiter?: Prisma.UserUpdateOneRequiredWithoutVacanciesAsRecruiterNestedInput
+  client?: Prisma.ClientUpdateOneRequiredWithoutVacanciesNestedInput
+  checklistValidatedBy?: Prisma.UserUpdateOneWithoutVacancyChecklistValidatedNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutVacanciesNestedInput
+  createdBy?: Prisma.UserUpdateOneWithoutVacanciesCreatedNestedInput
+  checklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutVacancyNestedInput
+  candidates?: Prisma.VacancyCandidateUpdateManyWithoutVacancyNestedInput
+  statusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutVacancyNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
+}
+
+export type VacancyUncheckedUpdateWithoutTernaHistoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  position?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
+  recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresPsychometry?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rollbackCount?: Prisma.IntFieldUpdateOperationsInput | number
+  placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  checklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutVacancyNestedInput
+  candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
+  statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyCreateManyRecruiterInput = {
@@ -2665,6 +2884,7 @@ export type VacancyUpdateWithoutRecruiterInput = {
   candidates?: Prisma.VacancyCandidateUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyUncheckedUpdateWithoutRecruiterInput = {
@@ -2703,6 +2923,7 @@ export type VacancyUncheckedUpdateWithoutRecruiterInput = {
   candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyUncheckedUpdateManyWithoutRecruiterInput = {
@@ -2775,6 +2996,7 @@ export type VacancyUpdateWithoutCreatedByInput = {
   candidates?: Prisma.VacancyCandidateUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyUncheckedUpdateWithoutCreatedByInput = {
@@ -2813,6 +3035,7 @@ export type VacancyUncheckedUpdateWithoutCreatedByInput = {
   candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyUncheckedUpdateManyWithoutCreatedByInput = {
@@ -2885,6 +3108,7 @@ export type VacancyUpdateWithoutChecklistValidatedByInput = {
   candidates?: Prisma.VacancyCandidateUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyUncheckedUpdateWithoutChecklistValidatedByInput = {
@@ -2923,6 +3147,7 @@ export type VacancyUncheckedUpdateWithoutChecklistValidatedByInput = {
   candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyUncheckedUpdateManyWithoutChecklistValidatedByInput = {
@@ -3029,6 +3254,7 @@ export type VacancyUpdateWithoutTenantInput = {
   candidates?: Prisma.VacancyCandidateUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyUncheckedUpdateWithoutTenantInput = {
@@ -3067,6 +3293,7 @@ export type VacancyUncheckedUpdateWithoutTenantInput = {
   candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyUncheckedUpdateManyWithoutTenantInput = {
@@ -3173,6 +3400,7 @@ export type VacancyUpdateWithoutClientInput = {
   candidates?: Prisma.VacancyCandidateUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyUncheckedUpdateWithoutClientInput = {
@@ -3211,6 +3439,7 @@ export type VacancyUncheckedUpdateWithoutClientInput = {
   candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyUncheckedUpdateManyWithoutClientInput = {
@@ -3257,6 +3486,7 @@ export type VacancyCountOutputType = {
   candidates: number
   statusHistory: number
   attachments: number
+  ternaHistories: number
 }
 
 export type VacancyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3264,6 +3494,7 @@ export type VacancyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   candidates?: boolean | VacancyCountOutputTypeCountCandidatesArgs
   statusHistory?: boolean | VacancyCountOutputTypeCountStatusHistoryArgs
   attachments?: boolean | VacancyCountOutputTypeCountAttachmentsArgs
+  ternaHistories?: boolean | VacancyCountOutputTypeCountTernaHistoriesArgs
 }
 
 /**
@@ -3302,6 +3533,13 @@ export type VacancyCountOutputTypeCountStatusHistoryArgs<ExtArgs extends runtime
  */
 export type VacancyCountOutputTypeCountAttachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AttachmentWhereInput
+}
+
+/**
+ * VacancyCountOutputType without action
+ */
+export type VacancyCountOutputTypeCountTernaHistoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VacancyTernaHistoryWhereInput
 }
 
 
@@ -3347,6 +3585,7 @@ export type VacancySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   candidates?: boolean | Prisma.Vacancy$candidatesArgs<ExtArgs>
   statusHistory?: boolean | Prisma.Vacancy$statusHistoryArgs<ExtArgs>
   attachments?: boolean | Prisma.Vacancy$attachmentsArgs<ExtArgs>
+  ternaHistories?: boolean | Prisma.Vacancy$ternaHistoriesArgs<ExtArgs>
   _count?: boolean | Prisma.VacancyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["vacancy"]>
 
@@ -3476,6 +3715,7 @@ export type VacancyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   candidates?: boolean | Prisma.Vacancy$candidatesArgs<ExtArgs>
   statusHistory?: boolean | Prisma.Vacancy$statusHistoryArgs<ExtArgs>
   attachments?: boolean | Prisma.Vacancy$attachmentsArgs<ExtArgs>
+  ternaHistories?: boolean | Prisma.Vacancy$ternaHistoriesArgs<ExtArgs>
   _count?: boolean | Prisma.VacancyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type VacancyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3505,6 +3745,7 @@ export type $VacancyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     candidates: Prisma.$VacancyCandidatePayload<ExtArgs>[]
     statusHistory: Prisma.$VacancyStatusHistoryPayload<ExtArgs>[]
     attachments: Prisma.$AttachmentPayload<ExtArgs>[]
+    ternaHistories: Prisma.$VacancyTernaHistoryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3942,6 +4183,7 @@ export interface Prisma__VacancyClient<T, Null = never, ExtArgs extends runtime.
   candidates<T extends Prisma.Vacancy$candidatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vacancy$candidatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyCandidatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   statusHistory<T extends Prisma.Vacancy$statusHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vacancy$statusHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyStatusHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   attachments<T extends Prisma.Vacancy$attachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vacancy$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ternaHistories<T extends Prisma.Vacancy$ternaHistoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vacancy$ternaHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyTernaHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4530,6 +4772,30 @@ export type Vacancy$attachmentsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.AttachmentScalarFieldEnum | Prisma.AttachmentScalarFieldEnum[]
+}
+
+/**
+ * Vacancy.ternaHistories
+ */
+export type Vacancy$ternaHistoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VacancyTernaHistory
+   */
+  select?: Prisma.VacancyTernaHistorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VacancyTernaHistory
+   */
+  omit?: Prisma.VacancyTernaHistoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VacancyTernaHistoryInclude<ExtArgs> | null
+  where?: Prisma.VacancyTernaHistoryWhereInput
+  orderBy?: Prisma.VacancyTernaHistoryOrderByWithRelationInput | Prisma.VacancyTernaHistoryOrderByWithRelationInput[]
+  cursor?: Prisma.VacancyTernaHistoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VacancyTernaHistoryScalarFieldEnum | Prisma.VacancyTernaHistoryScalarFieldEnum[]
 }
 
 /**

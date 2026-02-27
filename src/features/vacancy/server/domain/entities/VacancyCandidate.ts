@@ -16,7 +16,8 @@ export interface VacancyCandidateProps {
   currentSalary: number | null;
   salaryExpectation: number | null;
   currentModality: VacancyModality | null;
-  currentLocation: string | null;
+  countryCode: string | null;
+  regionCode: string | null;
   currentCommissions: string | null;
   currentBenefits: string | null;
   candidateLocation: string | null;
@@ -83,8 +84,12 @@ export class VacancyCandidate {
     return this.props.currentModality;
   }
 
-  get currentLocation(): string | null {
-    return this.props.currentLocation;
+  get countryCode(): string | null {
+    return this.props.countryCode;
+  }
+
+  get regionCode(): string | null {
+    return this.props.regionCode;
   }
 
   get currentCommissions(): string | null {
@@ -149,7 +154,7 @@ export class VacancyCandidate {
   /** Retorna true si el candidato puede ser seleccionado para la terna */
   isEligibleForTerna(): boolean {
     return (
-      this.props.status === "EN_PROCESO" || this.props.status === "PRESENTADO"
+      this.props.status === "EN_PROCESO" || this.props.status === "EN_TERNA"
     );
   }
 
@@ -171,7 +176,8 @@ export class VacancyCandidate {
       currentSalary: this.props.currentSalary,
       salaryExpectation: this.props.salaryExpectation,
       currentModality: this.props.currentModality,
-      currentLocation: this.props.currentLocation,
+      countryCode: this.props.countryCode,
+      regionCode: this.props.regionCode,
       currentCommissions: this.props.currentCommissions,
       currentBenefits: this.props.currentBenefits,
       candidateLocation: this.props.candidateLocation,

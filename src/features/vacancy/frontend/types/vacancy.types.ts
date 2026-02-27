@@ -31,10 +31,11 @@ export type VacancySaleType = "NUEVA" | "RECOMPRA";
 export type VacancyModality = "PRESENCIAL" | "REMOTO" | "HIBRIDO";
 export type CandidateStatus =
   | "EN_PROCESO"
-  | "PRESENTADO"
-  | "FINALISTA"
+  | "EN_TERNA"
   | "CONTRATADO"
   | "DESCARTADO";
+
+export type CandidateMatchRating = "CUMPLE" | "NO_CUMPLE" | "PARCIAL";
 
 // DTO principal de Vacancy
 export interface VacancyDTO {
@@ -99,7 +100,8 @@ export interface VacancyCandidateDTO {
   currentSalary: number | null;
   salaryExpectation: number | null;
   currentModality: VacancyModality | null;
-  currentLocation: string | null;
+  countryCode: string | null;
+  regionCode: string | null;
   currentCommissions: string | null;
   currentBenefits: string | null;
   candidateLocation: string | null;
@@ -132,6 +134,7 @@ export interface VacancyCandidateMatchDTO {
   id: string;
   candidateId: string;
   checklistItemId: string;
+  rating: CandidateMatchRating | null;
   feedback: string | null;
   tenantId: string;
   createdAt: string;
@@ -317,8 +320,7 @@ export const VACANCY_MODALITY_LABELS: Record<VacancyModality, string> = {
 
 export const CANDIDATE_STATUS_LABELS: Record<CandidateStatus, string> = {
   EN_PROCESO: "En Proceso",
-  PRESENTADO: "Presentado",
-  FINALISTA: "Finalista",
+  EN_TERNA: "En Terna",
   CONTRATADO: "Contratado",
   DESCARTADO: "Descartado",
 };
@@ -346,6 +348,43 @@ export interface UpdateVacancyFormData extends Partial<CreateVacancyFormData> {
   entryDate?: string | null;
 }
 
+/** Transiciones válidas por estado — mirror del backend state machine */
+export const VALID_TRANSITIONS: Partial<Record<VacancyStatusType, VacancyStatusType[]>> = {
+  QUICK_MEETING: ["HUNTING", "STAND_BY", "CANCELADA", "PERDIDA"],
+  HUNTING: ["FOLLOW_UP", "STAND_BY", "CANCELADA", "PERDIDA"],
+  FOLLOW_UP: ["HUNTING", "PRE_PLACEMENT", "PLACEMENT", "STAND_BY", "CANCELADA", "PERDIDA"],
+  PRE_PLACEMENT: ["PLACEMENT", "HUNTING", "STAND_BY", "CANCELADA", "PERDIDA"],
+  PLACEMENT: ["HUNTING", "STAND_BY", "CANCELADA", "PERDIDA"],
+  STAND_BY: ["QUICK_MEETING", "HUNTING", "FOLLOW_UP", "PRE_PLACEMENT", "CANCELADA", "PERDIDA"],
+  CANCELADA: [],
+  PERDIDA: [],
+};
+
+// DTO del historial de ternas
+export interface TernaHistoryCandidateDTO {
+  id: string;
+  candidateId: string;
+  candidateFullName: string;
+}
+
+export interface TernaHistoryDTO {
+  id: string;
+  vacancyId: string;
+  ternaNumber: number;
+  validatedAt: string;
+  validatedById: string;
+  validatedByName: string | null;
+  targetDeliveryDate: string | null;
+  isOnTime: boolean;
+  tenantId: string;
+  candidates: TernaHistoryCandidateDTO[];
+}
+
+export interface GetTernaHistoryResult {
+  error: string | null;
+  histories?: TernaHistoryDTO[];
+}
+
 export interface AddCandidateFormData {
   firstName: string;
   lastName: string;
@@ -356,7 +395,8 @@ export interface AddCandidateFormData {
   currentSalary?: number;
   salaryExpectation?: number;
   currentModality?: VacancyModality;
-  currentLocation?: string;
+  countryCode?: string;
+  regionCode?: string;
   currentCommissions?: string;
   currentBenefits?: string;
   candidateLocation?: string;

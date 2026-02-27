@@ -15,6 +15,7 @@ import type {
   VacancyCandidateDTO,
   VacancyChecklistItemDTO,
   VacancyStatusHistoryDTO,
+  AttachmentDTO,
 } from "@features/vacancy/frontend/types/vacancy.types";
 
 type VacancyWithRelations = {
@@ -76,7 +77,13 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       client: { select: { nombre: true } },
       candidates: {
         orderBy: { createdAt: "asc" as const },
-        include: { checklistMatches: true },
+        include: {
+          checklistMatches: true,
+          attachments: {
+            where: { subType: "CV" as const },
+            orderBy: { createdAt: "desc" as const },
+          },
+        },
       },
       checklistItems: {
         orderBy: { order: "asc" as const },
@@ -178,14 +185,21 @@ export class PrismaVacancyRepository implements IVacancyRepository {
         email: string | null; phone: string | null; isCurrentlyEmployed: boolean | null;
         currentCompany: string | null; currentSalary: number | null;
         salaryExpectation: number | null; currentModality: string | null;
-        currentLocation: string | null; currentCommissions: string | null;
+        countryCode: string | null; regionCode: string | null; currentCommissions: string | null;
         currentBenefits: string | null; candidateLocation: string | null;
         otherBenefits: string | null;
         status: string; isInTerna: boolean; isFinalist: boolean; finalSalary: number | null;
         tenantId: string; createdAt: Date; updatedAt: Date;
         checklistMatches: Array<{
           id: string; candidateId: string; checklistItemId: string;
-          feedback: string | null; tenantId: string; createdAt: Date; updatedAt: Date;
+          rating: string | null; feedback: string | null; tenantId: string; createdAt: Date; updatedAt: Date;
+        }>;
+        attachments: Array<{
+          id: string; fileName: string; fileUrl: string; fileSize: number;
+          mimeType: string; subType: string; isValidated: boolean;
+          validatedAt: Date | null; validatedById: string | null;
+          rejectionReason: string | null; vacancyId: string | null;
+          vacancyCandidateId: string | null; uploadedById: string; createdAt: Date;
         }>;
       }>;
       checklistItems: Array<{
@@ -193,7 +207,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
         order: number; tenantId: string; createdAt: Date; updatedAt: Date;
         candidateMatches: Array<{
           id: string; candidateId: string; checklistItemId: string;
-          feedback: string | null; tenantId: string; createdAt: Date; updatedAt: Date;
+          rating: string | null; feedback: string | null; tenantId: string; createdAt: Date; updatedAt: Date;
         }>;
       }>;
       statusHistory: Array<{
@@ -211,7 +225,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       currentCompany: c.currentCompany, currentSalary: c.currentSalary,
       salaryExpectation: c.salaryExpectation,
       currentModality: (c.currentModality as VacancyModality | null) ?? null,
-      currentLocation: c.currentLocation, currentCommissions: c.currentCommissions,
+      countryCode: c.countryCode, regionCode: c.regionCode, currentCommissions: c.currentCommissions,
       currentBenefits: c.currentBenefits, candidateLocation: c.candidateLocation,
       otherBenefits: c.otherBenefits,
       status: c.status as VacancyCandidateDTO["status"],
@@ -220,8 +234,17 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       updatedAt: c.updatedAt.toISOString(),
       checklistMatches: c.checklistMatches.map((m) => ({
         id: m.id, candidateId: m.candidateId, checklistItemId: m.checklistItemId,
+        rating: m.rating as ("CUMPLE" | "NO_CUMPLE" | "PARCIAL" | null),
         feedback: m.feedback, tenantId: m.tenantId,
         createdAt: m.createdAt.toISOString(), updatedAt: m.updatedAt.toISOString(),
+      })),
+      attachments: c.attachments.map((a) => ({
+        id: a.id, fileName: a.fileName, fileUrl: a.fileUrl, fileSize: a.fileSize,
+        mimeType: a.mimeType, subType: a.subType as AttachmentDTO["subType"],
+        isValidated: a.isValidated, validatedAt: a.validatedAt?.toISOString() ?? null,
+        validatedById: a.validatedById, rejectionReason: a.rejectionReason,
+        vacancyId: a.vacancyId, vacancyCandidateId: a.vacancyCandidateId,
+        uploadedById: a.uploadedById, createdAt: a.createdAt.toISOString(),
       })),
     }));
 

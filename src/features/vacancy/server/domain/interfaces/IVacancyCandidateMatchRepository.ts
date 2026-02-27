@@ -1,6 +1,7 @@
 export interface UpsertMatchData {
   candidateId: string;
   checklistItemId: string;
+  rating: string | null;
   feedback: string | null;
   tenantId: string;
 }
@@ -9,6 +10,7 @@ export interface CandidateMatchData {
   id: string;
   candidateId: string;
   checklistItemId: string;
+  rating: string | null;
   feedback: string | null;
   tenantId: string;
   createdAt: Date;
@@ -21,4 +23,9 @@ export interface IVacancyCandidateMatchRepository {
     candidateId: string,
     tenantId: string
   ): Promise<CandidateMatchData[]>;
+  countRatedForCandidate(
+    candidateId: string,
+    vacancyChecklistItemIds: string[],
+    tenantId: string
+  ): Promise<number>;
 }

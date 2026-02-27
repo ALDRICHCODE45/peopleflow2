@@ -9,6 +9,7 @@ type PrismaMatchRecord = {
   id: string;
   candidateId: string;
   checklistItemId: string;
+  rating: string | null;
   feedback: string | null;
   tenantId: string;
   createdAt: Date;
@@ -23,6 +24,7 @@ export class PrismaVacancyCandidateMatchRepository
       id: record.id,
       candidateId: record.candidateId,
       checklistItemId: record.checklistItemId,
+      rating: record.rating,
       feedback: record.feedback,
       tenantId: record.tenantId,
       createdAt: record.createdAt,
@@ -41,10 +43,12 @@ export class PrismaVacancyCandidateMatchRepository
       create: {
         candidateId: data.candidateId,
         checklistItemId: data.checklistItemId,
+        rating: data.rating,
         feedback: data.feedback,
         tenantId: data.tenantId,
       },
       update: {
+        rating: data.rating,
         feedback: data.feedback,
       },
     });
@@ -63,6 +67,23 @@ export class PrismaVacancyCandidateMatchRepository
     return records.map((r) =>
       this.mapToData(r as unknown as PrismaMatchRecord)
     );
+  }
+
+  async countRatedForCandidate(
+    candidateId: string,
+    vacancyChecklistItemIds: string[],
+    tenantId: string
+  ): Promise<number> {
+    if (vacancyChecklistItemIds.length === 0) return 0;
+    const count = await prisma.vacancyCandidateMatch.count({
+      where: {
+        candidateId,
+        tenantId,
+        checklistItemId: { in: vacancyChecklistItemIds },
+        rating: { not: null },
+      },
+    });
+    return count;
   }
 }
 

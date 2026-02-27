@@ -76,7 +76,7 @@ export class SelectFinalistUseCase {
       const [, updatedVacancy] = await Promise.all([
         this.candidateRepo.update(candidateId, tenantId, {
           isFinalist: true,
-          status: "FINALISTA",
+          status: "EN_TERNA",
         }),
         this.vacancyRepo.update(vacancyId, tenantId, {
           status: "PRE_PLACEMENT",

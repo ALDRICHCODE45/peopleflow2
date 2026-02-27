@@ -46,6 +46,7 @@ model User {
   vacanciesCreated          Vacancy[]              @relation("VacancyCreatedBy")
   vacancyStatusChanges      VacancyStatusHistory[] @relation("VacancyStatusChangedBy")
   vacancyChecklistValidated Vacancy[]              @relation("VacancyChecklistValidator")
+  ternaHistoriesValidated   VacancyTernaHistory[]  @relation("TernaHistoryValidator")
 
   @@map("user")
 }
@@ -138,6 +139,7 @@ model Tenant {
   vacancyCandidateMatchs VacancyCandidateMatch[]
   vacancyStatusHistory   VacancyStatusHistory[]
   vacancyConfig          VacancyConfig?
+  vacancyTernaHistories  VacancyTernaHistory[]
 
   // Relación con configuración de notificaciones
   notificationConfig NotificationConfig?
@@ -565,8 +567,7 @@ enum VacancyModality {
 
 enum CandidateStatus {
   EN_PROCESO
-  PRESENTADO
-  FINALISTA
+  EN_TERNA
   CONTRATADO
   DESCARTADO
 }
@@ -646,6 +647,7 @@ model Vacancy {
   candidates     VacancyCandidate[]
   statusHistory  VacancyStatusHistory[]
   attachments    Attachment[]           @relation("VacancyAttachments")
+  ternaHistories VacancyTernaHistory[]
 
   @@index([tenantId])
   @@index([status])
@@ -701,7 +703,8 @@ model VacancyCandidate {
   currentSalary       Float?          // Sueldo actual/último (bruto)
   salaryExpectation   Float?          // Expectativa económica (bruto)
   currentModality     VacancyModality? // Modalidad actual o última
-  currentLocation     String?         // Ubicación último trabajo (ciudad/país)
+  countryCode         String?         // Código de país (ISO 3166-1 alpha-2)
+  regionCode          String?         // Código de región/estado
   currentCommissions  String?         // Bonos/comisiones en trabajo actual o último
   currentBenefits     String?         // Prestaciones actuales o últimas
   candidateLocation   String?         // Dirección del candidato (Ciudad/País)
@@ -746,6 +749,8 @@ model VacancyCandidateMatch {
   checklistItemId String
   checklistItem   VacancyChecklistItem @relation(fields: [checklistItemId], references: [id], onDelete: Cascade)
 
+  // Evaluación cualitativa: CUMPLE | NO_CUMPLE | PARCIAL
+  rating   String? // "CUMPLE" | "NO_CUMPLE" | "PARCIAL"
   // Texto libre del reclutador (columna derecha del match cualitativo)
   feedback String? @db.Text
 
@@ -937,4 +942,52 @@ model NotificationConfig {
 
   @@index([tenantId])
   @@map("notification_config")
+}
+
+// =============================================
+// HISTORIAL DE TERNAS
+// =============================================
+
+// Historial permanente de cada terna entregada
+// Se crea automáticamente al validar la terna — nunca se elimina
+model VacancyTernaHistory {
+  id             String    @id @default(uuid())
+  vacancyId      String
+  vacancy        Vacancy   @relation(fields: [vacancyId], references: [id], onDelete: Cascade)
+  ternaNumber    Int       // 1 = primera terna, 2 = segunda, etc.
+  validatedAt    DateTime  @default(now())
+  validatedById  String
+  validatedBy    User      @relation("TernaHistoryValidator", fields: [validatedById], references: [id], onDelete: Restrict)
+
+  // Snapshot de la fecha objetivo en el momento de la validación
+  targetDeliveryDate DateTime?
+  // Snapshot de si fue entregada a tiempo (validatedAt <= targetDeliveryDate)
+  isOnTime           Boolean   @default(false)
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  candidates VacancyTernaHistoryCandidate[]
+
+  @@index([vacancyId])
+  @@index([tenantId])
+  @@map("vacancy_terna_history")
+}
+
+// Snapshot de candidatos para cada terna histórica
+model VacancyTernaHistoryCandidate {
+  id             String              @id @default(uuid())
+  ternaHistoryId String
+  ternaHistory   VacancyTernaHistory @relation(fields: [ternaHistoryId], references: [id], onDelete: Cascade)
+
+  // Reference + snapshot (candidate could be deleted later)
+  candidateId       String  // keep reference for linking
+  candidateFullName String  // snapshot so it survives deletion
+
+  tenantId String
+
+  @@index([ternaHistoryId])
+  @@map("vacancy_terna_history_candidate")
 }

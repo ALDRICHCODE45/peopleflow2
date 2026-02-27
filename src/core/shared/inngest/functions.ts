@@ -15,6 +15,14 @@ import {
   generateLeadInactivityAlertEmail,
   generateLeadInactivityAlertPlainText,
 } from "@features/Notifications/server/infrastructure/templates/leadInactivityAlertTemplate";
+import {
+  generateVacancyEntryReminderEmail,
+  generateVacancyEntryReminderPlainText,
+} from "@features/Notifications/server/infrastructure/templates/vacancyPrePlacementEntryReminderTemplate";
+import {
+  generateVacancyPlacementCongratsEmail,
+  generateVacancyPlacementCongratsPlainText,
+} from "@features/Notifications/server/infrastructure/templates/vacancyPlacementCongratsTemplate";
 
 const STATUS_LABELS: Record<string, string> = {
   CONTACTO: "Contacto",
@@ -259,7 +267,174 @@ const handleLeadInactivityAlert = inngest.createFunction(
   },
 );
 
+// Function 3: Entry date reminder for PRE_PLACEMENT vacancies
+const handleVacancyPrePlacementEntryReminder = inngest.createFunction(
+  {
+    id: "handle-vacancy-pre-placement-entry-reminder",
+    name: "Recordatorio de fecha de ingreso en Pre-Placement",
+    cancelOn: [
+      {
+        event: "vacancy/pre-placement.entered",
+        match: "data.vacancyId",
+      },
+    ],
+  },
+  { event: "vacancy/pre-placement.entered" },
+  async ({ event, step }) => {
+    const { vacancyId, tenantId, recruiterId, vacancyPosition, entryDate } =
+      event.data;
+
+    // Step 1: Sleep until entry date
+    await step.sleepUntil("wait-until-entry-date", new Date(entryDate));
+
+    // Step 2: Verify vacancy is still in PRE_PLACEMENT
+    const vacancy = await step.run("verify-vacancy-status", async () => {
+      return prisma.vacancy.findFirst({
+        where: { id: vacancyId, tenantId },
+        select: { status: true },
+      });
+    });
+
+    if (!vacancy || vacancy.status !== "PRE_PLACEMENT") {
+      return { skipped: true, reason: "Vacancy no longer in PRE_PLACEMENT" };
+    }
+
+    // Step 3: Fetch recruiter email
+    const recruiter = await step.run("fetch-recruiter", async () => {
+      return prisma.user.findFirst({
+        where: { id: recruiterId },
+        select: { email: true, name: true },
+      });
+    });
+
+    if (!recruiter?.email) {
+      return { skipped: true, reason: "Recruiter not found" };
+    }
+
+    // Step 4: Fetch finalist candidate name
+    const finalistCandidate = await step.run("fetch-finalist", async () => {
+      return prisma.vacancyCandidate.findFirst({
+        where: { vacancyId, tenantId, isInTerna: true },
+        orderBy: { createdAt: "asc" },
+        select: { firstName: true, lastName: true },
+      });
+    });
+
+    const candidateName = finalistCandidate
+      ? `${finalistCandidate.firstName} ${finalistCandidate.lastName}`
+      : "el candidato";
+
+    const formattedDate = new Date(entryDate).toLocaleDateString("es-MX", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    // Step 5: Send email
+    await step.run("send-entry-reminder-email", async () => {
+      const notificationUseCase = new SendNotificationUseCase(
+        prismaNotificationRepository,
+        [emailProvider],
+      );
+
+      const emailData = {
+        recipientName: recruiter.name || "Reclutador",
+        candidateName,
+        vacancyPosition,
+        entryDate: formattedDate,
+        appUrl: APP_URL,
+      };
+
+      await notificationUseCase.execute({
+        tenantId,
+        provider: "EMAIL",
+        recipient: recruiter.email,
+        subject: `Recordatorio: ${candidateName} ingresa hoy a "${vacancyPosition}"`,
+        body: generateVacancyEntryReminderPlainText(emailData),
+        priority: "HIGH",
+        metadata: {
+          vacancyId,
+          vacancyPosition,
+          triggerEvent: "VACANCY_PRE_PLACEMENT_ENTRY_REMINDER",
+          entryDate,
+          htmlTemplate: generateVacancyEntryReminderEmail(emailData),
+        },
+        createdById: recruiterId,
+      });
+    });
+
+    return { sent: true };
+  },
+);
+
+// Function 4: Placement congrats email
+const handleVacancyPlacementCongratsEmail = inngest.createFunction(
+  {
+    id: "handle-vacancy-placement-congrats-email",
+    name: "Email de felicitaciones por placement",
+  },
+  { event: "vacancy/placement.congrats-email" },
+  async ({ event, step }) => {
+    const { vacancyId, tenantId, vacancyPosition, candidateName, candidateEmail } =
+      event.data;
+
+    if (!candidateEmail) {
+      return { skipped: true, reason: "No candidate email" };
+    }
+
+    // Get vacancy entry date
+    const vacancy = await step.run("fetch-vacancy", async () => {
+      return prisma.vacancy.findFirst({
+        where: { id: vacancyId, tenantId },
+        select: { entryDate: true, createdById: true },
+      });
+    });
+
+    const formattedDate = vacancy?.entryDate
+      ? new Date(vacancy.entryDate).toLocaleDateString("es-MX", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })
+      : "próximamente";
+
+    await step.run("send-congrats-email", async () => {
+      const notificationUseCase = new SendNotificationUseCase(
+        prismaNotificationRepository,
+        [emailProvider],
+      );
+
+      const emailData = {
+        candidateName,
+        vacancyPosition,
+        entryDate: formattedDate,
+        appUrl: APP_URL,
+      };
+
+      await notificationUseCase.execute({
+        tenantId,
+        provider: "EMAIL",
+        recipient: candidateEmail,
+        subject: `¡Felicitaciones ${candidateName}! Bienvenido(a) a "${vacancyPosition}"`,
+        body: generateVacancyPlacementCongratsPlainText(emailData),
+        priority: "HIGH",
+        metadata: {
+          vacancyId,
+          vacancyPosition,
+          triggerEvent: "VACANCY_PLACEMENT_CONGRATS",
+          htmlTemplate: generateVacancyPlacementCongratsEmail(emailData),
+        },
+        createdById: vacancy?.createdById ?? "system",
+      });
+    });
+
+    return { sent: true };
+  },
+);
+
 export const functions = [
   handleLeadStatusChangeNotification,
   handleLeadInactivityAlert,
+  handleVacancyPrePlacementEntryReminder,
+  handleVacancyPlacementCongratsEmail,
 ];

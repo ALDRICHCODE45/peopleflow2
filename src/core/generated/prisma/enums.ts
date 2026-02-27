@@ -107,8 +107,7 @@ export type VacancyModality = (typeof VacancyModality)[keyof typeof VacancyModal
 
 export const CandidateStatus = {
   EN_PROCESO: 'EN_PROCESO',
-  PRESENTADO: 'PRESENTADO',
-  FINALISTA: 'FINALISTA',
+  EN_TERNA: 'EN_TERNA',
   CONTRATADO: 'CONTRATADO',
   DESCARTADO: 'DESCARTADO'
 } as const

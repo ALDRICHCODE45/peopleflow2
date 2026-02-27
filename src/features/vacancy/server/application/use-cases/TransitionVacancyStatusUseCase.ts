@@ -21,12 +21,20 @@ export interface TransitionVacancyStatusInput {
   /** Attachment data provided by the server action (queried before calling the use case) */
   hasJobDescription?: boolean;
   hasValidatedPerfilMuestra?: boolean;
+  /** For PRE_PLACEMENT and PLACEMENT transitions */
+  salaryFixed?: number | null;
+  entryDate?: Date | null;
+  sendCongratsEmail?: boolean;
 }
 
 export interface TransitionVacancyStatusOutput {
   success: boolean;
   vacancy?: VacancyDTO;
   error?: string;
+  inngestEvent?: {
+    name: string;
+    data: Record<string, unknown>;
+  };
 }
 
 export class TransitionVacancyStatusUseCase {
@@ -48,6 +56,9 @@ export class TransitionVacancyStatusUseCase {
         newTargetDeliveryDate,
         hasJobDescription = false,
         hasValidatedPerfilMuestra = false,
+        salaryFixed,
+        entryDate,
+        sendCongratsEmail,
       } = input;
 
       // 1. Load vacancy
@@ -60,7 +71,6 @@ export class TransitionVacancyStatusUseCase {
       const isRollback = isRollbackTransition(currentStatus, newStatus);
 
       // 2. Build context for the state machine
-      // Candidate counts are derived from the loaded vacancy relations (if available)
       const candidates = vacancy.toJSON().candidates ?? [];
       const inTernaCount = candidates.filter((c) => c.isInTerna).length;
       const finalistCount = candidates.filter((c) => c.isFinalist).length;
@@ -86,6 +96,8 @@ export class TransitionVacancyStatusUseCase {
         input: {
           reason,
           newTargetDeliveryDate: newTargetDeliveryDate?.toISOString() ?? null,
+          salaryFixed: salaryFixed ?? null,
+          entryDate: entryDate?.toISOString() ?? null,
         },
       };
 
@@ -108,6 +120,10 @@ export class TransitionVacancyStatusUseCase {
         newTargetDeliveryDate?: Date | null;
       };
 
+      const needsSalaryAndDate =
+        newStatus === "PRE_PLACEMENT" ||
+        (newStatus === "PLACEMENT" && currentStatus === "FOLLOW_UP");
+
       if (isRollback) {
         updateData = {
           status: newStatus,
@@ -116,6 +132,13 @@ export class TransitionVacancyStatusUseCase {
           actualDeliveryDate: null,
         };
         historyData = { isRollback: true, reason, newTargetDeliveryDate };
+      } else if (needsSalaryAndDate) {
+        updateData = {
+          status: newStatus,
+          salaryFixed: salaryFixed ?? null,
+          entryDate: entryDate ?? null,
+        };
+        historyData = { isRollback: false, reason: reason ?? null };
       } else {
         updateData = { status: newStatus };
         historyData = { isRollback: false, reason: reason ?? null };
@@ -138,7 +161,40 @@ export class TransitionVacancyStatusUseCase {
         return { success: false, error: "Error al actualizar la vacante" };
       }
 
-      return { success: true, vacancy: updatedVacancy.toJSON() };
+      // 6. Determine Inngest event to fire
+      let inngestEvent: TransitionVacancyStatusOutput["inngestEvent"];
+
+      if (newStatus === "PRE_PLACEMENT") {
+        inngestEvent = {
+          name: "vacancy/pre-placement.entered",
+          data: {
+            vacancyId,
+            tenantId,
+            recruiterId: vacancy.recruiterId,
+            vacancyPosition: vacancy.position,
+            entryDate: entryDate?.toISOString() ?? "",
+          },
+        };
+      } else if (newStatus === "PLACEMENT" && sendCongratsEmail) {
+        // Find finalist candidate for congrats email
+        const finalistCandidate = candidates.find(
+          (c) => c.isFinalist || c.isInTerna
+        );
+        inngestEvent = {
+          name: "vacancy/placement.congrats-email",
+          data: {
+            vacancyId,
+            tenantId,
+            vacancyPosition: vacancy.position,
+            candidateName: finalistCandidate
+              ? `${finalistCandidate.firstName ?? ""} ${finalistCandidate.lastName ?? ""}`.trim()
+              : "",
+            candidateEmail: finalistCandidate?.email ?? null,
+          },
+        };
+      }
+
+      return { success: true, vacancy: updatedVacancy.toJSON(), inngestEvent };
     } catch (error) {
       console.error("Error in TransitionVacancyStatusUseCase:", error);
       return {

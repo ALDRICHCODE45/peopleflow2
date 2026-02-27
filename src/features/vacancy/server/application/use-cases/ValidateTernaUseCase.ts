@@ -2,6 +2,7 @@ import type { VacancyDTO } from "@features/vacancy/frontend/types/vacancy.types"
 import type { IVacancyRepository } from "../../domain/interfaces/IVacancyRepository";
 import type { IVacancyCandidateRepository } from "../../domain/interfaces/IVacancyCandidateRepository";
 import type { IVacancyStatusHistoryRepository } from "../../domain/interfaces/IVacancyStatusHistoryRepository";
+import type { IVacancyTernaHistoryRepository } from "../../domain/interfaces/IVacancyTernaHistoryRepository";
 import { VacancyWorkflowService } from "../../domain/services/VacancyWorkflowService";
 
 export interface ValidateTernaInput {
@@ -22,7 +23,8 @@ export class ValidateTernaUseCase {
   constructor(
     private readonly vacancyRepo: IVacancyRepository,
     private readonly candidateRepo: IVacancyCandidateRepository,
-    private readonly statusHistoryRepo: IVacancyStatusHistoryRepository
+    private readonly statusHistoryRepo: IVacancyStatusHistoryRepository,
+    private readonly ternaHistoryRepo: IVacancyTernaHistoryRepository
   ) {}
 
   async execute(input: ValidateTernaInput): Promise<ValidateTernaOutput> {
@@ -50,15 +52,31 @@ export class ValidateTernaUseCase {
         return { success: false, error: ternaResult.error };
       }
 
-      // 4. Clear previous terna (sequential — must complete before marking new ones)
+      // 4. Load candidate details for the history snapshot
+      const allCandidates = await this.candidateRepo.findByVacancyId(vacancyId, tenantId);
+      const ternaCandidates = allCandidates.filter((c) =>
+        candidateIds.includes(c.id)
+      );
+
+      // 5. Count existing terna histories to determine terna number
+      const existingCount = await this.ternaHistoryRepo.countByVacancyId(vacancyId, tenantId);
+      const ternaNumber = existingCount + 1;
+
+      // 6. Calculate isOnTime
+      const targetDeliveryDate = vacancy.targetDeliveryDate ?? null;
+      const now = new Date();
+      const isOnTime = targetDeliveryDate ? now <= targetDeliveryDate : true;
+
+      // 7. Clear previous terna (sequential — must complete before marking new ones)
       await this.candidateRepo.clearTerna(vacancyId, tenantId);
 
-      // 5. Execute in parallel: mark new terna + update vacancy status + create history
-      const [, updatedVacancy] = await Promise.all([
+      // 8. Execute in parallel: mark terna, discard others, update vacancy, create histories
+      const [, , updatedVacancy] = await Promise.all([
         this.candidateRepo.markAsInTerna(candidateIds, vacancyId, tenantId),
+        this.candidateRepo.markNonTernaAsDescartado(vacancyId, tenantId, candidateIds),
         this.vacancyRepo.update(vacancyId, tenantId, {
           status: "FOLLOW_UP",
-          actualDeliveryDate: new Date(),
+          actualDeliveryDate: now,
         }),
         this.statusHistoryRepo.create({
           vacancyId,
@@ -67,6 +85,18 @@ export class ValidateTernaUseCase {
           isRollback: false,
           changedById,
           tenantId,
+        }),
+        this.ternaHistoryRepo.create({
+          vacancyId,
+          ternaNumber,
+          validatedById: changedById,
+          targetDeliveryDate,
+          isOnTime,
+          tenantId,
+          candidates: ternaCandidates.map((c) => ({
+            candidateId: c.id,
+            candidateFullName: `${c.firstName} ${c.lastName}`,
+          })),
         }),
       ]);
 

@@ -14,8 +14,16 @@ import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
 import { Skeleton } from "@/core/shared/ui/shadcn/skeleton";
 import { Separator } from "@/core/shared/ui/shadcn/separator";
-import { Checkbox } from "@/core/shared/ui/shadcn/checkbox";
 import { Input } from "@shadcn/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/core/shared/ui/shadcn/dialog";
+import { Textarea } from "@/core/shared/ui/shadcn/textarea";
+import { Label } from "@/core/shared/ui/shadcn/label";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   PlusSignIcon,
@@ -23,23 +31,35 @@ import {
   CheckmarkCircle02Icon,
   UserAdd01Icon,
   RefreshIcon,
+  UserMultiple02Icon,
+  CheckmarkBadge01Icon,
+  Alert02Icon,
+  RepeatIcon,
+  Cancel01Icon,
+  Clock01Icon,
 } from "@hugeicons/core-free-icons";
 import { useModalState } from "@/core/shared/hooks/useModalState";
 import { useVacancyDetailQuery } from "../hooks/useVacancyDetailQuery";
 import {
-  useToggleChecklistItem,
   useAddChecklistItem,
+  useConfirmPlacement,
 } from "../hooks/useVacancyDetailMutations";
+import {
+  useValidateChecklist,
+  useRejectChecklist,
+} from "../hooks/useVacancyAttachments";
 import { VacancyStatusBadge } from "./VacancyStatusBadge";
 import { CandidateCard } from "./CandidateCard";
 import { AddCandidateDialog } from "./AddCandidateDialog";
+import { ValidateTernaDialog } from "./ValidateTernaDialog";
+import { TernaHistorySheet } from "./TernaHistorySheet";
 import { VacancyStatusTransitionDialog } from "./VacancyStatusTransitionDialog";
 import { AttachmentsSection } from "./AttachmentsSection";
-import { useRemoveCandidate } from "../hooks/useVacancyDetailMutations";
 import { useVacancyAttachmentsQuery } from "../hooks/useVacancyAttachments";
 import type {
   VacancyStatusHistoryDTO,
   VacancyStatusType,
+  VacancyDTO,
 } from "../types/vacancy.types";
 import {
   VACANCY_STATUS_LABELS,
@@ -136,6 +156,136 @@ function DetailSkeleton() {
   );
 }
 
+// ─── ChecklistValidationSection ───────────────────────────────────────────────
+
+function ChecklistValidationSection({ vacancy }: { vacancy: VacancyDTO }) {
+  const [rejectOpen, setRejectOpen] = useState(false);
+  const [rejectReason, setRejectReason] = useState("");
+  const validateChecklist = useValidateChecklist(vacancy.id);
+  const rejectChecklist = useRejectChecklist(vacancy.id);
+
+  function handleReject() {
+    if (!rejectReason.trim()) return;
+    rejectChecklist.mutate(rejectReason.trim(), {
+      onSuccess: () => {
+        setRejectOpen(false);
+        setRejectReason("");
+      },
+    });
+  }
+
+  return (
+    <div className="space-y-3">
+      <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        Validación del Checklist (Admin)
+      </h4>
+
+      {vacancy.checklistValidatedAt ? (
+        <div className="rounded-lg border bg-green-50 border-green-200 p-3 space-y-1">
+          <div className="flex items-center gap-2">
+            <HugeiconsIcon
+              icon={CheckmarkCircle02Icon}
+              size={16}
+              className="text-green-600"
+            />
+            <Badge className="bg-green-100 text-green-700 border-green-200 text-xs">
+              Checklist Validado
+            </Badge>
+          </div>
+        </div>
+      ) : vacancy.checklistRejectionReason ? (
+        <div className="rounded-lg border bg-red-50 border-red-200 px-3 py-2 space-y-1">
+          <div className="flex items-center gap-2">
+            <HugeiconsIcon
+              icon={Cancel01Icon}
+              size={16}
+              className="text-red-600"
+            />
+            <span className="text-xs font-medium text-red-700">
+              Checklist Rechazado
+            </span>
+          </div>
+          <p className="text-xs text-red-700">
+            {vacancy.checklistRejectionReason}
+          </p>
+        </div>
+      ) : (
+        <div className="rounded-lg border border-dashed p-3">
+          <p className="text-xs text-muted-foreground">
+            El checklist aún no ha sido validado por un administrador.
+          </p>
+        </div>
+      )}
+
+      <div className="flex items-center gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-1.5 text-xs text-green-700 border-green-300 hover:bg-green-50"
+          disabled={
+            validateChecklist.isPending || !!vacancy.checklistValidatedAt
+          }
+          onClick={() => validateChecklist.mutate()}
+        >
+          <HugeiconsIcon icon={CheckmarkCircle02Icon} size={13} />
+          Validar Checklist
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-1.5 text-xs text-red-700 border-red-300 hover:bg-red-50"
+          disabled={rejectChecklist.isPending}
+          onClick={() => setRejectOpen(true)}
+        >
+          <HugeiconsIcon icon={Cancel01Icon} size={13} />
+          Rechazar Checklist
+        </Button>
+      </div>
+
+      {/* Reject Dialog */}
+      <Dialog
+        open={rejectOpen}
+        onOpenChange={(o) => !o && setRejectOpen(false)}
+      >
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Rechazar Checklist</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 py-2">
+            <Label htmlFor="checklist-reject-reason">Motivo del rechazo</Label>
+            <Textarea
+              id="checklist-reject-reason"
+              placeholder="Describe el motivo..."
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+              rows={4}
+            />
+          </div>
+          <DialogFooter className="gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setRejectOpen(false)}
+            >
+              Cancelar
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={handleReject}
+              disabled={!rejectReason.trim() || rejectChecklist.isPending}
+            >
+              {rejectChecklist.isPending ? "Rechazando..." : "Rechazar"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
+// ─── Main component ───────────────────────────────────────────────────────────
+
 export function VacancyDetailSheet({
   vacancyId,
   onClose,
@@ -160,9 +310,20 @@ export function VacancyDetailSheet({
     closeModal: closeTransition,
   } = useModalState();
 
-  const removeCandidateMutation = useRemoveCandidate();
-  const toggleChecklistMutation = useToggleChecklistItem();
+  const {
+    isOpen: isValidateTernaOpen,
+    openModal: openValidateTerna,
+    closeModal: closeValidateTerna,
+  } = useModalState();
+
+  const {
+    isOpen: isTernaHistoryOpen,
+    openModal: openTernaHistory,
+    closeModal: closeTernaHistory,
+  } = useModalState();
+
   const addChecklistMutation = useAddChecklistItem();
+  const confirmPlacementMutation = useConfirmPlacement();
 
   const [newChecklistText, setNewChecklistText] = useState("");
   const [showAddChecklist, setShowAddChecklist] = useState(false);
@@ -220,10 +381,59 @@ export function VacancyDetailSheet({
                           {vacancy.recruiterName}
                         </span>
                       )}
+                      {/* Indicador de intentos (downgrades) */}
+                      {vacancy.rollbackCount > 0 && (
+                        <span className="flex items-center gap-1 text-amber-600">
+                          <HugeiconsIcon icon={RepeatIcon} size={11} />
+                          <span>
+                            {vacancy.rollbackCount} retroceso
+                            {vacancy.rollbackCount !== 1 ? "s" : ""}
+                          </span>
+                        </span>
+                      )}
+                      {/* Indicador de entrega en tiempo */}
+                      {vacancy.actualDeliveryDate &&
+                        vacancy.targetDeliveryDate && (
+                          <span
+                            className={
+                              new Date(vacancy.actualDeliveryDate) <=
+                                new Date(vacancy.targetDeliveryDate)
+                                ? "flex items-center gap-1 text-green-600"
+                                : "flex items-center gap-1 text-red-500"
+                            }
+                          >
+                            <HugeiconsIcon icon={Alert02Icon} size={11} />
+                            <span>
+                              {new Date(vacancy.actualDeliveryDate) <=
+                                new Date(vacancy.targetDeliveryDate)
+                                ? "Terna en tiempo"
+                                : "Terna fuera de tiempo"}
+                            </span>
+                          </span>
+                        )}
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">
+                    {vacancy.status === "PRE_PLACEMENT" && (
+                      <Button
+                        size="sm"
+                        className="gap-1.5 bg-green-600 hover:bg-green-700 text-white"
+                        onClick={() =>
+                          confirmPlacementMutation.mutate(vacancy.id)
+                        }
+                        disabled={confirmPlacementMutation.isPending}
+                      >
+                        <HugeiconsIcon
+                          icon={CheckmarkBadge01Icon}
+                          size={14}
+                          strokeWidth={2}
+                        />
+                        {confirmPlacementMutation.isPending
+                          ? "Confirmando..."
+                          : "Confirmar placement"}
+                      </Button>
+                    )}
                     <Button
                       variant="outline"
                       size="sm"
@@ -286,12 +496,7 @@ export function VacancyDetailSheet({
                             variant="outline"
                             className="ml-1 text-xs size-5 p-0 flex items-center justify-center"
                           >
-                            {
-                              vacancy.checklistItems.filter(
-                                (i) => i.isCompleted,
-                              ).length
-                            }
-                            /{vacancy.checklistItems.length}
+                            {vacancy.checklistItems.length}
                           </Badge>
                         )}
                     </TabsTrigger>
@@ -431,23 +636,53 @@ export function VacancyDetailSheet({
 
                   {/* ---- Tab: Candidatos ---- */}
                   <TabsContent value="candidates" className="mt-4 space-y-3">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between gap-2 flex-wrap">
                       <span className="text-sm font-medium">
                         {vacancy.candidates?.length ?? 0} candidato(s)
                       </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={openAddCandidate}
-                        className="gap-1.5"
-                      >
-                        <HugeiconsIcon
-                          icon={UserAdd01Icon}
-                          size={14}
-                          strokeWidth={2}
-                        />
-                        Agregar candidato
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={openTernaHistory}
+                          className="gap-1.5 text-muted-foreground hover:text-foreground"
+                        >
+                          <HugeiconsIcon
+                            icon={Clock01Icon}
+                            size={14}
+                            strokeWidth={2}
+                          />
+                          Historial
+                        </Button>
+                        {vacancy.status === "HUNTING" && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={openValidateTerna}
+                            className="gap-1.5 border-amber-300 text-amber-700 hover:bg-amber-50"
+                          >
+                            <HugeiconsIcon
+                              icon={UserMultiple02Icon}
+                              size={14}
+                              strokeWidth={2}
+                            />
+                            Validar terna
+                          </Button>
+                        )}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={openAddCandidate}
+                          className="gap-1.5"
+                        >
+                          <HugeiconsIcon
+                            icon={UserAdd01Icon}
+                            size={14}
+                            strokeWidth={2}
+                          />
+                          Agregar candidato
+                        </Button>
+                      </div>
                     </div>
 
                     {!vacancy.candidates || vacancy.candidates.length === 0 ? (
@@ -465,13 +700,8 @@ export function VacancyDetailSheet({
                           <CandidateCard
                             key={candidate.id}
                             candidate={candidate}
-                            onRemove={(candidateId) =>
-                              removeCandidateMutation.mutate({
-                                candidateId,
-                                vacancyId: vacancy.id,
-                              })
-                            }
-                            isRemoving={removeCandidateMutation.isPending}
+                            vacancyId={vacancy.id}
+                            checklistItems={vacancy.checklistItems ?? []}
                           />
                         ))}
                       </div>
@@ -479,12 +709,12 @@ export function VacancyDetailSheet({
                   </TabsContent>
 
                   {/* ---- Tab: Checklist ---- */}
-                  <TabsContent value="checklist" className="mt-4 space-y-3">
+                  <TabsContent value="checklist" className="mt-4 space-y-4">
+                    {/* Header */}
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium">
-                        {vacancy.checklistItems?.filter((i) => i.isCompleted)
-                          .length ?? 0}
-                        /{vacancy.checklistItems?.length ?? 0} completados
+                      <span className="text-sm font-medium text-muted-foreground">
+                        {vacancy.checklistItems?.length ?? 0} requisito(s)
+                        definido(s)
                       </span>
                       <Button
                         variant="outline"
@@ -501,6 +731,7 @@ export function VacancyDetailSheet({
                       </Button>
                     </div>
 
+                    {/* List — purely informational, no checkboxes */}
                     {!vacancy.checklistItems ||
                       vacancy.checklistItems.length === 0 ? (
                       <div className="flex flex-col items-center justify-center py-10 text-muted-foreground gap-2">
@@ -509,38 +740,29 @@ export function VacancyDetailSheet({
                           size={32}
                           strokeWidth={1.5}
                         />
-                        <p className="text-sm">No hay ítems en el checklist</p>
+                        <p className="text-sm">
+                          No hay requisitos en el checklist
+                        </p>
+                        <p className="text-xs text-center max-w-xs">
+                          Agregá los requisitos que debe cumplir el candidato
+                          ideal para esta posición.
+                        </p>
                       </div>
                     ) : (
                       <div className="space-y-2">
                         {vacancy.checklistItems
                           .sort((a, b) => a.order - b.order)
-                          .map((item) => (
+                          .map((item, index) => (
                             <div
                               key={item.id}
-                              className="flex items-center gap-3 rounded-md border px-3 py-2 hover:bg-accent/30 transition-colors"
+                              className="flex items-center gap-3 rounded-md border px-3 py-2.5 bg-muted/30"
                             >
-                              <Checkbox
-                                id={item.id}
-                                checked={item.isCompleted}
-                                onCheckedChange={() =>
-                                  toggleChecklistMutation.mutate({
-                                    itemId: item.id,
-                                    vacancyId: vacancy.id,
-                                    isCompleted: !item.isCompleted,
-                                  })
-                                }
-                                disabled={toggleChecklistMutation.isPending}
-                              />
-                              <label
-                                htmlFor={item.id}
-                                className={`text-sm flex-1 cursor-pointer ${item.isCompleted
-                                    ? "line-through text-muted-foreground"
-                                    : ""
-                                  }`}
-                              >
+                              <span className="text-xs text-muted-foreground font-mono w-5 shrink-0">
+                                {index + 1}.
+                              </span>
+                              <span className="text-sm flex-1">
                                 {item.requirement}
-                              </label>
+                              </span>
                             </div>
                           ))}
                       </div>
@@ -584,6 +806,11 @@ export function VacancyDetailSheet({
                         </Button>
                       </div>
                     )}
+
+                    <Separator />
+
+                    {/* Checklist Validation (Admin) */}
+                    <ChecklistValidationSection vacancy={vacancy} />
                   </TabsContent>
 
                   {/* ---- Tab: Historial ---- */}
@@ -628,12 +855,27 @@ export function VacancyDetailSheet({
             vacancyId={vacancyId}
           />
           {vacancy && (
-            <VacancyStatusTransitionDialog
-              open={isTransitionOpen}
-              onClose={closeTransition}
-              vacancyId={vacancyId}
-              currentStatus={vacancy.status}
-            />
+            <>
+              <VacancyStatusTransitionDialog
+                open={isTransitionOpen}
+                onClose={closeTransition}
+                vacancyId={vacancyId}
+                currentStatus={vacancy.status}
+                candidates={vacancy.candidates ?? []}
+              />
+              <ValidateTernaDialog
+                open={isValidateTernaOpen}
+                onClose={closeValidateTerna}
+                vacancyId={vacancyId}
+                candidates={vacancy.candidates ?? []}
+              />
+              <TernaHistorySheet
+                open={isTernaHistoryOpen}
+                onClose={closeTernaHistory}
+                vacancyId={vacancyId}
+                vacancyPosition={vacancy.position}
+              />
+            </>
           )}
         </>
       )}

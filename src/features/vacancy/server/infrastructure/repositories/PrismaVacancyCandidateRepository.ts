@@ -25,7 +25,8 @@ type PrismaCandidateRecord = {
   currentSalary: number | null;
   salaryExpectation: number | null;
   currentModality: string | null;
-  currentLocation: string | null;
+  countryCode: string | null;
+  regionCode: string | null;
   currentCommissions: string | null;
   currentBenefits: string | null;
   candidateLocation: string | null;
@@ -55,7 +56,8 @@ export class PrismaVacancyCandidateRepository
       currentSalary: record.currentSalary,
       salaryExpectation: record.salaryExpectation,
       currentModality: (record.currentModality as VacancyModality) ?? null,
-      currentLocation: record.currentLocation,
+      countryCode: record.countryCode,
+      regionCode: record.regionCode,
       currentCommissions: record.currentCommissions,
       currentBenefits: record.currentBenefits,
       candidateLocation: record.candidateLocation,
@@ -123,7 +125,8 @@ export class PrismaVacancyCandidateRepository
         currentSalary: data.currentSalary ?? null,
         salaryExpectation: data.salaryExpectation ?? null,
         currentModality: data.currentModality ?? null,
-        currentLocation: data.currentLocation ?? null,
+        countryCode: data.countryCode ?? null,
+        regionCode: data.regionCode ?? null,
         currentCommissions: data.currentCommissions ?? null,
         currentBenefits: data.currentBenefits ?? null,
         candidateLocation: data.candidateLocation ?? null,
@@ -165,8 +168,11 @@ export class PrismaVacancyCandidateRepository
         ...(data.currentModality !== undefined && {
           currentModality: data.currentModality,
         }),
-        ...(data.currentLocation !== undefined && {
-          currentLocation: data.currentLocation,
+        ...(data.countryCode !== undefined && {
+          countryCode: data.countryCode,
+        }),
+        ...(data.regionCode !== undefined && {
+          regionCode: data.regionCode,
         }),
         ...(data.currentCommissions !== undefined && {
           currentCommissions: data.currentCommissions,
@@ -211,7 +217,7 @@ export class PrismaVacancyCandidateRepository
   ): Promise<number> {
     const result = await prisma.vacancyCandidate.updateMany({
       where: { id: { in: ids }, vacancyId, tenantId },
-      data: { isInTerna: true, status: "PRESENTADO" },
+      data: { isInTerna: true, status: "EN_TERNA" },
     });
     return result.count;
   }
@@ -222,6 +228,50 @@ export class PrismaVacancyCandidateRepository
       data: { isInTerna: false },
     });
     return result.count;
+  }
+
+  async markAsContratado(
+    id: string,
+    vacancyId: string,
+    tenantId: string
+  ): Promise<void> {
+    await prisma.$transaction([
+      // Mark the selected candidate as CONTRATADO and remove from terna
+      prisma.vacancyCandidate.updateMany({
+        where: { id, vacancyId, tenantId },
+        data: { status: "CONTRATADO", isInTerna: false },
+      }),
+      // Auto-discard all other candidates in the same vacancy
+      prisma.vacancyCandidate.updateMany({
+        where: { vacancyId, tenantId, id: { not: id } },
+        data: { status: "DESCARTADO" },
+      }),
+    ]);
+  }
+
+  async resetCandidatesOnRollback(
+    vacancyId: string,
+    tenantId: string
+  ): Promise<void> {
+    await prisma.vacancyCandidate.updateMany({
+      where: { vacancyId, tenantId },
+      data: { status: "EN_PROCESO", isInTerna: false },
+    });
+  }
+
+  async markNonTernaAsDescartado(
+    vacancyId: string,
+    tenantId: string,
+    ternaIds: string[]
+  ): Promise<void> {
+    await prisma.vacancyCandidate.updateMany({
+      where: {
+        vacancyId,
+        tenantId,
+        id: { notIn: ternaIds },
+      },
+      data: { status: "DESCARTADO" },
+    });
   }
 }
 

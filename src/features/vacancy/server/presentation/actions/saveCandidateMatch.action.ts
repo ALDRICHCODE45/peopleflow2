@@ -14,6 +14,7 @@ import type { SaveMatchResult } from "../../../frontend/types/vacancy.types";
 export interface SaveCandidateMatchInput {
   candidateId: string;
   checklistItemId: string;
+  rating: string | null;
   feedback: string | null;
 }
 
@@ -52,6 +53,7 @@ export async function saveCandidateMatchAction(
     const result = await useCase.execute({
       candidateId: input.candidateId,
       checklistItemId: input.checklistItemId,
+      rating: input.rating,
       feedback: input.feedback,
       tenantId,
     });
@@ -67,6 +69,7 @@ export async function saveCandidateMatchAction(
             id: result.match.id,
             candidateId: result.match.candidateId,
             checklistItemId: result.match.checklistItemId,
+            rating: result.match.rating as ("CUMPLE" | "NO_CUMPLE" | "PARCIAL" | null),
             feedback: result.match.feedback,
             tenantId: result.match.tenantId,
             createdAt: result.match.createdAt.toISOString(),

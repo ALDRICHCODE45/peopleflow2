@@ -169,3 +169,13 @@ export type Client = Prisma.ClientModel
  * 
  */
 export type NotificationConfig = Prisma.NotificationConfigModel
+/**
+ * Model VacancyTernaHistory
+ * 
+ */
+export type VacancyTernaHistory = Prisma.VacancyTernaHistoryModel
+/**
+ * Model VacancyTernaHistoryCandidate
+ * 
+ */
+export type VacancyTernaHistoryCandidate = Prisma.VacancyTernaHistoryCandidateModel

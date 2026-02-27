@@ -28,6 +28,7 @@ export type VacancyCandidateMatchMinAggregateOutputType = {
   id: string | null
   candidateId: string | null
   checklistItemId: string | null
+  rating: string | null
   feedback: string | null
   tenantId: string | null
   createdAt: Date | null
@@ -38,6 +39,7 @@ export type VacancyCandidateMatchMaxAggregateOutputType = {
   id: string | null
   candidateId: string | null
   checklistItemId: string | null
+  rating: string | null
   feedback: string | null
   tenantId: string | null
   createdAt: Date | null
@@ -48,6 +50,7 @@ export type VacancyCandidateMatchCountAggregateOutputType = {
   id: number
   candidateId: number
   checklistItemId: number
+  rating: number
   feedback: number
   tenantId: number
   createdAt: number
@@ -60,6 +63,7 @@ export type VacancyCandidateMatchMinAggregateInputType = {
   id?: true
   candidateId?: true
   checklistItemId?: true
+  rating?: true
   feedback?: true
   tenantId?: true
   createdAt?: true
@@ -70,6 +74,7 @@ export type VacancyCandidateMatchMaxAggregateInputType = {
   id?: true
   candidateId?: true
   checklistItemId?: true
+  rating?: true
   feedback?: true
   tenantId?: true
   createdAt?: true
@@ -80,6 +85,7 @@ export type VacancyCandidateMatchCountAggregateInputType = {
   id?: true
   candidateId?: true
   checklistItemId?: true
+  rating?: true
   feedback?: true
   tenantId?: true
   createdAt?: true
@@ -163,6 +169,7 @@ export type VacancyCandidateMatchGroupByOutputType = {
   id: string
   candidateId: string
   checklistItemId: string
+  rating: string | null
   feedback: string | null
   tenantId: string
   createdAt: Date
@@ -194,6 +201,7 @@ export type VacancyCandidateMatchWhereInput = {
   id?: Prisma.StringFilter<"VacancyCandidateMatch"> | string
   candidateId?: Prisma.StringFilter<"VacancyCandidateMatch"> | string
   checklistItemId?: Prisma.StringFilter<"VacancyCandidateMatch"> | string
+  rating?: Prisma.StringNullableFilter<"VacancyCandidateMatch"> | string | null
   feedback?: Prisma.StringNullableFilter<"VacancyCandidateMatch"> | string | null
   tenantId?: Prisma.StringFilter<"VacancyCandidateMatch"> | string
   createdAt?: Prisma.DateTimeFilter<"VacancyCandidateMatch"> | Date | string
@@ -207,6 +215,7 @@ export type VacancyCandidateMatchOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   candidateId?: Prisma.SortOrder
   checklistItemId?: Prisma.SortOrder
+  rating?: Prisma.SortOrderInput | Prisma.SortOrder
   feedback?: Prisma.SortOrderInput | Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -224,6 +233,7 @@ export type VacancyCandidateMatchWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.VacancyCandidateMatchWhereInput | Prisma.VacancyCandidateMatchWhereInput[]
   candidateId?: Prisma.StringFilter<"VacancyCandidateMatch"> | string
   checklistItemId?: Prisma.StringFilter<"VacancyCandidateMatch"> | string
+  rating?: Prisma.StringNullableFilter<"VacancyCandidateMatch"> | string | null
   feedback?: Prisma.StringNullableFilter<"VacancyCandidateMatch"> | string | null
   tenantId?: Prisma.StringFilter<"VacancyCandidateMatch"> | string
   createdAt?: Prisma.DateTimeFilter<"VacancyCandidateMatch"> | Date | string
@@ -237,6 +247,7 @@ export type VacancyCandidateMatchOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   candidateId?: Prisma.SortOrder
   checklistItemId?: Prisma.SortOrder
+  rating?: Prisma.SortOrderInput | Prisma.SortOrder
   feedback?: Prisma.SortOrderInput | Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -253,6 +264,7 @@ export type VacancyCandidateMatchScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"VacancyCandidateMatch"> | string
   candidateId?: Prisma.StringWithAggregatesFilter<"VacancyCandidateMatch"> | string
   checklistItemId?: Prisma.StringWithAggregatesFilter<"VacancyCandidateMatch"> | string
+  rating?: Prisma.StringNullableWithAggregatesFilter<"VacancyCandidateMatch"> | string | null
   feedback?: Prisma.StringNullableWithAggregatesFilter<"VacancyCandidateMatch"> | string | null
   tenantId?: Prisma.StringWithAggregatesFilter<"VacancyCandidateMatch"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"VacancyCandidateMatch"> | Date | string
@@ -261,6 +273,7 @@ export type VacancyCandidateMatchScalarWhereWithAggregatesInput = {
 
 export type VacancyCandidateMatchCreateInput = {
   id?: string
+  rating?: string | null
   feedback?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -273,6 +286,7 @@ export type VacancyCandidateMatchUncheckedCreateInput = {
   id?: string
   candidateId: string
   checklistItemId: string
+  rating?: string | null
   feedback?: string | null
   tenantId: string
   createdAt?: Date | string
@@ -281,6 +295,7 @@ export type VacancyCandidateMatchUncheckedCreateInput = {
 
 export type VacancyCandidateMatchUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   feedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -293,6 +308,7 @@ export type VacancyCandidateMatchUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   candidateId?: Prisma.StringFieldUpdateOperationsInput | string
   checklistItemId?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   feedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -303,6 +319,7 @@ export type VacancyCandidateMatchCreateManyInput = {
   id?: string
   candidateId: string
   checklistItemId: string
+  rating?: string | null
   feedback?: string | null
   tenantId: string
   createdAt?: Date | string
@@ -311,6 +328,7 @@ export type VacancyCandidateMatchCreateManyInput = {
 
 export type VacancyCandidateMatchUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   feedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -320,6 +338,7 @@ export type VacancyCandidateMatchUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   candidateId?: Prisma.StringFieldUpdateOperationsInput | string
   checklistItemId?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   feedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -345,6 +364,7 @@ export type VacancyCandidateMatchCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   candidateId?: Prisma.SortOrder
   checklistItemId?: Prisma.SortOrder
+  rating?: Prisma.SortOrder
   feedback?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -355,6 +375,7 @@ export type VacancyCandidateMatchMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   candidateId?: Prisma.SortOrder
   checklistItemId?: Prisma.SortOrder
+  rating?: Prisma.SortOrder
   feedback?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -365,6 +386,7 @@ export type VacancyCandidateMatchMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   candidateId?: Prisma.SortOrder
   checklistItemId?: Prisma.SortOrder
+  rating?: Prisma.SortOrder
   feedback?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -499,6 +521,7 @@ export type VacancyCandidateMatchUncheckedUpdateManyWithoutCandidateNestedInput 
 
 export type VacancyCandidateMatchCreateWithoutTenantInput = {
   id?: string
+  rating?: string | null
   feedback?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -510,6 +533,7 @@ export type VacancyCandidateMatchUncheckedCreateWithoutTenantInput = {
   id?: string
   candidateId: string
   checklistItemId: string
+  rating?: string | null
   feedback?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -548,6 +572,7 @@ export type VacancyCandidateMatchScalarWhereInput = {
   id?: Prisma.StringFilter<"VacancyCandidateMatch"> | string
   candidateId?: Prisma.StringFilter<"VacancyCandidateMatch"> | string
   checklistItemId?: Prisma.StringFilter<"VacancyCandidateMatch"> | string
+  rating?: Prisma.StringNullableFilter<"VacancyCandidateMatch"> | string | null
   feedback?: Prisma.StringNullableFilter<"VacancyCandidateMatch"> | string | null
   tenantId?: Prisma.StringFilter<"VacancyCandidateMatch"> | string
   createdAt?: Prisma.DateTimeFilter<"VacancyCandidateMatch"> | Date | string
@@ -556,6 +581,7 @@ export type VacancyCandidateMatchScalarWhereInput = {
 
 export type VacancyCandidateMatchCreateWithoutChecklistItemInput = {
   id?: string
+  rating?: string | null
   feedback?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -566,6 +592,7 @@ export type VacancyCandidateMatchCreateWithoutChecklistItemInput = {
 export type VacancyCandidateMatchUncheckedCreateWithoutChecklistItemInput = {
   id?: string
   candidateId: string
+  rating?: string | null
   feedback?: string | null
   tenantId: string
   createdAt?: Date | string
@@ -600,6 +627,7 @@ export type VacancyCandidateMatchUpdateManyWithWhereWithoutChecklistItemInput = 
 
 export type VacancyCandidateMatchCreateWithoutCandidateInput = {
   id?: string
+  rating?: string | null
   feedback?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -610,6 +638,7 @@ export type VacancyCandidateMatchCreateWithoutCandidateInput = {
 export type VacancyCandidateMatchUncheckedCreateWithoutCandidateInput = {
   id?: string
   checklistItemId: string
+  rating?: string | null
   feedback?: string | null
   tenantId: string
   createdAt?: Date | string
@@ -646,6 +675,7 @@ export type VacancyCandidateMatchCreateManyTenantInput = {
   id?: string
   candidateId: string
   checklistItemId: string
+  rating?: string | null
   feedback?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -653,6 +683,7 @@ export type VacancyCandidateMatchCreateManyTenantInput = {
 
 export type VacancyCandidateMatchUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   feedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -664,6 +695,7 @@ export type VacancyCandidateMatchUncheckedUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   candidateId?: Prisma.StringFieldUpdateOperationsInput | string
   checklistItemId?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   feedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -673,6 +705,7 @@ export type VacancyCandidateMatchUncheckedUpdateManyWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   candidateId?: Prisma.StringFieldUpdateOperationsInput | string
   checklistItemId?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   feedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -681,6 +714,7 @@ export type VacancyCandidateMatchUncheckedUpdateManyWithoutTenantInput = {
 export type VacancyCandidateMatchCreateManyChecklistItemInput = {
   id?: string
   candidateId: string
+  rating?: string | null
   feedback?: string | null
   tenantId: string
   createdAt?: Date | string
@@ -689,6 +723,7 @@ export type VacancyCandidateMatchCreateManyChecklistItemInput = {
 
 export type VacancyCandidateMatchUpdateWithoutChecklistItemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   feedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -699,6 +734,7 @@ export type VacancyCandidateMatchUpdateWithoutChecklistItemInput = {
 export type VacancyCandidateMatchUncheckedUpdateWithoutChecklistItemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   candidateId?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   feedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -708,6 +744,7 @@ export type VacancyCandidateMatchUncheckedUpdateWithoutChecklistItemInput = {
 export type VacancyCandidateMatchUncheckedUpdateManyWithoutChecklistItemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   candidateId?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   feedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -717,6 +754,7 @@ export type VacancyCandidateMatchUncheckedUpdateManyWithoutChecklistItemInput = 
 export type VacancyCandidateMatchCreateManyCandidateInput = {
   id?: string
   checklistItemId: string
+  rating?: string | null
   feedback?: string | null
   tenantId: string
   createdAt?: Date | string
@@ -725,6 +763,7 @@ export type VacancyCandidateMatchCreateManyCandidateInput = {
 
 export type VacancyCandidateMatchUpdateWithoutCandidateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   feedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -735,6 +774,7 @@ export type VacancyCandidateMatchUpdateWithoutCandidateInput = {
 export type VacancyCandidateMatchUncheckedUpdateWithoutCandidateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   checklistItemId?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   feedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -744,6 +784,7 @@ export type VacancyCandidateMatchUncheckedUpdateWithoutCandidateInput = {
 export type VacancyCandidateMatchUncheckedUpdateManyWithoutCandidateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   checklistItemId?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   feedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -756,6 +797,7 @@ export type VacancyCandidateMatchSelect<ExtArgs extends runtime.Types.Extensions
   id?: boolean
   candidateId?: boolean
   checklistItemId?: boolean
+  rating?: boolean
   feedback?: boolean
   tenantId?: boolean
   createdAt?: boolean
@@ -769,6 +811,7 @@ export type VacancyCandidateMatchSelectCreateManyAndReturn<ExtArgs extends runti
   id?: boolean
   candidateId?: boolean
   checklistItemId?: boolean
+  rating?: boolean
   feedback?: boolean
   tenantId?: boolean
   createdAt?: boolean
@@ -782,6 +825,7 @@ export type VacancyCandidateMatchSelectUpdateManyAndReturn<ExtArgs extends runti
   id?: boolean
   candidateId?: boolean
   checklistItemId?: boolean
+  rating?: boolean
   feedback?: boolean
   tenantId?: boolean
   createdAt?: boolean
@@ -795,13 +839,14 @@ export type VacancyCandidateMatchSelectScalar = {
   id?: boolean
   candidateId?: boolean
   checklistItemId?: boolean
+  rating?: boolean
   feedback?: boolean
   tenantId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type VacancyCandidateMatchOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "candidateId" | "checklistItemId" | "feedback" | "tenantId" | "createdAt" | "updatedAt", ExtArgs["result"]["vacancyCandidateMatch"]>
+export type VacancyCandidateMatchOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "candidateId" | "checklistItemId" | "rating" | "feedback" | "tenantId" | "createdAt" | "updatedAt", ExtArgs["result"]["vacancyCandidateMatch"]>
 export type VacancyCandidateMatchInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   candidate?: boolean | Prisma.VacancyCandidateDefaultArgs<ExtArgs>
   checklistItem?: boolean | Prisma.VacancyChecklistItemDefaultArgs<ExtArgs>
@@ -829,6 +874,7 @@ export type $VacancyCandidateMatchPayload<ExtArgs extends runtime.Types.Extensio
     id: string
     candidateId: string
     checklistItemId: string
+    rating: string | null
     feedback: string | null
     tenantId: string
     createdAt: Date
@@ -1262,6 +1308,7 @@ export interface VacancyCandidateMatchFieldRefs {
   readonly id: Prisma.FieldRef<"VacancyCandidateMatch", 'String'>
   readonly candidateId: Prisma.FieldRef<"VacancyCandidateMatch", 'String'>
   readonly checklistItemId: Prisma.FieldRef<"VacancyCandidateMatch", 'String'>
+  readonly rating: Prisma.FieldRef<"VacancyCandidateMatch", 'String'>
   readonly feedback: Prisma.FieldRef<"VacancyCandidateMatch", 'String'>
   readonly tenantId: Prisma.FieldRef<"VacancyCandidateMatch", 'String'>
   readonly createdAt: Prisma.FieldRef<"VacancyCandidateMatch", 'DateTime'>

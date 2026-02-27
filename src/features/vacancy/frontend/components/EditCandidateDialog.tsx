@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
 import {
   Dialog,
   DialogContent,
@@ -23,26 +22,20 @@ import {
   SelectValue,
 } from "@shadcn/select";
 import { Field, FieldLabel, FieldError } from "@/core/shared/ui/shadcn/field";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { FileAttachmentIcon, Delete02Icon } from "@hugeicons/core-free-icons";
 import { PhoneInput } from "@/core/shared/components/phone-input";
 import CountrySelect from "@/core/shared/components/CountrySelect";
 import RegionSelect from "@/core/shared/components/RegionSelect";
-import { useAddCandidate } from "../hooks/useVacancyDetailMutations";
-import { uploadFileAction } from "@core/storage/actions/uploadFile.action";
-import { StorageKeys } from "@core/storage/StorageKeys";
-import {
-  useFileUpload,
-  formatBytes,
-  type FileWithPreview,
-} from "@/core/shared/hooks/use-upload-file";
-import { showToast } from "@/core/shared/components/ShowToast";
-import type { VacancyModality } from "../types/vacancy.types";
+import { useUpdateCandidate } from "../hooks/useVacancyDetailMutations";
+import type {
+  VacancyCandidateDTO,
+  VacancyModality,
+} from "../types/vacancy.types";
 import { VACANCY_MODALITY_LABELS } from "../types/vacancy.types";
 
-interface AddCandidateDialogProps {
+interface EditCandidateDialogProps {
   open: boolean;
   onClose: () => void;
+  candidate: VacancyCandidateDTO;
   vacancyId: string;
 }
 
@@ -65,24 +58,30 @@ interface FormState {
   otherBenefits: string;
 }
 
-const INITIAL_STATE: FormState = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  phone: "",
-  isCurrentlyEmployed: false,
-  currentCompany: "",
-  currentModality: "",
-  currentCountryCode: "",
-  currentRegionCode: "",
-  currentSalary: "",
-  salaryExpectation: "",
-  currentCommissions: "",
-  currentBenefits: "",
-  candidateCountryCode: "",
-  candidateRegionCode: "",
-  otherBenefits: "",
-};
+function candidateToFormState(candidate: VacancyCandidateDTO): FormState {
+  return {
+    firstName: candidate.firstName,
+    lastName: candidate.lastName,
+    email: candidate.email ?? "",
+    phone: candidate.phone ?? "",
+    isCurrentlyEmployed: candidate.isCurrentlyEmployed ?? false,
+    currentCompany: candidate.currentCompany ?? "",
+    currentModality: candidate.currentModality ?? "",
+    currentCountryCode: candidate.countryCode ?? "",
+    currentRegionCode: candidate.regionCode ?? "",
+    currentSalary:
+      candidate.currentSalary != null ? String(candidate.currentSalary) : "",
+    salaryExpectation:
+      candidate.salaryExpectation != null
+        ? String(candidate.salaryExpectation)
+        : "",
+    currentCommissions: candidate.currentCommissions ?? "",
+    currentBenefits: candidate.currentBenefits ?? "",
+    candidateCountryCode: "",
+    candidateRegionCode: "",
+    otherBenefits: candidate.otherBenefits ?? "",
+  };
+}
 
 function SectionHeader({ title }: { title: string }) {
   return (
@@ -95,53 +94,24 @@ function SectionHeader({ title }: { title: string }) {
   );
 }
 
-export function AddCandidateDialog({
+export function EditCandidateDialog({
   open,
   onClose,
+  candidate,
   vacancyId,
-}: AddCandidateDialogProps) {
-  const [form, setForm] = useState<FormState>(INITIAL_STATE);
-  const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>(
-    {}
+}: EditCandidateDialogProps) {
+  const [form, setForm] = useState<FormState>(() =>
+    candidateToFormState(candidate),
   );
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof FormState, string>>
+  >({});
 
-  const addCandidateMutation = useAddCandidate();
-
-  // CV file state via useFileUpload hook
-  const [{ files: cvFiles, errors: cvErrors }, { getInputProps, openFileDialog, removeFile: removeCv }] =
-    useFileUpload({
-      accept: ".pdf,.doc,.docx",
-      multiple: false,
-      maxSize: 10 * 1024 * 1024,
-      onFilesAdded: (_added: FileWithPreview[]) => {
-        // Just collect — upload happens after candidate creation
-      },
-    });
-
-  const cvFile = cvFiles[0]?.file instanceof File ? cvFiles[0].file : null;
-
-  // Separate mutation for CV upload (runs after candidate is created)
-  const uploadCvMutation = useMutation({
-    mutationFn: async ({ file, candidateId }: { file: File; candidateId: string }) => {
-      const formData = new FormData();
-      formData.append("file", file);
-      const ext = file.name.split(".").pop() ?? "pdf";
-      const key = StorageKeys.candidateCV(vacancyId, candidateId, ext);
-      const result = await uploadFileAction({
-        formData,
-        key,
-        attachableType: "VACANCY_CANDIDATE" as import("@/core/generated/prisma/client").AttachableType,
-        subType: "CV" as import("@/core/generated/prisma/client").AttachmentSubType,
-        vacancyCandidateId: candidateId,
-      });
-      if (result.error) throw new Error(result.error);
-      return result.attachment;
-    },
-  });
+  const updateCandidateMutation = useUpdateCandidate();
 
   const handleChange = <K extends keyof FormState>(
     key: K,
-    value: FormState[K]
+    value: FormState[K],
   ) => {
     setForm((prev) => ({ ...prev, [key]: value }));
     if (errors[key]) {
@@ -164,46 +134,37 @@ export function AddCandidateDialog({
   const handleSubmit = async () => {
     if (!validate()) return;
 
-    const candidate = await addCandidateMutation.mutateAsync({
+    await updateCandidateMutation.mutateAsync({
+      candidateId: candidate.id,
       vacancyId,
       data: {
         firstName: form.firstName.trim(),
         lastName: form.lastName.trim(),
-        email: form.email.trim() || undefined,
-        phone: form.phone.trim() || undefined,
+        email: form.email.trim() || null,
+        phone: form.phone.trim() || null,
         isCurrentlyEmployed: form.isCurrentlyEmployed,
-        currentCompany: form.currentCompany.trim() || undefined,
-        currentModality: form.currentModality || undefined,
-        countryCode: form.currentCountryCode || undefined,
-        regionCode: form.currentRegionCode || undefined,
-        currentSalary: form.currentSalary ? Number(form.currentSalary) : undefined,
-        salaryExpectation: form.salaryExpectation ? Number(form.salaryExpectation) : undefined,
-        currentCommissions: form.currentCommissions.trim() || undefined,
-        currentBenefits: form.currentBenefits.trim() || undefined,
+        currentCompany: form.currentCompany.trim() || null,
+        currentModality: form.currentModality || null,
+        countryCode: form.currentCountryCode || null,
+        regionCode: form.currentRegionCode || null,
+        currentSalary: form.currentSalary ? Number(form.currentSalary) : null,
+        salaryExpectation: form.salaryExpectation
+          ? Number(form.salaryExpectation)
+          : null,
+        currentCommissions: form.currentCommissions.trim() || null,
+        currentBenefits: form.currentBenefits.trim() || null,
         candidateLocation: form.candidateCountryCode
           ? [form.candidateRegionCode, form.candidateCountryCode].filter(Boolean).join(", ")
-          : undefined,
-        otherBenefits: form.otherBenefits.trim() || undefined,
+          : null,
+        otherBenefits: form.otherBenefits.trim() || null,
       },
     });
 
-    // Upload CV if one was selected — after candidate exists in DB
-    if (cvFile && candidate?.id) {
-      try {
-        await uploadCvMutation.mutateAsync({ file: cvFile, candidateId: candidate.id });
-        showToast({ type: "success", title: "CV subido", description: "El CV fue adjuntado al candidato" });
-      } catch {
-        showToast({ type: "error", title: "CV no subido", description: "El candidato fue creado pero el CV no pudo subirse. Podés intentarlo desde el perfil del candidato." });
-      }
-    }
-
-    setForm(INITIAL_STATE);
-    setErrors({});
     onClose();
   };
 
   const handleClose = () => {
-    setForm(INITIAL_STATE);
+    setForm(candidateToFormState(candidate));
     setErrors({});
     onClose();
   };
@@ -212,7 +173,7 @@ export function AddCandidateDialog({
     <Dialog open={open} onOpenChange={(o) => !o && handleClose()}>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Agregar candidato</DialogTitle>
+          <DialogTitle>Editar candidato</DialogTitle>
         </DialogHeader>
 
         <ScrollArea className="max-h-[75vh]">
@@ -291,7 +252,9 @@ export function AddCandidateDialog({
                     <Input
                       placeholder="Nombre de la empresa"
                       value={form.currentCompany}
-                      onChange={(e) => handleChange("currentCompany", e.target.value)}
+                      onChange={(e) =>
+                        handleChange("currentCompany", e.target.value)
+                      }
                     />
                   </Field>
                 )}
@@ -365,7 +328,9 @@ export function AddCandidateDialog({
                         placeholder="0"
                         className="pl-7"
                         value={form.currentSalary}
-                        onChange={(e) => handleChange("currentSalary", e.target.value)}
+                        onChange={(e) =>
+                          handleChange("currentSalary", e.target.value)
+                        }
                       />
                     </div>
                   </Field>
@@ -394,7 +359,9 @@ export function AddCandidateDialog({
                   <Textarea
                     placeholder="Describe las comisiones..."
                     value={form.currentCommissions}
-                    onChange={(e) => handleChange("currentCommissions", e.target.value)}
+                    onChange={(e) =>
+                      handleChange("currentCommissions", e.target.value)
+                    }
                     rows={2}
                   />
                 </Field>
@@ -404,7 +371,9 @@ export function AddCandidateDialog({
                   <Textarea
                     placeholder="Describe los beneficios..."
                     value={form.currentBenefits}
-                    onChange={(e) => handleChange("currentBenefits", e.target.value)}
+                    onChange={(e) =>
+                      handleChange("currentBenefits", e.target.value)
+                    }
                     rows={2}
                   />
                 </Field>
@@ -452,51 +421,6 @@ export function AddCandidateDialog({
               </div>
             </div>
 
-            {/* ── Sección 5: CV ────────────────────────────────────── */}
-            <div>
-              <SectionHeader title="CV del candidato" />
-              <div className="rounded-lg border p-3 space-y-2">
-                {cvFile ? (
-                  <div className="flex items-center justify-between gap-2 rounded-md bg-muted/50 px-3 py-2">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <HugeiconsIcon icon={FileAttachmentIcon} size={16} className="text-muted-foreground shrink-0" />
-                      <span className="text-sm truncate">{cvFile.name}</span>
-                      <span className="text-xs text-muted-foreground shrink-0">
-                        ({formatBytes(cvFile.size)})
-                      </span>
-                    </div>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      className="h-7 w-7 text-destructive hover:text-destructive hover:bg-destructive/10 shrink-0"
-                      onClick={() => removeCv(cvFiles[0]?.id ?? "")}
-                    >
-                      <HugeiconsIcon icon={Delete02Icon} size={14} />
-                    </Button>
-                  </div>
-                ) : (
-                  <div>
-                    <input {...getInputProps()} className="hidden" />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="gap-1.5 text-xs"
-                      onClick={openFileDialog}
-                    >
-                      <HugeiconsIcon icon={FileAttachmentIcon} size={14} />
-                      Adjuntar CV
-                    </Button>
-                    <p className="text-xs text-muted-foreground mt-1">PDF, DOC o DOCX · Máx. 10 MB</p>
-                    {cvErrors.length > 0 && (
-                      <p className="text-xs text-destructive mt-1">{cvErrors[0]}</p>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-
           </div>
         </ScrollArea>
 
@@ -506,13 +430,9 @@ export function AddCandidateDialog({
           </Button>
           <Button
             onClick={handleSubmit}
-            disabled={addCandidateMutation.isPending || uploadCvMutation.isPending}
+            disabled={updateCandidateMutation.isPending}
           >
-            {addCandidateMutation.isPending
-              ? "Creando candidato..."
-              : uploadCvMutation.isPending
-              ? "Subiendo CV..."
-              : "Agregar candidato"}
+            {updateCandidateMutation.isPending ? "Guardando..." : "Guardar cambios"}
           </Button>
         </DialogFooter>
       </DialogContent>

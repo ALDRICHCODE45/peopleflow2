@@ -9,7 +9,10 @@ import { PermissionActions } from "@/core/shared/constants/permissions";
 import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
 import { prismaVacancyCandidateRepository } from "../../infrastructure/repositories/PrismaVacancyCandidateRepository";
 import { prismaVacancyStatusHistoryRepository } from "../../infrastructure/repositories/PrismaVacancyStatusHistoryRepository";
+import { prismaVacancyChecklistRepository } from "../../infrastructure/repositories/PrismaVacancyChecklistRepository";
+import { prismaVacancyCandidateMatchRepository } from "../../infrastructure/repositories/PrismaVacancyCandidateMatchRepository";
 import { ValidateTernaUseCase } from "../../application/use-cases/ValidateTernaUseCase";
+import { prismaVacancyTernaHistoryRepository } from "../../infrastructure/repositories/PrismaVacancyTernaHistoryRepository";
 import type { ValidateTernaResult } from "../../../frontend/types/vacancy.types";
 
 export interface ValidateTernaInput {
@@ -46,10 +49,34 @@ export async function validateTernaAction(
       return { error: "Sin permisos para validar la terna" };
     }
 
+    // Guard: if vacancy has checklist items, all terna candidates must have rated all items
+    const checklistItems = await prismaVacancyChecklistRepository.findByVacancyId(
+      input.vacancyId,
+      tenantId,
+    );
+
+    if (checklistItems.length > 0) {
+      const checklistItemIds = checklistItems.map((i) => i.id);
+      for (const candidateId of input.candidateIds) {
+        const ratedCount = await prismaVacancyCandidateMatchRepository.countRatedForCandidate(
+          candidateId,
+          checklistItemIds,
+          tenantId,
+        );
+        if (ratedCount < checklistItems.length) {
+          return {
+            error:
+              "Todos los candidatos de la terna deben tener el checklist evaluado antes de validar.",
+          };
+        }
+      }
+    }
+
     const useCase = new ValidateTernaUseCase(
       prismaVacancyRepository,
       prismaVacancyCandidateRepository,
       prismaVacancyStatusHistoryRepository,
+      prismaVacancyTernaHistoryRepository,
     );
 
     const result = await useCase.execute({

@@ -9,7 +9,6 @@ import {
   Cancel01Icon,
   Delete02Icon,
   DownloadCircle01Icon,
-  Upload01Icon,
 } from "@hugeicons/core-free-icons";
 import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
@@ -23,13 +22,11 @@ import {
 } from "@/core/shared/ui/shadcn/dialog";
 import { Textarea } from "@/core/shared/ui/shadcn/textarea";
 import { Label } from "@/core/shared/ui/shadcn/label";
-import { FileUploadButton } from "./FileUploadButton";
+import { FileUploadButton, FileDropZone } from "./FileUploadButton";
 import {
   useDeleteVacancyAttachment,
   useValidateAttachment,
   useRejectAttachment,
-  useValidateChecklist,
-  useRejectChecklist,
 } from "../hooks/useVacancyAttachments";
 import type { AttachmentDTO, VacancyDTO } from "../types/vacancy.types";
 
@@ -254,21 +251,10 @@ export function AttachmentsSection({
   attachments,
   isLoadingAttachments = false,
 }: AttachmentsSectionProps) {
-  const [rejectChecklistOpen, setRejectChecklistOpen] = useState(false);
-
-  const validateChecklist = useValidateChecklist(vacancy.id);
-  const rejectChecklist = useRejectChecklist(vacancy.id);
-
   const jobDescriptions = attachments.filter((a) => a.subType === "JOB_DESCRIPTION");
   const perfilesMuestra = attachments.filter((a) => a.subType === "PERFIL_MUESTRA");
 
   const hasJobDescription = jobDescriptions.length > 0;
-
-  function handleRejectChecklist(reason: string) {
-    rejectChecklist.mutate(reason, {
-      onSuccess: () => setRejectChecklistOpen(false),
-    });
-  }
 
   if (isLoadingAttachments) {
     return (
@@ -300,17 +286,13 @@ export function AttachmentsSection({
             ))}
           </div>
         ) : (
-          <div className="rounded-lg border border-dashed p-4 space-y-2">
-            <p className="text-xs text-muted-foreground">
-              No hay Job Description adjunto.
-            </p>
-            <FileUploadButton
-              vacancyId={vacancy.id}
-              subType="JOB_DESCRIPTION"
-              accept=".pdf,.doc,.docx"
-              label="Subir Job Description"
-            />
-          </div>
+          <FileDropZone
+            vacancyId={vacancy.id}
+            subType="JOB_DESCRIPTION"
+            accept=".pdf,.doc,.docx"
+            label="Arrastrá o hacé clic para subir el Job Description"
+            description="PDF, DOC o DOCX"
+          />
         )}
       </div>
 
@@ -331,12 +313,13 @@ export function AttachmentsSection({
         </div>
 
         {perfilesMuestra.length === 0 ? (
-          <div className="rounded-lg border border-dashed p-4">
-            <div className="flex flex-col items-center justify-center gap-2 py-2 text-muted-foreground">
-              <HugeiconsIcon icon={Upload01Icon} size={24} strokeWidth={1.5} />
-              <p className="text-xs">No hay perfiles muestra adjuntos.</p>
-            </div>
-          </div>
+          <FileDropZone
+            vacancyId={vacancy.id}
+            subType="PERFIL_MUESTRA"
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+            label="Arrastrá o hacé clic para subir un Perfil Muestra"
+            description="PDF, DOC, DOCX, JPG o PNG"
+          />
         ) : (
           <div className="space-y-2">
             {perfilesMuestra.map((attachment) => (
@@ -350,73 +333,6 @@ export function AttachmentsSection({
           </div>
         )}
       </div>
-
-      <Separator />
-
-      {/* ── Checklist Validation ── */}
-      <div>
-        <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">
-          Validación de Checklist
-        </h4>
-
-        {vacancy.checklistValidatedAt ? (
-          <div className="rounded-lg border bg-green-50 border-green-200 p-3 space-y-1">
-            <div className="flex items-center gap-2">
-              <HugeiconsIcon icon={CheckmarkCircle02Icon} size={16} className="text-green-600" />
-              <Badge className="bg-green-100 text-green-700 border-green-200 text-xs">
-                Checklist Validado
-              </Badge>
-            </div>
-            <p className="text-xs text-green-700 mt-1">
-              Validado el {formatDateSafe(vacancy.checklistValidatedAt)}
-            </p>
-          </div>
-        ) : vacancy.checklistRejectionReason ? (
-          <div className="rounded-lg border bg-red-50 border-red-200 px-3 py-2 space-y-1">
-            <div className="flex items-center gap-2">
-              <HugeiconsIcon icon={Cancel01Icon} size={16} className="text-red-600" />
-              <span className="text-xs font-medium text-red-700">Checklist Rechazado</span>
-            </div>
-            <p className="text-xs text-red-700">{vacancy.checklistRejectionReason}</p>
-          </div>
-        ) : (
-          <div className="rounded-lg border border-dashed p-3">
-            <p className="text-xs text-muted-foreground">El checklist aún no ha sido validado.</p>
-          </div>
-        )}
-
-        {/* Admin buttons */}
-        <div className="flex items-center gap-2 mt-3">
-          <Button
-            variant="outline"
-            size="sm"
-            className="gap-1.5 text-xs text-green-700 border-green-300 hover:bg-green-50"
-            disabled={validateChecklist.isPending || !!vacancy.checklistValidatedAt}
-            onClick={() => validateChecklist.mutate()}
-          >
-            <HugeiconsIcon icon={CheckmarkCircle02Icon} size={13} />
-            Validar Checklist
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="gap-1.5 text-xs text-red-700 border-red-300 hover:bg-red-50"
-            disabled={rejectChecklist.isPending}
-            onClick={() => setRejectChecklistOpen(true)}
-          >
-            <HugeiconsIcon icon={Cancel01Icon} size={13} />
-            Rechazar Checklist
-          </Button>
-        </div>
-      </div>
-
-      <RejectDialog
-        open={rejectChecklistOpen}
-        title="Rechazar Checklist"
-        onClose={() => setRejectChecklistOpen(false)}
-        onConfirm={handleRejectChecklist}
-        isPending={rejectChecklist.isPending}
-      />
     </div>
   );
 }

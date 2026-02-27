@@ -47,7 +47,8 @@ export class UpdateCandidateUseCase {
       if (fields.currentSalary !== undefined) updateData.currentSalary = fields.currentSalary;
       if (fields.salaryExpectation !== undefined) updateData.salaryExpectation = fields.salaryExpectation;
       if (fields.currentModality !== undefined) updateData.currentModality = fields.currentModality;
-      if (fields.currentLocation !== undefined) updateData.currentLocation = fields.currentLocation;
+      if (fields.countryCode !== undefined) updateData.countryCode = fields.countryCode;
+      if (fields.regionCode !== undefined) updateData.regionCode = fields.regionCode;
       if (fields.currentCommissions !== undefined) updateData.currentCommissions = fields.currentCommissions;
       if (fields.currentBenefits !== undefined) updateData.currentBenefits = fields.currentBenefits;
       if (fields.candidateLocation !== undefined) updateData.candidateLocation = fields.candidateLocation;
@@ -57,8 +58,19 @@ export class UpdateCandidateUseCase {
       if (fields.isFinalist !== undefined) updateData.isFinalist = fields.isFinalist;
       if (fields.finalSalary !== undefined) updateData.finalSalary = fields.finalSalary;
 
-      // 4. Update candidate
-      const candidate = await this.candidateRepo.update(id, tenantId, updateData);
+      // 4. Special case: marking CONTRATADO auto-descarts all other candidates
+      if (fields.status === "CONTRATADO") {
+        await this.candidateRepo.markAsContratado(id, existing.vacancyId, tenantId);
+        // Remove status from updateData — already handled by markAsContratado
+        delete updateData.status;
+      }
+
+      // 5. Update the rest of candidate fields (if any remain)
+      const hasOtherFields = Object.keys(updateData).length > 0;
+      const candidate = hasOtherFields
+        ? await this.candidateRepo.update(id, tenantId, updateData)
+        : await this.candidateRepo.findById(id, tenantId);
+
       if (!candidate) {
         return { success: false, error: "Error al actualizar el candidato" };
       }

@@ -7,11 +7,17 @@ import { transitionVacancyStatusAction } from "@features/vacancy/server/presenta
 import {
   addCandidateAction,
   removeCandidateAction,
+  updateCandidateAction,
+  selectFinalistAction,
 } from "@features/vacancy/server/presentation/actions/candidate.actions";
+import type { UpdateCandidateInput as ServerUpdateCandidateInput } from "@features/vacancy/server/presentation/actions/candidate.actions";
 import {
   updateChecklistItemAction,
   addChecklistItemAction,
 } from "@features/vacancy/server/presentation/actions/checklist.actions";
+import { validateTernaAction } from "@features/vacancy/server/presentation/actions/validateTerna.action";
+import { confirmPlacementAction } from "@features/vacancy/server/presentation/actions/confirmPlacement.action";
+import { saveCandidateMatchAction } from "@features/vacancy/server/presentation/actions/saveCandidateMatch.action";
 import type {
   VacancyStatusType,
   AddCandidateFormData,
@@ -24,6 +30,10 @@ export interface TransitionStatusInput {
   newStatus: VacancyStatusType;
   reason?: string;
   newTargetDeliveryDate?: string;
+  salaryFixed?: number;
+  entryDate?: string; // ISO date string
+  sendCongratsEmail?: boolean;
+  hiredCandidateId?: string;
 }
 
 export function useTransitionVacancyStatus() {
@@ -177,6 +187,85 @@ export function useToggleChecklistItem() {
   });
 }
 
+// ---- Validate Terna ----
+
+export interface ValidateTernaInput {
+  vacancyId: string;
+  candidateIds: string[];
+}
+
+export function useValidateTerna() {
+  const queryClient = useQueryClient();
+  const { tenant } = useTenant();
+
+  return useMutation({
+    mutationFn: async ({ vacancyId, candidateIds }: ValidateTernaInput) => {
+      const result = await validateTernaAction({ vacancyId, candidateIds });
+      if (result.error) throw new Error(result.error);
+      return result.vacancy;
+    },
+    onSuccess: (_data, variables) => {
+      showToast({
+        type: "success",
+        title: "Terna validada",
+        description: "Los candidatos de la terna fueron marcados como finalistas",
+      });
+      if (tenant?.id) {
+        queryClient.invalidateQueries({
+          queryKey: ["vacancy", "detail", tenant.id, variables.vacancyId],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["vacancies", "paginated", tenant.id],
+        });
+      }
+    },
+    onError: (error: Error) => {
+      showToast({
+        type: "error",
+        title: "Error al validar la terna",
+        description: error.message ?? "No se pudo validar la terna",
+      });
+    },
+  });
+}
+
+// ---- Confirm Placement ----
+
+export function useConfirmPlacement() {
+  const queryClient = useQueryClient();
+  const { tenant } = useTenant();
+
+  return useMutation({
+    mutationFn: async (vacancyId: string) => {
+      const result = await confirmPlacementAction(vacancyId);
+      if (result.error) throw new Error(result.error);
+      return result.vacancy;
+    },
+    onSuccess: (_data, vacancyId) => {
+      showToast({
+        type: "success",
+        title: "Placement confirmado",
+        description: "El placement fue confirmado exitosamente",
+      });
+      if (tenant?.id) {
+        queryClient.invalidateQueries({
+          queryKey: ["vacancy", "detail", tenant.id, vacancyId],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["vacancies", "paginated", tenant.id],
+        });
+      }
+    },
+    onError: (error: Error) => {
+      showToast({
+        type: "error",
+        title: "Error al confirmar placement",
+        description: error.message ?? "No se pudo confirmar el placement",
+      });
+    },
+  });
+}
+
 // ---- Add Checklist Item ----
 
 export interface AddChecklistItemInput {
@@ -212,6 +301,116 @@ export function useAddChecklistItem() {
         type: "error",
         title: "Error",
         description: error.message ?? "No se pudo agregar el ítem",
+      });
+    },
+  });
+}
+
+// ---- Update Candidate ----
+
+export interface UpdateCandidateInput {
+  candidateId: string;
+  vacancyId: string;
+  data: ServerUpdateCandidateInput;
+}
+
+export function useUpdateCandidate() {
+  const queryClient = useQueryClient();
+  const { tenant } = useTenant();
+
+  return useMutation({
+    mutationFn: async ({ candidateId, data }: UpdateCandidateInput) => {
+      const result = await updateCandidateAction(candidateId, data);
+      if (result.error) throw new Error(result.error);
+      return result.candidate;
+    },
+    onSuccess: (_data, variables) => {
+      showToast({
+        type: "success",
+        title: "Candidato actualizado",
+        description: "Los datos del candidato fueron actualizados",
+      });
+      if (tenant?.id) {
+        queryClient.invalidateQueries({
+          queryKey: ["vacancy", "detail", tenant.id, variables.vacancyId],
+        });
+      }
+    },
+    onError: (error: Error) => {
+      showToast({
+        type: "error",
+        title: "Error",
+        description: error.message ?? "No se pudo actualizar el candidato",
+      });
+    },
+  });
+}
+
+// ── useSaveCandidateMatch ──────────────────────────────────────────────────
+
+export function useSaveCandidateMatch(vacancyId: string) {
+  const queryClient = useQueryClient();
+  const { tenant } = useTenant();
+  return useMutation({
+    mutationFn: async (data: {
+      candidateId: string;
+      checklistItemId: string;
+      rating: string | null;
+      feedback: string | null;
+    }) => {
+      const result = await saveCandidateMatchAction(data);
+      if (result.error) throw new Error(result.error);
+      return result.match;
+    },
+    onSuccess: () => {
+      if (tenant?.id) {
+        queryClient.invalidateQueries({ queryKey: ["vacancy", "detail", tenant.id, vacancyId] });
+      }
+    },
+    onError: () =>
+      showToast({ type: "error", title: "Error", description: "No se pudo guardar la evaluación" }),
+  });
+}
+
+// ---- Select Finalist ----
+
+export interface SelectFinalistInput {
+  candidateId: string;
+  vacancyId: string;
+  salaryFixed: number;
+  entryDate: string;
+}
+
+export function useSelectFinalist() {
+  const queryClient = useQueryClient();
+  const { tenant } = useTenant();
+
+  return useMutation({
+    mutationFn: async (input: SelectFinalistInput) => {
+      const result = await selectFinalistAction(input);
+      if (result.error) throw new Error(result.error);
+      return result.vacancy;
+    },
+    onSuccess: (_data, variables) => {
+      showToast({
+        type: "success",
+        title: "Finalista seleccionado",
+        description: "El candidato fue seleccionado como finalista",
+      });
+      if (tenant?.id) {
+        queryClient.invalidateQueries({
+          queryKey: ["vacancy", "detail", tenant.id, variables.vacancyId],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["vacancies", "paginated", tenant.id],
+        });
+      }
+    },
+    onError: (error: Error) => {
+      showToast({
+        type: "error",
+        title: "Error",
+        description: error.message ?? "No se pudo seleccionar el finalista",
       });
     },
   });

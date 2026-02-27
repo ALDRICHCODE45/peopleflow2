@@ -12,6 +12,24 @@ type Events = {
       changedById: string;
     };
   };
+  "vacancy/pre-placement.entered": {
+    data: {
+      vacancyId: string;
+      tenantId: string;
+      recruiterId: string;
+      vacancyPosition: string;
+      entryDate: string; // ISO string
+    };
+  };
+  "vacancy/placement.congrats-email": {
+    data: {
+      vacancyId: string;
+      tenantId: string;
+      vacancyPosition: string;
+      candidateName: string;
+      candidateEmail: string | null;
+    };
+  };
 };
 
 // Create a client to send and receive events

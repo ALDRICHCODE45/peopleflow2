@@ -10,6 +10,7 @@ import type {
 export interface SaveCandidateMatchInput {
   candidateId: string;
   checklistItemId: string;
+  rating: string | null;
   feedback: string | null;
   tenantId: string;
 }
@@ -31,24 +32,22 @@ export class SaveCandidateMatchUseCase {
     input: SaveCandidateMatchInput
   ): Promise<SaveCandidateMatchOutput> {
     try {
-      const { candidateId, checklistItemId, feedback, tenantId } = input;
+      const { candidateId, checklistItemId, rating, feedback, tenantId } = input;
 
-      // 1. Validate candidate exists
       const candidate = await this.candidateRepo.findById(candidateId, tenantId);
       if (!candidate) {
         return { success: false, error: "Candidato no encontrado" };
       }
 
-      // 2. Validate checklist item exists
       const checklistItem = await this.checklistRepo.findById(checklistItemId, tenantId);
       if (!checklistItem) {
         return { success: false, error: "Ítem de checklist no encontrado" };
       }
 
-      // 3. Upsert match
       const match = await this.matchRepo.upsert({
         candidateId,
         checklistItemId,
+        rating,
         feedback,
         tenantId,
       });

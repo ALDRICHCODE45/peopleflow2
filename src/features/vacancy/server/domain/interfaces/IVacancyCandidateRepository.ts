@@ -15,7 +15,8 @@ export interface CreateCandidateData {
   currentSalary?: number | null;
   salaryExpectation?: number | null;
   currentModality?: VacancyModality | null;
-  currentLocation?: string | null;
+  countryCode?: string | null;
+  regionCode?: string | null;
   currentCommissions?: string | null;
   currentBenefits?: string | null;
   candidateLocation?: string | null;
@@ -33,7 +34,8 @@ export interface UpdateCandidateData {
   currentSalary?: number | null;
   salaryExpectation?: number | null;
   currentModality?: VacancyModality | null;
-  currentLocation?: string | null;
+  countryCode?: string | null;
+  regionCode?: string | null;
   currentCommissions?: string | null;
   currentBenefits?: string | null;
   candidateLocation?: string | null;
@@ -67,4 +69,27 @@ export interface IVacancyCandidateRepository {
     tenantId: string
   ): Promise<number>;
   clearTerna(vacancyId: string, tenantId: string): Promise<number>;
+  /**
+   * Marks one candidate as CONTRATADO (isInTerna: false) and sets all other
+   * candidates in the same vacancy to DESCARTADO in a single transaction.
+   */
+  markAsContratado(
+    id: string,
+    vacancyId: string,
+    tenantId: string
+  ): Promise<void>;
+  /**
+   * Resets all candidates in a vacancy to EN_PROCESO and clears isInTerna.
+   * Called when a vacancy rolls back to HUNTING from any forward state.
+   */
+  resetCandidatesOnRollback(vacancyId: string, tenantId: string): Promise<void>;
+  /**
+   * Marks all candidates in the vacancy whose IDs are NOT in ternaIds as DESCARTADO.
+   * Called after markAsInTerna to auto-discard non-terna candidates.
+   */
+  markNonTernaAsDescartado(
+    vacancyId: string,
+    tenantId: string,
+    ternaIds: string[]
+  ): Promise<void>;
 }

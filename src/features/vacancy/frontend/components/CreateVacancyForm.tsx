@@ -386,17 +386,16 @@ export function CreateVacancyForm({ onClose }: CreateVacancyFormProps) {
         open={detailsModal.isOpen}
         onOpenChange={(open) => !open && detailsModal.closeModal()}
       >
-        <DialogContent className="min-w-2xl">
+        <DialogContent className="min-w-2xl w-full">
           <DialogHeader>
             <DialogTitle>Detalles de la vacante</DialogTitle>
             <DialogDescription>
               Ingresa los detalles de la vacante a continuacion:
             </DialogDescription>
           </DialogHeader>
-
-          <div className="w-full space-y-4 max-h-[40vh] overflow-y-auto">
+          <div className="max-h-[40vh]  overflow-y-auto space-y-4 overflow-x-hidden">
             {/* Salario mínimo / máximo */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="flex items-center justify-between gap-2">
               <form.Field name="salaryMin">
                 {(field) => (
                   <Field>

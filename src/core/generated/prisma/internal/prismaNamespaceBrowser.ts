@@ -76,7 +76,9 @@ export const ModelName = {
   VacancyConfig: 'VacancyConfig',
   Notification: 'Notification',
   Client: 'Client',
-  NotificationConfig: 'NotificationConfig'
+  NotificationConfig: 'NotificationConfig',
+  VacancyTernaHistory: 'VacancyTernaHistory',
+  VacancyTernaHistoryCandidate: 'VacancyTernaHistoryCandidate'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -415,7 +417,8 @@ export const VacancyCandidateScalarFieldEnum = {
   currentSalary: 'currentSalary',
   salaryExpectation: 'salaryExpectation',
   currentModality: 'currentModality',
-  currentLocation: 'currentLocation',
+  countryCode: 'countryCode',
+  regionCode: 'regionCode',
   currentCommissions: 'currentCommissions',
   currentBenefits: 'currentBenefits',
   candidateLocation: 'candidateLocation',
@@ -436,6 +439,7 @@ export const VacancyCandidateMatchScalarFieldEnum = {
   id: 'id',
   candidateId: 'candidateId',
   checklistItemId: 'checklistItemId',
+  rating: 'rating',
   feedback: 'feedback',
   tenantId: 'tenantId',
   createdAt: 'createdAt',
@@ -539,6 +543,32 @@ export const NotificationConfigScalarFieldEnum = {
 } as const
 
 export type NotificationConfigScalarFieldEnum = (typeof NotificationConfigScalarFieldEnum)[keyof typeof NotificationConfigScalarFieldEnum]
+
+
+export const VacancyTernaHistoryScalarFieldEnum = {
+  id: 'id',
+  vacancyId: 'vacancyId',
+  ternaNumber: 'ternaNumber',
+  validatedAt: 'validatedAt',
+  validatedById: 'validatedById',
+  targetDeliveryDate: 'targetDeliveryDate',
+  isOnTime: 'isOnTime',
+  tenantId: 'tenantId',
+  createdAt: 'createdAt'
+} as const
+
+export type VacancyTernaHistoryScalarFieldEnum = (typeof VacancyTernaHistoryScalarFieldEnum)[keyof typeof VacancyTernaHistoryScalarFieldEnum]
+
+
+export const VacancyTernaHistoryCandidateScalarFieldEnum = {
+  id: 'id',
+  ternaHistoryId: 'ternaHistoryId',
+  candidateId: 'candidateId',
+  candidateFullName: 'candidateFullName',
+  tenantId: 'tenantId'
+} as const
+
+export type VacancyTernaHistoryCandidateScalarFieldEnum = (typeof VacancyTernaHistoryCandidateScalarFieldEnum)[keyof typeof VacancyTernaHistoryCandidateScalarFieldEnum]
 
 
 export const SortOrder = {
