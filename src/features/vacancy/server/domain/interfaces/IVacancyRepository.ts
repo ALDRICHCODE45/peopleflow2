@@ -73,6 +73,13 @@ export interface PaginatedResult<T> {
   totalCount: number;
 }
 
+export interface ChecklistValidationResult {
+  id: string;
+  checklistValidatedAt: string | null;
+  checklistValidatedById: string | null;
+  checklistRejectionReason: string | null;
+}
+
 export interface IVacancyRepository {
   findById(id: string, tenantId: string): Promise<Vacancy | null>;
   findByTenantId(
@@ -91,4 +98,9 @@ export interface IVacancyRepository {
   findPaginated(
     params: FindPaginatedVacanciesParams
   ): Promise<PaginatedResult<Vacancy>>;
+  countByClientId(clientId: string, tenantId: string): Promise<number>;
+  findRecruiterContactById(userId: string): Promise<{ email: string; name: string | null } | null>;
+  findClientNameById(clientId: string, tenantId: string): Promise<string | null>;
+  validateChecklist(vacancyId: string, tenantId: string, validatedById: string): Promise<ChecklistValidationResult>;
+  rejectChecklist(vacancyId: string, tenantId: string, reason: string): Promise<ChecklistValidationResult>;
 }

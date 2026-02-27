@@ -8,6 +8,7 @@ import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/applicatio
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
 import { CreateVacancyUseCase } from "../../application/use-cases/CreateVacancyUseCase";
+import { inngest } from "@/core/shared/inngest/inngest";
 import type {
   CreateVacancyFormData,
   CreateVacancyResult,
@@ -68,8 +69,35 @@ export async function createVacancyAction(
       return { error: result.error ?? "Error al crear la vacante" };
     }
 
+    const vacancyDTO = result.vacancy?.toJSON();
+
+    if (data.sendNotification === true && vacancyDTO) {
+      const [recruiter, clientName] = await Promise.all([
+        prismaVacancyRepository.findRecruiterContactById(data.recruiterId),
+        prismaVacancyRepository.findClientNameById(data.clientId, tenantId),
+      ]);
+
+      if (recruiter?.email) {
+        await inngest.send({
+          name: "email/send",
+          data: {
+            template: "recruiter-vacancy-assigned",
+            tenantId,
+            triggeredById: session.user.id,
+            data: {
+              recruiterName: recruiter.name ?? "Reclutador",
+              recruiterEmail: recruiter.email,
+              vacancyPosition: data.position,
+              clientName: clientName ?? "Cliente",
+              vacancyId: vacancyDTO.id,
+            },
+          },
+        });
+      }
+    }
+
     revalidatePath("/reclutamiento/vacantes");
-    return { error: null, vacancy: result.vacancy?.toJSON() };
+    return { error: null, vacancy: vacancyDTO };
   } catch (error) {
     console.error("Error in createVacancyAction:", error);
     return { error: "Error inesperado al crear la vacante" };

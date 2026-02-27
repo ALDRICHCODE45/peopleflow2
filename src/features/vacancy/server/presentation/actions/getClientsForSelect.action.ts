@@ -3,7 +3,7 @@
 import { auth } from "@lib/auth";
 import { headers } from "next/headers";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
-import prisma from "@lib/prisma";
+import { prismaClientRepository } from "@features/Finanzas/Clientes/server/infrastructure/repositories/PrismaClientRepository";
 
 export interface ClientOption {
   id: string;
@@ -23,11 +23,7 @@ export async function getClientsForSelectAction(): Promise<GetClientsResult> {
     const tenantId = await getActiveTenantId();
     if (!tenantId) return { error: "No hay tenant activo", clients: [] };
 
-    const clients = await prisma.client.findMany({
-      where: { tenantId },
-      select: { id: true, nombre: true },
-      orderBy: { nombre: "asc" },
-    });
+    const clients = await prismaClientRepository.findAllByTenantId(tenantId);
 
     return { error: null, clients };
   } catch (error) {

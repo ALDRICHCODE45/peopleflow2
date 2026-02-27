@@ -1,5 +1,20 @@
 import { Inngest, EventSchemas } from "inngest";
 
+export type StandaloneEmailPayload =
+  | {
+      template: "recruiter-vacancy-assigned";
+      tenantId: string;
+      triggeredById: string;
+      data: {
+        recruiterName: string;
+        recruiterEmail: string;
+        vacancyPosition: string;
+        clientName: string;
+        vacancyId: string;
+      };
+    };
+// Future templates will be added here as union members
+
 type Events = {
   "lead/status.changed": {
     data: {
@@ -29,6 +44,9 @@ type Events = {
       candidateName: string;
       candidateEmail: string | null;
     };
+  };
+  "email/send": {
+    data: StandaloneEmailPayload;
   };
 };
 

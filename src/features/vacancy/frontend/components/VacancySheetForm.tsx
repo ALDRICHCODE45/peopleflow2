@@ -12,6 +12,12 @@ import { useIsMobile } from "@/core/shared/hooks/use-mobile";
 import dynamic from "next/dynamic";
 import { Spinner } from "@shadcn/spinner";
 
+const loadingFallback = (
+  <div className="flex justify-center items-center p-8">
+    <Spinner className="size-10" />
+  </div>
+);
+
 const CreateVacancyForm = dynamic(
   () =>
     import("./CreateVacancyForm").then((mod) => ({
@@ -19,12 +25,19 @@ const CreateVacancyForm = dynamic(
     })),
   {
     ssr: false,
-    loading: () => (
-      <div className="flex justify-center items-center p-8">
-        <Spinner className="size-10" />
-      </div>
-    ),
-  }
+    loading: () => loadingFallback,
+  },
+);
+
+const EditVacancyForm = dynamic(
+  () =>
+    import("./EditVacancyForm").then((mod) => ({
+      default: mod.EditVacancyForm,
+    })),
+  {
+    ssr: false,
+    loading: () => loadingFallback,
+  },
 );
 
 interface VacancySheetFormProps {
@@ -59,7 +72,14 @@ export function VacancySheetForm({
           </SheetDescription>
         </SheetHeader>
         <div className="p-4">
-          <CreateVacancyForm onClose={() => onOpenChange(false)} />
+          {vacancy ? (
+            <EditVacancyForm
+              vacancy={vacancy}
+              onClose={() => onOpenChange(false)}
+            />
+          ) : (
+            <CreateVacancyForm onClose={() => onOpenChange(false)} />
+          )}
         </div>
       </SheetContent>
     </Sheet>

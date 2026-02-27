@@ -341,6 +341,7 @@ export interface CreateVacancyFormData {
   regionCode?: string;
   requiresPsychometry: boolean;
   targetDeliveryDate?: string;
+  sendNotification?: boolean;
 }
 
 export interface UpdateVacancyFormData extends Partial<CreateVacancyFormData> {

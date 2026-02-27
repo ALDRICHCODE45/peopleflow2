@@ -10,7 +10,11 @@ import { checkClientSaleTypeAction } from "../../server/presentation/actions/che
 import { addChecklistItemAction } from "../../server/presentation/actions/checklist.actions";
 import type { VacancySaleType, VacancyModality } from "../types/vacancy.types";
 
-export function useCreateVacancyForm({ onClose }: { onClose: () => void }) {
+export function useCreateVacancyForm({
+  onClose,
+}: {
+  onClose: () => void;
+}) {
   const createVacancyMutation = useCreateVacancy();
   const { data: users = [] } = useTenantUsersQuery();
   const { data: clients = [] } = useClientsForSelect();
@@ -43,7 +47,7 @@ export function useCreateVacancyForm({ onClose }: { onClose: () => void }) {
       requiresPsychometry: false,
     },
     onSubmit: async ({ value }) => {
-      const vacancy = await createVacancyMutation.mutateAsync({
+      const created = await createVacancyMutation.mutateAsync({
         position: value.position,
         recruiterId: value.recruiterId,
         clientId: value.clientId,
@@ -58,13 +62,14 @@ export function useCreateVacancyForm({ onClose }: { onClose: () => void }) {
         regionCode: value.regionCode || undefined,
         requiresPsychometry: value.requiresPsychometry,
         targetDeliveryDate: value.targetDeliveryDate || undefined,
+        sendNotification,
       });
 
       // Save checklist items after vacancy creation
-      if (vacancy?.id && checklist.length > 0) {
+      if (created?.id && checklist.length > 0) {
         for (let i = 0; i < checklist.length; i++) {
           if (checklist[i].trim()) {
-            await addChecklistItemAction(vacancy.id, checklist[i].trim(), i);
+            await addChecklistItemAction(created.id, checklist[i].trim(), i);
           }
         }
       }
@@ -83,7 +88,7 @@ export function useCreateVacancyForm({ onClose }: { onClose: () => void }) {
         setSaleType("NUEVA");
       }
     },
-    [form]
+    [form],
   );
 
   const addChecklistItem = useCallback(() => {

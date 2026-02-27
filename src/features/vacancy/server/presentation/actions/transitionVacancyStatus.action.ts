@@ -6,11 +6,11 @@ import { revalidatePath } from "next/cache";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
-import prisma from "@lib/prisma";
 import { inngest } from "@core/shared/inngest/inngest";
 import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
 import { prismaVacancyStatusHistoryRepository } from "../../infrastructure/repositories/PrismaVacancyStatusHistoryRepository";
 import { prismaVacancyCandidateRepository } from "../../infrastructure/repositories/PrismaVacancyCandidateRepository";
+import { prismaVacancyAttachmentRepository } from "../../infrastructure/repositories/PrismaVacancyAttachmentRepository";
 import { TransitionVacancyStatusUseCase } from "../../application/use-cases/TransitionVacancyStatusUseCase";
 import type {
   VacancyStatusType,
@@ -76,19 +76,8 @@ export async function transitionVacancyStatusAction(
     // Only relevant for QUICK_MEETING → HUNTING transition, but we query always
     // to keep the action generic (cheap query, correct behavior)
     const [jobDescCount, perfilMuestraValidatedCount] = await Promise.all([
-      prisma.attachment.count({
-        where: {
-          vacancyId: input.vacancyId,
-          subType: "JOB_DESCRIPTION",
-        },
-      }),
-      prisma.attachment.count({
-        where: {
-          vacancyId: input.vacancyId,
-          subType: "PERFIL_MUESTRA",
-          isValidated: true,
-        },
-      }),
+      prismaVacancyAttachmentRepository.countBySubType(input.vacancyId, "JOB_DESCRIPTION"),
+      prismaVacancyAttachmentRepository.countBySubType(input.vacancyId, "PERFIL_MUESTRA", true),
     ]);
 
     const useCase = new TransitionVacancyStatusUseCase(

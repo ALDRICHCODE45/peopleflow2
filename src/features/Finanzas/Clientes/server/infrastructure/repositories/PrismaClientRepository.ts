@@ -87,6 +87,14 @@ class PrismaClientRepositoryImpl implements IClientRepository {
       updatedAt: client.updatedAt,
     });
   }
+
+  async findAllByTenantId(tenantId: string): Promise<{ id: string; nombre: string }[]> {
+    return prisma.client.findMany({
+      where: { tenantId },
+      select: { id: true, nombre: true },
+      orderBy: { nombre: "asc" },
+    });
+  }
 }
 
 export const prismaClientRepository = new PrismaClientRepositoryImpl();

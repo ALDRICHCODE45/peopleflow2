@@ -23,6 +23,10 @@ import {
   generateVacancyPlacementCongratsEmail,
   generateVacancyPlacementCongratsPlainText,
 } from "@features/Notifications/server/infrastructure/templates/vacancyPlacementCongratsTemplate";
+import {
+  generateVacancyRecruiterAssignedEmail,
+  generateVacancyRecruiterAssignedPlainText,
+} from "@features/Notifications/server/infrastructure/templates/vacancyRecruiterAssignedTemplate";
 
 const STATUS_LABELS: Record<string, string> = {
   CONTACTO: "Contacto",
@@ -432,9 +436,63 @@ const handleVacancyPlacementCongratsEmail = inngest.createFunction(
   },
 );
 
+// Function 5: Generic standalone email queue
+const handleSendStandaloneEmail = inngest.createFunction(
+  {
+    id: "handle-send-standalone-email",
+    name: "Cola de emails standalone",
+  },
+  { event: "email/send" },
+  async ({ event, step }) => {
+    const payload = event.data;
+
+    switch (payload.template) {
+      case "recruiter-vacancy-assigned": {
+        const { data, tenantId, triggeredById } = payload;
+
+        await step.run("send-recruiter-assigned-email", async () => {
+          const notificationUseCase = new SendNotificationUseCase(
+            prismaNotificationRepository,
+            [emailProvider],
+          );
+
+          const emailData = {
+            recruiterName: data.recruiterName,
+            vacancyPosition: data.vacancyPosition,
+            clientName: data.clientName,
+            appUrl: APP_URL,
+          };
+
+          await notificationUseCase.execute({
+            tenantId,
+            provider: "EMAIL",
+            recipient: data.recruiterEmail,
+            subject: `Nueva vacante asignada: ${data.vacancyPosition}`,
+            body: generateVacancyRecruiterAssignedPlainText(emailData),
+            priority: "MEDIUM",
+            metadata: {
+              vacancyId: data.vacancyId,
+              vacancyPosition: data.vacancyPosition,
+              triggerEvent: "VACANCY_RECRUITER_ASSIGNED",
+              htmlTemplate: generateVacancyRecruiterAssignedEmail(emailData),
+            },
+            createdById: triggeredById,
+          });
+        });
+
+        return { sent: true, template: payload.template };
+      }
+
+      default:
+        return { skipped: true, reason: "Unknown template" };
+    }
+  },
+);
+
 export const functions = [
   handleLeadStatusChangeNotification,
   handleLeadInactivityAlert,
   handleVacancyPrePlacementEntryReminder,
   handleVacancyPlacementCongratsEmail,
+  handleSendStandaloneEmail,
 ];

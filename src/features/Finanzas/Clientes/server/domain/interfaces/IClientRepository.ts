@@ -24,4 +24,9 @@ export interface IClientRepository {
    * Busca un cliente por el ID del Lead original
    */
   findByLeadId(leadId: string, tenantId: string): Promise<Client | null>;
+
+  /**
+   * Devuelve id y nombre de todos los clientes de un tenant (para selects)
+   */
+  findAllByTenantId(tenantId: string): Promise<{ id: string; nombre: string }[]>;
 }

@@ -7,6 +7,7 @@ import type {
   FindVacanciesFilters,
   FindPaginatedVacanciesParams,
   PaginatedResult,
+  ChecklistValidationResult,
 } from "../../domain/interfaces/IVacancyRepository";
 import type {
   VacancyStatusType,
@@ -448,6 +449,80 @@ export class PrismaVacancyRepository implements IVacancyRepository {
         this.mapToDomain(r as unknown as VacancyWithRelations)
       ),
       totalCount,
+    };
+  }
+
+  async countByClientId(clientId: string, tenantId: string): Promise<number> {
+    return prisma.vacancy.count({ where: { clientId, tenantId } });
+  }
+
+  async findRecruiterContactById(userId: string): Promise<{ email: string; name: string | null } | null> {
+    const user = await prisma.user.findFirst({
+      where: { id: userId },
+      select: { email: true, name: true },
+    });
+    return user ?? null;
+  }
+
+  async findClientNameById(clientId: string, tenantId: string): Promise<string | null> {
+    const client = await prisma.client.findFirst({
+      where: { id: clientId, tenantId },
+      select: { nombre: true },
+    });
+    return client?.nombre ?? null;
+  }
+
+  async validateChecklist(
+    vacancyId: string,
+    tenantId: string,
+    validatedById: string,
+  ): Promise<ChecklistValidationResult> {
+    const v = await prisma.vacancy.update({
+      where: { id: vacancyId, tenantId },
+      data: {
+        checklistValidatedAt: new Date(),
+        checklistValidatedById: validatedById,
+        checklistRejectionReason: null,
+      },
+      select: {
+        id: true,
+        checklistValidatedAt: true,
+        checklistValidatedById: true,
+        checklistRejectionReason: true,
+      },
+    });
+    return {
+      id: v.id,
+      checklistValidatedAt: v.checklistValidatedAt?.toISOString() ?? null,
+      checklistValidatedById: v.checklistValidatedById,
+      checklistRejectionReason: v.checklistRejectionReason,
+    };
+  }
+
+  async rejectChecklist(
+    vacancyId: string,
+    tenantId: string,
+    reason: string,
+  ): Promise<ChecklistValidationResult> {
+    const v = await prisma.vacancy.update({
+      where: { id: vacancyId, tenantId },
+      data: {
+        checklistValidatedAt: null,
+        checklistValidatedById: null,
+        checklistRejectionReason: reason,
+      },
+      select: {
+        id: true,
+        checklistValidatedAt: true,
+        checklistValidatedById: true,
+        checklistRejectionReason: true,
+      },
+    });
+    return {
+      id: v.id,
+      checklistValidatedAt: null,
+      checklistValidatedById: null,
+      checklistRejectionReason: v.checklistRejectionReason,
     };
   }
 }
