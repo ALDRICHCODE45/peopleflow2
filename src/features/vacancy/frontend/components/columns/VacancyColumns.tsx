@@ -1,12 +1,11 @@
 import { ColumnDef } from "@tanstack/react-table";
 import type { VacancyDTO } from "../../types/vacancy.types";
-import { VACANCY_MODALITY_LABELS } from "../../types/vacancy.types";
-import { VacancyStatusBadge } from "../VacancyStatusBadge";
+import { VacancyStatusBadge, VacancyModalityBadge } from "../VacancyStatusBadge";
 import { VacancyRowActions } from "./VacancyRowActions";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { Badge } from "@/core/shared/ui/shadcn/badge";
 import { Checkbox } from "@/core/shared/ui/shadcn/checkbox";
+import { Avatar, AvatarFallback, AvatarImage } from "@/core/shared/ui/shadcn/avatar";
 import { VacancySalesTypeBadge } from "../VacancyVentaTypeBadge";
 
 export function createVacancyColumns(
@@ -68,14 +67,29 @@ export function createVacancyColumns(
       header: "Recruiter",
       accessorKey: "recruiterName",
       cell: ({ row }) => {
-        const { recruiterName, recruiterId } = row.original;
+        const { recruiterName, recruiterEmail, recruiterAvatar, recruiterId } = row.original;
+        const name = recruiterName ?? recruiterId;
+        const initials = name
+          ? name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
+          : "?";
         return (
-          <span className="truncate block max-w-37.5">
-            {recruiterName ?? recruiterId}
-          </span>
+          <div className="flex items-center gap-3 max-w-[200px]">
+            <Avatar className="h-9 w-9 flex-shrink-0">
+              <AvatarImage src={recruiterAvatar ?? undefined} alt={name} />
+              <AvatarFallback className="text-xs">{initials}</AvatarFallback>
+            </Avatar>
+            <div className="min-w-0 flex-1">
+              <div className="font-medium text-sm truncate">{name}</div>
+              {recruiterEmail && (
+                <span className="text-muted-foreground text-xs truncate block">
+                  {recruiterEmail}
+                </span>
+              )}
+            </div>
+          </div>
         );
       },
-      size: 14,
+      size: 16,
       enableSorting: false,
     },
     {
@@ -84,14 +98,8 @@ export function createVacancyColumns(
       cell: ({ row }) => {
         const modality = row.original.modality;
         if (!modality)
-          return (
-            <span className="text-muted-foreground italic text-xs">—</span>
-          );
-        return (
-          <Badge variant="outline" className="font-normal whitespace-nowrap">
-            {VACANCY_MODALITY_LABELS[modality]}
-          </Badge>
-        );
+          return <span className="text-muted-foreground italic text-xs">—</span>;
+        return <VacancyModalityBadge modality={modality} />;
       },
       size: 10,
       enableSorting: false,

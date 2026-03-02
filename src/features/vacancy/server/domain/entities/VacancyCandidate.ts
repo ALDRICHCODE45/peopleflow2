@@ -20,7 +20,6 @@ export interface VacancyCandidateProps {
   regionCode: string | null;
   currentCommissions: string | null;
   currentBenefits: string | null;
-  candidateLocation: string | null;
   otherBenefits: string | null;
   status: CandidateStatus;
   isInTerna: boolean;
@@ -100,10 +99,6 @@ export class VacancyCandidate {
     return this.props.currentBenefits;
   }
 
-  get candidateLocation(): string | null {
-    return this.props.candidateLocation;
-  }
-
   get otherBenefits(): string | null {
     return this.props.otherBenefits;
   }
@@ -180,7 +175,6 @@ export class VacancyCandidate {
       regionCode: this.props.regionCode,
       currentCommissions: this.props.currentCommissions,
       currentBenefits: this.props.currentBenefits,
-      candidateLocation: this.props.candidateLocation,
       otherBenefits: this.props.otherBenefits,
       status: this.props.status,
       isInTerna: this.props.isInTerna,

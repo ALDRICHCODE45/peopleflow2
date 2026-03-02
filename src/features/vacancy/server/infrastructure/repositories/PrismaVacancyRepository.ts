@@ -67,14 +67,14 @@ const ALLOWED_ORDER_FIELDS = [
 export class PrismaVacancyRepository implements IVacancyRepository {
   private getBaseInclude() {
     return {
-      recruiter: { select: { name: true } },
+      recruiter: { select: { name: true, email: true, avatar: true } },
       client: { select: { nombre: true } },
     } as const;
   }
 
   private getDetailInclude() {
     return {
-      recruiter: { select: { name: true } },
+      recruiter: { select: { name: true, email: true, avatar: true } },
       client: { select: { nombre: true } },
       candidates: {
         orderBy: { createdAt: "asc" as const },
@@ -135,6 +135,8 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       status: record.status as VacancyStatusType,
       recruiterId: record.recruiterId,
       recruiterName: record.recruiter?.name ?? null,
+      recruiterEmail: record.recruiter?.email ?? null,
+      recruiterAvatar: record.recruiter?.avatar ?? null,
       clientId: record.clientId,
       clientName: record.client?.nombre ?? null,
       saleType: record.saleType as VacancySaleType,
@@ -187,7 +189,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
         currentCompany: string | null; currentSalary: number | null;
         salaryExpectation: number | null; currentModality: string | null;
         countryCode: string | null; regionCode: string | null; currentCommissions: string | null;
-        currentBenefits: string | null; candidateLocation: string | null;
+        currentBenefits: string | null;
         otherBenefits: string | null;
         status: string; isInTerna: boolean; isFinalist: boolean; finalSalary: number | null;
         tenantId: string; createdAt: Date; updatedAt: Date;
@@ -227,7 +229,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       salaryExpectation: c.salaryExpectation,
       currentModality: (c.currentModality as VacancyModality | null) ?? null,
       countryCode: c.countryCode, regionCode: c.regionCode, currentCommissions: c.currentCommissions,
-      currentBenefits: c.currentBenefits, candidateLocation: c.candidateLocation,
+      currentBenefits: c.currentBenefits,
       otherBenefits: c.otherBenefits,
       status: c.status as VacancyCandidateDTO["status"],
       isInTerna: c.isInTerna, isFinalist: c.isFinalist, finalSalary: c.finalSalary,

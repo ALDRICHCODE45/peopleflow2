@@ -153,9 +153,6 @@ export function EditCandidateDialog({
           : null,
         currentCommissions: form.currentCommissions.trim() || null,
         currentBenefits: form.currentBenefits.trim() || null,
-        candidateLocation: form.candidateCountryCode
-          ? [form.candidateRegionCode, form.candidateCountryCode].filter(Boolean).join(", ")
-          : null,
         otherBenefits: form.otherBenefits.trim() || null,
       },
     });

@@ -51,7 +51,6 @@ export class UpdateCandidateUseCase {
       if (fields.regionCode !== undefined) updateData.regionCode = fields.regionCode;
       if (fields.currentCommissions !== undefined) updateData.currentCommissions = fields.currentCommissions;
       if (fields.currentBenefits !== undefined) updateData.currentBenefits = fields.currentBenefits;
-      if (fields.candidateLocation !== undefined) updateData.candidateLocation = fields.candidateLocation;
       if (fields.otherBenefits !== undefined) updateData.otherBenefits = fields.otherBenefits;
       if (fields.status !== undefined) updateData.status = fields.status;
       if (fields.isInTerna !== undefined) updateData.isInTerna = fields.isInTerna;

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { resolveCountryName, resolveRegionName } from "@lib/resolve-location";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@shadcn/sheet";
@@ -549,8 +550,8 @@ export function VacancyDetailSheet({
                           }
                         />
                         <InfoRow label="Horario" value={vacancy.schedule} />
-                        <InfoRow label="País" value={vacancy.countryCode} />
-                        <InfoRow label="Región" value={vacancy.regionCode} />
+                        <InfoRow label="País" value={resolveCountryName(vacancy.countryCode)} />
+                        <InfoRow label="Región" value={resolveRegionName(vacancy.countryCode, vacancy.regionCode)} />
                       </div>
                     </div>
 

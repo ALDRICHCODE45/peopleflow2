@@ -19,7 +19,6 @@ export interface CreateCandidateData {
   regionCode?: string | null;
   currentCommissions?: string | null;
   currentBenefits?: string | null;
-  candidateLocation?: string | null;
   otherBenefits?: string | null;
   tenantId: string;
 }
@@ -38,7 +37,6 @@ export interface UpdateCandidateData {
   regionCode?: string | null;
   currentCommissions?: string | null;
   currentBenefits?: string | null;
-  candidateLocation?: string | null;
   otherBenefits?: string | null;
   status?: CandidateStatus;
   isInTerna?: boolean;

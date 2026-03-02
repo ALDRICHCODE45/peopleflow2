@@ -15,6 +15,8 @@ export interface VacancyProps {
   status: VacancyStatusType;
   recruiterId: string;
   recruiterName?: string | null;
+  recruiterEmail?: string | null;
+  recruiterAvatar?: string | null;
   clientId: string;
   clientName?: string | null;
   saleType: VacancySaleType;
@@ -77,6 +79,14 @@ export class Vacancy {
 
   get recruiterName(): string | null | undefined {
     return this.props.recruiterName;
+  }
+
+  get recruiterEmail(): string | null | undefined {
+    return this.props.recruiterEmail;
+  }
+
+  get recruiterAvatar(): string | null | undefined {
+    return this.props.recruiterAvatar;
   }
 
   get clientId(): string {
@@ -287,6 +297,8 @@ export class Vacancy {
       status: this.props.status,
       recruiterId: this.props.recruiterId,
       recruiterName: this.props.recruiterName ?? null,
+      recruiterEmail: this.props.recruiterEmail ?? null,
+      recruiterAvatar: this.props.recruiterAvatar ?? null,
       clientId: this.props.clientId,
       clientName: this.props.clientName ?? null,
       saleType: this.props.saleType,

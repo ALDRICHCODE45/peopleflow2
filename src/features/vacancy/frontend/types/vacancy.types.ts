@@ -44,6 +44,8 @@ export interface VacancyDTO {
   status: VacancyStatusType;
   recruiterId: string;
   recruiterName?: string | null;
+  recruiterEmail?: string | null;
+  recruiterAvatar?: string | null;
   clientId: string;
   clientName?: string | null;
   saleType: VacancySaleType;
@@ -104,7 +106,7 @@ export interface VacancyCandidateDTO {
   regionCode: string | null;
   currentCommissions: string | null;
   currentBenefits: string | null;
-  candidateLocation: string | null;
+
   otherBenefits: string | null;
   status: CandidateStatus;
   isInTerna: boolean;
@@ -400,6 +402,5 @@ export interface AddCandidateFormData {
   regionCode?: string;
   currentCommissions?: string;
   currentBenefits?: string;
-  candidateLocation?: string;
   otherBenefits?: string;
 }

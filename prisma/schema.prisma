@@ -707,7 +707,6 @@ model VacancyCandidate {
   regionCode          String?         // Código de región/estado
   currentCommissions  String?         // Bonos/comisiones en trabajo actual o último
   currentBenefits     String?         // Prestaciones actuales o últimas
-  candidateLocation   String?         // Dirección del candidato (Ciudad/País)
   otherBenefits       String? @db.Text // Otros beneficios (campo abierto)
 
   // Estado del candidato en este proceso
@@ -822,7 +821,6 @@ model VacancyConfig {
   requireCurrentLocation     Boolean @default(false)
   requireCurrentCommissions  Boolean @default(false)
   requireCurrentBenefits     Boolean @default(false)
-  requireCandidateLocation   Boolean @default(false)
   requireOtherBenefits       Boolean @default(false)
 
   // CV

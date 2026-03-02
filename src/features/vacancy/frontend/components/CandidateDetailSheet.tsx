@@ -16,6 +16,7 @@ import { Badge } from "@shadcn/badge";
 import { Separator } from "@shadcn/separator";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@shadcn/sheet";
 import { cn } from "@/core/lib/utils";
+import { resolveCountryName, resolveRegionName } from "@lib/resolve-location";
 import {
   CANDIDATE_STATUS_LABELS,
   type VacancyCandidateDTO,
@@ -105,7 +106,7 @@ export function CandidateDetailSheet({
     candidate.salaryExpectation != null ||
     candidate.finalSalary != null;
 
-  const hasLocationInfo = candidate.candidateLocation || candidate.countryCode;
+  const hasLocationInfo = !!(candidate.countryCode || candidate.regionCode);
 
   return (
     <Sheet open={open} onOpenChange={(v) => !v && onClose()}>
@@ -256,7 +257,14 @@ export function CandidateDetailSheet({
               <InfoRow
                 icon={Location01Icon}
                 label="Ubicación"
-                value={candidate.candidateLocation ?? candidate.countryCode}
+                value={
+                  [
+                    resolveRegionName(candidate.countryCode, candidate.regionCode),
+                    resolveCountryName(candidate.countryCode),
+                  ]
+                    .filter(Boolean)
+                    .join(", ") || null
+                }
               />
             )}
             {candidate.isCurrentlyEmployed != null && (

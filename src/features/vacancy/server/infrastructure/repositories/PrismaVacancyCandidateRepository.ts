@@ -29,7 +29,6 @@ type PrismaCandidateRecord = {
   regionCode: string | null;
   currentCommissions: string | null;
   currentBenefits: string | null;
-  candidateLocation: string | null;
   otherBenefits: string | null;
   status: string;
   isInTerna: boolean;
@@ -60,7 +59,6 @@ export class PrismaVacancyCandidateRepository
       regionCode: record.regionCode,
       currentCommissions: record.currentCommissions,
       currentBenefits: record.currentBenefits,
-      candidateLocation: record.candidateLocation,
       otherBenefits: record.otherBenefits,
       status: record.status as CandidateStatus,
       isInTerna: record.isInTerna,
@@ -129,7 +127,6 @@ export class PrismaVacancyCandidateRepository
         regionCode: data.regionCode ?? null,
         currentCommissions: data.currentCommissions ?? null,
         currentBenefits: data.currentBenefits ?? null,
-        candidateLocation: data.candidateLocation ?? null,
         otherBenefits: data.otherBenefits ?? null,
         status: "EN_PROCESO",
         isInTerna: false,
@@ -179,9 +176,6 @@ export class PrismaVacancyCandidateRepository
         }),
         ...(data.currentBenefits !== undefined && {
           currentBenefits: data.currentBenefits,
-        }),
-        ...(data.candidateLocation !== undefined && {
-          candidateLocation: data.candidateLocation,
         }),
         ...(data.otherBenefits !== undefined && {
           otherBenefits: data.otherBenefits,

@@ -180,9 +180,6 @@ export function AddCandidateDialog({
         salaryExpectation: form.salaryExpectation ? Number(form.salaryExpectation) : undefined,
         currentCommissions: form.currentCommissions.trim() || undefined,
         currentBenefits: form.currentBenefits.trim() || undefined,
-        candidateLocation: form.candidateCountryCode
-          ? [form.candidateRegionCode, form.candidateCountryCode].filter(Boolean).join(", ")
-          : undefined,
         otherBenefits: form.otherBenefits.trim() || undefined,
       },
     });

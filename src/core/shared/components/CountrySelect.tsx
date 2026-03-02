@@ -4,11 +4,11 @@ import { filterCountries } from "@/core/lib/filter-countries";
 import { cn } from "@lib/utils";
 import { Button } from "@shadcn/button";
 import { Input } from "@shadcn/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@shadcn/popover";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowDown01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
 import { CircleFlag } from "react-circle-flags";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { createPortal } from "react-dom";
 import countryRegionData from "country-region-data/data.json";
 
 export interface Region {
@@ -43,8 +43,6 @@ function CountrySelect({
 }: CountrySelectProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
-  const buttonRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const countries = useMemo(
@@ -69,147 +67,98 @@ function CountrySelect({
     [countries, value],
   );
 
-  // Calculate dropdown position from button
-  const updatePosition = () => {
-    if (!buttonRef.current) return;
-    const rect = buttonRef.current.getBoundingClientRect();
-    setDropdownStyle({
-      position: "fixed",
-      top: rect.bottom + 4,
-      left: rect.left,
-      width: rect.width,
-      zIndex: 9999,
-      pointerEvents: "auto",
-    });
-  };
-
-  // Close on click outside
-  useEffect(() => {
-    if (!open) return;
-    function handleClick(e: MouseEvent) {
-      const target = e.target as Node;
-      const dropdownEl = document.getElementById("country-select-dropdown");
-      if (
-        buttonRef.current &&
-        !buttonRef.current.contains(target) &&
-        dropdownEl &&
-        !dropdownEl.contains(target)
-      ) {
-        setOpen(false);
-        setSearch("");
-      }
-    }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, [open]);
-
-  // Reposition on scroll/resize
-  useEffect(() => {
-    if (!open) return;
-    const handleScroll = () => updatePosition();
-    window.addEventListener("scroll", handleScroll, true);
-    window.addEventListener("resize", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll, true);
-      window.removeEventListener("resize", handleScroll);
-    };
-  }, [open]);
-
   // Auto-focus search input when opened
   useEffect(() => {
     if (open) {
-      updatePosition();
       requestAnimationFrame(() => inputRef.current?.focus());
+    } else {
+      setSearch("");
     }
   }, [open]);
 
   return (
-    <div className="relative">
-      <Button
-        ref={buttonRef}
-        type="button"
-        variant="outline"
-        role="combobox"
-        aria-expanded={open}
-        className={cn("w-full justify-between font-normal", className)}
-        onClick={() => setOpen((prev) => !prev)}
-      >
-        {selected ? (
-          <span className="flex items-center gap-2 truncate">
-            <CircleFlag
-              countryCode={selected.countryShortCode.toLowerCase()}
-              className="size-5 shrink-0"
-            />
-            {selected.countryName}
-          </span>
-        ) : (
-          <span className="text-muted-foreground">{placeholder}</span>
-        )}
-        <HugeiconsIcon
-          icon={ArrowDown01Icon}
-          className="ml-auto size-4 shrink-0 text-muted-foreground"
-        />
-      </Button>
-
-      {open &&
-        createPortal(
-          <div
-            id="country-select-dropdown"
-            style={dropdownStyle}
-            className="bg-popover ring-foreground/10 rounded-lg shadow-md ring-1"
-          >
-            <div className="p-2 pb-1.5">
-              <Input
-                ref={inputRef}
-                placeholder="Buscar pais..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="h-8"
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          type="button"
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className={cn("w-full justify-between font-normal", className)}
+        >
+          {selected ? (
+            <span className="flex items-center gap-2 truncate">
+              <CircleFlag
+                countryCode={selected.countryShortCode.toLowerCase()}
+                className="size-5 shrink-0"
               />
-            </div>
-            <div className="max-h-56 overflow-y-auto overscroll-contain px-1 pb-1" onWheel={(e) => e.stopPropagation()}>
-              {filtered.length === 0 ? (
-                <p className="py-4 text-center text-sm text-muted-foreground">
-                  Sin resultados.
-                </p>
-              ) : (
-                filtered.map(({ countryName, countryShortCode }) => {
-                  const isSelected = value === countryShortCode;
-                  return (
-                    <button
-                      key={countryShortCode}
-                      type="button"
-                      className={cn(
-                        "relative flex w-full cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm outline-none select-none hover:bg-accent hover:text-accent-foreground",
-                        isSelected && "bg-accent text-accent-foreground",
-                      )}
-                      onClick={() => {
-                        onChange(countryShortCode);
-                        setOpen(false);
-                        setSearch("");
-                      }}
-                    >
-                      <CircleFlag
-                        countryCode={countryShortCode.toLowerCase()}
-                        className="size-5 shrink-0"
-                      />
-                      <span className="truncate">{countryName}</span>
-                      {isSelected && (
-                        <HugeiconsIcon
-                          icon={Tick02Icon}
-                          strokeWidth={2}
-                          className="ml-auto size-4 shrink-0"
-                        />
-                      )}
-                    </button>
-                  );
-                })
-              )}
-            </div>
-          </div>,
-          document.body,
-        )}
-    </div>
+              {selected.countryName}
+            </span>
+          ) : (
+            <span className="text-muted-foreground">{placeholder}</span>
+          )}
+          <HugeiconsIcon
+            icon={ArrowDown01Icon}
+            className="ml-auto size-4 shrink-0 text-muted-foreground"
+          />
+        </Button>
+      </PopoverTrigger>
+
+      <PopoverContent
+        align="start"
+        sideOffset={4}
+        className="p-0 w-[var(--radix-popover-trigger-width)]"
+        onWheel={(e) => e.stopPropagation()}
+      >
+        <div className="p-2 pb-1.5">
+          <Input
+            ref={inputRef}
+            placeholder="Buscar pais..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="h-8"
+          />
+        </div>
+        <div className="max-h-56 overflow-y-auto overscroll-contain px-1 pb-1">
+          {filtered.length === 0 ? (
+            <p className="py-4 text-center text-sm text-muted-foreground">
+              Sin resultados.
+            </p>
+          ) : (
+            filtered.map(({ countryName, countryShortCode }) => {
+              const isSelected = value === countryShortCode;
+              return (
+                <button
+                  key={countryShortCode}
+                  type="button"
+                  className={cn(
+                    "relative flex w-full cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm outline-none select-none hover:bg-accent hover:text-accent-foreground",
+                    isSelected && "bg-accent text-accent-foreground",
+                  )}
+                  onClick={() => {
+                    onChange(countryShortCode);
+                    setOpen(false);
+                  }}
+                >
+                  <CircleFlag
+                    countryCode={countryShortCode.toLowerCase()}
+                    className="size-5 shrink-0"
+                  />
+                  <span className="truncate">{countryName}</span>
+                  {isSelected && (
+                    <HugeiconsIcon
+                      icon={Tick02Icon}
+                      strokeWidth={2}
+                      className="ml-auto size-4 shrink-0"
+                    />
+                  )}
+                </button>
+              );
+            })
+          )}
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 }
 

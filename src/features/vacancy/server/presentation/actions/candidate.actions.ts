@@ -77,7 +77,6 @@ export async function addCandidateAction(
       regionCode: data.regionCode ?? null,
       currentCommissions: data.currentCommissions ?? null,
       currentBenefits: data.currentBenefits ?? null,
-      candidateLocation: data.candidateLocation ?? null,
       otherBenefits: data.otherBenefits ?? null,
     });
 
@@ -107,7 +106,6 @@ export interface UpdateCandidateInput {
   regionCode?: string | null;
   currentCommissions?: string | null;
   currentBenefits?: string | null;
-  candidateLocation?: string | null;
   otherBenefits?: string | null;
   status?: CandidateStatus;
   isInTerna?: boolean;

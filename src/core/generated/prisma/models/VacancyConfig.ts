@@ -48,7 +48,6 @@ export type VacancyConfigMinAggregateOutputType = {
   requireCurrentLocation: boolean | null
   requireCurrentCommissions: boolean | null
   requireCurrentBenefits: boolean | null
-  requireCandidateLocation: boolean | null
   requireOtherBenefits: boolean | null
   requireCv: boolean | null
   createdAt: Date | null
@@ -69,7 +68,6 @@ export type VacancyConfigMaxAggregateOutputType = {
   requireCurrentLocation: boolean | null
   requireCurrentCommissions: boolean | null
   requireCurrentBenefits: boolean | null
-  requireCandidateLocation: boolean | null
   requireOtherBenefits: boolean | null
   requireCv: boolean | null
   createdAt: Date | null
@@ -90,7 +88,6 @@ export type VacancyConfigCountAggregateOutputType = {
   requireCurrentLocation: number
   requireCurrentCommissions: number
   requireCurrentBenefits: number
-  requireCandidateLocation: number
   requireOtherBenefits: number
   requireCv: number
   createdAt: number
@@ -121,7 +118,6 @@ export type VacancyConfigMinAggregateInputType = {
   requireCurrentLocation?: true
   requireCurrentCommissions?: true
   requireCurrentBenefits?: true
-  requireCandidateLocation?: true
   requireOtherBenefits?: true
   requireCv?: true
   createdAt?: true
@@ -142,7 +138,6 @@ export type VacancyConfigMaxAggregateInputType = {
   requireCurrentLocation?: true
   requireCurrentCommissions?: true
   requireCurrentBenefits?: true
-  requireCandidateLocation?: true
   requireOtherBenefits?: true
   requireCv?: true
   createdAt?: true
@@ -163,7 +158,6 @@ export type VacancyConfigCountAggregateInputType = {
   requireCurrentLocation?: true
   requireCurrentCommissions?: true
   requireCurrentBenefits?: true
-  requireCandidateLocation?: true
   requireOtherBenefits?: true
   requireCv?: true
   createdAt?: true
@@ -271,7 +265,6 @@ export type VacancyConfigGroupByOutputType = {
   requireCurrentLocation: boolean
   requireCurrentCommissions: boolean
   requireCurrentBenefits: boolean
-  requireCandidateLocation: boolean
   requireOtherBenefits: boolean
   requireCv: boolean
   createdAt: Date
@@ -315,7 +308,6 @@ export type VacancyConfigWhereInput = {
   requireCurrentLocation?: Prisma.BoolFilter<"VacancyConfig"> | boolean
   requireCurrentCommissions?: Prisma.BoolFilter<"VacancyConfig"> | boolean
   requireCurrentBenefits?: Prisma.BoolFilter<"VacancyConfig"> | boolean
-  requireCandidateLocation?: Prisma.BoolFilter<"VacancyConfig"> | boolean
   requireOtherBenefits?: Prisma.BoolFilter<"VacancyConfig"> | boolean
   requireCv?: Prisma.BoolFilter<"VacancyConfig"> | boolean
   createdAt?: Prisma.DateTimeFilter<"VacancyConfig"> | Date | string
@@ -337,7 +329,6 @@ export type VacancyConfigOrderByWithRelationInput = {
   requireCurrentLocation?: Prisma.SortOrder
   requireCurrentCommissions?: Prisma.SortOrder
   requireCurrentBenefits?: Prisma.SortOrder
-  requireCandidateLocation?: Prisma.SortOrder
   requireOtherBenefits?: Prisma.SortOrder
   requireCv?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -362,7 +353,6 @@ export type VacancyConfigWhereUniqueInput = Prisma.AtLeast<{
   requireCurrentLocation?: Prisma.BoolFilter<"VacancyConfig"> | boolean
   requireCurrentCommissions?: Prisma.BoolFilter<"VacancyConfig"> | boolean
   requireCurrentBenefits?: Prisma.BoolFilter<"VacancyConfig"> | boolean
-  requireCandidateLocation?: Prisma.BoolFilter<"VacancyConfig"> | boolean
   requireOtherBenefits?: Prisma.BoolFilter<"VacancyConfig"> | boolean
   requireCv?: Prisma.BoolFilter<"VacancyConfig"> | boolean
   createdAt?: Prisma.DateTimeFilter<"VacancyConfig"> | Date | string
@@ -384,7 +374,6 @@ export type VacancyConfigOrderByWithAggregationInput = {
   requireCurrentLocation?: Prisma.SortOrder
   requireCurrentCommissions?: Prisma.SortOrder
   requireCurrentBenefits?: Prisma.SortOrder
-  requireCandidateLocation?: Prisma.SortOrder
   requireOtherBenefits?: Prisma.SortOrder
   requireCv?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -413,7 +402,6 @@ export type VacancyConfigScalarWhereWithAggregatesInput = {
   requireCurrentLocation?: Prisma.BoolWithAggregatesFilter<"VacancyConfig"> | boolean
   requireCurrentCommissions?: Prisma.BoolWithAggregatesFilter<"VacancyConfig"> | boolean
   requireCurrentBenefits?: Prisma.BoolWithAggregatesFilter<"VacancyConfig"> | boolean
-  requireCandidateLocation?: Prisma.BoolWithAggregatesFilter<"VacancyConfig"> | boolean
   requireOtherBenefits?: Prisma.BoolWithAggregatesFilter<"VacancyConfig"> | boolean
   requireCv?: Prisma.BoolWithAggregatesFilter<"VacancyConfig"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"VacancyConfig"> | Date | string
@@ -433,7 +421,6 @@ export type VacancyConfigCreateInput = {
   requireCurrentLocation?: boolean
   requireCurrentCommissions?: boolean
   requireCurrentBenefits?: boolean
-  requireCandidateLocation?: boolean
   requireOtherBenefits?: boolean
   requireCv?: boolean
   createdAt?: Date | string
@@ -455,7 +442,6 @@ export type VacancyConfigUncheckedCreateInput = {
   requireCurrentLocation?: boolean
   requireCurrentCommissions?: boolean
   requireCurrentBenefits?: boolean
-  requireCandidateLocation?: boolean
   requireOtherBenefits?: boolean
   requireCv?: boolean
   createdAt?: Date | string
@@ -475,7 +461,6 @@ export type VacancyConfigUpdateInput = {
   requireCurrentLocation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireCurrentCommissions?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireCurrentBenefits?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  requireCandidateLocation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireOtherBenefits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireCv?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -497,7 +482,6 @@ export type VacancyConfigUncheckedUpdateInput = {
   requireCurrentLocation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireCurrentCommissions?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireCurrentBenefits?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  requireCandidateLocation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireOtherBenefits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireCv?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -518,7 +502,6 @@ export type VacancyConfigCreateManyInput = {
   requireCurrentLocation?: boolean
   requireCurrentCommissions?: boolean
   requireCurrentBenefits?: boolean
-  requireCandidateLocation?: boolean
   requireOtherBenefits?: boolean
   requireCv?: boolean
   createdAt?: Date | string
@@ -538,7 +521,6 @@ export type VacancyConfigUpdateManyMutationInput = {
   requireCurrentLocation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireCurrentCommissions?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireCurrentBenefits?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  requireCandidateLocation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireOtherBenefits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireCv?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -559,7 +541,6 @@ export type VacancyConfigUncheckedUpdateManyInput = {
   requireCurrentLocation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireCurrentCommissions?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireCurrentBenefits?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  requireCandidateLocation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireOtherBenefits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireCv?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -585,7 +566,6 @@ export type VacancyConfigCountOrderByAggregateInput = {
   requireCurrentLocation?: Prisma.SortOrder
   requireCurrentCommissions?: Prisma.SortOrder
   requireCurrentBenefits?: Prisma.SortOrder
-  requireCandidateLocation?: Prisma.SortOrder
   requireOtherBenefits?: Prisma.SortOrder
   requireCv?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -610,7 +590,6 @@ export type VacancyConfigMaxOrderByAggregateInput = {
   requireCurrentLocation?: Prisma.SortOrder
   requireCurrentCommissions?: Prisma.SortOrder
   requireCurrentBenefits?: Prisma.SortOrder
-  requireCandidateLocation?: Prisma.SortOrder
   requireOtherBenefits?: Prisma.SortOrder
   requireCv?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -631,7 +610,6 @@ export type VacancyConfigMinOrderByAggregateInput = {
   requireCurrentLocation?: Prisma.SortOrder
   requireCurrentCommissions?: Prisma.SortOrder
   requireCurrentBenefits?: Prisma.SortOrder
-  requireCandidateLocation?: Prisma.SortOrder
   requireOtherBenefits?: Prisma.SortOrder
   requireCv?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -687,7 +665,6 @@ export type VacancyConfigCreateWithoutTenantInput = {
   requireCurrentLocation?: boolean
   requireCurrentCommissions?: boolean
   requireCurrentBenefits?: boolean
-  requireCandidateLocation?: boolean
   requireOtherBenefits?: boolean
   requireCv?: boolean
   createdAt?: Date | string
@@ -707,7 +684,6 @@ export type VacancyConfigUncheckedCreateWithoutTenantInput = {
   requireCurrentLocation?: boolean
   requireCurrentCommissions?: boolean
   requireCurrentBenefits?: boolean
-  requireCandidateLocation?: boolean
   requireOtherBenefits?: boolean
   requireCv?: boolean
   createdAt?: Date | string
@@ -743,7 +719,6 @@ export type VacancyConfigUpdateWithoutTenantInput = {
   requireCurrentLocation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireCurrentCommissions?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireCurrentBenefits?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  requireCandidateLocation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireOtherBenefits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireCv?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -763,7 +738,6 @@ export type VacancyConfigUncheckedUpdateWithoutTenantInput = {
   requireCurrentLocation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireCurrentCommissions?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireCurrentBenefits?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  requireCandidateLocation?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireOtherBenefits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requireCv?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -786,7 +760,6 @@ export type VacancyConfigSelect<ExtArgs extends runtime.Types.Extensions.Interna
   requireCurrentLocation?: boolean
   requireCurrentCommissions?: boolean
   requireCurrentBenefits?: boolean
-  requireCandidateLocation?: boolean
   requireOtherBenefits?: boolean
   requireCv?: boolean
   createdAt?: boolean
@@ -808,7 +781,6 @@ export type VacancyConfigSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   requireCurrentLocation?: boolean
   requireCurrentCommissions?: boolean
   requireCurrentBenefits?: boolean
-  requireCandidateLocation?: boolean
   requireOtherBenefits?: boolean
   requireCv?: boolean
   createdAt?: boolean
@@ -830,7 +802,6 @@ export type VacancyConfigSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   requireCurrentLocation?: boolean
   requireCurrentCommissions?: boolean
   requireCurrentBenefits?: boolean
-  requireCandidateLocation?: boolean
   requireOtherBenefits?: boolean
   requireCv?: boolean
   createdAt?: boolean
@@ -852,14 +823,13 @@ export type VacancyConfigSelectScalar = {
   requireCurrentLocation?: boolean
   requireCurrentCommissions?: boolean
   requireCurrentBenefits?: boolean
-  requireCandidateLocation?: boolean
   requireOtherBenefits?: boolean
   requireCv?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type VacancyConfigOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "quickMeetingSlaHours" | "requirePhone" | "requireEmail" | "requireIsCurrentlyEmployed" | "requireCurrentCompany" | "requireCurrentSalary" | "requireSalaryExpectation" | "requireCurrentModality" | "requireCurrentLocation" | "requireCurrentCommissions" | "requireCurrentBenefits" | "requireCandidateLocation" | "requireOtherBenefits" | "requireCv" | "createdAt" | "updatedAt", ExtArgs["result"]["vacancyConfig"]>
+export type VacancyConfigOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "quickMeetingSlaHours" | "requirePhone" | "requireEmail" | "requireIsCurrentlyEmployed" | "requireCurrentCompany" | "requireCurrentSalary" | "requireSalaryExpectation" | "requireCurrentModality" | "requireCurrentLocation" | "requireCurrentCommissions" | "requireCurrentBenefits" | "requireOtherBenefits" | "requireCv" | "createdAt" | "updatedAt", ExtArgs["result"]["vacancyConfig"]>
 export type VacancyConfigInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
@@ -889,7 +859,6 @@ export type $VacancyConfigPayload<ExtArgs extends runtime.Types.Extensions.Inter
     requireCurrentLocation: boolean
     requireCurrentCommissions: boolean
     requireCurrentBenefits: boolean
-    requireCandidateLocation: boolean
     requireOtherBenefits: boolean
     requireCv: boolean
     createdAt: Date
@@ -1331,7 +1300,6 @@ export interface VacancyConfigFieldRefs {
   readonly requireCurrentLocation: Prisma.FieldRef<"VacancyConfig", 'Boolean'>
   readonly requireCurrentCommissions: Prisma.FieldRef<"VacancyConfig", 'Boolean'>
   readonly requireCurrentBenefits: Prisma.FieldRef<"VacancyConfig", 'Boolean'>
-  readonly requireCandidateLocation: Prisma.FieldRef<"VacancyConfig", 'Boolean'>
   readonly requireOtherBenefits: Prisma.FieldRef<"VacancyConfig", 'Boolean'>
   readonly requireCv: Prisma.FieldRef<"VacancyConfig", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"VacancyConfig", 'DateTime'>
