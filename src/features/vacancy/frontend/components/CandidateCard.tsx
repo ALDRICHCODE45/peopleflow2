@@ -3,7 +3,7 @@
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Mail01Icon,
-  SmartPhone01Icon,
+  Call02Icon,
   FileAttachmentIcon,
 } from "@hugeicons/core-free-icons";
 import { Badge } from "@shadcn/badge";
@@ -14,6 +14,20 @@ import { CandidateActionsDropdown } from "./CandidateActionsDropdown";
 import { DeleteCandidateAlertDialog } from "./DeleteCandidateAlertDialog";
 import { EditCandidateDialog } from "./EditCandidateDialog";
 import { CandidateChecklistSheet } from "./CandidateChecklistSheet";
+import { CandidateDetailSheet } from "./CandidateDetailSheet";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@shadcn/tooltip";
+import {
+  Item,
+  ItemMedia,
+  ItemContent,
+  ItemTitle,
+  ItemDescription,
+  ItemActions,
+} from "@shadcn/item";
 import type { VacancyCandidateDTO, CandidateStatus, VacancyChecklistItemDTO } from "../types/vacancy.types";
 import { CANDIDATE_STATUS_LABELS } from "../types/vacancy.types";
 
@@ -57,6 +71,12 @@ export function CandidateCard({ candidate, vacancyId, checklistItems = [] }: Can
     closeModal: closeChecklist,
   } = useModalState();
 
+  const {
+    isOpen: isDetailOpen,
+    openModal: openDetail,
+    closeModal: closeDetail,
+  } = useModalState();
+
   const handleDelete = () => {
     removeCandidateMutation.mutate({
       candidateId: candidate.id,
@@ -85,105 +105,124 @@ export function CandidateCard({ candidate, vacancyId, checklistItems = [] }: Can
   ];
 
   return (
-    <div
-      className={cn(
-        "group relative",
-        "rounded-xl border border-border/40",
-        "bg-gradient-to-b from-background to-muted/20",
-        "p-4 transition-all duration-200",
-        "hover:border-border/80 hover:shadow-sm",
-      )}
-    >
-      {/* Main content row */}
-      <div className="flex items-start gap-3">
+    <>
+      <Item variant="outline" size="sm" className="group">
         {/* Avatar */}
-        <div
-          className={cn(
-            "flex-shrink-0 size-10 rounded-full",
-            "flex items-center justify-center",
-            "text-xs font-semibold tracking-wide",
-            candidate.isInTerna
-              ? "bg-violet-100 text-violet-700 ring-1 ring-violet-300"
-              : "bg-muted text-muted-foreground",
-          )}
-        >
-          {initials}
-        </div>
+        <ItemMedia variant="image">
+          <div
+            className={cn(
+              "size-full flex items-center justify-center rounded-full",
+              "text-xs font-semibold tracking-wide",
+              candidate.isInTerna
+                ? "bg-violet-100 text-violet-700 ring-1 ring-violet-300"
+                : "bg-muted text-muted-foreground",
+            )}
+          >
+            {initials}
+          </div>
+        </ItemMedia>
 
-        {/* Info */}
-        <div className="flex-1 min-w-0 space-y-1">
-          {/* Name row */}
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-medium text-sm truncate">{fullName}</span>
+        {/* Content: name + icons row */}
+        <ItemContent>
+          <ItemTitle>
+            <button
+              type="button"
+              onClick={openDetail}
+              className="font-medium hover:text-primary transition-colors cursor-pointer"
+            >
+              {fullName}
+            </button>
             <Badge
               variant="outline"
               className={cn(
                 candidateStatusColorMap[candidate.status],
-                "text-xs font-medium shrink-0",
+                "text-[10px] font-medium",
               )}
             >
               {CANDIDATE_STATUS_LABELS[candidate.status]}
             </Badge>
-          </div>
+          </ItemTitle>
 
-          {/* Contact info */}
-          <div className="flex flex-col gap-0.5 text-xs text-muted-foreground">
-            {candidate.email && (
-              <div className="flex items-center gap-1.5">
-                <HugeiconsIcon
-                  icon={Mail01Icon}
-                  size={12}
-                  className="shrink-0"
-                />
-                <span className="truncate">{candidate.email}</span>
-              </div>
-            )}
-            {candidate.phone && (
-              <div className="flex items-center gap-1.5">
-                <HugeiconsIcon
-                  icon={SmartPhone01Icon}
-                  size={12}
-                  className="shrink-0"
-                />
-                <span>{candidate.phone}</span>
-              </div>
-            )}
-            {candidate.salaryExpectation != null && (
-              <div className="flex items-center gap-1">
-                <span className="text-foreground/60">Expectativa:</span>
-                <span>
-                  ${candidate.salaryExpectation.toLocaleString("es-MX")}
-                </span>
-              </div>
-            )}
-            {cvAttachment && (
-              <a
-                href={cvAttachment.fileUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-primary hover:underline w-fit"
-              >
-                <HugeiconsIcon
-                  icon={FileAttachmentIcon}
-                  size={12}
-                  className="shrink-0"
-                />
-                <span className="truncate">{cvAttachment.fileName}</span>
-              </a>
-            )}
-          </div>
-        </div>
+          {/* Quick-action icon row as description */}
+          <ItemDescription className="!p-0">
+            <div
+              className="flex items-center gap-0.5"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {candidate.email && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <a
+                      href={`mailto:${candidate.email}`}
+                      className={cn(
+                        "inline-flex items-center justify-center",
+                        "size-6 rounded-md",
+                        "text-muted-foreground hover:text-foreground",
+                        "hover:bg-muted/80 transition-colors",
+                      )}
+                    >
+                      <HugeiconsIcon icon={Mail01Icon} className="size-3.5" />
+                    </a>
+                  </TooltipTrigger>
+                  <TooltipContent>{candidate.email}</TooltipContent>
+                </Tooltip>
+              )}
 
-        {/* Actions — visible only on hover */}
-        <div
-          className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+              {candidate.phone && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <a
+                      href={`tel:${candidate.phone}`}
+                      className={cn(
+                        "inline-flex items-center justify-center",
+                        "size-6 rounded-md",
+                        "text-muted-foreground hover:text-foreground",
+                        "hover:bg-muted/80 transition-colors",
+                      )}
+                    >
+                      <HugeiconsIcon icon={Call02Icon} className="size-3.5" />
+                    </a>
+                  </TooltipTrigger>
+                  <TooltipContent>{candidate.phone}</TooltipContent>
+                </Tooltip>
+              )}
+
+              {cvAttachment && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <a
+                      href={cvAttachment.fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={cn(
+                        "inline-flex items-center justify-center",
+                        "size-6 rounded-md",
+                        "text-muted-foreground hover:text-primary",
+                        "hover:bg-primary/10 transition-colors",
+                      )}
+                    >
+                      <HugeiconsIcon icon={FileAttachmentIcon} className="size-3.5" />
+                    </a>
+                  </TooltipTrigger>
+                  <TooltipContent>CV: {cvAttachment.fileName}</TooltipContent>
+                </Tooltip>
+              )}
+
+
+            </div>
+          </ItemDescription>
+        </ItemContent>
+
+        {/* Dropdown — visible only on hover */}
+        <ItemActions
+          className="opacity-0 group-hover:opacity-100 transition-opacity"
           onClick={(e) => e.stopPropagation()}
         >
           <CandidateActionsDropdown actions={dropdownActions} />
-        </div>
-      </div>
+        </ItemActions>
+      </Item>
 
-      {/* Dialogs */}
+      {/* Dialogs — fuera del Item para no afectar layout */}
       <EditCandidateDialog
         open={isEditOpen}
         onClose={closeEdit}
@@ -206,6 +245,12 @@ export function CandidateCard({ candidate, vacancyId, checklistItems = [] }: Can
         checklistItems={checklistItems}
         vacancyId={vacancyId}
       />
-    </div>
+
+      <CandidateDetailSheet
+        open={isDetailOpen}
+        onClose={closeDetail}
+        candidate={candidate}
+      />
+    </>
   );
 }

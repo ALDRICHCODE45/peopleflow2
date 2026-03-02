@@ -6,7 +6,7 @@ export interface VacancyPlacementCongratsEmailData {
 }
 
 export function generateVacancyPlacementCongratsEmail(
-  data: VacancyPlacementCongratsEmailData
+  data: VacancyPlacementCongratsEmailData,
 ): string {
   const { candidateName, vacancyPosition, entryDate, appUrl } = data;
 
@@ -79,17 +79,6 @@ export function generateVacancyPlacementCongratsEmail(
                   </td>
                 </tr>
               </table>
-
-              <!-- CTA Button -->
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
-                <tr>
-                  <td align="center">
-                    <a href="${appUrl}" target="_blank" style="display: inline-block; padding: 16px 40px; background-color: #9333ea; color: #ffffff; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
-                      Ver en Sistema
-                    </a>
-                  </td>
-                </tr>
-              </table>
             </td>
           </tr>
 
@@ -133,7 +122,7 @@ export function generateVacancyPlacementCongratsEmail(
 }
 
 export function generateVacancyPlacementCongratsPlainText(
-  data: VacancyPlacementCongratsEmailData
+  data: VacancyPlacementCongratsEmailData,
 ): string {
   const { candidateName, vacancyPosition, entryDate, appUrl } = data;
 
@@ -147,9 +136,6 @@ Has sido seleccionado(a) para la posición "${vacancyPosition}". Te damos la bie
 Tu fecha de inicio es el ${entryDate}. Estamos emocionados de que te unas a nuestro equipo.
 
 ¡Bienvenido(a) a tu nuevo comienzo!
-
-Ver en sistema: ${appUrl}
-
 ---
 © 2025 PeopleFlow
 Tu sistema de gestion empresarial
