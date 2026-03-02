@@ -11,7 +11,12 @@ import {
   PaginatedActionResponse,
   SortingParam,
 } from "@/core/shared/types/pagination.types";
-import type { VacancyDTO, VacancyStatusType } from "@/features/vacancy/frontend/types/vacancy.types";
+import type {
+  VacancyDTO,
+  VacancyStatusType,
+  VacancySaleType,
+  VacancyModality,
+} from "@/features/vacancy/frontend/types/vacancy.types";
 
 /** Parámetros de entrada para la acción paginada */
 export interface GetPaginatedVacanciesParams {
@@ -20,6 +25,19 @@ export interface GetPaginatedVacanciesParams {
   sorting?: SortingParam[];
   globalFilter?: string;
   statuses?: VacancyStatusType[];
+  saleTypes?: VacancySaleType[];
+  modalities?: VacancyModality[];
+  recruiterIds?: string[];
+  clientIds?: string[];
+  countryCodes?: string[];
+  regionCodes?: string[];
+  requiresPsychometry?: boolean;
+  salaryMin?: number;
+  salaryMax?: number;
+  assignedAtFrom?: string;
+  assignedAtTo?: string;
+  targetDeliveryDateFrom?: string;
+  targetDeliveryDateTo?: string;
 }
 
 /**
@@ -113,6 +131,19 @@ export async function getPaginatedVacanciesAction(
       sorting: validatedSorting,
       filters: {
         statuses: params.statuses,
+        saleTypes: params.saleTypes,
+        modalities: params.modalities,
+        recruiterIds: params.recruiterIds,
+        clientIds: params.clientIds,
+        countryCodes: params.countryCodes,
+        regionCodes: params.regionCodes,
+        requiresPsychometry: params.requiresPsychometry,
+        salaryMin: params.salaryMin,
+        salaryMax: params.salaryMax,
+        assignedAtFrom: params.assignedAtFrom,
+        assignedAtTo: params.assignedAtTo,
+        targetDeliveryDateFrom: params.targetDeliveryDateFrom,
+        targetDeliveryDateTo: params.targetDeliveryDateTo,
         search: params.globalFilter,
       },
     });

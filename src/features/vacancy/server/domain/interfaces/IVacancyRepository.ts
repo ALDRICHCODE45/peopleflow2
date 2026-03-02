@@ -54,9 +54,19 @@ export interface UpdateVacancyData {
 
 export interface FindVacanciesFilters {
   statuses?: VacancyStatusType[];
-  recruiterId?: string;
-  clientId?: string;
-  countryCode?: string;
+  saleTypes?: VacancySaleType[];
+  modalities?: VacancyModality[];
+  recruiterIds?: string[];
+  clientIds?: string[];
+  countryCodes?: string[];
+  regionCodes?: string[];
+  requiresPsychometry?: boolean;
+  salaryMin?: number;
+  salaryMax?: number;
+  assignedAtFrom?: string;
+  assignedAtTo?: string;
+  targetDeliveryDateFrom?: string;
+  targetDeliveryDateTo?: string;
   search?: string;
 }
 

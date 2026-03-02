@@ -17,12 +17,11 @@ import { useServerPaginatedTable } from "@/core/shared/hooks/useServerPaginatedT
 import type { VacancyStatusType } from "../types/vacancy.types";
 import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
 import { enrichVacancyTabsWithCounts } from "../config/vacancyTabsConfig";
+import { useVacanciesFilters } from "../components/tableConfig/hooks/useVacanciesFilters";
 
 export function VacancyListPage() {
   const { isOpen, openModal, closeModal } = useModalState();
-  const [selectedVacancyId, setSelectedVacancyId] = useState<string | null>(
-    null
-  );
+  const [selectedVacancyId, setSelectedVacancyId] = useState<string | null>(null);
 
   // Server-side pagination state with multi-tab support
   const {
@@ -36,15 +35,56 @@ export function VacancyListPage() {
     handleMultiTabChange,
     createPaginationHandler,
     setPagination,
+    globalFilter,
   } = useServerPaginatedTable<VacancyStatusType>({ initialPageSize: 10 });
 
-  // Query with server-side pagination
+  // Advanced filters state
+  const {
+    filters,
+    hasActiveFilters,
+    setStatuses,
+    setSaleTypes,
+    setModalities,
+    setRecruiterIds,
+    setClientIds,
+    setCountryCodes,
+    setRegionCodes,
+    setRequiresPsychometry,
+    setSalaryMin,
+    setSalaryMax,
+    setAssignedAtFrom,
+    setAssignedAtTo,
+    setTargetDeliveryDateFrom,
+    setTargetDeliveryDateTo,
+    clearFilters: clearAdvancedFilters,
+  } = useVacanciesFilters();
+
+  // Merge tab statuses with multi-select statuses (tabs take precedence when active)
+  const effectiveStatuses = useMemo(() => {
+    if (statusFilters.length > 0) return statusFilters;
+    return filters.statuses.length > 0 ? filters.statuses : undefined;
+  }, [statusFilters, filters.statuses]);
+
+  // Query with server-side pagination and all filters
   const { data, isFetching, isPending } = usePaginatedVacanciesQuery({
     pageIndex: pagination.pageIndex,
     pageSize: pagination.pageSize,
     sorting: sorting.map((s) => ({ id: s.id, desc: s.desc })),
     globalFilter: debouncedSearch || undefined,
-    statuses: statusFilters.length > 0 ? statusFilters : undefined,
+    statuses: effectiveStatuses,
+    saleTypes: filters.saleTypes.length > 0 ? filters.saleTypes : undefined,
+    modalities: filters.modalities.length > 0 ? filters.modalities : undefined,
+    recruiterIds: filters.recruiterIds.length > 0 ? filters.recruiterIds : undefined,
+    clientIds: filters.clientIds.length > 0 ? filters.clientIds : undefined,
+    countryCodes: filters.countryCodes.length > 0 ? filters.countryCodes : undefined,
+    regionCodes: filters.regionCodes.length > 0 ? filters.regionCodes : undefined,
+    requiresPsychometry: filters.requiresPsychometry,
+    salaryMin: filters.salaryMin,
+    salaryMax: filters.salaryMax,
+    assignedAtFrom: filters.assignedAtFrom || undefined,
+    assignedAtTo: filters.assignedAtTo || undefined,
+    targetDeliveryDateFrom: filters.targetDeliveryDateFrom || undefined,
+    targetDeliveryDateTo: filters.targetDeliveryDateTo || undefined,
   });
 
   // Extract data from paginated response
@@ -68,8 +108,9 @@ export function VacancyListPage() {
   const handleClearFilters = useCallback(() => {
     handleGlobalFilterChange("");
     handleMultiTabChange([]);
+    clearAdvancedFilters();
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-  }, [handleGlobalFilterChange, handleMultiTabChange, setPagination]);
+  }, [handleGlobalFilterChange, handleMultiTabChange, clearAdvancedFilters, setPagination]);
 
   const handleViewDetail = useCallback((id: string) => {
     setSelectedVacancyId(id);
@@ -87,13 +128,67 @@ export function VacancyListPage() {
       createTableConfig(VacanciesTableConfig, {
         onAdd: handleAdd,
         onClearFilters: handleClearFilters,
+        // Inline filters
+        globalFilter: globalFilter ?? "",
+        selectedStatuses: filters.statuses,
+        onStatusesChange: setStatuses,
+        // Sheet filters
+        selectedSaleTypes: filters.saleTypes,
+        onSaleTypesChange: setSaleTypes,
+        selectedModalities: filters.modalities,
+        onModalitiesChange: setModalities,
+        selectedRecruiterIds: filters.recruiterIds,
+        onRecruiterIdsChange: setRecruiterIds,
+        selectedClientIds: filters.clientIds,
+        onClientIdsChange: setClientIds,
+        selectedCountryCodes: filters.countryCodes,
+        onCountryCodesChange: setCountryCodes,
+        selectedRegionCodes: filters.regionCodes,
+        onRegionCodesChange: setRegionCodes,
+        requiresPsychometry: filters.requiresPsychometry,
+        onRequiresPsychometryChange: setRequiresPsychometry,
+        salaryMin: filters.salaryMin,
+        onSalaryMinChange: setSalaryMin,
+        salaryMax: filters.salaryMax,
+        onSalaryMaxChange: setSalaryMax,
+        assignedAtFrom: filters.assignedAtFrom,
+        onAssignedAtFromChange: setAssignedAtFrom,
+        assignedAtTo: filters.assignedAtTo,
+        onAssignedAtToChange: setAssignedAtTo,
+        targetDeliveryDateFrom: filters.targetDeliveryDateFrom,
+        onTargetDeliveryDateFromChange: setTargetDeliveryDateFrom,
+        targetDeliveryDateTo: filters.targetDeliveryDateTo,
+        onTargetDeliveryDateToChange: setTargetDeliveryDateTo,
+        hasActiveSheetFilters: hasActiveFilters,
         serverSide: {
           enabled: true,
           totalCount,
           pageCount: paginationMeta?.pageCount ?? 0,
         },
       }),
-    [totalCount, paginationMeta?.pageCount, handleAdd, handleClearFilters]
+    [
+      totalCount,
+      paginationMeta?.pageCount,
+      handleAdd,
+      handleClearFilters,
+      globalFilter,
+      filters,
+      hasActiveFilters,
+      setStatuses,
+      setSaleTypes,
+      setModalities,
+      setRecruiterIds,
+      setClientIds,
+      setCountryCodes,
+      setRegionCodes,
+      setRequiresPsychometry,
+      setSalaryMin,
+      setSalaryMax,
+      setAssignedAtFrom,
+      setAssignedAtTo,
+      setTargetDeliveryDateFrom,
+      setTargetDeliveryDateTo,
+    ]
   );
 
   return (

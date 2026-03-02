@@ -1,7 +1,12 @@
 "use client";
 
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import type { VacancyStatusType, VacancyDTO } from "../types/vacancy.types";
+import type {
+  VacancyStatusType,
+  VacancySaleType,
+  VacancyModality,
+  VacancyDTO,
+} from "../types/vacancy.types";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { getPaginatedVacanciesAction } from "../../server/presentation/actions/getPaginatedVacanciesAction.action";
 import type {
@@ -16,6 +21,19 @@ export interface PaginatedVacanciesQueryParams {
   sorting?: SortingParam[];
   globalFilter?: string;
   statuses?: VacancyStatusType[];
+  saleTypes?: VacancySaleType[];
+  modalities?: VacancyModality[];
+  recruiterIds?: string[];
+  clientIds?: string[];
+  countryCodes?: string[];
+  regionCodes?: string[];
+  requiresPsychometry?: boolean;
+  salaryMin?: number;
+  salaryMax?: number;
+  assignedAtFrom?: string;
+  assignedAtTo?: string;
+  targetDeliveryDateFrom?: string;
+  targetDeliveryDateTo?: string;
 }
 
 /** Query Key Factory - CRÍTICO: incluir TODOS los parámetros */
@@ -33,6 +51,19 @@ export const getPaginatedVacanciesQueryKey = (
       sorting: params.sorting,
       globalFilter: params.globalFilter,
       statuses: params.statuses,
+      saleTypes: params.saleTypes,
+      modalities: params.modalities,
+      recruiterIds: params.recruiterIds,
+      clientIds: params.clientIds,
+      countryCodes: params.countryCodes,
+      regionCodes: params.regionCodes,
+      requiresPsychometry: params.requiresPsychometry,
+      salaryMin: params.salaryMin,
+      salaryMax: params.salaryMax,
+      assignedAtFrom: params.assignedAtFrom,
+      assignedAtTo: params.assignedAtTo,
+      targetDeliveryDateFrom: params.targetDeliveryDateFrom,
+      targetDeliveryDateTo: params.targetDeliveryDateTo,
     },
   ] as const;
 
@@ -69,6 +100,19 @@ export function usePaginatedVacanciesQuery(
         sorting: params.sorting,
         globalFilter: params.globalFilter,
         statuses: params.statuses,
+        saleTypes: params.saleTypes,
+        modalities: params.modalities,
+        recruiterIds: params.recruiterIds,
+        clientIds: params.clientIds,
+        countryCodes: params.countryCodes,
+        regionCodes: params.regionCodes,
+        requiresPsychometry: params.requiresPsychometry,
+        salaryMin: params.salaryMin,
+        salaryMax: params.salaryMax,
+        assignedAtFrom: params.assignedAtFrom,
+        assignedAtTo: params.assignedAtTo,
+        targetDeliveryDateFrom: params.targetDeliveryDateFrom,
+        targetDeliveryDateTo: params.targetDeliveryDateTo,
       });
 
       if ("error" in result && result.error) {

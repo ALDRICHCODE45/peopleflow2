@@ -24,7 +24,7 @@ type VacancyWithRelations = {
   position: string;
   status: string;
   recruiterId: string;
-  recruiter: { name: string | null } | null;
+  recruiter: { name: string | null; email: string | null; avatar: string | null } | null;
   clientId: string;
   client: { nombre: string } | null;
   saleType: string;
@@ -107,16 +107,54 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       where.status = { in: filters.statuses };
     }
 
-    if (filters?.recruiterId) {
-      where.recruiterId = filters.recruiterId;
+    if (filters?.saleTypes && filters.saleTypes.length > 0) {
+      where.saleType = { in: filters.saleTypes };
     }
 
-    if (filters?.clientId) {
-      where.clientId = filters.clientId;
+    if (filters?.modalities && filters.modalities.length > 0) {
+      where.modality = { in: filters.modalities };
     }
 
-    if (filters?.countryCode) {
-      where.countryCode = filters.countryCode;
+    if (filters?.recruiterIds && filters.recruiterIds.length > 0) {
+      where.recruiterId = { in: filters.recruiterIds };
+    }
+
+    if (filters?.clientIds && filters.clientIds.length > 0) {
+      where.clientId = { in: filters.clientIds };
+    }
+
+    if (filters?.countryCodes && filters.countryCodes.length > 0) {
+      where.countryCode = { in: filters.countryCodes };
+    }
+
+    if (filters?.regionCodes && filters.regionCodes.length > 0) {
+      where.regionCode = { in: filters.regionCodes };
+    }
+
+    if (filters?.requiresPsychometry !== undefined) {
+      where.requiresPsychometry = filters.requiresPsychometry;
+    }
+
+    if (filters?.salaryMin !== undefined) {
+      where.salaryMin = { gte: filters.salaryMin };
+    }
+
+    if (filters?.salaryMax !== undefined) {
+      where.salaryMax = { lte: filters.salaryMax };
+    }
+
+    if (filters?.assignedAtFrom || filters?.assignedAtTo) {
+      const assignedAtFilter: Record<string, Date> = {};
+      if (filters.assignedAtFrom) assignedAtFilter.gte = new Date(filters.assignedAtFrom);
+      if (filters.assignedAtTo) assignedAtFilter.lte = new Date(filters.assignedAtTo);
+      where.assignedAt = assignedAtFilter;
+    }
+
+    if (filters?.targetDeliveryDateFrom || filters?.targetDeliveryDateTo) {
+      const deliveryFilter: Record<string, Date> = {};
+      if (filters.targetDeliveryDateFrom) deliveryFilter.gte = new Date(filters.targetDeliveryDateFrom);
+      if (filters.targetDeliveryDateTo) deliveryFilter.lte = new Date(filters.targetDeliveryDateTo);
+      where.targetDeliveryDate = deliveryFilter;
     }
 
     if (filters?.search) {
