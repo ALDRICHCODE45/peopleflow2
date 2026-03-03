@@ -70,8 +70,3 @@ export class CheckAnyPermissonUseCase {
   }
 }
 
-const checker = await new CheckAnyPermissonUseCase().execute({
-  permissions: ["", ""],
-  tenantId: "",
-  userId: "",
-});
