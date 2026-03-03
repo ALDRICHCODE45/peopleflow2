@@ -56,10 +56,14 @@ async function getAuthContext() {
   return { error: null, session, tenantId };
 }
 
-async function checkVacancyPermission(userId: string, tenantId: string): Promise<boolean> {
+async function checkVacancyPermission(
+  userId: string,
+  tenantId: string,
+  extraPermissions: string[] = [],
+): Promise<boolean> {
   const result = await new CheckAnyPermissonUseCase().execute({
     userId,
-    permissions: [PermissionActions.vacantes.gestionar],
+    permissions: [PermissionActions.vacantes.gestionar, ...extraPermissions],
     tenantId,
   });
   return result.hasAnyPermission;
@@ -103,7 +107,9 @@ export async function deleteVacancyAttachmentAction(
     const { error, session, tenantId } = await getAuthContext();
     if (error || !session || !tenantId) return { error: error ?? "Error de autenticación", success: false };
 
-    const hasPermission = await checkVacancyPermission(session.user.id, tenantId);
+    const hasPermission = await checkVacancyPermission(session.user.id, tenantId, [
+      PermissionActions.vacantes.eliminarArchivos,
+    ]);
     if (!hasPermission) return { error: "Sin permisos para eliminar archivos", success: false };
 
     const attachment = await prismaVacancyAttachmentRepository.findById(attachmentId, vacancyId, tenantId);
@@ -152,7 +158,9 @@ export async function validateAttachmentAction(input: {
     const { error, session, tenantId } = await getAuthContext();
     if (error || !session || !tenantId) return { error: error ?? "Error de autenticación" };
 
-    const hasPermission = await checkVacancyPermission(session.user.id, tenantId);
+    const hasPermission = await checkVacancyPermission(session.user.id, tenantId, [
+      PermissionActions.vacantes.revisarArchivos,
+    ]);
     if (!hasPermission) return { error: "Sin permisos para validar archivos" };
 
     const record = await prismaVacancyAttachmentRepository.validate(input.attachmentId, session.user.id);
@@ -176,7 +184,9 @@ export async function rejectAttachmentAction(input: {
     const { error, session, tenantId } = await getAuthContext();
     if (error || !session || !tenantId) return { error: error ?? "Error de autenticación" };
 
-    const hasPermission = await checkVacancyPermission(session.user.id, tenantId);
+    const hasPermission = await checkVacancyPermission(session.user.id, tenantId, [
+      PermissionActions.vacantes.revisarArchivos,
+    ]);
     if (!hasPermission) return { error: "Sin permisos para rechazar archivos" };
 
     const record = await prismaVacancyAttachmentRepository.reject(input.attachmentId, input.reason);
@@ -209,7 +219,9 @@ export async function validateVacancyChecklistAction(
     const { error, session, tenantId } = await getAuthContext();
     if (error || !session || !tenantId) return { error: error ?? "Error de autenticación" };
 
-    const hasPermission = await checkVacancyPermission(session.user.id, tenantId);
+    const hasPermission = await checkVacancyPermission(session.user.id, tenantId, [
+      PermissionActions.vacantes.validarChecklist,
+    ]);
     if (!hasPermission) return { error: "Sin permisos para validar el checklist" };
 
     const vacancy = await prismaVacancyRepository.validateChecklist(vacancyId, tenantId, session.user.id);
@@ -232,7 +244,9 @@ export async function rejectVacancyChecklistAction(input: {
     const { error, session, tenantId } = await getAuthContext();
     if (error || !session || !tenantId) return { error: error ?? "Error de autenticación" };
 
-    const hasPermission = await checkVacancyPermission(session.user.id, tenantId);
+    const hasPermission = await checkVacancyPermission(session.user.id, tenantId, [
+      PermissionActions.vacantes.rechazarChecklist,
+    ]);
     if (!hasPermission) return { error: "Sin permisos para rechazar el checklist" };
 
     const vacancy = await prismaVacancyRepository.rejectChecklist(input.vacancyId, tenantId, input.reason);

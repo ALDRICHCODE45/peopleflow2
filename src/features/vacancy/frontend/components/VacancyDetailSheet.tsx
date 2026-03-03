@@ -70,6 +70,7 @@ import { useIsMobile } from "@/core/shared/hooks/use-mobile";
 import { VacancySalesTypeBadge } from "./VacancyVentaTypeBadge";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
+import { usePermissions } from "@/core/shared/hooks/use-permissions";
 
 interface VacancyDetailSheetProps {
   vacancyId: string | null;
@@ -166,6 +167,21 @@ function ChecklistValidationSection({ vacancy }: { vacancy: VacancyDTO }) {
   const [rejectReason, setRejectReason] = useState("");
   const validateChecklist = useValidateChecklist(vacancy.id);
   const rejectChecklist = useRejectChecklist(vacancy.id);
+  const { hasAnyPermission, isSuperAdmin } = usePermissions();
+
+  const canValidate =
+    isSuperAdmin ||
+    hasAnyPermission([
+      PermissionActions.vacantes.validarChecklist,
+      PermissionActions.vacantes.gestionar,
+    ]);
+
+  const canReject =
+    isSuperAdmin ||
+    hasAnyPermission([
+      PermissionActions.vacantes.rechazarChecklist,
+      PermissionActions.vacantes.gestionar,
+    ]);
 
   function handleReject() {
     if (!rejectReason.trim()) return;
@@ -221,28 +237,32 @@ function ChecklistValidationSection({ vacancy }: { vacancy: VacancyDTO }) {
       )}
 
       <div className="flex items-center gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          className="gap-1.5 text-xs text-green-700 border-green-300 hover:bg-green-50"
-          disabled={
-            validateChecklist.isPending || !!vacancy.checklistValidatedAt
-          }
-          onClick={() => validateChecklist.mutate()}
-        >
-          <HugeiconsIcon icon={CheckmarkCircle02Icon} size={13} />
-          Validar Checklist
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          className="gap-1.5 text-xs text-red-700 border-red-300 hover:bg-red-50"
-          disabled={rejectChecklist.isPending}
-          onClick={() => setRejectOpen(true)}
-        >
-          <HugeiconsIcon icon={Cancel01Icon} size={13} />
-          Rechazar Checklist
-        </Button>
+        {canValidate && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-1.5 text-xs text-green-700 border-green-300 hover:bg-green-50"
+            disabled={
+              validateChecklist.isPending || !!vacancy.checklistValidatedAt
+            }
+            onClick={() => validateChecklist.mutate()}
+          >
+            <HugeiconsIcon icon={CheckmarkCircle02Icon} size={13} />
+            Validar Checklist
+          </Button>
+        )}
+        {canReject && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-1.5 text-xs text-red-700 border-red-300 hover:bg-red-50"
+            disabled={rejectChecklist.isPending}
+            onClick={() => setRejectOpen(true)}
+          >
+            <HugeiconsIcon icon={Cancel01Icon} size={13} />
+            Rechazar Checklist
+          </Button>
+        )}
       </div>
 
       {/* Reject Dialog */}
@@ -838,9 +858,13 @@ export function VacancyDetailSheet({
 
                     <Separator />
 
-                    {/* Checklist Validation (Admin) */}
+                    {/* Checklist Validation */}
                     <PermissionGuard
-                      permissions={[PermissionActions.vacantes.gestionar]}
+                      permissions={[
+                        PermissionActions.vacantes.validarChecklist,
+                        PermissionActions.vacantes.rechazarChecklist,
+                        PermissionActions.vacantes.gestionar,
+                      ]}
                     >
                       <ChecklistValidationSection vacancy={vacancy} />
                     </PermissionGuard>

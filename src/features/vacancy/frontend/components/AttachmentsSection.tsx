@@ -135,10 +135,16 @@ function RejectDialog({ open, title, onClose, onConfirm, isPending }: RejectDial
 interface AttachmentRowProps {
   attachment: AttachmentDTO;
   vacancyId: string;
-  showAdminActions?: boolean;
+  showReviewActions?: boolean;
+  showDeleteAction?: boolean;
 }
 
-function AttachmentRow({ attachment, vacancyId, showAdminActions = false }: AttachmentRowProps) {
+function AttachmentRow({
+  attachment,
+  vacancyId,
+  showReviewActions = false,
+  showDeleteAction = false,
+}: AttachmentRowProps) {
   const [rejectOpen, setRejectOpen] = useState(false);
 
   const deleteMutation = useDeleteVacancyAttachment(vacancyId);
@@ -188,8 +194,8 @@ function AttachmentRow({ attachment, vacancyId, showAdminActions = false }: Atta
           </a>
         </Button>
 
-        {/* Admin actions */}
-        {showAdminActions && (
+        {/* Review actions (validate / reject) */}
+        {showReviewActions && (
           <>
             {!attachment.isValidated && (
               <Button
@@ -216,17 +222,19 @@ function AttachmentRow({ attachment, vacancyId, showAdminActions = false }: Atta
           </>
         )}
 
-        {/* Delete */}
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-7 px-2 text-xs gap-1 text-destructive hover:text-destructive hover:bg-destructive/10"
-          disabled={deleteMutation.isPending}
-          onClick={() => deleteMutation.mutate(attachment.id)}
-        >
-          <HugeiconsIcon icon={Delete02Icon} size={13} />
-          Eliminar
-        </Button>
+        {/* Delete action */}
+        {showDeleteAction && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-7 px-2 text-xs gap-1 text-destructive hover:text-destructive hover:bg-destructive/10"
+            disabled={deleteMutation.isPending}
+            onClick={() => deleteMutation.mutate(attachment.id)}
+          >
+            <HugeiconsIcon icon={Delete02Icon} size={13} />
+            Eliminar
+          </Button>
+        )}
       </div>
 
       <RejectDialog
@@ -254,9 +262,20 @@ export function AttachmentsSection({
   isLoadingAttachments = false,
 }: AttachmentsSectionProps) {
   const { hasAnyPermission, isSuperAdmin } = usePermissions();
-  const canManageAttachments = isSuperAdmin || hasAnyPermission([
-    PermissionActions.vacantes.gestionar,
-  ]);
+
+  const canReviewAttachments =
+    isSuperAdmin ||
+    hasAnyPermission([
+      PermissionActions.vacantes.revisarArchivos,
+      PermissionActions.vacantes.gestionar,
+    ]);
+
+  const canDeleteAttachments =
+    isSuperAdmin ||
+    hasAnyPermission([
+      PermissionActions.vacantes.eliminarArchivos,
+      PermissionActions.vacantes.gestionar,
+    ]);
 
   const jobDescriptions = attachments.filter((a) => a.subType === "JOB_DESCRIPTION");
   const perfilesMuestra = attachments.filter((a) => a.subType === "PERFIL_MUESTRA");
@@ -288,7 +307,8 @@ export function AttachmentsSection({
                 key={attachment.id}
                 attachment={attachment}
                 vacancyId={vacancy.id}
-                showAdminActions={canManageAttachments}
+                showReviewActions={canReviewAttachments}
+                showDeleteAction={canDeleteAttachments}
               />
             ))}
           </div>
@@ -334,7 +354,8 @@ export function AttachmentsSection({
                 key={attachment.id}
                 attachment={attachment}
                 vacancyId={vacancy.id}
-                showAdminActions={canManageAttachments}
+                showReviewActions={canReviewAttachments}
+                showDeleteAction={canDeleteAttachments}
               />
             ))}
           </div>

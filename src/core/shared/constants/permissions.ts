@@ -254,6 +254,34 @@ const RECLUTAMIENTO_PERMISSIONS: PermissionDefinition[] = [
     description:
       "Autorizar el retroceso de una vacante al estado Hunting desde Follow Up o Pre-Placement",
   },
+  // Vacantes - Archivos (JD + Perfiles Muestra)
+  {
+    name: "vacantes:revisar-archivos",
+    resource: "vacantes",
+    action: "revisar-archivos",
+    description:
+      "Validar y rechazar archivos de vacantes (Job Description y Perfiles Muestra)",
+  },
+  {
+    name: "vacantes:eliminar-archivos",
+    resource: "vacantes",
+    action: "eliminar-archivos",
+    description:
+      "Eliminar archivos de vacantes (Job Description y Perfiles Muestra)",
+  },
+  // Vacantes - Checklist
+  {
+    name: "vacantes:validar-checklist",
+    resource: "vacantes",
+    action: "validar-checklist",
+    description: "Validar el checklist de una vacante",
+  },
+  {
+    name: "vacantes:rechazar-checklist",
+    resource: "vacantes",
+    action: "rechazar-checklist",
+    description: "Rechazar el checklist de una vacante con motivo",
+  },
   // Vacantes - Modular
   {
     name: "vacantes:gestionar",
@@ -587,6 +615,10 @@ export const PermissionActions = {
     eliminar: "vacantes:eliminar",
     validarTerna: "vacantes:validar-terna",
     autorizarRetroceso: "vacantes:autorizar-retroceso",
+    revisarArchivos: "vacantes:revisar-archivos",
+    eliminarArchivos: "vacantes:eliminar-archivos",
+    validarChecklist: "vacantes:validar-checklist",
+    rechazarChecklist: "vacantes:rechazar-checklist",
     gestionar: "vacantes:gestionar",
   },
   candidatos: {
