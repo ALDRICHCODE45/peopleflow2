@@ -68,6 +68,8 @@ import {
 } from "../types/vacancy.types";
 import { useIsMobile } from "@/core/shared/hooks/use-mobile";
 import { VacancySalesTypeBadge } from "./VacancyVentaTypeBadge";
+import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
+import { PermissionActions } from "@/core/shared/constants/permissions";
 
 interface VacancyDetailSheetProps {
   vacancyId: string | null;
@@ -416,38 +418,42 @@ export function VacancyDetailSheet({
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">
-                    {vacancy.status === "PRE_PLACEMENT" && (
+                    <PermissionGuard
+                      permissions={[PermissionActions.vacantes.gestionar]}
+                    >
+                      {vacancy.status === "PRE_PLACEMENT" && (
+                        <Button
+                          size="sm"
+                          className="gap-1.5 bg-green-600 hover:bg-green-700 text-white"
+                          onClick={() =>
+                            confirmPlacementMutation.mutate(vacancy.id)
+                          }
+                          disabled={confirmPlacementMutation.isPending}
+                        >
+                          <HugeiconsIcon
+                            icon={CheckmarkBadge01Icon}
+                            size={14}
+                            strokeWidth={2}
+                          />
+                          {confirmPlacementMutation.isPending
+                            ? "Confirmando..."
+                            : "Confirmar placement"}
+                        </Button>
+                      )}
                       <Button
+                        variant="outline"
                         size="sm"
-                        className="gap-1.5 bg-green-600 hover:bg-green-700 text-white"
-                        onClick={() =>
-                          confirmPlacementMutation.mutate(vacancy.id)
-                        }
-                        disabled={confirmPlacementMutation.isPending}
+                        onClick={openTransition}
+                        className="gap-1.5"
                       >
                         <HugeiconsIcon
-                          icon={CheckmarkBadge01Icon}
+                          icon={RefreshIcon}
                           size={14}
                           strokeWidth={2}
                         />
-                        {confirmPlacementMutation.isPending
-                          ? "Confirmando..."
-                          : "Confirmar placement"}
+                        Cambiar estado
                       </Button>
-                    )}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={openTransition}
-                      className="gap-1.5"
-                    >
-                      <HugeiconsIcon
-                        icon={RefreshIcon}
-                        size={14}
-                        strokeWidth={2}
-                      />
-                      Cambiar estado
-                    </Button>
+                    </PermissionGuard>
                     <Button
                       variant="ghost"
                       size="icon-sm"
@@ -655,34 +661,48 @@ export function VacancyDetailSheet({
                           />
                           Historial
                         </Button>
-                        {vacancy.status === "HUNTING" && (
+                        <PermissionGuard
+                          permissions={[
+                            PermissionActions.vacantes.validarTerna,
+                            PermissionActions.vacantes.gestionar,
+                          ]}
+                        >
+                          {vacancy.status === "HUNTING" && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={openValidateTerna}
+                              className="gap-1.5 border-amber-300 text-amber-700 hover:bg-amber-50"
+                            >
+                              <HugeiconsIcon
+                                icon={UserMultiple02Icon}
+                                size={14}
+                                strokeWidth={2}
+                              />
+                              Validar terna
+                            </Button>
+                          )}
+                        </PermissionGuard>
+                        <PermissionGuard
+                          permissions={[
+                            PermissionActions.candidatos.crear,
+                            PermissionActions.vacantes.gestionar,
+                          ]}
+                        >
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={openValidateTerna}
-                            className="gap-1.5 border-amber-300 text-amber-700 hover:bg-amber-50"
+                            onClick={openAddCandidate}
+                            className="gap-1.5"
                           >
                             <HugeiconsIcon
-                              icon={UserMultiple02Icon}
+                              icon={UserAdd01Icon}
                               size={14}
                               strokeWidth={2}
                             />
-                            Validar terna
+                            Agregar candidato
                           </Button>
-                        )}
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={openAddCandidate}
-                          className="gap-1.5"
-                        >
-                          <HugeiconsIcon
-                            icon={UserAdd01Icon}
-                            size={14}
-                            strokeWidth={2}
-                          />
-                          Agregar candidato
-                        </Button>
+                        </PermissionGuard>
                       </div>
                     </div>
 
@@ -717,19 +737,23 @@ export function VacancyDetailSheet({
                         {vacancy.checklistItems?.length ?? 0} requisito(s)
                         definido(s)
                       </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setShowAddChecklist(true)}
-                        className="gap-1.5"
+                      <PermissionGuard
+                        permissions={[PermissionActions.vacantes.gestionar]}
                       >
-                        <HugeiconsIcon
-                          icon={PlusSignIcon}
-                          size={14}
-                          strokeWidth={2}
-                        />
-                        Agregar ítem
-                      </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setShowAddChecklist(true)}
+                          className="gap-1.5"
+                        >
+                          <HugeiconsIcon
+                            icon={PlusSignIcon}
+                            size={14}
+                            strokeWidth={2}
+                          />
+                          Agregar ítem
+                        </Button>
+                      </PermissionGuard>
                     </div>
 
                     {/* List — purely informational, no checkboxes */}
@@ -770,48 +794,56 @@ export function VacancyDetailSheet({
                     )}
 
                     {/* Inline add form */}
-                    {showAddChecklist && (
-                      <div className="flex gap-2 mt-2">
-                        <Input
-                          placeholder="Nuevo requerimiento..."
-                          value={newChecklistText}
-                          onChange={(e) => setNewChecklistText(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") handleAddChecklistItem();
-                            if (e.key === "Escape") {
+                    <PermissionGuard
+                      permissions={[PermissionActions.vacantes.gestionar]}
+                    >
+                      {showAddChecklist && (
+                        <div className="flex gap-2 mt-2">
+                          <Input
+                            placeholder="Nuevo requerimiento..."
+                            value={newChecklistText}
+                            onChange={(e) => setNewChecklistText(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") handleAddChecklistItem();
+                              if (e.key === "Escape") {
+                                setShowAddChecklist(false);
+                                setNewChecklistText("");
+                              }
+                            }}
+                            autoFocus
+                          />
+                          <Button
+                            size="sm"
+                            onClick={handleAddChecklistItem}
+                            disabled={
+                              !newChecklistText.trim() ||
+                              addChecklistMutation.isPending
+                            }
+                          >
+                            Agregar
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => {
                               setShowAddChecklist(false);
                               setNewChecklistText("");
-                            }
-                          }}
-                          autoFocus
-                        />
-                        <Button
-                          size="sm"
-                          onClick={handleAddChecklistItem}
-                          disabled={
-                            !newChecklistText.trim() ||
-                            addChecklistMutation.isPending
-                          }
-                        >
-                          Agregar
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => {
-                            setShowAddChecklist(false);
-                            setNewChecklistText("");
-                          }}
-                        >
-                          Cancelar
-                        </Button>
-                      </div>
-                    )}
+                            }}
+                          >
+                            Cancelar
+                          </Button>
+                        </div>
+                      )}
+                    </PermissionGuard>
 
                     <Separator />
 
                     {/* Checklist Validation (Admin) */}
-                    <ChecklistValidationSection vacancy={vacancy} />
+                    <PermissionGuard
+                      permissions={[PermissionActions.vacantes.gestionar]}
+                    >
+                      <ChecklistValidationSection vacancy={vacancy} />
+                    </PermissionGuard>
                   </TabsContent>
 
                   {/* ---- Tab: Historial ---- */}

@@ -30,6 +30,8 @@ import {
 } from "@shadcn/item";
 import type { VacancyCandidateDTO, CandidateStatus, VacancyChecklistItemDTO } from "../types/vacancy.types";
 import { CANDIDATE_STATUS_LABELS } from "../types/vacancy.types";
+import { usePermissions } from "@/core/shared/hooks/use-permissions";
+import { PermissionActions } from "@/core/shared/constants/permissions";
 
 interface CandidateCardProps {
   candidate: VacancyCandidateDTO;
@@ -52,6 +54,19 @@ export function CandidateCard({ candidate, vacancyId, checklistItems = [] }: Can
     `${candidate.firstName.charAt(0)}${candidate.lastName.charAt(0)}`.toUpperCase();
 
   const removeCandidateMutation = useRemoveCandidate();
+  const { hasAnyPermission, isSuperAdmin } = usePermissions();
+
+  const canEdit = isSuperAdmin || hasAnyPermission([
+    PermissionActions.candidatos.editar,
+    PermissionActions.vacantes.gestionar,
+  ]);
+  const canDelete = isSuperAdmin || hasAnyPermission([
+    PermissionActions.candidatos.eliminar,
+    PermissionActions.vacantes.gestionar,
+  ]);
+  const canChecklist = isSuperAdmin || hasAnyPermission([
+    PermissionActions.vacantes.gestionar,
+  ]);
 
   const {
     isOpen: isEditOpen,
@@ -86,22 +101,22 @@ export function CandidateCard({ candidate, vacancyId, checklistItems = [] }: Can
   };
 
   const dropdownActions = [
-    {
+    ...(canEdit ? [{
       id: "edit",
       label: "Editar",
       onClick: openEdit,
-    },
-    {
+    }] : []),
+    ...(canChecklist ? [{
       id: "checklist",
       label: "Checklist",
       onClick: openChecklist,
-    },
-    {
+    }] : []),
+    ...(canDelete ? [{
       id: "delete",
       label: "Eliminar",
       variant: "destructive" as const,
       onClick: openDelete,
-    },
+    }] : []),
   ];
 
   return (
@@ -213,13 +228,15 @@ export function CandidateCard({ candidate, vacancyId, checklistItems = [] }: Can
           </ItemDescription>
         </ItemContent>
 
-        {/* Dropdown — visible only on hover */}
-        <ItemActions
-          className="opacity-0 group-hover:opacity-100 transition-opacity"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <CandidateActionsDropdown actions={dropdownActions} />
-        </ItemActions>
+        {/* Dropdown — visible only on hover, hidden if no actions available */}
+        {dropdownActions.length > 0 && (
+          <ItemActions
+            className="opacity-0 group-hover:opacity-100 transition-opacity"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <CandidateActionsDropdown actions={dropdownActions} />
+          </ItemActions>
+        )}
       </Item>
 
       {/* Dialogs — fuera del Item para no afectar layout */}

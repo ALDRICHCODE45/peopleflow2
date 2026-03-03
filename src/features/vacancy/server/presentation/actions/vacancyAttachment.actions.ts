@@ -74,6 +74,16 @@ export async function getVacancyAttachmentsAction(
     const { error, session, tenantId } = await getAuthContext();
     if (error || !session || !tenantId) return { error: error ?? "Error de autenticación", attachments: [] };
 
+    const hasPermission = await new CheckAnyPermissonUseCase().execute({
+      userId: session.user.id,
+      permissions: [
+        PermissionActions.vacantes.acceder,
+        PermissionActions.vacantes.gestionar,
+      ],
+      tenantId,
+    });
+    if (!hasPermission.hasAnyPermission) return { error: "Sin permisos para ver los archivos", attachments: [] };
+
     const records = await prismaVacancyAttachmentRepository.findByVacancyId(vacancyId, tenantId);
 
     return { error: null, attachments: records.map(toAttachmentDTO) };

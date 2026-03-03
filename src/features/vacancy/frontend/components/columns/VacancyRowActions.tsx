@@ -11,6 +11,7 @@ import { LoadingModalState } from "@/core/shared/components/LoadingModalState";
 import dynamic from "next/dynamic";
 import { useUpdateVacancy } from "../../hooks/useUpdateVacancy";
 import { VacancySheetForm } from "../VacancySheetForm";
+import { usePermissions } from "@/core/shared/hooks/use-permissions";
 
 
 const DeleteVacancyAlertDialog = dynamic(
@@ -31,6 +32,22 @@ interface VacancyRowActionsProps {
 
 export function VacancyRowActions({ row, onViewDetail }: VacancyRowActionsProps) {
   const vacancy = row.original;
+  const { hasAnyPermission, isSuperAdmin } = usePermissions();
+
+  const canEdit =
+    isSuperAdmin ||
+    hasAnyPermission([
+      PermissionActions.vacantes.editar,
+      PermissionActions.vacantes.gestionar,
+    ]);
+
+  const canDelete =
+    isSuperAdmin ||
+    hasAnyPermission([
+      PermissionActions.vacantes.eliminar,
+      PermissionActions.vacantes.gestionar,
+    ]);
+
   const {
     isOpen: isDeleteOpen,
     openModal: openDeleteModal,
@@ -66,8 +83,8 @@ export function VacancyRowActions({ row, onViewDetail }: VacancyRowActionsProps)
   };
 
   const actions = createVacancyActions(
-    openUpdateModal,
-    openDeleteModal,
+    canEdit ? openUpdateModal : undefined,
+    canDelete ? openDeleteModal : undefined,
     onViewDetail ? () => onViewDetail(vacancy.id) : undefined
   );
 

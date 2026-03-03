@@ -4,6 +4,7 @@ import { useMemo, useCallback, useState } from "react";
 import { usePaginatedVacanciesQuery } from "../hooks/usePaginatedVacanciesQuery";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
+import { usePermissions } from "@/core/shared/hooks/use-permissions";
 import { DataTable } from "@/core/shared/components/DataTable/DataTable";
 import { createVacancyColumns } from "../components/columns/VacancyColumns";
 import { useModalState } from "@/core/shared/hooks/useModalState";
@@ -20,6 +21,14 @@ import { enrichVacancyTabsWithCounts } from "../config/vacancyTabsConfig";
 import { useVacanciesFilters } from "../components/tableConfig/hooks/useVacanciesFilters";
 
 export function VacancyListPage() {
+  const { hasAnyPermission, isSuperAdmin } = usePermissions();
+  const canCreateVacancy =
+    isSuperAdmin ||
+    hasAnyPermission([
+      PermissionActions.vacantes.crear,
+      PermissionActions.vacantes.gestionar,
+    ]);
+
   const { isOpen, openModal, closeModal } = useModalState();
   const [selectedVacancyId, setSelectedVacancyId] = useState<string | null>(null);
 
@@ -126,7 +135,7 @@ export function VacancyListPage() {
   const tableConfig = useMemo(
     () =>
       createTableConfig(VacanciesTableConfig, {
-        onAdd: handleAdd,
+        onAdd: canCreateVacancy ? handleAdd : undefined,
         onClearFilters: handleClearFilters,
         // Inline filters
         globalFilter: globalFilter ?? "",
@@ -169,6 +178,7 @@ export function VacancyListPage() {
     [
       totalCount,
       paginationMeta?.pageCount,
+      canCreateVacancy,
       handleAdd,
       handleClearFilters,
       globalFilter,

@@ -29,6 +29,8 @@ import {
   useRejectAttachment,
 } from "../hooks/useVacancyAttachments";
 import type { AttachmentDTO, VacancyDTO } from "../types/vacancy.types";
+import { usePermissions } from "@/core/shared/hooks/use-permissions";
+import { PermissionActions } from "@/core/shared/constants/permissions";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -251,6 +253,11 @@ export function AttachmentsSection({
   attachments,
   isLoadingAttachments = false,
 }: AttachmentsSectionProps) {
+  const { hasAnyPermission, isSuperAdmin } = usePermissions();
+  const canManageAttachments = isSuperAdmin || hasAnyPermission([
+    PermissionActions.vacantes.gestionar,
+  ]);
+
   const jobDescriptions = attachments.filter((a) => a.subType === "JOB_DESCRIPTION");
   const perfilesMuestra = attachments.filter((a) => a.subType === "PERFIL_MUESTRA");
 
@@ -281,7 +288,7 @@ export function AttachmentsSection({
                 key={attachment.id}
                 attachment={attachment}
                 vacancyId={vacancy.id}
-                showAdminActions
+                showAdminActions={canManageAttachments}
               />
             ))}
           </div>
@@ -327,7 +334,7 @@ export function AttachmentsSection({
                 key={attachment.id}
                 attachment={attachment}
                 vacancyId={vacancy.id}
-                showAdminActions
+                showAdminActions={canManageAttachments}
               />
             ))}
           </div>
