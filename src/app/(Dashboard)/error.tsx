@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { Routes } from "@core/shared/constants/routes";
 import { Spinner } from "@shadcn/spinner";
 import { Button } from "@shadcn/button";
 import {
@@ -82,7 +83,7 @@ export default function DashboardError({
             Reintentar
           </Button>
           <Button variant="outline" asChild>
-            <a href="/select-tenant">Seleccionar otra organización</a>
+            <a href={Routes.selectTenant}>Seleccionar otra organización</a>
           </Button>
         </CardContent>
       </Card>

@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { canAccessRouteAction } from "@/features/auth-rbac/server/presentation/actions/permission.actions";
 import { Spinner } from "@shadcn/spinner";
+import { Routes } from "@core/shared/constants/routes";
 
 interface RouteGuardProps {
   children: React.ReactNode;
@@ -56,7 +57,7 @@ export function RouteGuard({ children, fallback }: RouteGuardProps) {
         if (!result.canAccess) {
           // Sin acceso - redirigir
           // Usar replace para no agregar al historial
-          router.replace("/access-denied");
+          router.replace(Routes.accessDenied);
           setHasAccess(false);
           return;
         }
@@ -69,7 +70,7 @@ export function RouteGuard({ children, fallback }: RouteGuardProps) {
         // Esto previene acceso no autorizado si hay problemas de red o servidor
         if (!silent) {
           setHasAccess(false);
-          router.replace("/access-denied?error=verification_failed");
+          router.replace(`${Routes.accessDenied}?error=verification_failed`);
         }
         // Si es silent (verificación periódica), mantener estado actual
         // para no interrumpir al usuario por errores temporales

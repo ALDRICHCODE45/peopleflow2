@@ -11,6 +11,7 @@ import {
 } from "@shadcn/card";
 import { switchTenantAction } from "@/features/tenants/server/presentation/actions/tenant.actions";
 import { authClient } from "@/core/lib/auth-client";
+import { Routes } from "@core/shared/constants/routes";
 
 interface Tenant {
   id: string;
@@ -59,7 +60,7 @@ export function SuperAdminDashboard({
         // Nota: No usar result.redirectUrl porque para super admins siempre
         // retorna /super-admin (tiene permiso super:admin). Al "entrar" a un
         // tenant, el destino correcto es el dashboard del tenant.
-        window.location.href = "/admin/usuarios";
+        window.location.href = Routes.admin.usuarios;
       }
     } catch (error) {
       console.error("Error al entrar al tenant:", error);
@@ -69,7 +70,7 @@ export function SuperAdminDashboard({
 
   const handleLogout = async () => {
     await authClient.signOut();
-    window.location.href = "/sign-in";
+    window.location.href = Routes.signIn;
   };
 
   return (

@@ -11,6 +11,7 @@ import {
 } from "@shadcn/card";
 import { useAuth } from "@/core/shared/hooks/use-auth";
 import { useRouter } from "next/navigation";
+import { Routes } from "@core/shared/constants/routes";
 
 /**
  * Página de acceso denegado
@@ -27,7 +28,7 @@ export default function AccessDeniedPage() {
   };
 
   const handleLogout = async () => {
-    await logout("/sign-in");
+    await logout(Routes.signIn);
   };
 
   return (
@@ -95,7 +96,7 @@ export default function AccessDeniedPage() {
                 </Button>
               </>
             ) : (
-              <Link href="/sign-in" className="w-full">
+              <Link href={Routes.signIn} className="w-full">
                 <Button className="w-full">Iniciar Sesión</Button>
               </Link>
             )}

@@ -4,11 +4,13 @@ import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { getVacancyDetailAction } from "@features/vacancy/server/presentation/actions/getVacancyDetail.action";
 import type { VacancyDTO } from "../types/vacancy.types";
+import { vacancyQueryKeys } from "@core/shared/constants/query-keys";
 
+/** @deprecated Use vacancyQueryKeys.detail() directly */
 export const getVacancyDetailQueryKey = (
   tenantId: string,
   vacancyId: string
-) => ["vacancy", "detail", tenantId, vacancyId] as const;
+) => vacancyQueryKeys.detail(tenantId, vacancyId);
 
 export function useVacancyDetailQuery(vacancyId: string | null) {
   const { tenant } = useTenant();
@@ -16,7 +18,7 @@ export function useVacancyDetailQuery(vacancyId: string | null) {
   return useQuery({
     queryKey:
       tenant?.id && vacancyId
-        ? getVacancyDetailQueryKey(tenant.id, vacancyId)
+        ? vacancyQueryKeys.detail(tenant.id, vacancyId)
         : ["vacancy", "detail", "no-tenant"],
     queryFn: async (): Promise<VacancyDTO> => {
       if (!vacancyId) throw new Error("No vacancyId");

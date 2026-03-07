@@ -11,6 +11,7 @@ import { SaveNotificationConfigUseCase } from "../../application/use-cases/SaveN
 import { prismaNotificationConfigRepository } from "../../infrastructure/repositories/PrismaNotificationConfigRepository";
 import type { NotificationConfigDTO } from "../../domain/entities/NotificationConfig";
 import type { LeadStatus } from "@features/Leads/frontend/types";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 export interface GetNotificationConfigResult {
   config?: NotificationConfigDTO;
@@ -28,12 +29,12 @@ export async function getNotificationConfigAction(): Promise<GetNotificationConf
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     const hasAnyPermissionUseCase = new CheckAnyPermissonUseCase();
@@ -81,12 +82,12 @@ export async function saveNotificationConfigAction(data: {
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     const hasAnyPermissionUseCase = new CheckAnyPermissonUseCase();

@@ -8,6 +8,7 @@ import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/applicatio
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { storageAdapter } from "@core/storage/StorageModule";
 import { prismaVacancyAttachmentRepository } from "../../infrastructure/repositories/PrismaVacancyAttachmentRepository";
+import { Routes } from "@core/shared/constants/routes";
 import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
 import { SendNotificationUseCase } from "@features/Notifications/server/application/use-cases/SendNotificationUseCase";
 import { prismaNotificationRepository } from "@features/Notifications/server/infrastructure/repositories/PrismaNotificationRepository";
@@ -22,6 +23,7 @@ import type {
   AttachmentDTO,
 } from "@features/vacancy/frontend/types/vacancy.types";
 import type { VacancyAttachmentRecord } from "../../domain/interfaces/IVacancyAttachmentRepository";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 // ─── Map VacancyAttachmentRecord → AttachmentDTO ─────────────────────────────
 
@@ -48,10 +50,10 @@ function toAttachmentDTO(a: VacancyAttachmentRecord): AttachmentDTO {
 
 async function getAuthContext() {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session?.user) return { error: "No autenticado" as const, session: null, tenantId: null };
+  if (!session?.user) return { error: ServerErrors.notAuthenticated, session: null, tenantId: null };
 
   const tenantId = await getActiveTenantId();
-  if (!tenantId) return { error: "No hay tenant activo" as const, session: null, tenantId: null };
+  if (!tenantId) return { error: ServerErrors.noActiveTenant, session: null, tenantId: null };
 
   return { error: null, session, tenantId };
 }
@@ -140,7 +142,7 @@ export async function deleteVacancyAttachmentAction(
     // Delete from DB via repository
     await prismaVacancyAttachmentRepository.deleteById(attachmentId);
 
-    revalidatePath("/reclutamiento/vacantes");
+    revalidatePath(Routes.reclutamiento.vacantes);
     return { error: null, success: true };
   } catch (err) {
     console.error("[deleteVacancyAttachmentAction]", err);
@@ -165,7 +167,7 @@ export async function validateAttachmentAction(input: {
 
     const record = await prismaVacancyAttachmentRepository.validate(input.attachmentId, session.user.id);
 
-    revalidatePath("/reclutamiento/vacantes");
+    revalidatePath(Routes.reclutamiento.vacantes);
     return { error: null, attachment: toAttachmentDTO(record) };
   } catch (err) {
     console.error("[validateAttachmentAction]", err);
@@ -202,7 +204,7 @@ export async function rejectAttachmentAction(input: {
       createdById: session.user.id,
     });
 
-    revalidatePath("/reclutamiento/vacantes");
+    revalidatePath(Routes.reclutamiento.vacantes);
     return { error: null, attachment: toAttachmentDTO(record) };
   } catch (err) {
     console.error("[rejectAttachmentAction]", err);
@@ -226,7 +228,7 @@ export async function validateVacancyChecklistAction(
 
     const vacancy = await prismaVacancyRepository.validateChecklist(vacancyId, tenantId, session.user.id);
 
-    revalidatePath("/reclutamiento/vacantes");
+    revalidatePath(Routes.reclutamiento.vacantes);
     return { error: null, vacancy };
   } catch (err) {
     console.error("[validateVacancyChecklistAction]", err);
@@ -262,7 +264,7 @@ export async function rejectVacancyChecklistAction(input: {
       createdById: session.user.id,
     });
 
-    revalidatePath("/reclutamiento/vacantes");
+    revalidatePath(Routes.reclutamiento.vacantes);
     return { error: null, vacancy };
   } catch (err) {
     console.error("[rejectVacancyChecklistAction]", err);

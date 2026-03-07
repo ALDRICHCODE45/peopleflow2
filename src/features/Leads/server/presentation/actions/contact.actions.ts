@@ -3,6 +3,7 @@
 import { auth } from "@lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { Routes } from "@core/shared/constants/routes";
 
 // Repositories
 import { prismaContactRepository } from "../../infrastructure/repositories/PrismaContactRepository";
@@ -26,6 +27,7 @@ import type {
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 /**
  * Agrega un contacto a un lead
@@ -48,13 +50,13 @@ export async function addContactToLeadAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
 
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     // Verificar permisos
@@ -86,7 +88,7 @@ export async function addContactToLeadAction(
       return { error: result.error || "Error al agregar contacto" };
     }
 
-    revalidatePath("/generacion-de-leads/leads");
+    revalidatePath(Routes.leads.list);
     return {
       error: null,
       contact: result.contact?.toJSON(),
@@ -119,13 +121,13 @@ export async function updateContactAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
 
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     // Verificar permisos
@@ -154,7 +156,7 @@ export async function updateContactAction(
       return { error: result.error || "Error al actualizar contacto" };
     }
 
-    revalidatePath("/generacion-de-leads/leads");
+    revalidatePath(Routes.leads.list);
     return {
       error: null,
       contact: result.contact?.toJSON(),
@@ -176,13 +178,13 @@ export async function deleteContactAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", success: false };
+      return { error: ServerErrors.notAuthenticated, success: false };
     }
 
     const tenantId = await getActiveTenantId();
 
     if (!tenantId) {
-      return { error: "No hay tenant activo", success: false };
+      return { error: ServerErrors.noActiveTenant, success: false };
     }
 
     // Verificar permisos
@@ -213,7 +215,7 @@ export async function deleteContactAction(
       };
     }
 
-    revalidatePath("/generacion-de-leads/leads");
+    revalidatePath(Routes.leads.list);
     return {
       error: null,
       success: true,
@@ -235,13 +237,13 @@ export async function getContactsByLeadAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", contacts: [] };
+      return { error: ServerErrors.notAuthenticated, contacts: [] };
     }
 
     const tenantId = await getActiveTenantId();
 
     if (!tenantId) {
-      return { error: "No hay tenant activo", contacts: [] };
+      return { error: ServerErrors.noActiveTenant, contacts: [] };
     }
 
     // Verificar permisos

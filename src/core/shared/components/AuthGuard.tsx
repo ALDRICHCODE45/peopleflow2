@@ -2,6 +2,7 @@
 import { useAuth } from "@/core/shared/hooks/use-auth";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
+import { Routes } from "@core/shared/constants/routes";
 import { Spinner } from "@shadcn/spinner";
 
 interface AuthGuardProps {
@@ -18,14 +19,14 @@ export function AuthGuard({ children, fallback }: AuthGuardProps) {
     if (isLoading) return;
 
     if (!isAuthenticated) {
-      router.push("/sign-in");
+      router.push(Routes.signIn);
       return;
     }
 
     // Redirect to OTP verification if email is not verified
     // Skip this check if already on verify-otp page
-    if (isAuthenticated && user && !user.emailVerified && pathname !== "/verify-otp") {
-      router.push("/verify-otp");
+    if (isAuthenticated && user && !user.emailVerified && pathname !== Routes.verifyOtp) {
+      router.push(Routes.verifyOtp);
     }
   }, [isAuthenticated, isLoading, user, router, pathname]);
 
@@ -47,7 +48,7 @@ export function AuthGuard({ children, fallback }: AuthGuardProps) {
   }
 
   // Block access if email is not verified (except for verify-otp page)
-  if (user && !user.emailVerified && pathname !== "/verify-otp") {
+  if (user && !user.emailVerified && pathname !== Routes.verifyOtp) {
     return null;
   }
 

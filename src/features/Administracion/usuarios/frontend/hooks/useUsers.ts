@@ -13,6 +13,7 @@ import {
 import type { TenantUser, CreateUserData, UpdateUserData } from "../types";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { showToast } from "@/core/shared/components/ShowToast";
+import { usersQueryKeys } from "@core/shared/constants/query-keys";
 
 // Query Key Factories - Incluyen tenantId para evitar cache stale entre tenants
 export const getUsersQueryKey = (tenantId: string) =>
@@ -90,7 +91,7 @@ export function useCreateUser() {
           queryKey: getUsersQueryKey(tenant.id),
         });
         await queryClient.invalidateQueries({
-          queryKey: ["users", "paginated", tenant.id],
+          queryKey: usersQueryKeys.paginated(tenant.id),
         });
       }
     },
@@ -136,7 +137,7 @@ export function useUpdateUser() {
           queryKey: getUsersQueryKey(tenant.id),
         });
         await queryClient.invalidateQueries({
-          queryKey: ["users", "paginated", tenant.id],
+          queryKey: usersQueryKeys.paginated(tenant.id),
         });
       }
     },
@@ -176,7 +177,7 @@ export function useDeleteUserFromTenant() {
           queryKey: getUsersQueryKey(tenant.id),
         });
         await queryClient.invalidateQueries({
-          queryKey: ["users", "paginated", tenant.id],
+          queryKey: usersQueryKeys.paginated(tenant.id),
         });
       }
     },
@@ -222,7 +223,7 @@ export function useUpdateUserRoles() {
           queryKey: getUsersQueryKey(tenant.id),
         });
         await queryClient.invalidateQueries({
-          queryKey: ["users", "paginated", tenant.id],
+          queryKey: usersQueryKeys.paginated(tenant.id),
         });
       }
     },

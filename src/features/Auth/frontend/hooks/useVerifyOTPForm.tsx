@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
 import { authClient } from "@lib/auth-client";
 import { showToast } from "@/core/shared/components/ShowToast";
+import { Routes } from "@core/shared/constants/routes";
 import { otpSchema } from "../schemas/otpSchema";
 
 const MAX_ATTEMPTS = 3;
@@ -23,7 +24,7 @@ export function useVerifyOTPForm() {
       setEmail(storedEmail);
     } else {
       // No email in session, redirect to sign-in
-      router.push("/sign-in");
+      router.push(Routes.signIn);
     }
   }, [router]);
 
@@ -41,7 +42,7 @@ export function useVerifyOTPForm() {
           title: "Error",
           description: "No se encontro el email. Por favor inicia sesion nuevamente.",
         });
-        router.push("/sign-in");
+        router.push(Routes.signIn);
         return;
       }
 
@@ -52,7 +53,7 @@ export function useVerifyOTPForm() {
           description: "Has excedido el numero maximo de intentos. Por favor inicia sesion nuevamente.",
         });
         sessionStorage.removeItem(OTP_SESSION_KEY);
-        router.push("/sign-in");
+        router.push(Routes.signIn);
         return;
       }
 
@@ -72,7 +73,7 @@ export function useVerifyOTPForm() {
             description: "Has excedido el numero maximo de intentos. Por favor inicia sesion nuevamente.",
           });
           sessionStorage.removeItem(OTP_SESSION_KEY);
-          router.push("/sign-in");
+          router.push(Routes.signIn);
           return;
         }
 

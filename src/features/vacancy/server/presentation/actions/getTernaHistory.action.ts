@@ -8,6 +8,7 @@ import { PermissionActions } from "@/core/shared/constants/permissions";
 import { prismaVacancyTernaHistoryRepository } from "../../infrastructure/repositories/PrismaVacancyTernaHistoryRepository";
 import { GetTernaHistoryUseCase } from "../../application/use-cases/GetTernaHistoryUseCase";
 import type { TernaHistoryDTO } from "../../application/use-cases/GetTernaHistoryUseCase";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 export interface GetTernaHistoryResult {
   error: string | null;
@@ -20,10 +21,10 @@ export async function getTernaHistoryAction(
   try {
     const headersList = await headers();
     const session = await auth.api.getSession({ headers: headersList });
-    if (!session?.user) return { error: "No autenticado" };
+    if (!session?.user) return { error: ServerErrors.notAuthenticated };
 
     const tenantId = await getActiveTenantId();
-    if (!tenantId) return { error: "No hay tenant activo" };
+    if (!tenantId) return { error: ServerErrors.noActiveTenant };
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({
       userId: session.user.id,
@@ -33,7 +34,7 @@ export async function getTernaHistoryAction(
       ],
       tenantId,
     });
-    if (!hasPermission) return { error: "Sin permisos" };
+    if (!hasPermission) return { error: ServerErrors.noPermission };
 
     const useCase = new GetTernaHistoryUseCase(prismaVacancyTernaHistoryRepository);
     const result = await useCase.execute({ vacancyId, tenantId });
@@ -42,6 +43,6 @@ export async function getTernaHistoryAction(
     return { error: null, histories: result.histories ?? [] };
   } catch (error) {
     console.error("Error in getTernaHistoryAction:", error);
-    return { error: "Error inesperado" };
+    return { error: ServerErrors.unexpected };
   }
 }

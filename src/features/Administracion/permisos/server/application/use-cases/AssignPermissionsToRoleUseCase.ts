@@ -2,7 +2,7 @@ import { prismaPermissionRepository } from "../../infrastructure/repositories/Pr
 import { prismaUserRoleRepository } from "@/features/auth-rbac/server/infrastructure/repositories/PrismaUserRoleRepository";
 import { PermissionService } from "@/core/lib/permissions/permission.service";
 import prisma from "@lib/prisma";
-import { SUPER_ADMIN_PERMISSION_NAME } from "@/core/shared/constants/permissions";
+import { SUPER_ADMIN_PERMISSION_NAME, PermissionActions } from "@/core/shared/constants/permissions";
 
 /**
  * Caso de uso: Asignar permisos a un rol
@@ -108,7 +108,7 @@ export class AssignPermissionsToRoleUseCase {
 
     return PermissionService.hasPermission(
       userPermissions,
-      "roles:asignar-permisos"
+      PermissionActions.roles.asignarPermisos
     );
   }
 }

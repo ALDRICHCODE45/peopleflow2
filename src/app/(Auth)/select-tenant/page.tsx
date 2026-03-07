@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { auth } from "@/core/lib/auth";
+import { Routes } from "@core/shared/constants/routes";
 import { headers } from "next/headers";
 import prisma from "@/core/lib/prisma";
 import { SelectTenantPage } from "@/features/tenants/frontend/pages/SelectTenantPage";
@@ -24,7 +25,7 @@ export default async function SelectTenant() {
 
   // Verificar autenticación
   if (!session?.user) {
-    return redirect("/sign-in");
+    return redirect(Routes.signIn);
   }
 
   // Obtener tenants del usuario
@@ -70,7 +71,7 @@ export default async function SelectTenant() {
 
   // Si no tiene tenants, redirigir a acceso denegado
   if (tenants.length === 0) {
-    return redirect("/access-denied");
+    return redirect(Routes.accessDenied);
   }
 
   // Si solo tiene un tenant, seleccionarlo automáticamente y redirigir

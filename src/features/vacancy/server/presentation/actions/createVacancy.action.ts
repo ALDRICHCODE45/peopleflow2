@@ -8,11 +8,14 @@ import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/applicatio
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
 import { CreateVacancyUseCase } from "../../application/use-cases/CreateVacancyUseCase";
+import { Routes } from "@core/shared/constants/routes";
 import { inngest } from "@/core/shared/inngest/inngest";
+import { InngestEvents } from "@core/shared/constants/inngest-events";
 import type {
   CreateVacancyFormData,
   CreateVacancyResult,
 } from "../../../frontend/types/vacancy.types";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 export async function createVacancyAction(
   data: CreateVacancyFormData,
@@ -22,12 +25,12 @@ export async function createVacancyAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({
@@ -79,7 +82,7 @@ export async function createVacancyAction(
 
       if (recruiter?.email) {
         await inngest.send({
-          name: "email/send",
+          name: InngestEvents.email.send,
           data: {
             template: "recruiter-vacancy-assigned",
             tenantId,
@@ -96,7 +99,7 @@ export async function createVacancyAction(
       }
     }
 
-    revalidatePath("/reclutamiento/vacantes");
+    revalidatePath(Routes.reclutamiento.vacantes);
     return { error: null, vacancy: vacancyDTO };
   } catch (error) {
     console.error("Error in createVacancyAction:", error);

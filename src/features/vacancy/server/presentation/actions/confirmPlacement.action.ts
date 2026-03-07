@@ -8,8 +8,10 @@ import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/applicatio
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
 import { prismaVacancyStatusHistoryRepository } from "../../infrastructure/repositories/PrismaVacancyStatusHistoryRepository";
+import { Routes } from "@core/shared/constants/routes";
 import { ConfirmPlacementUseCase } from "../../application/use-cases/ConfirmPlacementUseCase";
 import type { ConfirmPlacementResult } from "../../../frontend/types/vacancy.types";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 export async function confirmPlacementAction(vacancyId: string): Promise<ConfirmPlacementResult> {
   try {
@@ -17,12 +19,12 @@ export async function confirmPlacementAction(vacancyId: string): Promise<Confirm
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({
@@ -50,7 +52,7 @@ export async function confirmPlacementAction(vacancyId: string): Promise<Confirm
       return { error: result.error ?? "Error al confirmar el placement" };
     }
 
-    revalidatePath("/reclutamiento/vacantes");
+    revalidatePath(Routes.reclutamiento.vacantes);
     return { error: null, vacancy: result.vacancy };
   } catch (error) {
     console.error("Error in confirmPlacementAction:", error);

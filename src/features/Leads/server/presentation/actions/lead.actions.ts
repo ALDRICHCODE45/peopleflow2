@@ -4,6 +4,7 @@ import { z } from "zod";
 import { auth } from "@lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { Routes } from "@core/shared/constants/routes";
 
 // UUID validation schema (Lead IDs use @default(uuid()))
 const uuidSchema = z.uuid("ID inválido");
@@ -45,6 +46,7 @@ import { GetLeadStatusHistoryUseCase } from "../../application/use-cases/GetLead
 
 // Types for status history
 import type { LeadStatusHistoryItem } from "../../../frontend/types";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 /**
  * Crea un nuevo lead
@@ -70,13 +72,13 @@ export async function createLeadAction(data: {
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
 
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     // Verificar permisos
@@ -105,7 +107,7 @@ export async function createLeadAction(data: {
       return { error: result.error || "Error al crear lead" };
     }
 
-    revalidatePath("/generacion-de-leads/leads");
+    revalidatePath(Routes.leads.list);
     return {
       error: null,
       lead: result.lead?.toJSON(),
@@ -148,13 +150,13 @@ export async function updateLeadAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
 
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     // Verificar permisos
@@ -183,7 +185,7 @@ export async function updateLeadAction(
       return { error: result.error || "Error al actualizar lead" };
     }
 
-    revalidatePath("/generacion-de-leads/leads");
+    revalidatePath(Routes.leads.list);
     return {
       error: null,
       lead: result.lead?.toJSON(),
@@ -211,13 +213,13 @@ export async function deleteLeadAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", success: false };
+      return { error: ServerErrors.notAuthenticated, success: false };
     }
 
     const tenantId = await getActiveTenantId();
 
     if (!tenantId) {
-      return { error: "No hay tenant activo", success: false };
+      return { error: ServerErrors.noActiveTenant, success: false };
     }
 
     // Verificar permisos
@@ -251,7 +253,7 @@ export async function deleteLeadAction(
       };
     }
 
-    revalidatePath("/generacion-de-leads/leads");
+    revalidatePath(Routes.leads.list);
     return {
       error: null,
       success: true,
@@ -279,13 +281,13 @@ export async function getLeadByIdAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
 
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     // Verificar permisos
@@ -341,13 +343,13 @@ export async function updateLeadStatusAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
 
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     // Verificar permisos
@@ -388,7 +390,7 @@ export async function updateLeadStatusAction(
       return { error: result.error || "Error al actualizar estado del lead" };
     }
 
-    revalidatePath("/generacion-de-leads/leads");
+    revalidatePath(Routes.leads.list);
     return {
       error: null,
       lead: result.lead?.toJSON(),
@@ -420,13 +422,13 @@ export const reasignLeadAction = async (
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
 
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     // Verificar permisos
@@ -451,8 +453,8 @@ export const reasignLeadAction = async (
       return { error: result.error || "Error al actualizar estado del lead" };
     }
 
-    revalidatePath("/generacion-de-leads/leads");
-    revalidatePath("/generacion-de-leads/kanban");
+    revalidatePath(Routes.leads.list);
+    revalidatePath(Routes.leads.kanban);
     return {
       error: null,
       lead: result.lead?.toJSON(),
@@ -481,13 +483,13 @@ export async function bulkDeleteLeadsAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", success: false };
+      return { error: ServerErrors.notAuthenticated, success: false };
     }
 
     const tenantId = await getActiveTenantId();
 
     if (!tenantId) {
-      return { error: "No hay tenant activo", success: false };
+      return { error: ServerErrors.noActiveTenant, success: false };
     }
 
     const hasAnyPermissionUseCase = new CheckAnyPermissonUseCase();
@@ -520,8 +522,8 @@ export async function bulkDeleteLeadsAction(
       };
     }
 
-    revalidatePath("/generacion-de-leads/leads");
-    revalidatePath("/generacion-de-leads/kanban");
+    revalidatePath(Routes.leads.list);
+    revalidatePath(Routes.leads.kanban);
     return {
       error: null,
       success: true,
@@ -555,13 +557,13 @@ export async function bulkReasignLeadsAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", success: false };
+      return { error: ServerErrors.notAuthenticated, success: false };
     }
 
     const tenantId = await getActiveTenantId();
 
     if (!tenantId) {
-      return { error: "No hay tenant activo", success: false };
+      return { error: ServerErrors.noActiveTenant, success: false };
     }
 
     const hasAnyPermissionUseCase = new CheckAnyPermissonUseCase();
@@ -595,8 +597,8 @@ export async function bulkReasignLeadsAction(
       };
     }
 
-    revalidatePath("/generacion-de-leads/leads");
-    revalidatePath("/generacion-de-leads/kanban");
+    revalidatePath(Routes.leads.list);
+    revalidatePath(Routes.leads.kanban);
     return {
       error: null,
       success: true,
@@ -625,13 +627,13 @@ export async function getLeadStatusHistoryAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", history: [] };
+      return { error: ServerErrors.notAuthenticated, history: [] };
     }
 
     const tenantId = await getActiveTenantId();
 
     if (!tenantId) {
-      return { error: "No hay tenant activo", history: [] };
+      return { error: ServerErrors.noActiveTenant, history: [] };
     }
 
     // Verificar permisos

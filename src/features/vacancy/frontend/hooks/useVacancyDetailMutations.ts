@@ -3,6 +3,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { showToast } from "@/core/shared/components/ShowToast";
+import { vacancyQueryKeys } from "@core/shared/constants/query-keys";
 import { transitionVacancyStatusAction } from "@features/vacancy/server/presentation/actions/transitionVacancyStatus.action";
 import {
   addCandidateAction,
@@ -54,10 +55,10 @@ export function useTransitionVacancyStatus() {
       });
       if (tenant?.id) {
         queryClient.invalidateQueries({
-          queryKey: ["vacancy", "detail", tenant.id, variables.vacancyId],
+          queryKey: vacancyQueryKeys.detail(tenant.id, variables.vacancyId),
         });
         queryClient.invalidateQueries({
-          queryKey: ["vacancies", "paginated", tenant.id],
+          queryKey: vacancyQueryKeys.all(tenant.id),
         });
       }
     },
@@ -96,7 +97,7 @@ export function useAddCandidate() {
       });
       if (tenant?.id) {
         queryClient.invalidateQueries({
-          queryKey: ["vacancy", "detail", tenant.id, variables.vacancyId],
+          queryKey: vacancyQueryKeys.detail(tenant.id, variables.vacancyId),
         });
       }
     },
@@ -135,7 +136,7 @@ export function useRemoveCandidate() {
       });
       if (tenant?.id) {
         queryClient.invalidateQueries({
-          queryKey: ["vacancy", "detail", tenant.id, variables.vacancyId],
+          queryKey: vacancyQueryKeys.detail(tenant.id, variables.vacancyId),
         });
       }
     },
@@ -173,7 +174,7 @@ export function useToggleChecklistItem() {
     onSuccess: (_data, variables) => {
       if (tenant?.id) {
         queryClient.invalidateQueries({
-          queryKey: ["vacancy", "detail", tenant.id, variables.vacancyId],
+          queryKey: vacancyQueryKeys.detail(tenant.id, variables.vacancyId),
         });
       }
     },
@@ -212,10 +213,10 @@ export function useValidateTerna() {
       });
       if (tenant?.id) {
         queryClient.invalidateQueries({
-          queryKey: ["vacancy", "detail", tenant.id, variables.vacancyId],
+          queryKey: vacancyQueryKeys.detail(tenant.id, variables.vacancyId),
         });
         queryClient.invalidateQueries({
-          queryKey: ["vacancies", "paginated", tenant.id],
+          queryKey: vacancyQueryKeys.all(tenant.id),
         });
       }
     },
@@ -249,10 +250,10 @@ export function useConfirmPlacement() {
       });
       if (tenant?.id) {
         queryClient.invalidateQueries({
-          queryKey: ["vacancy", "detail", tenant.id, vacancyId],
+          queryKey: vacancyQueryKeys.detail(tenant.id, vacancyId),
         });
         queryClient.invalidateQueries({
-          queryKey: ["vacancies", "paginated", tenant.id],
+          queryKey: vacancyQueryKeys.all(tenant.id),
         });
       }
     },
@@ -292,7 +293,7 @@ export function useAddChecklistItem() {
       });
       if (tenant?.id) {
         queryClient.invalidateQueries({
-          queryKey: ["vacancy", "detail", tenant.id, variables.vacancyId],
+          queryKey: vacancyQueryKeys.detail(tenant.id, variables.vacancyId),
         });
       }
     },
@@ -332,7 +333,7 @@ export function useUpdateCandidate() {
       });
       if (tenant?.id) {
         queryClient.invalidateQueries({
-          queryKey: ["vacancy", "detail", tenant.id, variables.vacancyId],
+          queryKey: vacancyQueryKeys.detail(tenant.id, variables.vacancyId),
         });
       }
     },
@@ -364,7 +365,7 @@ export function useSaveCandidateMatch(vacancyId: string) {
     },
     onSuccess: () => {
       if (tenant?.id) {
-        queryClient.invalidateQueries({ queryKey: ["vacancy", "detail", tenant.id, vacancyId] });
+        queryClient.invalidateQueries({ queryKey: vacancyQueryKeys.detail(tenant.id, vacancyId) });
       }
     },
     onError: () =>
@@ -399,10 +400,10 @@ export function useSelectFinalist() {
       });
       if (tenant?.id) {
         queryClient.invalidateQueries({
-          queryKey: ["vacancy", "detail", tenant.id, variables.vacancyId],
+          queryKey: vacancyQueryKeys.detail(tenant.id, variables.vacancyId),
         });
         queryClient.invalidateQueries({
-          queryKey: ["vacancies", "paginated", tenant.id],
+          queryKey: vacancyQueryKeys.all(tenant.id),
         });
       }
     },

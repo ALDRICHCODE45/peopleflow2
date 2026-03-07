@@ -10,6 +10,7 @@ import type { InvitableTenant } from "../types";
 import { getUsersQueryKey } from "./useUsers";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { showToast } from "@/core/shared/components/ShowToast";
+import { usersQueryKeys } from "@core/shared/constants/query-keys";
 
 // Query Key Factories
 export const getInvitableTenantsQueryKey = () => ["invitable-tenants"] as const;
@@ -86,7 +87,7 @@ export function useInviteToTenant() {
           queryKey: getUsersQueryKey(tenant.id),
         });
         await queryClient.invalidateQueries({
-          queryKey: ["users", "paginated", tenant.id],
+          queryKey: usersQueryKeys.paginated(tenant.id),
         });
       }
     },

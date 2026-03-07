@@ -3,6 +3,7 @@
 import { auth } from "@lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { Routes } from "@core/shared/constants/routes";
 
 // Repositorios
 import { prismaUserRoleRepository } from "@/features/auth-rbac/server/infrastructure/repositories/PrismaUserRoleRepository";
@@ -16,6 +17,8 @@ import {
 
 // Tenant actions
 import { getCurrentTenantAction } from "@/features/tenants/server/presentation/actions/tenant.actions";
+import { ServerErrors } from "@core/shared/constants/error-messages";
+import { PermissionActions } from "@/core/shared/constants/permissions";
 
 // Types
 export interface PermissionItem {
@@ -54,7 +57,7 @@ export async function getAllPermissionsAction(): Promise<GetAllPermissionsResult
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", permissions: {} };
+      return { error: ServerErrors.notAuthenticated, permissions: {} };
     }
 
     const useCase = new GetAllPermissionsUseCase();
@@ -82,7 +85,7 @@ export async function getRolePermissionsAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", permissionIds: [] };
+      return { error: ServerErrors.notAuthenticated, permissionIds: [] };
     }
 
     const useCase = new GetRolePermissionsUseCase();
@@ -111,7 +114,7 @@ export async function assignPermissionsToRoleAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", success: false };
+      return { error: ServerErrors.notAuthenticated, success: false };
     }
 
     // Obtener tenant activo (puede ser null para superadmin)
@@ -127,8 +130,8 @@ export async function assignPermissionsToRoleAction(
         tenantId
       );
 
-      const canAssign = permissions.includes("roles:asignar-permisos") ||
-                        permissions.includes("roles:gestionar");
+      const canAssign = permissions.includes(PermissionActions.roles.asignarPermisos) ||
+                        permissions.includes(PermissionActions.roles.gestionar);
 
       if (!canAssign) {
         return { error: "No tienes permisos para asignar permisos a roles", success: false };
@@ -149,7 +152,7 @@ export async function assignPermissionsToRoleAction(
       return { error: result.error || "Error al asignar permisos", success: false };
     }
 
-    revalidatePath("/admin/roles-permisos");
+    revalidatePath(Routes.admin.rolesPermisos);
     return { error: null, success: true };
   } catch (error) {
     console.error("Error in assignPermissionsToRoleAction:", error);

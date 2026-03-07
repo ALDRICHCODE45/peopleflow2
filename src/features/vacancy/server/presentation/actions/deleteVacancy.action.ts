@@ -8,7 +8,9 @@ import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/applicatio
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
 import { DeleteVacancyUseCase } from "../../application/use-cases/DeleteVacancyUseCase";
+import { Routes } from "@core/shared/constants/routes";
 import type { DeleteVacancyResult } from "../../../frontend/types/vacancy.types";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 export async function deleteVacancyAction(id: string): Promise<DeleteVacancyResult> {
   try {
@@ -16,12 +18,12 @@ export async function deleteVacancyAction(id: string): Promise<DeleteVacancyResu
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", success: false };
+      return { error: ServerErrors.notAuthenticated, success: false };
     }
 
     const tenantId = await getActiveTenantId();
     if (!tenantId) {
-      return { error: "No hay tenant activo", success: false };
+      return { error: ServerErrors.noActiveTenant, success: false };
     }
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({
@@ -44,7 +46,7 @@ export async function deleteVacancyAction(id: string): Promise<DeleteVacancyResu
       return { error: result.error ?? "Error al eliminar la vacante", success: false };
     }
 
-    revalidatePath("/reclutamiento/vacantes");
+    revalidatePath(Routes.reclutamiento.vacantes);
     return { error: null, success: true };
   } catch (error) {
     console.error("Error in deleteVacancyAction:", error);

@@ -6,6 +6,7 @@ import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { prismaClientRepository } from "@features/Finanzas/Clientes/server/infrastructure/repositories/PrismaClientRepository";
 import { CheckAnyPermissonUseCase } from "@features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 export interface ClientOption {
   id: string;
@@ -20,10 +21,10 @@ export interface GetClientsResult {
 export async function getClientsForSelectAction(): Promise<GetClientsResult> {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
-    if (!session?.user) return { error: "No autenticado", clients: [] };
+    if (!session?.user) return { error: ServerErrors.notAuthenticated, clients: [] };
 
     const tenantId = await getActiveTenantId();
-    if (!tenantId) return { error: "No hay tenant activo", clients: [] };
+    if (!tenantId) return { error: ServerErrors.noActiveTenant, clients: [] };
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({
       userId: session.user.id,
@@ -35,7 +36,7 @@ export async function getClientsForSelectAction(): Promise<GetClientsResult> {
       ],
       tenantId,
     });
-    if (!hasPermission) return { error: "Sin permisos", clients: [] };
+    if (!hasPermission) return { error: ServerErrors.noPermission, clients: [] };
 
     const clients = await prismaClientRepository.findAllByTenantId(tenantId);
 

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/core/lib/auth";
 import { headers } from "next/headers";
+import { Routes } from "@core/shared/constants/routes";
 import prisma from "@/core/lib/prisma";
 import { getDefaultRoute } from "@/core/lib/permissions/get-default-route";
 import { prismaUserRoleRepository } from "@/features/auth-rbac/server/infrastructure/repositories/PrismaUserRoleRepository";
@@ -24,12 +25,12 @@ export default async function HomePage() {
 
   // 1. Si no hay sesión, redirigir a sign-in
   if (!session?.user) {
-    return redirect("/sign-in");
+    return redirect(Routes.signIn);
   }
 
   // 2. Si el email no está verificado, redirigir a verificación OTP
   if (!session.user.emailVerified) {
-    return redirect("/verify-otp");
+    return redirect(Routes.verifyOtp);
   }
 
   const userId = session.user.id;
@@ -37,7 +38,7 @@ export default async function HomePage() {
   // 2. Verificar primero si es SuperAdmin (tienen rol global sin tenant)
   const isSuperAdmin = await prismaUserRoleRepository.isSuperAdmin(userId);
   if (isSuperAdmin) {
-    return redirect("/super-admin");
+    return redirect(Routes.superAdmin);
   }
 
   // 3. Para usuarios normales: obtener tenant activo y roles en paralelo
@@ -65,12 +66,12 @@ export default async function HomePage() {
 
   // 5. Si no tiene tenants, redirigir a acceso denegado
   if (userTenants.length === 0) {
-    return redirect("/access-denied");
+    return redirect(Routes.accessDenied);
   }
 
   // 6. Si tiene múltiples tenants y no ha seleccionado, redirigir a select-tenant
   if (userTenants.length > 1 && !activeTenantId) {
-    return redirect("/select-tenant");
+    return redirect(Routes.selectTenant);
   }
 
   // 7. Si tiene un solo tenant, establecerlo como activo si no lo está

@@ -5,6 +5,7 @@ import type { UpdateVacancyFormData } from "../types/vacancy.types";
 import { showToast } from "@/core/shared/components/ShowToast";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { updateVacancyAction } from "../../server/presentation/actions/updateVacancy.action";
+import { vacancyQueryKeys } from "@core/shared/constants/query-keys";
 
 export interface UpdateVacancyData {
   id: string;
@@ -31,7 +32,7 @@ export function useUpdateVacancy() {
       });
       if (tenant?.id) {
         queryClient.invalidateQueries({
-          queryKey: ["vacancies", "paginated", tenant.id],
+          queryKey: vacancyQueryKeys.all(tenant.id),
         });
       }
     },

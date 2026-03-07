@@ -11,21 +11,22 @@ import {
 } from "@/core/shared/helpers/route-permissions.config";
 import { hasPermission } from "@/core/shared/helpers/permission-checker";
 import { SUPER_ADMIN_PERMISSION_NAME } from "@/core/shared/constants/permissions";
+import { Routes } from "@core/shared/constants/routes";
 
 /**
  * Ruta por defecto para super administradores
  */
-const DEFAULT_SUPER_ADMIN_ROUTE = "/super-admin";
+const DEFAULT_SUPER_ADMIN_ROUTE = Routes.superAdmin;
 
 /**
  * Ruta por defecto para administradores normales
  */
-const DEFAULT_ADMIN_ROUTE = "/admin/usuarios";
+const DEFAULT_ADMIN_ROUTE = Routes.admin.usuarios;
 
 /**
  * Ruta de fallback si el usuario no tiene acceso a ninguna ruta
  */
-const FALLBACK_ROUTE = "/access-denied";
+const FALLBACK_ROUTE = Routes.accessDenied;
 
 /**
  * Obtiene la ruta por defecto basada en los permisos del usuario
@@ -77,7 +78,7 @@ export function getDefaultRoute(userPermissions: string[]): string {
   // (por si hay rutas que no están en la lista de prioridad)
   for (const [route, requiredPermission] of Object.entries(ROUTE_PERMISSIONS)) {
     // Saltar rutas especiales
-    if (route === "/super-admin") continue;
+    if (route === Routes.superAdmin) continue;
 
     if (hasPermission(userPermissions, requiredPermission)) {
       return route;

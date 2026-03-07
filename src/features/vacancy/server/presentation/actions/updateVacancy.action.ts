@@ -8,10 +8,12 @@ import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/applicatio
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
 import { UpdateVacancyUseCase } from "../../application/use-cases/UpdateVacancyUseCase";
+import { Routes } from "@core/shared/constants/routes";
 import type {
   UpdateVacancyFormData,
   UpdateVacancyResult,
 } from "../../../frontend/types/vacancy.types";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 export async function updateVacancyAction(
   id: string,
@@ -22,12 +24,12 @@ export async function updateVacancyAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({
@@ -75,7 +77,7 @@ export async function updateVacancyAction(
       return { error: result.error ?? "Error al actualizar la vacante" };
     }
 
-    revalidatePath("/reclutamiento/vacantes");
+    revalidatePath(Routes.reclutamiento.vacantes);
     return { error: null, vacancy: result.vacancy?.toJSON() };
   } catch (error) {
     console.error("Error in updateVacancyAction:", error);

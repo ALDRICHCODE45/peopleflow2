@@ -3,6 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { showToast } from "@/core/shared/components/ShowToast";
+import { vacancyQueryKeys } from "@core/shared/constants/query-keys";
 import {
   getVacancyAttachmentsAction,
   deleteVacancyAttachmentAction,
@@ -19,7 +20,9 @@ export function useVacancyAttachmentsQuery(vacancyId: string | null) {
   const { tenant } = useTenant();
 
   return useQuery({
-    queryKey: ["vacancy", "attachments", tenant?.id, vacancyId],
+    queryKey: tenant?.id && vacancyId
+      ? vacancyQueryKeys.attachments(tenant.id, vacancyId)
+      : ["vacancy", "attachments", "no-tenant"],
     queryFn: async (): Promise<AttachmentDTO[]> => {
       const result = await getVacancyAttachmentsAction(vacancyId!);
       if (result.error) throw new Error(result.error);
@@ -45,8 +48,8 @@ export function useDeleteVacancyAttachment(vacancyId: string) {
     onSuccess: () => {
       showToast({ type: "success", title: "Archivo eliminado", description: "El archivo fue eliminado exitosamente" });
       if (tenant?.id) {
-        queryClient.invalidateQueries({ queryKey: ["vacancy", "attachments", tenant.id, vacancyId] });
-        queryClient.invalidateQueries({ queryKey: ["vacancy", "detail", tenant.id, vacancyId] });
+        queryClient.invalidateQueries({ queryKey: vacancyQueryKeys.attachments(tenant.id, vacancyId) });
+        queryClient.invalidateQueries({ queryKey: vacancyQueryKeys.detail(tenant.id, vacancyId) });
       }
     },
     onError: (error: Error) => {
@@ -70,8 +73,8 @@ export function useValidateAttachment(vacancyId: string) {
     onSuccess: () => {
       showToast({ type: "success", title: "Archivo validado", description: "El archivo fue validado exitosamente" });
       if (tenant?.id) {
-        queryClient.invalidateQueries({ queryKey: ["vacancy", "attachments", tenant.id, vacancyId] });
-        queryClient.invalidateQueries({ queryKey: ["vacancy", "detail", tenant.id, vacancyId] });
+        queryClient.invalidateQueries({ queryKey: vacancyQueryKeys.attachments(tenant.id, vacancyId) });
+        queryClient.invalidateQueries({ queryKey: vacancyQueryKeys.detail(tenant.id, vacancyId) });
       }
     },
     onError: (error: Error) => {
@@ -95,8 +98,8 @@ export function useRejectAttachment(vacancyId: string) {
     onSuccess: () => {
       showToast({ type: "success", title: "Archivo rechazado", description: "El archivo fue rechazado" });
       if (tenant?.id) {
-        queryClient.invalidateQueries({ queryKey: ["vacancy", "attachments", tenant.id, vacancyId] });
-        queryClient.invalidateQueries({ queryKey: ["vacancy", "detail", tenant.id, vacancyId] });
+        queryClient.invalidateQueries({ queryKey: vacancyQueryKeys.attachments(tenant.id, vacancyId) });
+        queryClient.invalidateQueries({ queryKey: vacancyQueryKeys.detail(tenant.id, vacancyId) });
       }
     },
     onError: (error: Error) => {
@@ -120,8 +123,8 @@ export function useValidateChecklist(vacancyId: string) {
     onSuccess: () => {
       showToast({ type: "success", title: "Checklist validado", description: "El checklist fue validado exitosamente" });
       if (tenant?.id) {
-        queryClient.invalidateQueries({ queryKey: ["vacancy", "detail", tenant.id, vacancyId] });
-        queryClient.invalidateQueries({ queryKey: ["vacancies", "paginated", tenant.id] });
+        queryClient.invalidateQueries({ queryKey: vacancyQueryKeys.detail(tenant.id, vacancyId) });
+        queryClient.invalidateQueries({ queryKey: vacancyQueryKeys.all(tenant.id) });
       }
     },
     onError: (error: Error) => {
@@ -145,8 +148,8 @@ export function useRejectChecklist(vacancyId: string) {
     onSuccess: () => {
       showToast({ type: "success", title: "Checklist rechazado", description: "El checklist fue rechazado" });
       if (tenant?.id) {
-        queryClient.invalidateQueries({ queryKey: ["vacancy", "detail", tenant.id, vacancyId] });
-        queryClient.invalidateQueries({ queryKey: ["vacancies", "paginated", tenant.id] });
+        queryClient.invalidateQueries({ queryKey: vacancyQueryKeys.detail(tenant.id, vacancyId) });
+        queryClient.invalidateQueries({ queryKey: vacancyQueryKeys.all(tenant.id) });
       }
     },
     onError: (error: Error) => {

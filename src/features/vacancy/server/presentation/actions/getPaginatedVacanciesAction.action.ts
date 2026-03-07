@@ -17,6 +17,7 @@ import type {
   VacancySaleType,
   VacancyModality,
 } from "@/features/vacancy/frontend/types/vacancy.types";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 /** Parámetros de entrada para la acción paginada */
 export interface GetPaginatedVacanciesParams {
@@ -54,7 +55,7 @@ export async function getPaginatedVacanciesAction(
 
     if (!session?.user) {
       return {
-        error: "No autenticado",
+        error: ServerErrors.notAuthenticated,
         data: [],
         pagination: {
           pageIndex: 0,
@@ -69,7 +70,7 @@ export async function getPaginatedVacanciesAction(
     const tenantId = await getActiveTenantId();
     if (!tenantId) {
       return {
-        error: "No hay tenant activo",
+        error: ServerErrors.noActiveTenant,
         data: [],
         pagination: {
           pageIndex: 0,

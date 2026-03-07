@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-query";
 import { showToast } from "@/core/shared/components/ShowToast";
 import type { LeadStatus, LeadFormData, Lead } from "../types";
+import { leadsQueryKeys } from "@core/shared/constants/query-keys";
 import {
   createLeadAction,
   updateLeadAction,
@@ -45,7 +46,7 @@ export function useCreateLead() {
       // This reduces refetches from 8+ queries to 1-2
       if (newLead?.status) {
         queryClient.invalidateQueries({
-          queryKey: ["leads", "infinite"],
+          queryKey: leadsQueryKeys.infiniteAll(),
           predicate: (query) => {
             const key = query.queryKey as string[];
             return key[3] === newLead.status;
@@ -54,7 +55,7 @@ export function useCreateLead() {
         });
       }
       queryClient.invalidateQueries({
-        queryKey: ["leads", "paginated"],
+        queryKey: leadsQueryKeys.paginated(),
         refetchType: "active",
       });
       showToast({
@@ -97,7 +98,7 @@ export function useUpdateLead() {
       // Invalidate only the specific status column and paginated view
       if (updatedLead?.status) {
         queryClient.invalidateQueries({
-          queryKey: ["leads", "infinite"],
+          queryKey: leadsQueryKeys.infiniteAll(),
           predicate: (query) => {
             const key = query.queryKey as string[];
             return key[3] === updatedLead.status;
@@ -108,11 +109,11 @@ export function useUpdateLead() {
       // Invalidate the specific lead detail query
       if (updatedLead?.id) {
         queryClient.invalidateQueries({
-          queryKey: ["leads", "detail", updatedLead.id],
+          queryKey: leadsQueryKeys.detail(updatedLead.id),
         });
       }
       queryClient.invalidateQueries({
-        queryKey: ["leads", "paginated"],
+        queryKey: leadsQueryKeys.paginated(),
         refetchType: "active",
       });
       showToast({
@@ -149,11 +150,11 @@ export function useDeleteLead() {
       // For delete, we need to invalidate all infinite queries since we don't know the status
       // but we use refetchType: "active" to only refetch visible ones
       queryClient.invalidateQueries({
-        queryKey: ["leads", "infinite"],
+        queryKey: leadsQueryKeys.infiniteAll(),
         refetchType: "active",
       });
       queryClient.invalidateQueries({
-        queryKey: ["leads", "paginated"],
+        queryKey: leadsQueryKeys.paginated(),
         refetchType: "active",
       });
       showToast({
@@ -196,7 +197,7 @@ export function useReasignLead() {
       // Only invalidate the specific status column and detail query
       if (reasignedLead?.status) {
         queryClient.invalidateQueries({
-          queryKey: ["leads", "infinite"],
+          queryKey: leadsQueryKeys.infiniteAll(),
           predicate: (query) => {
             const key = query.queryKey as string[];
             return key[3] === reasignedLead.status;
@@ -206,11 +207,11 @@ export function useReasignLead() {
       }
       if (reasignedLead?.id) {
         queryClient.invalidateQueries({
-          queryKey: ["leads", "detail", reasignedLead.id],
+          queryKey: leadsQueryKeys.detail(reasignedLead.id),
         });
       }
       queryClient.invalidateQueries({
-        queryKey: ["leads", "paginated"],
+        queryKey: leadsQueryKeys.paginated(),
         refetchType: "active",
       });
       showToast({
@@ -245,11 +246,11 @@ export function useBulkDeleteLeads() {
     },
     onSuccess: (result) => {
       queryClient.invalidateQueries({
-        queryKey: ["leads", "infinite"],
+        queryKey: leadsQueryKeys.infiniteAll(),
         refetchType: "active",
       });
       queryClient.invalidateQueries({
-        queryKey: ["leads", "paginated"],
+        queryKey: leadsQueryKeys.paginated(),
         refetchType: "active",
       });
       showToast({
@@ -290,11 +291,11 @@ export function useBulkReasignLeads() {
     },
     onSuccess: (result) => {
       queryClient.invalidateQueries({
-        queryKey: ["leads", "infinite"],
+        queryKey: leadsQueryKeys.infiniteAll(),
         refetchType: "active",
       });
       queryClient.invalidateQueries({
-        queryKey: ["leads", "paginated"],
+        queryKey: leadsQueryKeys.paginated(),
         refetchType: "active",
       });
       showToast({
@@ -347,7 +348,7 @@ export function useUpdateLeadStatus() {
     onMutate: async ({ leadId, newStatus }) => {
       // 1. Find the lead in infinite queries to get its current status
       const allInfiniteQueries = queryClient.getQueriesData<LeadsInfiniteData>({
-        queryKey: ["leads", "infinite"],
+        queryKey: leadsQueryKeys.infiniteAll(),
       });
 
       let sourceStatus: LeadStatus | null = null;
@@ -509,20 +510,20 @@ export function useUpdateLeadStatus() {
       // exact: false allows matching regardless of the filter object reference
       if (sourceStatus) {
         queryClient.invalidateQueries({
-          queryKey: ["leads", "infinite", tenantId, sourceStatus],
+          queryKey: leadsQueryKeys.infinite(tenantId as string, sourceStatus as string),
           exact: false,
         });
       }
 
       // Invalidate destination column using partial query key
       queryClient.invalidateQueries({
-        queryKey: ["leads", "infinite", tenantId, newStatus],
+        queryKey: leadsQueryKeys.infinite(tenantId as string, newStatus),
         exact: false,
       });
 
       // Invalidate paginated view (table) so it reflects status changes
       queryClient.invalidateQueries({
-        queryKey: ["leads", "paginated"],
+        queryKey: leadsQueryKeys.paginated(),
         refetchType: "active",
       });
 
@@ -530,7 +531,7 @@ export function useUpdateLeadStatus() {
       // This is critical for the incomplete data flow where the detail might be cached
       const { leadId } = variables;
       queryClient.invalidateQueries({
-        queryKey: ["leads", "detail", leadId],
+        queryKey: leadsQueryKeys.detail(leadId),
       });
     },
   });

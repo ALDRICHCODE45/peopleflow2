@@ -5,6 +5,7 @@ import type { CreateVacancyFormData } from "../types/vacancy.types";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { createVacancyAction } from "../../server/presentation/actions/createVacancy.action";
 import { showToast } from "@/core/shared/components/ShowToast";
+import { vacancyQueryKeys } from "@core/shared/constants/query-keys";
 
 export function useCreateVacancy() {
   const queryClient = useQueryClient();
@@ -26,7 +27,7 @@ export function useCreateVacancy() {
       });
       if (tenant?.id) {
         queryClient.invalidateQueries({
-          queryKey: ["vacancies", "paginated", tenant.id],
+          queryKey: vacancyQueryKeys.all(tenant.id),
         });
       }
     },

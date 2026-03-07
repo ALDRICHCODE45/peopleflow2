@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { Routes } from "@core/shared/constants/routes";
 
 const MAX_AUTO_RETRIES = 3;
 
@@ -169,7 +170,7 @@ export default function GlobalError({
                 Reintentar
               </button>
               <a
-                href="/select-tenant"
+                href={Routes.selectTenant}
                 style={{
                   padding: "10px 20px",
                   background: "transparent",

@@ -20,6 +20,7 @@ import type {
   AssignUserToTenantResult,
   GetTenantUsersResult,
 } from "../../../frontend/types";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 /**
  * Server Actions para gestionar usuarios
@@ -35,7 +36,7 @@ export async function createUserAction(formData: FormData): Promise<CreateUserRe
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     // Verificar que sea superadmin
@@ -85,7 +86,7 @@ export async function assignUserToTenantAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     // Verificar que sea superadmin
@@ -138,7 +139,7 @@ export async function getTenantUsersAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", users: [] };
+      return { error: ServerErrors.notAuthenticated, users: [] };
     }
 
     const useCase = new GetTenantUsersUseCase(prismaUserRoleRepository);
@@ -198,7 +199,7 @@ export async function getRolesAction(): Promise<GetRolesResult> {
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", roles: [] };
+      return { error: ServerErrors.notAuthenticated, roles: [] };
     }
 
     // Verificar que sea superadmin

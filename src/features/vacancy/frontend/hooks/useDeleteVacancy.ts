@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { showToast } from "@/core/shared/components/ShowToast";
 import { deleteVacancyAction } from "../../server/presentation/actions/deleteVacancy.action";
+import { vacancyQueryKeys } from "@core/shared/constants/query-keys";
 
 export function useDeleteVacancy() {
   const queryClient = useQueryClient();
@@ -25,7 +26,7 @@ export function useDeleteVacancy() {
       });
       if (tenant?.id) {
         queryClient.invalidateQueries({
-          queryKey: ["vacancies", "paginated", tenant.id],
+          queryKey: vacancyQueryKeys.all(tenant.id),
         });
       }
     },

@@ -14,6 +14,7 @@ import {
   type FileWithPreview,
 } from "@/core/shared/hooks/use-upload-file";
 import { cn } from "@lib/utils";
+import { vacancyQueryKeys } from "@core/shared/constants/query-keys";
 
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
 
@@ -73,7 +74,7 @@ export function FileUploadButton({
       clearFiles();
       if (tenant?.id) {
         queryClient.invalidateQueries({
-          queryKey: ["vacancy", "attachments", tenant.id, vacancyId],
+          queryKey: vacancyQueryKeys.attachments(tenant.id, vacancyId),
         });
       }
       onSuccess?.();
@@ -192,7 +193,7 @@ export function FileDropZone({
       clearFiles();
       if (tenant?.id) {
         queryClient.invalidateQueries({
-          queryKey: ["vacancy", "attachments", tenant.id, vacancyId],
+          queryKey: vacancyQueryKeys.attachments(tenant.id, vacancyId),
         });
       }
       onSuccess?.();

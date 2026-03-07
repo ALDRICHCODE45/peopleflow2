@@ -8,11 +8,13 @@ import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/applicatio
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
 import { prismaVacancyCandidateRepository } from "../../infrastructure/repositories/PrismaVacancyCandidateRepository";
+import { Routes } from "@core/shared/constants/routes";
 import { prismaVacancyStatusHistoryRepository } from "../../infrastructure/repositories/PrismaVacancyStatusHistoryRepository";
 import { AddCandidateToVacancyUseCase } from "../../application/use-cases/AddCandidateToVacancyUseCase";
 import { UpdateCandidateUseCase } from "../../application/use-cases/UpdateCandidateUseCase";
 import { RemoveCandidateUseCase } from "../../application/use-cases/RemoveCandidateUseCase";
 import { SelectFinalistUseCase } from "../../application/use-cases/SelectFinalistUseCase";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 import type {
   AddCandidateFormData,
   AddCandidateResult,
@@ -35,12 +37,12 @@ export async function addCandidateAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({
@@ -84,7 +86,7 @@ export async function addCandidateAction(
       return { error: result.error ?? "Error al agregar el candidato" };
     }
 
-    revalidatePath("/reclutamiento/vacantes");
+    revalidatePath(Routes.reclutamiento.vacantes);
     return { error: null, candidate: result.candidate?.toJSON() };
   } catch (error) {
     console.error("Error in addCandidateAction:", error);
@@ -125,12 +127,12 @@ export async function updateCandidateAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({
@@ -157,7 +159,7 @@ export async function updateCandidateAction(
       return { error: result.error ?? "Error al actualizar el candidato" };
     }
 
-    revalidatePath("/reclutamiento/vacantes");
+    revalidatePath(Routes.reclutamiento.vacantes);
     return { error: null, candidate: result.candidate?.toJSON() };
   } catch (error) {
     console.error("Error in updateCandidateAction:", error);
@@ -177,12 +179,12 @@ export async function removeCandidateAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", success: false };
+      return { error: ServerErrors.notAuthenticated, success: false };
     }
 
     const tenantId = await getActiveTenantId();
     if (!tenantId) {
-      return { error: "No hay tenant activo", success: false };
+      return { error: ServerErrors.noActiveTenant, success: false };
     }
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({
@@ -209,7 +211,7 @@ export async function removeCandidateAction(
       return { error: result.error ?? "Error al eliminar el candidato", success: false };
     }
 
-    revalidatePath("/reclutamiento/vacantes");
+    revalidatePath(Routes.reclutamiento.vacantes);
     return { error: null, success: true };
   } catch (error) {
     console.error("Error in removeCandidateAction:", error);
@@ -235,12 +237,12 @@ export async function selectFinalistAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({
@@ -272,7 +274,7 @@ export async function selectFinalistAction(
       return { error: result.error ?? "Error al seleccionar el finalista" };
     }
 
-    revalidatePath("/reclutamiento/vacantes");
+    revalidatePath(Routes.reclutamiento.vacantes);
     return { error: null, vacancy: result.vacancy };
   } catch (error) {
     console.error("Error in selectFinalistAction:", error);

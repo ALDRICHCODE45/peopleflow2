@@ -25,6 +25,7 @@ import { useTheme } from "next-themes";
 import { PermissionGuard } from "../../components/PermissionGuard";
 import { PermissionActions } from "../../constants/permissions";
 import Link from "next/link";
+import { Routes } from "@core/shared/constants/routes";
 
 export function NavUser({
   user,
@@ -112,7 +113,7 @@ export function NavUser({
               <PermissionGuard permissions={[PermissionActions.super.admin]}>
                 <DropdownMenuItem asChild>
                   <Link
-                    href={"/super-admin"}
+                    href={Routes.superAdmin}
                     className={`${buttonVariants({ variant: "secondary" })} w-full flex justify-start`}
                   >
                     <HugeiconsIcon icon={Grid} strokeWidth={2} />

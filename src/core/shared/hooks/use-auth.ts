@@ -2,6 +2,7 @@
 
 import { authClient } from "@lib/auth-client";
 import { useCallback, useState } from "react";
+import { Routes } from "@core/shared/constants/routes";
 
 /**
  * Tipo para el usuario autenticado
@@ -107,7 +108,7 @@ export function useAuth() {
    * Cierra la sesión del usuario
    */
   const logout = useCallback(
-    async (redirectTo: string = "/sign-in"): Promise<AuthResult> => {
+    async (redirectTo: string = Routes.signIn): Promise<AuthResult> => {
       setIsOperationLoading(true);
 
       try {

@@ -1,5 +1,5 @@
 import { PermissionService } from "@/core/lib/permissions/permission.service";
-import { SUPER_ADMIN_PERMISSION_NAME } from "@/core/shared/constants/permissions";
+import { SUPER_ADMIN_PERMISSION_NAME, HIDDEN_ADMIN_ROLE_NAME } from "@/core/shared/constants/permissions";
 
 /**
  * Servicio de dominio para Permisos
@@ -28,7 +28,7 @@ export class PermissionDomainService {
    */
   isSuperAdminRole(roleName: string): boolean {
     // El rol "administrador" tiene asignado el permiso super:admin
-    return roleName === "administrador";
+    return roleName === HIDDEN_ADMIN_ROLE_NAME;
   }
 
   /**

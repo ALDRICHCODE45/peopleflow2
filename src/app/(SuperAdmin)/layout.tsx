@@ -3,6 +3,7 @@ import { auth } from "@/core/lib/auth";
 import { headers } from "next/headers";
 import prisma from "@/core/lib/prisma";
 import { SUPER_ADMIN_PERMISSION_NAME } from "@/core/shared/constants/permissions";
+import { Routes } from "@core/shared/constants/routes";
 import { ThemeToogle } from "@/core/shared/components/ThemeToogle";
 
 /**
@@ -21,7 +22,7 @@ export default async function SuperAdminLayout({
 
   // Verificar autenticación
   if (!session?.user) {
-    return redirect("/sign-in");
+    return redirect(Routes.signIn);
   }
 
   // Verificar que tenga permiso super:admin
@@ -50,7 +51,7 @@ export default async function SuperAdminLayout({
 
   // Verificar super:admin
   if (!permissionSet.has(SUPER_ADMIN_PERMISSION_NAME)) {
-    return redirect("/access-denied");
+    return redirect(Routes.accessDenied);
   }
 
   return (

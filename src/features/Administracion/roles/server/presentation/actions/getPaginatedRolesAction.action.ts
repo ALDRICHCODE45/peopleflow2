@@ -12,6 +12,7 @@ import {
   SortingParam,
 } from "@/core/shared/types/pagination.types";
 import type { RoleWithStats } from "@/features/Administracion/roles/frontend/types";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 /** Parámetros de entrada para la acción paginada */
 export interface GetPaginatedRolesParams {
@@ -35,7 +36,7 @@ export async function getPaginatedRolesAction(
 
     if (!session?.user) {
       return {
-        error: "No autenticado",
+        error: ServerErrors.notAuthenticated,
         data: [],
         pagination: {
           pageIndex: 0,
@@ -50,7 +51,7 @@ export async function getPaginatedRolesAction(
     const tenantResult = await getCurrentTenantAction();
     if (tenantResult.error || !tenantResult.tenant) {
       return {
-        error: "No hay tenant activo",
+        error: ServerErrors.noActiveTenant,
         data: [],
         pagination: {
           pageIndex: 0,

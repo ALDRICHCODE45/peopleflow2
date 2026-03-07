@@ -7,6 +7,8 @@
  * Formato: "ruta" -> "permiso:accion"
  */
 
+import { Routes } from "@core/shared/constants/routes";
+
 /**
  * Mapa de rutas a permisos requeridos
  */
@@ -16,14 +18,14 @@ export const ROUTE_PERMISSIONS: Record<string, string> = {
   // ═══════════════════════════════════════════════════════════════
 
   // Usuarios
-  "/admin/usuarios": "usuarios:acceder",
-  "/admin/usuarios/crear": "usuarios:crear",
-  "/admin/usuarios/editar": "usuarios:editar",
+  [Routes.admin.usuarios]: "usuarios:acceder",
+  [`${Routes.admin.usuarios}/crear`]: "usuarios:crear",
+  [`${Routes.admin.usuarios}/editar`]: "usuarios:editar",
 
   // Roles y Permisos
-  "/admin/roles-permisos": "roles:acceder",
-  "/admin/roles-permisos/crear": "roles:crear",
-  "/admin/roles-permisos/editar": "roles:editar",
+  [Routes.admin.rolesPermisos]: "roles:acceder",
+  [`${Routes.admin.rolesPermisos}/crear`]: "roles:crear",
+  [`${Routes.admin.rolesPermisos}/editar`]: "roles:editar",
 
   // ═══════════════════════════════════════════════════════════════
   // MÓDULO: FINANZAS
@@ -47,9 +49,9 @@ export const ROUTE_PERMISSIONS: Record<string, string> = {
   // ═══════════════════════════════════════════════════════════════
 
   // Vacantes
-  "/reclutamiento/vacantes": "vacantes:acceder",
-  "/reclutamiento/vacantes/crear": "vacantes:crear",
-  "/reclutamiento/vacantes/editar": "vacantes:editar",
+  [Routes.reclutamiento.vacantes]: "vacantes:acceder",
+  [`${Routes.reclutamiento.vacantes}/crear`]: "vacantes:crear",
+  [`${Routes.reclutamiento.vacantes}/editar`]: "vacantes:editar",
 
   // Kanban (Candidatos)
   "/reclutamiento/kanban": "candidatos:acceder",
@@ -62,12 +64,12 @@ export const ROUTE_PERMISSIONS: Record<string, string> = {
   // ═══════════════════════════════════════════════════════════════
 
   // Leads
-  "/generacion-de-leads/leads": "leads:acceder",
-  "/generacion-de-leads/leads/crear": "leads:crear",
-  "/generacion-de-leads/leads/editar": "leads:editar",
+  [Routes.leads.list]: "leads:acceder",
+  [`${Routes.leads.list}/crear`]: "leads:crear",
+  [`${Routes.leads.list}/editar`]: "leads:editar",
 
   // Kanban (Leads)
-  "/generacion-de-leads/kanban": "leads:acceder",
+  [Routes.leads.kanban]: "leads:acceder",
 
   // Reportes
   "/generacion-de-leads/reportes": "reportes-ventas:acceder",
@@ -87,22 +89,22 @@ export const ROUTE_PERMISSIONS: Record<string, string> = {
   // ═══════════════════════════════════════════════════════════════
 
   // Super Admin Dashboard
-  "/super-admin": "super:admin",
+  [Routes.superAdmin]: "super:admin",
 } as const;
 
 /**
  * Rutas públicas que no requieren autenticación
  */
 export const PUBLIC_ROUTES: string[] = [
-  "/sign-in",
+  Routes.signIn,
   "/api/auth",
-  "/access-denied",
+  Routes.accessDenied,
 ];
 
 /**
  * Rutas que requieren autenticación pero no permisos específicos
  */
-export const AUTHENTICATED_ROUTES: string[] = ["/select-tenant"];
+export const AUTHENTICATED_ROUTES: string[] = [Routes.selectTenant];
 
 /**
  * Obtiene el permiso requerido para una ruta específica
@@ -192,19 +194,19 @@ export function getRoutesForResource(resource: string): string[] {
  */
 export const ROUTE_PRIORITY: string[] = [
   // Administración (prioridad alta)
-  "/admin/usuarios",
-  "/admin/roles-permisos",
+  Routes.admin.usuarios,
+  Routes.admin.rolesPermisos,
   // Finanzas
   "/finanzas/ingresos",
   "/finanzas/egresos",
   "/finanzas/clientes",
   // Reclutamiento
-  "/reclutamiento/vacantes",
+  Routes.reclutamiento.vacantes,
   "/reclutamiento/kanban",
   "/reclutamiento/reportes",
   // Ventas
-  "/generacion-de-leads/leads",
-  "/generacion-de-leads/kanban",
+  Routes.leads.list,
+  Routes.leads.kanban,
   "/generacion-de-leads/reportes",
   // Sistema
   "/system/config",

@@ -8,6 +8,7 @@ import { PermissionActions } from "@/core/shared/constants/permissions";
 import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
 import { GetVacancyDetailUseCase } from "../../application/use-cases/GetVacancyDetailUseCase";
 import type { GetVacancyDetailResult } from "../../../frontend/types/vacancy.types";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 export async function getVacancyDetailAction(
   vacancyId: string,
@@ -17,12 +18,12 @@ export async function getVacancyDetailAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({

@@ -2,6 +2,7 @@
 
 import { useForm } from "@tanstack/react-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { leadsQueryKeys } from "@core/shared/constants/query-keys";
 import {
   useSectors,
   useSubsectorsBySector,
@@ -69,14 +70,14 @@ export function useEditLeadForm({
     onSuccess: (updatedLead) => {
       // Invalidate paginated (table view)
       queryClient.invalidateQueries({
-        queryKey: ["leads", "paginated"],
+        queryKey: leadsQueryKeys.paginated(),
         refetchType: "active",
       });
 
       // Invalidate infinite (kanban) for affected statuses
       if (updatedLead?.status) {
         queryClient.invalidateQueries({
-          queryKey: ["leads", "infinite"],
+          queryKey: leadsQueryKeys.infiniteAll(),
           predicate: (query) => {
             const key = query.queryKey as string[];
             return key[3] === updatedLead.status || key[3] === lead.status;
@@ -88,7 +89,7 @@ export function useEditLeadForm({
       // Invalidate detail query
       if (updatedLead?.id) {
         queryClient.invalidateQueries({
-          queryKey: ["leads", "detail", updatedLead.id],
+          queryKey: leadsQueryKeys.detail(updatedLead.id),
         });
       }
 

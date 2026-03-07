@@ -3,6 +3,7 @@ import { auth } from "@/core/lib/auth";
 import { headers } from "next/headers";
 import prisma from "@/core/lib/prisma";
 import { redirect } from "next/navigation";
+import { Routes } from "@core/shared/constants/routes";
 import { SuperAdminDashboard } from "@/features/super-admin/frontend/pages/SuperAdminDashboard";
 
 export const metadata: Metadata = {
@@ -24,7 +25,7 @@ export default async function SuperAdminPage() {
   const session = await auth.api.getSession({ headers: headersList });
 
   if (!session?.user) {
-    return redirect("/sign-in");
+    return redirect(Routes.signIn);
   }
 
   // Obtener todos los tenants

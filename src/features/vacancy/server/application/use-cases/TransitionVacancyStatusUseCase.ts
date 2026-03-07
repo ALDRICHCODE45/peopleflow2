@@ -9,6 +9,7 @@ import {
   isRollbackTransition,
   type VacancyTransitionContext,
 } from "../../domain/services/VacancyStateMachine";
+import { InngestEvents } from "@core/shared/constants/inngest-events";
 
 export interface TransitionVacancyStatusInput {
   vacancyId: string;
@@ -166,7 +167,7 @@ export class TransitionVacancyStatusUseCase {
 
       if (newStatus === "PRE_PLACEMENT") {
         inngestEvent = {
-          name: "vacancy/pre-placement.entered",
+          name: InngestEvents.vacancy.prePlacementEntered,
           data: {
             vacancyId,
             tenantId,
@@ -181,7 +182,7 @@ export class TransitionVacancyStatusUseCase {
           (c) => c.isFinalist || c.isInTerna
         );
         inngestEvent = {
-          name: "vacancy/placement.congrats-email",
+          name: InngestEvents.vacancy.placementCongratsEmail,
           data: {
             vacancyId,
             tenantId,

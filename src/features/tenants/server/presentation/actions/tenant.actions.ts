@@ -22,6 +22,7 @@ import type {
   SwitchTenantResult,
   GetCurrentTenantResult,
 } from "../../../frontend/types";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 /**
  * Server Actions para gestionar tenants
@@ -37,7 +38,7 @@ export async function getUserTenantsAction(): Promise<GetUserTenantsResult> {
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", tenants: [] };
+      return { error: ServerErrors.notAuthenticated, tenants: [] };
     }
 
     const useCase = new GetUserTenantsUseCase(prismaTenantRepository);
@@ -63,7 +64,7 @@ export async function createTenantAction(formData: FormData): Promise<CreateTena
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     // Verificar que sea superadmin
@@ -109,7 +110,7 @@ export async function switchTenantAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.session) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const useCase = new SwitchTenantUseCase(
@@ -149,7 +150,7 @@ export async function getCurrentTenantAction(): Promise<GetCurrentTenantResult> 
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.session) {
-      return { error: "No autenticado", tenant: null };
+      return { error: ServerErrors.notAuthenticated, tenant: null };
     }
 
     const useCase = new GetCurrentTenantUseCase(prismaTenantRepository);

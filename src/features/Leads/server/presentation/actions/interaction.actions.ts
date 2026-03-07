@@ -3,6 +3,7 @@
 import { auth } from "@lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { Routes } from "@core/shared/constants/routes";
 
 // Repositories
 import { prismaInteractionRepository } from "../../infrastructure/repositories/PrismaInteractionRepository";
@@ -26,6 +27,7 @@ import type {
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 /**
  * Agrega una interacción a un contacto
@@ -42,13 +44,13 @@ export async function addInteractionAction(data: {
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
 
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     // Verificar permisos
@@ -84,7 +86,7 @@ export async function addInteractionAction(data: {
       return { error: result.error || "Error al agregar interacción" };
     }
 
-    revalidatePath("/generacion-de-leads/leads");
+    revalidatePath(Routes.leads.list);
     return {
       error: null,
       interaction: result.interaction?.toJSON(),
@@ -106,13 +108,13 @@ export async function getInteractionsByLeadAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", interactions: [] };
+      return { error: ServerErrors.notAuthenticated, interactions: [] };
     }
 
     const tenantId = await getActiveTenantId();
 
     if (!tenantId) {
-      return { error: "No hay tenant activo", interactions: [] };
+      return { error: ServerErrors.noActiveTenant, interactions: [] };
     }
 
     // Verificar permisos
@@ -161,13 +163,13 @@ export async function getInteractionsByContactAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", interactions: [] };
+      return { error: ServerErrors.notAuthenticated, interactions: [] };
     }
 
     const tenantId = await getActiveTenantId();
 
     if (!tenantId) {
-      return { error: "No hay tenant activo", interactions: [] };
+      return { error: ServerErrors.noActiveTenant, interactions: [] };
     }
 
     // Verificar permisos
@@ -230,13 +232,13 @@ export async function updateInteractionAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
 
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     // Verificar permisos
@@ -265,7 +267,7 @@ export async function updateInteractionAction(
       return { error: result.error || "Error al actualizar la interacción" };
     }
 
-    revalidatePath("/generacion-de-leads/leads");
+    revalidatePath(Routes.leads.list);
     return {
       error: null,
       interaction: result.interaction?.toJSON(),
@@ -287,13 +289,13 @@ export async function deleteInteractionAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", success: false };
+      return { error: ServerErrors.notAuthenticated, success: false };
     }
 
     const tenantId = await getActiveTenantId();
 
     if (!tenantId) {
-      return { error: "No hay tenant activo", success: false };
+      return { error: ServerErrors.noActiveTenant, success: false };
     }
 
     // Verificar permisos
@@ -327,7 +329,7 @@ export async function deleteInteractionAction(
       };
     }
 
-    revalidatePath("/generacion-de-leads/leads");
+    revalidatePath(Routes.leads.list);
     return {
       error: null,
       success: true,

@@ -10,6 +10,7 @@ import { prismaVacancyChecklistRepository } from "../../infrastructure/repositor
 import { prismaVacancyCandidateMatchRepository } from "../../infrastructure/repositories/PrismaVacancyCandidateMatchRepository";
 import { SaveCandidateMatchUseCase } from "../../application/use-cases/SaveCandidateMatchUseCase";
 import type { SaveMatchResult } from "../../../frontend/types/vacancy.types";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 export interface SaveCandidateMatchInput {
   candidateId: string;
@@ -26,12 +27,12 @@ export async function saveCandidateMatchAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({

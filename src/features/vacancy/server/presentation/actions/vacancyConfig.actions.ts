@@ -15,6 +15,7 @@ import type {
 } from "../../../frontend/types/vacancy.types";
 import type { VacancyConfigData } from "../../domain/interfaces/IVacancyConfigRepository";
 import type { UpsertVacancyConfigInput } from "../../application/use-cases/UpsertVacancyConfigUseCase";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 /** Convierte VacancyConfigData (con Date) a VacancyConfigDTO (con ISO strings) */
 function toConfigDTO(config: VacancyConfigData): VacancyConfigDTO {
@@ -49,12 +50,12 @@ export async function getVacancyConfigAction(): Promise<GetVacancyConfigResult> 
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({
@@ -101,12 +102,12 @@ export async function upsertVacancyConfigAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({

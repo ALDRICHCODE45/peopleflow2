@@ -1,5 +1,6 @@
 import prisma from "@/core/lib/prisma";
 import { inngest } from "./inngest";
+import { InngestEvents } from "@core/shared/constants/inngest-events";
 import { SendNotificationUseCase } from "@features/Notifications/server/application/use-cases/SendNotificationUseCase";
 import { prismaNotificationRepository } from "@features/Notifications/server/infrastructure/repositories/PrismaNotificationRepository";
 import { emailProvider } from "@features/Notifications/server/infrastructure/providers/EmailProvider";
@@ -47,7 +48,7 @@ const handleLeadStatusChangeNotification = inngest.createFunction(
     id: "handle-lead-status-change-notification",
     name: "Notificación de cambio de estado de Lead",
   },
-  { event: "lead/status.changed" },
+  { event: InngestEvents.lead.statusChanged },
   async ({ event, step }) => {
     const { tenantId, newStatus, companyName, leadId, changedById } =
       event.data;
@@ -155,12 +156,12 @@ const handleLeadInactivityAlert = inngest.createFunction(
     name: "Alerta de inactividad de Lead",
     cancelOn: [
       {
-        event: "lead/status.changed",
+        event: InngestEvents.lead.statusChanged,
         match: "data.leadId",
       },
     ],
   },
-  { event: "lead/status.changed" },
+  { event: InngestEvents.lead.statusChanged },
   async ({ event, step }) => {
     const { tenantId, newStatus, companyName, leadId, changedById } =
       event.data;
@@ -278,12 +279,12 @@ const handleVacancyPrePlacementEntryReminder = inngest.createFunction(
     name: "Recordatorio de fecha de ingreso en Pre-Placement",
     cancelOn: [
       {
-        event: "vacancy/pre-placement.entered",
+        event: InngestEvents.vacancy.prePlacementEntered,
         match: "data.vacancyId",
       },
     ],
   },
-  { event: "vacancy/pre-placement.entered" },
+  { event: InngestEvents.vacancy.prePlacementEntered },
   async ({ event, step }) => {
     const { vacancyId, tenantId, recruiterId, vacancyPosition, entryDate } =
       event.data;
@@ -377,7 +378,7 @@ const handleVacancyPlacementCongratsEmail = inngest.createFunction(
     id: "handle-vacancy-placement-congrats-email",
     name: "Email de felicitaciones por placement",
   },
-  { event: "vacancy/placement.congrats-email" },
+  { event: InngestEvents.vacancy.placementCongratsEmail },
   async ({ event, step }) => {
     const { vacancyId, tenantId, vacancyPosition, candidateName, candidateEmail } =
       event.data;
@@ -442,7 +443,7 @@ const handleSendStandaloneEmail = inngest.createFunction(
     id: "handle-send-standalone-email",
     name: "Cola de emails standalone",
   },
-  { event: "email/send" },
+  { event: InngestEvents.email.send },
   async ({ event, step }) => {
     const payload = event.data;
 

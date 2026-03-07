@@ -5,6 +5,7 @@ import {
   Settings,
   Wallet,
 } from "@hugeicons/core-free-icons";
+import { Routes } from "@core/shared/constants/routes";
 
 /**
  * Configuración de enlaces del sidebar
@@ -26,11 +27,11 @@ export const sidebarLinks = {
       items: [
         {
           title: "Usuarios",
-          url: "/admin/usuarios",
+          url: Routes.admin.usuarios,
         },
         {
           title: "Roles y Permisos",
-          url: "/admin/roles-permisos",
+          url: Routes.admin.rolesPermisos,
         },
       ],
     },
@@ -60,7 +61,7 @@ export const sidebarLinks = {
       items: [
         {
           title: "Vacantes",
-          url: "/reclutamiento/vacantes",
+          url: Routes.reclutamiento.vacantes,
         },
         {
           title: "Kanban Board",
@@ -79,11 +80,11 @@ export const sidebarLinks = {
       items: [
         {
           title: "Leads",
-          url: "/generacion-de-leads/leads",
+          url: Routes.leads.list,
         },
         {
           title: "Kanban Board",
-          url: "/generacion-de-leads/kanban",
+          url: Routes.leads.kanban,
         },
         {
           title: "Reportes",

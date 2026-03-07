@@ -4,6 +4,7 @@ import type { IClientRepository } from "@features/Finanzas/Clientes/server/domai
 import { Lead } from "../../domain/entities/Lead";
 import type { LeadStatusType } from "../../domain/value-objects/LeadStatus";
 import { inngest } from "@core/shared/inngest/inngest";
+import { InngestEvents } from "@core/shared/constants/inngest-events";
 import prisma from "@lib/prisma";
 
 export interface UpdateLeadStatusInput {
@@ -188,7 +189,7 @@ export class UpdateLeadStatusUseCase {
       // SIDE-EFFECTS (no-críticos): Emitir evento Inngest para notificaciones configurables
       inngest
         .send({
-          name: "lead/status.changed",
+          name: InngestEvents.lead.statusChanged,
           data: {
             leadId: input.leadId,
             tenantId: input.tenantId,

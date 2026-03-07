@@ -13,6 +13,29 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  // Guard against re-introducing magic error strings
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    ignores: [
+      "**/constants/error-messages.ts",
+      "**/route-permission-guard.ts",
+    ],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "Literal[value='No autenticado']",
+          message:
+            "Use ServerErrors.notAuthenticated from @core/shared/constants/error-messages instead of magic strings.",
+        },
+        {
+          selector: "Literal[value='No hay tenant activo']",
+          message:
+            "Use ServerErrors.noActiveTenant from @core/shared/constants/error-messages instead of magic strings.",
+        },
+      ],
+    },
+  },
 ]);
 
 export default eslintConfig;

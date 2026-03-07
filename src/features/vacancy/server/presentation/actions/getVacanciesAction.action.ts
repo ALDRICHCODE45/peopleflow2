@@ -7,6 +7,7 @@ import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/applicatio
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
 import type { GetVacanciesResult } from "@/features/vacancy/frontend/types/vacancy.types";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 export async function getVacanciesAction(): Promise<GetVacanciesResult> {
   try {
@@ -14,12 +15,12 @@ export async function getVacanciesAction(): Promise<GetVacanciesResult> {
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", vacancies: [] };
+      return { error: ServerErrors.notAuthenticated, vacancies: [] };
     }
 
     const tenantId = await getActiveTenantId();
     if (!tenantId) {
-      return { error: "No hay tenant activo", vacancies: [] };
+      return { error: ServerErrors.noActiveTenant, vacancies: [] };
     }
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({

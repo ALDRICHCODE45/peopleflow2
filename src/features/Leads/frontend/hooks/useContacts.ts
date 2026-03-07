@@ -3,6 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { showToast } from "@/core/shared/components/ShowToast";
 import type { ContactFormData, Contact } from "../types";
+import { leadsQueryKeys } from "@core/shared/constants/query-keys";
 import {
   addContactToLeadAction,
   updateContactAction,
@@ -15,7 +16,7 @@ import {
  */
 export function useContactsByLead(leadId: string | null) {
   return useQuery({
-    queryKey: ["contacts", "by-lead", leadId],
+    queryKey: leadId ? leadsQueryKeys.contacts(leadId) : ["contacts", "by-lead", "no-id"],
     queryFn: async (): Promise<Contact[]> => {
       if (!leadId) return [];
       const result = await getContactsByLeadAction(leadId);
@@ -51,10 +52,10 @@ export function useAddContact() {
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["contacts", "by-lead", variables.leadId],
+        queryKey: leadsQueryKeys.contacts(variables.leadId),
       });
       queryClient.invalidateQueries({
-        queryKey: ["leads", "detail", variables.leadId],
+        queryKey: leadsQueryKeys.detail(variables.leadId),
       });
       showToast({
         type: "success",
@@ -96,10 +97,10 @@ export function useUpdateContact() {
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["contacts", "by-lead", variables.leadId],
+        queryKey: leadsQueryKeys.contacts(variables.leadId),
       });
       queryClient.invalidateQueries({
-        queryKey: ["leads", "detail", variables.leadId],
+        queryKey: leadsQueryKeys.detail(variables.leadId),
       });
       showToast({
         type: "success",
@@ -139,10 +140,10 @@ export function useDeleteContact() {
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["contacts", "by-lead", variables.leadId],
+        queryKey: leadsQueryKeys.contacts(variables.leadId),
       });
       queryClient.invalidateQueries({
-        queryKey: ["leads", "detail", variables.leadId],
+        queryKey: leadsQueryKeys.detail(variables.leadId),
       });
       showToast({
         type: "success",

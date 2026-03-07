@@ -11,6 +11,7 @@ import type { PermissionsByModule } from "../types";
 import { getRolesQueryKey } from "@/features/Administracion/roles/frontend/hooks/useRoles";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { showToast } from "@/core/shared/components/ShowToast";
+import { rolesQueryKeys } from "@core/shared/constants/query-keys";
 
 // Query Key Factories - Incluyen tenantId para evitar cache stale entre tenants
 export const getAllPermissionsQueryKey = (tenantId: string) =>
@@ -98,7 +99,7 @@ export function useAssignPermissionsToRole() {
           queryKey: getRolesQueryKey(tenant.id),
         });
         await queryClient.invalidateQueries({
-          queryKey: ["roles", "paginated", tenant.id],
+          queryKey: rolesQueryKeys.all(tenant.id),
         });
       }
     },

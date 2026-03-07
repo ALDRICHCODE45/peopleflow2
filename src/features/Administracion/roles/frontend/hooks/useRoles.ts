@@ -10,6 +10,7 @@ import {
 import type { RoleWithStats } from "../types";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { showToast } from "@/core/shared/components/ShowToast";
+import { rolesQueryKeys } from "@core/shared/constants/query-keys";
 
 // Query Key Factory - Incluye tenantId para evitar cache stale entre tenants
 export const getRolesQueryKey = (tenantId: string) =>
@@ -62,7 +63,7 @@ export function useCreateRole() {
           queryKey: getRolesQueryKey(tenant.id),
         });
         await queryClient.invalidateQueries({
-          queryKey: ["roles", "paginated", tenant.id],
+          queryKey: rolesQueryKeys.all(tenant.id),
         });
       }
     },
@@ -102,7 +103,7 @@ export function useUpdateRole() {
           queryKey: getRolesQueryKey(tenant.id),
         });
         await queryClient.invalidateQueries({
-          queryKey: ["roles", "paginated", tenant.id],
+          queryKey: rolesQueryKeys.all(tenant.id),
         });
       }
     },
@@ -142,7 +143,7 @@ export function useDeleteRole() {
           queryKey: getRolesQueryKey(tenant.id),
         });
         await queryClient.invalidateQueries({
-          queryKey: ["roles", "paginated", tenant.id],
+          queryKey: rolesQueryKeys.all(tenant.id),
         });
       }
     },

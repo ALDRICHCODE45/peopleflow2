@@ -22,6 +22,7 @@ import type {
   GetLeadOriginsResult,
 } from "../../../frontend/types";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 /**
  * Obtiene todos los sectores activos
@@ -32,13 +33,13 @@ export async function getSectorsAction(): Promise<GetSectorsResult> {
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", sectors: [] };
+      return { error: ServerErrors.notAuthenticated, sectors: [] };
     }
 
     const tenantId = await getActiveTenantId();
 
     if (!tenantId) {
-      return { error: "No hay tenant activo", sectors: [] };
+      return { error: ServerErrors.noActiveTenant, sectors: [] };
     }
 
     const useCase = new GetSectorsUseCase(prismaSectorRepository);
@@ -69,7 +70,7 @@ export async function getSubsectorsBySectorAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", subsectors: [] };
+      return { error: ServerErrors.notAuthenticated, subsectors: [] };
     }
 
     const useCase = new GetSubsectorsBySectorUseCase(prismaSubsectorRepository);
@@ -98,13 +99,13 @@ export async function getLeadOriginsAction(): Promise<GetLeadOriginsResult> {
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", origins: [] };
+      return { error: ServerErrors.notAuthenticated, origins: [] };
     }
 
     const tenantId = await getActiveTenantId();
 
     if (!tenantId) {
-      return { error: "No hay tenant activo", origins: [] };
+      return { error: ServerErrors.noActiveTenant, origins: [] };
     }
 
     const useCase = new GetLeadOriginsUseCase(prismaLeadOriginRepository);

@@ -6,6 +6,7 @@ import prisma from "@lib/prisma";
 import { getActiveTenantId } from "@features/vacancy/server/presentation/helpers/getActiveTenant.helper";
 import { storageAdapter } from "@core/storage/StorageModule";
 import { AttachableType, AttachmentSubType } from "../../generated/prisma/client";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 export interface UploadFileActionInput {
   formData: FormData;
@@ -35,13 +36,13 @@ export async function uploadFileAction(
     // 1. Auth check
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     // 2. Tenant check
     const tenantId = await getActiveTenantId();
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     // 3. Extract file from FormData

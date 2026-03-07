@@ -12,6 +12,7 @@ import {
   SortingParam,
 } from "@/core/shared/types/pagination.types";
 import type { TenantUser } from "@/features/Administracion/usuarios/frontend/types";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 /** Parámetros de entrada para la acción paginada */
 export interface GetPaginatedUsersParams {
@@ -35,7 +36,7 @@ export async function getPaginatedUsersAction(
 
     if (!session?.user) {
       return {
-        error: "No autenticado",
+        error: ServerErrors.notAuthenticated,
         data: [],
         pagination: {
           pageIndex: 0,
@@ -50,7 +51,7 @@ export async function getPaginatedUsersAction(
     const tenantResult = await getCurrentTenantAction();
     if (tenantResult.error || !tenantResult.tenant) {
       return {
-        error: "No hay tenant activo",
+        error: ServerErrors.noActiveTenant,
         data: [],
         pagination: {
           pageIndex: 0,

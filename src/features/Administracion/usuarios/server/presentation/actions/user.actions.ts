@@ -4,7 +4,8 @@ import { auth } from "@lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import prisma from "@lib/prisma";
-import { HIDDEN_ADMIN_ROLE_NAME } from "@/core/shared/constants/permissions";
+import { Routes } from "@core/shared/constants/routes";
+import { HIDDEN_ADMIN_ROLE_NAME, PermissionActions } from "@/core/shared/constants/permissions";
 
 // Repositorios
 import { prismaUserRoleRepository } from "@/features/auth-rbac/server/infrastructure/repositories/PrismaUserRoleRepository";
@@ -29,6 +30,7 @@ import { getCurrentTenantAction } from "@/features/tenants/server/presentation/a
 import { SendNotificationUseCase } from "@/features/Notifications/server/application/use-cases/SendNotificationUseCase";
 import { prismaNotificationRepository } from "@/features/Notifications/server/infrastructure/repositories/PrismaNotificationRepository";
 import { emailProvider } from "@/features/Notifications/server/infrastructure/providers/EmailProvider";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 // Types
 export interface TenantUser {
@@ -118,13 +120,13 @@ export async function getTenantUsersAction(): Promise<GetTenantUsersResult> {
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", users: [] };
+      return { error: ServerErrors.notAuthenticated, users: [] };
     }
 
     // Obtener tenant activo
     const tenantResult = await getCurrentTenantAction();
     if (tenantResult.error || !tenantResult.tenant) {
-      return { error: "No hay tenant activo", users: [] };
+      return { error: ServerErrors.noActiveTenant, users: [] };
     }
 
     const useCase = new GetTenantUsersUseCase(prismaUserRoleRepository);
@@ -157,7 +159,7 @@ export const getUserById = async (data: {
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", success: false };
+      return { error: ServerErrors.notAuthenticated, success: false };
     }
 
     const useCase = new GetUserByIdUseCase(prismaUserRoleRepository);
@@ -196,7 +198,7 @@ export async function createUserAction(data: {
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     // Validar avatar si se proporciona
@@ -215,7 +217,7 @@ export async function createUserAction(data: {
 
     if (!isSuperAdmin) {
       if (tenantResult.error || !tenantResult.tenant) {
-        return { error: "No hay tenant activo" };
+        return { error: ServerErrors.noActiveTenant };
       }
 
       // Verificar permiso de crear usuarios
@@ -225,8 +227,8 @@ export async function createUserAction(data: {
       );
 
       const canCreate =
-        creatorPermissions.includes("usuarios:crear") ||
-        creatorPermissions.includes("usuarios:gestionar");
+        creatorPermissions.includes(PermissionActions.usuarios.crear) ||
+        creatorPermissions.includes(PermissionActions.usuarios.gestionar);
 
       if (!canCreate) {
         return { error: "No tienes permisos para crear usuarios" };
@@ -309,7 +311,7 @@ export async function createUserAction(data: {
       }
     }
 
-    revalidatePath("/admin/usuarios");
+    revalidatePath(Routes.admin.usuarios);
     return {
       error: null,
       user: createResult.user
@@ -334,7 +336,7 @@ export async function updateUserAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     console.log("Antes de la validacion en la accion", data.avatar);
@@ -349,7 +351,7 @@ export async function updateUserAction(
     // Obtener tenant activo
     const tenantResult = await getCurrentTenantAction();
     if (tenantResult.error || !tenantResult.tenant) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     const useCase = new UpdateUserUseCase(prismaUserRoleRepository);
@@ -366,7 +368,7 @@ export async function updateUserAction(
       return { error: result.error || "Error al actualizar usuario" };
     }
 
-    revalidatePath("/admin/usuarios");
+    revalidatePath(Routes.admin.usuarios);
     return { error: null, user: result.user };
   } catch (error) {
     console.error("Error in updateUserAction:", error);
@@ -385,13 +387,13 @@ export async function deleteUserFromTenantAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", success: false };
+      return { error: ServerErrors.notAuthenticated, success: false };
     }
 
     // Obtener tenant activo
     const tenantResult = await getCurrentTenantAction();
     if (tenantResult.error || !tenantResult.tenant) {
-      return { error: "No hay tenant activo", success: false };
+      return { error: ServerErrors.noActiveTenant, success: false };
     }
 
     const useCase = new DeleteUserFromTenantUseCase(prismaUserRoleRepository);
@@ -408,7 +410,7 @@ export async function deleteUserFromTenantAction(
       };
     }
 
-    revalidatePath("/admin/usuarios");
+    revalidatePath(Routes.admin.usuarios);
     return { error: null, success: true };
   } catch (error) {
     console.error("Error in deleteUserFromTenantAction:", error);
@@ -428,13 +430,13 @@ export async function updateUserRolesAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", success: false };
+      return { error: ServerErrors.notAuthenticated, success: false };
     }
 
     // Obtener tenant activo
     const tenantResult = await getCurrentTenantAction();
     if (tenantResult.error || !tenantResult.tenant) {
-      return { error: "No hay tenant activo", success: false };
+      return { error: ServerErrors.noActiveTenant, success: false };
     }
 
     const useCase = new UpdateUserRolesUseCase(
@@ -455,7 +457,7 @@ export async function updateUserRolesAction(
       };
     }
 
-    revalidatePath("/admin/usuarios");
+    revalidatePath(Routes.admin.usuarios);
     return {
       error: null,
       success: true,
@@ -482,7 +484,7 @@ export async function getAvailableRolesAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", roles: [] };
+      return { error: ServerErrors.notAuthenticated, roles: [] };
     }
 
     // SEGURIDAD: Verificar que el usuario tenga acceso al tenant solicitado
@@ -536,7 +538,7 @@ export async function getInvitableTenantsAction(): Promise<GetInvitableTenantsRe
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", tenants: [] };
+      return { error: ServerErrors.notAuthenticated, tenants: [] };
     }
 
     const isSuperAdmin = await prismaUserRoleRepository.isSuperAdmin(
@@ -569,8 +571,8 @@ export async function getInvitableTenantsAction(): Promise<GetInvitableTenantsRe
       );
 
       const canInvite =
-        permissions.includes("usuarios:invitar-tenant") ||
-        permissions.includes("usuarios:gestionar");
+        permissions.includes(PermissionActions.usuarios.invitarTenant) ||
+        permissions.includes(PermissionActions.usuarios.gestionar);
 
       if (canInvite) {
         tenantsWithPermission.push({
@@ -608,7 +610,7 @@ export async function inviteUserToTenantAction(data: {
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", success: false };
+      return { error: ServerErrors.notAuthenticated, success: false };
     }
 
     // SEGURIDAD: Prevenir auto-invitacion
@@ -634,8 +636,8 @@ export async function inviteUserToTenantAction(data: {
         );
 
       const canInvite =
-        permissionsInTargetTenant.includes("usuarios:invitar-tenant") ||
-        permissionsInTargetTenant.includes("usuarios:gestionar");
+        permissionsInTargetTenant.includes(PermissionActions.usuarios.invitarTenant) ||
+        permissionsInTargetTenant.includes(PermissionActions.usuarios.gestionar);
 
       if (!canInvite) {
         return {
@@ -675,7 +677,7 @@ export async function inviteUserToTenantAction(data: {
       };
     }
 
-    revalidatePath("/admin/usuarios");
+    revalidatePath(Routes.admin.usuarios);
     return { error: null, success: true };
   } catch (error) {
     console.error("Error in inviteUserToTenantAction:", error);

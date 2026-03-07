@@ -3,6 +3,7 @@
 import { auth } from "@lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { Routes } from "@core/shared/constants/routes";
 
 // Repositorios
 import { prismaUserRoleRepository } from "@/features/auth-rbac/server/infrastructure/repositories/PrismaUserRoleRepository";
@@ -17,6 +18,7 @@ import {
   UpdateRoleUseCase,
   DeleteRoleUseCase,
 } from "../../application/use-cases";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 // Types
 export interface RoleWithStats {
@@ -57,13 +59,13 @@ export async function getRolesWithStatsAction(): Promise<GetRolesWithStatsResult
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", roles: [] };
+      return { error: ServerErrors.notAuthenticated, roles: [] };
     }
 
     // Obtener tenant activo
     const tenantResult = await getCurrentTenantAction();
     if (tenantResult.error || !tenantResult.tenant) {
-      return { error: "No hay tenant activo", roles: [] };
+      return { error: ServerErrors.noActiveTenant, roles: [] };
     }
 
     const useCase = new GetRolesWithStatsUseCase(prismaUserRoleRepository);
@@ -93,13 +95,13 @@ export async function createRoleAction(name: string): Promise<CreateRoleResult> 
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     // Obtener tenant activo
     const tenantResult = await getCurrentTenantAction();
     if (tenantResult.error || !tenantResult.tenant) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     const useCase = new CreateRoleUseCase(prismaUserRoleRepository);
@@ -113,7 +115,7 @@ export async function createRoleAction(name: string): Promise<CreateRoleResult> 
       return { error: result.error || "Error al crear rol" };
     }
 
-    revalidatePath("/admin/roles-permisos");
+    revalidatePath(Routes.admin.rolesPermisos);
     return { error: null, role: result.role };
   } catch (error) {
     console.error("Error in createRoleAction:", error);
@@ -133,7 +135,7 @@ export async function updateRoleAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const useCase = new UpdateRoleUseCase(prismaUserRoleRepository);
@@ -147,7 +149,7 @@ export async function updateRoleAction(
       return { error: result.error || "Error al actualizar rol" };
     }
 
-    revalidatePath("/admin/roles-permisos");
+    revalidatePath(Routes.admin.rolesPermisos);
     return { error: null, role: result.role };
   } catch (error) {
     console.error("Error in updateRoleAction:", error);
@@ -165,13 +167,13 @@ export async function deleteRoleAction(roleId: string): Promise<DeleteRoleResult
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", success: false };
+      return { error: ServerErrors.notAuthenticated, success: false };
     }
 
     // Obtener tenant activo
     const tenantResult = await getCurrentTenantAction();
     if (tenantResult.error || !tenantResult.tenant) {
-      return { error: "No hay tenant activo", success: false };
+      return { error: ServerErrors.noActiveTenant, success: false };
     }
 
     const useCase = new DeleteRoleUseCase(prismaUserRoleRepository);
@@ -185,7 +187,7 @@ export async function deleteRoleAction(roleId: string): Promise<DeleteRoleResult
       return { error: result.error || "Error al eliminar rol", success: false };
     }
 
-    revalidatePath("/admin/roles-permisos");
+    revalidatePath(Routes.admin.rolesPermisos);
     return { error: null, success: true };
   } catch (error) {
     console.error("Error in deleteRoleAction:", error);

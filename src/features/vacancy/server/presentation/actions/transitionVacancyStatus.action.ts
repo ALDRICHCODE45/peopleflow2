@@ -8,6 +8,7 @@ import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/applicatio
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { inngest } from "@core/shared/inngest/inngest";
 import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
+import { Routes } from "@core/shared/constants/routes";
 import { prismaVacancyStatusHistoryRepository } from "../../infrastructure/repositories/PrismaVacancyStatusHistoryRepository";
 import { prismaVacancyCandidateRepository } from "../../infrastructure/repositories/PrismaVacancyCandidateRepository";
 import { prismaVacancyAttachmentRepository } from "../../infrastructure/repositories/PrismaVacancyAttachmentRepository";
@@ -16,6 +17,7 @@ import type {
   VacancyStatusType,
   TransitionVacancyStatusResult,
 } from "../../../frontend/types/vacancy.types";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 
 export interface TransitionVacancyStatusInput {
   vacancyId: string;
@@ -36,12 +38,12 @@ export async function transitionVacancyStatusAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado" };
+      return { error: ServerErrors.notAuthenticated };
     }
 
     const tenantId = await getActiveTenantId();
     if (!tenantId) {
-      return { error: "No hay tenant activo" };
+      return { error: ServerErrors.noActiveTenant };
     }
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({
@@ -129,7 +131,7 @@ export async function transitionVacancyStatusAction(
       });
     }
 
-    revalidatePath("/reclutamiento/vacantes");
+    revalidatePath(Routes.reclutamiento.vacantes);
     return { error: null, vacancy: result.vacancy };
   } catch (error) {
     console.error("Error in transitionVacancyStatusAction:", error);

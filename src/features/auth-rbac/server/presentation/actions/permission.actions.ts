@@ -16,6 +16,9 @@ import { hasPermission } from "@/core/shared/helpers/permission-checker";
 
 // Types
 import type { GetUserPermissionsResult } from "../../../frontend/types";
+import { ServerErrors } from "@core/shared/constants/error-messages";
+import { Routes } from "@core/shared/constants/routes";
+import { SUPER_ADMIN_PERMISSION_NAME } from "@core/shared/constants/permissions";
 
 /**
  * Server Actions para verificar permisos
@@ -49,7 +52,7 @@ export async function checkPermissionAction(
     }
 
     // Verificar si tiene super:admin (acceso total)
-    if (result.permissions.includes("super:admin")) {
+    if (result.permissions.includes(SUPER_ADMIN_PERMISSION_NAME)) {
       return true;
     }
 
@@ -85,7 +88,7 @@ export async function getUserPermissionsAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { error: "No autenticado", permissions: [] };
+      return { error: ServerErrors.notAuthenticated, permissions: [] };
     }
 
     // Inyectar el repositorio al caso de uso
@@ -121,7 +124,7 @@ export async function getDefaultRouteForTenantAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { route: "/sign-in", error: "No autenticado" };
+      return { route: Routes.signIn, error: ServerErrors.notAuthenticated };
     }
 
     // Obtener permisos del usuario en el tenant especificado
@@ -132,7 +135,7 @@ export async function getDefaultRouteForTenantAction(
     });
 
     if (!result.success || result.permissions.length === 0) {
-      return { route: "/access-denied", error: result.error || null };
+      return { route: Routes.accessDenied, error: result.error || null };
     }
 
     // Calcular la ruta por defecto basada en los permisos
@@ -141,7 +144,7 @@ export async function getDefaultRouteForTenantAction(
     return { route: defaultRoute, error: null };
   } catch (error) {
     console.error("Error getting default route for tenant:", error);
-    return { route: "/access-denied", error: "Error al obtener ruta" };
+    return { route: Routes.accessDenied, error: "Error al obtener ruta" };
   }
 }
 
@@ -158,7 +161,7 @@ export async function canAccessRouteAction(
     const session = await auth.api.getSession({ headers: headersList });
 
     if (!session?.user) {
-      return { canAccess: false, error: "No autenticado" };
+      return { canAccess: false, error: ServerErrors.notAuthenticated };
     }
 
     // Obtener permisos del usuario en el tenant
@@ -173,7 +176,7 @@ export async function canAccessRouteAction(
     }
 
     // Super admin tiene acceso a todo
-    if (result.permissions.includes("super:admin")) {
+    if (result.permissions.includes(SUPER_ADMIN_PERMISSION_NAME)) {
       return { canAccess: true, error: null };
     }
 

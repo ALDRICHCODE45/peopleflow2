@@ -3,6 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { showToast } from "@/core/shared/components/ShowToast";
 import type { InteractionFormData, Interaction } from "../types";
+import { leadsQueryKeys } from "@core/shared/constants/query-keys";
 import {
   addInteractionAction,
   getInteractionsByLeadAction,
@@ -17,7 +18,7 @@ import type { InteractionType } from "../types";
  */
 export function useInteractionsByLead(leadId: string | null) {
   return useQuery({
-    queryKey: ["interactions", "by-lead", leadId],
+    queryKey: leadId ? leadsQueryKeys.interactionsByLead(leadId) : ["interactions", "by-lead", "no-id"],
     queryFn: async (): Promise<Interaction[]> => {
       if (!leadId) return [];
       const result = await getInteractionsByLeadAction(leadId);
@@ -36,7 +37,7 @@ export function useInteractionsByLead(leadId: string | null) {
  */
 export function useInteractionsByContact(contactId: string | null) {
   return useQuery({
-    queryKey: ["interactions", "by-contact", contactId],
+    queryKey: contactId ? leadsQueryKeys.interactionsByContact(contactId) : ["interactions", "by-contact", "no-id"],
     queryFn: async (): Promise<Interaction[]> => {
       if (!contactId) return [];
       const result = await getInteractionsByContactAction(contactId);
@@ -66,7 +67,7 @@ export function useAddInteraction() {
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["interactions", "by-contact", variables.contactId],
+        queryKey: leadsQueryKeys.interactionsByContact(variables.contactId),
       });
       showToast({
         type: "success",
@@ -113,7 +114,7 @@ export function useUpdateInteraction() {
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["interactions", "by-contact", variables.contactId],
+        queryKey: leadsQueryKeys.interactionsByContact(variables.contactId),
       });
       showToast({
         type: "success",
@@ -153,7 +154,7 @@ export function useDeleteInteraction() {
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["interactions", "by-contact", variables.contactId],
+        queryKey: leadsQueryKeys.interactionsByContact(variables.contactId),
       });
       showToast({
         type: "success",

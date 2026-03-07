@@ -6,6 +6,7 @@ import { showToast } from "@/core/shared/components/ShowToast";
 import { userLoginSchema } from "../schemas/userLoginSchema";
 import { authClient } from "@lib/auth-client";
 import { setOTPVerificationEmail } from "./useVerifyOTPForm";
+import { Routes } from "@core/shared/constants/routes";
 
 const isDev = process.env.NODE_ENV !== "production";
 
@@ -76,7 +77,7 @@ export function useSignInForm(getCaptchaToken: () => string | null) {
         description: "Se ha enviado un codigo de verificacion a tu correo electronico.",
       });
 
-      router.push("/verify-otp");
+      router.push(Routes.verifyOtp);
     },
   });
 
