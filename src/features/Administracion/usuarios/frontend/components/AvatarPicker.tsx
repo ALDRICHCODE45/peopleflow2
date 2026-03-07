@@ -20,7 +20,7 @@ import { Camera01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
 import { useModalState } from "@/core/shared/hooks";
 import { cn } from "@/core/lib/utils";
 
-const avatarOptions = Array.from({ length: 28 }, (_, i) => ({
+const avatarOptions = Array.from({ length: 34 }, (_, i) => ({
   id: String(i + 1),
   label: `Avatar ${i + 1}`,
   image: `/avatars/avatar${i + 1}.webp`,

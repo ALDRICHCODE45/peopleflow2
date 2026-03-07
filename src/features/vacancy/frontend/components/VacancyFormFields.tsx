@@ -118,9 +118,7 @@ export function VacancyFormFields({
                     placeholder="Ej. Desarrollador Senior"
                     aria-invalid={isEmpty}
                   />
-                  {isEmpty && (
-                    <FieldError>La posición es requerida</FieldError>
-                  )}
+                  {isEmpty && <FieldError>La posición es requerida</FieldError>}
                 </Field>
               );
             }}
@@ -138,13 +136,15 @@ export function VacancyFormFields({
           <Field>
             <FieldLabel>Tipo de Vacante</FieldLabel>
             <div className="flex items-center h-9 px-3 border rounded-md bg-muted/50">
-              <form.Subscribe selector={(s: { values: { clientId: string } }) => s.values.clientId}>
+              <form.Subscribe
+                selector={(s: { values: { clientId: string } }) =>
+                  s.values.clientId
+                }
+              >
                 {(clientId: string) =>
                   clientId ? (
                     <Badge
-                      variant={
-                        saleType === "RECOMPRA" ? "default" : "outline"
-                      }
+                      variant={saleType === "RECOMPRA" ? "default" : "outline"}
                     >
                       {saleType}
                     </Badge>
@@ -190,8 +190,7 @@ export function VacancyFormFields({
           <form.Field name="recruiterId">
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {(field: any) => {
-              const isEmpty =
-                field.state.meta.isTouched && !field.state.value;
+              const isEmpty = field.state.meta.isTouched && !field.state.value;
               return (
                 <Field data-invalid={isEmpty}>
                   <FieldLabel htmlFor={field.name}>Reclutador *</FieldLabel>
@@ -205,9 +204,7 @@ export function VacancyFormFields({
                       <>
                         <Avatar className="size-6">
                           <AvatarImage src={opt.avatar ?? ""} />
-                          <AvatarFallback className="text-xs">
-                            U
-                          </AvatarFallback>
+                          <AvatarFallback className="text-xs">U</AvatarFallback>
                         </Avatar>
                         <span className="truncate">{opt.label}</span>
                       </>
@@ -216,9 +213,7 @@ export function VacancyFormFields({
                       <span className="flex items-center gap-2 truncate">
                         <Avatar className="size-6">
                           <AvatarImage src={opt.avatar ?? ""} />
-                          <AvatarFallback className="text-xs">
-                            U
-                          </AvatarFallback>
+                          <AvatarFallback className="text-xs">U</AvatarFallback>
                         </Avatar>
                         {opt.label}
                       </span>
@@ -236,8 +231,7 @@ export function VacancyFormFields({
           <form.Field name="clientId">
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {(field: any) => {
-              const isEmpty =
-                field.state.meta.isTouched && !field.state.value;
+              const isEmpty = field.state.meta.isTouched && !field.state.value;
               return (
                 <Field data-invalid={isEmpty}>
                   <FieldLabel htmlFor={field.name}>Cliente *</FieldLabel>
@@ -248,9 +242,7 @@ export function VacancyFormFields({
                     placeholder="Selecciona el cliente"
                     searchPlaceholder="Buscar cliente..."
                   />
-                  {isEmpty && (
-                    <FieldError>El cliente es requerido</FieldError>
-                  )}
+                  {isEmpty && <FieldError>El cliente es requerido</FieldError>}
                 </Field>
               );
             }}
@@ -269,28 +261,28 @@ export function VacancyFormFields({
 
           {/* Notificación al reclutador */}
           {showNotification && (
-          <div className="flex items-start gap-3 rounded-lg border p-4">
-            <Checkbox
-              id="send-notification"
-              checked={sendNotification}
-              onCheckedChange={(checked) =>
-                setSendNotification?.(checked === true)
-              }
-              className="mt-0.5"
-            />
-            <div className="space-y-1">
-              <label
-                htmlFor="send-notification"
-                className="text-sm font-medium cursor-pointer leading-none"
-              >
-                Enviar notificación al reclutador
-              </label>
-              <p className="text-xs text-muted-foreground">
-                Se enviará un email al reclutador informándole de la nueva
-                vacante asignada
-              </p>
+            <div className="flex items-start gap-3 rounded-lg border p-4">
+              <Checkbox
+                id="send-notification"
+                checked={sendNotification}
+                onCheckedChange={(checked) =>
+                  setSendNotification?.(checked === true)
+                }
+                className="mt-0.5"
+              />
+              <div className="space-y-1">
+                <label
+                  htmlFor="send-notification"
+                  className="text-sm font-medium cursor-pointer leading-none"
+                >
+                  Enviar notificación al reclutador
+                </label>
+                <p className="text-xs text-muted-foreground">
+                  Se enviará un email al reclutador informándole de la nueva
+                  vacante asignada
+                </p>
+              </div>
             </div>
-          </div>
           )}
         </TabsContent>
 
@@ -307,7 +299,7 @@ export function VacancyFormFields({
         open={detailsModalOpen}
         onOpenChange={(open) => !open && closeDetailsModal()}
       >
-        <DialogContent className="min-w-2xl w-full">
+        <DialogContent className="md:min-w-2xl w-full">
           <DialogHeader>
             <DialogTitle>Detalles de la vacante</DialogTitle>
             <DialogDescription>
