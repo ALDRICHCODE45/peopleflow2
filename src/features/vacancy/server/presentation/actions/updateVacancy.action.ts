@@ -12,8 +12,10 @@ import { Routes } from "@core/shared/constants/routes";
 import type {
   UpdateVacancyFormData,
   UpdateVacancyResult,
+  VacancyServiceType,
 } from "../../../frontend/types/vacancy.types";
 import { ServerErrors } from "@core/shared/constants/error-messages";
+import { TargetDeliveryDate } from "../../domain/value-objects/TargetDeliveryDate";
 
 export async function updateVacancyAction(
   id: string,
@@ -45,11 +47,60 @@ export async function updateVacancyAction(
       return { error: "Sin permisos para editar vacantes" };
     }
 
+    // Determine assignedAt based on permission
+    let assignedAt: Date | null | undefined = undefined;
+    if (data.assignedAt !== undefined) {
+      const canModifyAssignedAt = data.assignedAt
+        ? await new CheckAnyPermissonUseCase().execute({
+            userId: session.user.id,
+            permissions: [
+              PermissionActions.vacantes.modificarFechaAsignacion,
+              PermissionActions.vacantes.gestionar,
+            ],
+            tenantId,
+          })
+        : false;
+
+      assignedAt =
+        canModifyAssignedAt && data.assignedAt
+          ? new Date(data.assignedAt)
+          : data.assignedAt === null
+            ? null
+            : undefined;
+    }
+
+    // Determine targetDeliveryDate based on permission
+    let targetDeliveryDate: Date | null | undefined = undefined;
+    if (data.targetDeliveryDate !== undefined) {
+      const canModifyTargetDate = data.targetDeliveryDate
+        ? await new CheckAnyPermissonUseCase().execute({
+            userId: session.user.id,
+            permissions: [
+              PermissionActions.vacantes.modificarFechaTentativaEntrega,
+              PermissionActions.vacantes.gestionar,
+            ],
+            tenantId,
+          })
+        : false;
+
+      if (canModifyTargetDate && data.targetDeliveryDate) {
+        targetDeliveryDate = TargetDeliveryDate.from(new Date(data.targetDeliveryDate)).value;
+      } else if (data.serviceType && assignedAt instanceof Date) {
+        targetDeliveryDate = TargetDeliveryDate.calculate(
+          assignedAt,
+          data.serviceType as VacancyServiceType,
+        ).value;
+      } else if (data.targetDeliveryDate === null) {
+        targetDeliveryDate = null;
+      }
+    }
+
     const useCase = new UpdateVacancyUseCase(prismaVacancyRepository);
     const result = await useCase.execute({
       id,
       tenantId,
       position: data.position,
+      salaryType: data.salaryType,
       salaryMin: data.salaryMin,
       salaryMax: data.salaryMax,
       salaryFixed: data.salaryFixed,
@@ -61,11 +112,9 @@ export async function updateVacancyAction(
       countryCode: data.countryCode,
       regionCode: data.regionCode,
       requiresPsychometry: data.requiresPsychometry,
-      targetDeliveryDate: data.targetDeliveryDate
-        ? new Date(data.targetDeliveryDate)
-        : data.targetDeliveryDate === null
-          ? null
-          : undefined,
+      serviceType: data.serviceType,
+      assignedAt,
+      targetDeliveryDate,
       entryDate: data.entryDate
         ? new Date(data.entryDate)
         : data.entryDate === null

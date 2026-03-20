@@ -1,6 +1,7 @@
 import type {
   VacancyStatusType,
   VacancySaleType,
+  VacancyServiceType,
   VacancyModality,
 } from "@features/vacancy/frontend/types/vacancy.types";
 import type { Vacancy } from "../entities/Vacancy";
@@ -10,6 +11,9 @@ export interface CreateVacancyData {
   recruiterId: string;
   clientId: string;
   saleType: VacancySaleType;
+  serviceType: VacancyServiceType;
+  assignedAt?: Date;
+  salaryType?: "FIXED" | "RANGE";
   salaryMin?: number | null;
   salaryMax?: number | null;
   salaryFixed?: number | null;
@@ -28,6 +32,9 @@ export interface CreateVacancyData {
 
 export interface UpdateVacancyData {
   position?: string;
+  serviceType?: VacancyServiceType;
+  assignedAt?: Date;
+  salaryType?: "FIXED" | "RANGE";
   salaryMin?: number | null;
   salaryMax?: number | null;
   salaryFixed?: number | null;
@@ -55,6 +62,7 @@ export interface UpdateVacancyData {
 export interface FindVacanciesFilters {
   statuses?: VacancyStatusType[];
   saleTypes?: VacancySaleType[];
+  serviceTypes?: VacancyServiceType[];
   modalities?: VacancyModality[];
   recruiterIds?: string[];
   clientIds?: string[];

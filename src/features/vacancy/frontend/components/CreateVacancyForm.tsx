@@ -7,17 +7,30 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { Delete02Icon, PlusSignIcon } from "@hugeicons/core-free-icons";
 import { useCreateVacancyForm } from "../hooks/useCreateVacancyForm";
 import { VacancyFormFields } from "./VacancyFormFields";
+import { usePermissions } from "@/core/shared/hooks/use-permissions";
+import { PermissionActions } from "@/core/shared/constants/permissions";
 
 interface CreateVacancyFormProps {
   onClose: () => void;
 }
 
 export function CreateVacancyForm({ onClose }: CreateVacancyFormProps) {
+  const { hasAnyPermission, isSuperAdmin } = usePermissions();
+
+  const canEditAssignedAt =
+    isSuperAdmin ||
+    hasAnyPermission([PermissionActions.vacantes.modificarFechaAsignacion]);
+
+  const canEditTargetDeliveryDate =
+    isSuperAdmin ||
+    hasAnyPermission([
+      PermissionActions.vacantes.modificarFechaTentativaEntrega,
+    ]);
+
   const {
     form,
     users,
     clients,
-    saleType,
     checklist,
     sendNotification,
     setSendNotification,
@@ -27,7 +40,7 @@ export function CreateVacancyForm({ onClose }: CreateVacancyFormProps) {
     addChecklistItem,
     updateChecklistItem,
     removeChecklistItem,
-  } = useCreateVacancyForm({ onClose });
+  } = useCreateVacancyForm({ onClose, canEditTargetDeliveryDate });
 
   const userOptions = useMemo(
     () =>
@@ -123,7 +136,8 @@ export function CreateVacancyForm({ onClose }: CreateVacancyFormProps) {
         form={form}
         userOptions={userOptions}
         clientOptions={clientOptions}
-        saleType={saleType}
+        canEditAssignedAt={canEditAssignedAt}
+        canEditTargetDeliveryDate={canEditTargetDeliveryDate}
         sendNotification={sendNotification}
         setSendNotification={setSendNotification}
         detailsModalOpen={detailsModal.isOpen}

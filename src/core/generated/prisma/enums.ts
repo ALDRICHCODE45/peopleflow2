@@ -96,6 +96,14 @@ export const VacancySaleType = {
 export type VacancySaleType = (typeof VacancySaleType)[keyof typeof VacancySaleType]
 
 
+export const VacancyServiceType = {
+  END_TO_END: 'END_TO_END',
+  SOURCING: 'SOURCING'
+} as const
+
+export type VacancyServiceType = (typeof VacancyServiceType)[keyof typeof VacancyServiceType]
+
+
 export const VacancyModality = {
   PRESENCIAL: 'PRESENCIAL',
   REMOTO: 'REMOTO',
@@ -103,6 +111,14 @@ export const VacancyModality = {
 } as const
 
 export type VacancyModality = (typeof VacancyModality)[keyof typeof VacancyModality]
+
+
+export const VacancySalaryType = {
+  FIXED: 'FIXED',
+  RANGE: 'RANGE'
+} as const
+
+export type VacancySalaryType = (typeof VacancySalaryType)[keyof typeof VacancySalaryType]
 
 
 export const CandidateStatus = {

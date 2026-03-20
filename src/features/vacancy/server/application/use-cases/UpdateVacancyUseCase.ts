@@ -1,4 +1,7 @@
-import type { VacancyModality } from "@features/vacancy/frontend/types/vacancy.types";
+import type {
+  VacancyModality,
+  VacancyServiceType,
+} from "@features/vacancy/frontend/types/vacancy.types";
 import type { Vacancy } from "../../domain/entities/Vacancy";
 import type {
   IVacancyRepository,
@@ -10,6 +13,7 @@ export interface UpdateVacancyInput {
   id: string;
   tenantId: string;
   position?: string;
+  salaryType?: "FIXED" | "RANGE";
   salaryMin?: number | null;
   salaryMax?: number | null;
   commissions?: string | null;
@@ -23,6 +27,8 @@ export interface UpdateVacancyInput {
   targetDeliveryDate?: Date | null;
   entryDate?: Date | null;
   salaryFixed?: number | null;
+  serviceType?: VacancyServiceType;
+  assignedAt?: Date | null;
 }
 
 export interface UpdateVacancyOutput {
@@ -72,16 +78,19 @@ export class UpdateVacancyUseCase {
 
       // 4. Validate salary fields if provided
       const hasSalaryFields =
+        input.salaryType !== undefined ||
         input.salaryMin !== undefined ||
         input.salaryMax !== undefined ||
         input.salaryFixed !== undefined;
 
       if (hasSalaryFields) {
+        const effectiveSalaryType = input.salaryType ?? existing.salaryType;
         try {
           SalaryRangeVO.create({
-            min: input.salaryMin !== undefined ? input.salaryMin : existing.salaryMin,
-            max: input.salaryMax !== undefined ? input.salaryMax : existing.salaryMax,
-            fixed: input.salaryFixed !== undefined ? input.salaryFixed : existing.salaryFixed,
+            salaryType: effectiveSalaryType,
+            min: effectiveSalaryType === "FIXED" ? undefined : (input.salaryMin !== undefined ? input.salaryMin : existing.salaryMin),
+            max: effectiveSalaryType === "FIXED" ? undefined : (input.salaryMax !== undefined ? input.salaryMax : existing.salaryMax),
+            fixed: effectiveSalaryType === "FIXED" ? (input.salaryFixed !== undefined ? input.salaryFixed : existing.salaryFixed) : undefined,
           });
         } catch (e) {
           return {
@@ -94,6 +103,7 @@ export class UpdateVacancyUseCase {
       // 5. Build updateData with only defined fields
       const updateData: UpdateVacancyData = {};
       if (input.position !== undefined) updateData.position = input.position.trim();
+      if (input.salaryType !== undefined) updateData.salaryType = input.salaryType;
       if (input.salaryMin !== undefined) updateData.salaryMin = input.salaryMin;
       if (input.salaryMax !== undefined) updateData.salaryMax = input.salaryMax;
       if (input.salaryFixed !== undefined) updateData.salaryFixed = input.salaryFixed;
@@ -107,6 +117,8 @@ export class UpdateVacancyUseCase {
       if (input.requiresPsychometry !== undefined) updateData.requiresPsychometry = input.requiresPsychometry;
       if (input.targetDeliveryDate !== undefined) updateData.targetDeliveryDate = input.targetDeliveryDate;
       if (input.entryDate !== undefined) updateData.entryDate = input.entryDate;
+      if (input.serviceType !== undefined) updateData.serviceType = input.serviceType;
+      if (input.assignedAt !== undefined) updateData.assignedAt = input.assignedAt ?? undefined;
 
       // 6. Update vacancy
       const vacancy = await this.vacancyRepo.update(

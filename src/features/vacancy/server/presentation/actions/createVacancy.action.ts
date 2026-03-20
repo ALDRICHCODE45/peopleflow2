@@ -14,8 +14,10 @@ import { InngestEvents } from "@core/shared/constants/inngest-events";
 import type {
   CreateVacancyFormData,
   CreateVacancyResult,
+  VacancyServiceType,
 } from "../../../frontend/types/vacancy.types";
 import { ServerErrors } from "@core/shared/constants/error-messages";
+import { TargetDeliveryDate } from "../../domain/value-objects/TargetDeliveryDate";
 
 export async function createVacancyAction(
   data: CreateVacancyFormData,
@@ -46,13 +48,51 @@ export async function createVacancyAction(
       return { error: "Sin permisos para crear vacantes" };
     }
 
+    // Determine assignedAt based on permission
+    const canModifyAssignedAt = data.assignedAt
+      ? await new CheckAnyPermissonUseCase().execute({
+          userId: session.user.id,
+          permissions: [
+            PermissionActions.vacantes.modificarFechaAsignacion,
+            PermissionActions.vacantes.gestionar,
+          ],
+          tenantId,
+        })
+      : false;
+
+    const assignedAt =
+      canModifyAssignedAt && data.assignedAt
+        ? new Date(data.assignedAt)
+        : new Date();
+
+    // Determine targetDeliveryDate based on permission
+    const canModifyTargetDate = data.targetDeliveryDate
+      ? await new CheckAnyPermissonUseCase().execute({
+          userId: session.user.id,
+          permissions: [
+            PermissionActions.vacantes.modificarFechaTentativaEntrega,
+            PermissionActions.vacantes.gestionar,
+          ],
+          tenantId,
+        })
+      : false;
+
+    const serviceType = data.serviceType ?? "END_TO_END";
+
+    const targetDeliveryDate =
+      canModifyTargetDate && data.targetDeliveryDate
+        ? TargetDeliveryDate.from(new Date(data.targetDeliveryDate)).value
+        : TargetDeliveryDate.calculate(assignedAt, serviceType as VacancyServiceType).value;
+
     const useCase = new CreateVacancyUseCase(prismaVacancyRepository);
     const result = await useCase.execute({
       position: data.position,
       recruiterId: data.recruiterId,
       clientId: data.clientId,
-      salaryMin: data.salaryMin ?? null,
-      salaryMax: data.salaryMax ?? null,
+      salaryType: data.salaryType ?? "RANGE",
+      salaryFixed: data.salaryType === "FIXED" ? (data.salaryFixed ?? null) : null,
+      salaryMin: data.salaryType === "FIXED" ? null : (data.salaryMin ?? null),
+      salaryMax: data.salaryType === "FIXED" ? null : (data.salaryMax ?? null),
       commissions: data.commissions ?? null,
       benefits: data.benefits ?? null,
       tools: data.tools ?? null,
@@ -61,9 +101,9 @@ export async function createVacancyAction(
       countryCode: data.countryCode ?? null,
       regionCode: data.regionCode ?? null,
       requiresPsychometry: data.requiresPsychometry,
-      targetDeliveryDate: data.targetDeliveryDate
-        ? new Date(data.targetDeliveryDate)
-        : null,
+      serviceType,
+      assignedAt,
+      targetDeliveryDate,
       tenantId,
       createdById: session.user.id,
     });

@@ -257,6 +257,13 @@ export type EnumVacancySaleTypeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumVacancySaleTypeFilter<$PrismaModel> | $Enums.VacancySaleType
 }
 
+export type EnumVacancyServiceTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.VacancyServiceType | Prisma.EnumVacancyServiceTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.VacancyServiceType[] | Prisma.ListEnumVacancyServiceTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VacancyServiceType[] | Prisma.ListEnumVacancyServiceTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVacancyServiceTypeFilter<$PrismaModel> | $Enums.VacancyServiceType
+}
+
 export type FloatNullableFilter<$PrismaModel = never> = {
   equals?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
@@ -266,6 +273,13 @@ export type FloatNullableFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
+}
+
+export type EnumVacancySalaryTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.VacancySalaryType | Prisma.EnumVacancySalaryTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.VacancySalaryType[] | Prisma.ListEnumVacancySalaryTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VacancySalaryType[] | Prisma.ListEnumVacancySalaryTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVacancySalaryTypeFilter<$PrismaModel> | $Enums.VacancySalaryType
 }
 
 export type EnumVacancyModalityNullableFilter<$PrismaModel = never> = {
@@ -295,6 +309,16 @@ export type EnumVacancySaleTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumVacancySaleTypeFilter<$PrismaModel>
 }
 
+export type EnumVacancyServiceTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.VacancyServiceType | Prisma.EnumVacancyServiceTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.VacancyServiceType[] | Prisma.ListEnumVacancyServiceTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VacancyServiceType[] | Prisma.ListEnumVacancyServiceTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVacancyServiceTypeWithAggregatesFilter<$PrismaModel> | $Enums.VacancyServiceType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumVacancyServiceTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumVacancyServiceTypeFilter<$PrismaModel>
+}
+
 export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
@@ -309,6 +333,16 @@ export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedFloatNullableFilter<$PrismaModel>
   _min?: Prisma.NestedFloatNullableFilter<$PrismaModel>
   _max?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+}
+
+export type EnumVacancySalaryTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.VacancySalaryType | Prisma.EnumVacancySalaryTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.VacancySalaryType[] | Prisma.ListEnumVacancySalaryTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VacancySalaryType[] | Prisma.ListEnumVacancySalaryTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVacancySalaryTypeWithAggregatesFilter<$PrismaModel> | $Enums.VacancySalaryType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumVacancySalaryTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumVacancySalaryTypeFilter<$PrismaModel>
 }
 
 export type EnumVacancyModalityNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -726,6 +760,13 @@ export type NestedEnumVacancySaleTypeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumVacancySaleTypeFilter<$PrismaModel> | $Enums.VacancySaleType
 }
 
+export type NestedEnumVacancyServiceTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.VacancyServiceType | Prisma.EnumVacancyServiceTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.VacancyServiceType[] | Prisma.ListEnumVacancyServiceTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VacancyServiceType[] | Prisma.ListEnumVacancyServiceTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVacancyServiceTypeFilter<$PrismaModel> | $Enums.VacancyServiceType
+}
+
 export type NestedFloatNullableFilter<$PrismaModel = never> = {
   equals?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
@@ -735,6 +776,13 @@ export type NestedFloatNullableFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
+}
+
+export type NestedEnumVacancySalaryTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.VacancySalaryType | Prisma.EnumVacancySalaryTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.VacancySalaryType[] | Prisma.ListEnumVacancySalaryTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VacancySalaryType[] | Prisma.ListEnumVacancySalaryTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVacancySalaryTypeFilter<$PrismaModel> | $Enums.VacancySalaryType
 }
 
 export type NestedEnumVacancyModalityNullableFilter<$PrismaModel = never> = {
@@ -764,6 +812,16 @@ export type NestedEnumVacancySaleTypeWithAggregatesFilter<$PrismaModel = never> 
   _max?: Prisma.NestedEnumVacancySaleTypeFilter<$PrismaModel>
 }
 
+export type NestedEnumVacancyServiceTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.VacancyServiceType | Prisma.EnumVacancyServiceTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.VacancyServiceType[] | Prisma.ListEnumVacancyServiceTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VacancyServiceType[] | Prisma.ListEnumVacancyServiceTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVacancyServiceTypeWithAggregatesFilter<$PrismaModel> | $Enums.VacancyServiceType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumVacancyServiceTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumVacancyServiceTypeFilter<$PrismaModel>
+}
+
 export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
@@ -778,6 +836,16 @@ export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedFloatNullableFilter<$PrismaModel>
   _min?: Prisma.NestedFloatNullableFilter<$PrismaModel>
   _max?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumVacancySalaryTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.VacancySalaryType | Prisma.EnumVacancySalaryTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.VacancySalaryType[] | Prisma.ListEnumVacancySalaryTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VacancySalaryType[] | Prisma.ListEnumVacancySalaryTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVacancySalaryTypeWithAggregatesFilter<$PrismaModel> | $Enums.VacancySalaryType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumVacancySalaryTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumVacancySalaryTypeFilter<$PrismaModel>
 }
 
 export type NestedEnumVacancyModalityNullableWithAggregatesFilter<$PrismaModel = never> = {

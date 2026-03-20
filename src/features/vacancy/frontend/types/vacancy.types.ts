@@ -27,8 +27,10 @@ export type VacancyStatusType =
   | "CANCELADA"
   | "PERDIDA";
 
+export type VacancySalaryType = "FIXED" | "RANGE";
 export type VacancySaleType = "NUEVA" | "RECOMPRA";
 export type VacancyModality = "PRESENCIAL" | "REMOTO" | "HIBRIDO";
+export type VacancyServiceType = "END_TO_END" | "SOURCING";
 export type CandidateStatus =
   | "EN_PROCESO"
   | "EN_TERNA"
@@ -49,9 +51,11 @@ export interface VacancyDTO {
   clientId: string;
   clientName?: string | null;
   saleType: VacancySaleType;
+  serviceType: VacancyServiceType;
   salaryMin: number | null;
   salaryMax: number | null;
   salaryFixed: number | null;
+  salaryType: VacancySalaryType;
   commissions: string | null;
   benefits: string | null;
   tools: string | null;
@@ -290,6 +294,11 @@ export interface RejectChecklistResult {
 
 // Labels y opciones para UI
 
+export const VACANCY_SALARY_TYPE_LABELS: Record<VacancySalaryType, string> = {
+  FIXED: "Fijo",
+  RANGE: "Rango",
+};
+
 export const VACANCY_SALESTYPE_LABELS: Record<VacancySaleType, string> = {
   NUEVA: "Nueva",
   RECOMPRA: "Recompra",
@@ -314,6 +323,11 @@ export const VACANCY_STATUS_OPTIONS: {
   label,
 }));
 
+export const VACANCY_SERVICE_TYPE_LABELS: Record<VacancyServiceType, string> = {
+  END_TO_END: "End to End",
+  SOURCING: "Sourcing",
+};
+
 export const VACANCY_MODALITY_LABELS: Record<VacancyModality, string> = {
   PRESENCIAL: "Presencial",
   REMOTO: "Remoto",
@@ -332,6 +346,11 @@ export interface CreateVacancyFormData {
   position: string;
   recruiterId: string;
   clientId: string;
+  saleType?: VacancySaleType;
+  serviceType?: VacancyServiceType;
+  assignedAt?: string;
+  salaryType?: VacancySalaryType;
+  salaryFixed?: number | null;
   salaryMin?: number | null;
   salaryMax?: number | null;
   commissions?: string;

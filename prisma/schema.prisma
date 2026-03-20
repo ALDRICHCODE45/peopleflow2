@@ -559,10 +559,20 @@ enum VacancySaleType {
   RECOMPRA
 }
 
+enum VacancyServiceType {
+  END_TO_END
+  SOURCING
+}
+
 enum VacancyModality {
   PRESENCIAL
   REMOTO
   HIBRIDO
+}
+
+enum VacancySalaryType {
+  FIXED
+  RANGE
 }
 
 enum CandidateStatus {
@@ -590,11 +600,15 @@ model Vacancy {
   // RECOMPRA si el cliente ya tiene historial de vacantes, NUEVA si es su primera
   saleType VacancySaleType
 
+  // Tipo de servicio
+  serviceType        VacancyServiceType
+
   // Condiciones económicas
   // Rango inicial permitido; en PRE_PLACEMENT se cierra con salaryFixed
   salaryMin   Float?
   salaryMax   Float?
   salaryFixed Float? // Monto cerrado y exacto — obligatorio en PRE_PLACEMENT
+  salaryType  VacancySalaryType  @default(RANGE)
 
   commissions String? @db.Text // Descripción de bonos/comisiones
   benefits    String? @db.Text // Descripción de prestaciones

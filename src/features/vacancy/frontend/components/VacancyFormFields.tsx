@@ -40,19 +40,26 @@ import {
 } from "@/core/shared/ui/shadcn/avatar";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Settings01Icon } from "@hugeicons/core-free-icons";
-import { VACANCY_MODALITY_LABELS } from "../types/vacancy.types";
-import type { VacancyModality } from "../types/vacancy.types";
+import {
+  VACANCY_MODALITY_LABELS,
+  VACANCY_SERVICE_TYPE_LABELS,
+  VACANCY_SALARY_TYPE_LABELS,
+} from "../types/vacancy.types";
+import type {
+  VacancyModality,
+  VacancyServiceType,
+  VacancySalaryType,
+} from "../types/vacancy.types";
+import type { VacancyForm } from "../types/vacancy-form.types";
 import { WorkSchedulePicker } from "./WorkSchedulePicker";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyForm = any;
+import { SalaryFields } from "./SalaryFields";
 
 export interface VacancyFormFieldsProps {
-  // Using a pragmatic type to avoid complex TanStack Form generics
-  form: AnyForm;
+  form: VacancyForm;
   userOptions: { value: string; label: string; avatar?: string | null }[];
   clientOptions: { value: string; label: string }[];
-  saleType: string;
+  canEditAssignedAt: boolean;
+  canEditTargetDeliveryDate: boolean;
   currentStatus?: string; // shown read-only; defaults to "Quick Meeting" for new vacancies
   sendNotification?: boolean;
   setSendNotification?: (v: boolean) => void;
@@ -69,7 +76,8 @@ export function VacancyFormFields({
   form,
   userOptions,
   clientOptions,
-  saleType,
+  canEditAssignedAt,
+  canEditTargetDeliveryDate,
   currentStatus = "Quick Meeting",
   sendNotification = false,
   setSendNotification,
@@ -81,6 +89,13 @@ export function VacancyFormFields({
   showChecklist = false,
   checklistSlot,
 }: VacancyFormFieldsProps) {
+  const serviceTypeOptions = (
+    Object.entries(VACANCY_SERVICE_TYPE_LABELS) as [
+      VacancyServiceType,
+      string,
+    ][]
+  ).map(([value, label]) => ({ value, label }));
+
   const modalityOptions = (
     Object.entries(VACANCY_MODALITY_LABELS) as [VacancyModality, string][]
   ).map(([value, label]) => ({ value, label }));
@@ -103,8 +118,7 @@ export function VacancyFormFields({
         <TabsContent value="basic" className="space-y-4">
           {/* Posición */}
           <form.Field name="position">
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {(field: any) => {
+            {(field) => {
               const isEmpty =
                 field.state.meta.isTouched && !field.state.value?.trim();
               return (
@@ -132,40 +146,55 @@ export function VacancyFormFields({
             </div>
           </Field>
 
-          {/* Tipo de Vacante (auto-calculated) */}
-          <Field>
-            <FieldLabel>Tipo de Vacante</FieldLabel>
-            <div className="flex items-center h-9 px-3 border rounded-md bg-muted/50">
-              <form.Subscribe
-                selector={(s: { values: { clientId: string } }) =>
-                  s.values.clientId
-                }
-              >
-                {(clientId: string) =>
-                  clientId ? (
-                    <Badge
-                      variant={saleType === "RECOMPRA" ? "default" : "outline"}
-                    >
-                      {saleType}
-                    </Badge>
-                  ) : (
-                    <span className="text-muted-foreground text-sm">—</span>
-                  )
-                }
-              </form.Subscribe>
-            </div>
-          </Field>
+          {/* Tipo de Servicio */}
+          <form.Field name="serviceType">
+            {(field) => {
+              const isEmpty = field.state.meta.isTouched && !field.state.value;
+              return (
+                <Field data-invalid={isEmpty}>
+                  <FieldLabel htmlFor={field.name}>
+                    Tipo de Servicio *
+                  </FieldLabel>
+                  <Select
+                    value={field.state.value || "none"}
+                    onValueChange={(v) =>
+                      field.handleChange(
+                        v === "none" ? "" : (v as VacancyServiceType),
+                      )
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecciona el tipo de servicio" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">
+                        Selecciona el tipo de servicio
+                      </SelectItem>
+                      {serviceTypeOptions.map((opt) => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {isEmpty && (
+                    <FieldError>El tipo de servicio es requerido</FieldError>
+                  )}
+                </Field>
+              );
+            }}
+          </form.Field>
 
           {/* Fecha de Asignación */}
           <form.Field name="assignedAt">
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {(field: any) => (
+            {(field) => (
               <Field>
                 <FieldLabel>Fecha de Asignación *</FieldLabel>
                 <DatePicker
                   value={field.state.value}
                   onChange={(v) => field.handleChange(v)}
                   placeholder="Seleccionar fecha de asignación"
+                  disabled={!canEditAssignedAt}
                 />
               </Field>
             )}
@@ -173,14 +202,14 @@ export function VacancyFormFields({
 
           {/* Fecha Tentativa de Entrega */}
           <form.Field name="targetDeliveryDate">
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {(field: any) => (
+            {(field) => (
               <Field>
                 <FieldLabel>Fecha Tentativa de Entrega</FieldLabel>
                 <DatePicker
                   value={field.state.value}
                   onChange={(v) => field.handleChange(v)}
                   placeholder="Seleccionar fecha tentativa de entrega"
+                  disabled={!canEditTargetDeliveryDate}
                 />
               </Field>
             )}
@@ -188,8 +217,7 @@ export function VacancyFormFields({
 
           {/* Reclutador */}
           <form.Field name="recruiterId">
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {(field: any) => {
+            {(field) => {
               const isEmpty = field.state.meta.isTouched && !field.state.value;
               return (
                 <Field data-invalid={isEmpty}>
@@ -229,8 +257,7 @@ export function VacancyFormFields({
 
           {/* Cliente */}
           <form.Field name="clientId">
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {(field: any) => {
+            {(field) => {
               const isEmpty = field.state.meta.isTouched && !field.state.value;
               return (
                 <Field data-invalid={isEmpty}>
@@ -307,55 +334,43 @@ export function VacancyFormFields({
             </DialogDescription>
           </DialogHeader>
           <div className="max-h-[40vh] overflow-y-auto space-y-4 overflow-x-hidden">
-            {/* Salario mínimo / máximo */}
-            <div className="flex items-center justify-between gap-2">
-              <form.Field name="salaryMin">
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                {(field: any) => (
-                  <Field>
-                    <FieldLabel htmlFor={field.name}>Salario mínimo</FieldLabel>
-                    <Input
-                      id={field.name}
-                      type="number"
-                      value={field.state.value ?? ""}
-                      onBlur={field.handleBlur}
-                      onChange={(e) =>
-                        field.handleChange(
-                          e.target.value ? Number(e.target.value) : undefined,
-                        )
-                      }
-                      placeholder="0"
-                    />
-                  </Field>
-                )}
-              </form.Field>
+            {/* Tipo de Salario */}
+            <form.Field name="salaryType">
+              {(field) => (
+                <Field>
+                  <FieldLabel>Tipo de Salario</FieldLabel>
+                  <Select
+                    value={field.state.value}
+                    onValueChange={(v) =>
+                      field.handleChange(v as VacancySalaryType)
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecciona tipo de salario" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {(
+                        Object.entries(VACANCY_SALARY_TYPE_LABELS) as [
+                          VacancySalaryType,
+                          string,
+                        ][]
+                      ).map(([value, label]) => (
+                        <SelectItem key={value} value={value}>
+                          {label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
+              )}
+            </form.Field>
 
-              <form.Field name="salaryMax">
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                {(field: any) => (
-                  <Field>
-                    <FieldLabel htmlFor={field.name}>Salario máximo</FieldLabel>
-                    <Input
-                      id={field.name}
-                      type="number"
-                      value={field.state.value ?? ""}
-                      onBlur={field.handleBlur}
-                      onChange={(e) =>
-                        field.handleChange(
-                          e.target.value ? Number(e.target.value) : undefined,
-                        )
-                      }
-                      placeholder="0"
-                    />
-                  </Field>
-                )}
-              </form.Field>
-            </div>
+            {/* Salario condicional según tipo */}
+            <SalaryFields form={form} />
 
             {/* Prestaciones */}
             <form.Field name="benefits">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              {(field: any) => (
+              {(field) => (
                 <Field>
                   <FieldLabel htmlFor={field.name}>Prestaciones</FieldLabel>
                   <Textarea
@@ -372,8 +387,7 @@ export function VacancyFormFields({
 
             {/* Herramientas */}
             <form.Field name="tools">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              {(field: any) => (
+              {(field) => (
                 <Field>
                   <FieldLabel htmlFor={field.name}>Herramientas</FieldLabel>
                   <Textarea
@@ -381,7 +395,7 @@ export function VacancyFormFields({
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="React, TypeScript, Node.js, etc."
+                    placeholder="Celular, Laptop, etc.."
                     rows={2}
                   />
                 </Field>
@@ -390,8 +404,7 @@ export function VacancyFormFields({
 
             {/* Comisiones/Bonos */}
             <form.Field name="commissions">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              {(field: any) => (
+              {(field) => (
                 <Field>
                   <FieldLabel htmlFor={field.name}>
                     Comisiones / Bonos
@@ -410,8 +423,7 @@ export function VacancyFormFields({
 
             {/* Modalidad */}
             <form.Field name="modality">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              {(field: any) => (
+              {(field) => (
                 <Field>
                   <FieldLabel htmlFor={field.name}>Modalidad</FieldLabel>
                   <Select
@@ -440,8 +452,7 @@ export function VacancyFormFields({
 
             {/* Horario */}
             <form.Field name="schedule">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              {(field: any) => (
+              {(field) => (
                 <Field>
                   <FieldLabel>Horario</FieldLabel>
                   <WorkSchedulePicker
@@ -454,8 +465,7 @@ export function VacancyFormFields({
 
             {/* País */}
             <form.Field name="countryCode">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              {(field: any) => (
+              {(field) => (
                 <Field>
                   <FieldLabel htmlFor={field.name}>País</FieldLabel>
                   <CountrySelect
@@ -474,8 +484,7 @@ export function VacancyFormFields({
 
             {/* Estado/Región */}
             <form.Field name="regionCode">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              {(field: any) => (
+              {(field) => (
                 <Field>
                   <FieldLabel htmlFor={field.name}>Estado / Región</FieldLabel>
                   <RegionSelect
@@ -491,8 +500,7 @@ export function VacancyFormFields({
 
             {/* Requiere Psicometría */}
             <form.Field name="requiresPsychometry">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              {(field: any) => (
+              {(field) => (
                 <Field>
                   <div className="flex items-center justify-between">
                     <FieldLabel htmlFor={field.name} className="cursor-pointer">

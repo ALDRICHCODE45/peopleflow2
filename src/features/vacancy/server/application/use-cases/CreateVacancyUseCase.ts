@@ -1,5 +1,6 @@
 import type {
   VacancyModality,
+  VacancyServiceType,
 } from "@features/vacancy/frontend/types/vacancy.types";
 import type { Vacancy } from "../../domain/entities/Vacancy";
 import type { IVacancyRepository } from "../../domain/interfaces/IVacancyRepository";
@@ -10,6 +11,8 @@ export interface CreateVacancyInput {
   position: string;
   recruiterId: string;
   clientId: string;
+  salaryType?: "FIXED" | "RANGE";
+  salaryFixed?: number | null;
   salaryMin?: number | null;
   salaryMax?: number | null;
   commissions?: string | null;
@@ -21,6 +24,8 @@ export interface CreateVacancyInput {
   regionCode?: string | null;
   requiresPsychometry?: boolean;
   targetDeliveryDate?: Date | null;
+  serviceType: VacancyServiceType;
+  assignedAt?: Date;
   tenantId: string;
   createdById?: string | null;
 }
@@ -54,8 +59,10 @@ export class CreateVacancyUseCase {
       // 2. Validate salary range via VO
       try {
         SalaryRangeVO.create({
-          min: input.salaryMin,
-          max: input.salaryMax,
+          salaryType: input.salaryType,
+          min: input.salaryType === "FIXED" ? undefined : input.salaryMin,
+          max: input.salaryType === "FIXED" ? undefined : input.salaryMax,
+          fixed: input.salaryType === "FIXED" ? input.salaryFixed : undefined,
         });
       } catch (e) {
         return {
@@ -77,8 +84,10 @@ export class CreateVacancyUseCase {
         recruiterId: input.recruiterId,
         clientId: input.clientId,
         saleType,
-        salaryMin: input.salaryMin ?? null,
-        salaryMax: input.salaryMax ?? null,
+        salaryType: input.salaryType ?? "RANGE",
+        salaryMin: input.salaryType === "FIXED" ? null : (input.salaryMin ?? null),
+        salaryMax: input.salaryType === "FIXED" ? null : (input.salaryMax ?? null),
+        salaryFixed: input.salaryType === "FIXED" ? (input.salaryFixed ?? null) : null,
         commissions: input.commissions ?? null,
         benefits: input.benefits ?? null,
         tools: input.tools ?? null,
@@ -88,6 +97,8 @@ export class CreateVacancyUseCase {
         regionCode: input.regionCode ?? null,
         requiresPsychometry: input.requiresPsychometry ?? false,
         targetDeliveryDate: input.targetDeliveryDate ?? null,
+        serviceType: input.serviceType,
+        assignedAt: input.assignedAt ?? undefined,
         tenantId: input.tenantId,
         createdById: input.createdById ?? null,
       });

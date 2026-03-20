@@ -9,6 +9,7 @@ export interface VacancyTransitionContext {
   vacancy: {
     id: string;
     status: VacancyStatusType;
+    salaryType: "FIXED" | "RANGE" | null;
     salaryFixed: number | null;
     entryDate: string | null; // ISO string or null
     checklistValidatedAt: string | null; // ISO string or null

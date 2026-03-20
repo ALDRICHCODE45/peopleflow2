@@ -6,6 +6,8 @@ export const createVacancySchema = z.object({
   clientId: z.string().min(1, "El cliente es requerido"),
   assignedAt: z.string().min(1, "La fecha de asignación es requerida"),
   targetDeliveryDate: z.string(),
+  salaryType: z.enum(["FIXED", "RANGE"]).default("RANGE"),
+  salaryFixed: z.number().optional(),
   salaryMin: z.number().or(z.undefined()),
   salaryMax: z.number().or(z.undefined()),
   benefits: z.string(),
@@ -18,4 +20,7 @@ export const createVacancySchema = z.object({
   countryCode: z.string(),
   regionCode: z.string(),
   requiresPsychometry: z.boolean(),
+  serviceType: z.enum(["END_TO_END", "SOURCING"], {
+    message: "El tipo de servicio es requerido",
+  }),
 });

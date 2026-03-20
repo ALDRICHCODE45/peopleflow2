@@ -47,9 +47,11 @@ export type VacancyMinAggregateOutputType = {
   recruiterId: string | null
   clientId: string | null
   saleType: $Enums.VacancySaleType | null
+  serviceType: $Enums.VacancyServiceType | null
   salaryMin: number | null
   salaryMax: number | null
   salaryFixed: number | null
+  salaryType: $Enums.VacancySalaryType | null
   commissions: string | null
   benefits: string | null
   tools: string | null
@@ -82,9 +84,11 @@ export type VacancyMaxAggregateOutputType = {
   recruiterId: string | null
   clientId: string | null
   saleType: $Enums.VacancySaleType | null
+  serviceType: $Enums.VacancyServiceType | null
   salaryMin: number | null
   salaryMax: number | null
   salaryFixed: number | null
+  salaryType: $Enums.VacancySalaryType | null
   commissions: string | null
   benefits: string | null
   tools: string | null
@@ -117,9 +121,11 @@ export type VacancyCountAggregateOutputType = {
   recruiterId: number
   clientId: number
   saleType: number
+  serviceType: number
   salaryMin: number
   salaryMax: number
   salaryFixed: number
+  salaryType: number
   commissions: number
   benefits: number
   tools: number
@@ -168,9 +174,11 @@ export type VacancyMinAggregateInputType = {
   recruiterId?: true
   clientId?: true
   saleType?: true
+  serviceType?: true
   salaryMin?: true
   salaryMax?: true
   salaryFixed?: true
+  salaryType?: true
   commissions?: true
   benefits?: true
   tools?: true
@@ -203,9 +211,11 @@ export type VacancyMaxAggregateInputType = {
   recruiterId?: true
   clientId?: true
   saleType?: true
+  serviceType?: true
   salaryMin?: true
   salaryMax?: true
   salaryFixed?: true
+  salaryType?: true
   commissions?: true
   benefits?: true
   tools?: true
@@ -238,9 +248,11 @@ export type VacancyCountAggregateInputType = {
   recruiterId?: true
   clientId?: true
   saleType?: true
+  serviceType?: true
   salaryMin?: true
   salaryMax?: true
   salaryFixed?: true
+  salaryType?: true
   commissions?: true
   benefits?: true
   tools?: true
@@ -360,9 +372,11 @@ export type VacancyGroupByOutputType = {
   recruiterId: string
   clientId: string
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin: number | null
   salaryMax: number | null
   salaryFixed: number | null
+  salaryType: $Enums.VacancySalaryType
   commissions: string | null
   benefits: string | null
   tools: string | null
@@ -418,9 +432,11 @@ export type VacancyWhereInput = {
   recruiterId?: Prisma.StringFilter<"Vacancy"> | string
   clientId?: Prisma.StringFilter<"Vacancy"> | string
   saleType?: Prisma.EnumVacancySaleTypeFilter<"Vacancy"> | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFilter<"Vacancy"> | $Enums.VacancyServiceType
   salaryMin?: Prisma.FloatNullableFilter<"Vacancy"> | number | null
   salaryMax?: Prisma.FloatNullableFilter<"Vacancy"> | number | null
   salaryFixed?: Prisma.FloatNullableFilter<"Vacancy"> | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFilter<"Vacancy"> | $Enums.VacancySalaryType
   commissions?: Prisma.StringNullableFilter<"Vacancy"> | string | null
   benefits?: Prisma.StringNullableFilter<"Vacancy"> | string | null
   tools?: Prisma.StringNullableFilter<"Vacancy"> | string | null
@@ -463,9 +479,11 @@ export type VacancyOrderByWithRelationInput = {
   recruiterId?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
   saleType?: Prisma.SortOrder
+  serviceType?: Prisma.SortOrder
   salaryMin?: Prisma.SortOrderInput | Prisma.SortOrder
   salaryMax?: Prisma.SortOrderInput | Prisma.SortOrder
   salaryFixed?: Prisma.SortOrderInput | Prisma.SortOrder
+  salaryType?: Prisma.SortOrder
   commissions?: Prisma.SortOrderInput | Prisma.SortOrder
   benefits?: Prisma.SortOrderInput | Prisma.SortOrder
   tools?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -511,9 +529,11 @@ export type VacancyWhereUniqueInput = Prisma.AtLeast<{
   recruiterId?: Prisma.StringFilter<"Vacancy"> | string
   clientId?: Prisma.StringFilter<"Vacancy"> | string
   saleType?: Prisma.EnumVacancySaleTypeFilter<"Vacancy"> | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFilter<"Vacancy"> | $Enums.VacancyServiceType
   salaryMin?: Prisma.FloatNullableFilter<"Vacancy"> | number | null
   salaryMax?: Prisma.FloatNullableFilter<"Vacancy"> | number | null
   salaryFixed?: Prisma.FloatNullableFilter<"Vacancy"> | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFilter<"Vacancy"> | $Enums.VacancySalaryType
   commissions?: Prisma.StringNullableFilter<"Vacancy"> | string | null
   benefits?: Prisma.StringNullableFilter<"Vacancy"> | string | null
   tools?: Prisma.StringNullableFilter<"Vacancy"> | string | null
@@ -556,9 +576,11 @@ export type VacancyOrderByWithAggregationInput = {
   recruiterId?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
   saleType?: Prisma.SortOrder
+  serviceType?: Prisma.SortOrder
   salaryMin?: Prisma.SortOrderInput | Prisma.SortOrder
   salaryMax?: Prisma.SortOrderInput | Prisma.SortOrder
   salaryFixed?: Prisma.SortOrderInput | Prisma.SortOrder
+  salaryType?: Prisma.SortOrder
   commissions?: Prisma.SortOrderInput | Prisma.SortOrder
   benefits?: Prisma.SortOrderInput | Prisma.SortOrder
   tools?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -599,9 +621,11 @@ export type VacancyScalarWhereWithAggregatesInput = {
   recruiterId?: Prisma.StringWithAggregatesFilter<"Vacancy"> | string
   clientId?: Prisma.StringWithAggregatesFilter<"Vacancy"> | string
   saleType?: Prisma.EnumVacancySaleTypeWithAggregatesFilter<"Vacancy"> | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeWithAggregatesFilter<"Vacancy"> | $Enums.VacancyServiceType
   salaryMin?: Prisma.FloatNullableWithAggregatesFilter<"Vacancy"> | number | null
   salaryMax?: Prisma.FloatNullableWithAggregatesFilter<"Vacancy"> | number | null
   salaryFixed?: Prisma.FloatNullableWithAggregatesFilter<"Vacancy"> | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeWithAggregatesFilter<"Vacancy"> | $Enums.VacancySalaryType
   commissions?: Prisma.StringNullableWithAggregatesFilter<"Vacancy"> | string | null
   benefits?: Prisma.StringNullableWithAggregatesFilter<"Vacancy"> | string | null
   tools?: Prisma.StringNullableWithAggregatesFilter<"Vacancy"> | string | null
@@ -632,9 +656,11 @@ export type VacancyCreateInput = {
   position: string
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -674,9 +700,11 @@ export type VacancyUncheckedCreateInput = {
   recruiterId: string
   clientId: string
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -712,9 +740,11 @@ export type VacancyUpdateInput = {
   position?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -754,9 +784,11 @@ export type VacancyUncheckedUpdateInput = {
   recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -794,9 +826,11 @@ export type VacancyCreateManyInput = {
   recruiterId: string
   clientId: string
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -827,9 +861,11 @@ export type VacancyUpdateManyMutationInput = {
   position?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -859,9 +895,11 @@ export type VacancyUncheckedUpdateManyInput = {
   recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -909,9 +947,11 @@ export type VacancyCountOrderByAggregateInput = {
   recruiterId?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
   saleType?: Prisma.SortOrder
+  serviceType?: Prisma.SortOrder
   salaryMin?: Prisma.SortOrder
   salaryMax?: Prisma.SortOrder
   salaryFixed?: Prisma.SortOrder
+  salaryType?: Prisma.SortOrder
   commissions?: Prisma.SortOrder
   benefits?: Prisma.SortOrder
   tools?: Prisma.SortOrder
@@ -951,9 +991,11 @@ export type VacancyMaxOrderByAggregateInput = {
   recruiterId?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
   saleType?: Prisma.SortOrder
+  serviceType?: Prisma.SortOrder
   salaryMin?: Prisma.SortOrder
   salaryMax?: Prisma.SortOrder
   salaryFixed?: Prisma.SortOrder
+  salaryType?: Prisma.SortOrder
   commissions?: Prisma.SortOrder
   benefits?: Prisma.SortOrder
   tools?: Prisma.SortOrder
@@ -986,9 +1028,11 @@ export type VacancyMinOrderByAggregateInput = {
   recruiterId?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
   saleType?: Prisma.SortOrder
+  serviceType?: Prisma.SortOrder
   salaryMin?: Prisma.SortOrder
   salaryMax?: Prisma.SortOrder
   salaryFixed?: Prisma.SortOrder
+  salaryType?: Prisma.SortOrder
   commissions?: Prisma.SortOrder
   benefits?: Prisma.SortOrder
   tools?: Prisma.SortOrder
@@ -1218,12 +1262,20 @@ export type EnumVacancySaleTypeFieldUpdateOperationsInput = {
   set?: $Enums.VacancySaleType
 }
 
+export type EnumVacancyServiceTypeFieldUpdateOperationsInput = {
+  set?: $Enums.VacancyServiceType
+}
+
 export type NullableFloatFieldUpdateOperationsInput = {
   set?: number | null
   increment?: number
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type EnumVacancySalaryTypeFieldUpdateOperationsInput = {
+  set?: $Enums.VacancySalaryType
 }
 
 export type NullableEnumVacancyModalityFieldUpdateOperationsInput = {
@@ -1333,9 +1385,11 @@ export type VacancyCreateWithoutRecruiterInput = {
   position: string
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -1373,9 +1427,11 @@ export type VacancyUncheckedCreateWithoutRecruiterInput = {
   status?: $Enums.VacancyStatus
   clientId: string
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -1421,9 +1477,11 @@ export type VacancyCreateWithoutCreatedByInput = {
   position: string
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -1462,9 +1520,11 @@ export type VacancyUncheckedCreateWithoutCreatedByInput = {
   recruiterId: string
   clientId: string
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -1509,9 +1569,11 @@ export type VacancyCreateWithoutChecklistValidatedByInput = {
   position: string
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -1550,9 +1612,11 @@ export type VacancyUncheckedCreateWithoutChecklistValidatedByInput = {
   recruiterId: string
   clientId: string
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -1618,9 +1682,11 @@ export type VacancyScalarWhereInput = {
   recruiterId?: Prisma.StringFilter<"Vacancy"> | string
   clientId?: Prisma.StringFilter<"Vacancy"> | string
   saleType?: Prisma.EnumVacancySaleTypeFilter<"Vacancy"> | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFilter<"Vacancy"> | $Enums.VacancyServiceType
   salaryMin?: Prisma.FloatNullableFilter<"Vacancy"> | number | null
   salaryMax?: Prisma.FloatNullableFilter<"Vacancy"> | number | null
   salaryFixed?: Prisma.FloatNullableFilter<"Vacancy"> | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFilter<"Vacancy"> | $Enums.VacancySalaryType
   commissions?: Prisma.StringNullableFilter<"Vacancy"> | string | null
   benefits?: Prisma.StringNullableFilter<"Vacancy"> | string | null
   tools?: Prisma.StringNullableFilter<"Vacancy"> | string | null
@@ -1683,9 +1749,11 @@ export type VacancyCreateWithoutTenantInput = {
   position: string
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -1724,9 +1792,11 @@ export type VacancyUncheckedCreateWithoutTenantInput = {
   recruiterId: string
   clientId: string
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -1787,9 +1857,11 @@ export type VacancyCreateWithoutAttachmentsInput = {
   position: string
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -1828,9 +1900,11 @@ export type VacancyUncheckedCreateWithoutAttachmentsInput = {
   recruiterId: string
   clientId: string
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -1881,9 +1955,11 @@ export type VacancyUpdateWithoutAttachmentsInput = {
   position?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1922,9 +1998,11 @@ export type VacancyUncheckedUpdateWithoutAttachmentsInput = {
   recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1959,9 +2037,11 @@ export type VacancyCreateWithoutChecklistItemsInput = {
   position: string
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -2000,9 +2080,11 @@ export type VacancyUncheckedCreateWithoutChecklistItemsInput = {
   recruiterId: string
   clientId: string
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -2053,9 +2135,11 @@ export type VacancyUpdateWithoutChecklistItemsInput = {
   position?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2094,9 +2178,11 @@ export type VacancyUncheckedUpdateWithoutChecklistItemsInput = {
   recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2131,9 +2217,11 @@ export type VacancyCreateWithoutCandidatesInput = {
   position: string
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -2172,9 +2260,11 @@ export type VacancyUncheckedCreateWithoutCandidatesInput = {
   recruiterId: string
   clientId: string
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -2225,9 +2315,11 @@ export type VacancyUpdateWithoutCandidatesInput = {
   position?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2266,9 +2358,11 @@ export type VacancyUncheckedUpdateWithoutCandidatesInput = {
   recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2303,9 +2397,11 @@ export type VacancyCreateWithoutStatusHistoryInput = {
   position: string
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -2344,9 +2440,11 @@ export type VacancyUncheckedCreateWithoutStatusHistoryInput = {
   recruiterId: string
   clientId: string
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -2397,9 +2495,11 @@ export type VacancyUpdateWithoutStatusHistoryInput = {
   position?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2438,9 +2538,11 @@ export type VacancyUncheckedUpdateWithoutStatusHistoryInput = {
   recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2475,9 +2577,11 @@ export type VacancyCreateWithoutClientInput = {
   position: string
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -2515,9 +2619,11 @@ export type VacancyUncheckedCreateWithoutClientInput = {
   status?: $Enums.VacancyStatus
   recruiterId: string
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -2579,9 +2685,11 @@ export type VacancyCreateWithoutTernaHistoriesInput = {
   position: string
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -2620,9 +2728,11 @@ export type VacancyUncheckedCreateWithoutTernaHistoriesInput = {
   recruiterId: string
   clientId: string
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -2673,9 +2783,11 @@ export type VacancyUpdateWithoutTernaHistoriesInput = {
   position?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2714,9 +2826,11 @@ export type VacancyUncheckedUpdateWithoutTernaHistoriesInput = {
   recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2752,9 +2866,11 @@ export type VacancyCreateManyRecruiterInput = {
   status?: $Enums.VacancyStatus
   clientId: string
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -2787,9 +2903,11 @@ export type VacancyCreateManyCreatedByInput = {
   recruiterId: string
   clientId: string
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -2821,9 +2939,11 @@ export type VacancyCreateManyChecklistValidatedByInput = {
   recruiterId: string
   clientId: string
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -2853,9 +2973,11 @@ export type VacancyUpdateWithoutRecruiterInput = {
   position?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2893,9 +3015,11 @@ export type VacancyUncheckedUpdateWithoutRecruiterInput = {
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2932,9 +3056,11 @@ export type VacancyUncheckedUpdateManyWithoutRecruiterInput = {
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2965,9 +3091,11 @@ export type VacancyUpdateWithoutCreatedByInput = {
   position?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3006,9 +3134,11 @@ export type VacancyUncheckedUpdateWithoutCreatedByInput = {
   recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3045,9 +3175,11 @@ export type VacancyUncheckedUpdateManyWithoutCreatedByInput = {
   recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3077,9 +3209,11 @@ export type VacancyUpdateWithoutChecklistValidatedByInput = {
   position?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3118,9 +3252,11 @@ export type VacancyUncheckedUpdateWithoutChecklistValidatedByInput = {
   recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3157,9 +3293,11 @@ export type VacancyUncheckedUpdateManyWithoutChecklistValidatedByInput = {
   recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3191,9 +3329,11 @@ export type VacancyCreateManyTenantInput = {
   recruiterId: string
   clientId: string
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -3223,9 +3363,11 @@ export type VacancyUpdateWithoutTenantInput = {
   position?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3264,9 +3406,11 @@ export type VacancyUncheckedUpdateWithoutTenantInput = {
   recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3303,9 +3447,11 @@ export type VacancyUncheckedUpdateManyWithoutTenantInput = {
   recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3336,9 +3482,11 @@ export type VacancyCreateManyClientInput = {
   status?: $Enums.VacancyStatus
   recruiterId: string
   saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
   commissions?: string | null
   benefits?: string | null
   tools?: string | null
@@ -3369,9 +3517,11 @@ export type VacancyUpdateWithoutClientInput = {
   position?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3409,9 +3559,11 @@ export type VacancyUncheckedUpdateWithoutClientInput = {
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3448,9 +3600,11 @@ export type VacancyUncheckedUpdateManyWithoutClientInput = {
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
   commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3550,9 +3704,11 @@ export type VacancySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   recruiterId?: boolean
   clientId?: boolean
   saleType?: boolean
+  serviceType?: boolean
   salaryMin?: boolean
   salaryMax?: boolean
   salaryFixed?: boolean
+  salaryType?: boolean
   commissions?: boolean
   benefits?: boolean
   tools?: boolean
@@ -3596,9 +3752,11 @@ export type VacancySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   recruiterId?: boolean
   clientId?: boolean
   saleType?: boolean
+  serviceType?: boolean
   salaryMin?: boolean
   salaryMax?: boolean
   salaryFixed?: boolean
+  salaryType?: boolean
   commissions?: boolean
   benefits?: boolean
   tools?: boolean
@@ -3636,9 +3794,11 @@ export type VacancySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   recruiterId?: boolean
   clientId?: boolean
   saleType?: boolean
+  serviceType?: boolean
   salaryMin?: boolean
   salaryMax?: boolean
   salaryFixed?: boolean
+  salaryType?: boolean
   commissions?: boolean
   benefits?: boolean
   tools?: boolean
@@ -3676,9 +3836,11 @@ export type VacancySelectScalar = {
   recruiterId?: boolean
   clientId?: boolean
   saleType?: boolean
+  serviceType?: boolean
   salaryMin?: boolean
   salaryMax?: boolean
   salaryFixed?: boolean
+  salaryType?: boolean
   commissions?: boolean
   benefits?: boolean
   tools?: boolean
@@ -3704,7 +3866,7 @@ export type VacancySelectScalar = {
   updatedAt?: boolean
 }
 
-export type VacancyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "position" | "status" | "recruiterId" | "clientId" | "saleType" | "salaryMin" | "salaryMax" | "salaryFixed" | "commissions" | "benefits" | "tools" | "modality" | "schedule" | "countryCode" | "regionCode" | "requiresPsychometry" | "checklistValidatedAt" | "checklistValidatedById" | "checklistRejectionReason" | "assignedAt" | "targetDeliveryDate" | "actualDeliveryDate" | "entryDate" | "rollbackCount" | "placementConfirmedAt" | "commissionDate" | "congratsEmailSent" | "tenantId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["vacancy"]>
+export type VacancyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "position" | "status" | "recruiterId" | "clientId" | "saleType" | "serviceType" | "salaryMin" | "salaryMax" | "salaryFixed" | "salaryType" | "commissions" | "benefits" | "tools" | "modality" | "schedule" | "countryCode" | "regionCode" | "requiresPsychometry" | "checklistValidatedAt" | "checklistValidatedById" | "checklistRejectionReason" | "assignedAt" | "targetDeliveryDate" | "actualDeliveryDate" | "entryDate" | "rollbackCount" | "placementConfirmedAt" | "commissionDate" | "congratsEmailSent" | "tenantId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["vacancy"]>
 export type VacancyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   recruiter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
@@ -3754,9 +3916,11 @@ export type $VacancyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     recruiterId: string
     clientId: string
     saleType: $Enums.VacancySaleType
+    serviceType: $Enums.VacancyServiceType
     salaryMin: number | null
     salaryMax: number | null
     salaryFixed: number | null
+    salaryType: $Enums.VacancySalaryType
     commissions: string | null
     benefits: string | null
     tools: string | null
@@ -4219,9 +4383,11 @@ export interface VacancyFieldRefs {
   readonly recruiterId: Prisma.FieldRef<"Vacancy", 'String'>
   readonly clientId: Prisma.FieldRef<"Vacancy", 'String'>
   readonly saleType: Prisma.FieldRef<"Vacancy", 'VacancySaleType'>
+  readonly serviceType: Prisma.FieldRef<"Vacancy", 'VacancyServiceType'>
   readonly salaryMin: Prisma.FieldRef<"Vacancy", 'Float'>
   readonly salaryMax: Prisma.FieldRef<"Vacancy", 'Float'>
   readonly salaryFixed: Prisma.FieldRef<"Vacancy", 'Float'>
+  readonly salaryType: Prisma.FieldRef<"Vacancy", 'VacancySalaryType'>
   readonly commissions: Prisma.FieldRef<"Vacancy", 'String'>
   readonly benefits: Prisma.FieldRef<"Vacancy", 'String'>
   readonly tools: Prisma.FieldRef<"Vacancy", 'String'>

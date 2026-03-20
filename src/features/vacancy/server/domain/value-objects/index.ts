@@ -8,3 +8,4 @@ export {
 export type { VacancyStatusType } from "./VacancyStatus";
 export { SalaryRangeVO } from "./SalaryRange";
 export type { SalaryRangeProps } from "./SalaryRange";
+export { TargetDeliveryDate } from "./TargetDeliveryDate";

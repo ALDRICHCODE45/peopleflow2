@@ -12,6 +12,7 @@ import type {
 import type {
   VacancyStatusType,
   VacancySaleType,
+  VacancyServiceType,
   VacancyModality,
   VacancyCandidateDTO,
   VacancyChecklistItemDTO,
@@ -28,8 +29,10 @@ type VacancyWithRelations = {
   clientId: string;
   client: { nombre: string } | null;
   saleType: string;
+  serviceType: string | null;
   salaryMin: number | null;
   salaryMax: number | null;
+  salaryType: string | null;
   salaryFixed: number | null;
   commissions: string | null;
   benefits: string | null;
@@ -111,6 +114,10 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       where.saleType = { in: filters.saleTypes };
     }
 
+    if (filters?.serviceTypes && filters.serviceTypes.length > 0) {
+      where.serviceType = { in: filters.serviceTypes };
+    }
+
     if (filters?.modalities && filters.modalities.length > 0) {
       where.modality = { in: filters.modalities };
     }
@@ -178,8 +185,10 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       clientId: record.clientId,
       clientName: record.client?.nombre ?? null,
       saleType: record.saleType as VacancySaleType,
+      serviceType: (record.serviceType as VacancyServiceType) ?? null,
       salaryMin: record.salaryMin,
       salaryMax: record.salaryMax,
+      salaryType: (record.salaryType as "FIXED" | "RANGE") ?? null,
       salaryFixed: record.salaryFixed,
       commissions: record.commissions,
       benefits: record.benefits,
@@ -350,6 +359,8 @@ export class PrismaVacancyRepository implements IVacancyRepository {
         recruiterId: data.recruiterId,
         clientId: data.clientId,
         saleType: data.saleType,
+        serviceType: data.serviceType ?? null,
+        salaryType: data.salaryType ?? "RANGE",
         salaryMin: data.salaryMin ?? null,
         salaryMax: data.salaryMax ?? null,
         salaryFixed: data.salaryFixed ?? null,
@@ -362,7 +373,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
         regionCode: data.regionCode ?? null,
         requiresPsychometry: data.requiresPsychometry ?? false,
         targetDeliveryDate: data.targetDeliveryDate ?? null,
-        assignedAt: new Date(),
+        assignedAt: data.assignedAt ?? new Date(),
         status: "QUICK_MEETING",
         tenantId: data.tenantId,
         createdById: data.createdById ?? null,
@@ -383,6 +394,9 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       data: {
         ...(data.position !== undefined && { position: data.position }),
         ...(data.status !== undefined && { status: data.status }),
+        ...(data.serviceType !== undefined && { serviceType: data.serviceType }),
+        ...(data.assignedAt !== undefined && { assignedAt: data.assignedAt }),
+        ...(data.salaryType !== undefined && { salaryType: data.salaryType }),
         ...(data.salaryMin !== undefined && { salaryMin: data.salaryMin }),
         ...(data.salaryMax !== undefined && { salaryMax: data.salaryMax }),
         ...(data.salaryFixed !== undefined && { salaryFixed: data.salaryFixed }),

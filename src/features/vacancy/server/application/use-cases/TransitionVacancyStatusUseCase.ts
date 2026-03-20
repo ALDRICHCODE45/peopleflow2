@@ -71,6 +71,12 @@ export class TransitionVacancyStatusUseCase {
       const currentStatus = vacancy.status;
       const isRollback = isRollbackTransition(currentStatus, newStatus);
 
+      // Auto-populate salaryFixed from vacancy when salaryType is FIXED
+      let effectiveSalaryFixed = salaryFixed;
+      if (vacancy.salaryType === "FIXED" && vacancy.salaryFixed != null && vacancy.salaryFixed > 0) {
+        effectiveSalaryFixed = effectiveSalaryFixed ?? vacancy.salaryFixed;
+      }
+
       // 2. Build context for the state machine
       const candidates = vacancy.toJSON().candidates ?? [];
       const inTernaCount = candidates.filter((c) => c.isInTerna).length;
@@ -80,6 +86,7 @@ export class TransitionVacancyStatusUseCase {
         vacancy: {
           id: vacancy.id,
           status: currentStatus,
+          salaryType: vacancy.salaryType,
           salaryFixed: vacancy.salaryFixed,
           entryDate: vacancy.entryDate?.toISOString() ?? null,
           checklistValidatedAt:
@@ -97,7 +104,7 @@ export class TransitionVacancyStatusUseCase {
         input: {
           reason,
           newTargetDeliveryDate: newTargetDeliveryDate?.toISOString() ?? null,
-          salaryFixed: salaryFixed ?? null,
+          salaryFixed: effectiveSalaryFixed ?? null,
           entryDate: entryDate?.toISOString() ?? null,
         },
       };
@@ -136,7 +143,7 @@ export class TransitionVacancyStatusUseCase {
       } else if (needsSalaryAndDate) {
         updateData = {
           status: newStatus,
-          salaryFixed: salaryFixed ?? null,
+          salaryFixed: effectiveSalaryFixed ?? null,
           entryDate: entryDate ?? null,
         };
         historyData = { isRollback: false, reason: reason ?? null };

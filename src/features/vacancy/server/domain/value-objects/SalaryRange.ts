@@ -1,4 +1,5 @@
 export interface SalaryRangeProps {
+  salaryType?: "FIXED" | "RANGE" | null;
   min?: number | null;
   max?: number | null;
   fixed?: number | null;
@@ -12,8 +13,37 @@ export class SalaryRangeVO {
   }
 
   static create(props: SalaryRangeProps): SalaryRangeVO {
-    const { min, max, fixed } = props;
+    const { salaryType, min, max, fixed } = props;
 
+    if (salaryType === "FIXED") {
+      // FIXED mode: require fixed > 0, ignore min/max
+      if (fixed === null || fixed === undefined || fixed <= 0) {
+        throw new Error("El salario fijo debe ser mayor a 0");
+      }
+      return new SalaryRangeVO(props);
+    }
+
+    if (salaryType === "RANGE") {
+      // RANGE mode: standard min/max validation
+      if (min !== null && min !== undefined && min < 0) {
+        throw new Error("El salario mínimo no puede ser negativo");
+      }
+      if (max !== null && max !== undefined && max < 0) {
+        throw new Error("El salario máximo no puede ser negativo");
+      }
+      if (
+        min !== null &&
+        min !== undefined &&
+        max !== null &&
+        max !== undefined &&
+        min > max
+      ) {
+        throw new Error("El salario mínimo no puede ser mayor al máximo");
+      }
+      return new SalaryRangeVO(props);
+    }
+
+    // Backward-compatible: no salaryType specified (null/undefined)
     if (min !== null && min !== undefined && min < 0) {
       throw new Error("El salario mínimo no puede ser negativo");
     }

@@ -2,6 +2,7 @@ import type {
   VacancyDTO,
   VacancyStatusType,
   VacancySaleType,
+  VacancyServiceType,
   VacancyModality,
   VacancyCandidateDTO,
   VacancyChecklistItemDTO,
@@ -20,8 +21,10 @@ export interface VacancyProps {
   clientId: string;
   clientName?: string | null;
   saleType: VacancySaleType;
+  serviceType: VacancyServiceType;
   salaryMin: number | null;
   salaryMax: number | null;
+  salaryType: "FIXED" | "RANGE" | null;
   salaryFixed: number | null;
   commissions: string | null;
   benefits: string | null;
@@ -101,12 +104,20 @@ export class Vacancy {
     return this.props.saleType;
   }
 
+  get serviceType(): VacancyServiceType {
+    return this.props.serviceType;
+  }
+
   get salaryMin(): number | null {
     return this.props.salaryMin;
   }
 
   get salaryMax(): number | null {
     return this.props.salaryMax;
+  }
+
+  get salaryType(): "FIXED" | "RANGE" | null {
+    return this.props.salaryType;
   }
 
   get salaryFixed(): number | null {
@@ -302,8 +313,10 @@ export class Vacancy {
       clientId: this.props.clientId,
       clientName: this.props.clientName ?? null,
       saleType: this.props.saleType,
+      serviceType: this.props.serviceType,
       salaryMin: this.props.salaryMin,
       salaryMax: this.props.salaryMax,
+      salaryType: this.props.salaryType ?? "RANGE",
       salaryFixed: this.props.salaryFixed,
       commissions: this.props.commissions,
       benefits: this.props.benefits,

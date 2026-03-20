@@ -28,8 +28,10 @@ import { VacancyStatusBadge } from "./VacancyStatusBadge";
 import { useTransitionVacancyStatus } from "../hooks/useVacancyDetailMutations";
 import {
   VACANCY_STATUS_LABELS,
+  VACANCY_SALARY_TYPE_LABELS,
   VALID_TRANSITIONS,
   type VacancyStatusType,
+  type VacancySalaryType,
   type VacancyCandidateDTO,
 } from "../types/vacancy.types";
 
@@ -39,6 +41,8 @@ interface VacancyStatusTransitionDialogProps {
   vacancyId: string;
   currentStatus: VacancyStatusType;
   candidates?: VacancyCandidateDTO[];
+  vacancySalaryType?: VacancySalaryType;
+  vacancySalaryFixed?: number | null;
 }
 
 export function VacancyStatusTransitionDialog({
@@ -47,6 +51,8 @@ export function VacancyStatusTransitionDialog({
   vacancyId,
   currentStatus,
   candidates,
+  vacancySalaryType,
+  vacancySalaryFixed,
 }: VacancyStatusTransitionDialogProps) {
   const [newStatus, setNewStatus] = useState<VacancyStatusType | "">("");
   const [reason, setReason] = useState("");
@@ -77,6 +83,7 @@ export function VacancyStatusTransitionDialog({
     newStatus === "CANCELADA" ||
     newStatus === "PERDIDA";
 
+  const isFixedSalary = vacancySalaryType === "FIXED";
   const needsSalaryAndDate = isPrePlacement || isPlacementFromFollowUp;
   const needsReason = isRollbackToHunting || isTerminal;
   const needsNewTargetDate = isRollbackToHunting;
@@ -88,7 +95,7 @@ export function VacancyStatusTransitionDialog({
   const validate = () => {
     const newErrors: Record<string, string> = {};
     if (needsSalaryAndDate) {
-      if (!salaryFixed || Number(salaryFixed) <= 0) {
+      if (!isFixedSalary && (!salaryFixed || Number(salaryFixed) <= 0)) {
         newErrors.salaryFixed = "Ingresá el salario final";
       }
       if (!entryDate) {
@@ -126,7 +133,7 @@ export function VacancyStatusTransitionDialog({
       newStatus,
       reason: reason.trim() || undefined,
       newTargetDeliveryDate: newTargetDeliveryDate || undefined,
-      salaryFixed: salaryFixed ? Number(salaryFixed) : undefined,
+      salaryFixed: isFixedSalary ? undefined : (salaryFixed ? Number(salaryFixed) : undefined),
       entryDate: entryDate || undefined,
       sendCongratsEmail: sendCongratsEmail || undefined,
       hiredCandidateId: hiredCandidateId || undefined,
@@ -229,32 +236,44 @@ export function VacancyStatusTransitionDialog({
                 );
               })()}
 
-              <Field>
-                <FieldLabel>
-                  Salario final acordado <span className="text-destructive">*</span>
-                </FieldLabel>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
-                    $
-                  </span>
-                  <Input
-                    type="number"
-                    placeholder="0"
-                    className="pl-7"
-                    value={salaryFixed}
-                    onChange={(e) => {
-                      setSalaryFixed(e.target.value);
-                      if (errors.salaryFixed) {
-                        setErrors((prev) => ({ ...prev, salaryFixed: "" }));
-                      }
-                    }}
-                    min={0}
+              {isFixedSalary ? (
+                <div className="flex items-start gap-2 rounded-md border border-blue-200 bg-blue-50 px-3 py-2 text-sm text-blue-700 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300">
+                  <HugeiconsIcon
+                    icon={InformationCircleIcon}
+                    className="mt-0.5 size-4 shrink-0"
                   />
+                  <span>
+                    El salario {VACANCY_SALARY_TYPE_LABELS.FIXED.toLowerCase()} ya fue definido: ${vacancySalaryFixed?.toLocaleString() ?? 0}
+                  </span>
                 </div>
-                {errors.salaryFixed && (
-                  <FieldError>{errors.salaryFixed}</FieldError>
-                )}
-              </Field>
+              ) : (
+                <Field>
+                  <FieldLabel>
+                    Salario final acordado <span className="text-destructive">*</span>
+                  </FieldLabel>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
+                      $
+                    </span>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      className="pl-7"
+                      value={salaryFixed}
+                      onChange={(e) => {
+                        setSalaryFixed(e.target.value);
+                        if (errors.salaryFixed) {
+                          setErrors((prev) => ({ ...prev, salaryFixed: "" }));
+                        }
+                      }}
+                      min={0}
+                    />
+                  </div>
+                  {errors.salaryFixed && (
+                    <FieldError>{errors.salaryFixed}</FieldError>
+                  )}
+                </Field>
+              )}
 
               <Field>
                 <FieldLabel>

@@ -919,6 +919,8 @@ export function VacancyDetailSheet({
                 vacancyId={vacancyId}
                 currentStatus={vacancy.status}
                 candidates={vacancy.candidates ?? []}
+                vacancySalaryType={vacancy.salaryType}
+                vacancySalaryFixed={vacancy.salaryFixed}
               />
               <ValidateTernaDialog
                 open={isValidateTernaOpen}

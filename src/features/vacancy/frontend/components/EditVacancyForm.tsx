@@ -6,6 +6,8 @@ import { useEditVacancyForm } from "../hooks/useEditVacancyForm";
 import type { VacancyDTO } from "../types/vacancy.types";
 import { VACANCY_STATUS_LABELS } from "../types/vacancy.types";
 import { VacancyFormFields } from "./VacancyFormFields";
+import { usePermissions } from "@/core/shared/hooks/use-permissions";
+import { PermissionActions } from "@/core/shared/constants/permissions";
 
 interface EditVacancyFormProps {
   onClose: () => void;
@@ -13,15 +15,24 @@ interface EditVacancyFormProps {
 }
 
 export function EditVacancyForm({ onClose, vacancy }: EditVacancyFormProps) {
+  const { hasAnyPermission, isSuperAdmin } = usePermissions();
+
+  const canEditAssignedAt =
+    isSuperAdmin ||
+    hasAnyPermission([PermissionActions.vacantes.modificarFechaAsignacion]);
+
+  const canEditTargetDeliveryDate =
+    isSuperAdmin ||
+    hasAnyPermission([PermissionActions.vacantes.modificarFechaTentativaEntrega]);
+
   const {
     form,
     users,
     clients,
-    saleType,
     detailsModal,
     isSubmitting,
     handleClientChange,
-  } = useEditVacancyForm({ onClose, vacancy });
+  } = useEditVacancyForm({ onClose, vacancy, canEditTargetDeliveryDate });
 
   const userOptions = useMemo(
     () =>
@@ -54,7 +65,8 @@ export function EditVacancyForm({ onClose, vacancy }: EditVacancyFormProps) {
         form={form}
         userOptions={userOptions}
         clientOptions={clientOptions}
-        saleType={saleType}
+        canEditAssignedAt={canEditAssignedAt}
+        canEditTargetDeliveryDate={canEditTargetDeliveryDate}
         currentStatus={VACANCY_STATUS_LABELS[vacancy.status]}
         showNotification={false}
         detailsModalOpen={detailsModal.isOpen}
