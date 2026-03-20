@@ -18,7 +18,7 @@ export interface AddChecklistItemOutput {
 export class AddChecklistItemUseCase {
   constructor(
     private readonly vacancyRepo: IVacancyRepository,
-    private readonly checklistRepo: IVacancyChecklistRepository
+    private readonly checklistRepo: IVacancyChecklistRepository,
   ) {}
 
   async execute(input: AddChecklistItemInput): Promise<AddChecklistItemOutput> {
@@ -49,7 +49,10 @@ export class AddChecklistItemUseCase {
       // 3. Calculate order if not provided
       let finalOrder = order;
       if (finalOrder === undefined) {
-        const count = await this.checklistRepo.countByVacancyId(vacancyId, tenantId);
+        const count = await this.checklistRepo.countByVacancyId(
+          vacancyId,
+          tenantId,
+        );
         finalOrder = count + 1;
       }
 

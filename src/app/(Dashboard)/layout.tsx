@@ -53,7 +53,7 @@ export default function DashboardLayout({
                         <ThemeToogle />
                       </div>
                     </header>
-                    <div className="bg-gray-100 dark:bg-black/100 flex-1 pt-4 px-2 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 min-w-0 w-full">
+                    <div className="bg-gray-100 dark:bg-black flex-1 pt-4 px-2 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 min-w-0 w-full">
                       <div className="w-full max-w-full min-w-0 overflow-hidden">
                         {children}
                       </div>

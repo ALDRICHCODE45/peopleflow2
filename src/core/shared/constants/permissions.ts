@@ -282,6 +282,19 @@ const RECLUTAMIENTO_PERMISSIONS: PermissionDefinition[] = [
     action: "rechazar-checklist",
     description: "Rechazar el checklist de una vacante con motivo",
   },
+  // Vacantes - Control de fechas
+  {
+    name: "vacantes:modificar-fecha-asignacion",
+    resource: "vacantes",
+    action: "modificar-fecha-asignacion",
+    description: "Modificar la fecha de asignación de una vacante",
+  },
+  {
+    name: "vacantes:modificar-fecha-tentativa-entrega",
+    resource: "vacantes",
+    action: "modificar-fecha-tentativa-entrega",
+    description: "Modificar la fecha tentativa de entrega de una vacante",
+  },
   // Vacantes - Modular
   {
     name: "vacantes:gestionar",
@@ -619,6 +632,8 @@ export const PermissionActions = {
     eliminarArchivos: "vacantes:eliminar-archivos",
     validarChecklist: "vacantes:validar-checklist",
     rechazarChecklist: "vacantes:rechazar-checklist",
+    modificarFechaAsignacion: "vacantes:modificar-fecha-asignacion",
+    modificarFechaTentativaEntrega: "vacantes:modificar-fecha-tentativa-entrega",
     gestionar: "vacantes:gestionar",
   },
   candidatos: {
