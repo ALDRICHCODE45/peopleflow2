@@ -49,6 +49,7 @@ import {
 } from "../types/vacancy.types";
 import { useIsMobile } from "@/core/shared/hooks/use-mobile";
 import { VacancySalesTypeBadge } from "./VacancyVentaTypeBadge";
+import { VacancyProgressIndicator } from "./VacancyProgressIndicator";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 
@@ -379,9 +380,13 @@ export function VacancyDetailSheet({
                   <TabsContent value="info" className="mt-4 space-y-5">
                     {/* Fechas */}
                     <div>
-                      <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">
-                        Fechas
-                      </h4>
+                      <VacancyProgressIndicator
+                        assignedAt={vacancy.assignedAt}
+                        targetDeliveryDate={vacancy.targetDeliveryDate}
+                        actualDeliveryDate={vacancy.actualDeliveryDate}
+                        status={vacancy.status}
+                        variant="expanded"
+                      />
                       <div className="grid grid-cols-2 gap-4">
                         <InfoRow
                           label="Fecha de asignación"

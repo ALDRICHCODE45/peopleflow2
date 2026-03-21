@@ -1,6 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { VacancyDTO } from "../../types/vacancy.types";
 import { VacancyStatusBadge, VacancyModalityBadge } from "../VacancyStatusBadge";
+import { VacancyProgressIndicator } from "../VacancyProgressIndicator";
 import { VacancyRowActions } from "./VacancyRowActions";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -127,6 +128,24 @@ export function createVacancyColumns(
         );
       },
       size: 12,
+    },
+    {
+      id: "progress",
+      header: "Progreso",
+      cell: ({ row }) => {
+        const vacancy = row.original;
+        return (
+          <VacancyProgressIndicator
+            assignedAt={vacancy.assignedAt}
+            targetDeliveryDate={vacancy.targetDeliveryDate}
+            actualDeliveryDate={vacancy.actualDeliveryDate}
+            status={vacancy.status}
+            variant="compact"
+          />
+        );
+      },
+      size: 12,
+      enableSorting: false,
     },
     {
       id: "actions",
