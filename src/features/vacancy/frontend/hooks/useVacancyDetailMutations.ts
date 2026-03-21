@@ -16,6 +16,7 @@ import type { UpdateCandidateInput as ServerUpdateCandidateInput } from "@featur
 import {
   updateChecklistItemAction,
   addChecklistItemAction,
+  deleteChecklistItemAction,
 } from "@features/vacancy/server/presentation/actions/checklist.actions";
 import { validateTernaAction } from "@features/vacancy/server/presentation/actions/validateTerna.action";
 import { confirmPlacementAction } from "@features/vacancy/server/presentation/actions/confirmPlacement.action";
@@ -27,6 +28,7 @@ import type {
   VacancyChecklistItemDTO,
   VacancyCandidateMatchDTO,
   DeleteCandidateResult,
+  DeleteChecklistItemResult,
   AddCandidateFormData,
   CandidateMatchRating,
 } from "../types/vacancy.types";
@@ -309,6 +311,85 @@ export function useAddChecklistItem(): UseMutationResult<VacancyChecklistItemDTO
         type: "error",
         title: "Error",
         description: error.message ?? "No se pudo agregar el ítem",
+      });
+    },
+  });
+}
+
+// ---- Update Checklist Item (requirement text) ----
+
+export interface UpdateChecklistItemInput {
+  itemId: string;
+  vacancyId: string;
+  requirement: string;
+}
+
+export function useUpdateChecklistItem(): UseMutationResult<VacancyChecklistItemDTO | undefined, Error, UpdateChecklistItemInput> {
+  const queryClient = useQueryClient();
+  const { tenant } = useTenant();
+
+  return useMutation({
+    mutationFn: async ({ itemId, requirement }: UpdateChecklistItemInput) => {
+      const result = await updateChecklistItemAction(itemId, { requirement });
+      if (result.error) throw new Error(result.error);
+      return result.item;
+    },
+    onSuccess: (_data, variables) => {
+      showToast({
+        type: "success",
+        title: "Ítem actualizado",
+        description: "El requisito fue actualizado exitosamente",
+      });
+      if (tenant?.id) {
+        queryClient.invalidateQueries({
+          queryKey: vacancyQueryKeys.detail(tenant.id, variables.vacancyId),
+        });
+      }
+    },
+    onError: (error: Error) => {
+      showToast({
+        type: "error",
+        title: "Error",
+        description: error.message ?? "No se pudo actualizar el ítem",
+      });
+    },
+  });
+}
+
+// ---- Delete Checklist Item ----
+
+export interface DeleteChecklistItemInput {
+  itemId: string;
+  vacancyId: string;
+}
+
+export function useDeleteChecklistItem(): UseMutationResult<DeleteChecklistItemResult, Error, DeleteChecklistItemInput> {
+  const queryClient = useQueryClient();
+  const { tenant } = useTenant();
+
+  return useMutation({
+    mutationFn: async ({ itemId }: DeleteChecklistItemInput) => {
+      const result = await deleteChecklistItemAction(itemId);
+      if (result.error) throw new Error(result.error);
+      return result;
+    },
+    onSuccess: (_data, variables) => {
+      showToast({
+        type: "success",
+        title: "Ítem eliminado",
+        description: "El requisito fue eliminado del checklist",
+      });
+      if (tenant?.id) {
+        queryClient.invalidateQueries({
+          queryKey: vacancyQueryKeys.detail(tenant.id, variables.vacancyId),
+        });
+      }
+    },
+    onError: (error: Error) => {
+      showToast({
+        type: "error",
+        title: "Error",
+        description: error.message ?? "No se pudo eliminar el ítem",
       });
     },
   });

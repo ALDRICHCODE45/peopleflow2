@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import Image from "next/image";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Dialog,
   DialogContent,
@@ -11,6 +13,7 @@ import {
 import { Button } from "@shadcn/button";
 import { Input } from "@shadcn/input";
 import { Switch } from "@shadcn/switch";
+import { CurrencyInput } from "@/core/shared/components/CurrencyInput";
 import { Textarea } from "@shadcn/textarea";
 import { Separator } from "@/core/shared/ui/shadcn/separator";
 import { ScrollArea } from "@shadcn/scroll-area";
@@ -21,14 +24,40 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@shadcn/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@shadcn/dropdown-menu";
 import { Field, FieldLabel, FieldError } from "@/core/shared/ui/shadcn/field";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  Upload01Icon,
+  Delete02Icon,
+  MoreVerticalIcon,
+  Download04Icon,
+  ArrowMoveUpLeftIcon,
+} from "@hugeicons/core-free-icons";
+import { cn } from "@lib/utils";
 import { PhoneInput } from "@/core/shared/components/phone-input";
 import CountrySelect from "@/core/shared/components/CountrySelect";
 import RegionSelect from "@/core/shared/components/RegionSelect";
 import { useUpdateCandidate } from "../hooks/useVacancyDetailMutations";
+import { useDeleteVacancyAttachment } from "../hooks/useVacancyAttachments";
+import { uploadFileAction } from "@core/storage/actions/uploadFile.action";
+import { StorageKeys } from "@core/storage/StorageKeys";
+import {
+  useFileUpload,
+  type FileWithPreview,
+} from "@/core/shared/hooks/use-upload-file";
+import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
+import { showToast } from "@/core/shared/components/ShowToast";
+import { vacancyQueryKeys } from "@core/shared/constants/query-keys";
 import type {
   VacancyCandidateDTO,
   VacancyModality,
+  AttachmentDTO,
 } from "../types/vacancy.types";
 import { VACANCY_MODALITY_LABELS } from "../types/vacancy.types";
 
@@ -94,6 +123,18 @@ function SectionHeader({ title }: { title: string }) {
   );
 }
 
+function getFileTypeIconSrc(fileName: string): string {
+  const ext = fileName.split(".").pop()?.toLowerCase() ?? "";
+  if (ext === "doc" || ext === "docx") return "/icons/microsoft-word.svg";
+  return "/icons/pdf.svg";
+}
+
+function formatFileSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 export function EditCandidateDialog({
   open,
   onClose,
@@ -108,6 +149,104 @@ export function EditCandidateDialog({
   >({});
 
   const updateCandidateMutation = useUpdateCandidate();
+  const deleteAttachmentMutation = useDeleteVacancyAttachment(vacancyId);
+  const { tenant } = useTenant();
+  const queryClient = useQueryClient();
+
+  // ── CV state ──────────────────────────────────────────────────────────────
+  const existingCv = useMemo<AttachmentDTO | null>(
+    () => candidate.attachments?.find((a) => a.subType === "CV") ?? null,
+    [candidate.attachments],
+  );
+
+  const [
+    { files: cvFiles, isDragging: cvIsDragging, errors: cvErrors },
+    {
+      getInputProps: getCvInputProps,
+      openFileDialog: openCvDialog,
+      clearFiles: clearCvFiles,
+      handleDragEnter: cvDragEnter,
+      handleDragLeave: cvDragLeave,
+      handleDragOver: cvDragOver,
+      handleDrop: cvDrop,
+    },
+  ] = useFileUpload({
+    accept: ".pdf,.doc,.docx",
+    multiple: false,
+    maxSize: 10 * 1024 * 1024,
+    onFilesAdded: (added: FileWithPreview[]) => {
+      const first = added[0];
+      if (first && first.file instanceof File) {
+        uploadCvMutation.mutate({ file: first.file });
+      }
+    },
+  });
+
+  const pendingCvFile =
+    cvFiles[0]?.file instanceof File ? cvFiles[0].file : null;
+
+  const uploadCvMutation = useMutation({
+    mutationFn: async ({ file }: { file: File }) => {
+      const formData = new FormData();
+      formData.append("file", file);
+      const ext = file.name.split(".").pop() ?? "pdf";
+      const key = StorageKeys.candidateCV(vacancyId, candidate.id, ext);
+      const result = await uploadFileAction({
+        formData,
+        key,
+        attachableType:
+          "VACANCY_CANDIDATE" as import("@/core/generated/prisma/client").AttachableType,
+        subType:
+          "CV" as import("@/core/generated/prisma/client").AttachmentSubType,
+        vacancyCandidateId: candidate.id,
+      });
+      if (result.error) throw new Error(result.error);
+      return result.attachment;
+    },
+    onSuccess: () => {
+      showToast({
+        type: "success",
+        title: "CV subido",
+        description: "El CV fue adjuntado al candidato",
+      });
+      clearCvFiles();
+      if (tenant?.id) {
+        queryClient.invalidateQueries({
+          queryKey: vacancyQueryKeys.detail(tenant.id, vacancyId),
+        });
+      }
+    },
+    onError: (error: Error) => {
+      showToast({
+        type: "error",
+        title: "Error al subir CV",
+        description: error.message ?? "No se pudo subir el CV",
+      });
+      clearCvFiles();
+    },
+  });
+
+  const handleDeleteCv = async (attachmentId: string) => {
+    await deleteAttachmentMutation.mutateAsync(attachmentId);
+  };
+
+  const handleReplaceCv = (attachmentId: string) => {
+    // Delete old first, then open file dialog to pick a new one
+    deleteAttachmentMutation.mutate(attachmentId, {
+      onSuccess: () => {
+        openCvDialog();
+      },
+    });
+  };
+
+  const handleDownloadCv = (url: string, fileName: string) => {
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.click();
+  };
 
   const handleChange = <K extends keyof FormState>(
     key: K,
@@ -316,38 +455,22 @@ export function EditCandidateDialog({
                 <div className="grid grid-cols-2 gap-3">
                   <Field>
                     <FieldLabel>Salario actual</FieldLabel>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm pointer-events-none">
-                        $
-                      </span>
-                      <Input
-                        type="number"
-                        placeholder="0"
-                        className="pl-7"
-                        value={form.currentSalary}
-                        onChange={(e) =>
-                          handleChange("currentSalary", e.target.value)
-                        }
-                      />
-                    </div>
+                    <CurrencyInput
+                      value={form.currentSalary}
+                      onChange={(value) =>
+                        handleChange("currentSalary", value)
+                      }
+                    />
                   </Field>
 
                   <Field>
                     <FieldLabel>Expectativa salarial</FieldLabel>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm pointer-events-none">
-                        $
-                      </span>
-                      <Input
-                        type="number"
-                        placeholder="0"
-                        className="pl-7"
-                        value={form.salaryExpectation}
-                        onChange={(e) =>
-                          handleChange("salaryExpectation", e.target.value)
-                        }
-                      />
-                    </div>
+                    <CurrencyInput
+                      value={form.salaryExpectation}
+                      onChange={(value) =>
+                        handleChange("salaryExpectation", value)
+                      }
+                    />
                   </Field>
                 </div>
 
@@ -416,6 +539,139 @@ export function EditCandidateDialog({
                   />
                 </Field>
               </div>
+            </div>
+
+            {/* ── Sección 5: CV ────────────────────────────────────── */}
+            <div>
+              <SectionHeader title="CV del candidato" />
+              <input {...getCvInputProps()} className="hidden" />
+
+              {/* Uploading indicator */}
+              {uploadCvMutation.isPending && pendingCvFile && (
+                <div className="flex items-center justify-between gap-3 rounded-lg border bg-muted/50 px-4 py-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <Image
+                      src={getFileTypeIconSrc(pendingCvFile.name)}
+                      alt=""
+                      width={28}
+                      height={28}
+                      className="shrink-0"
+                    />
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium truncate">
+                        {pendingCvFile.name}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Subiendo...
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Existing CV attached */}
+              {!uploadCvMutation.isPending && existingCv && (
+                <div className="flex items-center justify-between gap-3 rounded-lg border bg-muted/50 px-4 py-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <Image
+                      src={getFileTypeIconSrc(existingCv.fileName)}
+                      alt=""
+                      width={28}
+                      height={28}
+                      className="shrink-0"
+                    />
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium truncate">
+                        {existingCv.fileName}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {formatFileSize(existingCv.fileSize)}
+                      </p>
+                    </div>
+                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7 shrink-0"
+                      >
+                        <HugeiconsIcon icon={MoreVerticalIcon} size={14} />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        onClick={() =>
+                          handleDownloadCv(existingCv.fileUrl, existingCv.fileName)
+                        }
+                      >
+                        <HugeiconsIcon icon={Download04Icon} size={14} className="mr-2" />
+                        Descargar
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => handleReplaceCv(existingCv.id)}
+                        disabled={deleteAttachmentMutation.isPending}
+                      >
+                        <HugeiconsIcon icon={ArrowMoveUpLeftIcon} size={14} className="mr-2" />
+                        Reemplazar
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => handleDeleteCv(existingCv.id)}
+                        disabled={deleteAttachmentMutation.isPending}
+                        className="text-destructive focus:text-destructive"
+                      >
+                        <HugeiconsIcon icon={Delete02Icon} size={14} className="mr-2" />
+                        Eliminar
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              )}
+
+              {/* No CV — show drop zone */}
+              {!uploadCvMutation.isPending && !existingCv && (
+                <div
+                  onDragEnter={cvDragEnter}
+                  onDragLeave={cvDragLeave}
+                  onDragOver={cvDragOver}
+                  onDrop={cvDrop}
+                  onClick={openCvDialog}
+                  className={cn(
+                    "rounded-lg border-2 border-dashed p-6 transition-colors cursor-pointer",
+                    cvIsDragging
+                      ? "border-primary bg-primary/5"
+                      : "border-muted-foreground/25 hover:border-muted-foreground/50",
+                  )}
+                >
+                  <div className="flex flex-col items-center justify-center gap-2 text-center">
+                    <HugeiconsIcon
+                      icon={Upload01Icon}
+                      size={28}
+                      strokeWidth={1.5}
+                      className={cn(
+                        "transition-colors",
+                        cvIsDragging ? "text-primary" : "text-muted-foreground",
+                      )}
+                    />
+                    <div>
+                      <p className="text-sm font-medium">
+                        {cvIsDragging
+                          ? "Soltá el archivo acá"
+                          : "Arrastrá o hacé clic para subir el CV"}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        PDF, DOC o DOCX · Máx. 10 MB
+                      </p>
+                    </div>
+                  </div>
+                  {cvErrors.length > 0 && (
+                    <p className="text-xs text-destructive text-center mt-2">
+                      {cvErrors[0]}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
 
           </div>

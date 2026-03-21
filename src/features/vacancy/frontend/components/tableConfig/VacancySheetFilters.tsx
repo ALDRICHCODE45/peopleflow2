@@ -10,8 +10,8 @@ import {
   SheetTitle,
 } from "@shadcn/sheet";
 import { Label } from "@shadcn/label";
-import { Input } from "@shadcn/input";
 import { Switch } from "@shadcn/switch";
+import { CurrencyInput } from "@/core/shared/components/CurrencyInput";
 import { DatePicker } from "@shadcn/date-picker";
 import { useIsMobile } from "@/core/shared/hooks/use-mobile";
 import { useTenantUsersQuery } from "@/features/Administracion/usuarios/frontend/hooks/useUsers";
@@ -226,28 +226,23 @@ export function VacancySheetFilters({
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1">
                 <Label className="text-xs text-muted-foreground">Mínimo</Label>
-                <Input
-                  type="number"
-                  min={0}
-                  placeholder="0"
+                <CurrencyInput
                   value={salaryMin ?? ""}
-                  onChange={(e) =>
+                  onChange={(value) =>
                     onSalaryMinChange(
-                      e.target.value ? Number(e.target.value) : undefined
+                      value ? Number(value) : undefined
                     )
                   }
                 />
               </div>
               <div className="space-y-1">
                 <Label className="text-xs text-muted-foreground">Máximo</Label>
-                <Input
-                  type="number"
-                  min={0}
+                <CurrencyInput
                   placeholder="∞"
                   value={salaryMax ?? ""}
-                  onChange={(e) =>
+                  onChange={(value) =>
                     onSalaryMaxChange(
-                      e.target.value ? Number(e.target.value) : undefined
+                      value ? Number(value) : undefined
                     )
                   }
                 />

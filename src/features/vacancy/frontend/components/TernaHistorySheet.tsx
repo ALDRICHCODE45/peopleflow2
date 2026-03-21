@@ -1,6 +1,6 @@
 "use client";
 
-import { format, differenceInDays } from "date-fns";
+import { format, differenceInDays, startOfDay } from "date-fns";
 import { es } from "date-fns/locale";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@shadcn/sheet";
 import { Badge } from "@shadcn/badge";
@@ -24,6 +24,8 @@ interface TernaHistorySheetProps {
   onClose: () => void;
   vacancyId: string | null;
   vacancyPosition: string;
+  /** Vacancy assignment date — used to calculate delivery days */
+  vacancyAssignedAt?: string;
 }
 
 function getInitials(fullName: string): string {
@@ -55,14 +57,34 @@ function getDeltaLabel(
   return `${days} día${days !== 1 ? "s" : ""} tarde`;
 }
 
+function getDeliveryDaysLabel(
+  validatedAt: string,
+  assignedAt: string | undefined,
+): string | null {
+  if (!assignedAt) return null;
+  const days = Math.max(
+    0,
+    differenceInDays(
+      startOfDay(new Date(validatedAt)),
+      startOfDay(new Date(assignedAt)),
+    ),
+  );
+  if (days === 0) return "Entregada el día de asignación";
+  if (days === 1) return "Entregada en 1 día";
+  return `Entregada en ${days} días`;
+}
+
 function TernaCard({
   history,
   isLast,
+  assignedAt,
 }: {
   history: TernaHistoryDTO;
   isLast: boolean;
+  assignedAt?: string;
 }) {
   const delta = getDeltaLabel(history.validatedAt, history.targetDeliveryDate);
+  const deliveryDays = getDeliveryDaysLabel(history.validatedAt, assignedAt);
 
   return (
     <div className="flex gap-4">
@@ -144,6 +166,14 @@ function TernaCard({
                   )}
                 </div>
               )}
+
+              {/* Delivery days */}
+              {deliveryDays && (
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <HugeiconsIcon icon={Calendar03Icon} size={12} />
+                  <span>{deliveryDays}</span>
+                </div>
+              )}
             </div>
 
             {/* Validated by */}
@@ -207,6 +237,7 @@ export function TernaHistorySheet({
   onClose,
   vacancyId,
   vacancyPosition,
+  vacancyAssignedAt,
 }: TernaHistorySheetProps) {
   const { data: histories = [], isLoading } = useTernaHistoryQuery(vacancyId);
 
@@ -281,6 +312,7 @@ export function TernaHistorySheet({
                 key={history.id}
                 history={history}
                 isLast={index === histories.length - 1}
+                assignedAt={vacancyAssignedAt}
               />
             ))}
           </div>

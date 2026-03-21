@@ -6,6 +6,10 @@ interface FolderProps {
   size?: number;
   items?: React.ReactNode[];
   className?: string;
+  /** Controlled open state. When provided, the component becomes controlled. */
+  open?: boolean;
+  /** Callback fired when the folder is clicked. Use with `open` for controlled mode. */
+  onToggle?: () => void;
 }
 
 const darkenColor = (hex: string, percent: number): string => {
@@ -26,14 +30,24 @@ const darkenColor = (hex: string, percent: number): string => {
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
 };
 
-const Folder: React.FC<FolderProps> = ({ color = '#5227FF', size = 1, items = [], className = '' }) => {
+const Folder: React.FC<FolderProps> = ({
+  color = '#5227FF',
+  size = 1,
+  items = [],
+  className = '',
+  open: controlledOpen,
+  onToggle,
+}) => {
   const maxItems = 3;
   const papers = items.slice(0, maxItems);
   while (papers.length < maxItems) {
     papers.push(null);
   }
 
-  const [open, setOpen] = useState(false);
+  const isControlled = controlledOpen !== undefined;
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = isControlled ? controlledOpen : internalOpen;
+
   const [paperOffsets, setPaperOffsets] = useState<{ x: number; y: number }[]>(
     Array.from({ length: maxItems }, () => ({ x: 0, y: 0 }))
   );
@@ -43,8 +57,14 @@ const Folder: React.FC<FolderProps> = ({ color = '#5227FF', size = 1, items = []
   const paper2 = darkenColor('#ffffff', 0.05);
   const paper3 = '#ffffff';
 
-  const handleClick = () => {
-    setOpen(prev => !prev);
+  const handleClick = (e: React.MouseEvent) => {
+    // In controlled mode, stop propagation so the parent button handles the toggle
+    if (isControlled) {
+      e.stopPropagation();
+      onToggle?.();
+    } else {
+      setInternalOpen(prev => !prev);
+    }
     if (open) {
       setPaperOffsets(Array.from({ length: maxItems }, () => ({ x: 0, y: 0 })));
     }

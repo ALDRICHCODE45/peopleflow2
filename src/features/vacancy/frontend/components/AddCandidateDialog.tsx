@@ -12,6 +12,7 @@ import {
 import { Button } from "@shadcn/button";
 import { Input } from "@shadcn/input";
 import { Switch } from "@shadcn/switch";
+import { CurrencyInput } from "@/core/shared/components/CurrencyInput";
 import { Textarea } from "@shadcn/textarea";
 import { Separator } from "@/core/shared/ui/shadcn/separator";
 import { ScrollArea } from "@shadcn/scroll-area";
@@ -23,8 +24,10 @@ import {
   SelectValue,
 } from "@shadcn/select";
 import { Field, FieldLabel, FieldError } from "@/core/shared/ui/shadcn/field";
+import Image from "next/image";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { FileAttachmentIcon, Delete02Icon } from "@hugeicons/core-free-icons";
+import { Upload01Icon, Delete02Icon } from "@hugeicons/core-free-icons";
+import { cn } from "@lib/utils";
 import { PhoneInput } from "@/core/shared/components/phone-input";
 import CountrySelect from "@/core/shared/components/CountrySelect";
 import RegionSelect from "@/core/shared/components/RegionSelect";
@@ -95,6 +98,12 @@ function SectionHeader({ title }: { title: string }) {
   );
 }
 
+function getFileTypeIconSrc(fileName: string): string {
+  const ext = fileName.split(".").pop()?.toLowerCase() ?? "";
+  if (ext === "doc" || ext === "docx") return "/icons/microsoft-word.svg";
+  return "/icons/pdf.svg";
+}
+
 export function AddCandidateDialog({
   open,
   onClose,
@@ -108,15 +117,25 @@ export function AddCandidateDialog({
   const addCandidateMutation = useAddCandidate();
 
   // CV file state via useFileUpload hook
-  const [{ files: cvFiles, errors: cvErrors }, { getInputProps, openFileDialog, removeFile: removeCv }] =
-    useFileUpload({
-      accept: ".pdf,.doc,.docx",
-      multiple: false,
-      maxSize: 10 * 1024 * 1024,
-      onFilesAdded: (_added: FileWithPreview[]) => {
-        // Just collect — upload happens after candidate creation
-      },
-    });
+  const [
+    { files: cvFiles, isDragging: cvIsDragging, errors: cvErrors },
+    {
+      getInputProps,
+      openFileDialog,
+      removeFile: removeCv,
+      handleDragEnter: cvDragEnter,
+      handleDragLeave: cvDragLeave,
+      handleDragOver: cvDragOver,
+      handleDrop: cvDrop,
+    },
+  ] = useFileUpload({
+    accept: ".pdf,.doc,.docx",
+    multiple: false,
+    maxSize: 10 * 1024 * 1024,
+    onFilesAdded: (_added: FileWithPreview[]) => {
+      // Just collect — upload happens after candidate creation
+    },
+  });
 
   const cvFile = cvFiles[0]?.file instanceof File ? cvFiles[0].file : null;
 
@@ -353,36 +372,20 @@ export function AddCandidateDialog({
                 <div className="grid grid-cols-2 gap-3">
                   <Field>
                     <FieldLabel>Salario actual</FieldLabel>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm pointer-events-none">
-                        $
-                      </span>
-                      <Input
-                        type="number"
-                        placeholder="0"
-                        className="pl-7"
-                        value={form.currentSalary}
-                        onChange={(e) => handleChange("currentSalary", e.target.value)}
-                      />
-                    </div>
+                    <CurrencyInput
+                      value={form.currentSalary}
+                      onChange={(value) => handleChange("currentSalary", value)}
+                    />
                   </Field>
 
                   <Field>
                     <FieldLabel>Expectativa salarial</FieldLabel>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm pointer-events-none">
-                        $
-                      </span>
-                      <Input
-                        type="number"
-                        placeholder="0"
-                        className="pl-7"
-                        value={form.salaryExpectation}
-                        onChange={(e) =>
-                          handleChange("salaryExpectation", e.target.value)
-                        }
-                      />
-                    </div>
+                    <CurrencyInput
+                      value={form.salaryExpectation}
+                      onChange={(value) =>
+                        handleChange("salaryExpectation", value)
+                      }
+                    />
                   </Field>
                 </div>
 
@@ -452,46 +455,76 @@ export function AddCandidateDialog({
             {/* ── Sección 5: CV ────────────────────────────────────── */}
             <div>
               <SectionHeader title="CV del candidato" />
-              <div className="rounded-lg border p-3 space-y-2">
-                {cvFile ? (
-                  <div className="flex items-center justify-between gap-2 rounded-md bg-muted/50 px-3 py-2">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <HugeiconsIcon icon={FileAttachmentIcon} size={16} className="text-muted-foreground shrink-0" />
-                      <span className="text-sm truncate">{cvFile.name}</span>
-                      <span className="text-xs text-muted-foreground shrink-0">
-                        ({formatBytes(cvFile.size)})
-                      </span>
+              <input {...getInputProps()} className="hidden" />
+              {cvFile ? (
+                <div className="flex items-center justify-between gap-3 rounded-lg border bg-muted/50 px-4 py-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <Image
+                      src={getFileTypeIconSrc(cvFile.name)}
+                      alt=""
+                      width={28}
+                      height={28}
+                      className="shrink-0"
+                    />
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium truncate">{cvFile.name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {formatBytes(cvFile.size)}
+                      </p>
                     </div>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      className="h-7 w-7 text-destructive hover:text-destructive hover:bg-destructive/10 shrink-0"
-                      onClick={() => removeCv(cvFiles[0]?.id ?? "")}
-                    >
-                      <HugeiconsIcon icon={Delete02Icon} size={14} />
-                    </Button>
                   </div>
-                ) : (
-                  <div>
-                    <input {...getInputProps()} className="hidden" />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="gap-1.5 text-xs"
-                      onClick={openFileDialog}
-                    >
-                      <HugeiconsIcon icon={FileAttachmentIcon} size={14} />
-                      Adjuntar CV
-                    </Button>
-                    <p className="text-xs text-muted-foreground mt-1">PDF, DOC o DOCX · Máx. 10 MB</p>
-                    {cvErrors.length > 0 && (
-                      <p className="text-xs text-destructive mt-1">{cvErrors[0]}</p>
-                    )}
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 text-destructive hover:text-destructive hover:bg-destructive/10 shrink-0"
+                    onClick={() => removeCv(cvFiles[0]?.id ?? "")}
+                  >
+                    <HugeiconsIcon icon={Delete02Icon} size={14} />
+                  </Button>
+                </div>
+              ) : (
+                <div
+                  onDragEnter={cvDragEnter}
+                  onDragLeave={cvDragLeave}
+                  onDragOver={cvDragOver}
+                  onDrop={cvDrop}
+                  onClick={openFileDialog}
+                  className={cn(
+                    "rounded-lg border-2 border-dashed p-6 transition-colors cursor-pointer",
+                    cvIsDragging
+                      ? "border-primary bg-primary/5"
+                      : "border-muted-foreground/25 hover:border-muted-foreground/50",
+                  )}
+                >
+                  <div className="flex flex-col items-center justify-center gap-2 text-center">
+                    <HugeiconsIcon
+                      icon={Upload01Icon}
+                      size={28}
+                      strokeWidth={1.5}
+                      className={cn(
+                        "transition-colors",
+                        cvIsDragging ? "text-primary" : "text-muted-foreground",
+                      )}
+                    />
+                    <div>
+                      <p className="text-sm font-medium">
+                        {cvIsDragging
+                          ? "Soltá el archivo acá"
+                          : "Arrastrá o hacé clic para subir el CV"}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        PDF, DOC o DOCX · Máx. 10 MB
+                      </p>
+                    </div>
                   </div>
-                )}
-              </div>
+                  {cvErrors.length > 0 && (
+                    <p className="text-xs text-destructive text-center mt-2">
+                      {cvErrors[0]}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
 
           </div>

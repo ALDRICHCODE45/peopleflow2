@@ -10,8 +10,8 @@ import {
   DialogDescription,
 } from "@shadcn/dialog";
 import { Button } from "@shadcn/button";
-import { Input } from "@shadcn/input";
 import { Switch } from "@shadcn/switch";
+import { CurrencyInput } from "@/core/shared/components/CurrencyInput";
 import { Textarea } from "@shadcn/textarea";
 import {
   Select,
@@ -43,6 +43,9 @@ interface VacancyStatusTransitionDialogProps {
   candidates?: VacancyCandidateDTO[];
   vacancySalaryType?: VacancySalaryType;
   vacancySalaryFixed?: number | null;
+  vacancyEntryDate?: string | null;
+  /** Pre-select a target status when the dialog opens (e.g. from "Confirmar Placement" button) */
+  initialStatus?: VacancyStatusType;
 }
 
 export function VacancyStatusTransitionDialog({
@@ -53,12 +56,24 @@ export function VacancyStatusTransitionDialog({
   candidates,
   vacancySalaryType,
   vacancySalaryFixed,
+  vacancyEntryDate,
+  initialStatus,
 }: VacancyStatusTransitionDialogProps) {
-  const [newStatus, setNewStatus] = useState<VacancyStatusType | "">("");
+  // Compute initial values — when initialStatus is PLACEMENT from PRE_PLACEMENT, pre-populate salary/date
+  const preloadPlacement =
+    initialStatus === "PLACEMENT" && currentStatus === "PRE_PLACEMENT";
+
+  const [newStatus, setNewStatus] = useState<VacancyStatusType | "">(initialStatus ?? "");
   const [reason, setReason] = useState("");
   const [newTargetDeliveryDate, setNewTargetDeliveryDate] = useState("");
-  const [salaryFixed, setSalaryFixed] = useState("");
-  const [entryDate, setEntryDate] = useState("");
+  const [salaryFixed, setSalaryFixed] = useState(
+    preloadPlacement && vacancySalaryFixed != null && vacancySalaryFixed > 0
+      ? String(vacancySalaryFixed)
+      : "",
+  );
+  const [entryDate, setEntryDate] = useState(
+    preloadPlacement && vacancyEntryDate ? vacancyEntryDate.split("T")[0] : "",
+  );
   const [sendCongratsEmail, setSendCongratsEmail] = useState(false);
   const [hiredCandidateId, setHiredCandidateId] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -84,7 +99,8 @@ export function VacancyStatusTransitionDialog({
     newStatus === "PERDIDA";
 
   const isFixedSalary = vacancySalaryType === "FIXED";
-  const needsSalaryAndDate = isPrePlacement || isPlacementFromFollowUp;
+  const needsSalaryAndDate = isPrePlacement || isPlacementFromFollowUp || isPlacementFromPrePlacement;
+  const needsHiredCandidate = isPrePlacement || isPlacementFromFollowUp;
   const needsReason = isRollbackToHunting || isTerminal;
   const needsNewTargetDate = isRollbackToHunting;
   const showCongratsSwitch = isPlacementFromFollowUp || isPlacementFromPrePlacement;
@@ -101,6 +117,8 @@ export function VacancyStatusTransitionDialog({
       if (!entryDate) {
         newErrors.entryDate = "Ingresá la fecha de ingreso";
       }
+    }
+    if (needsHiredCandidate) {
       const ternaOrAll = (candidates ?? []).filter(
         (c) => c.isInTerna || c.status === "EN_TERNA",
       );
@@ -121,8 +139,19 @@ export function VacancyStatusTransitionDialog({
   };
 
   const handleStatusChange = (value: string) => {
-    setNewStatus(value as VacancyStatusType);
+    const status = value as VacancyStatusType;
+    setNewStatus(status);
     setErrors({});
+
+    // Pre-populate salary/date when selecting PLACEMENT from PRE_PLACEMENT
+    if (status === "PLACEMENT" && currentStatus === "PRE_PLACEMENT") {
+      if (vacancySalaryFixed != null && vacancySalaryFixed > 0) {
+        setSalaryFixed(String(vacancySalaryFixed));
+      }
+      if (vacancyEntryDate) {
+        setEntryDate(vacancyEntryDate.split("T")[0]);
+      }
+    }
   };
 
   const handleSubmit = async () => {
@@ -190,11 +219,11 @@ export function VacancyStatusTransitionDialog({
             </Select>
           </Field>
 
-          {/* ── PRE_PLACEMENT or PLACEMENT from FOLLOW_UP: salary + date ── */}
+          {/* ── PRE_PLACEMENT or PLACEMENT: salary + date ── */}
           {needsSalaryAndDate && (
             <>
-              {/* Candidate hired selector */}
-              {(() => {
+              {/* Candidate hired selector (only for PRE_PLACEMENT or PLACEMENT from FOLLOW_UP) */}
+              {needsHiredCandidate && (() => {
                 const ternaOrAll = (candidates ?? []).filter(
                   (c) => c.isInTerna || c.status === "EN_TERNA",
                 );
@@ -251,24 +280,15 @@ export function VacancyStatusTransitionDialog({
                   <FieldLabel>
                     Salario final acordado <span className="text-destructive">*</span>
                   </FieldLabel>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
-                      $
-                    </span>
-                    <Input
-                      type="number"
-                      placeholder="0"
-                      className="pl-7"
-                      value={salaryFixed}
-                      onChange={(e) => {
-                        setSalaryFixed(e.target.value);
-                        if (errors.salaryFixed) {
-                          setErrors((prev) => ({ ...prev, salaryFixed: "" }));
-                        }
-                      }}
-                      min={0}
-                    />
-                  </div>
+                  <CurrencyInput
+                    value={salaryFixed}
+                    onChange={(value) => {
+                      setSalaryFixed(value);
+                      if (errors.salaryFixed) {
+                        setErrors((prev) => ({ ...prev, salaryFixed: "" }));
+                      }
+                    }}
+                  />
                   {errors.salaryFixed && (
                     <FieldError>{errors.salaryFixed}</FieldError>
                   )}
@@ -309,21 +329,21 @@ export function VacancyStatusTransitionDialog({
                   </span>
                 </div>
               )}
-            </>
-          )}
 
-          {/* ── PLACEMENT from PRE_PLACEMENT: info only ── */}
-          {isPlacementFromPrePlacement && (
-            <div className="flex items-start gap-2 rounded-md border border-muted bg-muted/30 px-3 py-2 text-sm text-muted-foreground">
-              <HugeiconsIcon
-                icon={InformationCircleIcon}
-                className="mt-0.5 size-4 shrink-0"
-              />
-              <span>
-                El salario y fecha de ingreso ya fueron registrados al pasar a
-                Pre-Placement.
-              </span>
-            </div>
+              {/* Info box for PLACEMENT from PRE_PLACEMENT: values pre-loaded */}
+              {isPlacementFromPrePlacement && (vacancySalaryFixed != null || vacancyEntryDate) && (
+                <div className="flex items-start gap-2 rounded-md border border-blue-200 bg-blue-50 px-3 py-2 text-sm text-blue-700 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300">
+                  <HugeiconsIcon
+                    icon={InformationCircleIcon}
+                    className="mt-0.5 size-4 shrink-0"
+                  />
+                  <span>
+                    Los valores de salario y fecha fueron cargados desde
+                    Pre-Placement. Podés modificarlos antes de confirmar.
+                  </span>
+                </div>
+              )}
+            </>
           )}
 
           {/* ── Congrats email switch (PLACEMENT from any source) ── */}

@@ -1,7 +1,7 @@
 "use client";
 
-import { Input } from "@shadcn/input";
 import { Field, FieldLabel } from "@/core/shared/ui/shadcn/field";
+import { CurrencyInput } from "@/core/shared/components/CurrencyInput";
 import { useStore } from "@tanstack/react-form";
 import { VACANCY_SALARY_TYPE_LABELS } from "../types/vacancy.types";
 import type { VacancyForm } from "../types/vacancy-form.types";
@@ -21,24 +21,16 @@ export function SalaryFields({ form }: SalaryFieldsProps) {
             <FieldLabel htmlFor={field.name}>
               {VACANCY_SALARY_TYPE_LABELS.FIXED}
             </FieldLabel>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
-                $
-              </span>
-              <Input
-                id={field.name}
-                type="number"
-                className="pl-7"
-                value={field.state.value ?? ""}
-                onBlur={field.handleBlur}
-                onChange={(e) =>
-                  field.handleChange(
-                    e.target.value ? Number(e.target.value) : undefined,
-                  )
-                }
-                placeholder="0"
-              />
-            </div>
+            <CurrencyInput
+              id={field.name}
+              value={field.state.value ?? ""}
+              onBlur={field.handleBlur}
+              onChange={(value) =>
+                field.handleChange(
+                  value ? Number(value) : undefined,
+                )
+              }
+            />
           </Field>
         )}
       </form.Field>
@@ -51,17 +43,15 @@ export function SalaryFields({ form }: SalaryFieldsProps) {
         {(field) => (
           <Field>
             <FieldLabel htmlFor={field.name}>Salario mínimo</FieldLabel>
-            <Input
+            <CurrencyInput
               id={field.name}
-              type="number"
               value={field.state.value ?? ""}
               onBlur={field.handleBlur}
-              onChange={(e) =>
+              onChange={(value) =>
                 field.handleChange(
-                  e.target.value ? Number(e.target.value) : undefined,
+                  value ? Number(value) : undefined,
                 )
               }
-              placeholder="0"
             />
           </Field>
         )}
@@ -71,17 +61,15 @@ export function SalaryFields({ form }: SalaryFieldsProps) {
         {(field) => (
           <Field>
             <FieldLabel htmlFor={field.name}>Salario máximo</FieldLabel>
-            <Input
+            <CurrencyInput
               id={field.name}
-              type="number"
               value={field.state.value ?? ""}
               onBlur={field.handleBlur}
-              onChange={(e) =>
+              onChange={(value) =>
                 field.handleChange(
-                  e.target.value ? Number(e.target.value) : undefined,
+                  value ? Number(value) : undefined,
                 )
               }
-              placeholder="0"
             />
           </Field>
         )}

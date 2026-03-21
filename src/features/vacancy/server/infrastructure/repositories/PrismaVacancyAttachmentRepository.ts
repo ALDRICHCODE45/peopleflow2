@@ -70,11 +70,10 @@ export class PrismaVacancyAttachmentRepository implements IVacancyAttachmentRepo
 
   async findById(
     attachmentId: string,
-    vacancyId: string,
     tenantId: string,
   ): Promise<VacancyAttachmentRecord | null> {
     const record = await prisma.attachment.findFirst({
-      where: { id: attachmentId, vacancyId, tenantId },
+      where: { id: attachmentId, tenantId },
       select: ATTACHMENT_SELECT,
     });
     if (!record) return null;

@@ -4,15 +4,28 @@ import { useState } from "react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  CheckmarkCircle02Icon,
-  Cancel01Icon,
-  Delete02Icon,
-  DownloadCircle01Icon,
-} from "@hugeicons/core-free-icons";
+import { CheckmarkCircle02Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
-import { Separator } from "@/core/shared/ui/shadcn/separator";
+import {
+  Item,
+  ItemMedia,
+  ItemContent,
+  ItemTitle,
+  ItemDescription,
+  ItemActions,
+} from "@shadcn/item";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@shadcn/alert-dialog";
+import { FolderSection } from "@/core/shared/ui/FolderSection/FolderSection";
 import {
   Dialog,
   DialogContent,
@@ -22,22 +35,56 @@ import {
 } from "@/core/shared/ui/shadcn/dialog";
 import { Textarea } from "@/core/shared/ui/shadcn/textarea";
 import { Label } from "@/core/shared/ui/shadcn/label";
+import { CandidateActionsDropdown } from "./CandidateActionsDropdown";
 import { FileUploadButton, FileDropZone } from "./FileUploadButton";
 import {
   useDeleteVacancyAttachment,
   useValidateAttachment,
   useRejectAttachment,
 } from "../hooks/useVacancyAttachments";
+import type { CandidateAction } from "./CandidateActionsDropdown";
 import type { AttachmentDTO, VacancyDTO } from "../types/vacancy.types";
 import { usePermissions } from "@/core/shared/hooks/use-permissions";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
+/** SVG file-type icons used as Folder paper items */
+/* eslint-disable @next/next/no-img-element */
+function FileIconItem({ src, alt }: { src: string; alt: string }) {
+  return (
+    <div className="flex items-center justify-center w-full h-full p-1">
+      <img src={src} alt={alt} className="w-full h-full object-contain" />
+    </div>
+  );
+}
+
+/** Static decorative items for each folder — always shows 3 file-type icons */
+const JOB_DESCRIPTION_ITEMS = [
+  <FileIconItem key="pdf" src="/icons/pdf.svg" alt="PDF" />,
+  <FileIconItem key="word" src="/icons/microsoft-word.svg" alt="Word" />,
+  <FileIconItem key="sheets" src="/icons/google-sheets.svg" alt="Sheets" />,
+];
+
+const PERFILES_MUESTRA_ITEMS = [
+  <FileIconItem key="pdf" src="/icons/pdf.svg" alt="PDF" />,
+  <FileIconItem key="word" src="/icons/microsoft-word.svg" alt="Word" />,
+  <FileIconItem key="sheets" src="/icons/google-sheets.svg" alt="Sheets" />,
+];
+/* eslint-enable @next/next/no-img-element */
+
 function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function getFileTypeIcon(fileName: string): { src: string; alt: string } {
+  const ext = fileName.split(".").pop()?.toLowerCase() ?? "";
+  if (ext === "pdf") return { src: "/icons/pdf.svg", alt: "PDF" };
+  if (ext === "doc" || ext === "docx") return { src: "/icons/microsoft-word.svg", alt: "Word" };
+  if (ext === "xls" || ext === "xlsx" || ext === "csv") return { src: "/icons/google-sheets.svg", alt: "Sheets" };
+  return { src: "/icons/pdf.svg", alt: "Archivo" };
 }
 
 function formatDateSafe(isoString: string | null | undefined): string {
@@ -130,6 +177,47 @@ function RejectDialog({ open, title, onClose, onConfirm, isPending }: RejectDial
   );
 }
 
+// ─── Validate Attachment Alert Dialog ─────────────────────────────────────────
+
+interface ValidateAttachmentAlertDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  fileName: string;
+  onConfirm: () => void;
+  isPending: boolean;
+}
+
+function ValidateAttachmentAlertDialog({
+  open,
+  onOpenChange,
+  fileName,
+  onConfirm,
+  isPending,
+}: ValidateAttachmentAlertDialogProps) {
+  return (
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Validar archivo</AlertDialogTitle>
+          <AlertDialogDescription>
+            ¿Estás seguro de que deseas validar el archivo{" "}
+            <span className="font-semibold">{fileName}</span>? Esta acción no se
+            puede deshacer.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={isPending}>Cancelar</AlertDialogCancel>
+          <Button asChild>
+            <AlertDialogAction onClick={onConfirm} disabled={isPending}>
+              {isPending ? "Validando..." : "Validar"}
+            </AlertDialogAction>
+          </Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
+
 // ─── Attachment Row ───────────────────────────────────────────────────────────
 
 interface AttachmentRowProps {
@@ -139,6 +227,7 @@ interface AttachmentRowProps {
   showDeleteAction?: boolean;
 }
 
+/* eslint-disable @next/next/no-img-element */
 function AttachmentRow({
   attachment,
   vacancyId,
@@ -146,10 +235,13 @@ function AttachmentRow({
   showDeleteAction = false,
 }: AttachmentRowProps) {
   const [rejectOpen, setRejectOpen] = useState(false);
+  const [validateOpen, setValidateOpen] = useState(false);
 
   const deleteMutation = useDeleteVacancyAttachment(vacancyId);
   const validateMutation = useValidateAttachment(vacancyId);
   const rejectMutation = useRejectAttachment(vacancyId);
+
+  const fileIcon = getFileTypeIcon(attachment.fileName);
 
   function handleReject(reason: string) {
     rejectMutation.mutate(
@@ -158,84 +250,97 @@ function AttachmentRow({
     );
   }
 
+  function handleValidate() {
+    validateMutation.mutate(attachment.id, {
+      onSuccess: () => setValidateOpen(false),
+    });
+  }
+
+  // Build dropdown actions
+  const dropdownActions: CandidateAction[] = [
+    {
+      id: "download",
+      label: "Descargar",
+      onClick: () => window.open(attachment.fileUrl, "_blank"),
+    },
+    ...(showReviewActions && !attachment.isValidated
+      ? [
+          {
+            id: "validate",
+            label: "Validar",
+            onClick: () => setValidateOpen(true),
+          },
+        ]
+      : []),
+    ...(showReviewActions
+      ? [
+          {
+            id: "reject",
+            label: "Rechazar",
+            onClick: () => setRejectOpen(true),
+          },
+        ]
+      : []),
+    ...(showDeleteAction
+      ? [
+          {
+            id: "delete",
+            label: "Eliminar",
+            variant: "destructive" as const,
+            onClick: () => deleteMutation.mutate(attachment.id),
+          },
+        ]
+      : []),
+  ];
+
+  // Build description parts
+  const descriptionParts: string[] = [formatBytes(attachment.fileSize)];
+  if (attachment.isValidated && attachment.validatedAt) {
+    descriptionParts.push(`Validado el ${formatDateSafe(attachment.validatedAt)}`);
+  }
+
   return (
-    <div className="rounded-lg border bg-card p-3 space-y-2">
-      {/* File info row */}
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium truncate">{attachment.fileName}</p>
-          <p className="text-xs text-muted-foreground">{formatBytes(attachment.fileSize)}</p>
-        </div>
-        <ValidationBadge attachment={attachment} />
-      </div>
+    <>
+      <Item variant="outline" size="sm" className="group">
+        <ItemMedia className="size-9 shrink-0 self-start">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={fileIcon.src} alt={fileIcon.alt} className="size-9 object-contain" />
+        </ItemMedia>
 
-      {/* Rejection reason callout */}
-      {attachment.rejectionReason && (
-        <div className="rounded-md bg-red-50 border border-red-200 px-3 py-2 text-xs text-red-700">
-          <span className="font-medium">Motivo de rechazo: </span>
-          {attachment.rejectionReason}
-        </div>
-      )}
+        <ItemContent>
+          <ItemTitle>
+            <span className="truncate">{attachment.fileName}</span>
+            <ValidationBadge attachment={attachment} />
+          </ItemTitle>
 
-      {/* Validation date */}
-      {attachment.isValidated && attachment.validatedAt && (
-        <p className="text-xs text-muted-foreground">
-          Validado el {formatDateSafe(attachment.validatedAt)}
-        </p>
-      )}
-
-      {/* Action buttons */}
-      <div className="flex items-center gap-1.5 flex-wrap">
-        {/* Download */}
-        <Button variant="ghost" size="sm" className="h-7 px-2 text-xs gap-1" asChild>
-          <a href={attachment.fileUrl} target="_blank" rel="noopener noreferrer" download>
-            <HugeiconsIcon icon={DownloadCircle01Icon} size={13} />
-            Descargar
-          </a>
-        </Button>
-
-        {/* Review actions (validate / reject) */}
-        {showReviewActions && (
-          <>
-            {!attachment.isValidated && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-7 px-2 text-xs gap-1 text-green-700 hover:text-green-800 hover:bg-green-50"
-                disabled={validateMutation.isPending}
-                onClick={() => validateMutation.mutate(attachment.id)}
-              >
-                <HugeiconsIcon icon={CheckmarkCircle02Icon} size={13} />
-                Validar
-              </Button>
+          <ItemDescription>
+            {descriptionParts.join(" · ")}
+            {attachment.rejectionReason && (
+              <span className="text-red-600">
+                {" — "}Motivo: {attachment.rejectionReason}
+              </span>
             )}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 px-2 text-xs gap-1 text-red-700 hover:text-red-800 hover:bg-red-50"
-              disabled={rejectMutation.isPending}
-              onClick={() => setRejectOpen(true)}
-            >
-              <HugeiconsIcon icon={Cancel01Icon} size={13} />
-              Rechazar
-            </Button>
-          </>
-        )}
+          </ItemDescription>
+        </ItemContent>
 
-        {/* Delete action */}
-        {showDeleteAction && (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-7 px-2 text-xs gap-1 text-destructive hover:text-destructive hover:bg-destructive/10"
-            disabled={deleteMutation.isPending}
-            onClick={() => deleteMutation.mutate(attachment.id)}
+        {dropdownActions.length > 0 && (
+          <ItemActions
+            className="opacity-0 group-hover:opacity-100 transition-opacity"
+            onClick={(e) => e.stopPropagation()}
           >
-            <HugeiconsIcon icon={Delete02Icon} size={13} />
-            Eliminar
-          </Button>
+            <CandidateActionsDropdown actions={dropdownActions} />
+          </ItemActions>
         )}
-      </div>
+      </Item>
+
+      {/* Dialogs — outside Item to avoid layout interference */}
+      <ValidateAttachmentAlertDialog
+        open={validateOpen}
+        onOpenChange={setValidateOpen}
+        fileName={attachment.fileName}
+        onConfirm={handleValidate}
+        isPending={validateMutation.isPending}
+      />
 
       <RejectDialog
         open={rejectOpen}
@@ -244,9 +349,10 @@ function AttachmentRow({
         onConfirm={handleReject}
         isPending={rejectMutation.isPending}
       />
-    </div>
+    </>
   );
 }
+/* eslint-enable @next/next/no-img-element */
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
@@ -293,13 +399,15 @@ export function AttachmentsSection({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       {/* ── Job Description ── */}
-      <div>
-        <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">
-          Job Description
-        </h4>
-
+      <FolderSection
+        title="Job Description"
+        color="#5227FF"
+        fileCount={jobDescriptions.length}
+        defaultOpen={false}
+        folderItems={JOB_DESCRIPTION_ITEMS}
+      >
         {hasJobDescription ? (
           <div className="space-y-2">
             {jobDescriptions.map((attachment) => (
@@ -321,24 +429,24 @@ export function AttachmentsSection({
             description="PDF, DOC o DOCX"
           />
         )}
-      </div>
-
-      <Separator />
+      </FolderSection>
 
       {/* ── Perfiles Muestra ── */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Perfiles Muestra
-          </h4>
+      <FolderSection
+        title="Perfiles Muestra"
+        color="#FF6B35"
+        fileCount={perfilesMuestra.length}
+        defaultOpen={false}
+        folderItems={PERFILES_MUESTRA_ITEMS}
+        headerAction={
           <FileUploadButton
             vacancyId={vacancy.id}
             subType="PERFIL_MUESTRA"
             accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
             label="Agregar perfil"
           />
-        </div>
-
+        }
+      >
         {perfilesMuestra.length === 0 ? (
           <FileDropZone
             vacancyId={vacancy.id}
@@ -360,7 +468,7 @@ export function AttachmentsSection({
             ))}
           </div>
         )}
-      </div>
+      </FolderSection>
     </div>
   );
 }

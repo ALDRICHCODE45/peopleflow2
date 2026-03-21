@@ -24,6 +24,7 @@ import type {
 } from "@features/vacancy/frontend/types/vacancy.types";
 import type { VacancyAttachmentRecord } from "../../domain/interfaces/IVacancyAttachmentRepository";
 import { ServerErrors } from "@core/shared/constants/error-messages";
+import { tryAutoTransitionToHunting } from "../helpers/tryAutoTransitionToHunting.helper";
 
 // ─── Map VacancyAttachmentRecord → AttachmentDTO ─────────────────────────────
 
@@ -114,7 +115,7 @@ export async function deleteVacancyAttachmentAction(
     ]);
     if (!hasPermission) return { error: "Sin permisos para eliminar archivos", success: false };
 
-    const attachment = await prismaVacancyAttachmentRepository.findById(attachmentId, vacancyId, tenantId);
+    const attachment = await prismaVacancyAttachmentRepository.findById(attachmentId, tenantId);
     if (!attachment) return { error: "Archivo no encontrado", success: false };
 
     // Derive storage key from the URL
@@ -166,6 +167,9 @@ export async function validateAttachmentAction(input: {
     if (!hasPermission) return { error: "Sin permisos para validar archivos" };
 
     const record = await prismaVacancyAttachmentRepository.validate(input.attachmentId, session.user.id);
+
+    // Try auto-transition QUICK_MEETING → HUNTING if all guards pass
+    await tryAutoTransitionToHunting(input.vacancyId, tenantId, session.user.id);
 
     revalidatePath(Routes.reclutamiento.vacantes);
     return { error: null, attachment: toAttachmentDTO(record) };
@@ -227,6 +231,9 @@ export async function validateVacancyChecklistAction(
     if (!hasPermission) return { error: "Sin permisos para validar el checklist" };
 
     const vacancy = await prismaVacancyRepository.validateChecklist(vacancyId, tenantId, session.user.id);
+
+    // Try auto-transition QUICK_MEETING → HUNTING if all guards pass
+    await tryAutoTransitionToHunting(vacancyId, tenantId, session.user.id);
 
     revalidatePath(Routes.reclutamiento.vacantes);
     return { error: null, vacancy };
