@@ -32,6 +32,8 @@ import { useTenantUsersQuery } from "@/features/Administracion/usuarios/frontend
 import { SwitchActionNotification } from "../components/SwitchActionNotification";
 import { LeadStatusSelector } from "../components/LeadStatusSelector";
 import { LeadInactivityConfig } from "../components/LeadInactivityConfig";
+import { VacancyCountdownConfig } from "../components/VacancyCountdownConfig";
+import { VacancyStaleConfig } from "../components/VacancyStaleConfig";
 import {
   useNotificationConfigQuery,
   useSaveNotificationConfig,
@@ -60,29 +62,16 @@ const NOTIFICATION_MODULES = [
     label: "Reclutamiento",
     actions: [
       {
-        id: "vacancy-created",
-        label: "Nueva vacante creada",
-        description: "Cuando se publica una nueva vacante",
+        id: "vacancy-countdown",
+        label: "Recordatorio de entrega",
+        description:
+          "Enviar recordatorios antes de la fecha tentativa de entrega",
       },
       {
-        id: "candidate-applied",
-        label: "Nuevo candidato",
-        description: "Cuando un candidato aplica a una vacante",
-      },
-      {
-        id: "interview-scheduled",
-        label: "Entrevista programada",
-        description: "Cuando se agenda una entrevista",
-      },
-      {
-        id: "candidate-hired",
-        label: "Candidato contratado",
-        description: "Cuando un candidato es contratado",
-      },
-      {
-        id: "vacancy-closed",
-        label: "Vacante cerrada",
-        description: "Cuando una vacante se cierra",
+        id: "vacancy-stale",
+        label: "Vacante sin actividad",
+        description:
+          "Notificar cuando una vacante permanezca demasiado tiempo en ciertos estados",
       },
     ],
   },
@@ -131,6 +120,12 @@ export function ConfiguracionPage() {
     toggleInactiveStatus,
     setTimeValue,
     setTimeUnit,
+    setCountdownDays,
+    toggleStaleStatus,
+    setStaleTimeValue,
+    setStaleTimeUnit,
+    setStaleRepeatValue,
+    setStaleRepeatUnit,
   } = useNotificationDraft(savedConfig);
 
   const userOptions = useMemo(
@@ -162,6 +157,17 @@ export function ConfiguracionPage() {
       leadInactiveTimeValue: state.inactiveTimeValue,
       leadInactiveTimeUnit:
         state.inactiveTimeUnit === "horas" ? "HOURS" : "DAYS",
+      vacancyCountdownEnabled:
+        state.activeActions["vacancy-countdown"] ?? false,
+      vacancyCountdownDaysBefore: state.vacancyCountdownDaysBefore,
+      vacancyStaleEnabled: state.activeActions["vacancy-stale"] ?? false,
+      vacancyStaleStatuses: state.vacancyStaleStatuses,
+      vacancyStaleTimeValue: state.vacancyStaleTimeValue,
+      vacancyStaleTimeUnit:
+        state.vacancyStaleTimeUnit === "horas" ? "HOURS" : "DAYS",
+      vacancyStaleRepeatValue: state.vacancyStaleRepeatValue,
+      vacancyStaleRepeatUnit:
+        state.vacancyStaleRepeatUnit === "horas" ? "HOURS" : "DAYS",
     });
   }, [state, saveConfigMutation]);
 
@@ -319,6 +325,34 @@ export function ConfiguracionPage() {
                                       onTimeValueChange={setTimeValue}
                                       timeUnit={state.inactiveTimeUnit}
                                       onTimeUnitChange={setTimeUnit}
+                                    />
+                                  )}
+                                {action.id === "vacancy-countdown" &&
+                                  state.activeActions[action.id] === true && (
+                                    <VacancyCountdownConfig
+                                      daysBefore={
+                                        state.vacancyCountdownDaysBefore
+                                      }
+                                      onDaysChange={setCountdownDays}
+                                    />
+                                  )}
+                                {action.id === "vacancy-stale" &&
+                                  state.activeActions[action.id] === true && (
+                                    <VacancyStaleConfig
+                                      selectedStatuses={
+                                        state.vacancyStaleStatuses
+                                      }
+                                      onStatusChange={toggleStaleStatus}
+                                      timeValue={state.vacancyStaleTimeValue}
+                                      onTimeValueChange={setStaleTimeValue}
+                                      timeUnit={state.vacancyStaleTimeUnit}
+                                      onTimeUnitChange={setStaleTimeUnit}
+                                      repeatValue={
+                                        state.vacancyStaleRepeatValue
+                                      }
+                                      onRepeatValueChange={setStaleRepeatValue}
+                                      repeatUnit={state.vacancyStaleRepeatUnit}
+                                      onRepeatUnitChange={setStaleRepeatUnit}
                                     />
                                   )}
                               </SwitchActionNotification>

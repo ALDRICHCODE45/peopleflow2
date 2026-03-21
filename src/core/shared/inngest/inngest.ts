@@ -64,7 +64,7 @@ export type StandaloneEmailPayload =
         vacancyId: string;
       };
     }
-  | {
+   | {
       template: "validation-request";
       tenantId: string;
       triggeredById: string;
@@ -77,6 +77,35 @@ export type StandaloneEmailPayload =
         resources: string[];
         vacancyId: string;
         tenantName: string;
+      };
+    }
+  | {
+      template: "vacancy-countdown";
+      tenantId: string;
+      triggeredById: string;
+      data: {
+        recipientName: string;
+        recipientEmail: string;
+        vacancyPosition: string;
+        clientName: string;
+        daysRemaining: number;
+        targetDate: string;
+        vacancyId: string;
+      };
+    }
+  | {
+      template: "vacancy-stale-alert";
+      tenantId: string;
+      triggeredById: string;
+      data: {
+        recipientName: string;
+        recipientEmail: string;
+        vacancyPosition: string;
+        clientName: string;
+        currentStatus: string;
+        daysInStatus: number;
+        tenantName: string;
+        vacancyId: string;
       };
     };
 
@@ -108,6 +137,31 @@ type Events = {
       vacancyPosition: string;
       candidateName: string;
       candidateEmail: string | null;
+    };
+  };
+  "vacancy/countdown.schedule": {
+    data: {
+      vacancyId: string;
+      tenantId: string;
+      targetDeliveryDate: string; // ISO
+      vacancyPosition: string;
+      clientName: string;
+      recruiterId: string;
+      recruiterName: string;
+      recruiterEmail: string;
+    };
+  };
+  "vacancy/status.changed": {
+    data: {
+      vacancyId: string;
+      tenantId: string;
+      oldStatus: string;
+      newStatus: string;
+      vacancyPosition: string;
+      clientName: string;
+      recruiterId: string;
+      recruiterName: string;
+      recruiterEmail: string;
     };
   };
   "email/send": {

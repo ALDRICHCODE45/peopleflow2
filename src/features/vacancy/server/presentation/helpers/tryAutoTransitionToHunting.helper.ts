@@ -4,6 +4,7 @@ import { prismaVacancyStatusHistoryRepository } from "../../infrastructure/repos
 import { prismaVacancyAttachmentRepository } from "../../infrastructure/repositories/PrismaVacancyAttachmentRepository";
 import { TransitionVacancyStatusUseCase } from "../../application/use-cases/TransitionVacancyStatusUseCase";
 import { inngest } from "@core/shared/inngest/inngest";
+import { InngestEvents } from "@core/shared/constants/inngest-events";
 import { Routes } from "@core/shared/constants/routes";
 
 /**
@@ -70,6 +71,26 @@ export async function tryAutoTransitionToHunting(
         console.error("[Auto-transition] Failed to send inngest event:", err);
       });
     }
+
+    // Emit vacancy/status.changed for stale vacancy monitoring
+    inngest
+      .send({
+        name: InngestEvents.vacancy.statusChanged,
+        data: {
+          vacancyId,
+          tenantId,
+          oldStatus: "QUICK_MEETING",
+          newStatus: "HUNTING",
+          vacancyPosition: vacancy.position,
+          clientName: vacancy.clientName ?? "Cliente",
+          recruiterId: vacancy.recruiterId,
+          recruiterName: vacancy.recruiterName ?? "Reclutador",
+          recruiterEmail: vacancy.recruiterEmail ?? "",
+        },
+      })
+      .catch((err) => {
+        console.error("[Auto-transition] Failed to send status changed event:", err);
+      });
 
     console.log(`[Auto-transition] Vacancy ${vacancyId} → HUNTING`);
     revalidatePath(Routes.reclutamiento.vacantes);

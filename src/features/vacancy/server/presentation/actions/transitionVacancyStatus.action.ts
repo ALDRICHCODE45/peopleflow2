@@ -8,6 +8,7 @@ import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { inngest } from "@core/shared/inngest/inngest";
+import { InngestEvents } from "@core/shared/constants/inngest-events";
 import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
 import { Routes } from "@core/shared/constants/routes";
 import { prismaVacancyStatusHistoryRepository } from "../../infrastructure/repositories/PrismaVacancyStatusHistoryRepository";
@@ -130,6 +131,52 @@ export async function transitionVacancyStatusAction(
       inngest.send(result.inngestEvent as Parameters<typeof inngest.send>[0]).catch((err) => {
         console.error("[transitionVacancyStatusAction] Failed to send inngest event:", err);
       });
+    }
+
+    // Emit vacancy/status.changed for stale vacancy monitoring (and future consumers)
+    inngest
+      .send({
+        name: InngestEvents.vacancy.statusChanged,
+        data: {
+          vacancyId: input.vacancyId,
+          tenantId,
+          oldStatus: currentVacancyStatus,
+          newStatus: input.newStatus,
+          vacancyPosition: currentVacancy.position,
+          clientName: currentVacancy.clientName ?? "Cliente",
+          recruiterId: currentVacancy.recruiterId,
+          recruiterName: currentVacancy.recruiterName ?? "Reclutador",
+          recruiterEmail: currentVacancy.recruiterEmail ?? "",
+        },
+      })
+      .catch((err) => {
+        console.error("[transitionVacancyStatusAction] Failed to send status changed event:", err);
+      });
+
+    // On rollback to HUNTING with a new targetDeliveryDate, schedule countdown reminders.
+    // The cancelOn on vacancyId will cancel the previous countdown automatically.
+    if (
+      input.newStatus === "HUNTING" &&
+      input.newTargetDeliveryDate &&
+      currentVacancy.recruiterEmail
+    ) {
+      inngest
+        .send({
+          name: InngestEvents.vacancy.countdownSchedule,
+          data: {
+            vacancyId: input.vacancyId,
+            tenantId,
+            targetDeliveryDate: parseISO(input.newTargetDeliveryDate).toISOString(),
+            vacancyPosition: currentVacancy.position,
+            clientName: currentVacancy.clientName ?? "Cliente",
+            recruiterId: currentVacancy.recruiterId,
+            recruiterName: currentVacancy.recruiterName ?? "Reclutador",
+            recruiterEmail: currentVacancy.recruiterEmail,
+          },
+        })
+        .catch((err) => {
+          console.error("[transitionVacancyStatusAction] Failed to send countdown event:", err);
+        });
     }
 
     revalidatePath(Routes.reclutamiento.vacantes);

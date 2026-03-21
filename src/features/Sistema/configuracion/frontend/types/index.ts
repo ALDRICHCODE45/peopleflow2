@@ -1,4 +1,5 @@
 import type { LeadStatus } from "@features/Leads/frontend/types";
+import type { VacancyStatusType } from "@features/vacancy/frontend/types/vacancy.types";
 
 export interface NotificationConfigDTO {
   id: string;
@@ -11,6 +12,14 @@ export interface NotificationConfigDTO {
   leadInactiveStatuses: LeadStatus[];
   leadInactiveTimeValue: number;
   leadInactiveTimeUnit: "HOURS" | "DAYS";
+  vacancyCountdownEnabled: boolean;
+  vacancyCountdownDaysBefore: number[];
+  vacancyStaleEnabled: boolean;
+  vacancyStaleStatuses: VacancyStatusType[];
+  vacancyStaleTimeValue: number;
+  vacancyStaleTimeUnit: "HOURS" | "DAYS";
+  vacancyStaleRepeatValue: number;
+  vacancyStaleRepeatUnit: "HOURS" | "DAYS";
 }
 
 export interface SaveNotificationConfigData {
@@ -22,4 +31,12 @@ export interface SaveNotificationConfigData {
   leadInactiveStatuses: LeadStatus[];
   leadInactiveTimeValue: number;
   leadInactiveTimeUnit: "HOURS" | "DAYS";
+  vacancyCountdownEnabled: boolean;
+  vacancyCountdownDaysBefore: number[];
+  vacancyStaleEnabled: boolean;
+  vacancyStaleStatuses: VacancyStatusType[];
+  vacancyStaleTimeValue: number;
+  vacancyStaleTimeUnit: "HOURS" | "DAYS";
+  vacancyStaleRepeatValue: number;
+  vacancyStaleRepeatUnit: "HOURS" | "DAYS";
 }

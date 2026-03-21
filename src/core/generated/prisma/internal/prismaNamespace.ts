@@ -2983,6 +2983,14 @@ export const NotificationConfigScalarFieldEnum = {
   leadInactiveStatuses: 'leadInactiveStatuses',
   leadInactiveTimeValue: 'leadInactiveTimeValue',
   leadInactiveTimeUnit: 'leadInactiveTimeUnit',
+  vacancyCountdownEnabled: 'vacancyCountdownEnabled',
+  vacancyCountdownDaysBefore: 'vacancyCountdownDaysBefore',
+  vacancyStaleEnabled: 'vacancyStaleEnabled',
+  vacancyStaleStatuses: 'vacancyStaleStatuses',
+  vacancyStaleTimeValue: 'vacancyStaleTimeValue',
+  vacancyStaleTimeUnit: 'vacancyStaleTimeUnit',
+  vacancyStaleRepeatValue: 'vacancyStaleRepeatValue',
+  vacancyStaleRepeatUnit: 'vacancyStaleRepeatUnit',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

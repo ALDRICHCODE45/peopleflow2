@@ -7,6 +7,7 @@ import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { inngest } from "@core/shared/inngest/inngest";
+import { InngestEvents } from "@core/shared/constants/inngest-events";
 import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
 import { prismaVacancyCandidateRepository } from "../../infrastructure/repositories/PrismaVacancyCandidateRepository";
 import { Routes } from "@core/shared/constants/routes";
@@ -101,6 +102,28 @@ export async function validateTernaAction(
       inngest.send(result.inngestEvent as Parameters<typeof inngest.send>[0]).catch((err) => {
         console.error("[validateTernaAction] Failed to send inngest event:", err);
       });
+    }
+
+    // Emit vacancy/status.changed for stale vacancy monitoring (HUNTING → FOLLOW_UP)
+    if (result.vacancy) {
+      inngest
+        .send({
+          name: InngestEvents.vacancy.statusChanged,
+          data: {
+            vacancyId: input.vacancyId,
+            tenantId,
+            oldStatus: "HUNTING",
+            newStatus: "FOLLOW_UP",
+            vacancyPosition: result.vacancy.position,
+            clientName: result.vacancy.clientName ?? "Cliente",
+            recruiterId: result.vacancy.recruiterId,
+            recruiterName: result.vacancy.recruiterName ?? "Reclutador",
+            recruiterEmail: result.vacancy.recruiterEmail ?? "",
+          },
+        })
+        .catch((err) => {
+          console.error("[validateTernaAction] Failed to send status changed event:", err);
+        });
     }
 
     revalidatePath(Routes.reclutamiento.vacantes);

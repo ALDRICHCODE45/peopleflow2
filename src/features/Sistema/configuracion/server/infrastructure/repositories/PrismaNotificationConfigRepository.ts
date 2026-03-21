@@ -8,6 +8,7 @@ import {
   type NotificationConfigProps,
 } from "../../domain/entities/NotificationConfig";
 import type { LeadStatus } from "@features/Leads/frontend/types";
+import type { VacancyStatusType } from "@features/vacancy/frontend/types/vacancy.types";
 
 export class PrismaNotificationConfigRepository
   implements INotificationConfigRepository
@@ -24,6 +25,14 @@ export class PrismaNotificationConfigRepository
       leadInactiveStatuses: string[];
       leadInactiveTimeValue: number;
       leadInactiveTimeUnit: string;
+      vacancyCountdownEnabled: boolean;
+      vacancyCountdownDaysBefore: number[];
+      vacancyStaleEnabled: boolean;
+      vacancyStaleStatuses: string[];
+      vacancyStaleTimeValue: number;
+      vacancyStaleTimeUnit: string;
+      vacancyStaleRepeatValue: number;
+      vacancyStaleRepeatUnit: string;
       createdAt: Date;
       updatedAt: Date;
     },
@@ -39,6 +48,14 @@ export class PrismaNotificationConfigRepository
       leadInactiveStatuses: record.leadInactiveStatuses as LeadStatus[],
       leadInactiveTimeValue: record.leadInactiveTimeValue,
       leadInactiveTimeUnit: record.leadInactiveTimeUnit as NotificationConfigProps["leadInactiveTimeUnit"],
+      vacancyCountdownEnabled: record.vacancyCountdownEnabled,
+      vacancyCountdownDaysBefore: record.vacancyCountdownDaysBefore,
+      vacancyStaleEnabled: record.vacancyStaleEnabled,
+      vacancyStaleStatuses: record.vacancyStaleStatuses as VacancyStatusType[],
+      vacancyStaleTimeValue: record.vacancyStaleTimeValue,
+      vacancyStaleTimeUnit: record.vacancyStaleTimeUnit as NotificationConfigProps["vacancyStaleTimeUnit"],
+      vacancyStaleRepeatValue: record.vacancyStaleRepeatValue,
+      vacancyStaleRepeatUnit: record.vacancyStaleRepeatUnit as NotificationConfigProps["vacancyStaleRepeatUnit"],
       createdAt: record.createdAt,
       updatedAt: record.updatedAt,
     });
@@ -66,6 +83,14 @@ export class PrismaNotificationConfigRepository
         leadInactiveStatuses: data.leadInactiveStatuses,
         leadInactiveTimeValue: data.leadInactiveTimeValue,
         leadInactiveTimeUnit: data.leadInactiveTimeUnit,
+        vacancyCountdownEnabled: data.vacancyCountdownEnabled,
+        vacancyCountdownDaysBefore: data.vacancyCountdownDaysBefore,
+        vacancyStaleEnabled: data.vacancyStaleEnabled,
+        vacancyStaleStatuses: data.vacancyStaleStatuses,
+        vacancyStaleTimeValue: data.vacancyStaleTimeValue,
+        vacancyStaleTimeUnit: data.vacancyStaleTimeUnit,
+        vacancyStaleRepeatValue: data.vacancyStaleRepeatValue,
+        vacancyStaleRepeatUnit: data.vacancyStaleRepeatUnit,
       },
       update: {
         enabled: data.enabled,
@@ -76,6 +101,14 @@ export class PrismaNotificationConfigRepository
         leadInactiveStatuses: data.leadInactiveStatuses,
         leadInactiveTimeValue: data.leadInactiveTimeValue,
         leadInactiveTimeUnit: data.leadInactiveTimeUnit,
+        vacancyCountdownEnabled: data.vacancyCountdownEnabled,
+        vacancyCountdownDaysBefore: data.vacancyCountdownDaysBefore,
+        vacancyStaleEnabled: data.vacancyStaleEnabled,
+        vacancyStaleStatuses: data.vacancyStaleStatuses,
+        vacancyStaleTimeValue: data.vacancyStaleTimeValue,
+        vacancyStaleTimeUnit: data.vacancyStaleTimeUnit,
+        vacancyStaleRepeatValue: data.vacancyStaleRepeatValue,
+        vacancyStaleRepeatUnit: data.vacancyStaleRepeatUnit,
       },
     });
 

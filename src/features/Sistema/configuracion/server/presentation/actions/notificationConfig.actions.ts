@@ -11,6 +11,7 @@ import { SaveNotificationConfigUseCase } from "../../application/use-cases/SaveN
 import { prismaNotificationConfigRepository } from "../../infrastructure/repositories/PrismaNotificationConfigRepository";
 import type { NotificationConfigDTO } from "../../domain/entities/NotificationConfig";
 import type { LeadStatus } from "@features/Leads/frontend/types";
+import type { VacancyStatusType } from "@features/vacancy/frontend/types/vacancy.types";
 import { ServerErrors } from "@core/shared/constants/error-messages";
 
 export interface GetNotificationConfigResult {
@@ -76,6 +77,14 @@ export async function saveNotificationConfigAction(data: {
   leadInactiveStatuses: LeadStatus[];
   leadInactiveTimeValue: number;
   leadInactiveTimeUnit: "HOURS" | "DAYS";
+  vacancyCountdownEnabled: boolean;
+  vacancyCountdownDaysBefore: number[];
+  vacancyStaleEnabled: boolean;
+  vacancyStaleStatuses: VacancyStatusType[];
+  vacancyStaleTimeValue: number;
+  vacancyStaleTimeUnit: "HOURS" | "DAYS";
+  vacancyStaleRepeatValue: number;
+  vacancyStaleRepeatUnit: "HOURS" | "DAYS";
 }): Promise<SaveNotificationConfigResult> {
   try {
     const headersList = await headers();

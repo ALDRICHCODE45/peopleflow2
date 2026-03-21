@@ -48,6 +48,14 @@ import {
   generateValidationRequestEmail,
   generateValidationRequestPlainText,
 } from "@features/Notifications/server/infrastructure/templates/validationRequestTemplate";
+import {
+  generateVacancyCountdownEmail,
+  generateVacancyCountdownPlainText,
+} from "@features/Notifications/server/infrastructure/templates/vacancyCountdownTemplate";
+import {
+  generateVacancyStaleAlertEmail,
+  generateVacancyStaleAlertPlainText,
+} from "@features/Notifications/server/infrastructure/templates/vacancyStaleAlertTemplate";
 
 const STATUS_LABELS: Record<string, string> = {
   CONTACTO: "Contacto",
@@ -696,9 +704,474 @@ const handleSendStandaloneEmail = inngest.createFunction(
         return { sent: true, template: payload.template };
       }
 
+      case "vacancy-countdown": {
+        const { data, tenantId, triggeredById } = payload;
+
+        await step.run("send-vacancy-countdown-email", async () => {
+          const notificationUseCase = new SendNotificationUseCase(
+            prismaNotificationRepository,
+            [emailProvider],
+          );
+
+          const subject =
+            data.daysRemaining === 0
+              ? `¡Hoy es el día de entrega! ${data.vacancyPosition}`
+              : data.daysRemaining === 1
+                ? `¡Mañana es la fecha de entrega! ${data.vacancyPosition}`
+                : `Faltan ${data.daysRemaining} días para la entrega — ${data.vacancyPosition}`;
+
+          const emailData = {
+            recipientName: data.recipientName,
+            vacancyPosition: data.vacancyPosition,
+            clientName: data.clientName,
+            daysRemaining: data.daysRemaining,
+            targetDate: data.targetDate,
+            vacancyId: data.vacancyId,
+            appUrl: APP_URL,
+          };
+
+          await notificationUseCase.execute({
+            tenantId,
+            provider: "EMAIL",
+            recipient: data.recipientEmail,
+            subject,
+            body: generateVacancyCountdownPlainText(emailData),
+            priority: data.daysRemaining <= 1 ? "HIGH" : "MEDIUM",
+            metadata: {
+              vacancyId: data.vacancyId,
+              vacancyPosition: data.vacancyPosition,
+              triggerEvent: "VACANCY_COUNTDOWN_REMINDER",
+              daysRemaining: data.daysRemaining,
+              htmlTemplate: generateVacancyCountdownEmail(emailData),
+            },
+            createdById: triggeredById,
+          });
+        });
+
+        return { sent: true, template: payload.template };
+      }
+
+      case "vacancy-stale-alert": {
+        const { data, tenantId, triggeredById } = payload;
+
+        await step.run("send-vacancy-stale-alert-email", async () => {
+          const notificationUseCase = new SendNotificationUseCase(
+            prismaNotificationRepository,
+            [emailProvider],
+          );
+
+          const emailData = {
+            recipientName: data.recipientName,
+            vacancyPosition: data.vacancyPosition,
+            clientName: data.clientName,
+            currentStatus: data.currentStatus,
+            daysInStatus: data.daysInStatus,
+            tenantName: data.tenantName,
+            vacancyId: data.vacancyId,
+            appUrl: APP_URL,
+          };
+
+          await notificationUseCase.execute({
+            tenantId,
+            provider: "EMAIL",
+            recipient: data.recipientEmail,
+            subject: `Vacante "${data.vacancyPosition}" lleva ${data.daysInStatus} días en ${data.currentStatus}`,
+            body: generateVacancyStaleAlertPlainText(emailData),
+            priority: "HIGH",
+            metadata: {
+              vacancyId: data.vacancyId,
+              vacancyPosition: data.vacancyPosition,
+              triggerEvent: "VACANCY_STALE_ALERT",
+              currentStatus: data.currentStatus,
+              daysInStatus: data.daysInStatus,
+              htmlTemplate: generateVacancyStaleAlertEmail(emailData),
+            },
+            createdById: triggeredById,
+          });
+        });
+
+        return { sent: true, template: payload.template };
+      }
+
       default:
         return { skipped: true, reason: "Unknown template" };
     }
+  },
+);
+
+// Function 6: Vacancy countdown reminders before targetDeliveryDate
+const VACANCY_TERMINAL_STATUSES = ["CANCELADA", "PERDIDA", "STAND_BY", "PLACEMENT"] as const;
+
+const handleVacancyCountdownNotification = inngest.createFunction(
+  {
+    id: "vacancy-countdown-notification",
+    name: "Recordatorios de countdown antes de entrega de vacante",
+    cancelOn: [
+      {
+        event: InngestEvents.vacancy.countdownSchedule,
+        match: "data.vacancyId",
+      },
+    ],
+  },
+  { event: InngestEvents.vacancy.countdownSchedule },
+  async ({ event, step }) => {
+    const {
+      vacancyId,
+      tenantId,
+      targetDeliveryDate,
+      vacancyPosition,
+      clientName,
+      recruiterId,
+      recruiterName,
+      recruiterEmail,
+    } = event.data;
+
+    // Step 1: Load config
+    const config = await step.run("load-config", async () => {
+      return prisma.notificationConfig.findUnique({ where: { tenantId } });
+    });
+
+    if (!config?.enabled || !config.vacancyCountdownEnabled) {
+      return { skipped: true, reason: "Countdown notifications disabled" };
+    }
+
+    const daysBefore = [
+      ...((config.vacancyCountdownDaysBefore as number[] | null) ?? [3, 1]),
+    ].sort((a, b) => b - a);
+    const targetDate = new Date(targetDeliveryDate);
+
+    // Step 2: For each checkpoint, sleepUntil and send
+    for (const daysAhead of daysBefore) {
+      const notifyDate = new Date(targetDate);
+      notifyDate.setDate(notifyDate.getDate() - daysAhead);
+
+      // Skip if notify date is already in the past
+      if (notifyDate <= new Date()) continue;
+
+      await step.sleepUntil(`wait-${daysAhead}d-before`, notifyDate);
+
+      // Verify vacancy is still active
+      const vacancy = await step.run(`check-vacancy-${daysAhead}d`, async () => {
+        return prisma.vacancy.findUnique({
+          where: { id: vacancyId },
+          select: { status: true, actualDeliveryDate: true, targetDeliveryDate: true },
+        });
+      });
+
+      if (
+        !vacancy ||
+        vacancy.actualDeliveryDate ||
+        VACANCY_TERMINAL_STATUSES.includes(
+          vacancy.status as (typeof VACANCY_TERMINAL_STATUSES)[number],
+        )
+      ) {
+        return { skipped: true, reason: "Vacancy completed or terminal" };
+      }
+
+      // Reload config (may have changed during sleep)
+      const freshConfig = await step.run(`reload-config-${daysAhead}d`, async () => {
+        return prisma.notificationConfig.findUnique({ where: { tenantId } });
+      });
+
+      if (!freshConfig?.enabled || !freshConfig.vacancyCountdownEnabled) {
+        return { skipped: true, reason: "Countdown disabled during sleep" };
+      }
+
+      // Gather recipients: recruiter + configured recipients
+      const recipients = await step.run(`get-recipients-${daysAhead}d`, async () => {
+        const recipientIds = freshConfig.recipientUserIds ?? [];
+        const users =
+          recipientIds.length > 0
+            ? await prisma.user.findMany({
+                where: { id: { in: recipientIds } },
+                select: { id: true, name: true, email: true },
+              })
+            : [];
+        const allRecipients = [
+          { name: recruiterName, email: recruiterEmail },
+          ...users
+            .filter((u) => u.id !== recruiterId)
+            .map((u) => ({ name: u.name, email: u.email })),
+        ];
+        return allRecipients;
+      });
+
+      // Send email to each recipient
+      for (const recipient of recipients) {
+        await step.run(
+          `send-countdown-${daysAhead}d-${recipient.email}`,
+          async () => {
+            await inngest.send({
+              name: InngestEvents.email.send,
+              data: {
+                template: "vacancy-countdown" as const,
+                tenantId,
+                triggeredById: recruiterId,
+                data: {
+                  recipientName: recipient.name ?? "Usuario",
+                  recipientEmail: recipient.email,
+                  vacancyPosition,
+                  clientName,
+                  daysRemaining: daysAhead,
+                  targetDate: targetDeliveryDate,
+                  vacancyId,
+                },
+              },
+            });
+          },
+        );
+      }
+    }
+
+    // Final checkpoint: the day of targetDeliveryDate (daysRemaining = 0)
+    if (targetDate > new Date()) {
+      await step.sleepUntil("wait-day-of", targetDate);
+
+      const vacancy = await step.run("check-vacancy-day-of", async () => {
+        return prisma.vacancy.findUnique({
+          where: { id: vacancyId },
+          select: { status: true, actualDeliveryDate: true },
+        });
+      });
+
+      if (
+        !vacancy ||
+        vacancy.actualDeliveryDate ||
+        VACANCY_TERMINAL_STATUSES.includes(
+          vacancy.status as (typeof VACANCY_TERMINAL_STATUSES)[number],
+        )
+      ) {
+        return { skipped: true, reason: "Vacancy completed before day-of" };
+      }
+
+      const dayOfConfig = await step.run("reload-config-day-of", async () => {
+        return prisma.notificationConfig.findUnique({ where: { tenantId } });
+      });
+
+      if (!dayOfConfig?.enabled || !dayOfConfig.vacancyCountdownEnabled) {
+        return { skipped: true, reason: "Countdown disabled before day-of" };
+      }
+
+      const dayOfRecipients = await step.run("get-recipients-day-of", async () => {
+        const recipientIds = dayOfConfig.recipientUserIds ?? [];
+        const users =
+          recipientIds.length > 0
+            ? await prisma.user.findMany({
+                where: { id: { in: recipientIds } },
+                select: { id: true, name: true, email: true },
+              })
+            : [];
+        return [
+          { name: recruiterName, email: recruiterEmail },
+          ...users
+            .filter((u) => u.id !== recruiterId)
+            .map((u) => ({ name: u.name, email: u.email })),
+        ];
+      });
+
+      for (const recipient of dayOfRecipients) {
+        await step.run(
+          `send-countdown-day-of-${recipient.email}`,
+          async () => {
+            await inngest.send({
+              name: InngestEvents.email.send,
+              data: {
+                template: "vacancy-countdown" as const,
+                tenantId,
+                triggeredById: recruiterId,
+                data: {
+                  recipientName: recipient.name ?? "Usuario",
+                  recipientEmail: recipient.email,
+                  vacancyPosition,
+                  clientName,
+                  daysRemaining: 0,
+                  targetDate: targetDeliveryDate,
+                  vacancyId,
+                },
+              },
+            });
+          },
+        );
+      }
+    }
+
+    return { sent: true, reason: "Countdown sequence completed" };
+  },
+);
+
+// Function 7: Stale vacancy repeating notification
+function formatDuration(value: number, unit: string): string {
+  return unit === "HOURS" ? `${value}h` : `${value}d`;
+}
+
+const VACANCY_STATUS_DISPLAY: Record<string, string> = {
+  QUICK_MEETING: "Quick Meeting",
+  HUNTING: "Hunting",
+  FOLLOW_UP: "Follow Up",
+  PRE_PLACEMENT: "Pre-Placement",
+  PLACEMENT: "Placement",
+  STAND_BY: "Stand By",
+  CANCELADA: "Cancelada",
+  PERDIDA: "Perdida",
+};
+
+const handleVacancyStaleNotification = inngest.createFunction(
+  {
+    id: "vacancy-stale-notification",
+    name: "Alerta de vacante estancada (repetitiva)",
+    cancelOn: [
+      {
+        event: InngestEvents.vacancy.statusChanged,
+        match: "data.vacancyId",
+      },
+    ],
+  },
+  { event: InngestEvents.vacancy.statusChanged },
+  async ({ event, step }) => {
+    const {
+      vacancyId,
+      tenantId,
+      newStatus,
+      vacancyPosition,
+      clientName,
+      recruiterId,
+      recruiterName,
+      recruiterEmail,
+    } = event.data;
+
+    // Step 1: Load config and check if monitoring is enabled for this status
+    const config = await step.run("load-config", async () => {
+      return prisma.notificationConfig.findUnique({ where: { tenantId } });
+    });
+
+    if (!config?.enabled || !config.vacancyStaleEnabled) {
+      return { skipped: true, reason: "Stale vacancy monitoring disabled" };
+    }
+
+    const monitoredStatuses = config.vacancyStaleStatuses as string[];
+    if (!monitoredStatuses.includes(newStatus)) {
+      return { skipped: true, reason: "Status not monitored for staleness" };
+    }
+
+    // Calculate sleep durations from config
+    const initialSleep = formatDuration(config.vacancyStaleTimeValue, config.vacancyStaleTimeUnit);
+    const repeatSleep = formatDuration(config.vacancyStaleRepeatValue, config.vacancyStaleRepeatUnit);
+
+    // Step 2: Initial sleep (wait for stale threshold)
+    await step.sleep("wait-for-stale", initialSleep);
+
+    // Step 3: Verify vacancy is STILL in the same status
+    const vacancy = await step.run("verify-status", async () => {
+      return prisma.vacancy.findUnique({
+        where: { id: vacancyId },
+        select: { status: true },
+      });
+    });
+
+    if (!vacancy || vacancy.status !== newStatus) {
+      return { skipped: true, reason: "Vacancy status changed during initial sleep" };
+    }
+
+    // Step 4: Enter notification loop
+    let iteration = 0;
+    const MAX_ITERATIONS = 52; // Safety cap: ~1 year of weekly notifications
+
+    while (iteration < MAX_ITERATIONS) {
+      // Reload config each iteration (may have changed)
+      const freshConfig = await step.run(`reload-config-${iteration}`, async () => {
+        return prisma.notificationConfig.findUnique({ where: { tenantId } });
+      });
+
+      if (!freshConfig?.enabled || !freshConfig.vacancyStaleEnabled) {
+        return { skipped: true, reason: "Stale monitoring disabled during loop" };
+      }
+
+      // Re-verify vacancy status
+      const currentVacancy = await step.run(`verify-status-${iteration}`, async () => {
+        return prisma.vacancy.findUnique({
+          where: { id: vacancyId },
+          select: { status: true },
+        });
+      });
+
+      if (!currentVacancy || currentVacancy.status !== newStatus) {
+        return { skipped: true, reason: "Vacancy status changed during loop" };
+      }
+
+      // Calculate days in status from status history
+      const statusEntryIso = await step.run(`get-status-entry-${iteration}`, async () => {
+        const history = await prisma.vacancyStatusHistory.findFirst({
+          where: { vacancyId, newStatus: newStatus as "QUICK_MEETING" | "HUNTING" | "FOLLOW_UP" | "PRE_PLACEMENT" | "PLACEMENT" | "STAND_BY" | "PERDIDA" | "CANCELADA" },
+          orderBy: { createdAt: "desc" },
+          select: { createdAt: true },
+        });
+        return history?.createdAt?.toISOString() ?? new Date().toISOString();
+      });
+
+      const daysInStatus = Math.floor(
+        (Date.now() - new Date(statusEntryIso).getTime()) / (1000 * 60 * 60 * 24),
+      );
+
+      // Get tenant name
+      const tenantName = await step.run(`get-tenant-${iteration}`, async () => {
+        const tenant = await prisma.tenant.findUnique({
+          where: { id: tenantId },
+          select: { name: true },
+        });
+        return tenant?.name ?? "Sistema";
+      });
+
+      // Get recipients (recruiter + configured users)
+      const recipients = await step.run(`get-recipients-${iteration}`, async () => {
+        const recipientIds = freshConfig.recipientUserIds ?? [];
+        const users =
+          recipientIds.length > 0
+            ? await prisma.user.findMany({
+                where: { id: { in: recipientIds } },
+                select: { id: true, name: true, email: true },
+              })
+            : [];
+        return [
+          { name: recruiterName, email: recruiterEmail },
+          ...users
+            .filter((u) => u.id !== recruiterId)
+            .map((u) => ({ name: u.name, email: u.email })),
+        ];
+      });
+
+      const statusLabel = VACANCY_STATUS_DISPLAY[newStatus] ?? newStatus;
+
+      // Send to each recipient
+      for (const recipient of recipients) {
+        await step.run(`send-stale-${iteration}-${recipient.email}`, async () => {
+          await inngest.send({
+            name: InngestEvents.email.send,
+            data: {
+              template: "vacancy-stale-alert" as const,
+              tenantId,
+              triggeredById: recruiterId,
+              data: {
+                recipientName: recipient.name ?? "Usuario",
+                recipientEmail: recipient.email,
+                vacancyPosition,
+                clientName,
+                currentStatus: statusLabel,
+                daysInStatus,
+                tenantName,
+                vacancyId,
+              },
+            },
+          });
+        });
+      }
+
+      iteration++;
+
+      // Sleep until next repeat
+      await step.sleep(`repeat-wait-${iteration}`, repeatSleep);
+    }
+
+    return { sent: true, reason: "Max iterations reached" };
   },
 );
 
@@ -708,4 +1181,6 @@ export const functions = [
   handleVacancyPrePlacementEntryReminder,
   handleVacancyPlacementCongratsEmail,
   handleSendStandaloneEmail,
+  handleVacancyCountdownNotification,
+  handleVacancyStaleNotification,
 ];

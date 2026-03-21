@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useReducer } from "react";
 import type { LeadStatus } from "@features/Leads/frontend/types";
+import type { VacancyStatusType } from "@features/vacancy/frontend/types/vacancy.types";
 import type { NotificationConfigDTO } from "../types";
 
 export interface NotificationDraft {
@@ -10,6 +11,14 @@ export interface NotificationDraft {
   inactiveStatuses: LeadStatus[];
   inactiveTimeValue: number;
   inactiveTimeUnit: "horas" | "dias";
+  // Vacancy countdown
+  vacancyCountdownDaysBefore: number[];
+  // Vacancy stale
+  vacancyStaleStatuses: VacancyStatusType[];
+  vacancyStaleTimeValue: number;
+  vacancyStaleTimeUnit: "horas" | "dias";
+  vacancyStaleRepeatValue: number;
+  vacancyStaleRepeatUnit: "horas" | "dias";
 }
 
 type Action =
@@ -20,7 +29,13 @@ type Action =
   | { type: "TOGGLE_STATUS"; status: LeadStatus; checked: boolean }
   | { type: "TOGGLE_INACTIVE_STATUS"; status: LeadStatus; checked: boolean }
   | { type: "SET_TIME_VALUE"; value: number }
-  | { type: "SET_TIME_UNIT"; unit: "horas" | "dias" };
+  | { type: "SET_TIME_UNIT"; unit: "horas" | "dias" }
+  | { type: "SET_COUNTDOWN_DAYS"; days: number[] }
+  | { type: "TOGGLE_STALE_STATUS"; status: VacancyStatusType; checked: boolean }
+  | { type: "SET_STALE_TIME_VALUE"; value: number }
+  | { type: "SET_STALE_TIME_UNIT"; unit: "horas" | "dias" }
+  | { type: "SET_STALE_REPEAT_VALUE"; value: number }
+  | { type: "SET_STALE_REPEAT_UNIT"; unit: "horas" | "dias" };
 
 const initialState: NotificationDraft = {
   enabled: true,
@@ -30,6 +45,12 @@ const initialState: NotificationDraft = {
   inactiveStatuses: [],
   inactiveTimeValue: 48,
   inactiveTimeUnit: "horas",
+  vacancyCountdownDaysBefore: [3, 1],
+  vacancyStaleStatuses: [],
+  vacancyStaleTimeValue: 72,
+  vacancyStaleTimeUnit: "horas",
+  vacancyStaleRepeatValue: 24,
+  vacancyStaleRepeatUnit: "horas",
 };
 
 function toggleInArray<T>(arr: T[], item: T, checked: boolean): T[] {
@@ -45,12 +66,22 @@ function reducer(state: NotificationDraft, action: Action): NotificationDraft {
         activeActions: {
           "lead-status-change": action.config.leadStatusChangeEnabled,
           "lead-inactive": action.config.leadInactiveEnabled,
+          "vacancy-countdown": action.config.vacancyCountdownEnabled,
+          "vacancy-stale": action.config.vacancyStaleEnabled,
         },
         selectedStatuses: action.config.leadStatusChangeTriggers,
         inactiveStatuses: action.config.leadInactiveStatuses,
         inactiveTimeValue: action.config.leadInactiveTimeValue,
         inactiveTimeUnit:
           action.config.leadInactiveTimeUnit === "HOURS" ? "horas" : "dias",
+        vacancyCountdownDaysBefore: action.config.vacancyCountdownDaysBefore,
+        vacancyStaleStatuses: action.config.vacancyStaleStatuses,
+        vacancyStaleTimeValue: action.config.vacancyStaleTimeValue,
+        vacancyStaleTimeUnit:
+          action.config.vacancyStaleTimeUnit === "HOURS" ? "horas" : "dias",
+        vacancyStaleRepeatValue: action.config.vacancyStaleRepeatValue,
+        vacancyStaleRepeatUnit:
+          action.config.vacancyStaleRepeatUnit === "HOURS" ? "horas" : "dias",
       };
     case "SET_ENABLED":
       return { ...state, enabled: action.enabled };
@@ -86,6 +117,25 @@ function reducer(state: NotificationDraft, action: Action): NotificationDraft {
       return { ...state, inactiveTimeValue: action.value };
     case "SET_TIME_UNIT":
       return { ...state, inactiveTimeUnit: action.unit };
+    case "SET_COUNTDOWN_DAYS":
+      return { ...state, vacancyCountdownDaysBefore: action.days };
+    case "TOGGLE_STALE_STATUS":
+      return {
+        ...state,
+        vacancyStaleStatuses: toggleInArray(
+          state.vacancyStaleStatuses,
+          action.status,
+          action.checked,
+        ),
+      };
+    case "SET_STALE_TIME_VALUE":
+      return { ...state, vacancyStaleTimeValue: action.value };
+    case "SET_STALE_TIME_UNIT":
+      return { ...state, vacancyStaleTimeUnit: action.unit };
+    case "SET_STALE_REPEAT_VALUE":
+      return { ...state, vacancyStaleRepeatValue: action.value };
+    case "SET_STALE_REPEAT_UNIT":
+      return { ...state, vacancyStaleRepeatUnit: action.unit };
   }
 }
 
@@ -131,6 +181,33 @@ export function useNotificationDraft(
     dispatch({ type: "SET_TIME_UNIT", unit });
   }, []);
 
+  const setCountdownDays = useCallback((days: number[]) => {
+    dispatch({ type: "SET_COUNTDOWN_DAYS", days });
+  }, []);
+
+  const toggleStaleStatus = useCallback(
+    (status: VacancyStatusType, checked: boolean) => {
+      dispatch({ type: "TOGGLE_STALE_STATUS", status, checked });
+    },
+    [],
+  );
+
+  const setStaleTimeValue = useCallback((value: number) => {
+    dispatch({ type: "SET_STALE_TIME_VALUE", value });
+  }, []);
+
+  const setStaleTimeUnit = useCallback((unit: "horas" | "dias") => {
+    dispatch({ type: "SET_STALE_TIME_UNIT", unit });
+  }, []);
+
+  const setStaleRepeatValue = useCallback((value: number) => {
+    dispatch({ type: "SET_STALE_REPEAT_VALUE", value });
+  }, []);
+
+  const setStaleRepeatUnit = useCallback((unit: "horas" | "dias") => {
+    dispatch({ type: "SET_STALE_REPEAT_UNIT", unit });
+  }, []);
+
   return {
     state,
     setEnabled,
@@ -140,5 +217,11 @@ export function useNotificationDraft(
     toggleInactiveStatus,
     setTimeValue,
     setTimeUnit,
+    setCountdownDays,
+    toggleStaleStatus,
+    setStaleTimeValue,
+    setStaleTimeUnit,
+    setStaleRepeatValue,
+    setStaleRepeatUnit,
   };
 }

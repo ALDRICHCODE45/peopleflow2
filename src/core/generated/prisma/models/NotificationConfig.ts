@@ -28,10 +28,16 @@ export type AggregateNotificationConfig = {
 
 export type NotificationConfigAvgAggregateOutputType = {
   leadInactiveTimeValue: number | null
+  vacancyCountdownDaysBefore: number | null
+  vacancyStaleTimeValue: number | null
+  vacancyStaleRepeatValue: number | null
 }
 
 export type NotificationConfigSumAggregateOutputType = {
   leadInactiveTimeValue: number | null
+  vacancyCountdownDaysBefore: number[]
+  vacancyStaleTimeValue: number | null
+  vacancyStaleRepeatValue: number | null
 }
 
 export type NotificationConfigMinAggregateOutputType = {
@@ -42,6 +48,12 @@ export type NotificationConfigMinAggregateOutputType = {
   leadInactiveEnabled: boolean | null
   leadInactiveTimeValue: number | null
   leadInactiveTimeUnit: $Enums.InactiveTimeUnit | null
+  vacancyCountdownEnabled: boolean | null
+  vacancyStaleEnabled: boolean | null
+  vacancyStaleTimeValue: number | null
+  vacancyStaleTimeUnit: $Enums.InactiveTimeUnit | null
+  vacancyStaleRepeatValue: number | null
+  vacancyStaleRepeatUnit: $Enums.InactiveTimeUnit | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -54,6 +66,12 @@ export type NotificationConfigMaxAggregateOutputType = {
   leadInactiveEnabled: boolean | null
   leadInactiveTimeValue: number | null
   leadInactiveTimeUnit: $Enums.InactiveTimeUnit | null
+  vacancyCountdownEnabled: boolean | null
+  vacancyStaleEnabled: boolean | null
+  vacancyStaleTimeValue: number | null
+  vacancyStaleTimeUnit: $Enums.InactiveTimeUnit | null
+  vacancyStaleRepeatValue: number | null
+  vacancyStaleRepeatUnit: $Enums.InactiveTimeUnit | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -69,6 +87,14 @@ export type NotificationConfigCountAggregateOutputType = {
   leadInactiveStatuses: number
   leadInactiveTimeValue: number
   leadInactiveTimeUnit: number
+  vacancyCountdownEnabled: number
+  vacancyCountdownDaysBefore: number
+  vacancyStaleEnabled: number
+  vacancyStaleStatuses: number
+  vacancyStaleTimeValue: number
+  vacancyStaleTimeUnit: number
+  vacancyStaleRepeatValue: number
+  vacancyStaleRepeatUnit: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -77,10 +103,16 @@ export type NotificationConfigCountAggregateOutputType = {
 
 export type NotificationConfigAvgAggregateInputType = {
   leadInactiveTimeValue?: true
+  vacancyCountdownDaysBefore?: true
+  vacancyStaleTimeValue?: true
+  vacancyStaleRepeatValue?: true
 }
 
 export type NotificationConfigSumAggregateInputType = {
   leadInactiveTimeValue?: true
+  vacancyCountdownDaysBefore?: true
+  vacancyStaleTimeValue?: true
+  vacancyStaleRepeatValue?: true
 }
 
 export type NotificationConfigMinAggregateInputType = {
@@ -91,6 +123,12 @@ export type NotificationConfigMinAggregateInputType = {
   leadInactiveEnabled?: true
   leadInactiveTimeValue?: true
   leadInactiveTimeUnit?: true
+  vacancyCountdownEnabled?: true
+  vacancyStaleEnabled?: true
+  vacancyStaleTimeValue?: true
+  vacancyStaleTimeUnit?: true
+  vacancyStaleRepeatValue?: true
+  vacancyStaleRepeatUnit?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -103,6 +141,12 @@ export type NotificationConfigMaxAggregateInputType = {
   leadInactiveEnabled?: true
   leadInactiveTimeValue?: true
   leadInactiveTimeUnit?: true
+  vacancyCountdownEnabled?: true
+  vacancyStaleEnabled?: true
+  vacancyStaleTimeValue?: true
+  vacancyStaleTimeUnit?: true
+  vacancyStaleRepeatValue?: true
+  vacancyStaleRepeatUnit?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -118,6 +162,14 @@ export type NotificationConfigCountAggregateInputType = {
   leadInactiveStatuses?: true
   leadInactiveTimeValue?: true
   leadInactiveTimeUnit?: true
+  vacancyCountdownEnabled?: true
+  vacancyCountdownDaysBefore?: true
+  vacancyStaleEnabled?: true
+  vacancyStaleStatuses?: true
+  vacancyStaleTimeValue?: true
+  vacancyStaleTimeUnit?: true
+  vacancyStaleRepeatValue?: true
+  vacancyStaleRepeatUnit?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -220,6 +272,14 @@ export type NotificationConfigGroupByOutputType = {
   leadInactiveStatuses: $Enums.LeadStatus[]
   leadInactiveTimeValue: number
   leadInactiveTimeUnit: $Enums.InactiveTimeUnit
+  vacancyCountdownEnabled: boolean
+  vacancyCountdownDaysBefore: number[]
+  vacancyStaleEnabled: boolean
+  vacancyStaleStatuses: $Enums.VacancyStatus[]
+  vacancyStaleTimeValue: number
+  vacancyStaleTimeUnit: $Enums.InactiveTimeUnit
+  vacancyStaleRepeatValue: number
+  vacancyStaleRepeatUnit: $Enums.InactiveTimeUnit
   createdAt: Date
   updatedAt: Date
   _count: NotificationConfigCountAggregateOutputType | null
@@ -258,6 +318,14 @@ export type NotificationConfigWhereInput = {
   leadInactiveStatuses?: Prisma.EnumLeadStatusNullableListFilter<"NotificationConfig">
   leadInactiveTimeValue?: Prisma.IntFilter<"NotificationConfig"> | number
   leadInactiveTimeUnit?: Prisma.EnumInactiveTimeUnitFilter<"NotificationConfig"> | $Enums.InactiveTimeUnit
+  vacancyCountdownEnabled?: Prisma.BoolFilter<"NotificationConfig"> | boolean
+  vacancyCountdownDaysBefore?: Prisma.IntNullableListFilter<"NotificationConfig">
+  vacancyStaleEnabled?: Prisma.BoolFilter<"NotificationConfig"> | boolean
+  vacancyStaleStatuses?: Prisma.EnumVacancyStatusNullableListFilter<"NotificationConfig">
+  vacancyStaleTimeValue?: Prisma.IntFilter<"NotificationConfig"> | number
+  vacancyStaleTimeUnit?: Prisma.EnumInactiveTimeUnitFilter<"NotificationConfig"> | $Enums.InactiveTimeUnit
+  vacancyStaleRepeatValue?: Prisma.IntFilter<"NotificationConfig"> | number
+  vacancyStaleRepeatUnit?: Prisma.EnumInactiveTimeUnitFilter<"NotificationConfig"> | $Enums.InactiveTimeUnit
   createdAt?: Prisma.DateTimeFilter<"NotificationConfig"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NotificationConfig"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -274,6 +342,14 @@ export type NotificationConfigOrderByWithRelationInput = {
   leadInactiveStatuses?: Prisma.SortOrder
   leadInactiveTimeValue?: Prisma.SortOrder
   leadInactiveTimeUnit?: Prisma.SortOrder
+  vacancyCountdownEnabled?: Prisma.SortOrder
+  vacancyCountdownDaysBefore?: Prisma.SortOrder
+  vacancyStaleEnabled?: Prisma.SortOrder
+  vacancyStaleStatuses?: Prisma.SortOrder
+  vacancyStaleTimeValue?: Prisma.SortOrder
+  vacancyStaleTimeUnit?: Prisma.SortOrder
+  vacancyStaleRepeatValue?: Prisma.SortOrder
+  vacancyStaleRepeatUnit?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
@@ -293,6 +369,14 @@ export type NotificationConfigWhereUniqueInput = Prisma.AtLeast<{
   leadInactiveStatuses?: Prisma.EnumLeadStatusNullableListFilter<"NotificationConfig">
   leadInactiveTimeValue?: Prisma.IntFilter<"NotificationConfig"> | number
   leadInactiveTimeUnit?: Prisma.EnumInactiveTimeUnitFilter<"NotificationConfig"> | $Enums.InactiveTimeUnit
+  vacancyCountdownEnabled?: Prisma.BoolFilter<"NotificationConfig"> | boolean
+  vacancyCountdownDaysBefore?: Prisma.IntNullableListFilter<"NotificationConfig">
+  vacancyStaleEnabled?: Prisma.BoolFilter<"NotificationConfig"> | boolean
+  vacancyStaleStatuses?: Prisma.EnumVacancyStatusNullableListFilter<"NotificationConfig">
+  vacancyStaleTimeValue?: Prisma.IntFilter<"NotificationConfig"> | number
+  vacancyStaleTimeUnit?: Prisma.EnumInactiveTimeUnitFilter<"NotificationConfig"> | $Enums.InactiveTimeUnit
+  vacancyStaleRepeatValue?: Prisma.IntFilter<"NotificationConfig"> | number
+  vacancyStaleRepeatUnit?: Prisma.EnumInactiveTimeUnitFilter<"NotificationConfig"> | $Enums.InactiveTimeUnit
   createdAt?: Prisma.DateTimeFilter<"NotificationConfig"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NotificationConfig"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -309,6 +393,14 @@ export type NotificationConfigOrderByWithAggregationInput = {
   leadInactiveStatuses?: Prisma.SortOrder
   leadInactiveTimeValue?: Prisma.SortOrder
   leadInactiveTimeUnit?: Prisma.SortOrder
+  vacancyCountdownEnabled?: Prisma.SortOrder
+  vacancyCountdownDaysBefore?: Prisma.SortOrder
+  vacancyStaleEnabled?: Prisma.SortOrder
+  vacancyStaleStatuses?: Prisma.SortOrder
+  vacancyStaleTimeValue?: Prisma.SortOrder
+  vacancyStaleTimeUnit?: Prisma.SortOrder
+  vacancyStaleRepeatValue?: Prisma.SortOrder
+  vacancyStaleRepeatUnit?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.NotificationConfigCountOrderByAggregateInput
@@ -332,6 +424,14 @@ export type NotificationConfigScalarWhereWithAggregatesInput = {
   leadInactiveStatuses?: Prisma.EnumLeadStatusNullableListFilter<"NotificationConfig">
   leadInactiveTimeValue?: Prisma.IntWithAggregatesFilter<"NotificationConfig"> | number
   leadInactiveTimeUnit?: Prisma.EnumInactiveTimeUnitWithAggregatesFilter<"NotificationConfig"> | $Enums.InactiveTimeUnit
+  vacancyCountdownEnabled?: Prisma.BoolWithAggregatesFilter<"NotificationConfig"> | boolean
+  vacancyCountdownDaysBefore?: Prisma.IntNullableListFilter<"NotificationConfig">
+  vacancyStaleEnabled?: Prisma.BoolWithAggregatesFilter<"NotificationConfig"> | boolean
+  vacancyStaleStatuses?: Prisma.EnumVacancyStatusNullableListFilter<"NotificationConfig">
+  vacancyStaleTimeValue?: Prisma.IntWithAggregatesFilter<"NotificationConfig"> | number
+  vacancyStaleTimeUnit?: Prisma.EnumInactiveTimeUnitWithAggregatesFilter<"NotificationConfig"> | $Enums.InactiveTimeUnit
+  vacancyStaleRepeatValue?: Prisma.IntWithAggregatesFilter<"NotificationConfig"> | number
+  vacancyStaleRepeatUnit?: Prisma.EnumInactiveTimeUnitWithAggregatesFilter<"NotificationConfig"> | $Enums.InactiveTimeUnit
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"NotificationConfig"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"NotificationConfig"> | Date | string
 }
@@ -346,6 +446,14 @@ export type NotificationConfigCreateInput = {
   leadInactiveStatuses?: Prisma.NotificationConfigCreateleadInactiveStatusesInput | $Enums.LeadStatus[]
   leadInactiveTimeValue?: number
   leadInactiveTimeUnit?: $Enums.InactiveTimeUnit
+  vacancyCountdownEnabled?: boolean
+  vacancyCountdownDaysBefore?: Prisma.NotificationConfigCreatevacancyCountdownDaysBeforeInput | number[]
+  vacancyStaleEnabled?: boolean
+  vacancyStaleStatuses?: Prisma.NotificationConfigCreatevacancyStaleStatusesInput | $Enums.VacancyStatus[]
+  vacancyStaleTimeValue?: number
+  vacancyStaleTimeUnit?: $Enums.InactiveTimeUnit
+  vacancyStaleRepeatValue?: number
+  vacancyStaleRepeatUnit?: $Enums.InactiveTimeUnit
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutNotificationConfigInput
@@ -362,6 +470,14 @@ export type NotificationConfigUncheckedCreateInput = {
   leadInactiveStatuses?: Prisma.NotificationConfigCreateleadInactiveStatusesInput | $Enums.LeadStatus[]
   leadInactiveTimeValue?: number
   leadInactiveTimeUnit?: $Enums.InactiveTimeUnit
+  vacancyCountdownEnabled?: boolean
+  vacancyCountdownDaysBefore?: Prisma.NotificationConfigCreatevacancyCountdownDaysBeforeInput | number[]
+  vacancyStaleEnabled?: boolean
+  vacancyStaleStatuses?: Prisma.NotificationConfigCreatevacancyStaleStatusesInput | $Enums.VacancyStatus[]
+  vacancyStaleTimeValue?: number
+  vacancyStaleTimeUnit?: $Enums.InactiveTimeUnit
+  vacancyStaleRepeatValue?: number
+  vacancyStaleRepeatUnit?: $Enums.InactiveTimeUnit
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -376,6 +492,14 @@ export type NotificationConfigUpdateInput = {
   leadInactiveStatuses?: Prisma.NotificationConfigUpdateleadInactiveStatusesInput | $Enums.LeadStatus[]
   leadInactiveTimeValue?: Prisma.IntFieldUpdateOperationsInput | number
   leadInactiveTimeUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
+  vacancyCountdownEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  vacancyCountdownDaysBefore?: Prisma.NotificationConfigUpdatevacancyCountdownDaysBeforeInput | number[]
+  vacancyStaleEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  vacancyStaleStatuses?: Prisma.NotificationConfigUpdatevacancyStaleStatusesInput | $Enums.VacancyStatus[]
+  vacancyStaleTimeValue?: Prisma.IntFieldUpdateOperationsInput | number
+  vacancyStaleTimeUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
+  vacancyStaleRepeatValue?: Prisma.IntFieldUpdateOperationsInput | number
+  vacancyStaleRepeatUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutNotificationConfigNestedInput
@@ -392,6 +516,14 @@ export type NotificationConfigUncheckedUpdateInput = {
   leadInactiveStatuses?: Prisma.NotificationConfigUpdateleadInactiveStatusesInput | $Enums.LeadStatus[]
   leadInactiveTimeValue?: Prisma.IntFieldUpdateOperationsInput | number
   leadInactiveTimeUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
+  vacancyCountdownEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  vacancyCountdownDaysBefore?: Prisma.NotificationConfigUpdatevacancyCountdownDaysBeforeInput | number[]
+  vacancyStaleEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  vacancyStaleStatuses?: Prisma.NotificationConfigUpdatevacancyStaleStatusesInput | $Enums.VacancyStatus[]
+  vacancyStaleTimeValue?: Prisma.IntFieldUpdateOperationsInput | number
+  vacancyStaleTimeUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
+  vacancyStaleRepeatValue?: Prisma.IntFieldUpdateOperationsInput | number
+  vacancyStaleRepeatUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -407,6 +539,14 @@ export type NotificationConfigCreateManyInput = {
   leadInactiveStatuses?: Prisma.NotificationConfigCreateleadInactiveStatusesInput | $Enums.LeadStatus[]
   leadInactiveTimeValue?: number
   leadInactiveTimeUnit?: $Enums.InactiveTimeUnit
+  vacancyCountdownEnabled?: boolean
+  vacancyCountdownDaysBefore?: Prisma.NotificationConfigCreatevacancyCountdownDaysBeforeInput | number[]
+  vacancyStaleEnabled?: boolean
+  vacancyStaleStatuses?: Prisma.NotificationConfigCreatevacancyStaleStatusesInput | $Enums.VacancyStatus[]
+  vacancyStaleTimeValue?: number
+  vacancyStaleTimeUnit?: $Enums.InactiveTimeUnit
+  vacancyStaleRepeatValue?: number
+  vacancyStaleRepeatUnit?: $Enums.InactiveTimeUnit
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -421,6 +561,14 @@ export type NotificationConfigUpdateManyMutationInput = {
   leadInactiveStatuses?: Prisma.NotificationConfigUpdateleadInactiveStatusesInput | $Enums.LeadStatus[]
   leadInactiveTimeValue?: Prisma.IntFieldUpdateOperationsInput | number
   leadInactiveTimeUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
+  vacancyCountdownEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  vacancyCountdownDaysBefore?: Prisma.NotificationConfigUpdatevacancyCountdownDaysBeforeInput | number[]
+  vacancyStaleEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  vacancyStaleStatuses?: Prisma.NotificationConfigUpdatevacancyStaleStatusesInput | $Enums.VacancyStatus[]
+  vacancyStaleTimeValue?: Prisma.IntFieldUpdateOperationsInput | number
+  vacancyStaleTimeUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
+  vacancyStaleRepeatValue?: Prisma.IntFieldUpdateOperationsInput | number
+  vacancyStaleRepeatUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -436,6 +584,14 @@ export type NotificationConfigUncheckedUpdateManyInput = {
   leadInactiveStatuses?: Prisma.NotificationConfigUpdateleadInactiveStatusesInput | $Enums.LeadStatus[]
   leadInactiveTimeValue?: Prisma.IntFieldUpdateOperationsInput | number
   leadInactiveTimeUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
+  vacancyCountdownEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  vacancyCountdownDaysBefore?: Prisma.NotificationConfigUpdatevacancyCountdownDaysBeforeInput | number[]
+  vacancyStaleEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  vacancyStaleStatuses?: Prisma.NotificationConfigUpdatevacancyStaleStatusesInput | $Enums.VacancyStatus[]
+  vacancyStaleTimeValue?: Prisma.IntFieldUpdateOperationsInput | number
+  vacancyStaleTimeUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
+  vacancyStaleRepeatValue?: Prisma.IntFieldUpdateOperationsInput | number
+  vacancyStaleRepeatUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -461,6 +617,22 @@ export type EnumLeadStatusNullableListFilter<$PrismaModel = never> = {
   isEmpty?: boolean
 }
 
+export type IntNullableListFilter<$PrismaModel = never> = {
+  equals?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  has?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
+  hasEvery?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
+  hasSome?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
+}
+
+export type EnumVacancyStatusNullableListFilter<$PrismaModel = never> = {
+  equals?: $Enums.VacancyStatus[] | Prisma.ListEnumVacancyStatusFieldRefInput<$PrismaModel> | null
+  has?: $Enums.VacancyStatus | Prisma.EnumVacancyStatusFieldRefInput<$PrismaModel> | null
+  hasEvery?: $Enums.VacancyStatus[] | Prisma.ListEnumVacancyStatusFieldRefInput<$PrismaModel>
+  hasSome?: $Enums.VacancyStatus[] | Prisma.ListEnumVacancyStatusFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
+}
+
 export type NotificationConfigCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
@@ -472,12 +644,23 @@ export type NotificationConfigCountOrderByAggregateInput = {
   leadInactiveStatuses?: Prisma.SortOrder
   leadInactiveTimeValue?: Prisma.SortOrder
   leadInactiveTimeUnit?: Prisma.SortOrder
+  vacancyCountdownEnabled?: Prisma.SortOrder
+  vacancyCountdownDaysBefore?: Prisma.SortOrder
+  vacancyStaleEnabled?: Prisma.SortOrder
+  vacancyStaleStatuses?: Prisma.SortOrder
+  vacancyStaleTimeValue?: Prisma.SortOrder
+  vacancyStaleTimeUnit?: Prisma.SortOrder
+  vacancyStaleRepeatValue?: Prisma.SortOrder
+  vacancyStaleRepeatUnit?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type NotificationConfigAvgOrderByAggregateInput = {
   leadInactiveTimeValue?: Prisma.SortOrder
+  vacancyCountdownDaysBefore?: Prisma.SortOrder
+  vacancyStaleTimeValue?: Prisma.SortOrder
+  vacancyStaleRepeatValue?: Prisma.SortOrder
 }
 
 export type NotificationConfigMaxOrderByAggregateInput = {
@@ -488,6 +671,12 @@ export type NotificationConfigMaxOrderByAggregateInput = {
   leadInactiveEnabled?: Prisma.SortOrder
   leadInactiveTimeValue?: Prisma.SortOrder
   leadInactiveTimeUnit?: Prisma.SortOrder
+  vacancyCountdownEnabled?: Prisma.SortOrder
+  vacancyStaleEnabled?: Prisma.SortOrder
+  vacancyStaleTimeValue?: Prisma.SortOrder
+  vacancyStaleTimeUnit?: Prisma.SortOrder
+  vacancyStaleRepeatValue?: Prisma.SortOrder
+  vacancyStaleRepeatUnit?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -500,12 +689,21 @@ export type NotificationConfigMinOrderByAggregateInput = {
   leadInactiveEnabled?: Prisma.SortOrder
   leadInactiveTimeValue?: Prisma.SortOrder
   leadInactiveTimeUnit?: Prisma.SortOrder
+  vacancyCountdownEnabled?: Prisma.SortOrder
+  vacancyStaleEnabled?: Prisma.SortOrder
+  vacancyStaleTimeValue?: Prisma.SortOrder
+  vacancyStaleTimeUnit?: Prisma.SortOrder
+  vacancyStaleRepeatValue?: Prisma.SortOrder
+  vacancyStaleRepeatUnit?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type NotificationConfigSumOrderByAggregateInput = {
   leadInactiveTimeValue?: Prisma.SortOrder
+  vacancyCountdownDaysBefore?: Prisma.SortOrder
+  vacancyStaleTimeValue?: Prisma.SortOrder
+  vacancyStaleRepeatValue?: Prisma.SortOrder
 }
 
 export type NotificationConfigCreateNestedOneWithoutTenantInput = {
@@ -552,6 +750,14 @@ export type NotificationConfigCreateleadInactiveStatusesInput = {
   set: $Enums.LeadStatus[]
 }
 
+export type NotificationConfigCreatevacancyCountdownDaysBeforeInput = {
+  set: number[]
+}
+
+export type NotificationConfigCreatevacancyStaleStatusesInput = {
+  set: $Enums.VacancyStatus[]
+}
+
 export type NotificationConfigUpdaterecipientUserIdsInput = {
   set?: string[]
   push?: string | string[]
@@ -571,6 +777,16 @@ export type EnumInactiveTimeUnitFieldUpdateOperationsInput = {
   set?: $Enums.InactiveTimeUnit
 }
 
+export type NotificationConfigUpdatevacancyCountdownDaysBeforeInput = {
+  set?: number[]
+  push?: number | number[]
+}
+
+export type NotificationConfigUpdatevacancyStaleStatusesInput = {
+  set?: $Enums.VacancyStatus[]
+  push?: $Enums.VacancyStatus | $Enums.VacancyStatus[]
+}
+
 export type NotificationConfigCreateWithoutTenantInput = {
   id?: string
   enabled?: boolean
@@ -581,6 +797,14 @@ export type NotificationConfigCreateWithoutTenantInput = {
   leadInactiveStatuses?: Prisma.NotificationConfigCreateleadInactiveStatusesInput | $Enums.LeadStatus[]
   leadInactiveTimeValue?: number
   leadInactiveTimeUnit?: $Enums.InactiveTimeUnit
+  vacancyCountdownEnabled?: boolean
+  vacancyCountdownDaysBefore?: Prisma.NotificationConfigCreatevacancyCountdownDaysBeforeInput | number[]
+  vacancyStaleEnabled?: boolean
+  vacancyStaleStatuses?: Prisma.NotificationConfigCreatevacancyStaleStatusesInput | $Enums.VacancyStatus[]
+  vacancyStaleTimeValue?: number
+  vacancyStaleTimeUnit?: $Enums.InactiveTimeUnit
+  vacancyStaleRepeatValue?: number
+  vacancyStaleRepeatUnit?: $Enums.InactiveTimeUnit
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -595,6 +819,14 @@ export type NotificationConfigUncheckedCreateWithoutTenantInput = {
   leadInactiveStatuses?: Prisma.NotificationConfigCreateleadInactiveStatusesInput | $Enums.LeadStatus[]
   leadInactiveTimeValue?: number
   leadInactiveTimeUnit?: $Enums.InactiveTimeUnit
+  vacancyCountdownEnabled?: boolean
+  vacancyCountdownDaysBefore?: Prisma.NotificationConfigCreatevacancyCountdownDaysBeforeInput | number[]
+  vacancyStaleEnabled?: boolean
+  vacancyStaleStatuses?: Prisma.NotificationConfigCreatevacancyStaleStatusesInput | $Enums.VacancyStatus[]
+  vacancyStaleTimeValue?: number
+  vacancyStaleTimeUnit?: $Enums.InactiveTimeUnit
+  vacancyStaleRepeatValue?: number
+  vacancyStaleRepeatUnit?: $Enums.InactiveTimeUnit
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -625,6 +857,14 @@ export type NotificationConfigUpdateWithoutTenantInput = {
   leadInactiveStatuses?: Prisma.NotificationConfigUpdateleadInactiveStatusesInput | $Enums.LeadStatus[]
   leadInactiveTimeValue?: Prisma.IntFieldUpdateOperationsInput | number
   leadInactiveTimeUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
+  vacancyCountdownEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  vacancyCountdownDaysBefore?: Prisma.NotificationConfigUpdatevacancyCountdownDaysBeforeInput | number[]
+  vacancyStaleEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  vacancyStaleStatuses?: Prisma.NotificationConfigUpdatevacancyStaleStatusesInput | $Enums.VacancyStatus[]
+  vacancyStaleTimeValue?: Prisma.IntFieldUpdateOperationsInput | number
+  vacancyStaleTimeUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
+  vacancyStaleRepeatValue?: Prisma.IntFieldUpdateOperationsInput | number
+  vacancyStaleRepeatUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -639,6 +879,14 @@ export type NotificationConfigUncheckedUpdateWithoutTenantInput = {
   leadInactiveStatuses?: Prisma.NotificationConfigUpdateleadInactiveStatusesInput | $Enums.LeadStatus[]
   leadInactiveTimeValue?: Prisma.IntFieldUpdateOperationsInput | number
   leadInactiveTimeUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
+  vacancyCountdownEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  vacancyCountdownDaysBefore?: Prisma.NotificationConfigUpdatevacancyCountdownDaysBeforeInput | number[]
+  vacancyStaleEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  vacancyStaleStatuses?: Prisma.NotificationConfigUpdatevacancyStaleStatusesInput | $Enums.VacancyStatus[]
+  vacancyStaleTimeValue?: Prisma.IntFieldUpdateOperationsInput | number
+  vacancyStaleTimeUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
+  vacancyStaleRepeatValue?: Prisma.IntFieldUpdateOperationsInput | number
+  vacancyStaleRepeatUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -656,6 +904,14 @@ export type NotificationConfigSelect<ExtArgs extends runtime.Types.Extensions.In
   leadInactiveStatuses?: boolean
   leadInactiveTimeValue?: boolean
   leadInactiveTimeUnit?: boolean
+  vacancyCountdownEnabled?: boolean
+  vacancyCountdownDaysBefore?: boolean
+  vacancyStaleEnabled?: boolean
+  vacancyStaleStatuses?: boolean
+  vacancyStaleTimeValue?: boolean
+  vacancyStaleTimeUnit?: boolean
+  vacancyStaleRepeatValue?: boolean
+  vacancyStaleRepeatUnit?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -672,6 +928,14 @@ export type NotificationConfigSelectCreateManyAndReturn<ExtArgs extends runtime.
   leadInactiveStatuses?: boolean
   leadInactiveTimeValue?: boolean
   leadInactiveTimeUnit?: boolean
+  vacancyCountdownEnabled?: boolean
+  vacancyCountdownDaysBefore?: boolean
+  vacancyStaleEnabled?: boolean
+  vacancyStaleStatuses?: boolean
+  vacancyStaleTimeValue?: boolean
+  vacancyStaleTimeUnit?: boolean
+  vacancyStaleRepeatValue?: boolean
+  vacancyStaleRepeatUnit?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -688,6 +952,14 @@ export type NotificationConfigSelectUpdateManyAndReturn<ExtArgs extends runtime.
   leadInactiveStatuses?: boolean
   leadInactiveTimeValue?: boolean
   leadInactiveTimeUnit?: boolean
+  vacancyCountdownEnabled?: boolean
+  vacancyCountdownDaysBefore?: boolean
+  vacancyStaleEnabled?: boolean
+  vacancyStaleStatuses?: boolean
+  vacancyStaleTimeValue?: boolean
+  vacancyStaleTimeUnit?: boolean
+  vacancyStaleRepeatValue?: boolean
+  vacancyStaleRepeatUnit?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -704,11 +976,19 @@ export type NotificationConfigSelectScalar = {
   leadInactiveStatuses?: boolean
   leadInactiveTimeValue?: boolean
   leadInactiveTimeUnit?: boolean
+  vacancyCountdownEnabled?: boolean
+  vacancyCountdownDaysBefore?: boolean
+  vacancyStaleEnabled?: boolean
+  vacancyStaleStatuses?: boolean
+  vacancyStaleTimeValue?: boolean
+  vacancyStaleTimeUnit?: boolean
+  vacancyStaleRepeatValue?: boolean
+  vacancyStaleRepeatUnit?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type NotificationConfigOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "enabled" | "recipientUserIds" | "leadStatusChangeEnabled" | "leadStatusChangeTriggers" | "leadInactiveEnabled" | "leadInactiveStatuses" | "leadInactiveTimeValue" | "leadInactiveTimeUnit" | "createdAt" | "updatedAt", ExtArgs["result"]["notificationConfig"]>
+export type NotificationConfigOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "enabled" | "recipientUserIds" | "leadStatusChangeEnabled" | "leadStatusChangeTriggers" | "leadInactiveEnabled" | "leadInactiveStatuses" | "leadInactiveTimeValue" | "leadInactiveTimeUnit" | "vacancyCountdownEnabled" | "vacancyCountdownDaysBefore" | "vacancyStaleEnabled" | "vacancyStaleStatuses" | "vacancyStaleTimeValue" | "vacancyStaleTimeUnit" | "vacancyStaleRepeatValue" | "vacancyStaleRepeatUnit" | "createdAt" | "updatedAt", ExtArgs["result"]["notificationConfig"]>
 export type NotificationConfigInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
@@ -735,6 +1015,14 @@ export type $NotificationConfigPayload<ExtArgs extends runtime.Types.Extensions.
     leadInactiveStatuses: $Enums.LeadStatus[]
     leadInactiveTimeValue: number
     leadInactiveTimeUnit: $Enums.InactiveTimeUnit
+    vacancyCountdownEnabled: boolean
+    vacancyCountdownDaysBefore: number[]
+    vacancyStaleEnabled: boolean
+    vacancyStaleStatuses: $Enums.VacancyStatus[]
+    vacancyStaleTimeValue: number
+    vacancyStaleTimeUnit: $Enums.InactiveTimeUnit
+    vacancyStaleRepeatValue: number
+    vacancyStaleRepeatUnit: $Enums.InactiveTimeUnit
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["notificationConfig"]>
@@ -1171,6 +1459,14 @@ export interface NotificationConfigFieldRefs {
   readonly leadInactiveStatuses: Prisma.FieldRef<"NotificationConfig", 'LeadStatus[]'>
   readonly leadInactiveTimeValue: Prisma.FieldRef<"NotificationConfig", 'Int'>
   readonly leadInactiveTimeUnit: Prisma.FieldRef<"NotificationConfig", 'InactiveTimeUnit'>
+  readonly vacancyCountdownEnabled: Prisma.FieldRef<"NotificationConfig", 'Boolean'>
+  readonly vacancyCountdownDaysBefore: Prisma.FieldRef<"NotificationConfig", 'Int[]'>
+  readonly vacancyStaleEnabled: Prisma.FieldRef<"NotificationConfig", 'Boolean'>
+  readonly vacancyStaleStatuses: Prisma.FieldRef<"NotificationConfig", 'VacancyStatus[]'>
+  readonly vacancyStaleTimeValue: Prisma.FieldRef<"NotificationConfig", 'Int'>
+  readonly vacancyStaleTimeUnit: Prisma.FieldRef<"NotificationConfig", 'InactiveTimeUnit'>
+  readonly vacancyStaleRepeatValue: Prisma.FieldRef<"NotificationConfig", 'Int'>
+  readonly vacancyStaleRepeatUnit: Prisma.FieldRef<"NotificationConfig", 'InactiveTimeUnit'>
   readonly createdAt: Prisma.FieldRef<"NotificationConfig", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"NotificationConfig", 'DateTime'>
 }

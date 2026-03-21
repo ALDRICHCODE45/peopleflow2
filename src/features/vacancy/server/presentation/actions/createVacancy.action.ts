@@ -115,29 +115,51 @@ export async function createVacancyAction(
 
     const vacancyDTO = result.vacancy?.toJSON();
 
-    if (data.sendNotification === true && vacancyDTO) {
-      const [recruiter, clientName] = await Promise.all([
-        prismaVacancyRepository.findRecruiterContactById(data.recruiterId),
-        prismaVacancyRepository.findClientNameById(data.clientId, tenantId),
-      ]);
+    // Lookup recruiter + client for notifications (needed by both events below)
+    const [recruiter, clientName] = vacancyDTO
+      ? await Promise.all([
+          prismaVacancyRepository.findRecruiterContactById(data.recruiterId),
+          prismaVacancyRepository.findClientNameById(data.clientId, tenantId),
+        ])
+      : [null, null];
 
-      if (recruiter?.email) {
-        await inngest.send({
-          name: InngestEvents.email.send,
+    if (data.sendNotification === true && vacancyDTO && recruiter?.email) {
+      await inngest.send({
+        name: InngestEvents.email.send,
+        data: {
+          template: "recruiter-vacancy-assigned",
+          tenantId,
+          triggeredById: session.user.id,
           data: {
-            template: "recruiter-vacancy-assigned",
-            tenantId,
-            triggeredById: session.user.id,
-            data: {
-              recruiterName: recruiter.name ?? "Reclutador",
-              recruiterEmail: recruiter.email,
-              vacancyPosition: data.position,
-              clientName: clientName ?? "Cliente",
-              vacancyId: vacancyDTO.id,
-            },
+            recruiterName: recruiter.name ?? "Reclutador",
+            recruiterEmail: recruiter.email,
+            vacancyPosition: data.position,
+            clientName: clientName ?? "Cliente",
+            vacancyId: vacancyDTO.id,
           },
+        },
+      });
+    }
+
+    // Schedule countdown reminders if vacancy has a targetDeliveryDate
+    if (vacancyDTO && targetDeliveryDate && recruiter?.email) {
+      inngest
+        .send({
+          name: InngestEvents.vacancy.countdownSchedule,
+          data: {
+            vacancyId: vacancyDTO.id,
+            tenantId,
+            targetDeliveryDate: targetDeliveryDate.toISOString(),
+            vacancyPosition: data.position,
+            clientName: clientName ?? "Cliente",
+            recruiterId: data.recruiterId,
+            recruiterName: recruiter.name ?? "Reclutador",
+            recruiterEmail: recruiter.email,
+          },
+        })
+        .catch((err) => {
+          console.error("[createVacancyAction] Failed to send countdown event:", err);
         });
-      }
     }
 
     revalidatePath(Routes.reclutamiento.vacantes);

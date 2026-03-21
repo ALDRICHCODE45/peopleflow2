@@ -949,6 +949,18 @@ model NotificationConfig {
   leadInactiveTimeValue Int             @default(48)
   leadInactiveTimeUnit InactiveTimeUnit @default(HOURS)
 
+  // === VACANCY COUNTDOWN (before targetDeliveryDate) ===
+  vacancyCountdownEnabled    Boolean          @default(false)
+  vacancyCountdownDaysBefore Int[]            @default([3, 1])
+
+  // === VACANCY STALE/INACTIVITY ===
+  vacancyStaleEnabled     Boolean          @default(false)
+  vacancyStaleStatuses    VacancyStatus[]  @default([])
+  vacancyStaleTimeValue   Int              @default(72)
+  vacancyStaleTimeUnit    InactiveTimeUnit @default(HOURS)
+  vacancyStaleRepeatValue Int              @default(24)
+  vacancyStaleRepeatUnit  InactiveTimeUnit @default(HOURS)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
