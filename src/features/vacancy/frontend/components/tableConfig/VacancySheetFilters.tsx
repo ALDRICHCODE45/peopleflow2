@@ -277,10 +277,10 @@ export function VacancySheetFilters({
             </div>
           </div>
 
-          {/* Fecha objetivo de entrega */}
+          {/* Fecha tentativa de entrega */}
           <div className="space-y-2">
             <Label className="text-xs font-medium text-muted-foreground">
-              Fecha objetivo de entrega
+              Fecha tentativa de entrega
             </Label>
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1">

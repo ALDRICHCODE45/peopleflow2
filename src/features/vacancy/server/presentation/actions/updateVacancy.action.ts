@@ -3,6 +3,7 @@
 import { auth } from "@lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { parseISO } from "date-fns";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
@@ -63,7 +64,7 @@ export async function updateVacancyAction(
 
       assignedAt =
         canModifyAssignedAt && data.assignedAt
-          ? new Date(data.assignedAt)
+          ? parseISO(data.assignedAt)
           : data.assignedAt === null
             ? null
             : undefined;
@@ -84,7 +85,7 @@ export async function updateVacancyAction(
         : false;
 
       if (canModifyTargetDate && data.targetDeliveryDate) {
-        targetDeliveryDate = TargetDeliveryDate.from(new Date(data.targetDeliveryDate)).value;
+        targetDeliveryDate = TargetDeliveryDate.from(parseISO(data.targetDeliveryDate)).value;
       } else if (data.serviceType && assignedAt instanceof Date) {
         targetDeliveryDate = TargetDeliveryDate.calculate(
           assignedAt,
@@ -116,7 +117,7 @@ export async function updateVacancyAction(
       assignedAt,
       targetDeliveryDate,
       entryDate: data.entryDate
-        ? new Date(data.entryDate)
+        ? parseISO(data.entryDate)
         : data.entryDate === null
           ? null
           : undefined,

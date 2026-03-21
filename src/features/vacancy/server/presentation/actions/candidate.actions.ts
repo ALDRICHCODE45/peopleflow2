@@ -3,6 +3,7 @@
 import { auth } from "@lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { parseISO } from "date-fns";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
@@ -266,7 +267,7 @@ export async function selectFinalistAction(
       vacancyId: input.vacancyId,
       tenantId,
       salaryFixed: input.salaryFixed,
-      entryDate: new Date(input.entryDate),
+      entryDate: parseISO(input.entryDate),
       changedById: session.user.id,
     });
 

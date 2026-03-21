@@ -3,6 +3,7 @@
 import { auth } from "@lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { parseISO } from "date-fns";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
@@ -62,7 +63,7 @@ export async function createVacancyAction(
 
     const assignedAt =
       canModifyAssignedAt && data.assignedAt
-        ? new Date(data.assignedAt)
+        ? parseISO(data.assignedAt)
         : new Date();
 
     // Determine targetDeliveryDate based on permission
@@ -81,7 +82,7 @@ export async function createVacancyAction(
 
     const targetDeliveryDate =
       canModifyTargetDate && data.targetDeliveryDate
-        ? TargetDeliveryDate.from(new Date(data.targetDeliveryDate)).value
+        ? TargetDeliveryDate.from(parseISO(data.targetDeliveryDate)).value
         : TargetDeliveryDate.calculate(assignedAt, serviceType as VacancyServiceType).value;
 
     const useCase = new CreateVacancyUseCase(prismaVacancyRepository);
