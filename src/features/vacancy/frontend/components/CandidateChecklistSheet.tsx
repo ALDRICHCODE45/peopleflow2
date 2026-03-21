@@ -81,7 +81,7 @@ export function CandidateChecklistSheet({
         (m) => m.checklistItemId === item.id,
       );
       initial[item.id] = {
-        rating: (existing?.rating as CandidateMatchRating | null) ?? null,
+        rating: existing?.rating ?? null,
         feedback: existing?.feedback ?? "",
         noteOpen: !!existing?.feedback,
       };

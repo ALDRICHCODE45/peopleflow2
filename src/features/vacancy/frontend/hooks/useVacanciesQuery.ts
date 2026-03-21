@@ -7,6 +7,7 @@
  */
 
 import { useQuery } from "@tanstack/react-query";
+import type { UseQueryResult } from "@tanstack/react-query";
 import type { VacancyStatusType, VacancyDTO } from "../types/vacancy.types";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { getVacanciesAction } from "../../server/presentation/actions/getVacanciesAction.action";
@@ -22,7 +23,7 @@ export const getVacanciesQueryKey = (
   filters?: VacanciesQueryFilters,
 ) => ["vacancies", tenantId, filters] as const;
 
-export function useVacanciesQuery(filters?: VacanciesQueryFilters) {
+export function useVacanciesQuery(filters?: VacanciesQueryFilters): UseQueryResult<VacancyDTO[], Error> {
   const { tenant } = useTenant();
 
   return useQuery({

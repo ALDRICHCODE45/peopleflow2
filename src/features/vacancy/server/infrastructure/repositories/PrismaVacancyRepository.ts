@@ -18,6 +18,7 @@ import type {
   VacancyChecklistItemDTO,
   VacancyStatusHistoryDTO,
   AttachmentDTO,
+  CandidateMatchRating,
 } from "@features/vacancy/frontend/types/vacancy.types";
 
 type VacancyWithRelations = {
@@ -242,7 +243,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
         tenantId: string; createdAt: Date; updatedAt: Date;
         checklistMatches: Array<{
           id: string; candidateId: string; checklistItemId: string;
-          rating: string | null; feedback: string | null; tenantId: string; createdAt: Date; updatedAt: Date;
+          rating: CandidateMatchRating | null; feedback: string | null; tenantId: string; createdAt: Date; updatedAt: Date;
         }>;
         attachments: Array<{
           id: string; fileName: string; fileUrl: string; fileSize: number;
@@ -257,7 +258,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
         order: number; tenantId: string; createdAt: Date; updatedAt: Date;
         candidateMatches: Array<{
           id: string; candidateId: string; checklistItemId: string;
-          rating: string | null; feedback: string | null; tenantId: string; createdAt: Date; updatedAt: Date;
+          rating: CandidateMatchRating | null; feedback: string | null; tenantId: string; createdAt: Date; updatedAt: Date;
         }>;
       }>;
       statusHistory: Array<{
@@ -284,7 +285,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       updatedAt: c.updatedAt.toISOString(),
       checklistMatches: c.checklistMatches.map((m) => ({
         id: m.id, candidateId: m.candidateId, checklistItemId: m.checklistItemId,
-        rating: m.rating as ("CUMPLE" | "NO_CUMPLE" | "PARCIAL" | null),
+        rating: m.rating as CandidateMatchRating | null,
         feedback: m.feedback, tenantId: m.tenantId,
         createdAt: m.createdAt.toISOString(), updatedAt: m.updatedAt.toISOString(),
       })),

@@ -19,6 +19,7 @@ import { cn } from "@/core/lib/utils";
 import { resolveCountryName, resolveRegionName } from "@lib/resolve-location";
 import {
   CANDIDATE_STATUS_LABELS,
+  VACANCY_MODALITY_LABELS,
   type VacancyCandidateDTO,
   type CandidateStatus,
 } from "../types/vacancy.types";
@@ -35,12 +36,6 @@ const candidateStatusColorMap: Record<CandidateStatus, string> = {
   EN_TERNA: "bg-violet-100 text-violet-700 border-violet-200",
   CONTRATADO: "bg-green-100 text-green-700 border-green-200",
   DESCARTADO: "bg-slate-100 text-slate-600 border-slate-200",
-};
-
-const modalityLabels: Record<string, string> = {
-  PRESENCIAL: "Presencial",
-  REMOTO: "Remoto",
-  HIBRIDO: "Híbrido",
 };
 
 function InfoRow({
@@ -248,7 +243,7 @@ export function CandidateDetailSheet({
               label="Modalidad"
               value={
                 candidate.currentModality
-                  ? (modalityLabels[candidate.currentModality] ??
+                  ? (VACANCY_MODALITY_LABELS[candidate.currentModality] ??
                     candidate.currentModality)
                   : null
               }

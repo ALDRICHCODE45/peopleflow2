@@ -1,5 +1,5 @@
 "use client";
-import { Row } from "@tanstack/react-table";
+import type { Row } from "@tanstack/react-table";
 import { useModalState } from "@/core/shared/hooks/useModalState";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { VacancyActionsDropdown } from "./VacanciesActionsDropdown";

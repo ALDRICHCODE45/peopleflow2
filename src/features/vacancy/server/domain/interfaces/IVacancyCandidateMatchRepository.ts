@@ -1,7 +1,9 @@
+import type { CandidateMatchRating } from "@features/vacancy/frontend/types/vacancy.types";
+
 export interface UpsertMatchData {
   candidateId: string;
   checklistItemId: string;
-  rating: string | null;
+  rating: CandidateMatchRating | null;
   feedback: string | null;
   tenantId: string;
 }
@@ -10,7 +12,7 @@ export interface CandidateMatchData {
   id: string;
   candidateId: string;
   checklistItemId: string;
-  rating: string | null;
+  rating: CandidateMatchRating | null;
   feedback: string | null;
   tenantId: string;
   createdAt: Date;

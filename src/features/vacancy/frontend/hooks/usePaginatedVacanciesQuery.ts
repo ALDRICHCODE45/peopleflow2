@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import type { UseQueryResult } from "@tanstack/react-query";
 import type {
   VacancyStatusType,
   VacancySaleType,
@@ -86,7 +87,7 @@ export const getPaginatedVacanciesQueryKey = (
  */
 export function usePaginatedVacanciesQuery(
   params: PaginatedVacanciesQueryParams
-) {
+): UseQueryResult<PaginatedResponse<VacancyDTO>, Error> {
   const { tenant } = useTenant();
 
   return useQuery({

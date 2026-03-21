@@ -7,7 +7,15 @@
  */
 
 import { useState, useEffect, useCallback } from "react";
-import type { VacancyDTO, VacancyStatusType, CreateVacancyFormData, UpdateVacancyFormData } from "../types/vacancy.types";
+import type {
+  VacancyDTO,
+  VacancyStatusType,
+  CreateVacancyFormData,
+  UpdateVacancyFormData,
+  CreateVacancyResult,
+  UpdateVacancyResult,
+  DeleteVacancyResult,
+} from "../types/vacancy.types";
 import { getVacanciesAction } from "../../server/presentation/actions/getVacanciesAction.action";
 import { createVacancyAction } from "../../server/presentation/actions/createVacancy.action";
 import { updateVacancyAction } from "../../server/presentation/actions/updateVacancy.action";
@@ -18,7 +26,19 @@ interface UseVacanciesFilters {
   search?: string;
 }
 
-export function useVacancies(initialFilters?: UseVacanciesFilters) {
+export interface UseVacanciesReturn {
+  vacancies: VacancyDTO[];
+  isLoading: boolean;
+  error: string | null;
+  filters: UseVacanciesFilters;
+  refresh: () => Promise<void>;
+  createVacancy: (data: CreateVacancyFormData) => Promise<CreateVacancyResult>;
+  updateVacancy: (id: string, data: UpdateVacancyFormData) => Promise<UpdateVacancyResult>;
+  deleteVacancy: (id: string) => Promise<DeleteVacancyResult>;
+  updateFilters: (newFilters: UseVacanciesFilters) => void;
+}
+
+export function useVacancies(initialFilters?: UseVacanciesFilters): UseVacanciesReturn {
   const [vacancies, setVacancies] = useState<VacancyDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

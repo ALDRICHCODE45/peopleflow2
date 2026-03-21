@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { showToast } from "@/core/shared/components/ShowToast";
 import { vacancyQueryKeys } from "@core/shared/constants/query-keys";
@@ -12,11 +13,15 @@ import {
   validateVacancyChecklistAction,
   rejectVacancyChecklistAction,
 } from "@features/vacancy/server/presentation/actions/vacancyAttachment.actions";
-import type { AttachmentDTO } from "../types/vacancy.types";
+import type {
+  AttachmentDTO,
+  VacancyDTO,
+  DeleteVacancyAttachmentResult,
+} from "../types/vacancy.types";
 
 // ─── Query: fetch attachments for a vacancy ───────────────────────────────────
 
-export function useVacancyAttachmentsQuery(vacancyId: string | null) {
+export function useVacancyAttachmentsQuery(vacancyId: string | null): UseQueryResult<AttachmentDTO[], Error> {
   const { tenant } = useTenant();
 
   return useQuery({
@@ -35,7 +40,7 @@ export function useVacancyAttachmentsQuery(vacancyId: string | null) {
 
 // ─── Mutation: delete attachment ──────────────────────────────────────────────
 
-export function useDeleteVacancyAttachment(vacancyId: string) {
+export function useDeleteVacancyAttachment(vacancyId: string): UseMutationResult<DeleteVacancyAttachmentResult, Error, string> {
   const queryClient = useQueryClient();
   const { tenant } = useTenant();
 
@@ -60,7 +65,7 @@ export function useDeleteVacancyAttachment(vacancyId: string) {
 
 // ─── Mutation: validate attachment ────────────────────────────────────────────
 
-export function useValidateAttachment(vacancyId: string) {
+export function useValidateAttachment(vacancyId: string): UseMutationResult<AttachmentDTO | undefined, Error, string> {
   const queryClient = useQueryClient();
   const { tenant } = useTenant();
 
@@ -85,7 +90,7 @@ export function useValidateAttachment(vacancyId: string) {
 
 // ─── Mutation: reject attachment ──────────────────────────────────────────────
 
-export function useRejectAttachment(vacancyId: string) {
+export function useRejectAttachment(vacancyId: string): UseMutationResult<AttachmentDTO | undefined, Error, { attachmentId: string; reason: string }> {
   const queryClient = useQueryClient();
   const { tenant } = useTenant();
 
@@ -110,7 +115,9 @@ export function useRejectAttachment(vacancyId: string) {
 
 // ─── Mutation: validate checklist ─────────────────────────────────────────────
 
-export function useValidateChecklist(vacancyId: string) {
+type ChecklistValidationResult = Pick<VacancyDTO, "id" | "checklistValidatedAt" | "checklistValidatedById" | "checklistRejectionReason">;
+
+export function useValidateChecklist(vacancyId: string): UseMutationResult<ChecklistValidationResult | undefined, Error, void> {
   const queryClient = useQueryClient();
   const { tenant } = useTenant();
 
@@ -135,7 +142,7 @@ export function useValidateChecklist(vacancyId: string) {
 
 // ─── Mutation: reject checklist ───────────────────────────────────────────────
 
-export function useRejectChecklist(vacancyId: string) {
+export function useRejectChecklist(vacancyId: string): UseMutationResult<ChecklistValidationResult | undefined, Error, string> {
   const queryClient = useQueryClient();
   const { tenant } = useTenant();
 

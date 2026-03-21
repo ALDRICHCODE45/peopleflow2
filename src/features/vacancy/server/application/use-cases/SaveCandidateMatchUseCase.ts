@@ -6,11 +6,12 @@ import type {
   IVacancyCandidateMatchRepository,
   CandidateMatchData,
 } from "../../domain/interfaces/IVacancyCandidateMatchRepository";
+import type { CandidateMatchRating } from "@features/vacancy/frontend/types/vacancy.types";
 
 export interface SaveCandidateMatchInput {
   candidateId: string;
   checklistItemId: string;
-  rating: string | null;
+  rating: CandidateMatchRating | null;
   feedback: string | null;
   tenantId: string;
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { UseMutationResult } from "@tanstack/react-query";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { showToast } from "@/core/shared/components/ShowToast";
 import { vacancyQueryKeys } from "@core/shared/constants/query-keys";
@@ -21,7 +22,13 @@ import { confirmPlacementAction } from "@features/vacancy/server/presentation/ac
 import { saveCandidateMatchAction } from "@features/vacancy/server/presentation/actions/saveCandidateMatch.action";
 import type {
   VacancyStatusType,
+  VacancyDTO,
+  VacancyCandidateDTO,
+  VacancyChecklistItemDTO,
+  VacancyCandidateMatchDTO,
+  DeleteCandidateResult,
   AddCandidateFormData,
+  CandidateMatchRating,
 } from "../types/vacancy.types";
 
 // ---- Transition Status ----
@@ -37,7 +44,7 @@ export interface TransitionStatusInput {
   hiredCandidateId?: string;
 }
 
-export function useTransitionVacancyStatus() {
+export function useTransitionVacancyStatus(): UseMutationResult<VacancyDTO | undefined, Error, TransitionStatusInput> {
   const queryClient = useQueryClient();
   const { tenant } = useTenant();
 
@@ -79,7 +86,7 @@ export interface AddCandidateInput {
   data: AddCandidateFormData;
 }
 
-export function useAddCandidate() {
+export function useAddCandidate(): UseMutationResult<VacancyCandidateDTO | undefined, Error, AddCandidateInput> {
   const queryClient = useQueryClient();
   const { tenant } = useTenant();
 
@@ -118,7 +125,7 @@ export interface RemoveCandidateInput {
   vacancyId: string;
 }
 
-export function useRemoveCandidate() {
+export function useRemoveCandidate(): UseMutationResult<DeleteCandidateResult, Error, RemoveCandidateInput> {
   const queryClient = useQueryClient();
   const { tenant } = useTenant();
 
@@ -158,7 +165,7 @@ export interface ToggleChecklistItemInput {
   isCompleted: boolean;
 }
 
-export function useToggleChecklistItem() {
+export function useToggleChecklistItem(): UseMutationResult<VacancyChecklistItemDTO | undefined, Error, ToggleChecklistItemInput> {
   const queryClient = useQueryClient();
   const { tenant } = useTenant();
 
@@ -195,7 +202,7 @@ export interface ValidateTernaInput {
   candidateIds: string[];
 }
 
-export function useValidateTerna() {
+export function useValidateTerna(): UseMutationResult<VacancyDTO | undefined, Error, ValidateTernaInput> {
   const queryClient = useQueryClient();
   const { tenant } = useTenant();
 
@@ -232,7 +239,7 @@ export function useValidateTerna() {
 
 // ---- Confirm Placement ----
 
-export function useConfirmPlacement() {
+export function useConfirmPlacement(): UseMutationResult<VacancyDTO | undefined, Error, string> {
   const queryClient = useQueryClient();
   const { tenant } = useTenant();
 
@@ -275,7 +282,7 @@ export interface AddChecklistItemInput {
   order?: number;
 }
 
-export function useAddChecklistItem() {
+export function useAddChecklistItem(): UseMutationResult<VacancyChecklistItemDTO | undefined, Error, AddChecklistItemInput> {
   const queryClient = useQueryClient();
   const { tenant } = useTenant();
 
@@ -315,7 +322,7 @@ export interface UpdateCandidateInput {
   data: ServerUpdateCandidateInput;
 }
 
-export function useUpdateCandidate() {
+export function useUpdateCandidate(): UseMutationResult<VacancyCandidateDTO | undefined, Error, UpdateCandidateInput> {
   const queryClient = useQueryClient();
   const { tenant } = useTenant();
 
@@ -349,14 +356,21 @@ export function useUpdateCandidate() {
 
 // ── useSaveCandidateMatch ──────────────────────────────────────────────────
 
-export function useSaveCandidateMatch(vacancyId: string) {
+interface SaveCandidateMatchInput {
+  candidateId: string;
+  checklistItemId: string;
+  rating: CandidateMatchRating | null;
+  feedback: string | null;
+}
+
+export function useSaveCandidateMatch(vacancyId: string): UseMutationResult<VacancyCandidateMatchDTO | undefined, Error, SaveCandidateMatchInput> {
   const queryClient = useQueryClient();
   const { tenant } = useTenant();
   return useMutation({
     mutationFn: async (data: {
       candidateId: string;
       checklistItemId: string;
-      rating: string | null;
+      rating: CandidateMatchRating | null;
       feedback: string | null;
     }) => {
       const result = await saveCandidateMatchAction(data);
@@ -382,7 +396,7 @@ export interface SelectFinalistInput {
   entryDate: string;
 }
 
-export function useSelectFinalist() {
+export function useSelectFinalist(): UseMutationResult<VacancyDTO | undefined, Error, SelectFinalistInput> {
   const queryClient = useQueryClient();
   const { tenant } = useTenant();
 

@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@shadcn/button";
 import {
   Select,
   SelectContent,
@@ -17,14 +16,21 @@ const DAY_RANGE_OPTIONS = [
 ] as const;
 
 const DAYS_OF_WEEK = [
-  { value: "Lunes", label: "Lun" },
-  { value: "Martes", label: "Mar" },
-  { value: "Miércoles", label: "Mié" },
-  { value: "Jueves", label: "Jue" },
-  { value: "Viernes", label: "Vie" },
-  { value: "Sábado", label: "Sáb" },
-  { value: "Domingo", label: "Dom" },
+  { value: "Lunes", label: "Lunes" },
+  { value: "Martes", label: "Martes" },
+  { value: "Miércoles", label: "Miércoles" },
+  { value: "Jueves", label: "Jueves" },
+  { value: "Viernes", label: "Viernes" },
+  { value: "Sábado", label: "Sábado" },
+  { value: "Domingo", label: "Domingo" },
 ] as const;
+
+type DayOfWeek = (typeof DAYS_OF_WEEK)[number]["value"];
+
+/** Set of day-range strings that match known presets (not custom). */
+const KNOWN_RANGES: Set<string> = new Set(
+  DAY_RANGE_OPTIONS.filter((o) => o.value !== "custom").map((o) => o.value),
+);
 
 interface WorkSchedulePickerProps {
   value?: string;
@@ -46,25 +52,30 @@ function parseTime(raw: string): TimeState {
   return { hour: match[1], period: match[2].toUpperCase() as "AM" | "PM" };
 }
 
-function parseSchedule(value: string | undefined): {
+interface ParsedSchedule {
   dayRange: string;
-  selectedDays: string[];
+  customStartDay: DayOfWeek;
+  customEndDay: DayOfWeek;
   start: TimeState;
   end: TimeState;
-} {
+}
+
+function parseSchedule(value: string | undefined): ParsedSchedule {
   const defaultStart: TimeState = { hour: "9", period: "AM" };
   const defaultEnd: TimeState = { hour: "6", period: "PM" };
+  const defaultCustomStart: DayOfWeek = "Lunes";
+  const defaultCustomEnd: DayOfWeek = "Viernes";
 
   if (!value)
     return {
       dayRange: "Lunes a Viernes",
-      selectedDays: [],
+      customStartDay: defaultCustomStart,
+      customEndDay: defaultCustomEnd,
       start: defaultStart,
       end: defaultEnd,
     };
 
-  // Try new format: "Lunes a Viernes, 9:00 AM - 6:00 PM"
-  // or custom: "Lunes, Miércoles, Viernes, 9:00 AM - 6:00 PM"
+  // Format: "DayRange, HH:00 AM - HH:00 PM"
   const timeMatch = value.match(
     /(\d{1,2}:\d{2}\s?(?:AM|PM))\s*-\s*(\d{1,2}:\d{2}\s?(?:AM|PM))$/i,
   );
@@ -77,24 +88,67 @@ function parseSchedule(value: string | undefined): {
       .trim();
 
     if (dayPart) {
-      // Has day info
-      const isKnownRange = DAY_RANGE_OPTIONS.some(
-        (o) => o.value !== "custom" && o.value === dayPart,
-      );
+      // Custom range with explicit prefix: "custom:Martes a Sábado"
+      const customPrefixMatch = dayPart.match(/^custom:(.+?)\s+a\s+(.+)$/);
+      if (customPrefixMatch) {
+        const startDay = customPrefixMatch[1] as DayOfWeek;
+        const endDay = customPrefixMatch[2] as DayOfWeek;
+        const isValidStart = DAYS_OF_WEEK.some((d) => d.value === startDay);
+        const isValidEnd = DAYS_OF_WEEK.some((d) => d.value === endDay);
+
+        return {
+          dayRange: "custom",
+          customStartDay: isValidStart ? startDay : defaultCustomStart,
+          customEndDay: isValidEnd ? endDay : defaultCustomEnd,
+          start: parseTime(timeMatch[1]),
+          end: parseTime(timeMatch[2]),
+        };
+      }
+
+      if (KNOWN_RANGES.has(dayPart)) {
+        return {
+          dayRange: dayPart,
+          customStartDay: defaultCustomStart,
+          customEndDay: defaultCustomEnd,
+          start: parseTime(timeMatch[1]),
+          end: parseTime(timeMatch[2]),
+        };
+      }
+
+      // Legacy custom range without prefix: "Martes a Sábado" (not a known preset)
+      const rangeMatch = dayPart.match(/^(.+?)\s+a\s+(.+)$/);
+      if (rangeMatch) {
+        const startDay = rangeMatch[1] as DayOfWeek;
+        const endDay = rangeMatch[2] as DayOfWeek;
+        const isValidStart = DAYS_OF_WEEK.some((d) => d.value === startDay);
+        const isValidEnd = DAYS_OF_WEEK.some((d) => d.value === endDay);
+
+        return {
+          dayRange: "custom",
+          customStartDay: isValidStart ? startDay : defaultCustomStart,
+          customEndDay: isValidEnd ? endDay : defaultCustomEnd,
+          start: parseTime(timeMatch[1]),
+          end: parseTime(timeMatch[2]),
+        };
+      }
+
+      // Legacy comma-separated fallback — treat as custom with defaults
       return {
-        dayRange: isKnownRange ? dayPart : "custom",
-        selectedDays: isKnownRange ? [] : dayPart.split(", "),
+        dayRange: "custom",
+        customStartDay: defaultCustomStart,
+        customEndDay: defaultCustomEnd,
         start: parseTime(timeMatch[1]),
         end: parseTime(timeMatch[2]),
       };
     }
   }
 
-  // Legacy: "9:00 AM - 6:00 PM"
+  // Legacy: "9:00 AM - 6:00 PM" (no day part)
   const parts = value.split(" - ");
   return {
     dayRange: "Lunes a Viernes",
-    selectedDays: [],
+    customStartDay: defaultCustomStart,
+    customEndDay: defaultCustomEnd,
     start: parts[0] ? parseTime(parts[0]) : defaultStart,
     end: parts[1] ? parseTime(parts[1]) : defaultEnd,
   };
@@ -102,11 +156,15 @@ function parseSchedule(value: string | undefined): {
 
 function buildSchedule(
   dayRange: string,
-  selectedDays: string[],
+  customStartDay: DayOfWeek,
+  customEndDay: DayOfWeek,
   start: TimeState,
   end: TimeState,
 ): string {
-  const dayPart = dayRange === "custom" ? selectedDays.join(", ") : dayRange;
+  const dayPart =
+    dayRange === "custom"
+      ? `custom:${customStartDay} a ${customEndDay}`
+      : dayRange;
   return `${dayPart}, ${formatTime(start)} - ${formatTime(end)}`;
 }
 
@@ -178,79 +236,122 @@ export function WorkSchedulePicker({
   value,
   onChange,
 }: WorkSchedulePickerProps) {
-  const { dayRange, selectedDays, start, end } = parseSchedule(value);
+  const { dayRange, customStartDay, customEndDay, start, end } =
+    parseSchedule(value);
 
   const emit = (
     dr: string,
-    days: string[],
+    startDay: DayOfWeek,
+    endDay: DayOfWeek,
     s: TimeState,
     e: TimeState,
   ) => {
-    onChange(buildSchedule(dr, days, s, e));
+    onChange(buildSchedule(dr, startDay, endDay, s, e));
   };
 
   const updateDayRange = (newRange: string) => {
-    emit(newRange, newRange === "custom" ? selectedDays : [], start, end);
+    if (newRange === "custom") {
+      // Default to Lunes–Viernes when first switching to custom
+      emit(newRange, customStartDay, customEndDay, start, end);
+    } else {
+      emit(newRange, "Lunes", "Viernes", start, end);
+    }
   };
 
-  const toggleDay = (day: string) => {
-    const next = selectedDays.includes(day)
-      ? selectedDays.filter((d) => d !== day)
-      : [...selectedDays, day];
-    emit("custom", next, start, end);
+  const updateCustomStartDay = (day: DayOfWeek) => {
+    emit("custom", day, customEndDay, start, end);
+  };
+
+  const updateCustomEndDay = (day: DayOfWeek) => {
+    emit("custom", customStartDay, day, start, end);
   };
 
   const updateStart = (patch: Partial<TimeState>) => {
     const next = { ...start, ...patch };
-    emit(dayRange, selectedDays, next, end);
+    emit(dayRange, customStartDay, customEndDay, next, end);
   };
 
   const updateEnd = (patch: Partial<TimeState>) => {
     const next = { ...end, ...patch };
-    emit(dayRange, selectedDays, start, next);
+    emit(dayRange, customStartDay, customEndDay, start, next);
   };
 
-  const preview = buildSchedule(dayRange, selectedDays, start, end);
+  const previewDayPart =
+    dayRange === "custom"
+      ? `${customStartDay} a ${customEndDay}`
+      : dayRange;
+  const preview = `${previewDayPart}, ${formatTime(start)} - ${formatTime(end)}`;
 
   return (
     <div className="space-y-3">
-      {/* Day range selector */}
-      <div className="space-y-1.5">
-        <p className="text-xs font-medium text-muted-foreground">Días</p>
-        <Select value={dayRange} onValueChange={updateDayRange}>
-          <SelectTrigger className="h-9">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {DAY_RANGE_OPTIONS.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value}>
-                {opt.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Custom day toggle buttons */}
-      {dayRange === "custom" && (
-        <div className="flex flex-wrap gap-1">
-          {DAYS_OF_WEEK.map((day) => {
-            const isActive = selectedDays.includes(day.value);
-            return (
-              <Button
-                key={day.value}
-                type="button"
-                size="sm"
-                variant={isActive ? "default" : "outline"}
-                className="h-8 px-2.5 text-xs"
-                onClick={() => toggleDay(day.value)}
-              >
-                {day.label}
-              </Button>
-            );
-          })}
+      {/* Day range selector + custom day pickers inline */}
+      <div className="flex flex-col sm:flex-row sm:items-end gap-2">
+        <div className="space-y-1.5">
+          <p className="text-xs font-medium text-muted-foreground">Días</p>
+          <Select value={dayRange} onValueChange={updateDayRange}>
+            <SelectTrigger className="h-9">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {DAY_RANGE_OPTIONS.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
-      )}
+
+        {dayRange === "custom" && (
+          <>
+            <div className="space-y-1.5">
+              <p className="text-xs font-medium text-muted-foreground">
+                Desde
+              </p>
+              <Select
+                value={customStartDay}
+                onValueChange={(v) => updateCustomStartDay(v as DayOfWeek)}
+              >
+                <SelectTrigger className="h-9 w-full sm:w-[120px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {DAYS_OF_WEEK.map((day) => (
+                    <SelectItem key={day.value} value={day.value}>
+                      {day.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="hidden sm:flex items-center pb-1 text-muted-foreground font-medium text-sm">
+              a
+            </div>
+
+            <div className="space-y-1.5">
+              <p className="text-xs font-medium text-muted-foreground">
+                Hasta
+              </p>
+              <Select
+                value={customEndDay}
+                onValueChange={(v) => updateCustomEndDay(v as DayOfWeek)}
+              >
+                <SelectTrigger className="h-9 w-full sm:w-[120px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {DAYS_OF_WEEK.map((day) => (
+                    <SelectItem key={day.value} value={day.value}>
+                      {day.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        )}
+      </div>
 
       {/* Time selectors */}
       <div className="flex items-start gap-3">
@@ -274,7 +375,8 @@ export function WorkSchedulePicker({
       {/* Preview */}
       {preview && (
         <p className="text-xs text-muted-foreground">
-          Horario: <span className="font-medium text-foreground">{preview}</span>
+          Horario:{" "}
+          <span className="font-medium text-foreground">{preview}</span>
         </p>
       )}
     </div>

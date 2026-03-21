@@ -1,4 +1,4 @@
-import { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 import type { VacancyDTO } from "../../types/vacancy.types";
 import { VacancyStatusBadge, VacancyModalityBadge } from "../VacancyStatusBadge";
 import { VacancyRowActions } from "./VacancyRowActions";

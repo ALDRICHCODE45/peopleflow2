@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import type { UseQueryResult } from "@tanstack/react-query";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { getVacancyDetailAction } from "@features/vacancy/server/presentation/actions/getVacancyDetail.action";
 import type { VacancyDTO } from "../types/vacancy.types";
@@ -12,7 +13,7 @@ export const getVacancyDetailQueryKey = (
   vacancyId: string
 ) => vacancyQueryKeys.detail(tenantId, vacancyId);
 
-export function useVacancyDetailQuery(vacancyId: string | null) {
+export function useVacancyDetailQuery(vacancyId: string | null): UseQueryResult<VacancyDTO, Error> {
   const { tenant } = useTenant();
 
   return useQuery({

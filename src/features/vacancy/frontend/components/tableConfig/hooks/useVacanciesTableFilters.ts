@@ -1,5 +1,5 @@
 "use client";
-import { Table } from "@tanstack/react-table";
+import type { Table } from "@tanstack/react-table";
 import { useCallback, useState } from "react";
 import type { VacancyStatusType } from "../../../types/vacancy.types";
 

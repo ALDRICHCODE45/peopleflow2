@@ -1,10 +1,12 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import type { UseQueryResult } from "@tanstack/react-query";
+import type { ClientOption } from "../../server/presentation/actions/getClientsForSelect.action";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { getClientsForSelectAction } from "../../server/presentation/actions/getClientsForSelect.action";
 
-export function useClientsForSelect() {
+export function useClientsForSelect(): UseQueryResult<ClientOption[], Error> {
   const { tenant } = useTenant();
   return useQuery({
     queryKey: ["clients", "for-select", tenant?.id],

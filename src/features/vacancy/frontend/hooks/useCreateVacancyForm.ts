@@ -7,11 +7,8 @@ import { useTenantUsersQuery } from "@/features/Administracion/usuarios/frontend
 import { useClientsForSelect } from "./useClientsForSelect";
 import { useModalState } from "@/core/shared/hooks/useModalState";
 import { addChecklistItemAction } from "../../server/presentation/actions/checklist.actions";
-import type {
-  VacancyServiceType,
-  VacancyModality,
-  VacancySalaryType,
-} from "../types/vacancy.types";
+import type { VacancyServiceType } from "../types/vacancy.types";
+import type { VacancyFormValues } from "../types/vacancy-form.types";
 
 const SERVICE_TYPE_DAYS: Record<VacancyServiceType, number> = {
   SOURCING: 5,
@@ -29,11 +26,9 @@ function calculateTargetDeliveryDate(
   assignedAt: string,
   serviceType: VacancyServiceType | "",
 ): string {
-  if (!assignedAt || !serviceType) return "";
+  if (!assignedAt || serviceType === "") return "";
   const date = new Date(assignedAt);
-  date.setDate(
-    date.getDate() + SERVICE_TYPE_DAYS[serviceType as VacancyServiceType],
-  );
+  date.setDate(date.getDate() + SERVICE_TYPE_DAYS[serviceType]);
   adjustForWeekend(date);
   return date.toISOString().split("T")[0];
 }
@@ -55,38 +50,43 @@ export function useCreateVacancyForm({
 
   const today = new Date().toISOString().split("T")[0];
 
+  const defaultValues: VacancyFormValues = {
+    position: "",
+    recruiterId: "",
+    clientId: "",
+    serviceType: "SOURCING",
+    assignedAt: today,
+    targetDeliveryDate: "",
+    salaryType: "RANGE",
+    salaryFixed: undefined,
+    salaryMin: undefined,
+    salaryMax: undefined,
+    benefits: "",
+    tools: "N/A",
+    commissions: "N/A",
+    modality: undefined,
+    schedule: "",
+    countryCode: "",
+    regionCode: "",
+    requiresPsychometry: false,
+  };
+
   const form = useForm({
-    defaultValues: {
-      position: "",
-      recruiterId: "",
-      clientId: "",
-      serviceType: "SOURCING" as VacancyServiceType | "",
-      assignedAt: today,
-      targetDeliveryDate: "",
-      salaryType: "RANGE" as VacancySalaryType,
-      salaryFixed: undefined as number | undefined,
-      salaryMin: undefined as number | undefined,
-      salaryMax: undefined as number | undefined,
-      benefits: "",
-      tools: "",
-      commissions: "",
-      modality: undefined as VacancyModality | undefined,
-      schedule: "",
-      countryCode: "",
-      regionCode: "",
-      requiresPsychometry: false,
-    },
+    defaultValues,
     onSubmit: async ({ value }) => {
       const created = await createVacancyMutation.mutateAsync({
         position: value.position,
         recruiterId: value.recruiterId,
         clientId: value.clientId,
-        serviceType: value.serviceType as VacancyServiceType | undefined,
+        serviceType: value.serviceType || undefined,
         assignedAt: value.assignedAt || undefined,
         salaryType: value.salaryType,
-        salaryFixed: value.salaryType === "FIXED" ? (value.salaryFixed ?? null) : null,
-        salaryMin: value.salaryType === "RANGE" ? (value.salaryMin ?? null) : null,
-        salaryMax: value.salaryType === "RANGE" ? (value.salaryMax ?? null) : null,
+        salaryFixed:
+          value.salaryType === "FIXED" ? (value.salaryFixed ?? null) : null,
+        salaryMin:
+          value.salaryType === "RANGE" ? (value.salaryMin ?? null) : null,
+        salaryMax:
+          value.salaryType === "RANGE" ? (value.salaryMax ?? null) : null,
         benefits: value.benefits || undefined,
         tools: value.tools || undefined,
         commissions: value.commissions || undefined,
@@ -158,3 +158,9 @@ export function useCreateVacancyForm({
     removeChecklistItem,
   };
 }
+
+/**
+ * Return type for useCreateVacancyForm.
+ * Extracted via ReturnType to avoid manually specifying TanStack Form's 12 generics.
+ */
+export type UseCreateVacancyFormReturn = ReturnType<typeof useCreateVacancyForm>;

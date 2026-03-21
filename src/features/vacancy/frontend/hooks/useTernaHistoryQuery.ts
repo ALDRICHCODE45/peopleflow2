@@ -1,10 +1,12 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import type { UseQueryResult } from "@tanstack/react-query";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { getTernaHistoryAction } from "@features/vacancy/server/presentation/actions/getTernaHistory.action";
+import type { TernaHistoryDTO } from "../types/vacancy.types";
 
-export function useTernaHistoryQuery(vacancyId: string | null) {
+export function useTernaHistoryQuery(vacancyId: string | null): UseQueryResult<TernaHistoryDTO[], Error> {
   const { tenant } = useTenant();
   return useQuery({
     queryKey: ["vacancy", "terna-history", tenant?.id, vacancyId],

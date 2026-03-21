@@ -1,13 +1,14 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { CreateVacancyFormData } from "../types/vacancy.types";
+import type { UseMutationResult } from "@tanstack/react-query";
+import type { CreateVacancyFormData, VacancyDTO } from "../types/vacancy.types";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { createVacancyAction } from "../../server/presentation/actions/createVacancy.action";
 import { showToast } from "@/core/shared/components/ShowToast";
 import { vacancyQueryKeys } from "@core/shared/constants/query-keys";
 
-export function useCreateVacancy() {
+export function useCreateVacancy(): UseMutationResult<VacancyDTO | undefined, Error, CreateVacancyFormData> {
   const queryClient = useQueryClient();
   const { tenant } = useTenant();
 

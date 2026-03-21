@@ -4,6 +4,7 @@ import type {
   UpsertMatchData,
   CandidateMatchData,
 } from "../../domain/interfaces/IVacancyCandidateMatchRepository";
+import type { CandidateMatchRating } from "@features/vacancy/frontend/types/vacancy.types";
 
 type PrismaMatchRecord = {
   id: string;
@@ -24,7 +25,7 @@ export class PrismaVacancyCandidateMatchRepository
       id: record.id,
       candidateId: record.candidateId,
       checklistItemId: record.checklistItemId,
-      rating: record.rating,
+      rating: record.rating as CandidateMatchRating | null,
       feedback: record.feedback,
       tenantId: record.tenantId,
       createdAt: record.createdAt,

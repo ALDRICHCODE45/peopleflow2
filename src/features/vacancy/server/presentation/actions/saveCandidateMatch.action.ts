@@ -9,13 +9,13 @@ import { prismaVacancyCandidateRepository } from "../../infrastructure/repositor
 import { prismaVacancyChecklistRepository } from "../../infrastructure/repositories/PrismaVacancyChecklistRepository";
 import { prismaVacancyCandidateMatchRepository } from "../../infrastructure/repositories/PrismaVacancyCandidateMatchRepository";
 import { SaveCandidateMatchUseCase } from "../../application/use-cases/SaveCandidateMatchUseCase";
-import type { SaveMatchResult } from "../../../frontend/types/vacancy.types";
+import type { SaveMatchResult, CandidateMatchRating } from "../../../frontend/types/vacancy.types";
 import { ServerErrors } from "@core/shared/constants/error-messages";
 
 export interface SaveCandidateMatchInput {
   candidateId: string;
   checklistItemId: string;
-  rating: string | null;
+  rating: CandidateMatchRating | null;
   feedback: string | null;
 }
 
@@ -70,7 +70,7 @@ export async function saveCandidateMatchAction(
             id: result.match.id,
             candidateId: result.match.candidateId,
             checklistItemId: result.match.checklistItemId,
-            rating: result.match.rating as ("CUMPLE" | "NO_CUMPLE" | "PARCIAL" | null),
+            rating: result.match.rating,
             feedback: result.match.feedback,
             tenantId: result.match.tenantId,
             createdAt: result.match.createdAt.toISOString(),

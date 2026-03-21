@@ -6,12 +6,8 @@ import { useUpdateVacancy } from "./useUpdateVacancy";
 import { useTenantUsersQuery } from "@/features/Administracion/usuarios/frontend/hooks/useUsers";
 import { useClientsForSelect } from "./useClientsForSelect";
 import { useModalState } from "@/core/shared/hooks/useModalState";
-import type {
-  VacancyServiceType,
-  VacancyModality,
-  VacancySalaryType,
-  VacancyDTO,
-} from "../types/vacancy.types";
+import type { VacancyServiceType, VacancyDTO } from "../types/vacancy.types";
+import type { VacancyFormValues } from "../types/vacancy-form.types";
 
 const SERVICE_TYPE_DAYS: Record<VacancyServiceType, number> = {
   SOURCING: 5,
@@ -29,9 +25,9 @@ function calculateTargetDeliveryDate(
   assignedAt: string,
   serviceType: VacancyServiceType | "",
 ): string {
-  if (!assignedAt || !serviceType) return "";
+  if (!assignedAt || serviceType === "") return "";
   const date = new Date(assignedAt);
-  date.setDate(date.getDate() + SERVICE_TYPE_DAYS[serviceType as VacancyServiceType]);
+  date.setDate(date.getDate() + SERVICE_TYPE_DAYS[serviceType]);
   adjustForWeekend(date);
   return date.toISOString().split("T")[0];
 }
@@ -51,37 +47,54 @@ export function useEditVacancyForm({
 
   const detailsModal = useModalState();
 
+  const defaultValues: VacancyFormValues = {
+    position: vacancy.position,
+    recruiterId: vacancy.recruiterId,
+    clientId: vacancy.clientId,
+    serviceType: vacancy.serviceType ?? "",
+    assignedAt: vacancy.assignedAt,
+    targetDeliveryDate: vacancy.targetDeliveryDate ?? "",
+    salaryType: vacancy.salaryType ?? "RANGE",
+    salaryFixed: vacancy.salaryFixed ?? undefined,
+    salaryMin: vacancy.salaryMin ?? undefined,
+    salaryMax: vacancy.salaryMax ?? undefined,
+    benefits: vacancy.benefits ?? "",
+    tools: vacancy.tools ?? "",
+    commissions: vacancy.commissions ?? "",
+    modality: vacancy.modality ?? undefined,
+    schedule: vacancy.schedule ?? "",
+    countryCode: vacancy.countryCode ?? "",
+    regionCode: vacancy.regionCode ?? "",
+    requiresPsychometry: vacancy.requiresPsychometry,
+  };
+
   const form = useForm({
-    defaultValues: {
-      position: vacancy.position,
-      recruiterId: vacancy.recruiterId,
-      clientId: vacancy.clientId,
-      serviceType: (vacancy.serviceType ?? "") as VacancyServiceType | "",
-      assignedAt: vacancy.assignedAt,
-      targetDeliveryDate: vacancy.targetDeliveryDate ?? "",
-      salaryType: (vacancy.salaryType ?? "RANGE") as VacancySalaryType,
-      salaryFixed: (vacancy.salaryFixed ?? undefined) as number | undefined,
-      salaryMin: (vacancy.salaryMin ?? undefined) as number | undefined,
-      salaryMax: (vacancy.salaryMax ?? undefined) as number | undefined,
-      benefits: vacancy.benefits ?? "",
-      tools: vacancy.tools ?? "",
-      commissions: vacancy.commissions ?? "",
-      modality: (vacancy.modality ?? undefined) as VacancyModality | undefined,
-      schedule: vacancy.schedule ?? "",
-      countryCode: vacancy.countryCode ?? "",
-      regionCode: vacancy.regionCode ?? "",
-      requiresPsychometry: vacancy.requiresPsychometry,
-    },
+    defaultValues,
     onSubmit: async ({ value }) => {
       await updateVacancyMutation.mutateAsync({
         id: vacancy.id,
         data: {
-          ...value,
-          serviceType: value.serviceType as VacancyServiceType | undefined,
+          position: value.position,
+          recruiterId: value.recruiterId,
+          clientId: value.clientId,
+          serviceType: value.serviceType || undefined,
+          assignedAt: value.assignedAt || undefined,
           salaryType: value.salaryType,
-          salaryFixed: value.salaryType === "FIXED" ? (value.salaryFixed ?? null) : null,
-          salaryMin: value.salaryType === "RANGE" ? (value.salaryMin ?? null) : null,
-          salaryMax: value.salaryType === "RANGE" ? (value.salaryMax ?? null) : null,
+          salaryFixed:
+            value.salaryType === "FIXED" ? (value.salaryFixed ?? null) : null,
+          salaryMin:
+            value.salaryType === "RANGE" ? (value.salaryMin ?? null) : null,
+          salaryMax:
+            value.salaryType === "RANGE" ? (value.salaryMax ?? null) : null,
+          benefits: value.benefits || undefined,
+          tools: value.tools || undefined,
+          commissions: value.commissions || undefined,
+          modality: value.modality,
+          schedule: value.schedule || undefined,
+          countryCode: value.countryCode || undefined,
+          regionCode: value.regionCode || undefined,
+          requiresPsychometry: value.requiresPsychometry,
+          targetDeliveryDate: value.targetDeliveryDate || undefined,
         },
       });
       onClose();
@@ -116,3 +129,9 @@ export function useEditVacancyForm({
     handleClientChange,
   };
 }
+
+/**
+ * Return type for useEditVacancyForm.
+ * Extracted via ReturnType to avoid manually specifying TanStack Form's 12 generics.
+ */
+export type UseEditVacancyFormReturn = ReturnType<typeof useEditVacancyForm>;

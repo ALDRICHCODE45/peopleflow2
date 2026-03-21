@@ -4,7 +4,6 @@ import { Input } from "@shadcn/input";
 import { Field, FieldLabel } from "@/core/shared/ui/shadcn/field";
 import { useStore } from "@tanstack/react-form";
 import { VACANCY_SALARY_TYPE_LABELS } from "../types/vacancy.types";
-import type { VacancySalaryType } from "../types/vacancy.types";
 import type { VacancyForm } from "../types/vacancy-form.types";
 
 interface SalaryFieldsProps {
@@ -12,10 +11,7 @@ interface SalaryFieldsProps {
 }
 
 export function SalaryFields({ form }: SalaryFieldsProps) {
-  const salaryType = useStore(
-    form.store,
-    (s) => s.values.salaryType as VacancySalaryType,
-  );
+  const salaryType = useStore(form.store, (s) => s.values.salaryType);
 
   if (salaryType === "FIXED") {
     return (

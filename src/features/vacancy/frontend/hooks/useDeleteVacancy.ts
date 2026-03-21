@@ -1,12 +1,14 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { UseMutationResult } from "@tanstack/react-query";
+import type { DeleteVacancyResult } from "../types/vacancy.types";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { showToast } from "@/core/shared/components/ShowToast";
 import { deleteVacancyAction } from "../../server/presentation/actions/deleteVacancy.action";
 import { vacancyQueryKeys } from "@core/shared/constants/query-keys";
 
-export function useDeleteVacancy() {
+export function useDeleteVacancy(): UseMutationResult<DeleteVacancyResult, Error, string> {
   const queryClient = useQueryClient();
   const { tenant } = useTenant();
 
