@@ -202,6 +202,8 @@ export function useToggleChecklistItem(): UseMutationResult<VacancyChecklistItem
 export interface ValidateTernaInput {
   vacancyId: string;
   candidateIds: string[];
+  /** ISO date string (YYYY-MM-DD) — if omitted, defaults to now */
+  validatedAt?: string;
 }
 
 export function useValidateTerna(): UseMutationResult<VacancyDTO | undefined, Error, ValidateTernaInput> {
@@ -209,8 +211,8 @@ export function useValidateTerna(): UseMutationResult<VacancyDTO | undefined, Er
   const { tenant } = useTenant();
 
   return useMutation({
-    mutationFn: async ({ vacancyId, candidateIds }: ValidateTernaInput) => {
-      const result = await validateTernaAction({ vacancyId, candidateIds });
+    mutationFn: async ({ vacancyId, candidateIds, validatedAt }: ValidateTernaInput) => {
+      const result = await validateTernaAction({ vacancyId, candidateIds, validatedAt });
       if (result.error) throw new Error(result.error);
       return result.vacancy;
     },

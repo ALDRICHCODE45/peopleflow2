@@ -4,6 +4,8 @@ export interface CreateTernaHistoryData {
   vacancyId: string;
   ternaNumber: number;
   validatedById: string;
+  /** If omitted, Prisma default `now()` applies */
+  validatedAt?: Date;
   targetDeliveryDate: Date | null;
   isOnTime: boolean;
   tenantId: string;

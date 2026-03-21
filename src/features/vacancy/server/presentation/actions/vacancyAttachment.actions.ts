@@ -10,9 +10,8 @@ import { storageAdapter } from "@core/storage/StorageModule";
 import { prismaVacancyAttachmentRepository } from "../../infrastructure/repositories/PrismaVacancyAttachmentRepository";
 import { Routes } from "@core/shared/constants/routes";
 import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
-import { SendNotificationUseCase } from "@features/Notifications/server/application/use-cases/SendNotificationUseCase";
-import { prismaNotificationRepository } from "@features/Notifications/server/infrastructure/repositories/PrismaNotificationRepository";
-import { emailProvider } from "@features/Notifications/server/infrastructure/providers/EmailProvider";
+import { inngest } from "@/core/shared/inngest/inngest";
+import { InngestEvents } from "@core/shared/constants/inngest-events";
 import type {
   GetVacancyAttachmentsResult,
   DeleteVacancyAttachmentResult,
@@ -197,16 +196,38 @@ export async function rejectAttachmentAction(input: {
 
     const record = await prismaVacancyAttachmentRepository.reject(input.attachmentId, input.reason);
 
-    // Send notification via use case
-    await new SendNotificationUseCase(prismaNotificationRepository, [emailProvider]).execute({
-      tenantId,
-      provider: "EMAIL",
-      priority: "MEDIUM",
-      recipient: session.user.email ?? "",
-      subject: "Archivo rechazado",
-      body: `El archivo "${record.fileName}" fue rechazado. Motivo: ${input.reason}`,
-      createdById: session.user.id,
-    });
+    // Fetch vacancy to get recruiter info and position
+    const vacancy = await prismaVacancyRepository.findById(input.vacancyId, tenantId);
+    if (vacancy) {
+      const recruiterEmail = vacancy.recruiterEmail
+        ?? (await prismaVacancyRepository.findRecruiterContactById(vacancy.recruiterId))?.email;
+      const recruiterName = vacancy.recruiterName
+        ?? (await prismaVacancyRepository.findRecruiterContactById(vacancy.recruiterId))?.name
+        ?? "Reclutador";
+      const clientName = vacancy.clientName
+        ?? await prismaVacancyRepository.findClientNameById(vacancy.clientId, tenantId)
+        ?? "Cliente";
+
+      if (recruiterEmail) {
+        await inngest.send({
+          name: InngestEvents.email.send,
+          data: {
+            template: "attachment-rejected",
+            tenantId,
+            triggeredById: session.user.id,
+            data: {
+              recruiterName,
+              recruiterEmail,
+              vacancyPosition: vacancy.position,
+              clientName,
+              fileName: record.fileName,
+              rejectionReason: input.reason,
+              vacancyId: input.vacancyId,
+            },
+          },
+        });
+      }
+    }
 
     revalidatePath(Routes.reclutamiento.vacantes);
     return { error: null, attachment: toAttachmentDTO(record) };
@@ -260,16 +281,37 @@ export async function rejectVacancyChecklistAction(input: {
 
     const vacancy = await prismaVacancyRepository.rejectChecklist(input.vacancyId, tenantId, input.reason);
 
-    // Send notification via use case
-    await new SendNotificationUseCase(prismaNotificationRepository, [emailProvider]).execute({
-      tenantId,
-      provider: "EMAIL",
-      priority: "MEDIUM",
-      recipient: session.user.email ?? "",
-      subject: "Checklist de vacante rechazado",
-      body: `El checklist de la vacante fue rechazado. Motivo: ${input.reason}`,
-      createdById: session.user.id,
-    });
+    // Fetch full vacancy to get recruiter info and position
+    const fullVacancy = await prismaVacancyRepository.findById(input.vacancyId, tenantId);
+    if (fullVacancy) {
+      const recruiterEmail = fullVacancy.recruiterEmail
+        ?? (await prismaVacancyRepository.findRecruiterContactById(fullVacancy.recruiterId))?.email;
+      const recruiterName = fullVacancy.recruiterName
+        ?? (await prismaVacancyRepository.findRecruiterContactById(fullVacancy.recruiterId))?.name
+        ?? "Reclutador";
+      const clientName = fullVacancy.clientName
+        ?? await prismaVacancyRepository.findClientNameById(fullVacancy.clientId, tenantId)
+        ?? "Cliente";
+
+      if (recruiterEmail) {
+        await inngest.send({
+          name: InngestEvents.email.send,
+          data: {
+            template: "checklist-rejected",
+            tenantId,
+            triggeredById: session.user.id,
+            data: {
+              recruiterName,
+              recruiterEmail,
+              vacancyPosition: fullVacancy.position,
+              clientName,
+              rejectionReason: input.reason,
+              vacancyId: input.vacancyId,
+            },
+          },
+        });
+      }
+    }
 
     revalidatePath(Routes.reclutamiento.vacantes);
     return { error: null, vacancy };

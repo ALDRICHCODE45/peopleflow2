@@ -189,7 +189,23 @@ export class TransitionVacancyStatusUseCase {
       // 6. Determine Inngest event to fire
       let inngestEvent: TransitionVacancyStatusOutput["inngestEvent"];
 
-      if (newStatus === "PRE_PLACEMENT") {
+      if (newStatus === "HUNTING" && currentStatus === "QUICK_MEETING") {
+        inngestEvent = {
+          name: InngestEvents.email.send,
+          data: {
+            template: "vacancy-status-hunting" as const,
+            tenantId,
+            triggeredById: changedById,
+            data: {
+              recruiterName: vacancy.recruiterName ?? "Reclutador",
+              recruiterEmail: vacancy.recruiterEmail ?? "",
+              vacancyPosition: vacancy.position,
+              clientName: vacancy.clientName ?? "Cliente",
+              vacancyId,
+            },
+          },
+        };
+      } else if (newStatus === "PRE_PLACEMENT") {
         inngestEvent = {
           name: InngestEvents.vacancy.prePlacementEntered,
           data: {

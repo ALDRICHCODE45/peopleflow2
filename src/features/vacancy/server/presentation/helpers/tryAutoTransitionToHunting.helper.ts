@@ -3,6 +3,7 @@ import { prismaVacancyRepository } from "../../infrastructure/repositories/Prism
 import { prismaVacancyStatusHistoryRepository } from "../../infrastructure/repositories/PrismaVacancyStatusHistoryRepository";
 import { prismaVacancyAttachmentRepository } from "../../infrastructure/repositories/PrismaVacancyAttachmentRepository";
 import { TransitionVacancyStatusUseCase } from "../../application/use-cases/TransitionVacancyStatusUseCase";
+import { inngest } from "@core/shared/inngest/inngest";
 import { Routes } from "@core/shared/constants/routes";
 
 /**
@@ -61,6 +62,13 @@ export async function tryAutoTransitionToHunting(
         `[Auto-transition] Failed for vacancy ${vacancyId}: ${result.error}`,
       );
       return false;
+    }
+
+    // Fire Inngest event if the use case produced one (e.g. HUNTING email)
+    if (result.inngestEvent) {
+      inngest.send(result.inngestEvent as Parameters<typeof inngest.send>[0]).catch((err) => {
+        console.error("[Auto-transition] Failed to send inngest event:", err);
+      });
     }
 
     console.log(`[Auto-transition] Vacancy ${vacancyId} → HUNTING`);

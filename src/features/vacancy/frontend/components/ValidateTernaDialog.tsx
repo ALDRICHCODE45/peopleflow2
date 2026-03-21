@@ -14,7 +14,10 @@ import { Checkbox } from "@/core/shared/ui/shadcn/checkbox";
 import { Badge } from "@shadcn/badge";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { UserMultiple02Icon } from "@hugeicons/core-free-icons";
+import { format } from "date-fns";
 import { cn } from "@/core/lib/utils";
+import { DatePicker } from "@shadcn/date-picker";
+import { Label } from "@shadcn/label";
 import { useValidateTerna } from "../hooks/useVacancyDetailMutations";
 import type { VacancyCandidateDTO, CandidateStatus } from "../types/vacancy.types";
 import { CANDIDATE_STATUS_LABELS } from "../types/vacancy.types";
@@ -46,6 +49,9 @@ export function ValidateTernaDialog({
   candidates,
 }: ValidateTernaDialogProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [validatedAt, setValidatedAt] = useState<string>(
+    format(new Date(), "yyyy-MM-dd"),
+  );
   const validateTernaMutation = useValidateTerna();
 
   const eligibleCandidates = candidates.filter((c) =>
@@ -66,9 +72,12 @@ export function ValidateTernaDialog({
 
   const handleConfirm = async () => {
     if (selectedIds.size === 0) return;
+    const today = format(new Date(), "yyyy-MM-dd");
     await validateTernaMutation.mutateAsync({
       vacancyId,
       candidateIds: Array.from(selectedIds),
+      // Only send validatedAt if user picked a date different from today
+      validatedAt: validatedAt !== today ? validatedAt : undefined,
     });
     setSelectedIds(new Set());
     onClose();
@@ -76,6 +85,7 @@ export function ValidateTernaDialog({
 
   const handleClose = () => {
     setSelectedIds(new Set());
+    setValidatedAt(format(new Date(), "yyyy-MM-dd"));
     onClose();
   };
 
@@ -89,6 +99,16 @@ export function ValidateTernaDialog({
             marcados como <strong>Finalistas</strong>.
           </DialogDescription>
         </DialogHeader>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="validated-at-picker">Fecha de validación</Label>
+          <DatePicker
+            value={validatedAt}
+            onChange={(date) => setValidatedAt(date)}
+            maxDate={format(new Date(), "yyyy-MM-dd")}
+            placeholder="Seleccionar fecha"
+          />
+        </div>
 
         <div className="space-y-2 py-2 max-h-72 overflow-y-auto pr-1">
           {eligibleCandidates.length === 0 ? (

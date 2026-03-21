@@ -61,6 +61,7 @@ export class PrismaVacancyTernaHistoryRepository
         vacancyId: data.vacancyId,
         ternaNumber: data.ternaNumber,
         validatedById: data.validatedById,
+        ...(data.validatedAt ? { validatedAt: data.validatedAt } : {}),
         targetDeliveryDate: data.targetDeliveryDate,
         isOnTime: data.isOnTime,
         tenantId: data.tenantId,

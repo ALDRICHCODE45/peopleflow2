@@ -12,8 +12,73 @@ export type StandaloneEmailPayload =
         clientName: string;
         vacancyId: string;
       };
+    }
+  | {
+      template: "attachment-rejected";
+      tenantId: string;
+      triggeredById: string;
+      data: {
+        recruiterName: string;
+        recruiterEmail: string;
+        vacancyPosition: string;
+        clientName: string;
+        fileName: string;
+        rejectionReason: string;
+        vacancyId: string;
+      };
+    }
+  | {
+      template: "checklist-rejected";
+      tenantId: string;
+      triggeredById: string;
+      data: {
+        recruiterName: string;
+        recruiterEmail: string;
+        vacancyPosition: string;
+        clientName: string;
+        rejectionReason: string;
+        vacancyId: string;
+      };
+    }
+  | {
+      template: "vacancy-status-hunting";
+      tenantId: string;
+      triggeredById: string;
+      data: {
+        recruiterName: string;
+        recruiterEmail: string;
+        vacancyPosition: string;
+        clientName: string;
+        vacancyId: string;
+      };
+    }
+  | {
+      template: "vacancy-status-follow-up";
+      tenantId: string;
+      triggeredById: string;
+      data: {
+        recruiterName: string;
+        recruiterEmail: string;
+        vacancyPosition: string;
+        clientName: string;
+        vacancyId: string;
+      };
+    }
+  | {
+      template: "validation-request";
+      tenantId: string;
+      triggeredById: string;
+      data: {
+        recipientName: string;
+        recipientEmail: string;
+        requesterName: string;
+        vacancyPosition: string;
+        clientName: string;
+        resources: string[];
+        vacancyId: string;
+        tenantName: string;
+      };
     };
-// Future templates will be added here as union members
 
 type Events = {
   "lead/status.changed": {

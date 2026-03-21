@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
+import { inngest } from "@core/shared/inngest/inngest";
 import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
 import { prismaVacancyCandidateRepository } from "../../infrastructure/repositories/PrismaVacancyCandidateRepository";
 import { Routes } from "@core/shared/constants/routes";
@@ -20,6 +21,8 @@ import { ServerErrors } from "@core/shared/constants/error-messages";
 export interface ValidateTernaInput {
   vacancyId: string;
   candidateIds: string[];
+  /** ISO date string (YYYY-MM-DD) — if omitted, defaults to now */
+  validatedAt?: string;
 }
 
 export async function validateTernaAction(
@@ -86,10 +89,18 @@ export async function validateTernaAction(
       tenantId,
       candidateIds: input.candidateIds,
       changedById: session.user.id,
+      validatedAt: input.validatedAt,
     });
 
     if (!result.success) {
       return { error: result.error ?? "Error al validar la terna" };
+    }
+
+    // Fire and forget Inngest event if applicable (FOLLOW_UP email)
+    if (result.inngestEvent) {
+      inngest.send(result.inngestEvent as Parameters<typeof inngest.send>[0]).catch((err) => {
+        console.error("[validateTernaAction] Failed to send inngest event:", err);
+      });
     }
 
     revalidatePath(Routes.reclutamiento.vacantes);

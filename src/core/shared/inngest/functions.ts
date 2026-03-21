@@ -28,6 +28,26 @@ import {
   generateVacancyRecruiterAssignedEmail,
   generateVacancyRecruiterAssignedPlainText,
 } from "@features/Notifications/server/infrastructure/templates/vacancyRecruiterAssignedTemplate";
+import {
+  generateAttachmentRejectedEmail,
+  generateAttachmentRejectedPlainText,
+} from "@features/Notifications/server/infrastructure/templates/attachmentRejectedTemplate";
+import {
+  generateChecklistRejectedEmail,
+  generateChecklistRejectedPlainText,
+} from "@features/Notifications/server/infrastructure/templates/checklistRejectedTemplate";
+import {
+  generateVacancyStatusHuntingEmail,
+  generateVacancyStatusHuntingPlainText,
+} from "@features/Notifications/server/infrastructure/templates/vacancyStatusHuntingTemplate";
+import {
+  generateVacancyStatusFollowUpEmail,
+  generateVacancyStatusFollowUpPlainText,
+} from "@features/Notifications/server/infrastructure/templates/vacancyStatusFollowUpTemplate";
+import {
+  generateValidationRequestEmail,
+  generateValidationRequestPlainText,
+} from "@features/Notifications/server/infrastructure/templates/validationRequestTemplate";
 
 const STATUS_LABELS: Record<string, string> = {
   CONTACTO: "Contacto",
@@ -476,6 +496,198 @@ const handleSendStandaloneEmail = inngest.createFunction(
               vacancyPosition: data.vacancyPosition,
               triggerEvent: "VACANCY_RECRUITER_ASSIGNED",
               htmlTemplate: generateVacancyRecruiterAssignedEmail(emailData),
+            },
+            createdById: triggeredById,
+          });
+        });
+
+        return { sent: true, template: payload.template };
+      }
+
+      case "attachment-rejected": {
+        const { data, tenantId, triggeredById } = payload;
+
+        await step.run("send-attachment-rejected-email", async () => {
+          const notificationUseCase = new SendNotificationUseCase(
+            prismaNotificationRepository,
+            [emailProvider],
+          );
+
+          const emailData = {
+            recruiterName: data.recruiterName,
+            vacancyPosition: data.vacancyPosition,
+            clientName: data.clientName,
+            fileName: data.fileName,
+            rejectionReason: data.rejectionReason,
+            appUrl: APP_URL,
+            vacancyId: data.vacancyId,
+          };
+
+          await notificationUseCase.execute({
+            tenantId,
+            provider: "EMAIL",
+            recipient: data.recruiterEmail,
+            subject: `Archivo rechazado: ${data.fileName} — ${data.vacancyPosition}`,
+            body: generateAttachmentRejectedPlainText(emailData),
+            priority: "MEDIUM",
+            metadata: {
+              vacancyId: data.vacancyId,
+              vacancyPosition: data.vacancyPosition,
+              fileName: data.fileName,
+              triggerEvent: "VACANCY_ATTACHMENT_REJECTED",
+              htmlTemplate: generateAttachmentRejectedEmail(emailData),
+            },
+            createdById: triggeredById,
+          });
+        });
+
+        return { sent: true, template: payload.template };
+      }
+
+      case "checklist-rejected": {
+        const { data, tenantId, triggeredById } = payload;
+
+        await step.run("send-checklist-rejected-email", async () => {
+          const notificationUseCase = new SendNotificationUseCase(
+            prismaNotificationRepository,
+            [emailProvider],
+          );
+
+          const emailData = {
+            recruiterName: data.recruiterName,
+            vacancyPosition: data.vacancyPosition,
+            clientName: data.clientName,
+            rejectionReason: data.rejectionReason,
+            appUrl: APP_URL,
+            vacancyId: data.vacancyId,
+          };
+
+          await notificationUseCase.execute({
+            tenantId,
+            provider: "EMAIL",
+            recipient: data.recruiterEmail,
+            subject: `Checklist rechazado — ${data.vacancyPosition}`,
+            body: generateChecklistRejectedPlainText(emailData),
+            priority: "MEDIUM",
+            metadata: {
+              vacancyId: data.vacancyId,
+              vacancyPosition: data.vacancyPosition,
+              triggerEvent: "VACANCY_CHECKLIST_REJECTED",
+              htmlTemplate: generateChecklistRejectedEmail(emailData),
+            },
+            createdById: triggeredById,
+          });
+        });
+
+        return { sent: true, template: payload.template };
+      }
+
+      case "vacancy-status-hunting": {
+        const { data, tenantId, triggeredById } = payload;
+
+        await step.run("send-vacancy-status-hunting-email", async () => {
+          const notificationUseCase = new SendNotificationUseCase(
+            prismaNotificationRepository,
+            [emailProvider],
+          );
+
+          const emailData = {
+            recruiterName: data.recruiterName,
+            vacancyPosition: data.vacancyPosition,
+            clientName: data.clientName,
+            vacancyId: data.vacancyId,
+            appUrl: APP_URL,
+          };
+
+          await notificationUseCase.execute({
+            tenantId,
+            provider: "EMAIL",
+            recipient: data.recruiterEmail,
+            subject: `Tu vacante está lista para Hunting: ${data.vacancyPosition}`,
+            body: generateVacancyStatusHuntingPlainText(emailData),
+            priority: "MEDIUM",
+            metadata: {
+              vacancyId: data.vacancyId,
+              vacancyPosition: data.vacancyPosition,
+              triggerEvent: "VACANCY_STATUS_HUNTING",
+              htmlTemplate: generateVacancyStatusHuntingEmail(emailData),
+            },
+            createdById: triggeredById,
+          });
+        });
+
+        return { sent: true, template: payload.template };
+      }
+
+      case "vacancy-status-follow-up": {
+        const { data, tenantId, triggeredById } = payload;
+
+        await step.run("send-vacancy-status-follow-up-email", async () => {
+          const notificationUseCase = new SendNotificationUseCase(
+            prismaNotificationRepository,
+            [emailProvider],
+          );
+
+          const emailData = {
+            recruiterName: data.recruiterName,
+            vacancyPosition: data.vacancyPosition,
+            clientName: data.clientName,
+            vacancyId: data.vacancyId,
+            appUrl: APP_URL,
+          };
+
+          await notificationUseCase.execute({
+            tenantId,
+            provider: "EMAIL",
+            recipient: data.recruiterEmail,
+            subject: `¡Felicidades! Candidatos entregados: ${data.vacancyPosition}`,
+            body: generateVacancyStatusFollowUpPlainText(emailData),
+            priority: "MEDIUM",
+            metadata: {
+              vacancyId: data.vacancyId,
+              vacancyPosition: data.vacancyPosition,
+              triggerEvent: "VACANCY_STATUS_FOLLOW_UP",
+              htmlTemplate: generateVacancyStatusFollowUpEmail(emailData),
+            },
+            createdById: triggeredById,
+          });
+        });
+
+        return { sent: true, template: payload.template };
+      }
+
+      case "validation-request": {
+        const { data, tenantId, triggeredById } = payload;
+
+        await step.run("send-validation-request-email", async () => {
+          const notificationUseCase = new SendNotificationUseCase(
+            prismaNotificationRepository,
+            [emailProvider],
+          );
+
+          const emailData = {
+            recipientName: data.recipientName,
+            requesterName: data.requesterName,
+            vacancyPosition: data.vacancyPosition,
+            clientName: data.clientName,
+            resources: data.resources,
+            tenantName: data.tenantName,
+            appUrl: APP_URL,
+            vacancyId: data.vacancyId,
+          };
+
+          await notificationUseCase.execute({
+            tenantId,
+            provider: "EMAIL",
+            recipient: data.recipientEmail,
+            subject: `Solicitud de validación — ${data.vacancyPosition}`,
+            body: generateValidationRequestPlainText(emailData),
+            priority: "HIGH",
+            metadata: {
+              vacancyId: data.vacancyId,
+              vacancyPosition: data.vacancyPosition,
+              triggerEvent: "VACANCY_VALIDATION_REQUEST",
+              htmlTemplate: generateValidationRequestEmail(emailData),
             },
             createdById: triggeredById,
           });

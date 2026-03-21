@@ -25,6 +25,7 @@ import {
   Alert02Icon,
   RepeatIcon,
   Clock01Icon,
+  SentIcon,
 } from "@hugeicons/core-free-icons";
 import { useModalState } from "@/core/shared/hooks/useModalState";
 import { useVacancyDetailQuery } from "../hooks/useVacancyDetailQuery";
@@ -33,6 +34,7 @@ import { CandidateCard } from "./CandidateCard";
 import { AddCandidateDialog } from "./AddCandidateDialog";
 import { ValidateTernaDialog } from "./ValidateTernaDialog";
 import { TernaHistorySheet } from "./TernaHistorySheet";
+import { RequestValidationDialog } from "./RequestValidationDialog";
 import { VacancyStatusTransitionDialog } from "./VacancyStatusTransitionDialog";
 import { ChecklistSection } from "./ChecklistSection";
 import { AttachmentsSection } from "./AttachmentsSection";
@@ -176,6 +178,12 @@ export function VacancyDetailSheet({
     closeModal: closeTernaHistory,
   } = useModalState();
 
+  const {
+    isOpen: isRequestValidationOpen,
+    openModal: openRequestValidation,
+    closeModal: closeRequestValidation,
+  } = useModalState();
+
   const [transitionInitialStatus, setTransitionInitialStatus] = useState<VacancyStatusType | undefined>(undefined);
   const [transitionDialogKey, setTransitionDialogKey] = useState(0);
 
@@ -294,6 +302,21 @@ export function VacancyDetailSheet({
                         Cambiar estado
                       </Button>
                     </PermissionGuard>
+                    {["QUICK_MEETING", "HUNTING", "FOLLOW_UP", "PRE_PLACEMENT"].includes(vacancy.status) && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={openRequestValidation}
+                        className="gap-1.5"
+                      >
+                        <HugeiconsIcon
+                          icon={SentIcon}
+                          size={14}
+                          strokeWidth={2}
+                        />
+                        Solicitar validación
+                      </Button>
+                    )}
                     <Button
                       variant="ghost"
                       size="icon-sm"
@@ -644,6 +667,12 @@ export function VacancyDetailSheet({
                 vacancyId={vacancyId}
                 vacancyPosition={vacancy.position}
                 vacancyAssignedAt={vacancy.assignedAt}
+              />
+              <RequestValidationDialog
+                open={isRequestValidationOpen}
+                onClose={closeRequestValidation}
+                vacancy={vacancy}
+                attachments={attachments}
               />
             </>
           )}
