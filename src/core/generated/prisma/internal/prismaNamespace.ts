@@ -2806,6 +2806,7 @@ export const VacancyScalarFieldEnum = {
   clientId: 'clientId',
   saleType: 'saleType',
   serviceType: 'serviceType',
+  currency: 'currency',
   salaryMin: 'salaryMin',
   salaryMax: 'salaryMax',
   salaryFixed: 'salaryFixed',
@@ -2829,6 +2830,8 @@ export const VacancyScalarFieldEnum = {
   placementConfirmedAt: 'placementConfirmedAt',
   commissionDate: 'commissionDate',
   congratsEmailSent: 'congratsEmailSent',
+  isWarranty: 'isWarranty',
+  originVacancyId: 'originVacancyId',
   tenantId: 'tenantId',
   createdById: 'createdById',
   createdAt: 'createdAt',
@@ -2963,6 +2966,16 @@ export const ClientScalarFieldEnum = {
   leadId: 'leadId',
   generadorId: 'generadorId',
   origenId: 'origenId',
+  currency: 'currency',
+  initialPositions: 'initialPositions',
+  paymentScheme: 'paymentScheme',
+  advanceType: 'advanceType',
+  advanceValue: 'advanceValue',
+  feeType: 'feeType',
+  feeValue: 'feeValue',
+  creditDays: 'creditDays',
+  cancellationFee: 'cancellationFee',
+  warrantyMonths: 'warrantyMonths',
   tenantId: 'tenantId',
   createdById: 'createdById',
   createdAt: 'createdAt',
@@ -3205,6 +3218,20 @@ export type ListEnumVacancyServiceTypeFieldRefInput<$PrismaModel> = FieldRefInpu
 
 
 /**
+ * Reference to a field of type 'Currency'
+ */
+export type EnumCurrencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Currency'>
+    
+
+
+/**
+ * Reference to a field of type 'Currency[]'
+ */
+export type ListEnumCurrencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Currency[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -3313,6 +3340,48 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
  * Reference to a field of type 'QueryMode'
  */
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'PaymentScheme'
+ */
+export type EnumPaymentSchemeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentScheme'>
+    
+
+
+/**
+ * Reference to a field of type 'PaymentScheme[]'
+ */
+export type ListEnumPaymentSchemeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentScheme[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AdvanceType'
+ */
+export type EnumAdvanceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdvanceType'>
+    
+
+
+/**
+ * Reference to a field of type 'AdvanceType[]'
+ */
+export type ListEnumAdvanceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdvanceType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'FeeType'
+ */
+export type EnumFeeTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FeeType'>
+    
+
+
+/**
+ * Reference to a field of type 'FeeType[]'
+ */
+export type ListEnumFeeTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FeeType[]'>
     
 
 

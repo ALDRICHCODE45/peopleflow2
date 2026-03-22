@@ -55,6 +55,7 @@ export function useCreateVacancyForm({
     recruiterId: "",
     clientId: "",
     serviceType: "SOURCING",
+    currency: "",
     assignedAt: today,
     targetDeliveryDate: "",
     salaryType: "RANGE",
@@ -79,6 +80,7 @@ export function useCreateVacancyForm({
         recruiterId: value.recruiterId,
         clientId: value.clientId,
         serviceType: value.serviceType || undefined,
+        currency: value.currency || undefined,
         assignedAt: value.assignedAt || undefined,
         salaryType: value.salaryType,
         salaryFixed:
@@ -126,8 +128,16 @@ export function useCreateVacancyForm({
   const handleClientChange = useCallback(
     (clientId: string) => {
       form.setFieldValue("clientId", clientId);
+      // Auto-fill currency from client's default currency
+      const selectedClient = clients.find((c) => c.id === clientId);
+      if (selectedClient?.currency) {
+        form.setFieldValue(
+          "currency",
+          selectedClient.currency as VacancyFormValues["currency"],
+        );
+      }
     },
-    [form],
+    [form, clients],
   );
 
   const addChecklistItem = useCallback(() => {

@@ -112,3 +112,16 @@ export type {
   UpsertVacancyConfigInput,
   UpsertVacancyConfigOutput,
 } from "./UpsertVacancyConfigUseCase";
+
+// Warranty (Garantía)
+export { CheckWarrantyEligibilityUseCase } from "./CheckWarrantyEligibilityUseCase";
+export type {
+  CheckWarrantyEligibilityInput,
+  CheckWarrantyEligibilityOutput,
+} from "./CheckWarrantyEligibilityUseCase";
+
+export { CreateWarrantyVacancyUseCase } from "./CreateWarrantyVacancyUseCase";
+export type {
+  CreateWarrantyVacancyUseCaseInput,
+  CreateWarrantyVacancyOutput,
+} from "./CreateWarrantyVacancyUseCase";

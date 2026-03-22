@@ -20,8 +20,28 @@ export type ClientModel = runtime.Types.Result.DefaultSelection<Prisma.$ClientPa
 
 export type AggregateClient = {
   _count: ClientCountAggregateOutputType | null
+  _avg: ClientAvgAggregateOutputType | null
+  _sum: ClientSumAggregateOutputType | null
   _min: ClientMinAggregateOutputType | null
   _max: ClientMaxAggregateOutputType | null
+}
+
+export type ClientAvgAggregateOutputType = {
+  initialPositions: number | null
+  advanceValue: number | null
+  feeValue: number | null
+  creditDays: number | null
+  cancellationFee: number | null
+  warrantyMonths: number | null
+}
+
+export type ClientSumAggregateOutputType = {
+  initialPositions: number | null
+  advanceValue: number | null
+  feeValue: number | null
+  creditDays: number | null
+  cancellationFee: number | null
+  warrantyMonths: number | null
 }
 
 export type ClientMinAggregateOutputType = {
@@ -30,6 +50,16 @@ export type ClientMinAggregateOutputType = {
   leadId: string | null
   generadorId: string | null
   origenId: string | null
+  currency: $Enums.Currency | null
+  initialPositions: number | null
+  paymentScheme: $Enums.PaymentScheme | null
+  advanceType: $Enums.AdvanceType | null
+  advanceValue: number | null
+  feeType: $Enums.FeeType | null
+  feeValue: number | null
+  creditDays: number | null
+  cancellationFee: number | null
+  warrantyMonths: number | null
   tenantId: string | null
   createdById: string | null
   createdAt: Date | null
@@ -42,6 +72,16 @@ export type ClientMaxAggregateOutputType = {
   leadId: string | null
   generadorId: string | null
   origenId: string | null
+  currency: $Enums.Currency | null
+  initialPositions: number | null
+  paymentScheme: $Enums.PaymentScheme | null
+  advanceType: $Enums.AdvanceType | null
+  advanceValue: number | null
+  feeType: $Enums.FeeType | null
+  feeValue: number | null
+  creditDays: number | null
+  cancellationFee: number | null
+  warrantyMonths: number | null
   tenantId: string | null
   createdById: string | null
   createdAt: Date | null
@@ -54,6 +94,16 @@ export type ClientCountAggregateOutputType = {
   leadId: number
   generadorId: number
   origenId: number
+  currency: number
+  initialPositions: number
+  paymentScheme: number
+  advanceType: number
+  advanceValue: number
+  feeType: number
+  feeValue: number
+  creditDays: number
+  cancellationFee: number
+  warrantyMonths: number
   tenantId: number
   createdById: number
   createdAt: number
@@ -62,12 +112,40 @@ export type ClientCountAggregateOutputType = {
 }
 
 
+export type ClientAvgAggregateInputType = {
+  initialPositions?: true
+  advanceValue?: true
+  feeValue?: true
+  creditDays?: true
+  cancellationFee?: true
+  warrantyMonths?: true
+}
+
+export type ClientSumAggregateInputType = {
+  initialPositions?: true
+  advanceValue?: true
+  feeValue?: true
+  creditDays?: true
+  cancellationFee?: true
+  warrantyMonths?: true
+}
+
 export type ClientMinAggregateInputType = {
   id?: true
   nombre?: true
   leadId?: true
   generadorId?: true
   origenId?: true
+  currency?: true
+  initialPositions?: true
+  paymentScheme?: true
+  advanceType?: true
+  advanceValue?: true
+  feeType?: true
+  feeValue?: true
+  creditDays?: true
+  cancellationFee?: true
+  warrantyMonths?: true
   tenantId?: true
   createdById?: true
   createdAt?: true
@@ -80,6 +158,16 @@ export type ClientMaxAggregateInputType = {
   leadId?: true
   generadorId?: true
   origenId?: true
+  currency?: true
+  initialPositions?: true
+  paymentScheme?: true
+  advanceType?: true
+  advanceValue?: true
+  feeType?: true
+  feeValue?: true
+  creditDays?: true
+  cancellationFee?: true
+  warrantyMonths?: true
   tenantId?: true
   createdById?: true
   createdAt?: true
@@ -92,6 +180,16 @@ export type ClientCountAggregateInputType = {
   leadId?: true
   generadorId?: true
   origenId?: true
+  currency?: true
+  initialPositions?: true
+  paymentScheme?: true
+  advanceType?: true
+  advanceValue?: true
+  feeType?: true
+  feeValue?: true
+  creditDays?: true
+  cancellationFee?: true
+  warrantyMonths?: true
   tenantId?: true
   createdById?: true
   createdAt?: true
@@ -137,6 +235,18 @@ export type ClientAggregateArgs<ExtArgs extends runtime.Types.Extensions.Interna
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: ClientAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: ClientSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: ClientMinAggregateInputType
@@ -167,6 +277,8 @@ export type ClientGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   _count?: ClientCountAggregateInputType | true
+  _avg?: ClientAvgAggregateInputType
+  _sum?: ClientSumAggregateInputType
   _min?: ClientMinAggregateInputType
   _max?: ClientMaxAggregateInputType
 }
@@ -177,11 +289,23 @@ export type ClientGroupByOutputType = {
   leadId: string
   generadorId: string | null
   origenId: string | null
+  currency: $Enums.Currency | null
+  initialPositions: number | null
+  paymentScheme: $Enums.PaymentScheme | null
+  advanceType: $Enums.AdvanceType | null
+  advanceValue: number | null
+  feeType: $Enums.FeeType | null
+  feeValue: number | null
+  creditDays: number | null
+  cancellationFee: number | null
+  warrantyMonths: number | null
   tenantId: string
   createdById: string | null
   createdAt: Date
   updatedAt: Date
   _count: ClientCountAggregateOutputType | null
+  _avg: ClientAvgAggregateOutputType | null
+  _sum: ClientSumAggregateOutputType | null
   _min: ClientMinAggregateOutputType | null
   _max: ClientMaxAggregateOutputType | null
 }
@@ -210,6 +334,16 @@ export type ClientWhereInput = {
   leadId?: Prisma.StringFilter<"Client"> | string
   generadorId?: Prisma.StringNullableFilter<"Client"> | string | null
   origenId?: Prisma.StringNullableFilter<"Client"> | string | null
+  currency?: Prisma.EnumCurrencyNullableFilter<"Client"> | $Enums.Currency | null
+  initialPositions?: Prisma.IntNullableFilter<"Client"> | number | null
+  paymentScheme?: Prisma.EnumPaymentSchemeNullableFilter<"Client"> | $Enums.PaymentScheme | null
+  advanceType?: Prisma.EnumAdvanceTypeNullableFilter<"Client"> | $Enums.AdvanceType | null
+  advanceValue?: Prisma.FloatNullableFilter<"Client"> | number | null
+  feeType?: Prisma.EnumFeeTypeNullableFilter<"Client"> | $Enums.FeeType | null
+  feeValue?: Prisma.FloatNullableFilter<"Client"> | number | null
+  creditDays?: Prisma.IntNullableFilter<"Client"> | number | null
+  cancellationFee?: Prisma.FloatNullableFilter<"Client"> | number | null
+  warrantyMonths?: Prisma.IntNullableFilter<"Client"> | number | null
   tenantId?: Prisma.StringFilter<"Client"> | string
   createdById?: Prisma.StringNullableFilter<"Client"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Client"> | Date | string
@@ -228,6 +362,16 @@ export type ClientOrderByWithRelationInput = {
   leadId?: Prisma.SortOrder
   generadorId?: Prisma.SortOrderInput | Prisma.SortOrder
   origenId?: Prisma.SortOrderInput | Prisma.SortOrder
+  currency?: Prisma.SortOrderInput | Prisma.SortOrder
+  initialPositions?: Prisma.SortOrderInput | Prisma.SortOrder
+  paymentScheme?: Prisma.SortOrderInput | Prisma.SortOrder
+  advanceType?: Prisma.SortOrderInput | Prisma.SortOrder
+  advanceValue?: Prisma.SortOrderInput | Prisma.SortOrder
+  feeType?: Prisma.SortOrderInput | Prisma.SortOrder
+  feeValue?: Prisma.SortOrderInput | Prisma.SortOrder
+  creditDays?: Prisma.SortOrderInput | Prisma.SortOrder
+  cancellationFee?: Prisma.SortOrderInput | Prisma.SortOrder
+  warrantyMonths?: Prisma.SortOrderInput | Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -249,6 +393,16 @@ export type ClientWhereUniqueInput = Prisma.AtLeast<{
   nombre?: Prisma.StringFilter<"Client"> | string
   generadorId?: Prisma.StringNullableFilter<"Client"> | string | null
   origenId?: Prisma.StringNullableFilter<"Client"> | string | null
+  currency?: Prisma.EnumCurrencyNullableFilter<"Client"> | $Enums.Currency | null
+  initialPositions?: Prisma.IntNullableFilter<"Client"> | number | null
+  paymentScheme?: Prisma.EnumPaymentSchemeNullableFilter<"Client"> | $Enums.PaymentScheme | null
+  advanceType?: Prisma.EnumAdvanceTypeNullableFilter<"Client"> | $Enums.AdvanceType | null
+  advanceValue?: Prisma.FloatNullableFilter<"Client"> | number | null
+  feeType?: Prisma.EnumFeeTypeNullableFilter<"Client"> | $Enums.FeeType | null
+  feeValue?: Prisma.FloatNullableFilter<"Client"> | number | null
+  creditDays?: Prisma.IntNullableFilter<"Client"> | number | null
+  cancellationFee?: Prisma.FloatNullableFilter<"Client"> | number | null
+  warrantyMonths?: Prisma.IntNullableFilter<"Client"> | number | null
   tenantId?: Prisma.StringFilter<"Client"> | string
   createdById?: Prisma.StringNullableFilter<"Client"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Client"> | Date | string
@@ -267,13 +421,25 @@ export type ClientOrderByWithAggregationInput = {
   leadId?: Prisma.SortOrder
   generadorId?: Prisma.SortOrderInput | Prisma.SortOrder
   origenId?: Prisma.SortOrderInput | Prisma.SortOrder
+  currency?: Prisma.SortOrderInput | Prisma.SortOrder
+  initialPositions?: Prisma.SortOrderInput | Prisma.SortOrder
+  paymentScheme?: Prisma.SortOrderInput | Prisma.SortOrder
+  advanceType?: Prisma.SortOrderInput | Prisma.SortOrder
+  advanceValue?: Prisma.SortOrderInput | Prisma.SortOrder
+  feeType?: Prisma.SortOrderInput | Prisma.SortOrder
+  feeValue?: Prisma.SortOrderInput | Prisma.SortOrder
+  creditDays?: Prisma.SortOrderInput | Prisma.SortOrder
+  cancellationFee?: Prisma.SortOrderInput | Prisma.SortOrder
+  warrantyMonths?: Prisma.SortOrderInput | Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ClientCountOrderByAggregateInput
+  _avg?: Prisma.ClientAvgOrderByAggregateInput
   _max?: Prisma.ClientMaxOrderByAggregateInput
   _min?: Prisma.ClientMinOrderByAggregateInput
+  _sum?: Prisma.ClientSumOrderByAggregateInput
 }
 
 export type ClientScalarWhereWithAggregatesInput = {
@@ -285,6 +451,16 @@ export type ClientScalarWhereWithAggregatesInput = {
   leadId?: Prisma.StringWithAggregatesFilter<"Client"> | string
   generadorId?: Prisma.StringNullableWithAggregatesFilter<"Client"> | string | null
   origenId?: Prisma.StringNullableWithAggregatesFilter<"Client"> | string | null
+  currency?: Prisma.EnumCurrencyNullableWithAggregatesFilter<"Client"> | $Enums.Currency | null
+  initialPositions?: Prisma.IntNullableWithAggregatesFilter<"Client"> | number | null
+  paymentScheme?: Prisma.EnumPaymentSchemeNullableWithAggregatesFilter<"Client"> | $Enums.PaymentScheme | null
+  advanceType?: Prisma.EnumAdvanceTypeNullableWithAggregatesFilter<"Client"> | $Enums.AdvanceType | null
+  advanceValue?: Prisma.FloatNullableWithAggregatesFilter<"Client"> | number | null
+  feeType?: Prisma.EnumFeeTypeNullableWithAggregatesFilter<"Client"> | $Enums.FeeType | null
+  feeValue?: Prisma.FloatNullableWithAggregatesFilter<"Client"> | number | null
+  creditDays?: Prisma.IntNullableWithAggregatesFilter<"Client"> | number | null
+  cancellationFee?: Prisma.FloatNullableWithAggregatesFilter<"Client"> | number | null
+  warrantyMonths?: Prisma.IntNullableWithAggregatesFilter<"Client"> | number | null
   tenantId?: Prisma.StringWithAggregatesFilter<"Client"> | string
   createdById?: Prisma.StringNullableWithAggregatesFilter<"Client"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Client"> | Date | string
@@ -294,6 +470,16 @@ export type ClientScalarWhereWithAggregatesInput = {
 export type ClientCreateInput = {
   id?: string
   nombre: string
+  currency?: $Enums.Currency | null
+  initialPositions?: number | null
+  paymentScheme?: $Enums.PaymentScheme | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
+  feeType?: $Enums.FeeType | null
+  feeValue?: number | null
+  creditDays?: number | null
+  cancellationFee?: number | null
+  warrantyMonths?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lead: Prisma.LeadCreateNestedOneWithoutClientInput
@@ -310,6 +496,16 @@ export type ClientUncheckedCreateInput = {
   leadId: string
   generadorId?: string | null
   origenId?: string | null
+  currency?: $Enums.Currency | null
+  initialPositions?: number | null
+  paymentScheme?: $Enums.PaymentScheme | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
+  feeType?: $Enums.FeeType | null
+  feeValue?: number | null
+  creditDays?: number | null
+  cancellationFee?: number | null
+  warrantyMonths?: number | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
@@ -320,6 +516,16 @@ export type ClientUncheckedCreateInput = {
 export type ClientUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentScheme?: Prisma.NullableEnumPaymentSchemeFieldUpdateOperationsInput | $Enums.PaymentScheme | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
+  feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lead?: Prisma.LeadUpdateOneRequiredWithoutClientNestedInput
@@ -336,6 +542,16 @@ export type ClientUncheckedUpdateInput = {
   leadId?: Prisma.StringFieldUpdateOperationsInput | string
   generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentScheme?: Prisma.NullableEnumPaymentSchemeFieldUpdateOperationsInput | $Enums.PaymentScheme | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
+  feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -349,6 +565,16 @@ export type ClientCreateManyInput = {
   leadId: string
   generadorId?: string | null
   origenId?: string | null
+  currency?: $Enums.Currency | null
+  initialPositions?: number | null
+  paymentScheme?: $Enums.PaymentScheme | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
+  feeType?: $Enums.FeeType | null
+  feeValue?: number | null
+  creditDays?: number | null
+  cancellationFee?: number | null
+  warrantyMonths?: number | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
@@ -358,6 +584,16 @@ export type ClientCreateManyInput = {
 export type ClientUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentScheme?: Prisma.NullableEnumPaymentSchemeFieldUpdateOperationsInput | $Enums.PaymentScheme | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
+  feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -368,6 +604,16 @@ export type ClientUncheckedUpdateManyInput = {
   leadId?: Prisma.StringFieldUpdateOperationsInput | string
   generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentScheme?: Prisma.NullableEnumPaymentSchemeFieldUpdateOperationsInput | $Enums.PaymentScheme | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
+  feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -400,10 +646,29 @@ export type ClientCountOrderByAggregateInput = {
   leadId?: Prisma.SortOrder
   generadorId?: Prisma.SortOrder
   origenId?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  initialPositions?: Prisma.SortOrder
+  paymentScheme?: Prisma.SortOrder
+  advanceType?: Prisma.SortOrder
+  advanceValue?: Prisma.SortOrder
+  feeType?: Prisma.SortOrder
+  feeValue?: Prisma.SortOrder
+  creditDays?: Prisma.SortOrder
+  cancellationFee?: Prisma.SortOrder
+  warrantyMonths?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type ClientAvgOrderByAggregateInput = {
+  initialPositions?: Prisma.SortOrder
+  advanceValue?: Prisma.SortOrder
+  feeValue?: Prisma.SortOrder
+  creditDays?: Prisma.SortOrder
+  cancellationFee?: Prisma.SortOrder
+  warrantyMonths?: Prisma.SortOrder
 }
 
 export type ClientMaxOrderByAggregateInput = {
@@ -412,6 +677,16 @@ export type ClientMaxOrderByAggregateInput = {
   leadId?: Prisma.SortOrder
   generadorId?: Prisma.SortOrder
   origenId?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  initialPositions?: Prisma.SortOrder
+  paymentScheme?: Prisma.SortOrder
+  advanceType?: Prisma.SortOrder
+  advanceValue?: Prisma.SortOrder
+  feeType?: Prisma.SortOrder
+  feeValue?: Prisma.SortOrder
+  creditDays?: Prisma.SortOrder
+  cancellationFee?: Prisma.SortOrder
+  warrantyMonths?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -424,10 +699,29 @@ export type ClientMinOrderByAggregateInput = {
   leadId?: Prisma.SortOrder
   generadorId?: Prisma.SortOrder
   origenId?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  initialPositions?: Prisma.SortOrder
+  paymentScheme?: Prisma.SortOrder
+  advanceType?: Prisma.SortOrder
+  advanceValue?: Prisma.SortOrder
+  feeType?: Prisma.SortOrder
+  feeValue?: Prisma.SortOrder
+  creditDays?: Prisma.SortOrder
+  cancellationFee?: Prisma.SortOrder
+  warrantyMonths?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type ClientSumOrderByAggregateInput = {
+  initialPositions?: Prisma.SortOrder
+  advanceValue?: Prisma.SortOrder
+  feeValue?: Prisma.SortOrder
+  creditDays?: Prisma.SortOrder
+  cancellationFee?: Prisma.SortOrder
+  warrantyMonths?: Prisma.SortOrder
 }
 
 export type ClientCreateNestedManyWithoutGeneradorInput = {
@@ -644,9 +938,39 @@ export type ClientUpdateOneRequiredWithoutVacanciesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ClientUpdateToOneWithWhereWithoutVacanciesInput, Prisma.ClientUpdateWithoutVacanciesInput>, Prisma.ClientUncheckedUpdateWithoutVacanciesInput>
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type NullableEnumPaymentSchemeFieldUpdateOperationsInput = {
+  set?: $Enums.PaymentScheme | null
+}
+
+export type NullableEnumAdvanceTypeFieldUpdateOperationsInput = {
+  set?: $Enums.AdvanceType | null
+}
+
+export type NullableEnumFeeTypeFieldUpdateOperationsInput = {
+  set?: $Enums.FeeType | null
+}
+
 export type ClientCreateWithoutGeneradorInput = {
   id?: string
   nombre: string
+  currency?: $Enums.Currency | null
+  initialPositions?: number | null
+  paymentScheme?: $Enums.PaymentScheme | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
+  feeType?: $Enums.FeeType | null
+  feeValue?: number | null
+  creditDays?: number | null
+  cancellationFee?: number | null
+  warrantyMonths?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lead: Prisma.LeadCreateNestedOneWithoutClientInput
@@ -661,6 +985,16 @@ export type ClientUncheckedCreateWithoutGeneradorInput = {
   nombre: string
   leadId: string
   origenId?: string | null
+  currency?: $Enums.Currency | null
+  initialPositions?: number | null
+  paymentScheme?: $Enums.PaymentScheme | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
+  feeType?: $Enums.FeeType | null
+  feeValue?: number | null
+  creditDays?: number | null
+  cancellationFee?: number | null
+  warrantyMonths?: number | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
@@ -681,6 +1015,16 @@ export type ClientCreateManyGeneradorInputEnvelope = {
 export type ClientCreateWithoutCreatedByInput = {
   id?: string
   nombre: string
+  currency?: $Enums.Currency | null
+  initialPositions?: number | null
+  paymentScheme?: $Enums.PaymentScheme | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
+  feeType?: $Enums.FeeType | null
+  feeValue?: number | null
+  creditDays?: number | null
+  cancellationFee?: number | null
+  warrantyMonths?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lead: Prisma.LeadCreateNestedOneWithoutClientInput
@@ -696,6 +1040,16 @@ export type ClientUncheckedCreateWithoutCreatedByInput = {
   leadId: string
   generadorId?: string | null
   origenId?: string | null
+  currency?: $Enums.Currency | null
+  initialPositions?: number | null
+  paymentScheme?: $Enums.PaymentScheme | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
+  feeType?: $Enums.FeeType | null
+  feeValue?: number | null
+  creditDays?: number | null
+  cancellationFee?: number | null
+  warrantyMonths?: number | null
   tenantId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -737,6 +1091,16 @@ export type ClientScalarWhereInput = {
   leadId?: Prisma.StringFilter<"Client"> | string
   generadorId?: Prisma.StringNullableFilter<"Client"> | string | null
   origenId?: Prisma.StringNullableFilter<"Client"> | string | null
+  currency?: Prisma.EnumCurrencyNullableFilter<"Client"> | $Enums.Currency | null
+  initialPositions?: Prisma.IntNullableFilter<"Client"> | number | null
+  paymentScheme?: Prisma.EnumPaymentSchemeNullableFilter<"Client"> | $Enums.PaymentScheme | null
+  advanceType?: Prisma.EnumAdvanceTypeNullableFilter<"Client"> | $Enums.AdvanceType | null
+  advanceValue?: Prisma.FloatNullableFilter<"Client"> | number | null
+  feeType?: Prisma.EnumFeeTypeNullableFilter<"Client"> | $Enums.FeeType | null
+  feeValue?: Prisma.FloatNullableFilter<"Client"> | number | null
+  creditDays?: Prisma.IntNullableFilter<"Client"> | number | null
+  cancellationFee?: Prisma.FloatNullableFilter<"Client"> | number | null
+  warrantyMonths?: Prisma.IntNullableFilter<"Client"> | number | null
   tenantId?: Prisma.StringFilter<"Client"> | string
   createdById?: Prisma.StringNullableFilter<"Client"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Client"> | Date | string
@@ -762,6 +1126,16 @@ export type ClientUpdateManyWithWhereWithoutCreatedByInput = {
 export type ClientCreateWithoutTenantInput = {
   id?: string
   nombre: string
+  currency?: $Enums.Currency | null
+  initialPositions?: number | null
+  paymentScheme?: $Enums.PaymentScheme | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
+  feeType?: $Enums.FeeType | null
+  feeValue?: number | null
+  creditDays?: number | null
+  cancellationFee?: number | null
+  warrantyMonths?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lead: Prisma.LeadCreateNestedOneWithoutClientInput
@@ -777,6 +1151,16 @@ export type ClientUncheckedCreateWithoutTenantInput = {
   leadId: string
   generadorId?: string | null
   origenId?: string | null
+  currency?: $Enums.Currency | null
+  initialPositions?: number | null
+  paymentScheme?: $Enums.PaymentScheme | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
+  feeType?: $Enums.FeeType | null
+  feeValue?: number | null
+  creditDays?: number | null
+  cancellationFee?: number | null
+  warrantyMonths?: number | null
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -812,6 +1196,16 @@ export type ClientUpdateManyWithWhereWithoutTenantInput = {
 export type ClientCreateWithoutOrigenInput = {
   id?: string
   nombre: string
+  currency?: $Enums.Currency | null
+  initialPositions?: number | null
+  paymentScheme?: $Enums.PaymentScheme | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
+  feeType?: $Enums.FeeType | null
+  feeValue?: number | null
+  creditDays?: number | null
+  cancellationFee?: number | null
+  warrantyMonths?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lead: Prisma.LeadCreateNestedOneWithoutClientInput
@@ -826,6 +1220,16 @@ export type ClientUncheckedCreateWithoutOrigenInput = {
   nombre: string
   leadId: string
   generadorId?: string | null
+  currency?: $Enums.Currency | null
+  initialPositions?: number | null
+  paymentScheme?: $Enums.PaymentScheme | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
+  feeType?: $Enums.FeeType | null
+  feeValue?: number | null
+  creditDays?: number | null
+  cancellationFee?: number | null
+  warrantyMonths?: number | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
@@ -862,6 +1266,16 @@ export type ClientUpdateManyWithWhereWithoutOrigenInput = {
 export type ClientCreateWithoutLeadInput = {
   id?: string
   nombre: string
+  currency?: $Enums.Currency | null
+  initialPositions?: number | null
+  paymentScheme?: $Enums.PaymentScheme | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
+  feeType?: $Enums.FeeType | null
+  feeValue?: number | null
+  creditDays?: number | null
+  cancellationFee?: number | null
+  warrantyMonths?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   generador?: Prisma.UserCreateNestedOneWithoutClientsGeneratedInput
@@ -876,6 +1290,16 @@ export type ClientUncheckedCreateWithoutLeadInput = {
   nombre: string
   generadorId?: string | null
   origenId?: string | null
+  currency?: $Enums.Currency | null
+  initialPositions?: number | null
+  paymentScheme?: $Enums.PaymentScheme | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
+  feeType?: $Enums.FeeType | null
+  feeValue?: number | null
+  creditDays?: number | null
+  cancellationFee?: number | null
+  warrantyMonths?: number | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
@@ -902,6 +1326,16 @@ export type ClientUpdateToOneWithWhereWithoutLeadInput = {
 export type ClientUpdateWithoutLeadInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentScheme?: Prisma.NullableEnumPaymentSchemeFieldUpdateOperationsInput | $Enums.PaymentScheme | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
+  feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   generador?: Prisma.UserUpdateOneWithoutClientsGeneratedNestedInput
@@ -916,6 +1350,16 @@ export type ClientUncheckedUpdateWithoutLeadInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentScheme?: Prisma.NullableEnumPaymentSchemeFieldUpdateOperationsInput | $Enums.PaymentScheme | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
+  feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -926,6 +1370,16 @@ export type ClientUncheckedUpdateWithoutLeadInput = {
 export type ClientCreateWithoutVacanciesInput = {
   id?: string
   nombre: string
+  currency?: $Enums.Currency | null
+  initialPositions?: number | null
+  paymentScheme?: $Enums.PaymentScheme | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
+  feeType?: $Enums.FeeType | null
+  feeValue?: number | null
+  creditDays?: number | null
+  cancellationFee?: number | null
+  warrantyMonths?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lead: Prisma.LeadCreateNestedOneWithoutClientInput
@@ -941,6 +1395,16 @@ export type ClientUncheckedCreateWithoutVacanciesInput = {
   leadId: string
   generadorId?: string | null
   origenId?: string | null
+  currency?: $Enums.Currency | null
+  initialPositions?: number | null
+  paymentScheme?: $Enums.PaymentScheme | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
+  feeType?: $Enums.FeeType | null
+  feeValue?: number | null
+  creditDays?: number | null
+  cancellationFee?: number | null
+  warrantyMonths?: number | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
@@ -966,6 +1430,16 @@ export type ClientUpdateToOneWithWhereWithoutVacanciesInput = {
 export type ClientUpdateWithoutVacanciesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentScheme?: Prisma.NullableEnumPaymentSchemeFieldUpdateOperationsInput | $Enums.PaymentScheme | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
+  feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lead?: Prisma.LeadUpdateOneRequiredWithoutClientNestedInput
@@ -981,6 +1455,16 @@ export type ClientUncheckedUpdateWithoutVacanciesInput = {
   leadId?: Prisma.StringFieldUpdateOperationsInput | string
   generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentScheme?: Prisma.NullableEnumPaymentSchemeFieldUpdateOperationsInput | $Enums.PaymentScheme | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
+  feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -992,6 +1476,16 @@ export type ClientCreateManyGeneradorInput = {
   nombre: string
   leadId: string
   origenId?: string | null
+  currency?: $Enums.Currency | null
+  initialPositions?: number | null
+  paymentScheme?: $Enums.PaymentScheme | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
+  feeType?: $Enums.FeeType | null
+  feeValue?: number | null
+  creditDays?: number | null
+  cancellationFee?: number | null
+  warrantyMonths?: number | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
@@ -1004,6 +1498,16 @@ export type ClientCreateManyCreatedByInput = {
   leadId: string
   generadorId?: string | null
   origenId?: string | null
+  currency?: $Enums.Currency | null
+  initialPositions?: number | null
+  paymentScheme?: $Enums.PaymentScheme | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
+  feeType?: $Enums.FeeType | null
+  feeValue?: number | null
+  creditDays?: number | null
+  cancellationFee?: number | null
+  warrantyMonths?: number | null
   tenantId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1012,6 +1516,16 @@ export type ClientCreateManyCreatedByInput = {
 export type ClientUpdateWithoutGeneradorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentScheme?: Prisma.NullableEnumPaymentSchemeFieldUpdateOperationsInput | $Enums.PaymentScheme | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
+  feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lead?: Prisma.LeadUpdateOneRequiredWithoutClientNestedInput
@@ -1026,6 +1540,16 @@ export type ClientUncheckedUpdateWithoutGeneradorInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   leadId?: Prisma.StringFieldUpdateOperationsInput | string
   origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentScheme?: Prisma.NullableEnumPaymentSchemeFieldUpdateOperationsInput | $Enums.PaymentScheme | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
+  feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1038,6 +1562,16 @@ export type ClientUncheckedUpdateManyWithoutGeneradorInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   leadId?: Prisma.StringFieldUpdateOperationsInput | string
   origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentScheme?: Prisma.NullableEnumPaymentSchemeFieldUpdateOperationsInput | $Enums.PaymentScheme | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
+  feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1047,6 +1581,16 @@ export type ClientUncheckedUpdateManyWithoutGeneradorInput = {
 export type ClientUpdateWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentScheme?: Prisma.NullableEnumPaymentSchemeFieldUpdateOperationsInput | $Enums.PaymentScheme | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
+  feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lead?: Prisma.LeadUpdateOneRequiredWithoutClientNestedInput
@@ -1062,6 +1606,16 @@ export type ClientUncheckedUpdateWithoutCreatedByInput = {
   leadId?: Prisma.StringFieldUpdateOperationsInput | string
   generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentScheme?: Prisma.NullableEnumPaymentSchemeFieldUpdateOperationsInput | $Enums.PaymentScheme | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
+  feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1074,6 +1628,16 @@ export type ClientUncheckedUpdateManyWithoutCreatedByInput = {
   leadId?: Prisma.StringFieldUpdateOperationsInput | string
   generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentScheme?: Prisma.NullableEnumPaymentSchemeFieldUpdateOperationsInput | $Enums.PaymentScheme | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
+  feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1085,6 +1649,16 @@ export type ClientCreateManyTenantInput = {
   leadId: string
   generadorId?: string | null
   origenId?: string | null
+  currency?: $Enums.Currency | null
+  initialPositions?: number | null
+  paymentScheme?: $Enums.PaymentScheme | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
+  feeType?: $Enums.FeeType | null
+  feeValue?: number | null
+  creditDays?: number | null
+  cancellationFee?: number | null
+  warrantyMonths?: number | null
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1093,6 +1667,16 @@ export type ClientCreateManyTenantInput = {
 export type ClientUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentScheme?: Prisma.NullableEnumPaymentSchemeFieldUpdateOperationsInput | $Enums.PaymentScheme | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
+  feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lead?: Prisma.LeadUpdateOneRequiredWithoutClientNestedInput
@@ -1108,6 +1692,16 @@ export type ClientUncheckedUpdateWithoutTenantInput = {
   leadId?: Prisma.StringFieldUpdateOperationsInput | string
   generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentScheme?: Prisma.NullableEnumPaymentSchemeFieldUpdateOperationsInput | $Enums.PaymentScheme | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
+  feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1120,6 +1714,16 @@ export type ClientUncheckedUpdateManyWithoutTenantInput = {
   leadId?: Prisma.StringFieldUpdateOperationsInput | string
   generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentScheme?: Prisma.NullableEnumPaymentSchemeFieldUpdateOperationsInput | $Enums.PaymentScheme | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
+  feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1130,6 +1734,16 @@ export type ClientCreateManyOrigenInput = {
   nombre: string
   leadId: string
   generadorId?: string | null
+  currency?: $Enums.Currency | null
+  initialPositions?: number | null
+  paymentScheme?: $Enums.PaymentScheme | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
+  feeType?: $Enums.FeeType | null
+  feeValue?: number | null
+  creditDays?: number | null
+  cancellationFee?: number | null
+  warrantyMonths?: number | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
@@ -1139,6 +1753,16 @@ export type ClientCreateManyOrigenInput = {
 export type ClientUpdateWithoutOrigenInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentScheme?: Prisma.NullableEnumPaymentSchemeFieldUpdateOperationsInput | $Enums.PaymentScheme | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
+  feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lead?: Prisma.LeadUpdateOneRequiredWithoutClientNestedInput
@@ -1153,6 +1777,16 @@ export type ClientUncheckedUpdateWithoutOrigenInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   leadId?: Prisma.StringFieldUpdateOperationsInput | string
   generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentScheme?: Prisma.NullableEnumPaymentSchemeFieldUpdateOperationsInput | $Enums.PaymentScheme | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
+  feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1165,6 +1799,16 @@ export type ClientUncheckedUpdateManyWithoutOrigenInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   leadId?: Prisma.StringFieldUpdateOperationsInput | string
   generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  paymentScheme?: Prisma.NullableEnumPaymentSchemeFieldUpdateOperationsInput | $Enums.PaymentScheme | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
+  feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1208,6 +1852,16 @@ export type ClientSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   leadId?: boolean
   generadorId?: boolean
   origenId?: boolean
+  currency?: boolean
+  initialPositions?: boolean
+  paymentScheme?: boolean
+  advanceType?: boolean
+  advanceValue?: boolean
+  feeType?: boolean
+  feeValue?: boolean
+  creditDays?: boolean
+  cancellationFee?: boolean
+  warrantyMonths?: boolean
   tenantId?: boolean
   createdById?: boolean
   createdAt?: boolean
@@ -1227,6 +1881,16 @@ export type ClientSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   leadId?: boolean
   generadorId?: boolean
   origenId?: boolean
+  currency?: boolean
+  initialPositions?: boolean
+  paymentScheme?: boolean
+  advanceType?: boolean
+  advanceValue?: boolean
+  feeType?: boolean
+  feeValue?: boolean
+  creditDays?: boolean
+  cancellationFee?: boolean
+  warrantyMonths?: boolean
   tenantId?: boolean
   createdById?: boolean
   createdAt?: boolean
@@ -1244,6 +1908,16 @@ export type ClientSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   leadId?: boolean
   generadorId?: boolean
   origenId?: boolean
+  currency?: boolean
+  initialPositions?: boolean
+  paymentScheme?: boolean
+  advanceType?: boolean
+  advanceValue?: boolean
+  feeType?: boolean
+  feeValue?: boolean
+  creditDays?: boolean
+  cancellationFee?: boolean
+  warrantyMonths?: boolean
   tenantId?: boolean
   createdById?: boolean
   createdAt?: boolean
@@ -1261,13 +1935,23 @@ export type ClientSelectScalar = {
   leadId?: boolean
   generadorId?: boolean
   origenId?: boolean
+  currency?: boolean
+  initialPositions?: boolean
+  paymentScheme?: boolean
+  advanceType?: boolean
+  advanceValue?: boolean
+  feeType?: boolean
+  feeValue?: boolean
+  creditDays?: boolean
+  cancellationFee?: boolean
+  warrantyMonths?: boolean
   tenantId?: boolean
   createdById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ClientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nombre" | "leadId" | "generadorId" | "origenId" | "tenantId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["client"]>
+export type ClientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nombre" | "leadId" | "generadorId" | "origenId" | "currency" | "initialPositions" | "paymentScheme" | "advanceType" | "advanceValue" | "feeType" | "feeValue" | "creditDays" | "cancellationFee" | "warrantyMonths" | "tenantId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["client"]>
 export type ClientInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lead?: boolean | Prisma.LeadDefaultArgs<ExtArgs>
   generador?: boolean | Prisma.Client$generadorArgs<ExtArgs>
@@ -1308,6 +1992,16 @@ export type $ClientPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     leadId: string
     generadorId: string | null
     origenId: string | null
+    currency: $Enums.Currency | null
+    initialPositions: number | null
+    paymentScheme: $Enums.PaymentScheme | null
+    advanceType: $Enums.AdvanceType | null
+    advanceValue: number | null
+    feeType: $Enums.FeeType | null
+    feeValue: number | null
+    creditDays: number | null
+    cancellationFee: number | null
+    warrantyMonths: number | null
     tenantId: string
     createdById: string | null
     createdAt: Date
@@ -1746,6 +2440,16 @@ export interface ClientFieldRefs {
   readonly leadId: Prisma.FieldRef<"Client", 'String'>
   readonly generadorId: Prisma.FieldRef<"Client", 'String'>
   readonly origenId: Prisma.FieldRef<"Client", 'String'>
+  readonly currency: Prisma.FieldRef<"Client", 'Currency'>
+  readonly initialPositions: Prisma.FieldRef<"Client", 'Int'>
+  readonly paymentScheme: Prisma.FieldRef<"Client", 'PaymentScheme'>
+  readonly advanceType: Prisma.FieldRef<"Client", 'AdvanceType'>
+  readonly advanceValue: Prisma.FieldRef<"Client", 'Float'>
+  readonly feeType: Prisma.FieldRef<"Client", 'FeeType'>
+  readonly feeValue: Prisma.FieldRef<"Client", 'Float'>
+  readonly creditDays: Prisma.FieldRef<"Client", 'Int'>
+  readonly cancellationFee: Prisma.FieldRef<"Client", 'Float'>
+  readonly warrantyMonths: Prisma.FieldRef<"Client", 'Int'>
   readonly tenantId: Prisma.FieldRef<"Client", 'String'>
   readonly createdById: Prisma.FieldRef<"Client", 'String'>
   readonly createdAt: Prisma.FieldRef<"Client", 'DateTime'>

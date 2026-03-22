@@ -1,6 +1,7 @@
 import type {
   VacancyModality,
   VacancyServiceType,
+  VacancyCurrency,
 } from "@features/vacancy/frontend/types/vacancy.types";
 import type { Vacancy } from "../../domain/entities/Vacancy";
 import type { IVacancyRepository } from "../../domain/interfaces/IVacancyRepository";
@@ -11,6 +12,7 @@ export interface CreateVacancyInput {
   position: string;
   recruiterId: string;
   clientId: string;
+  currency?: VacancyCurrency | null;
   salaryType?: "FIXED" | "RANGE";
   salaryFixed?: number | null;
   salaryMin?: number | null;
@@ -84,6 +86,7 @@ export class CreateVacancyUseCase {
         recruiterId: input.recruiterId,
         clientId: input.clientId,
         saleType,
+        currency: input.currency ?? null,
         salaryType: input.salaryType ?? "RANGE",
         salaryMin: input.salaryType === "FIXED" ? null : (input.salaryMin ?? null),
         salaryMax: input.salaryType === "FIXED" ? null : (input.salaryMax ?? null),

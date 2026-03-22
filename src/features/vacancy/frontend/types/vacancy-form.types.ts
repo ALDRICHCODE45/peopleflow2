@@ -2,6 +2,7 @@ import type {
   VacancyServiceType,
   VacancyModality,
   VacancySalaryType,
+  VacancyCurrency,
 } from "./vacancy.types";
 import type { useCreateVacancyForm } from "../hooks/useCreateVacancyForm";
 
@@ -16,6 +17,7 @@ export interface VacancyFormValues {
   recruiterId: string;
   clientId: string;
   serviceType: VacancyServiceType | "";
+  currency: VacancyCurrency | "";
   assignedAt: string;
   targetDeliveryDate: string;
   salaryType: VacancySalaryType;

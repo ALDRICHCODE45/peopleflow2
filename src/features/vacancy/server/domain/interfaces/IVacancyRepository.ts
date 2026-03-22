@@ -3,6 +3,8 @@ import type {
   VacancySaleType,
   VacancyServiceType,
   VacancyModality,
+  VacancyCurrency,
+  VacancySalaryType,
 } from "@features/vacancy/frontend/types/vacancy.types";
 import type { Vacancy } from "../entities/Vacancy";
 
@@ -12,6 +14,7 @@ export interface CreateVacancyData {
   clientId: string;
   saleType: VacancySaleType;
   serviceType: VacancyServiceType;
+  currency?: VacancyCurrency | null;
   assignedAt?: Date;
   salaryType?: "FIXED" | "RANGE";
   salaryMin?: number | null;
@@ -33,6 +36,7 @@ export interface CreateVacancyData {
 export interface UpdateVacancyData {
   position?: string;
   serviceType?: VacancyServiceType;
+  currency?: VacancyCurrency | null;
   assignedAt?: Date;
   salaryType?: "FIXED" | "RANGE";
   salaryMin?: number | null;
@@ -91,6 +95,31 @@ export interface PaginatedResult<T> {
   totalCount: number;
 }
 
+export interface CreateWarrantyVacancyData {
+  originVacancyId: string;
+  position: string;
+  recruiterId: string;
+  clientId: string;
+  saleType: VacancySaleType;
+  serviceType: VacancyServiceType;
+  currency?: VacancyCurrency | null;
+  salaryType?: VacancySalaryType;
+  salaryMin?: number | null;
+  salaryMax?: number | null;
+  salaryFixed?: number | null;
+  commissions?: string | null;
+  benefits?: string | null;
+  tools?: string | null;
+  modality?: VacancyModality | null;
+  schedule?: string | null;
+  countryCode?: string | null;
+  regionCode?: string | null;
+  requiresPsychometry?: boolean;
+  targetDeliveryDate?: Date | null;
+  tenantId: string;
+  createdById: string | null;
+}
+
 export interface ChecklistValidationResult {
   id: string;
   checklistValidatedAt: string | null;
@@ -121,4 +150,6 @@ export interface IVacancyRepository {
   findClientNameById(clientId: string, tenantId: string): Promise<string | null>;
   validateChecklist(vacancyId: string, tenantId: string, validatedById: string): Promise<ChecklistValidationResult>;
   rejectChecklist(vacancyId: string, tenantId: string, reason: string): Promise<ChecklistValidationResult>;
+  findByOriginVacancyId(originVacancyId: string, tenantId: string): Promise<Vacancy | null>;
+  createWarrantyVacancy(data: CreateWarrantyVacancyData): Promise<Vacancy>;
 }

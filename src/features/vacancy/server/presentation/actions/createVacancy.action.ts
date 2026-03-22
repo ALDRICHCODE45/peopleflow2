@@ -16,6 +16,7 @@ import type {
   CreateVacancyFormData,
   CreateVacancyResult,
   VacancyServiceType,
+  VacancyCurrency,
 } from "../../../frontend/types/vacancy.types";
 import { ServerErrors } from "@core/shared/constants/error-messages";
 import { TargetDeliveryDate } from "../../domain/value-objects/TargetDeliveryDate";
@@ -90,6 +91,7 @@ export async function createVacancyAction(
       position: data.position,
       recruiterId: data.recruiterId,
       clientId: data.clientId,
+      currency: (data.currency as VacancyCurrency) ?? null,
       salaryType: data.salaryType ?? "RANGE",
       salaryFixed: data.salaryType === "FIXED" ? (data.salaryFixed ?? null) : null,
       salaryMin: data.salaryType === "FIXED" ? null : (data.salaryMin ?? null),

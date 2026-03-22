@@ -26,6 +26,7 @@ import {
   RepeatIcon,
   Clock01Icon,
   SentIcon,
+  SecurityIcon,
 } from "@hugeicons/core-free-icons";
 import { useModalState } from "@/core/shared/hooks/useModalState";
 import { useVacancyDetailQuery } from "../hooks/useVacancyDetailQuery";
@@ -52,6 +53,7 @@ import { VacancySalesTypeBadge } from "./VacancyVentaTypeBadge";
 import { VacancyProgressIndicator } from "./VacancyProgressIndicator";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
+import { ApplyWarrantyDialog } from "./ApplyWarrantyDialog";
 
 interface VacancyDetailSheetProps {
   vacancyId: string | null;
@@ -185,6 +187,12 @@ export function VacancyDetailSheet({
     closeModal: closeRequestValidation,
   } = useModalState();
 
+  const {
+    isOpen: isWarrantyOpen,
+    openModal: openWarranty,
+    closeModal: closeWarranty,
+  } = useModalState();
+
   const [transitionInitialStatus, setTransitionInitialStatus] = useState<VacancyStatusType | undefined>(undefined);
   const [transitionDialogKey, setTransitionDialogKey] = useState(0);
 
@@ -212,6 +220,22 @@ export function VacancyDetailSheet({
                       <VacancyStatusBadge status={vacancy.status} />
 
                       <VacancySalesTypeBadge type={vacancy.saleType} />
+
+                      {vacancy.isWarranty && (
+                        <Badge className="bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-950 dark:text-purple-300 dark:border-purple-800 gap-1">
+                          <HugeiconsIcon icon={SecurityIcon} size={12} />
+                          Garantía
+                        </Badge>
+                      )}
+
+                      {vacancy.warrantyVacancyId && (
+                        <Badge
+                          variant="outline"
+                          className="bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800"
+                        >
+                          Garantía aplicada
+                        </Badge>
+                      )}
                     </div>
                     <div className="flex gap-4 mt-2 text-xs text-muted-foreground flex-wrap">
                       {vacancy.clientName && (
@@ -318,6 +342,30 @@ export function VacancyDetailSheet({
                         Solicitar validación
                       </Button>
                     )}
+                    <PermissionGuard
+                      permissions={[
+                        PermissionActions.vacantes.crear,
+                        PermissionActions.vacantes.gestionar,
+                      ]}
+                    >
+                      {vacancy.status === "PLACEMENT" &&
+                        !vacancy.isWarranty &&
+                        !vacancy.warrantyVacancyId && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={openWarranty}
+                            className="gap-1.5 border-purple-300 text-purple-700 hover:bg-purple-50 dark:border-purple-700 dark:text-purple-300 dark:hover:bg-purple-950"
+                          >
+                            <HugeiconsIcon
+                              icon={SecurityIcon}
+                              size={14}
+                              strokeWidth={2}
+                            />
+                            Aplicar garantía
+                          </Button>
+                        )}
+                    </PermissionGuard>
                     <Button
                       variant="ghost"
                       size="icon-sm"
@@ -678,6 +726,11 @@ export function VacancyDetailSheet({
                 onClose={closeRequestValidation}
                 vacancy={vacancy}
                 attachments={attachments}
+              />
+              <ApplyWarrantyDialog
+                vacancyId={vacancyId}
+                open={isWarrantyOpen}
+                onOpenChange={(o) => !o && closeWarranty()}
               />
             </>
           )}

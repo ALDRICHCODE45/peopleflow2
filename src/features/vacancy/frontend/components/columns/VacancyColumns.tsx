@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Checkbox } from "@/core/shared/ui/shadcn/checkbox";
 import { Avatar, AvatarFallback, AvatarImage } from "@/core/shared/ui/shadcn/avatar";
+import { Badge } from "@shadcn/badge";
 import { VacancySalesTypeBadge } from "../VacancyVentaTypeBadge";
 
 export function createVacancyColumns(
@@ -37,9 +38,16 @@ export function createVacancyColumns(
       header: "Posición",
       accessorKey: "position",
       cell: ({ row }) => (
-        <span className="font-medium truncate block max-w-50">
-          {row.original.position}
-        </span>
+        <div className="flex items-center gap-1.5 max-w-50">
+          <span className="font-medium truncate">
+            {row.original.position}
+          </span>
+          {row.original.isWarranty && (
+            <Badge className="bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-950 dark:text-purple-300 dark:border-purple-800 text-[10px] px-1.5 py-0 shrink-0">
+              Garantía
+            </Badge>
+          )}
+        </div>
       ),
       size: 22,
     },

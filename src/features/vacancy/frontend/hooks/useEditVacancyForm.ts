@@ -52,6 +52,7 @@ export function useEditVacancyForm({
     recruiterId: vacancy.recruiterId,
     clientId: vacancy.clientId,
     serviceType: vacancy.serviceType ?? "",
+    currency: vacancy.currency ?? "",
     assignedAt: vacancy.assignedAt,
     targetDeliveryDate: vacancy.targetDeliveryDate ?? "",
     salaryType: vacancy.salaryType ?? "RANGE",
@@ -78,6 +79,7 @@ export function useEditVacancyForm({
           recruiterId: value.recruiterId,
           clientId: value.clientId,
           serviceType: value.serviceType || undefined,
+          currency: value.currency || undefined,
           assignedAt: value.assignedAt || undefined,
           salaryType: value.salaryType,
           salaryFixed:
@@ -115,8 +117,16 @@ export function useEditVacancyForm({
   const handleClientChange = useCallback(
     (clientId: string) => {
       form.setFieldValue("clientId", clientId);
+      // Auto-fill currency from client's default currency
+      const selectedClient = clients.find((c) => c.id === clientId);
+      if (selectedClient?.currency) {
+        form.setFieldValue(
+          "currency",
+          selectedClient.currency as VacancyFormValues["currency"],
+        );
+      }
     },
-    [form],
+    [form, clients],
   );
 
   return {

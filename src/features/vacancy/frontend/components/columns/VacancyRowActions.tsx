@@ -12,6 +12,7 @@ import dynamic from "next/dynamic";
 import { useUpdateVacancy } from "../../hooks/useUpdateVacancy";
 import { VacancySheetForm } from "../VacancySheetForm";
 import { usePermissions } from "@/core/shared/hooks/use-permissions";
+import { ApplyWarrantyDialog } from "../ApplyWarrantyDialog";
 
 
 const DeleteVacancyAlertDialog = dynamic(
@@ -48,6 +49,13 @@ export function VacancyRowActions({ row, onViewDetail }: VacancyRowActionsProps)
       PermissionActions.vacantes.gestionar,
     ]);
 
+  const canCreateWarranty =
+    isSuperAdmin ||
+    hasAnyPermission([
+      PermissionActions.vacantes.crear,
+      PermissionActions.vacantes.gestionar,
+    ]);
+
   const {
     isOpen: isDeleteOpen,
     openModal: openDeleteModal,
@@ -58,6 +66,12 @@ export function VacancyRowActions({ row, onViewDetail }: VacancyRowActionsProps)
     isOpen: isUpdateModalOpen,
     openModal: openUpdateModal,
     closeModal: closeUpdateModal,
+  } = useModalState();
+
+  const {
+    isOpen: isWarrantyOpen,
+    openModal: openWarrantyModal,
+    closeModal: closeWarrantyModal,
   } = useModalState();
 
   const deleteVacancyMutation = useDeleteVacancy();
@@ -82,10 +96,18 @@ export function VacancyRowActions({ row, onViewDetail }: VacancyRowActionsProps)
     closeDeleteModal();
   };
 
+  // Show warranty action only for PLACEMENT vacancies without existing warranty
+  const showWarrantyAction =
+    canCreateWarranty &&
+    vacancy.status === "PLACEMENT" &&
+    !vacancy.isWarranty &&
+    !vacancy.warrantyVacancyId;
+
   const actions = createVacancyActions(
     canEdit ? openUpdateModal : undefined,
     canDelete ? openDeleteModal : undefined,
-    onViewDetail ? () => onViewDetail(vacancy.id) : undefined
+    onViewDetail ? () => onViewDetail(vacancy.id) : undefined,
+    showWarrantyAction ? openWarrantyModal : undefined,
   );
 
   return (
@@ -123,6 +145,14 @@ export function VacancyRowActions({ row, onViewDetail }: VacancyRowActionsProps)
           />
         )}
       </PermissionGuard>
+
+      {isWarrantyOpen && (
+        <ApplyWarrantyDialog
+          vacancyId={vacancy.id}
+          open={isWarrantyOpen}
+          onOpenChange={(o) => !o && closeWarrantyModal()}
+        />
+      )}
     </>
   );
 }

@@ -604,6 +604,7 @@ model Vacancy {
   serviceType        VacancyServiceType
 
   // Condiciones económicas
+  currency Currency? // Moneda de la vacante — hereda default del Cliente pero es editable
   // Rango inicial permitido; en PRE_PLACEMENT se cierra con salaryFixed
   salaryMin   Float?
   salaryMax   Float?
@@ -646,6 +647,12 @@ model Vacancy {
   commissionDate       DateTime? // Día 15 del mes siguiente — generado automáticamente
   congratsEmailSent    Boolean   @default(false) // Si se envió correo de felicitaciones
 
+  // Warranty (Garantía)
+  isWarranty      Boolean  @default(false)
+  originVacancyId String?  @unique
+  originVacancy   Vacancy? @relation("WarrantyOrigin", fields: [originVacancyId], references: [id], onDelete: SetNull)
+  warrantyVacancy Vacancy? @relation("WarrantyOrigin")
+
   // Multi-tenancy
   tenantId String
   tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
@@ -670,6 +677,7 @@ model Vacancy {
   @@index([tenantId, status])
   @@index([tenantId, recruiterId])
   @@index([tenantId, createdAt])
+  @@index([originVacancyId])
   @@map("vacancy")
 }
 
@@ -885,6 +893,31 @@ model Notification {
 }
 
 // =============================================
+// ENUMS DEL MÓDULO DE CLIENTES (FINANZAS)
+// =============================================
+
+enum Currency {
+  MXN
+  USD
+}
+
+enum PaymentScheme {
+  SUCCESS_100
+  ADVANCE
+}
+
+enum AdvanceType {
+  FIXED
+  PERCENTAGE
+}
+
+enum FeeType {
+  PERCENTAGE
+  FIXED
+  MONTHS
+}
+
+// =============================================
 // MÓDULO DE CLIENTES (FINANZAS)
 // =============================================
 
@@ -903,6 +936,18 @@ model Client {
   // Origen del cliente (mismo que el Lead)
   origenId String?
   origen   LeadOrigin? @relation(fields: [origenId], references: [id], onDelete: SetNull)
+
+  // Condiciones comerciales
+  currency         Currency?
+  initialPositions Int?
+  paymentScheme    PaymentScheme?
+  advanceType      AdvanceType?
+  advanceValue     Float?
+  feeType          FeeType?
+  feeValue         Float?
+  creditDays       Int?
+  cancellationFee  Float?
+  warrantyMonths   Int?
 
   // Multi-tenancy
   tenantId String

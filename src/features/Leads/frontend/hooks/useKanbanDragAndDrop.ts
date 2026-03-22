@@ -22,16 +22,25 @@ interface IncompleteDataError {
   missingFields: string[];
 }
 
+/** Payload emitted when a lead is dragged to POSICIONES_ASIGNADAS */
+export interface CommercialTermsPending {
+  leadId: string;
+  lead: Lead;
+}
+
 interface UseKanbanDragAndDropParams {
   leads: Lead[];
   updateStatusMutation: ReturnType<typeof useUpdateLeadStatus>;
   onIncompleteData?: (data: IncompleteDataError) => void;
+  /** Called when lead is dropped on POSICIONES_ASIGNADAS — parent shows the dialog */
+  onCommercialTermsRequired?: (data: CommercialTermsPending) => void;
 }
 
 export function useKanbanDragAndDrop({
   leads,
   updateStatusMutation,
   onIncompleteData,
+  onCommercialTermsRequired,
 }: UseKanbanDragAndDropParams) {
   const [columns, setColumns] = useState<KanbanColumn[]>(
     DEFAULT_KANBAN_COLUMNS,
@@ -151,6 +160,18 @@ export function useKanbanDragAndDrop({
         const currentStatus = findColumnForLead(leadId);
 
         if (currentStatus && currentStatus !== targetColumnId) {
+          // Intercept: if target is POSICIONES_ASIGNADAS, show commercial terms dialog
+          if (
+            targetColumnId === "POSICIONES_ASIGNADAS" &&
+            onCommercialTermsRequired
+          ) {
+            const lead = leads.find((l) => l.id === leadId);
+            if (lead) {
+              onCommercialTermsRequired({ leadId, lead });
+            }
+            return;
+          }
+
           updateStatusMutation.mutate(
             {
               leadId,
@@ -176,7 +197,7 @@ export function useKanbanDragAndDrop({
         }
       }
     },
-    [resolveDropTargetColumn, findColumnForLead, updateStatusMutation, onIncompleteData],
+    [resolveDropTargetColumn, findColumnForLead, updateStatusMutation, onIncompleteData, onCommercialTermsRequired, leads],
   );
 
   return {

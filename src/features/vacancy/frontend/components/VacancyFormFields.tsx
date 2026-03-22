@@ -44,11 +44,13 @@ import {
   VACANCY_MODALITY_LABELS,
   VACANCY_SERVICE_TYPE_LABELS,
   VACANCY_SALARY_TYPE_LABELS,
+  VACANCY_CURRENCY_LABELS,
 } from "../types/vacancy.types";
 import type {
   VacancyModality,
   VacancyServiceType,
   VacancySalaryType,
+  VacancyCurrency,
 } from "../types/vacancy.types";
 import type { VacancyForm } from "../types/vacancy-form.types";
 import { WorkSchedulePicker } from "./WorkSchedulePicker";
@@ -334,6 +336,40 @@ export function VacancyFormFields({
             </DialogDescription>
           </DialogHeader>
           <div className="max-h-[40vh] overflow-y-auto space-y-4 overflow-x-hidden">
+            {/* Moneda */}
+            <form.Field name="currency">
+              {(field) => (
+                <Field>
+                  <FieldLabel htmlFor={field.name}>Moneda</FieldLabel>
+                  <Select
+                    value={field.state.value || "none"}
+                    onValueChange={(v) =>
+                      field.handleChange(
+                        v === "none" ? "" : (v as VacancyCurrency),
+                      )
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecciona la moneda" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">Sin moneda</SelectItem>
+                      {(
+                        Object.entries(VACANCY_CURRENCY_LABELS) as [
+                          VacancyCurrency,
+                          string,
+                        ][]
+                      ).map(([value, label]) => (
+                        <SelectItem key={value} value={value}>
+                          {label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
+              )}
+            </form.Field>
+
             {/* Tipo de Salario */}
             <form.Field name="salaryType">
               {(field) => (

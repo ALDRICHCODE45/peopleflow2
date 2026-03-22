@@ -18,9 +18,12 @@ import { LeadDetailSheet } from "../components/TableView/LeadDetailSheet";
 import { LeadSheetForm } from "../components/TableView/LeadSheetForm";
 import { DeleteLeadAlertDialog } from "../components/TableView/DeleteLeadAlertDialog";
 import { ReasignLeadDialog } from "../components/KanbanView/ReasignLeadDialog";
+import { CommercialTermsDialog } from "../components/KanbanView/CommercialTermsDialog";
 import { IncompleteLeadDialog } from "../components/TableView/IncompleteLeadDialog";
 import type { Lead } from "../types";
+import type { CommercialTermsFormData } from "@features/Finanzas/Clientes/frontend/types/client.types";
 import type { LeadCardActions } from "../components/KanbanView/LeadKanbanCard";
+import type { CommercialTermsPending } from "../hooks/useKanbanDragAndDrop";
 
 /** Type for centralized dialog state - only one dialog can be open at a time */
 type KanbanDialogType = "edit" | "delete" | "reasign" | null;
@@ -36,6 +39,10 @@ export const LeadsKabanPage = () => {
     leadId: string;
     missingFields: string[];
   } | null>(null);
+
+  // Commercial terms dialog state (intercept POSICIONES_ASIGNADAS drop)
+  const [commercialTermsPending, setCommercialTermsPending] =
+    useState<CommercialTermsPending | null>(null);
 
   // Centralized dialog state - lifted from LeadKanbanCard for performance
   // Instead of 4000+ dialogs mounted (one per card), we have just 3 at page level
@@ -112,6 +119,37 @@ export const LeadsKabanPage = () => {
   const updateStatusMutation = useUpdateLeadStatus();
   const prefetchLeadDetails = usePrefetchLeadDetails();
 
+  const handleCommercialTermsRequired = useCallback(
+    (data: CommercialTermsPending) => {
+      setCommercialTermsPending(data);
+    },
+    [],
+  );
+
+  const handleCommercialTermsSubmit = useCallback(
+    (terms: CommercialTermsFormData) => {
+      if (!commercialTermsPending) return;
+      updateStatusMutation.mutate(
+        {
+          leadId: commercialTermsPending.leadId,
+          newStatus: "POSICIONES_ASIGNADAS",
+          commercialTerms: terms,
+        },
+        {
+          onSettled: () => {
+            setCommercialTermsPending(null);
+          },
+        },
+      );
+    },
+    [commercialTermsPending, updateStatusMutation],
+  );
+
+  const handleCommercialTermsCancel = useCallback(() => {
+    // Dialog cancelled — don't update lead status (revert)
+    setCommercialTermsPending(null);
+  }, []);
+
   const handleIncompleteData = useCallback(
     (data: { leadId: string; missingFields: string[] }) => {
       // Find the lead and store it for editing (not for detail sheet)
@@ -129,6 +167,7 @@ export const LeadsKabanPage = () => {
     leads: allLeads,
     updateStatusMutation,
     onIncompleteData: handleIncompleteData,
+    onCommercialTermsRequired: handleCommercialTermsRequired,
   });
 
   const handleSelectLead = useCallback((lead: Lead) => {
@@ -281,6 +320,20 @@ export const LeadsKabanPage = () => {
             leadId={dialogState.lead.id}
             leadName={dialogState.lead.companyName}
             currentAssignedToId={dialogState.lead.assignedToId}
+          />
+        )}
+
+        {/* Commercial Terms Dialog — intercepts POSICIONES_ASIGNADAS transition */}
+        {commercialTermsPending && (
+          <CommercialTermsDialog
+            open={!!commercialTermsPending}
+            onOpenChange={(open) => {
+              if (!open) handleCommercialTermsCancel();
+            }}
+            companyName={commercialTermsPending.lead.companyName}
+            onSubmit={handleCommercialTermsSubmit}
+            onCancel={handleCommercialTermsCancel}
+            isSubmitting={updateStatusMutation.isPending}
           />
         )}
       </CardContent>

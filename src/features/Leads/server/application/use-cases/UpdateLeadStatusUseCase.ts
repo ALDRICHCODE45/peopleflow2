@@ -1,6 +1,7 @@
 import type { ILeadRepository } from "../../domain/interfaces/ILeadRepository";
 import type { ILeadStatusHistoryRepository } from "../../domain/interfaces/ILeadStatusHistoryRepository";
 import type { IClientRepository } from "@features/Finanzas/Clientes/server/domain/interfaces/IClientRepository";
+import type { CommercialTermsData } from "@features/Finanzas/Clientes/server/domain/interfaces/IClientRepository";
 import { Lead } from "../../domain/entities/Lead";
 import type { LeadStatusType } from "../../domain/value-objects/LeadStatus";
 import { inngest } from "@core/shared/inngest/inngest";
@@ -12,6 +13,8 @@ export interface UpdateLeadStatusInput {
   tenantId: string;
   newStatus: LeadStatusType;
   userId: string;
+  /** Optional commercial terms to attach when creating the Client (status → POSICIONES_ASIGNADAS) */
+  commercialTerms?: CommercialTermsData;
 }
 
 export interface UpdateLeadStatusOutput {
@@ -119,6 +122,7 @@ export class UpdateLeadStatusUseCase {
           });
 
           if (!existingClient) {
+            const terms = input.commercialTerms;
             await tx.client.create({
               data: {
                 nombre: lead.companyName,
@@ -127,6 +131,19 @@ export class UpdateLeadStatusUseCase {
                 origenId: lead.originId,
                 tenantId: input.tenantId,
                 createdById: input.userId,
+                // Condiciones comerciales (opcionales — backward compatible)
+                ...(terms && {
+                  currency: terms.currency,
+                  initialPositions: terms.initialPositions,
+                  paymentScheme: terms.paymentScheme,
+                  advanceType: terms.advanceType,
+                  advanceValue: terms.advanceValue,
+                  feeType: terms.feeType,
+                  feeValue: terms.feeValue,
+                  creditDays: terms.creditDays,
+                  cancellationFee: terms.cancellationFee,
+                  warrantyMonths: terms.warrantyMonths,
+                }),
               },
             });
           }

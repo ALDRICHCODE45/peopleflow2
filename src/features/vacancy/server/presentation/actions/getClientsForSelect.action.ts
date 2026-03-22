@@ -11,6 +11,7 @@ import { ServerErrors } from "@core/shared/constants/error-messages";
 export interface ClientOption {
   id: string;
   nombre: string;
+  currency: string | null;
 }
 
 export interface GetClientsResult {

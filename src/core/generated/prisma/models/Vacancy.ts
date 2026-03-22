@@ -48,6 +48,7 @@ export type VacancyMinAggregateOutputType = {
   clientId: string | null
   saleType: $Enums.VacancySaleType | null
   serviceType: $Enums.VacancyServiceType | null
+  currency: $Enums.Currency | null
   salaryMin: number | null
   salaryMax: number | null
   salaryFixed: number | null
@@ -71,6 +72,8 @@ export type VacancyMinAggregateOutputType = {
   placementConfirmedAt: Date | null
   commissionDate: Date | null
   congratsEmailSent: boolean | null
+  isWarranty: boolean | null
+  originVacancyId: string | null
   tenantId: string | null
   createdById: string | null
   createdAt: Date | null
@@ -85,6 +88,7 @@ export type VacancyMaxAggregateOutputType = {
   clientId: string | null
   saleType: $Enums.VacancySaleType | null
   serviceType: $Enums.VacancyServiceType | null
+  currency: $Enums.Currency | null
   salaryMin: number | null
   salaryMax: number | null
   salaryFixed: number | null
@@ -108,6 +112,8 @@ export type VacancyMaxAggregateOutputType = {
   placementConfirmedAt: Date | null
   commissionDate: Date | null
   congratsEmailSent: boolean | null
+  isWarranty: boolean | null
+  originVacancyId: string | null
   tenantId: string | null
   createdById: string | null
   createdAt: Date | null
@@ -122,6 +128,7 @@ export type VacancyCountAggregateOutputType = {
   clientId: number
   saleType: number
   serviceType: number
+  currency: number
   salaryMin: number
   salaryMax: number
   salaryFixed: number
@@ -145,6 +152,8 @@ export type VacancyCountAggregateOutputType = {
   placementConfirmedAt: number
   commissionDate: number
   congratsEmailSent: number
+  isWarranty: number
+  originVacancyId: number
   tenantId: number
   createdById: number
   createdAt: number
@@ -175,6 +184,7 @@ export type VacancyMinAggregateInputType = {
   clientId?: true
   saleType?: true
   serviceType?: true
+  currency?: true
   salaryMin?: true
   salaryMax?: true
   salaryFixed?: true
@@ -198,6 +208,8 @@ export type VacancyMinAggregateInputType = {
   placementConfirmedAt?: true
   commissionDate?: true
   congratsEmailSent?: true
+  isWarranty?: true
+  originVacancyId?: true
   tenantId?: true
   createdById?: true
   createdAt?: true
@@ -212,6 +224,7 @@ export type VacancyMaxAggregateInputType = {
   clientId?: true
   saleType?: true
   serviceType?: true
+  currency?: true
   salaryMin?: true
   salaryMax?: true
   salaryFixed?: true
@@ -235,6 +248,8 @@ export type VacancyMaxAggregateInputType = {
   placementConfirmedAt?: true
   commissionDate?: true
   congratsEmailSent?: true
+  isWarranty?: true
+  originVacancyId?: true
   tenantId?: true
   createdById?: true
   createdAt?: true
@@ -249,6 +264,7 @@ export type VacancyCountAggregateInputType = {
   clientId?: true
   saleType?: true
   serviceType?: true
+  currency?: true
   salaryMin?: true
   salaryMax?: true
   salaryFixed?: true
@@ -272,6 +288,8 @@ export type VacancyCountAggregateInputType = {
   placementConfirmedAt?: true
   commissionDate?: true
   congratsEmailSent?: true
+  isWarranty?: true
+  originVacancyId?: true
   tenantId?: true
   createdById?: true
   createdAt?: true
@@ -373,6 +391,7 @@ export type VacancyGroupByOutputType = {
   clientId: string
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency: $Enums.Currency | null
   salaryMin: number | null
   salaryMax: number | null
   salaryFixed: number | null
@@ -396,6 +415,8 @@ export type VacancyGroupByOutputType = {
   placementConfirmedAt: Date | null
   commissionDate: Date | null
   congratsEmailSent: boolean
+  isWarranty: boolean
+  originVacancyId: string | null
   tenantId: string
   createdById: string | null
   createdAt: Date
@@ -433,6 +454,7 @@ export type VacancyWhereInput = {
   clientId?: Prisma.StringFilter<"Vacancy"> | string
   saleType?: Prisma.EnumVacancySaleTypeFilter<"Vacancy"> | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFilter<"Vacancy"> | $Enums.VacancyServiceType
+  currency?: Prisma.EnumCurrencyNullableFilter<"Vacancy"> | $Enums.Currency | null
   salaryMin?: Prisma.FloatNullableFilter<"Vacancy"> | number | null
   salaryMax?: Prisma.FloatNullableFilter<"Vacancy"> | number | null
   salaryFixed?: Prisma.FloatNullableFilter<"Vacancy"> | number | null
@@ -456,6 +478,8 @@ export type VacancyWhereInput = {
   placementConfirmedAt?: Prisma.DateTimeNullableFilter<"Vacancy"> | Date | string | null
   commissionDate?: Prisma.DateTimeNullableFilter<"Vacancy"> | Date | string | null
   congratsEmailSent?: Prisma.BoolFilter<"Vacancy"> | boolean
+  isWarranty?: Prisma.BoolFilter<"Vacancy"> | boolean
+  originVacancyId?: Prisma.StringNullableFilter<"Vacancy"> | string | null
   tenantId?: Prisma.StringFilter<"Vacancy"> | string
   createdById?: Prisma.StringNullableFilter<"Vacancy"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Vacancy"> | Date | string
@@ -463,6 +487,8 @@ export type VacancyWhereInput = {
   recruiter?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   client?: Prisma.XOR<Prisma.ClientScalarRelationFilter, Prisma.ClientWhereInput>
   checklistValidatedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  originVacancy?: Prisma.XOR<Prisma.VacancyNullableScalarRelationFilter, Prisma.VacancyWhereInput> | null
+  warrantyVacancy?: Prisma.XOR<Prisma.VacancyNullableScalarRelationFilter, Prisma.VacancyWhereInput> | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   checklistItems?: Prisma.VacancyChecklistItemListRelationFilter
@@ -480,6 +506,7 @@ export type VacancyOrderByWithRelationInput = {
   clientId?: Prisma.SortOrder
   saleType?: Prisma.SortOrder
   serviceType?: Prisma.SortOrder
+  currency?: Prisma.SortOrderInput | Prisma.SortOrder
   salaryMin?: Prisma.SortOrderInput | Prisma.SortOrder
   salaryMax?: Prisma.SortOrderInput | Prisma.SortOrder
   salaryFixed?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -503,6 +530,8 @@ export type VacancyOrderByWithRelationInput = {
   placementConfirmedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   commissionDate?: Prisma.SortOrderInput | Prisma.SortOrder
   congratsEmailSent?: Prisma.SortOrder
+  isWarranty?: Prisma.SortOrder
+  originVacancyId?: Prisma.SortOrderInput | Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -510,6 +539,8 @@ export type VacancyOrderByWithRelationInput = {
   recruiter?: Prisma.UserOrderByWithRelationInput
   client?: Prisma.ClientOrderByWithRelationInput
   checklistValidatedBy?: Prisma.UserOrderByWithRelationInput
+  originVacancy?: Prisma.VacancyOrderByWithRelationInput
+  warrantyVacancy?: Prisma.VacancyOrderByWithRelationInput
   tenant?: Prisma.TenantOrderByWithRelationInput
   createdBy?: Prisma.UserOrderByWithRelationInput
   checklistItems?: Prisma.VacancyChecklistItemOrderByRelationAggregateInput
@@ -521,6 +552,7 @@ export type VacancyOrderByWithRelationInput = {
 
 export type VacancyWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  originVacancyId?: string
   AND?: Prisma.VacancyWhereInput | Prisma.VacancyWhereInput[]
   OR?: Prisma.VacancyWhereInput[]
   NOT?: Prisma.VacancyWhereInput | Prisma.VacancyWhereInput[]
@@ -530,6 +562,7 @@ export type VacancyWhereUniqueInput = Prisma.AtLeast<{
   clientId?: Prisma.StringFilter<"Vacancy"> | string
   saleType?: Prisma.EnumVacancySaleTypeFilter<"Vacancy"> | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFilter<"Vacancy"> | $Enums.VacancyServiceType
+  currency?: Prisma.EnumCurrencyNullableFilter<"Vacancy"> | $Enums.Currency | null
   salaryMin?: Prisma.FloatNullableFilter<"Vacancy"> | number | null
   salaryMax?: Prisma.FloatNullableFilter<"Vacancy"> | number | null
   salaryFixed?: Prisma.FloatNullableFilter<"Vacancy"> | number | null
@@ -553,6 +586,7 @@ export type VacancyWhereUniqueInput = Prisma.AtLeast<{
   placementConfirmedAt?: Prisma.DateTimeNullableFilter<"Vacancy"> | Date | string | null
   commissionDate?: Prisma.DateTimeNullableFilter<"Vacancy"> | Date | string | null
   congratsEmailSent?: Prisma.BoolFilter<"Vacancy"> | boolean
+  isWarranty?: Prisma.BoolFilter<"Vacancy"> | boolean
   tenantId?: Prisma.StringFilter<"Vacancy"> | string
   createdById?: Prisma.StringNullableFilter<"Vacancy"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Vacancy"> | Date | string
@@ -560,6 +594,8 @@ export type VacancyWhereUniqueInput = Prisma.AtLeast<{
   recruiter?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   client?: Prisma.XOR<Prisma.ClientScalarRelationFilter, Prisma.ClientWhereInput>
   checklistValidatedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  originVacancy?: Prisma.XOR<Prisma.VacancyNullableScalarRelationFilter, Prisma.VacancyWhereInput> | null
+  warrantyVacancy?: Prisma.XOR<Prisma.VacancyNullableScalarRelationFilter, Prisma.VacancyWhereInput> | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   checklistItems?: Prisma.VacancyChecklistItemListRelationFilter
@@ -567,7 +603,7 @@ export type VacancyWhereUniqueInput = Prisma.AtLeast<{
   statusHistory?: Prisma.VacancyStatusHistoryListRelationFilter
   attachments?: Prisma.AttachmentListRelationFilter
   ternaHistories?: Prisma.VacancyTernaHistoryListRelationFilter
-}, "id">
+}, "id" | "originVacancyId">
 
 export type VacancyOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -577,6 +613,7 @@ export type VacancyOrderByWithAggregationInput = {
   clientId?: Prisma.SortOrder
   saleType?: Prisma.SortOrder
   serviceType?: Prisma.SortOrder
+  currency?: Prisma.SortOrderInput | Prisma.SortOrder
   salaryMin?: Prisma.SortOrderInput | Prisma.SortOrder
   salaryMax?: Prisma.SortOrderInput | Prisma.SortOrder
   salaryFixed?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -600,6 +637,8 @@ export type VacancyOrderByWithAggregationInput = {
   placementConfirmedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   commissionDate?: Prisma.SortOrderInput | Prisma.SortOrder
   congratsEmailSent?: Prisma.SortOrder
+  isWarranty?: Prisma.SortOrder
+  originVacancyId?: Prisma.SortOrderInput | Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -622,6 +661,7 @@ export type VacancyScalarWhereWithAggregatesInput = {
   clientId?: Prisma.StringWithAggregatesFilter<"Vacancy"> | string
   saleType?: Prisma.EnumVacancySaleTypeWithAggregatesFilter<"Vacancy"> | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeWithAggregatesFilter<"Vacancy"> | $Enums.VacancyServiceType
+  currency?: Prisma.EnumCurrencyNullableWithAggregatesFilter<"Vacancy"> | $Enums.Currency | null
   salaryMin?: Prisma.FloatNullableWithAggregatesFilter<"Vacancy"> | number | null
   salaryMax?: Prisma.FloatNullableWithAggregatesFilter<"Vacancy"> | number | null
   salaryFixed?: Prisma.FloatNullableWithAggregatesFilter<"Vacancy"> | number | null
@@ -645,6 +685,8 @@ export type VacancyScalarWhereWithAggregatesInput = {
   placementConfirmedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Vacancy"> | Date | string | null
   commissionDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Vacancy"> | Date | string | null
   congratsEmailSent?: Prisma.BoolWithAggregatesFilter<"Vacancy"> | boolean
+  isWarranty?: Prisma.BoolWithAggregatesFilter<"Vacancy"> | boolean
+  originVacancyId?: Prisma.StringNullableWithAggregatesFilter<"Vacancy"> | string | null
   tenantId?: Prisma.StringWithAggregatesFilter<"Vacancy"> | string
   createdById?: Prisma.StringNullableWithAggregatesFilter<"Vacancy"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Vacancy"> | Date | string
@@ -657,6 +699,7 @@ export type VacancyCreateInput = {
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -679,11 +722,14 @@ export type VacancyCreateInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   recruiter: Prisma.UserCreateNestedOneWithoutVacanciesAsRecruiterInput
   client: Prisma.ClientCreateNestedOneWithoutVacanciesInput
   checklistValidatedBy?: Prisma.UserCreateNestedOneWithoutVacancyChecklistValidatedInput
+  originVacancy?: Prisma.VacancyCreateNestedOneWithoutWarrantyVacancyInput
+  warrantyVacancy?: Prisma.VacancyCreateNestedOneWithoutOriginVacancyInput
   tenant: Prisma.TenantCreateNestedOneWithoutVacanciesInput
   createdBy?: Prisma.UserCreateNestedOneWithoutVacanciesCreatedInput
   checklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutVacancyInput
@@ -701,6 +747,7 @@ export type VacancyUncheckedCreateInput = {
   clientId: string
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -724,10 +771,13 @@ export type VacancyUncheckedCreateInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedCreateNestedOneWithoutOriginVacancyInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutVacancyInput
   candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
@@ -741,6 +791,7 @@ export type VacancyUpdateInput = {
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -763,11 +814,14 @@ export type VacancyUpdateInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recruiter?: Prisma.UserUpdateOneRequiredWithoutVacanciesAsRecruiterNestedInput
   client?: Prisma.ClientUpdateOneRequiredWithoutVacanciesNestedInput
   checklistValidatedBy?: Prisma.UserUpdateOneWithoutVacancyChecklistValidatedNestedInput
+  originVacancy?: Prisma.VacancyUpdateOneWithoutWarrantyVacancyNestedInput
+  warrantyVacancy?: Prisma.VacancyUpdateOneWithoutOriginVacancyNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutVacanciesNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutVacanciesCreatedNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutVacancyNestedInput
@@ -785,6 +839,7 @@ export type VacancyUncheckedUpdateInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -808,10 +863,13 @@ export type VacancyUncheckedUpdateInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  originVacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedUpdateOneWithoutOriginVacancyNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutVacancyNestedInput
   candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
@@ -827,6 +885,7 @@ export type VacancyCreateManyInput = {
   clientId: string
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -850,6 +909,8 @@ export type VacancyCreateManyInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
@@ -862,6 +923,7 @@ export type VacancyUpdateManyMutationInput = {
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -884,6 +946,7 @@ export type VacancyUpdateManyMutationInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -896,6 +959,7 @@ export type VacancyUncheckedUpdateManyInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -919,6 +983,8 @@ export type VacancyUncheckedUpdateManyInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  originVacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -948,6 +1014,7 @@ export type VacancyCountOrderByAggregateInput = {
   clientId?: Prisma.SortOrder
   saleType?: Prisma.SortOrder
   serviceType?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
   salaryMin?: Prisma.SortOrder
   salaryMax?: Prisma.SortOrder
   salaryFixed?: Prisma.SortOrder
@@ -971,6 +1038,8 @@ export type VacancyCountOrderByAggregateInput = {
   placementConfirmedAt?: Prisma.SortOrder
   commissionDate?: Prisma.SortOrder
   congratsEmailSent?: Prisma.SortOrder
+  isWarranty?: Prisma.SortOrder
+  originVacancyId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -992,6 +1061,7 @@ export type VacancyMaxOrderByAggregateInput = {
   clientId?: Prisma.SortOrder
   saleType?: Prisma.SortOrder
   serviceType?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
   salaryMin?: Prisma.SortOrder
   salaryMax?: Prisma.SortOrder
   salaryFixed?: Prisma.SortOrder
@@ -1015,6 +1085,8 @@ export type VacancyMaxOrderByAggregateInput = {
   placementConfirmedAt?: Prisma.SortOrder
   commissionDate?: Prisma.SortOrder
   congratsEmailSent?: Prisma.SortOrder
+  isWarranty?: Prisma.SortOrder
+  originVacancyId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -1029,6 +1101,7 @@ export type VacancyMinOrderByAggregateInput = {
   clientId?: Prisma.SortOrder
   saleType?: Prisma.SortOrder
   serviceType?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
   salaryMin?: Prisma.SortOrder
   salaryMax?: Prisma.SortOrder
   salaryFixed?: Prisma.SortOrder
@@ -1052,6 +1125,8 @@ export type VacancyMinOrderByAggregateInput = {
   placementConfirmedAt?: Prisma.SortOrder
   commissionDate?: Prisma.SortOrder
   congratsEmailSent?: Prisma.SortOrder
+  isWarranty?: Prisma.SortOrder
+  originVacancyId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -1254,6 +1329,24 @@ export type VacancyUpdateOneWithoutAttachmentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.VacancyUpdateToOneWithWhereWithoutAttachmentsInput, Prisma.VacancyUpdateWithoutAttachmentsInput>, Prisma.VacancyUncheckedUpdateWithoutAttachmentsInput>
 }
 
+export type VacancyCreateNestedOneWithoutWarrantyVacancyInput = {
+  create?: Prisma.XOR<Prisma.VacancyCreateWithoutWarrantyVacancyInput, Prisma.VacancyUncheckedCreateWithoutWarrantyVacancyInput>
+  connectOrCreate?: Prisma.VacancyCreateOrConnectWithoutWarrantyVacancyInput
+  connect?: Prisma.VacancyWhereUniqueInput
+}
+
+export type VacancyCreateNestedOneWithoutOriginVacancyInput = {
+  create?: Prisma.XOR<Prisma.VacancyCreateWithoutOriginVacancyInput, Prisma.VacancyUncheckedCreateWithoutOriginVacancyInput>
+  connectOrCreate?: Prisma.VacancyCreateOrConnectWithoutOriginVacancyInput
+  connect?: Prisma.VacancyWhereUniqueInput
+}
+
+export type VacancyUncheckedCreateNestedOneWithoutOriginVacancyInput = {
+  create?: Prisma.XOR<Prisma.VacancyCreateWithoutOriginVacancyInput, Prisma.VacancyUncheckedCreateWithoutOriginVacancyInput>
+  connectOrCreate?: Prisma.VacancyCreateOrConnectWithoutOriginVacancyInput
+  connect?: Prisma.VacancyWhereUniqueInput
+}
+
 export type EnumVacancyStatusFieldUpdateOperationsInput = {
   set?: $Enums.VacancyStatus
 }
@@ -1264,6 +1357,10 @@ export type EnumVacancySaleTypeFieldUpdateOperationsInput = {
 
 export type EnumVacancyServiceTypeFieldUpdateOperationsInput = {
   set?: $Enums.VacancyServiceType
+}
+
+export type NullableEnumCurrencyFieldUpdateOperationsInput = {
+  set?: $Enums.Currency | null
 }
 
 export type NullableFloatFieldUpdateOperationsInput = {
@@ -1280,6 +1377,36 @@ export type EnumVacancySalaryTypeFieldUpdateOperationsInput = {
 
 export type NullableEnumVacancyModalityFieldUpdateOperationsInput = {
   set?: $Enums.VacancyModality | null
+}
+
+export type VacancyUpdateOneWithoutWarrantyVacancyNestedInput = {
+  create?: Prisma.XOR<Prisma.VacancyCreateWithoutWarrantyVacancyInput, Prisma.VacancyUncheckedCreateWithoutWarrantyVacancyInput>
+  connectOrCreate?: Prisma.VacancyCreateOrConnectWithoutWarrantyVacancyInput
+  upsert?: Prisma.VacancyUpsertWithoutWarrantyVacancyInput
+  disconnect?: Prisma.VacancyWhereInput | boolean
+  delete?: Prisma.VacancyWhereInput | boolean
+  connect?: Prisma.VacancyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.VacancyUpdateToOneWithWhereWithoutWarrantyVacancyInput, Prisma.VacancyUpdateWithoutWarrantyVacancyInput>, Prisma.VacancyUncheckedUpdateWithoutWarrantyVacancyInput>
+}
+
+export type VacancyUpdateOneWithoutOriginVacancyNestedInput = {
+  create?: Prisma.XOR<Prisma.VacancyCreateWithoutOriginVacancyInput, Prisma.VacancyUncheckedCreateWithoutOriginVacancyInput>
+  connectOrCreate?: Prisma.VacancyCreateOrConnectWithoutOriginVacancyInput
+  upsert?: Prisma.VacancyUpsertWithoutOriginVacancyInput
+  disconnect?: Prisma.VacancyWhereInput | boolean
+  delete?: Prisma.VacancyWhereInput | boolean
+  connect?: Prisma.VacancyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.VacancyUpdateToOneWithWhereWithoutOriginVacancyInput, Prisma.VacancyUpdateWithoutOriginVacancyInput>, Prisma.VacancyUncheckedUpdateWithoutOriginVacancyInput>
+}
+
+export type VacancyUncheckedUpdateOneWithoutOriginVacancyNestedInput = {
+  create?: Prisma.XOR<Prisma.VacancyCreateWithoutOriginVacancyInput, Prisma.VacancyUncheckedCreateWithoutOriginVacancyInput>
+  connectOrCreate?: Prisma.VacancyCreateOrConnectWithoutOriginVacancyInput
+  upsert?: Prisma.VacancyUpsertWithoutOriginVacancyInput
+  disconnect?: Prisma.VacancyWhereInput | boolean
+  delete?: Prisma.VacancyWhereInput | boolean
+  connect?: Prisma.VacancyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.VacancyUpdateToOneWithWhereWithoutOriginVacancyInput, Prisma.VacancyUpdateWithoutOriginVacancyInput>, Prisma.VacancyUncheckedUpdateWithoutOriginVacancyInput>
 }
 
 export type VacancyCreateNestedOneWithoutChecklistItemsInput = {
@@ -1386,6 +1513,7 @@ export type VacancyCreateWithoutRecruiterInput = {
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -1408,10 +1536,13 @@ export type VacancyCreateWithoutRecruiterInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   client: Prisma.ClientCreateNestedOneWithoutVacanciesInput
   checklistValidatedBy?: Prisma.UserCreateNestedOneWithoutVacancyChecklistValidatedInput
+  originVacancy?: Prisma.VacancyCreateNestedOneWithoutWarrantyVacancyInput
+  warrantyVacancy?: Prisma.VacancyCreateNestedOneWithoutOriginVacancyInput
   tenant: Prisma.TenantCreateNestedOneWithoutVacanciesInput
   createdBy?: Prisma.UserCreateNestedOneWithoutVacanciesCreatedInput
   checklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutVacancyInput
@@ -1428,6 +1559,7 @@ export type VacancyUncheckedCreateWithoutRecruiterInput = {
   clientId: string
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -1451,10 +1583,13 @@ export type VacancyUncheckedCreateWithoutRecruiterInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedCreateNestedOneWithoutOriginVacancyInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutVacancyInput
   candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
@@ -1478,6 +1613,7 @@ export type VacancyCreateWithoutCreatedByInput = {
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -1500,11 +1636,14 @@ export type VacancyCreateWithoutCreatedByInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   recruiter: Prisma.UserCreateNestedOneWithoutVacanciesAsRecruiterInput
   client: Prisma.ClientCreateNestedOneWithoutVacanciesInput
   checklistValidatedBy?: Prisma.UserCreateNestedOneWithoutVacancyChecklistValidatedInput
+  originVacancy?: Prisma.VacancyCreateNestedOneWithoutWarrantyVacancyInput
+  warrantyVacancy?: Prisma.VacancyCreateNestedOneWithoutOriginVacancyInput
   tenant: Prisma.TenantCreateNestedOneWithoutVacanciesInput
   checklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutVacancyInput
   candidates?: Prisma.VacancyCandidateCreateNestedManyWithoutVacancyInput
@@ -1521,6 +1660,7 @@ export type VacancyUncheckedCreateWithoutCreatedByInput = {
   clientId: string
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -1544,9 +1684,12 @@ export type VacancyUncheckedCreateWithoutCreatedByInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: string | null
   tenantId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedCreateNestedOneWithoutOriginVacancyInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutVacancyInput
   candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
@@ -1570,6 +1713,7 @@ export type VacancyCreateWithoutChecklistValidatedByInput = {
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -1592,10 +1736,13 @@ export type VacancyCreateWithoutChecklistValidatedByInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   recruiter: Prisma.UserCreateNestedOneWithoutVacanciesAsRecruiterInput
   client: Prisma.ClientCreateNestedOneWithoutVacanciesInput
+  originVacancy?: Prisma.VacancyCreateNestedOneWithoutWarrantyVacancyInput
+  warrantyVacancy?: Prisma.VacancyCreateNestedOneWithoutOriginVacancyInput
   tenant: Prisma.TenantCreateNestedOneWithoutVacanciesInput
   createdBy?: Prisma.UserCreateNestedOneWithoutVacanciesCreatedInput
   checklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutVacancyInput
@@ -1613,6 +1760,7 @@ export type VacancyUncheckedCreateWithoutChecklistValidatedByInput = {
   clientId: string
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -1635,10 +1783,13 @@ export type VacancyUncheckedCreateWithoutChecklistValidatedByInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedCreateNestedOneWithoutOriginVacancyInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutVacancyInput
   candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
@@ -1683,6 +1834,7 @@ export type VacancyScalarWhereInput = {
   clientId?: Prisma.StringFilter<"Vacancy"> | string
   saleType?: Prisma.EnumVacancySaleTypeFilter<"Vacancy"> | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFilter<"Vacancy"> | $Enums.VacancyServiceType
+  currency?: Prisma.EnumCurrencyNullableFilter<"Vacancy"> | $Enums.Currency | null
   salaryMin?: Prisma.FloatNullableFilter<"Vacancy"> | number | null
   salaryMax?: Prisma.FloatNullableFilter<"Vacancy"> | number | null
   salaryFixed?: Prisma.FloatNullableFilter<"Vacancy"> | number | null
@@ -1706,6 +1858,8 @@ export type VacancyScalarWhereInput = {
   placementConfirmedAt?: Prisma.DateTimeNullableFilter<"Vacancy"> | Date | string | null
   commissionDate?: Prisma.DateTimeNullableFilter<"Vacancy"> | Date | string | null
   congratsEmailSent?: Prisma.BoolFilter<"Vacancy"> | boolean
+  isWarranty?: Prisma.BoolFilter<"Vacancy"> | boolean
+  originVacancyId?: Prisma.StringNullableFilter<"Vacancy"> | string | null
   tenantId?: Prisma.StringFilter<"Vacancy"> | string
   createdById?: Prisma.StringNullableFilter<"Vacancy"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Vacancy"> | Date | string
@@ -1750,6 +1904,7 @@ export type VacancyCreateWithoutTenantInput = {
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -1772,11 +1927,14 @@ export type VacancyCreateWithoutTenantInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   recruiter: Prisma.UserCreateNestedOneWithoutVacanciesAsRecruiterInput
   client: Prisma.ClientCreateNestedOneWithoutVacanciesInput
   checklistValidatedBy?: Prisma.UserCreateNestedOneWithoutVacancyChecklistValidatedInput
+  originVacancy?: Prisma.VacancyCreateNestedOneWithoutWarrantyVacancyInput
+  warrantyVacancy?: Prisma.VacancyCreateNestedOneWithoutOriginVacancyInput
   createdBy?: Prisma.UserCreateNestedOneWithoutVacanciesCreatedInput
   checklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutVacancyInput
   candidates?: Prisma.VacancyCandidateCreateNestedManyWithoutVacancyInput
@@ -1793,6 +1951,7 @@ export type VacancyUncheckedCreateWithoutTenantInput = {
   clientId: string
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -1816,9 +1975,12 @@ export type VacancyUncheckedCreateWithoutTenantInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: string | null
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedCreateNestedOneWithoutOriginVacancyInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutVacancyInput
   candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
@@ -1858,6 +2020,7 @@ export type VacancyCreateWithoutAttachmentsInput = {
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -1880,11 +2043,14 @@ export type VacancyCreateWithoutAttachmentsInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   recruiter: Prisma.UserCreateNestedOneWithoutVacanciesAsRecruiterInput
   client: Prisma.ClientCreateNestedOneWithoutVacanciesInput
   checklistValidatedBy?: Prisma.UserCreateNestedOneWithoutVacancyChecklistValidatedInput
+  originVacancy?: Prisma.VacancyCreateNestedOneWithoutWarrantyVacancyInput
+  warrantyVacancy?: Prisma.VacancyCreateNestedOneWithoutOriginVacancyInput
   tenant: Prisma.TenantCreateNestedOneWithoutVacanciesInput
   createdBy?: Prisma.UserCreateNestedOneWithoutVacanciesCreatedInput
   checklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutVacancyInput
@@ -1901,6 +2067,7 @@ export type VacancyUncheckedCreateWithoutAttachmentsInput = {
   clientId: string
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -1924,10 +2091,13 @@ export type VacancyUncheckedCreateWithoutAttachmentsInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedCreateNestedOneWithoutOriginVacancyInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutVacancyInput
   candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
@@ -1956,6 +2126,7 @@ export type VacancyUpdateWithoutAttachmentsInput = {
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1978,11 +2149,14 @@ export type VacancyUpdateWithoutAttachmentsInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recruiter?: Prisma.UserUpdateOneRequiredWithoutVacanciesAsRecruiterNestedInput
   client?: Prisma.ClientUpdateOneRequiredWithoutVacanciesNestedInput
   checklistValidatedBy?: Prisma.UserUpdateOneWithoutVacancyChecklistValidatedNestedInput
+  originVacancy?: Prisma.VacancyUpdateOneWithoutWarrantyVacancyNestedInput
+  warrantyVacancy?: Prisma.VacancyUpdateOneWithoutOriginVacancyNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutVacanciesNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutVacanciesCreatedNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutVacancyNestedInput
@@ -1999,6 +2173,7 @@ export type VacancyUncheckedUpdateWithoutAttachmentsInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -2022,22 +2197,26 @@ export type VacancyUncheckedUpdateWithoutAttachmentsInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  originVacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedUpdateOneWithoutOriginVacancyNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutVacancyNestedInput
   candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
-export type VacancyCreateWithoutChecklistItemsInput = {
+export type VacancyCreateWithoutWarrantyVacancyInput = {
   id?: string
   position: string
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -2060,20 +2239,23 @@ export type VacancyCreateWithoutChecklistItemsInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   recruiter: Prisma.UserCreateNestedOneWithoutVacanciesAsRecruiterInput
   client: Prisma.ClientCreateNestedOneWithoutVacanciesInput
   checklistValidatedBy?: Prisma.UserCreateNestedOneWithoutVacancyChecklistValidatedInput
+  originVacancy?: Prisma.VacancyCreateNestedOneWithoutWarrantyVacancyInput
   tenant: Prisma.TenantCreateNestedOneWithoutVacanciesInput
   createdBy?: Prisma.UserCreateNestedOneWithoutVacanciesCreatedInput
+  checklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutVacancyInput
   candidates?: Prisma.VacancyCandidateCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
 }
 
-export type VacancyUncheckedCreateWithoutChecklistItemsInput = {
+export type VacancyUncheckedCreateWithoutWarrantyVacancyInput = {
   id?: string
   position: string
   status?: $Enums.VacancyStatus
@@ -2081,6 +2263,7 @@ export type VacancyUncheckedCreateWithoutChecklistItemsInput = {
   clientId: string
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -2104,10 +2287,405 @@ export type VacancyUncheckedCreateWithoutChecklistItemsInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  checklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutVacancyInput
+  candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
+  statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
+}
+
+export type VacancyCreateOrConnectWithoutWarrantyVacancyInput = {
+  where: Prisma.VacancyWhereUniqueInput
+  create: Prisma.XOR<Prisma.VacancyCreateWithoutWarrantyVacancyInput, Prisma.VacancyUncheckedCreateWithoutWarrantyVacancyInput>
+}
+
+export type VacancyCreateWithoutOriginVacancyInput = {
+  id?: string
+  position: string
+  status?: $Enums.VacancyStatus
+  saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
+  salaryMin?: number | null
+  salaryMax?: number | null
+  salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
+  commissions?: string | null
+  benefits?: string | null
+  tools?: string | null
+  modality?: $Enums.VacancyModality | null
+  schedule?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  requiresPsychometry?: boolean
+  checklistValidatedAt?: Date | string | null
+  checklistRejectionReason?: string | null
+  assignedAt?: Date | string
+  targetDeliveryDate?: Date | string | null
+  actualDeliveryDate?: Date | string | null
+  entryDate?: Date | string | null
+  rollbackCount?: number
+  placementConfirmedAt?: Date | string | null
+  commissionDate?: Date | string | null
+  congratsEmailSent?: boolean
+  isWarranty?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  recruiter: Prisma.UserCreateNestedOneWithoutVacanciesAsRecruiterInput
+  client: Prisma.ClientCreateNestedOneWithoutVacanciesInput
+  checklistValidatedBy?: Prisma.UserCreateNestedOneWithoutVacancyChecklistValidatedInput
+  warrantyVacancy?: Prisma.VacancyCreateNestedOneWithoutOriginVacancyInput
+  tenant: Prisma.TenantCreateNestedOneWithoutVacanciesInput
+  createdBy?: Prisma.UserCreateNestedOneWithoutVacanciesCreatedInput
+  checklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutVacancyInput
+  candidates?: Prisma.VacancyCandidateCreateNestedManyWithoutVacancyInput
+  statusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutVacancyInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
+}
+
+export type VacancyUncheckedCreateWithoutOriginVacancyInput = {
+  id?: string
+  position: string
+  status?: $Enums.VacancyStatus
+  recruiterId: string
+  clientId: string
+  saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
+  salaryMin?: number | null
+  salaryMax?: number | null
+  salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
+  commissions?: string | null
+  benefits?: string | null
+  tools?: string | null
+  modality?: $Enums.VacancyModality | null
+  schedule?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  requiresPsychometry?: boolean
+  checklistValidatedAt?: Date | string | null
+  checklistValidatedById?: string | null
+  checklistRejectionReason?: string | null
+  assignedAt?: Date | string
+  targetDeliveryDate?: Date | string | null
+  actualDeliveryDate?: Date | string | null
+  entryDate?: Date | string | null
+  rollbackCount?: number
+  placementConfirmedAt?: Date | string | null
+  commissionDate?: Date | string | null
+  congratsEmailSent?: boolean
+  isWarranty?: boolean
+  tenantId: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedCreateNestedOneWithoutOriginVacancyInput
+  checklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutVacancyInput
+  candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
+  statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
+}
+
+export type VacancyCreateOrConnectWithoutOriginVacancyInput = {
+  where: Prisma.VacancyWhereUniqueInput
+  create: Prisma.XOR<Prisma.VacancyCreateWithoutOriginVacancyInput, Prisma.VacancyUncheckedCreateWithoutOriginVacancyInput>
+}
+
+export type VacancyUpsertWithoutWarrantyVacancyInput = {
+  update: Prisma.XOR<Prisma.VacancyUpdateWithoutWarrantyVacancyInput, Prisma.VacancyUncheckedUpdateWithoutWarrantyVacancyInput>
+  create: Prisma.XOR<Prisma.VacancyCreateWithoutWarrantyVacancyInput, Prisma.VacancyUncheckedCreateWithoutWarrantyVacancyInput>
+  where?: Prisma.VacancyWhereInput
+}
+
+export type VacancyUpdateToOneWithWhereWithoutWarrantyVacancyInput = {
+  where?: Prisma.VacancyWhereInput
+  data: Prisma.XOR<Prisma.VacancyUpdateWithoutWarrantyVacancyInput, Prisma.VacancyUncheckedUpdateWithoutWarrantyVacancyInput>
+}
+
+export type VacancyUpdateWithoutWarrantyVacancyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  position?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
+  saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
+  commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresPsychometry?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rollbackCount?: Prisma.IntFieldUpdateOperationsInput | number
+  placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recruiter?: Prisma.UserUpdateOneRequiredWithoutVacanciesAsRecruiterNestedInput
+  client?: Prisma.ClientUpdateOneRequiredWithoutVacanciesNestedInput
+  checklistValidatedBy?: Prisma.UserUpdateOneWithoutVacancyChecklistValidatedNestedInput
+  originVacancy?: Prisma.VacancyUpdateOneWithoutWarrantyVacancyNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutVacanciesNestedInput
+  createdBy?: Prisma.UserUpdateOneWithoutVacanciesCreatedNestedInput
+  checklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutVacancyNestedInput
+  candidates?: Prisma.VacancyCandidateUpdateManyWithoutVacancyNestedInput
+  statusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutVacancyNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
+}
+
+export type VacancyUncheckedUpdateWithoutWarrantyVacancyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  position?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
+  recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
+  commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresPsychometry?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rollbackCount?: Prisma.IntFieldUpdateOperationsInput | number
+  placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  originVacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  checklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutVacancyNestedInput
+  candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
+  statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+}
+
+export type VacancyUpsertWithoutOriginVacancyInput = {
+  update: Prisma.XOR<Prisma.VacancyUpdateWithoutOriginVacancyInput, Prisma.VacancyUncheckedUpdateWithoutOriginVacancyInput>
+  create: Prisma.XOR<Prisma.VacancyCreateWithoutOriginVacancyInput, Prisma.VacancyUncheckedCreateWithoutOriginVacancyInput>
+  where?: Prisma.VacancyWhereInput
+}
+
+export type VacancyUpdateToOneWithWhereWithoutOriginVacancyInput = {
+  where?: Prisma.VacancyWhereInput
+  data: Prisma.XOR<Prisma.VacancyUpdateWithoutOriginVacancyInput, Prisma.VacancyUncheckedUpdateWithoutOriginVacancyInput>
+}
+
+export type VacancyUpdateWithoutOriginVacancyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  position?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
+  saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
+  commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresPsychometry?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rollbackCount?: Prisma.IntFieldUpdateOperationsInput | number
+  placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recruiter?: Prisma.UserUpdateOneRequiredWithoutVacanciesAsRecruiterNestedInput
+  client?: Prisma.ClientUpdateOneRequiredWithoutVacanciesNestedInput
+  checklistValidatedBy?: Prisma.UserUpdateOneWithoutVacancyChecklistValidatedNestedInput
+  warrantyVacancy?: Prisma.VacancyUpdateOneWithoutOriginVacancyNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutVacanciesNestedInput
+  createdBy?: Prisma.UserUpdateOneWithoutVacanciesCreatedNestedInput
+  checklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutVacancyNestedInput
+  candidates?: Prisma.VacancyCandidateUpdateManyWithoutVacancyNestedInput
+  statusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutVacancyNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
+}
+
+export type VacancyUncheckedUpdateWithoutOriginVacancyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  position?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
+  recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
+  commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresPsychometry?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rollbackCount?: Prisma.IntFieldUpdateOperationsInput | number
+  placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedUpdateOneWithoutOriginVacancyNestedInput
+  checklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutVacancyNestedInput
+  candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
+  statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+}
+
+export type VacancyCreateWithoutChecklistItemsInput = {
+  id?: string
+  position: string
+  status?: $Enums.VacancyStatus
+  saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
+  salaryMin?: number | null
+  salaryMax?: number | null
+  salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
+  commissions?: string | null
+  benefits?: string | null
+  tools?: string | null
+  modality?: $Enums.VacancyModality | null
+  schedule?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  requiresPsychometry?: boolean
+  checklistValidatedAt?: Date | string | null
+  checklistRejectionReason?: string | null
+  assignedAt?: Date | string
+  targetDeliveryDate?: Date | string | null
+  actualDeliveryDate?: Date | string | null
+  entryDate?: Date | string | null
+  rollbackCount?: number
+  placementConfirmedAt?: Date | string | null
+  commissionDate?: Date | string | null
+  congratsEmailSent?: boolean
+  isWarranty?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  recruiter: Prisma.UserCreateNestedOneWithoutVacanciesAsRecruiterInput
+  client: Prisma.ClientCreateNestedOneWithoutVacanciesInput
+  checklistValidatedBy?: Prisma.UserCreateNestedOneWithoutVacancyChecklistValidatedInput
+  originVacancy?: Prisma.VacancyCreateNestedOneWithoutWarrantyVacancyInput
+  warrantyVacancy?: Prisma.VacancyCreateNestedOneWithoutOriginVacancyInput
+  tenant: Prisma.TenantCreateNestedOneWithoutVacanciesInput
+  createdBy?: Prisma.UserCreateNestedOneWithoutVacanciesCreatedInput
+  candidates?: Prisma.VacancyCandidateCreateNestedManyWithoutVacancyInput
+  statusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutVacancyInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
+}
+
+export type VacancyUncheckedCreateWithoutChecklistItemsInput = {
+  id?: string
+  position: string
+  status?: $Enums.VacancyStatus
+  recruiterId: string
+  clientId: string
+  saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
+  salaryMin?: number | null
+  salaryMax?: number | null
+  salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
+  commissions?: string | null
+  benefits?: string | null
+  tools?: string | null
+  modality?: $Enums.VacancyModality | null
+  schedule?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  requiresPsychometry?: boolean
+  checklistValidatedAt?: Date | string | null
+  checklistValidatedById?: string | null
+  checklistRejectionReason?: string | null
+  assignedAt?: Date | string
+  targetDeliveryDate?: Date | string | null
+  actualDeliveryDate?: Date | string | null
+  entryDate?: Date | string | null
+  rollbackCount?: number
+  placementConfirmedAt?: Date | string | null
+  commissionDate?: Date | string | null
+  congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: string | null
+  tenantId: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedCreateNestedOneWithoutOriginVacancyInput
   candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
@@ -2136,6 +2714,7 @@ export type VacancyUpdateWithoutChecklistItemsInput = {
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -2158,11 +2737,14 @@ export type VacancyUpdateWithoutChecklistItemsInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recruiter?: Prisma.UserUpdateOneRequiredWithoutVacanciesAsRecruiterNestedInput
   client?: Prisma.ClientUpdateOneRequiredWithoutVacanciesNestedInput
   checklistValidatedBy?: Prisma.UserUpdateOneWithoutVacancyChecklistValidatedNestedInput
+  originVacancy?: Prisma.VacancyUpdateOneWithoutWarrantyVacancyNestedInput
+  warrantyVacancy?: Prisma.VacancyUpdateOneWithoutOriginVacancyNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutVacanciesNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutVacanciesCreatedNestedInput
   candidates?: Prisma.VacancyCandidateUpdateManyWithoutVacancyNestedInput
@@ -2179,6 +2761,7 @@ export type VacancyUncheckedUpdateWithoutChecklistItemsInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -2202,10 +2785,13 @@ export type VacancyUncheckedUpdateWithoutChecklistItemsInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  originVacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedUpdateOneWithoutOriginVacancyNestedInput
   candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
@@ -2218,6 +2804,7 @@ export type VacancyCreateWithoutCandidatesInput = {
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -2240,11 +2827,14 @@ export type VacancyCreateWithoutCandidatesInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   recruiter: Prisma.UserCreateNestedOneWithoutVacanciesAsRecruiterInput
   client: Prisma.ClientCreateNestedOneWithoutVacanciesInput
   checklistValidatedBy?: Prisma.UserCreateNestedOneWithoutVacancyChecklistValidatedInput
+  originVacancy?: Prisma.VacancyCreateNestedOneWithoutWarrantyVacancyInput
+  warrantyVacancy?: Prisma.VacancyCreateNestedOneWithoutOriginVacancyInput
   tenant: Prisma.TenantCreateNestedOneWithoutVacanciesInput
   createdBy?: Prisma.UserCreateNestedOneWithoutVacanciesCreatedInput
   checklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutVacancyInput
@@ -2261,6 +2851,7 @@ export type VacancyUncheckedCreateWithoutCandidatesInput = {
   clientId: string
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -2284,10 +2875,13 @@ export type VacancyUncheckedCreateWithoutCandidatesInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedCreateNestedOneWithoutOriginVacancyInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
@@ -2316,6 +2910,7 @@ export type VacancyUpdateWithoutCandidatesInput = {
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -2338,11 +2933,14 @@ export type VacancyUpdateWithoutCandidatesInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recruiter?: Prisma.UserUpdateOneRequiredWithoutVacanciesAsRecruiterNestedInput
   client?: Prisma.ClientUpdateOneRequiredWithoutVacanciesNestedInput
   checklistValidatedBy?: Prisma.UserUpdateOneWithoutVacancyChecklistValidatedNestedInput
+  originVacancy?: Prisma.VacancyUpdateOneWithoutWarrantyVacancyNestedInput
+  warrantyVacancy?: Prisma.VacancyUpdateOneWithoutOriginVacancyNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutVacanciesNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutVacanciesCreatedNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutVacancyNestedInput
@@ -2359,6 +2957,7 @@ export type VacancyUncheckedUpdateWithoutCandidatesInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -2382,10 +2981,13 @@ export type VacancyUncheckedUpdateWithoutCandidatesInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  originVacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedUpdateOneWithoutOriginVacancyNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
@@ -2398,6 +3000,7 @@ export type VacancyCreateWithoutStatusHistoryInput = {
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -2420,11 +3023,14 @@ export type VacancyCreateWithoutStatusHistoryInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   recruiter: Prisma.UserCreateNestedOneWithoutVacanciesAsRecruiterInput
   client: Prisma.ClientCreateNestedOneWithoutVacanciesInput
   checklistValidatedBy?: Prisma.UserCreateNestedOneWithoutVacancyChecklistValidatedInput
+  originVacancy?: Prisma.VacancyCreateNestedOneWithoutWarrantyVacancyInput
+  warrantyVacancy?: Prisma.VacancyCreateNestedOneWithoutOriginVacancyInput
   tenant: Prisma.TenantCreateNestedOneWithoutVacanciesInput
   createdBy?: Prisma.UserCreateNestedOneWithoutVacanciesCreatedInput
   checklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutVacancyInput
@@ -2441,6 +3047,7 @@ export type VacancyUncheckedCreateWithoutStatusHistoryInput = {
   clientId: string
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -2464,10 +3071,13 @@ export type VacancyUncheckedCreateWithoutStatusHistoryInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedCreateNestedOneWithoutOriginVacancyInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutVacancyInput
   candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
@@ -2496,6 +3106,7 @@ export type VacancyUpdateWithoutStatusHistoryInput = {
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -2518,11 +3129,14 @@ export type VacancyUpdateWithoutStatusHistoryInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recruiter?: Prisma.UserUpdateOneRequiredWithoutVacanciesAsRecruiterNestedInput
   client?: Prisma.ClientUpdateOneRequiredWithoutVacanciesNestedInput
   checklistValidatedBy?: Prisma.UserUpdateOneWithoutVacancyChecklistValidatedNestedInput
+  originVacancy?: Prisma.VacancyUpdateOneWithoutWarrantyVacancyNestedInput
+  warrantyVacancy?: Prisma.VacancyUpdateOneWithoutOriginVacancyNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutVacanciesNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutVacanciesCreatedNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutVacancyNestedInput
@@ -2539,6 +3153,7 @@ export type VacancyUncheckedUpdateWithoutStatusHistoryInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -2562,10 +3177,13 @@ export type VacancyUncheckedUpdateWithoutStatusHistoryInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  originVacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedUpdateOneWithoutOriginVacancyNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutVacancyNestedInput
   candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
@@ -2578,6 +3196,7 @@ export type VacancyCreateWithoutClientInput = {
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -2600,10 +3219,13 @@ export type VacancyCreateWithoutClientInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   recruiter: Prisma.UserCreateNestedOneWithoutVacanciesAsRecruiterInput
   checklistValidatedBy?: Prisma.UserCreateNestedOneWithoutVacancyChecklistValidatedInput
+  originVacancy?: Prisma.VacancyCreateNestedOneWithoutWarrantyVacancyInput
+  warrantyVacancy?: Prisma.VacancyCreateNestedOneWithoutOriginVacancyInput
   tenant: Prisma.TenantCreateNestedOneWithoutVacanciesInput
   createdBy?: Prisma.UserCreateNestedOneWithoutVacanciesCreatedInput
   checklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutVacancyInput
@@ -2620,6 +3242,7 @@ export type VacancyUncheckedCreateWithoutClientInput = {
   recruiterId: string
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -2643,10 +3266,13 @@ export type VacancyUncheckedCreateWithoutClientInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedCreateNestedOneWithoutOriginVacancyInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutVacancyInput
   candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
@@ -2686,6 +3312,7 @@ export type VacancyCreateWithoutTernaHistoriesInput = {
   status?: $Enums.VacancyStatus
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -2708,11 +3335,14 @@ export type VacancyCreateWithoutTernaHistoriesInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   recruiter: Prisma.UserCreateNestedOneWithoutVacanciesAsRecruiterInput
   client: Prisma.ClientCreateNestedOneWithoutVacanciesInput
   checklistValidatedBy?: Prisma.UserCreateNestedOneWithoutVacancyChecklistValidatedInput
+  originVacancy?: Prisma.VacancyCreateNestedOneWithoutWarrantyVacancyInput
+  warrantyVacancy?: Prisma.VacancyCreateNestedOneWithoutOriginVacancyInput
   tenant: Prisma.TenantCreateNestedOneWithoutVacanciesInput
   createdBy?: Prisma.UserCreateNestedOneWithoutVacanciesCreatedInput
   checklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutVacancyInput
@@ -2729,6 +3359,7 @@ export type VacancyUncheckedCreateWithoutTernaHistoriesInput = {
   clientId: string
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -2752,10 +3383,13 @@ export type VacancyUncheckedCreateWithoutTernaHistoriesInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedCreateNestedOneWithoutOriginVacancyInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutVacancyInput
   candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
@@ -2784,6 +3418,7 @@ export type VacancyUpdateWithoutTernaHistoriesInput = {
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -2806,11 +3441,14 @@ export type VacancyUpdateWithoutTernaHistoriesInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recruiter?: Prisma.UserUpdateOneRequiredWithoutVacanciesAsRecruiterNestedInput
   client?: Prisma.ClientUpdateOneRequiredWithoutVacanciesNestedInput
   checklistValidatedBy?: Prisma.UserUpdateOneWithoutVacancyChecklistValidatedNestedInput
+  originVacancy?: Prisma.VacancyUpdateOneWithoutWarrantyVacancyNestedInput
+  warrantyVacancy?: Prisma.VacancyUpdateOneWithoutOriginVacancyNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutVacanciesNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutVacanciesCreatedNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutVacancyNestedInput
@@ -2827,6 +3465,7 @@ export type VacancyUncheckedUpdateWithoutTernaHistoriesInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -2850,10 +3489,13 @@ export type VacancyUncheckedUpdateWithoutTernaHistoriesInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  originVacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedUpdateOneWithoutOriginVacancyNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutVacancyNestedInput
   candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
@@ -2867,6 +3509,7 @@ export type VacancyCreateManyRecruiterInput = {
   clientId: string
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -2890,6 +3533,8 @@ export type VacancyCreateManyRecruiterInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
@@ -2904,6 +3549,7 @@ export type VacancyCreateManyCreatedByInput = {
   clientId: string
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -2927,6 +3573,8 @@ export type VacancyCreateManyCreatedByInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: string | null
   tenantId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2940,6 +3588,7 @@ export type VacancyCreateManyChecklistValidatedByInput = {
   clientId: string
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -2962,6 +3611,8 @@ export type VacancyCreateManyChecklistValidatedByInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
@@ -2974,6 +3625,7 @@ export type VacancyUpdateWithoutRecruiterInput = {
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -2996,10 +3648,13 @@ export type VacancyUpdateWithoutRecruiterInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   client?: Prisma.ClientUpdateOneRequiredWithoutVacanciesNestedInput
   checklistValidatedBy?: Prisma.UserUpdateOneWithoutVacancyChecklistValidatedNestedInput
+  originVacancy?: Prisma.VacancyUpdateOneWithoutWarrantyVacancyNestedInput
+  warrantyVacancy?: Prisma.VacancyUpdateOneWithoutOriginVacancyNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutVacanciesNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutVacanciesCreatedNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutVacancyNestedInput
@@ -3016,6 +3671,7 @@ export type VacancyUncheckedUpdateWithoutRecruiterInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -3039,10 +3695,13 @@ export type VacancyUncheckedUpdateWithoutRecruiterInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  originVacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedUpdateOneWithoutOriginVacancyNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutVacancyNestedInput
   candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
@@ -3057,6 +3716,7 @@ export type VacancyUncheckedUpdateManyWithoutRecruiterInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -3080,6 +3740,8 @@ export type VacancyUncheckedUpdateManyWithoutRecruiterInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  originVacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3092,6 +3754,7 @@ export type VacancyUpdateWithoutCreatedByInput = {
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -3114,11 +3777,14 @@ export type VacancyUpdateWithoutCreatedByInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recruiter?: Prisma.UserUpdateOneRequiredWithoutVacanciesAsRecruiterNestedInput
   client?: Prisma.ClientUpdateOneRequiredWithoutVacanciesNestedInput
   checklistValidatedBy?: Prisma.UserUpdateOneWithoutVacancyChecklistValidatedNestedInput
+  originVacancy?: Prisma.VacancyUpdateOneWithoutWarrantyVacancyNestedInput
+  warrantyVacancy?: Prisma.VacancyUpdateOneWithoutOriginVacancyNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutVacanciesNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutVacancyNestedInput
   candidates?: Prisma.VacancyCandidateUpdateManyWithoutVacancyNestedInput
@@ -3135,6 +3801,7 @@ export type VacancyUncheckedUpdateWithoutCreatedByInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -3158,9 +3825,12 @@ export type VacancyUncheckedUpdateWithoutCreatedByInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  originVacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedUpdateOneWithoutOriginVacancyNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutVacancyNestedInput
   candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
@@ -3176,6 +3846,7 @@ export type VacancyUncheckedUpdateManyWithoutCreatedByInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -3199,6 +3870,8 @@ export type VacancyUncheckedUpdateManyWithoutCreatedByInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  originVacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3210,6 +3883,7 @@ export type VacancyUpdateWithoutChecklistValidatedByInput = {
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -3232,10 +3906,13 @@ export type VacancyUpdateWithoutChecklistValidatedByInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recruiter?: Prisma.UserUpdateOneRequiredWithoutVacanciesAsRecruiterNestedInput
   client?: Prisma.ClientUpdateOneRequiredWithoutVacanciesNestedInput
+  originVacancy?: Prisma.VacancyUpdateOneWithoutWarrantyVacancyNestedInput
+  warrantyVacancy?: Prisma.VacancyUpdateOneWithoutOriginVacancyNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutVacanciesNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutVacanciesCreatedNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutVacancyNestedInput
@@ -3253,6 +3930,7 @@ export type VacancyUncheckedUpdateWithoutChecklistValidatedByInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -3275,10 +3953,13 @@ export type VacancyUncheckedUpdateWithoutChecklistValidatedByInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  originVacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedUpdateOneWithoutOriginVacancyNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutVacancyNestedInput
   candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
@@ -3294,6 +3975,7 @@ export type VacancyUncheckedUpdateManyWithoutChecklistValidatedByInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -3316,6 +3998,8 @@ export type VacancyUncheckedUpdateManyWithoutChecklistValidatedByInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  originVacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3330,6 +4014,7 @@ export type VacancyCreateManyTenantInput = {
   clientId: string
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -3353,6 +4038,8 @@ export type VacancyCreateManyTenantInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: string | null
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -3364,6 +4051,7 @@ export type VacancyUpdateWithoutTenantInput = {
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -3386,11 +4074,14 @@ export type VacancyUpdateWithoutTenantInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recruiter?: Prisma.UserUpdateOneRequiredWithoutVacanciesAsRecruiterNestedInput
   client?: Prisma.ClientUpdateOneRequiredWithoutVacanciesNestedInput
   checklistValidatedBy?: Prisma.UserUpdateOneWithoutVacancyChecklistValidatedNestedInput
+  originVacancy?: Prisma.VacancyUpdateOneWithoutWarrantyVacancyNestedInput
+  warrantyVacancy?: Prisma.VacancyUpdateOneWithoutOriginVacancyNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutVacanciesCreatedNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutVacancyNestedInput
   candidates?: Prisma.VacancyCandidateUpdateManyWithoutVacancyNestedInput
@@ -3407,6 +4098,7 @@ export type VacancyUncheckedUpdateWithoutTenantInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -3430,9 +4122,12 @@ export type VacancyUncheckedUpdateWithoutTenantInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  originVacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedUpdateOneWithoutOriginVacancyNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutVacancyNestedInput
   candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
@@ -3448,6 +4143,7 @@ export type VacancyUncheckedUpdateManyWithoutTenantInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -3471,6 +4167,8 @@ export type VacancyUncheckedUpdateManyWithoutTenantInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  originVacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3483,6 +4181,7 @@ export type VacancyCreateManyClientInput = {
   recruiterId: string
   saleType: $Enums.VacancySaleType
   serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
   salaryMin?: number | null
   salaryMax?: number | null
   salaryFixed?: number | null
@@ -3506,6 +4205,8 @@ export type VacancyCreateManyClientInput = {
   placementConfirmedAt?: Date | string | null
   commissionDate?: Date | string | null
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
@@ -3518,6 +4219,7 @@ export type VacancyUpdateWithoutClientInput = {
   status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -3540,10 +4242,13 @@ export type VacancyUpdateWithoutClientInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recruiter?: Prisma.UserUpdateOneRequiredWithoutVacanciesAsRecruiterNestedInput
   checklistValidatedBy?: Prisma.UserUpdateOneWithoutVacancyChecklistValidatedNestedInput
+  originVacancy?: Prisma.VacancyUpdateOneWithoutWarrantyVacancyNestedInput
+  warrantyVacancy?: Prisma.VacancyUpdateOneWithoutOriginVacancyNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutVacanciesNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutVacanciesCreatedNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutVacancyNestedInput
@@ -3560,6 +4265,7 @@ export type VacancyUncheckedUpdateWithoutClientInput = {
   recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -3583,10 +4289,13 @@ export type VacancyUncheckedUpdateWithoutClientInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  originVacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedUpdateOneWithoutOriginVacancyNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutVacancyNestedInput
   candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
@@ -3601,6 +4310,7 @@ export type VacancyUncheckedUpdateManyWithoutClientInput = {
   recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
   saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
   serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -3624,6 +4334,8 @@ export type VacancyUncheckedUpdateManyWithoutClientInput = {
   placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  originVacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3705,6 +4417,7 @@ export type VacancySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   clientId?: boolean
   saleType?: boolean
   serviceType?: boolean
+  currency?: boolean
   salaryMin?: boolean
   salaryMax?: boolean
   salaryFixed?: boolean
@@ -3728,6 +4441,8 @@ export type VacancySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   placementConfirmedAt?: boolean
   commissionDate?: boolean
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: boolean
   tenantId?: boolean
   createdById?: boolean
   createdAt?: boolean
@@ -3735,6 +4450,8 @@ export type VacancySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   recruiter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   checklistValidatedBy?: boolean | Prisma.Vacancy$checklistValidatedByArgs<ExtArgs>
+  originVacancy?: boolean | Prisma.Vacancy$originVacancyArgs<ExtArgs>
+  warrantyVacancy?: boolean | Prisma.Vacancy$warrantyVacancyArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Vacancy$createdByArgs<ExtArgs>
   checklistItems?: boolean | Prisma.Vacancy$checklistItemsArgs<ExtArgs>
@@ -3753,6 +4470,7 @@ export type VacancySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   clientId?: boolean
   saleType?: boolean
   serviceType?: boolean
+  currency?: boolean
   salaryMin?: boolean
   salaryMax?: boolean
   salaryFixed?: boolean
@@ -3776,6 +4494,8 @@ export type VacancySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   placementConfirmedAt?: boolean
   commissionDate?: boolean
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: boolean
   tenantId?: boolean
   createdById?: boolean
   createdAt?: boolean
@@ -3783,6 +4503,7 @@ export type VacancySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   recruiter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   checklistValidatedBy?: boolean | Prisma.Vacancy$checklistValidatedByArgs<ExtArgs>
+  originVacancy?: boolean | Prisma.Vacancy$originVacancyArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Vacancy$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["vacancy"]>
@@ -3795,6 +4516,7 @@ export type VacancySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   clientId?: boolean
   saleType?: boolean
   serviceType?: boolean
+  currency?: boolean
   salaryMin?: boolean
   salaryMax?: boolean
   salaryFixed?: boolean
@@ -3818,6 +4540,8 @@ export type VacancySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   placementConfirmedAt?: boolean
   commissionDate?: boolean
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: boolean
   tenantId?: boolean
   createdById?: boolean
   createdAt?: boolean
@@ -3825,6 +4549,7 @@ export type VacancySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   recruiter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   checklistValidatedBy?: boolean | Prisma.Vacancy$checklistValidatedByArgs<ExtArgs>
+  originVacancy?: boolean | Prisma.Vacancy$originVacancyArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Vacancy$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["vacancy"]>
@@ -3837,6 +4562,7 @@ export type VacancySelectScalar = {
   clientId?: boolean
   saleType?: boolean
   serviceType?: boolean
+  currency?: boolean
   salaryMin?: boolean
   salaryMax?: boolean
   salaryFixed?: boolean
@@ -3860,17 +4586,21 @@ export type VacancySelectScalar = {
   placementConfirmedAt?: boolean
   commissionDate?: boolean
   congratsEmailSent?: boolean
+  isWarranty?: boolean
+  originVacancyId?: boolean
   tenantId?: boolean
   createdById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type VacancyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "position" | "status" | "recruiterId" | "clientId" | "saleType" | "serviceType" | "salaryMin" | "salaryMax" | "salaryFixed" | "salaryType" | "commissions" | "benefits" | "tools" | "modality" | "schedule" | "countryCode" | "regionCode" | "requiresPsychometry" | "checklistValidatedAt" | "checklistValidatedById" | "checklistRejectionReason" | "assignedAt" | "targetDeliveryDate" | "actualDeliveryDate" | "entryDate" | "rollbackCount" | "placementConfirmedAt" | "commissionDate" | "congratsEmailSent" | "tenantId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["vacancy"]>
+export type VacancyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "position" | "status" | "recruiterId" | "clientId" | "saleType" | "serviceType" | "currency" | "salaryMin" | "salaryMax" | "salaryFixed" | "salaryType" | "commissions" | "benefits" | "tools" | "modality" | "schedule" | "countryCode" | "regionCode" | "requiresPsychometry" | "checklistValidatedAt" | "checklistValidatedById" | "checklistRejectionReason" | "assignedAt" | "targetDeliveryDate" | "actualDeliveryDate" | "entryDate" | "rollbackCount" | "placementConfirmedAt" | "commissionDate" | "congratsEmailSent" | "isWarranty" | "originVacancyId" | "tenantId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["vacancy"]>
 export type VacancyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   recruiter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   checklistValidatedBy?: boolean | Prisma.Vacancy$checklistValidatedByArgs<ExtArgs>
+  originVacancy?: boolean | Prisma.Vacancy$originVacancyArgs<ExtArgs>
+  warrantyVacancy?: boolean | Prisma.Vacancy$warrantyVacancyArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Vacancy$createdByArgs<ExtArgs>
   checklistItems?: boolean | Prisma.Vacancy$checklistItemsArgs<ExtArgs>
@@ -3884,6 +4614,7 @@ export type VacancyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   recruiter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   checklistValidatedBy?: boolean | Prisma.Vacancy$checklistValidatedByArgs<ExtArgs>
+  originVacancy?: boolean | Prisma.Vacancy$originVacancyArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Vacancy$createdByArgs<ExtArgs>
 }
@@ -3891,6 +4622,7 @@ export type VacancyIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   recruiter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   checklistValidatedBy?: boolean | Prisma.Vacancy$checklistValidatedByArgs<ExtArgs>
+  originVacancy?: boolean | Prisma.Vacancy$originVacancyArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Vacancy$createdByArgs<ExtArgs>
 }
@@ -3901,6 +4633,8 @@ export type $VacancyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     recruiter: Prisma.$UserPayload<ExtArgs>
     client: Prisma.$ClientPayload<ExtArgs>
     checklistValidatedBy: Prisma.$UserPayload<ExtArgs> | null
+    originVacancy: Prisma.$VacancyPayload<ExtArgs> | null
+    warrantyVacancy: Prisma.$VacancyPayload<ExtArgs> | null
     tenant: Prisma.$TenantPayload<ExtArgs>
     createdBy: Prisma.$UserPayload<ExtArgs> | null
     checklistItems: Prisma.$VacancyChecklistItemPayload<ExtArgs>[]
@@ -3917,6 +4651,7 @@ export type $VacancyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     clientId: string
     saleType: $Enums.VacancySaleType
     serviceType: $Enums.VacancyServiceType
+    currency: $Enums.Currency | null
     salaryMin: number | null
     salaryMax: number | null
     salaryFixed: number | null
@@ -3940,6 +4675,8 @@ export type $VacancyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     placementConfirmedAt: Date | null
     commissionDate: Date | null
     congratsEmailSent: boolean
+    isWarranty: boolean
+    originVacancyId: string | null
     tenantId: string
     createdById: string | null
     createdAt: Date
@@ -4341,6 +5078,8 @@ export interface Prisma__VacancyClient<T, Null = never, ExtArgs extends runtime.
   recruiter<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   client<T extends Prisma.ClientDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClientDefaultArgs<ExtArgs>>): Prisma.Prisma__ClientClient<runtime.Types.Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   checklistValidatedBy<T extends Prisma.Vacancy$checklistValidatedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vacancy$checklistValidatedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  originVacancy<T extends Prisma.Vacancy$originVacancyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vacancy$originVacancyArgs<ExtArgs>>): Prisma.Prisma__VacancyClient<runtime.Types.Result.GetResult<Prisma.$VacancyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  warrantyVacancy<T extends Prisma.Vacancy$warrantyVacancyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vacancy$warrantyVacancyArgs<ExtArgs>>): Prisma.Prisma__VacancyClient<runtime.Types.Result.GetResult<Prisma.$VacancyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   createdBy<T extends Prisma.Vacancy$createdByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vacancy$createdByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   checklistItems<T extends Prisma.Vacancy$checklistItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vacancy$checklistItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyChecklistItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4384,6 +5123,7 @@ export interface VacancyFieldRefs {
   readonly clientId: Prisma.FieldRef<"Vacancy", 'String'>
   readonly saleType: Prisma.FieldRef<"Vacancy", 'VacancySaleType'>
   readonly serviceType: Prisma.FieldRef<"Vacancy", 'VacancyServiceType'>
+  readonly currency: Prisma.FieldRef<"Vacancy", 'Currency'>
   readonly salaryMin: Prisma.FieldRef<"Vacancy", 'Float'>
   readonly salaryMax: Prisma.FieldRef<"Vacancy", 'Float'>
   readonly salaryFixed: Prisma.FieldRef<"Vacancy", 'Float'>
@@ -4407,6 +5147,8 @@ export interface VacancyFieldRefs {
   readonly placementConfirmedAt: Prisma.FieldRef<"Vacancy", 'DateTime'>
   readonly commissionDate: Prisma.FieldRef<"Vacancy", 'DateTime'>
   readonly congratsEmailSent: Prisma.FieldRef<"Vacancy", 'Boolean'>
+  readonly isWarranty: Prisma.FieldRef<"Vacancy", 'Boolean'>
+  readonly originVacancyId: Prisma.FieldRef<"Vacancy", 'String'>
   readonly tenantId: Prisma.FieldRef<"Vacancy", 'String'>
   readonly createdById: Prisma.FieldRef<"Vacancy", 'String'>
   readonly createdAt: Prisma.FieldRef<"Vacancy", 'DateTime'>
@@ -4823,6 +5565,44 @@ export type Vacancy$checklistValidatedByArgs<ExtArgs extends runtime.Types.Exten
    */
   include?: Prisma.UserInclude<ExtArgs> | null
   where?: Prisma.UserWhereInput
+}
+
+/**
+ * Vacancy.originVacancy
+ */
+export type Vacancy$originVacancyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Vacancy
+   */
+  select?: Prisma.VacancySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Vacancy
+   */
+  omit?: Prisma.VacancyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VacancyInclude<ExtArgs> | null
+  where?: Prisma.VacancyWhereInput
+}
+
+/**
+ * Vacancy.warrantyVacancy
+ */
+export type Vacancy$warrantyVacancyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Vacancy
+   */
+  select?: Prisma.VacancySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Vacancy
+   */
+  omit?: Prisma.VacancyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VacancyInclude<ExtArgs> | null
+  where?: Prisma.VacancyWhereInput
 }
 
 /**

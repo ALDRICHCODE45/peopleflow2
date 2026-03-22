@@ -12,6 +12,7 @@ export const createVacancyActions = (
   onEdit: (() => void) | undefined,
   onDelete: (() => void) | undefined,
   onViewDetail?: () => void,
+  onApplyWarranty?: () => void,
 ): VacancyAction[] => {
   const actions: VacancyAction[] = [];
 
@@ -28,6 +29,14 @@ export const createVacancyActions = (
       id: "edit",
       label: "Editar",
       onClick: onEdit,
+    });
+  }
+
+  if (onApplyWarranty) {
+    actions.push({
+      id: "warranty",
+      label: "Aplicar garantía",
+      onClick: onApplyWarranty,
     });
   }
 

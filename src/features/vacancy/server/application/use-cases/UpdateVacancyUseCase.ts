@@ -1,6 +1,7 @@
 import type {
   VacancyModality,
   VacancyServiceType,
+  VacancyCurrency,
 } from "@features/vacancy/frontend/types/vacancy.types";
 import type { Vacancy } from "../../domain/entities/Vacancy";
 import type {
@@ -13,6 +14,7 @@ export interface UpdateVacancyInput {
   id: string;
   tenantId: string;
   position?: string;
+  currency?: VacancyCurrency | null;
   salaryType?: "FIXED" | "RANGE";
   salaryMin?: number | null;
   salaryMax?: number | null;
@@ -103,6 +105,7 @@ export class UpdateVacancyUseCase {
       // 5. Build updateData with only defined fields
       const updateData: UpdateVacancyData = {};
       if (input.position !== undefined) updateData.position = input.position.trim();
+      if (input.currency !== undefined) updateData.currency = input.currency;
       if (input.salaryType !== undefined) updateData.salaryType = input.salaryType;
       if (input.salaryMin !== undefined) updateData.salaryMin = input.salaryMin;
       if (input.salaryMax !== undefined) updateData.salaryMax = input.salaryMax;

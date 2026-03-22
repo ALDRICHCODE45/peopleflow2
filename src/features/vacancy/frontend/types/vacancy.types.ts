@@ -39,6 +39,9 @@ export type CandidateStatus =
 
 export type CandidateMatchRating = "CUMPLE" | "NO_CUMPLE" | "PARCIAL";
 
+// Currency type (mirror del enum de Prisma)
+export type VacancyCurrency = "MXN" | "USD";
+
 // DTO principal de Vacancy
 export interface VacancyDTO {
   id: string;
@@ -52,6 +55,7 @@ export interface VacancyDTO {
   clientName?: string | null;
   saleType: VacancySaleType;
   serviceType: VacancyServiceType;
+  currency: VacancyCurrency | null;
   salaryMin: number | null;
   salaryMax: number | null;
   salaryFixed: number | null;
@@ -79,6 +83,10 @@ export interface VacancyDTO {
   createdById: string | null;
   createdAt: string;
   updatedAt: string;
+  // Warranty (Garantía)
+  isWarranty: boolean;
+  originVacancyId: string | null;
+  warrantyVacancyId: string | null;
   // Relaciones opcionales
   candidates?: VacancyCandidateDTO[];
   checklistItems?: VacancyChecklistItemDTO[];
@@ -292,7 +300,53 @@ export interface RejectChecklistResult {
   >;
 }
 
+// Warranty (Garantía) result types
+export interface WarrantyEligibilityResult {
+  eligible: boolean;
+  expired: boolean;
+  expiryDate: string | null;
+  warrantyMonths: number | null;
+  prefillData: Partial<VacancyDTO> | null;
+  errorMessage?: string;
+}
+
+export interface CreateWarrantyVacancyInput {
+  originVacancyId: string;
+  position: string;
+  recruiterId: string;
+  serviceType?: VacancyServiceType;
+  currency?: VacancyCurrency;
+  salaryType?: VacancySalaryType;
+  salaryMin?: number | null;
+  salaryMax?: number | null;
+  salaryFixed?: number | null;
+  commissions?: string | null;
+  benefits?: string | null;
+  tools?: string | null;
+  modality?: VacancyModality | null;
+  schedule?: string | null;
+  countryCode?: string | null;
+  regionCode?: string | null;
+  requiresPsychometry?: boolean;
+  targetDeliveryDate?: string | null;
+}
+
+export interface CheckWarrantyEligibilityResult {
+  error: string | null;
+  eligibility?: WarrantyEligibilityResult;
+}
+
+export interface CreateWarrantyVacancyResult {
+  error: string | null;
+  vacancy?: VacancyDTO;
+}
+
 // Labels y opciones para UI
+
+export const VACANCY_CURRENCY_LABELS: Record<VacancyCurrency, string> = {
+  MXN: "MXN (Peso Mexicano)",
+  USD: "USD (Dólar)",
+};
 
 export const VACANCY_SALARY_TYPE_LABELS: Record<VacancySalaryType, string> = {
   FIXED: "Fijo",
@@ -348,6 +402,7 @@ export interface CreateVacancyFormData {
   clientId: string;
   saleType?: VacancySaleType;
   serviceType?: VacancyServiceType;
+  currency?: VacancyCurrency;
   assignedAt?: string;
   salaryType?: VacancySalaryType;
   salaryFixed?: number | null;

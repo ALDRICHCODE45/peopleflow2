@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-query";
 import { showToast } from "@/core/shared/components/ShowToast";
 import type { LeadStatus, LeadFormData, Lead } from "../types";
+import type { CommercialTermsFormData } from "@features/Finanzas/Clientes/frontend/types/client.types";
 import { leadsQueryKeys } from "@core/shared/constants/query-keys";
 import {
   createLeadAction,
@@ -325,11 +326,13 @@ export function useUpdateLeadStatus() {
     mutationFn: async ({
       leadId,
       newStatus,
+      commercialTerms,
     }: {
       leadId: string;
       newStatus: LeadStatus;
+      commercialTerms?: CommercialTermsFormData;
     }) => {
-      const result = await updateLeadStatusAction(leadId, newStatus);
+      const result = await updateLeadStatusAction(leadId, newStatus, commercialTerms);
       if (result.error) {
         // Lanzar error especial para datos incompletos
         if (result.error === "INCOMPLETE_DATA") {

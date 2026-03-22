@@ -131,6 +131,39 @@ export const CandidateStatus = {
 export type CandidateStatus = (typeof CandidateStatus)[keyof typeof CandidateStatus]
 
 
+export const Currency = {
+  MXN: 'MXN',
+  USD: 'USD'
+} as const
+
+export type Currency = (typeof Currency)[keyof typeof Currency]
+
+
+export const PaymentScheme = {
+  SUCCESS_100: 'SUCCESS_100',
+  ADVANCE: 'ADVANCE'
+} as const
+
+export type PaymentScheme = (typeof PaymentScheme)[keyof typeof PaymentScheme]
+
+
+export const AdvanceType = {
+  FIXED: 'FIXED',
+  PERCENTAGE: 'PERCENTAGE'
+} as const
+
+export type AdvanceType = (typeof AdvanceType)[keyof typeof AdvanceType]
+
+
+export const FeeType = {
+  PERCENTAGE: 'PERCENTAGE',
+  FIXED: 'FIXED',
+  MONTHS: 'MONTHS'
+} as const
+
+export type FeeType = (typeof FeeType)[keyof typeof FeeType]
+
+
 export const InactiveTimeUnit = {
   HOURS: 'HOURS',
   DAYS: 'DAYS'

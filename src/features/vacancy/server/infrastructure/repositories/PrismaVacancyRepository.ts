@@ -4,6 +4,7 @@ import type {
   IVacancyRepository,
   CreateVacancyData,
   UpdateVacancyData,
+  CreateWarrantyVacancyData,
   FindVacanciesFilters,
   FindPaginatedVacanciesParams,
   PaginatedResult,
@@ -14,6 +15,7 @@ import type {
   VacancySaleType,
   VacancyServiceType,
   VacancyModality,
+  VacancyCurrency,
   VacancyCandidateDTO,
   VacancyChecklistItemDTO,
   VacancyStatusHistoryDTO,
@@ -28,9 +30,10 @@ type VacancyWithRelations = {
   recruiterId: string;
   recruiter: { name: string | null; email: string | null; avatar: string | null } | null;
   clientId: string;
-  client: { nombre: string } | null;
+  client: { nombre: string; warrantyMonths: number | null } | null;
   saleType: string;
   serviceType: string | null;
+  currency: string | null;
   salaryMin: number | null;
   salaryMax: number | null;
   salaryType: string | null;
@@ -54,6 +57,9 @@ type VacancyWithRelations = {
   placementConfirmedAt: Date | null;
   commissionDate: Date | null;
   congratsEmailSent: boolean;
+  isWarranty: boolean;
+  originVacancyId: string | null;
+  warrantyVacancy: { id: string } | null;
   tenantId: string;
   createdById: string | null;
   createdAt: Date;
@@ -72,14 +78,16 @@ export class PrismaVacancyRepository implements IVacancyRepository {
   private getBaseInclude() {
     return {
       recruiter: { select: { name: true, email: true, avatar: true } },
-      client: { select: { nombre: true } },
+      client: { select: { nombre: true, warrantyMonths: true } },
+      warrantyVacancy: { select: { id: true } },
     } as const;
   }
 
   private getDetailInclude() {
     return {
       recruiter: { select: { name: true, email: true, avatar: true } },
-      client: { select: { nombre: true } },
+      client: { select: { nombre: true, warrantyMonths: true } },
+      warrantyVacancy: { select: { id: true } },
       candidates: {
         orderBy: { createdAt: "asc" as const },
         include: {
@@ -187,6 +195,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       clientName: record.client?.nombre ?? null,
       saleType: record.saleType as VacancySaleType,
       serviceType: (record.serviceType as VacancyServiceType) ?? null,
+      currency: (record.currency as VacancyCurrency) ?? null,
       salaryMin: record.salaryMin,
       salaryMax: record.salaryMax,
       salaryType: (record.salaryType as "FIXED" | "RANGE") ?? null,
@@ -210,6 +219,10 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       placementConfirmedAt: record.placementConfirmedAt,
       commissionDate: record.commissionDate,
       congratsEmailSent: record.congratsEmailSent,
+      isWarranty: record.isWarranty,
+      originVacancyId: record.originVacancyId,
+      warrantyVacancyId: record.warrantyVacancy?.id ?? null,
+      clientWarrantyMonths: record.client?.warrantyMonths ?? null,
       tenantId: record.tenantId,
       createdById: record.createdById,
       createdAt: record.createdAt,
@@ -361,6 +374,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
         clientId: data.clientId,
         saleType: data.saleType,
         serviceType: data.serviceType ?? null,
+        currency: data.currency ?? null,
         salaryType: data.salaryType ?? "RANGE",
         salaryMin: data.salaryMin ?? null,
         salaryMax: data.salaryMax ?? null,
@@ -396,6 +410,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
         ...(data.position !== undefined && { position: data.position }),
         ...(data.status !== undefined && { status: data.status }),
         ...(data.serviceType !== undefined && { serviceType: data.serviceType }),
+        ...(data.currency !== undefined && { currency: data.currency }),
         ...(data.assignedAt !== undefined && { assignedAt: data.assignedAt }),
         ...(data.salaryType !== undefined && { salaryType: data.salaryType }),
         ...(data.salaryMin !== undefined && { salaryMin: data.salaryMin }),
@@ -579,6 +594,116 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       checklistValidatedById: null,
       checklistRejectionReason: v.checklistRejectionReason,
     };
+  }
+
+  async findByOriginVacancyId(
+    originVacancyId: string,
+    tenantId: string,
+  ): Promise<Vacancy | null> {
+    const record = await prisma.vacancy.findFirst({
+      where: { originVacancyId, tenantId },
+      include: this.getBaseInclude(),
+    });
+
+    if (!record) return null;
+    return this.mapToDomain(record as unknown as VacancyWithRelations);
+  }
+
+  async createWarrantyVacancy(data: CreateWarrantyVacancyData): Promise<Vacancy> {
+    const result = await prisma.$transaction(async (tx) => {
+      // 1. Create the warranty vacancy
+      const newVacancy = await tx.vacancy.create({
+        data: {
+          position: data.position,
+          status: "QUICK_MEETING",
+          recruiterId: data.recruiterId,
+          clientId: data.clientId,
+          saleType: data.saleType,
+          serviceType: data.serviceType ?? null,
+          currency: data.currency ?? null,
+          salaryType: data.salaryType ?? "RANGE",
+          salaryMin: data.salaryMin ?? null,
+          salaryMax: data.salaryMax ?? null,
+          salaryFixed: data.salaryFixed ?? null,
+          commissions: data.commissions ?? null,
+          benefits: data.benefits ?? null,
+          tools: data.tools ?? null,
+          modality: data.modality ?? null,
+          schedule: data.schedule ?? null,
+          countryCode: data.countryCode ?? null,
+          regionCode: data.regionCode ?? null,
+          requiresPsychometry: data.requiresPsychometry ?? false,
+          targetDeliveryDate: data.targetDeliveryDate ?? null,
+          assignedAt: new Date(),
+          isWarranty: true,
+          originVacancyId: data.originVacancyId,
+          tenantId: data.tenantId,
+          createdById: data.createdById,
+        },
+      });
+
+      // 2. Duplicate checklist items from original vacancy (reset completion)
+      const originalChecklistItems = await tx.vacancyChecklistItem.findMany({
+        where: { vacancyId: data.originVacancyId, tenantId: data.tenantId },
+        orderBy: { order: "asc" },
+      });
+
+      if (originalChecklistItems.length > 0) {
+        await tx.vacancyChecklistItem.createMany({
+          data: originalChecklistItems.map((item) => ({
+            vacancyId: newVacancy.id,
+            requirement: item.requirement,
+            isCompleted: false,
+            order: item.order,
+            tenantId: data.tenantId,
+          })),
+        });
+      }
+
+      // 3. Duplicate JOB_DESCRIPTION and PERFIL_MUESTRA attachments (same fileUrl, new DB record)
+      const originalAttachments = await tx.attachment.findMany({
+        where: {
+          vacancyId: data.originVacancyId,
+          subType: { in: ["JOB_DESCRIPTION", "PERFIL_MUESTRA"] },
+          tenantId: data.tenantId,
+        },
+      });
+
+      if (originalAttachments.length > 0) {
+        await tx.attachment.createMany({
+          data: originalAttachments.map((att) => ({
+            fileName: att.fileName,
+            fileUrl: att.fileUrl,
+            fileSize: att.fileSize,
+            mimeType: att.mimeType,
+            attachableType: att.attachableType,
+            subType: att.subType,
+            vacancyId: newVacancy.id,
+            isValidated: false,
+            tenantId: data.tenantId,
+            uploadedById: att.uploadedById,
+          })),
+        });
+      }
+
+      // 4. Return the created vacancy with relations
+      const created = await tx.vacancy.findUnique({
+        where: { id: newVacancy.id },
+        include: {
+          recruiter: { select: { name: true, email: true, avatar: true } },
+          client: { select: { nombre: true } },
+          warrantyVacancy: { select: { id: true } },
+        },
+      });
+
+      return created;
+    });
+
+    if (!result) {
+      throw new Error("Failed to create warranty vacancy");
+    }
+
+    return this.mapToDomain(result as unknown as VacancyWithRelations);
   }
 }
 

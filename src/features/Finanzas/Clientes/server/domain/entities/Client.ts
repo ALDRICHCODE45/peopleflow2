@@ -3,6 +3,13 @@
  * Representa un cliente convertido desde un Lead
  */
 
+import type {
+  Currency,
+  PaymentScheme,
+  AdvanceType,
+  FeeType,
+} from "@/core/generated/prisma/client";
+
 export interface ClientProps {
   id: string;
   nombre: string;
@@ -16,6 +23,18 @@ export interface ClientProps {
   createdByName?: string | null;
   createdAt: Date;
   updatedAt: Date;
+
+  // Condiciones comerciales
+  currency: Currency | null;
+  initialPositions: number | null;
+  paymentScheme: PaymentScheme | null;
+  advanceType: AdvanceType | null;
+  advanceValue: number | null;
+  feeType: FeeType | null;
+  feeValue: number | null;
+  creditDays: number | null;
+  cancellationFee: number | null;
+  warrantyMonths: number | null;
 }
 
 export class Client {
@@ -24,6 +43,8 @@ export class Client {
   constructor(props: ClientProps) {
     this.props = props;
   }
+
+  // --- Identidad ---
 
   get id(): string {
     return this.props.id;
@@ -73,6 +94,58 @@ export class Client {
     return this.props.updatedAt;
   }
 
+  // --- Condiciones comerciales ---
+
+  get currency(): Currency | null {
+    return this.props.currency;
+  }
+
+  get initialPositions(): number | null {
+    return this.props.initialPositions;
+  }
+
+  get paymentScheme(): PaymentScheme | null {
+    return this.props.paymentScheme;
+  }
+
+  get advanceType(): AdvanceType | null {
+    return this.props.advanceType;
+  }
+
+  get advanceValue(): number | null {
+    return this.props.advanceValue;
+  }
+
+  get feeType(): FeeType | null {
+    return this.props.feeType;
+  }
+
+  get feeValue(): number | null {
+    return this.props.feeValue;
+  }
+
+  get creditDays(): number | null {
+    return this.props.creditDays;
+  }
+
+  get cancellationFee(): number | null {
+    return this.props.cancellationFee;
+  }
+
+  get warrantyMonths(): number | null {
+    return this.props.warrantyMonths;
+  }
+
+  // --- Domain methods ---
+
+  /**
+   * Retorna true si el cliente tiene al menos paymentScheme definido
+   * (indica que se completaron las condiciones comerciales)
+   */
+  hasCommercialTerms(): boolean {
+    return this.props.paymentScheme !== null;
+  }
+
   toJSON() {
     return {
       id: this.props.id,
@@ -87,6 +160,17 @@ export class Client {
       createdByName: this.props.createdByName,
       createdAt: this.props.createdAt.toISOString(),
       updatedAt: this.props.updatedAt.toISOString(),
+      // Condiciones comerciales
+      currency: this.props.currency,
+      initialPositions: this.props.initialPositions,
+      paymentScheme: this.props.paymentScheme,
+      advanceType: this.props.advanceType,
+      advanceValue: this.props.advanceValue,
+      feeType: this.props.feeType,
+      feeValue: this.props.feeValue,
+      creditDays: this.props.creditDays,
+      cancellationFee: this.props.cancellationFee,
+      warrantyMonths: this.props.warrantyMonths,
     };
   }
 }

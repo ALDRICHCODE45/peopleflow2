@@ -45,8 +45,8 @@ export const sidebarLinks = {
           url: "/finanzas/clientes",
         },
         {
-          title: "Ingresos",
-          url: "/finanzas/ingresos",
+          title: "Facturas",
+          url: "/finanzas/facturas",
         },
         {
           title: "Egresos",

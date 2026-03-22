@@ -264,6 +264,13 @@ export type EnumVacancyServiceTypeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumVacancyServiceTypeFilter<$PrismaModel> | $Enums.VacancyServiceType
 }
 
+export type EnumCurrencyNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.Currency | Prisma.EnumCurrencyFieldRefInput<$PrismaModel> | null
+  in?: $Enums.Currency[] | Prisma.ListEnumCurrencyFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.Currency[] | Prisma.ListEnumCurrencyFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumCurrencyNullableFilter<$PrismaModel> | $Enums.Currency | null
+}
+
 export type FloatNullableFilter<$PrismaModel = never> = {
   equals?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
@@ -317,6 +324,16 @@ export type EnumVacancyServiceTypeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumVacancyServiceTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumVacancyServiceTypeFilter<$PrismaModel>
+}
+
+export type EnumCurrencyNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Currency | Prisma.EnumCurrencyFieldRefInput<$PrismaModel> | null
+  in?: $Enums.Currency[] | Prisma.ListEnumCurrencyFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.Currency[] | Prisma.ListEnumCurrencyFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumCurrencyNullableWithAggregatesFilter<$PrismaModel> | $Enums.Currency | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCurrencyNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCurrencyNullableFilter<$PrismaModel>
 }
 
 export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -485,6 +502,84 @@ export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedJsonNullableFilter<$PrismaModel>
   _max?: Prisma.NestedJsonNullableFilter<$PrismaModel>
+}
+
+export type IntNullableFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
+  in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  notIn?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  lt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedIntNullableFilter<$PrismaModel> | number | null
+}
+
+export type EnumPaymentSchemeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.PaymentScheme | Prisma.EnumPaymentSchemeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.PaymentScheme[] | Prisma.ListEnumPaymentSchemeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.PaymentScheme[] | Prisma.ListEnumPaymentSchemeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumPaymentSchemeNullableFilter<$PrismaModel> | $Enums.PaymentScheme | null
+}
+
+export type EnumAdvanceTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdvanceType | Prisma.EnumAdvanceTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.AdvanceType[] | Prisma.ListEnumAdvanceTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.AdvanceType[] | Prisma.ListEnumAdvanceTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumAdvanceTypeNullableFilter<$PrismaModel> | $Enums.AdvanceType | null
+}
+
+export type EnumFeeTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.FeeType | Prisma.EnumFeeTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.FeeType[] | Prisma.ListEnumFeeTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.FeeType[] | Prisma.ListEnumFeeTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumFeeTypeNullableFilter<$PrismaModel> | $Enums.FeeType | null
+}
+
+export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
+  in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  notIn?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  lt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _avg?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+  _sum?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
+}
+
+export type EnumPaymentSchemeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PaymentScheme | Prisma.EnumPaymentSchemeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.PaymentScheme[] | Prisma.ListEnumPaymentSchemeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.PaymentScheme[] | Prisma.ListEnumPaymentSchemeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumPaymentSchemeNullableWithAggregatesFilter<$PrismaModel> | $Enums.PaymentScheme | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPaymentSchemeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPaymentSchemeNullableFilter<$PrismaModel>
+}
+
+export type EnumAdvanceTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdvanceType | Prisma.EnumAdvanceTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.AdvanceType[] | Prisma.ListEnumAdvanceTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.AdvanceType[] | Prisma.ListEnumAdvanceTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumAdvanceTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.AdvanceType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAdvanceTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAdvanceTypeNullableFilter<$PrismaModel>
+}
+
+export type EnumFeeTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FeeType | Prisma.EnumFeeTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.FeeType[] | Prisma.ListEnumFeeTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.FeeType[] | Prisma.ListEnumFeeTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumFeeTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.FeeType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFeeTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFeeTypeNullableFilter<$PrismaModel>
 }
 
 export type EnumInactiveTimeUnitFilter<$PrismaModel = never> = {
@@ -767,6 +862,13 @@ export type NestedEnumVacancyServiceTypeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumVacancyServiceTypeFilter<$PrismaModel> | $Enums.VacancyServiceType
 }
 
+export type NestedEnumCurrencyNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.Currency | Prisma.EnumCurrencyFieldRefInput<$PrismaModel> | null
+  in?: $Enums.Currency[] | Prisma.ListEnumCurrencyFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.Currency[] | Prisma.ListEnumCurrencyFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumCurrencyNullableFilter<$PrismaModel> | $Enums.Currency | null
+}
+
 export type NestedFloatNullableFilter<$PrismaModel = never> = {
   equals?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
@@ -820,6 +922,16 @@ export type NestedEnumVacancyServiceTypeWithAggregatesFilter<$PrismaModel = neve
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumVacancyServiceTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumVacancyServiceTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumCurrencyNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Currency | Prisma.EnumCurrencyFieldRefInput<$PrismaModel> | null
+  in?: $Enums.Currency[] | Prisma.ListEnumCurrencyFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.Currency[] | Prisma.ListEnumCurrencyFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumCurrencyNullableWithAggregatesFilter<$PrismaModel> | $Enums.Currency | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCurrencyNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCurrencyNullableFilter<$PrismaModel>
 }
 
 export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -961,6 +1073,73 @@ export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
   gt?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   gte?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+}
+
+export type NestedEnumPaymentSchemeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.PaymentScheme | Prisma.EnumPaymentSchemeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.PaymentScheme[] | Prisma.ListEnumPaymentSchemeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.PaymentScheme[] | Prisma.ListEnumPaymentSchemeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumPaymentSchemeNullableFilter<$PrismaModel> | $Enums.PaymentScheme | null
+}
+
+export type NestedEnumAdvanceTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdvanceType | Prisma.EnumAdvanceTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.AdvanceType[] | Prisma.ListEnumAdvanceTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.AdvanceType[] | Prisma.ListEnumAdvanceTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumAdvanceTypeNullableFilter<$PrismaModel> | $Enums.AdvanceType | null
+}
+
+export type NestedEnumFeeTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.FeeType | Prisma.EnumFeeTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.FeeType[] | Prisma.ListEnumFeeTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.FeeType[] | Prisma.ListEnumFeeTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumFeeTypeNullableFilter<$PrismaModel> | $Enums.FeeType | null
+}
+
+export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
+  in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  notIn?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  lt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _avg?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+  _sum?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumPaymentSchemeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PaymentScheme | Prisma.EnumPaymentSchemeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.PaymentScheme[] | Prisma.ListEnumPaymentSchemeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.PaymentScheme[] | Prisma.ListEnumPaymentSchemeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumPaymentSchemeNullableWithAggregatesFilter<$PrismaModel> | $Enums.PaymentScheme | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPaymentSchemeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPaymentSchemeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumAdvanceTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdvanceType | Prisma.EnumAdvanceTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.AdvanceType[] | Prisma.ListEnumAdvanceTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.AdvanceType[] | Prisma.ListEnumAdvanceTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumAdvanceTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.AdvanceType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAdvanceTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAdvanceTypeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumFeeTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FeeType | Prisma.EnumFeeTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.FeeType[] | Prisma.ListEnumFeeTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.FeeType[] | Prisma.ListEnumFeeTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumFeeTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.FeeType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFeeTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFeeTypeNullableFilter<$PrismaModel>
 }
 
 export type NestedEnumInactiveTimeUnitFilter<$PrismaModel = never> = {

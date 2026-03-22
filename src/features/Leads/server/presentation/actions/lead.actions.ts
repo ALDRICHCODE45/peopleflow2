@@ -36,6 +36,9 @@ import type {
   BulkReasignLeadsResult,
 } from "../../../frontend/types";
 import type { Lead } from "../../../frontend/types";
+import type { CommercialTermsData } from "@features/Finanzas/Clientes/server/domain/interfaces/IClientRepository";
+import type { CommercialTermsFormData } from "@features/Finanzas/Clientes/frontend/types/client.types";
+import type { Currency, PaymentScheme, AdvanceType, FeeType } from "@/core/generated/prisma/client";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
@@ -327,10 +330,12 @@ export async function getLeadByIdAction(
 
 /**
  * Actualiza el estado de un lead
+ * @param commercialTerms — optional commercial terms to attach when transitioning to POSICIONES_ASIGNADAS
  */
 export async function updateLeadStatusAction(
   leadId: string,
   newStatus: LeadStatus,
+  commercialTerms?: CommercialTermsFormData,
 ): Promise<UpdateLeadStatusResult> {
   try {
     // Validar UUID
@@ -367,6 +372,23 @@ export async function updateLeadStatusAction(
       return { error: "No tienes permisos para editar leads" };
     }
 
+    // Cast frontend form data (string enums) to domain types (Prisma enums)
+    // Values are identical at runtime — this is a type-level boundary cast
+    const domainTerms: CommercialTermsData | undefined = commercialTerms
+      ? {
+          currency: commercialTerms.currency as Currency,
+          initialPositions: commercialTerms.initialPositions,
+          paymentScheme: commercialTerms.paymentScheme as PaymentScheme,
+          advanceType: (commercialTerms.advanceType as AdvanceType) ?? null,
+          advanceValue: commercialTerms.advanceValue ?? null,
+          feeType: commercialTerms.feeType as FeeType,
+          feeValue: commercialTerms.feeValue,
+          creditDays: commercialTerms.creditDays,
+          cancellationFee: commercialTerms.cancellationFee ?? null,
+          warrantyMonths: commercialTerms.warrantyMonths,
+        }
+      : undefined;
+
     const useCase = new UpdateLeadStatusUseCase(
       prismaLeadRepository,
       prismaLeadStatusHistoryRepository,
@@ -377,6 +399,7 @@ export async function updateLeadStatusAction(
       tenantId,
       newStatus,
       userId: session.user.id,
+      commercialTerms: domainTerms,
     });
 
     if (!result.success) {

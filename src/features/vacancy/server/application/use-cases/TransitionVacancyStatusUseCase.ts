@@ -128,13 +128,12 @@ export class TransitionVacancyStatusUseCase {
         newTargetDeliveryDate?: Date | null;
       };
 
-      const needsSalaryAndDate =
-        newStatus === "PRE_PLACEMENT" ||
-        (newStatus === "PLACEMENT" && currentStatus === "FOLLOW_UP") ||
-        (newStatus === "PLACEMENT" && currentStatus === "PRE_PLACEMENT");
+      const isPlacementTransition =
+        newStatus === "PLACEMENT" &&
+        (currentStatus === "PRE_PLACEMENT" || currentStatus === "FOLLOW_UP");
 
-      const isPlacementFromPrePlacement =
-        newStatus === "PLACEMENT" && currentStatus === "PRE_PLACEMENT";
+      const needsSalaryAndDate =
+        newStatus === "PRE_PLACEMENT" || isPlacementTransition;
 
       if (isRollback) {
         updateData = {
@@ -144,8 +143,8 @@ export class TransitionVacancyStatusUseCase {
           actualDeliveryDate: null,
         };
         historyData = { isRollback: true, reason, newTargetDeliveryDate };
-      } else if (isPlacementFromPrePlacement) {
-        // PRE_PLACEMENT → PLACEMENT: update salary/date + set placementConfirmedAt & commissionDate
+      } else if (isPlacementTransition) {
+        // Any transition → PLACEMENT: update salary/date + set placementConfirmedAt & commissionDate
         const today = new Date();
         const commissionDate = new Date(today.getFullYear(), today.getMonth() + 1, 15);
         updateData = {

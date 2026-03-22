@@ -4,6 +4,7 @@ import type {
   VacancySaleType,
   VacancyServiceType,
   VacancyModality,
+  VacancyCurrency,
   VacancyCandidateDTO,
   VacancyChecklistItemDTO,
   VacancyStatusHistoryDTO,
@@ -22,6 +23,7 @@ export interface VacancyProps {
   clientName?: string | null;
   saleType: VacancySaleType;
   serviceType: VacancyServiceType;
+  currency: VacancyCurrency | null;
   salaryMin: number | null;
   salaryMax: number | null;
   salaryType: "FIXED" | "RANGE" | null;
@@ -49,6 +51,12 @@ export interface VacancyProps {
   createdById: string | null;
   createdAt: Date;
   updatedAt: Date;
+  // Warranty (Garantía)
+  isWarranty: boolean;
+  originVacancyId: string | null;
+  warrantyVacancyId: string | null;
+  // Client metadata (loaded via join)
+  clientWarrantyMonths?: number | null;
   // Relaciones opcionales — se populan solo en consultas de detalle
   candidates?: VacancyCandidateDTO[];
   checklistItems?: VacancyChecklistItemDTO[];
@@ -106,6 +114,10 @@ export class Vacancy {
 
   get serviceType(): VacancyServiceType {
     return this.props.serviceType;
+  }
+
+  get currency(): VacancyCurrency | null {
+    return this.props.currency;
   }
 
   get salaryMin(): number | null {
@@ -216,6 +228,22 @@ export class Vacancy {
     return this.props.updatedAt;
   }
 
+  get isWarranty(): boolean {
+    return this.props.isWarranty;
+  }
+
+  get originVacancyId(): string | null {
+    return this.props.originVacancyId;
+  }
+
+  get warrantyVacancyId(): string | null {
+    return this.props.warrantyVacancyId;
+  }
+
+  get clientWarrantyMonths(): number | null {
+    return this.props.clientWarrantyMonths ?? null;
+  }
+
   // --- Métodos de dominio ---
 
   /**
@@ -286,6 +314,35 @@ export class Vacancy {
   }
 
   /**
+   * Retorna true si la vacante puede tener una garantía aplicada.
+   * Solo vacantes en estado PLACEMENT pueden generar garantía.
+   */
+  canApplyWarranty(): boolean {
+    return this.props.status === "PLACEMENT" && !this.props.isWarranty;
+  }
+
+  /**
+   * Retorna true si la garantía de la vacante ya expiró.
+   * Calcula si la fecha actual >= placementConfirmedAt + warrantyMonths.
+   *
+   * Edge cases:
+   * - placementConfirmedAt null → expired (no date to calculate from)
+   * - warrantyMonths <= 0 → NOT expired (no warranty configured, allow with warning)
+   */
+  isWarrantyExpired(warrantyMonths: number): boolean {
+    // No placement date → treat as expired
+    if (!this.props.placementConfirmedAt) return true;
+
+    // No warranty configured (0 or negative) → not expired (allow with warning upstream)
+    if (warrantyMonths <= 0) return false;
+
+    const expiryDate = new Date(this.props.placementConfirmedAt);
+    expiryDate.setMonth(expiryDate.getMonth() + warrantyMonths);
+
+    return new Date() >= expiryDate;
+  }
+
+  /**
    * Delega al VacancyStatusVO para obtener las transiciones válidas desde el estado actual.
    */
   getValidTransitions(): VacancyStatusType[] {
@@ -314,6 +371,7 @@ export class Vacancy {
       clientName: this.props.clientName ?? null,
       saleType: this.props.saleType,
       serviceType: this.props.serviceType,
+      currency: this.props.currency,
       salaryMin: this.props.salaryMin,
       salaryMax: this.props.salaryMax,
       salaryType: this.props.salaryType ?? "RANGE",
@@ -343,6 +401,9 @@ export class Vacancy {
       createdById: this.props.createdById,
       createdAt: this.props.createdAt.toISOString(),
       updatedAt: this.props.updatedAt.toISOString(),
+      isWarranty: this.props.isWarranty,
+      originVacancyId: this.props.originVacancyId,
+      warrantyVacancyId: this.props.warrantyVacancyId,
       candidates: this.props.candidates,
       checklistItems: this.props.checklistItems,
       statusHistory: this.props.statusHistory,

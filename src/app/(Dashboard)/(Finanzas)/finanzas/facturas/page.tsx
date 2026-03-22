@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Ingresos",
+  title: "Facturas",
   description:
-    "Registro, seguimiento y análisis de ingresos y flujos de entrada de la organización.",
+    "Registro, seguimiento y análisis de facturas y flujos de entrada de la organización.",
 };
 
-export default function IngresosPage() {
+export default function FacturasTablePage() {
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-bold">Ingresos</h1>
       <p className="text-muted-foreground">
-        Página de Ingresos en construcción
+        Página de Facturas en construcción
       </p>
     </div>
   );
