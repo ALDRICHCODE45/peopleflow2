@@ -72,6 +72,7 @@ export interface VacancyDTO {
   checklistValidatedById: string | null;
   checklistRejectionReason: string | null;
   assignedAt: string;
+  currentCycleStartedAt: string;
   targetDeliveryDate: string | null;
   actualDeliveryDate: string | null;
   entryDate: string | null;

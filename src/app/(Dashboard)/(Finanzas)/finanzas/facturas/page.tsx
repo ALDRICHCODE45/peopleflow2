@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function FacturasTablePage() {
   return (
     <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold">Ingresos</h1>
+      <h1 className="text-3xl font-bold">Facturas</h1>
       <p className="text-muted-foreground">
         Página de Facturas en construcción
       </p>

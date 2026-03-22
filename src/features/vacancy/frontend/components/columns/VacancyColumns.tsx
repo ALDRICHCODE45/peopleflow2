@@ -144,7 +144,7 @@ export function createVacancyColumns(
         const vacancy = row.original;
         return (
           <VacancyProgressIndicator
-            assignedAt={vacancy.assignedAt}
+            currentCycleStartedAt={vacancy.currentCycleStartedAt}
             targetDeliveryDate={vacancy.targetDeliveryDate}
             actualDeliveryDate={vacancy.actualDeliveryDate}
             status={vacancy.status}

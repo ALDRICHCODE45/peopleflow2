@@ -40,6 +40,7 @@ export interface VacancyProps {
   checklistValidatedById: string | null;
   checklistRejectionReason: string | null;
   assignedAt: Date;
+  currentCycleStartedAt: Date;
   targetDeliveryDate: Date | null;
   actualDeliveryDate: Date | null;
   entryDate: Date | null;
@@ -182,6 +183,10 @@ export class Vacancy {
 
   get assignedAt(): Date {
     return this.props.assignedAt;
+  }
+
+  get currentCycleStartedAt(): Date {
+    return this.props.currentCycleStartedAt;
   }
 
   get targetDeliveryDate(): Date | null {
@@ -388,6 +393,7 @@ export class Vacancy {
       checklistValidatedById: this.props.checklistValidatedById,
       checklistRejectionReason: this.props.checklistRejectionReason,
       assignedAt: this.props.assignedAt.toISOString(),
+      currentCycleStartedAt: this.props.currentCycleStartedAt.toISOString(),
       targetDeliveryDate: this.props.targetDeliveryDate?.toISOString() ?? null,
       actualDeliveryDate:
         this.props.actualDeliveryDate?.toISOString() ?? null,

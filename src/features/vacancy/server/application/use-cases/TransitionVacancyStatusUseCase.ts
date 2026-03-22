@@ -139,8 +139,13 @@ export class TransitionVacancyStatusUseCase {
         updateData = {
           status: newStatus,
           rollbackCount: vacancy.rollbackCount + 1,
+          currentCycleStartedAt: new Date(),    // Reset progress baseline
           targetDeliveryDate: newTargetDeliveryDate,
           actualDeliveryDate: null,
+          placementConfirmedAt: null,            // Clean placement state
+          commissionDate: null,                  // Clean commission
+          congratsEmailSent: false,              // Reset email flag
+          entryDate: null,                       // Reset entry date
         };
         historyData = { isRollback: true, reason, newTargetDeliveryDate };
       } else if (isPlacementTransition) {

@@ -65,6 +65,7 @@ export type VacancyMinAggregateOutputType = {
   checklistValidatedById: string | null
   checklistRejectionReason: string | null
   assignedAt: Date | null
+  currentCycleStartedAt: Date | null
   targetDeliveryDate: Date | null
   actualDeliveryDate: Date | null
   entryDate: Date | null
@@ -105,6 +106,7 @@ export type VacancyMaxAggregateOutputType = {
   checklistValidatedById: string | null
   checklistRejectionReason: string | null
   assignedAt: Date | null
+  currentCycleStartedAt: Date | null
   targetDeliveryDate: Date | null
   actualDeliveryDate: Date | null
   entryDate: Date | null
@@ -145,6 +147,7 @@ export type VacancyCountAggregateOutputType = {
   checklistValidatedById: number
   checklistRejectionReason: number
   assignedAt: number
+  currentCycleStartedAt: number
   targetDeliveryDate: number
   actualDeliveryDate: number
   entryDate: number
@@ -201,6 +204,7 @@ export type VacancyMinAggregateInputType = {
   checklistValidatedById?: true
   checklistRejectionReason?: true
   assignedAt?: true
+  currentCycleStartedAt?: true
   targetDeliveryDate?: true
   actualDeliveryDate?: true
   entryDate?: true
@@ -241,6 +245,7 @@ export type VacancyMaxAggregateInputType = {
   checklistValidatedById?: true
   checklistRejectionReason?: true
   assignedAt?: true
+  currentCycleStartedAt?: true
   targetDeliveryDate?: true
   actualDeliveryDate?: true
   entryDate?: true
@@ -281,6 +286,7 @@ export type VacancyCountAggregateInputType = {
   checklistValidatedById?: true
   checklistRejectionReason?: true
   assignedAt?: true
+  currentCycleStartedAt?: true
   targetDeliveryDate?: true
   actualDeliveryDate?: true
   entryDate?: true
@@ -408,6 +414,7 @@ export type VacancyGroupByOutputType = {
   checklistValidatedById: string | null
   checklistRejectionReason: string | null
   assignedAt: Date
+  currentCycleStartedAt: Date
   targetDeliveryDate: Date | null
   actualDeliveryDate: Date | null
   entryDate: Date | null
@@ -471,6 +478,7 @@ export type VacancyWhereInput = {
   checklistValidatedById?: Prisma.StringNullableFilter<"Vacancy"> | string | null
   checklistRejectionReason?: Prisma.StringNullableFilter<"Vacancy"> | string | null
   assignedAt?: Prisma.DateTimeFilter<"Vacancy"> | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFilter<"Vacancy"> | Date | string
   targetDeliveryDate?: Prisma.DateTimeNullableFilter<"Vacancy"> | Date | string | null
   actualDeliveryDate?: Prisma.DateTimeNullableFilter<"Vacancy"> | Date | string | null
   entryDate?: Prisma.DateTimeNullableFilter<"Vacancy"> | Date | string | null
@@ -523,6 +531,7 @@ export type VacancyOrderByWithRelationInput = {
   checklistValidatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   checklistRejectionReason?: Prisma.SortOrderInput | Prisma.SortOrder
   assignedAt?: Prisma.SortOrder
+  currentCycleStartedAt?: Prisma.SortOrder
   targetDeliveryDate?: Prisma.SortOrderInput | Prisma.SortOrder
   actualDeliveryDate?: Prisma.SortOrderInput | Prisma.SortOrder
   entryDate?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -579,6 +588,7 @@ export type VacancyWhereUniqueInput = Prisma.AtLeast<{
   checklistValidatedById?: Prisma.StringNullableFilter<"Vacancy"> | string | null
   checklistRejectionReason?: Prisma.StringNullableFilter<"Vacancy"> | string | null
   assignedAt?: Prisma.DateTimeFilter<"Vacancy"> | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFilter<"Vacancy"> | Date | string
   targetDeliveryDate?: Prisma.DateTimeNullableFilter<"Vacancy"> | Date | string | null
   actualDeliveryDate?: Prisma.DateTimeNullableFilter<"Vacancy"> | Date | string | null
   entryDate?: Prisma.DateTimeNullableFilter<"Vacancy"> | Date | string | null
@@ -630,6 +640,7 @@ export type VacancyOrderByWithAggregationInput = {
   checklistValidatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   checklistRejectionReason?: Prisma.SortOrderInput | Prisma.SortOrder
   assignedAt?: Prisma.SortOrder
+  currentCycleStartedAt?: Prisma.SortOrder
   targetDeliveryDate?: Prisma.SortOrderInput | Prisma.SortOrder
   actualDeliveryDate?: Prisma.SortOrderInput | Prisma.SortOrder
   entryDate?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -678,6 +689,7 @@ export type VacancyScalarWhereWithAggregatesInput = {
   checklistValidatedById?: Prisma.StringNullableWithAggregatesFilter<"Vacancy"> | string | null
   checklistRejectionReason?: Prisma.StringNullableWithAggregatesFilter<"Vacancy"> | string | null
   assignedAt?: Prisma.DateTimeWithAggregatesFilter<"Vacancy"> | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeWithAggregatesFilter<"Vacancy"> | Date | string
   targetDeliveryDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Vacancy"> | Date | string | null
   actualDeliveryDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Vacancy"> | Date | string | null
   entryDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Vacancy"> | Date | string | null
@@ -715,6 +727,7 @@ export type VacancyCreateInput = {
   checklistValidatedAt?: Date | string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -764,6 +777,7 @@ export type VacancyUncheckedCreateInput = {
   checklistValidatedById?: string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -807,6 +821,7 @@ export type VacancyUpdateInput = {
   checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -856,6 +871,7 @@ export type VacancyUncheckedUpdateInput = {
   checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -902,6 +918,7 @@ export type VacancyCreateManyInput = {
   checklistValidatedById?: string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -939,6 +956,7 @@ export type VacancyUpdateManyMutationInput = {
   checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -976,6 +994,7 @@ export type VacancyUncheckedUpdateManyInput = {
   checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1031,6 +1050,7 @@ export type VacancyCountOrderByAggregateInput = {
   checklistValidatedById?: Prisma.SortOrder
   checklistRejectionReason?: Prisma.SortOrder
   assignedAt?: Prisma.SortOrder
+  currentCycleStartedAt?: Prisma.SortOrder
   targetDeliveryDate?: Prisma.SortOrder
   actualDeliveryDate?: Prisma.SortOrder
   entryDate?: Prisma.SortOrder
@@ -1078,6 +1098,7 @@ export type VacancyMaxOrderByAggregateInput = {
   checklistValidatedById?: Prisma.SortOrder
   checklistRejectionReason?: Prisma.SortOrder
   assignedAt?: Prisma.SortOrder
+  currentCycleStartedAt?: Prisma.SortOrder
   targetDeliveryDate?: Prisma.SortOrder
   actualDeliveryDate?: Prisma.SortOrder
   entryDate?: Prisma.SortOrder
@@ -1118,6 +1139,7 @@ export type VacancyMinOrderByAggregateInput = {
   checklistValidatedById?: Prisma.SortOrder
   checklistRejectionReason?: Prisma.SortOrder
   assignedAt?: Prisma.SortOrder
+  currentCycleStartedAt?: Prisma.SortOrder
   targetDeliveryDate?: Prisma.SortOrder
   actualDeliveryDate?: Prisma.SortOrder
   entryDate?: Prisma.SortOrder
@@ -1529,6 +1551,7 @@ export type VacancyCreateWithoutRecruiterInput = {
   checklistValidatedAt?: Date | string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -1576,6 +1599,7 @@ export type VacancyUncheckedCreateWithoutRecruiterInput = {
   checklistValidatedById?: string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -1629,6 +1653,7 @@ export type VacancyCreateWithoutCreatedByInput = {
   checklistValidatedAt?: Date | string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -1677,6 +1702,7 @@ export type VacancyUncheckedCreateWithoutCreatedByInput = {
   checklistValidatedById?: string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -1729,6 +1755,7 @@ export type VacancyCreateWithoutChecklistValidatedByInput = {
   checklistValidatedAt?: Date | string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -1776,6 +1803,7 @@ export type VacancyUncheckedCreateWithoutChecklistValidatedByInput = {
   checklistValidatedAt?: Date | string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -1851,6 +1879,7 @@ export type VacancyScalarWhereInput = {
   checklistValidatedById?: Prisma.StringNullableFilter<"Vacancy"> | string | null
   checklistRejectionReason?: Prisma.StringNullableFilter<"Vacancy"> | string | null
   assignedAt?: Prisma.DateTimeFilter<"Vacancy"> | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFilter<"Vacancy"> | Date | string
   targetDeliveryDate?: Prisma.DateTimeNullableFilter<"Vacancy"> | Date | string | null
   actualDeliveryDate?: Prisma.DateTimeNullableFilter<"Vacancy"> | Date | string | null
   entryDate?: Prisma.DateTimeNullableFilter<"Vacancy"> | Date | string | null
@@ -1920,6 +1949,7 @@ export type VacancyCreateWithoutTenantInput = {
   checklistValidatedAt?: Date | string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -1968,6 +1998,7 @@ export type VacancyUncheckedCreateWithoutTenantInput = {
   checklistValidatedById?: string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -2036,6 +2067,7 @@ export type VacancyCreateWithoutAttachmentsInput = {
   checklistValidatedAt?: Date | string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -2084,6 +2116,7 @@ export type VacancyUncheckedCreateWithoutAttachmentsInput = {
   checklistValidatedById?: string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -2142,6 +2175,7 @@ export type VacancyUpdateWithoutAttachmentsInput = {
   checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2190,6 +2224,7 @@ export type VacancyUncheckedUpdateWithoutAttachmentsInput = {
   checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2232,6 +2267,7 @@ export type VacancyCreateWithoutWarrantyVacancyInput = {
   checklistValidatedAt?: Date | string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -2280,6 +2316,7 @@ export type VacancyUncheckedCreateWithoutWarrantyVacancyInput = {
   checklistValidatedById?: string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -2327,6 +2364,7 @@ export type VacancyCreateWithoutOriginVacancyInput = {
   checklistValidatedAt?: Date | string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -2375,6 +2413,7 @@ export type VacancyUncheckedCreateWithoutOriginVacancyInput = {
   checklistValidatedById?: string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -2433,6 +2472,7 @@ export type VacancyUpdateWithoutWarrantyVacancyInput = {
   checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2481,6 +2521,7 @@ export type VacancyUncheckedUpdateWithoutWarrantyVacancyInput = {
   checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2534,6 +2575,7 @@ export type VacancyUpdateWithoutOriginVacancyInput = {
   checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2582,6 +2624,7 @@ export type VacancyUncheckedUpdateWithoutOriginVacancyInput = {
   checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2624,6 +2667,7 @@ export type VacancyCreateWithoutChecklistItemsInput = {
   checklistValidatedAt?: Date | string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -2672,6 +2716,7 @@ export type VacancyUncheckedCreateWithoutChecklistItemsInput = {
   checklistValidatedById?: string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -2730,6 +2775,7 @@ export type VacancyUpdateWithoutChecklistItemsInput = {
   checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2778,6 +2824,7 @@ export type VacancyUncheckedUpdateWithoutChecklistItemsInput = {
   checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2820,6 +2867,7 @@ export type VacancyCreateWithoutCandidatesInput = {
   checklistValidatedAt?: Date | string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -2868,6 +2916,7 @@ export type VacancyUncheckedCreateWithoutCandidatesInput = {
   checklistValidatedById?: string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -2926,6 +2975,7 @@ export type VacancyUpdateWithoutCandidatesInput = {
   checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2974,6 +3024,7 @@ export type VacancyUncheckedUpdateWithoutCandidatesInput = {
   checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3016,6 +3067,7 @@ export type VacancyCreateWithoutStatusHistoryInput = {
   checklistValidatedAt?: Date | string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -3064,6 +3116,7 @@ export type VacancyUncheckedCreateWithoutStatusHistoryInput = {
   checklistValidatedById?: string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -3122,6 +3175,7 @@ export type VacancyUpdateWithoutStatusHistoryInput = {
   checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3170,6 +3224,7 @@ export type VacancyUncheckedUpdateWithoutStatusHistoryInput = {
   checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3212,6 +3267,7 @@ export type VacancyCreateWithoutClientInput = {
   checklistValidatedAt?: Date | string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -3259,6 +3315,7 @@ export type VacancyUncheckedCreateWithoutClientInput = {
   checklistValidatedById?: string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -3328,6 +3385,7 @@ export type VacancyCreateWithoutTernaHistoriesInput = {
   checklistValidatedAt?: Date | string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -3376,6 +3434,7 @@ export type VacancyUncheckedCreateWithoutTernaHistoriesInput = {
   checklistValidatedById?: string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -3434,6 +3493,7 @@ export type VacancyUpdateWithoutTernaHistoriesInput = {
   checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3482,6 +3542,7 @@ export type VacancyUncheckedUpdateWithoutTernaHistoriesInput = {
   checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3526,6 +3587,7 @@ export type VacancyCreateManyRecruiterInput = {
   checklistValidatedById?: string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -3566,6 +3628,7 @@ export type VacancyCreateManyCreatedByInput = {
   checklistValidatedById?: string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -3604,6 +3667,7 @@ export type VacancyCreateManyChecklistValidatedByInput = {
   checklistValidatedAt?: Date | string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -3641,6 +3705,7 @@ export type VacancyUpdateWithoutRecruiterInput = {
   checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3688,6 +3753,7 @@ export type VacancyUncheckedUpdateWithoutRecruiterInput = {
   checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3733,6 +3799,7 @@ export type VacancyUncheckedUpdateManyWithoutRecruiterInput = {
   checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3770,6 +3837,7 @@ export type VacancyUpdateWithoutCreatedByInput = {
   checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3818,6 +3886,7 @@ export type VacancyUncheckedUpdateWithoutCreatedByInput = {
   checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3863,6 +3932,7 @@ export type VacancyUncheckedUpdateManyWithoutCreatedByInput = {
   checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3899,6 +3969,7 @@ export type VacancyUpdateWithoutChecklistValidatedByInput = {
   checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3946,6 +4017,7 @@ export type VacancyUncheckedUpdateWithoutChecklistValidatedByInput = {
   checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3991,6 +4063,7 @@ export type VacancyUncheckedUpdateManyWithoutChecklistValidatedByInput = {
   checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4031,6 +4104,7 @@ export type VacancyCreateManyTenantInput = {
   checklistValidatedById?: string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -4067,6 +4141,7 @@ export type VacancyUpdateWithoutTenantInput = {
   checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4115,6 +4190,7 @@ export type VacancyUncheckedUpdateWithoutTenantInput = {
   checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4160,6 +4236,7 @@ export type VacancyUncheckedUpdateManyWithoutTenantInput = {
   checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4198,6 +4275,7 @@ export type VacancyCreateManyClientInput = {
   checklistValidatedById?: string | null
   checklistRejectionReason?: string | null
   assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
   targetDeliveryDate?: Date | string | null
   actualDeliveryDate?: Date | string | null
   entryDate?: Date | string | null
@@ -4235,6 +4313,7 @@ export type VacancyUpdateWithoutClientInput = {
   checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4282,6 +4361,7 @@ export type VacancyUncheckedUpdateWithoutClientInput = {
   checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4327,6 +4407,7 @@ export type VacancyUncheckedUpdateManyWithoutClientInput = {
   checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4434,6 +4515,7 @@ export type VacancySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   checklistValidatedById?: boolean
   checklistRejectionReason?: boolean
   assignedAt?: boolean
+  currentCycleStartedAt?: boolean
   targetDeliveryDate?: boolean
   actualDeliveryDate?: boolean
   entryDate?: boolean
@@ -4487,6 +4569,7 @@ export type VacancySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   checklistValidatedById?: boolean
   checklistRejectionReason?: boolean
   assignedAt?: boolean
+  currentCycleStartedAt?: boolean
   targetDeliveryDate?: boolean
   actualDeliveryDate?: boolean
   entryDate?: boolean
@@ -4533,6 +4616,7 @@ export type VacancySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   checklistValidatedById?: boolean
   checklistRejectionReason?: boolean
   assignedAt?: boolean
+  currentCycleStartedAt?: boolean
   targetDeliveryDate?: boolean
   actualDeliveryDate?: boolean
   entryDate?: boolean
@@ -4579,6 +4663,7 @@ export type VacancySelectScalar = {
   checklistValidatedById?: boolean
   checklistRejectionReason?: boolean
   assignedAt?: boolean
+  currentCycleStartedAt?: boolean
   targetDeliveryDate?: boolean
   actualDeliveryDate?: boolean
   entryDate?: boolean
@@ -4594,7 +4679,7 @@ export type VacancySelectScalar = {
   updatedAt?: boolean
 }
 
-export type VacancyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "position" | "status" | "recruiterId" | "clientId" | "saleType" | "serviceType" | "currency" | "salaryMin" | "salaryMax" | "salaryFixed" | "salaryType" | "commissions" | "benefits" | "tools" | "modality" | "schedule" | "countryCode" | "regionCode" | "requiresPsychometry" | "checklistValidatedAt" | "checklistValidatedById" | "checklistRejectionReason" | "assignedAt" | "targetDeliveryDate" | "actualDeliveryDate" | "entryDate" | "rollbackCount" | "placementConfirmedAt" | "commissionDate" | "congratsEmailSent" | "isWarranty" | "originVacancyId" | "tenantId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["vacancy"]>
+export type VacancyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "position" | "status" | "recruiterId" | "clientId" | "saleType" | "serviceType" | "currency" | "salaryMin" | "salaryMax" | "salaryFixed" | "salaryType" | "commissions" | "benefits" | "tools" | "modality" | "schedule" | "countryCode" | "regionCode" | "requiresPsychometry" | "checklistValidatedAt" | "checklistValidatedById" | "checklistRejectionReason" | "assignedAt" | "currentCycleStartedAt" | "targetDeliveryDate" | "actualDeliveryDate" | "entryDate" | "rollbackCount" | "placementConfirmedAt" | "commissionDate" | "congratsEmailSent" | "isWarranty" | "originVacancyId" | "tenantId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["vacancy"]>
 export type VacancyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   recruiter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
@@ -4668,6 +4753,7 @@ export type $VacancyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     checklistValidatedById: string | null
     checklistRejectionReason: string | null
     assignedAt: Date
+    currentCycleStartedAt: Date
     targetDeliveryDate: Date | null
     actualDeliveryDate: Date | null
     entryDate: Date | null
@@ -5140,6 +5226,7 @@ export interface VacancyFieldRefs {
   readonly checklistValidatedById: Prisma.FieldRef<"Vacancy", 'String'>
   readonly checklistRejectionReason: Prisma.FieldRef<"Vacancy", 'String'>
   readonly assignedAt: Prisma.FieldRef<"Vacancy", 'DateTime'>
+  readonly currentCycleStartedAt: Prisma.FieldRef<"Vacancy", 'DateTime'>
   readonly targetDeliveryDate: Prisma.FieldRef<"Vacancy", 'DateTime'>
   readonly actualDeliveryDate: Prisma.FieldRef<"Vacancy", 'DateTime'>
   readonly entryDate: Prisma.FieldRef<"Vacancy", 'DateTime'>

@@ -20,7 +20,8 @@ const COMPLETED_STATUSES: ReadonlySet<VacancyStatusType> = new Set([
 // ── Types ────────────────────────────────────────────────────────────────────
 
 interface VacancyProgressIndicatorProps {
-  assignedAt: string;
+  /** Progress baseline — resets on rollback */
+  currentCycleStartedAt: string;
   targetDeliveryDate: string | null;
   actualDeliveryDate: string | null;
   status: string;
@@ -43,13 +44,13 @@ type ProgressColor = "green" | "amber" | "red" | "darkRed" | "blue" | "muted";
 // ── Calculation ──────────────────────────────────────────────────────────────
 
 function calculateProgress(
-  assignedAt: string,
+  currentCycleStartedAt: string,
   targetDeliveryDate: string | null,
   actualDeliveryDate: string | null,
   status: string,
 ): ProgressData {
   const today = startOfDay(new Date());
-  const start = startOfDay(parseISO(assignedAt));
+  const start = startOfDay(parseISO(currentCycleStartedAt));
   const isDelivered = !!actualDeliveryDate;
   const isTerminal = TERMINAL_STATUSES.has(status as VacancyStatusType);
   const isCompleted = COMPLETED_STATUSES.has(status as VacancyStatusType);
@@ -261,13 +262,13 @@ function ExpandedIndicator({
 // ── Public component ─────────────────────────────────────────────────────────
 
 export function VacancyProgressIndicator({
-  assignedAt,
+  currentCycleStartedAt,
   targetDeliveryDate,
   actualDeliveryDate,
   status,
   variant = "compact",
 }: VacancyProgressIndicatorProps) {
-  const data = calculateProgress(assignedAt, targetDeliveryDate, actualDeliveryDate, status);
+  const data = calculateProgress(currentCycleStartedAt, targetDeliveryDate, actualDeliveryDate, status);
   const color = resolveColor(data);
 
   if (variant === "expanded") {

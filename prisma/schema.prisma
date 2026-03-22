@@ -632,8 +632,9 @@ model Vacancy {
   checklistRejectionReason  String?   @db.Text
 
   // Fechas y SLA
-  assignedAt         DateTime  @default(now()) // Inicio del SLA — automático al crear
-  targetDeliveryDate DateTime? // Fecha tentativa pactada con el cliente
+  assignedAt             DateTime  @default(now()) // Inicio del SLA — automático al crear (INMUTABLE)
+  currentCycleStartedAt  DateTime  @default(now()) // Resets on rollback — progress indicator baseline
+  targetDeliveryDate     DateTime? // Fecha tentativa pactada con el cliente
   actualDeliveryDate DateTime? // Automático al validar la terna (detiene el cronómetro)
 
   // Fecha de ingreso del candidato (obligatorio en PRE_PLACEMENT)

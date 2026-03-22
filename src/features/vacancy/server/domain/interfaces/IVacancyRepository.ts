@@ -38,6 +38,7 @@ export interface UpdateVacancyData {
   serviceType?: VacancyServiceType;
   currency?: VacancyCurrency | null;
   assignedAt?: Date;
+  currentCycleStartedAt?: Date;
   salaryType?: "FIXED" | "RANGE";
   salaryMin?: number | null;
   salaryMax?: number | null;

@@ -50,6 +50,7 @@ type VacancyWithRelations = {
   checklistValidatedById: string | null;
   checklistRejectionReason: string | null;
   assignedAt: Date;
+  currentCycleStartedAt: Date;
   targetDeliveryDate: Date | null;
   actualDeliveryDate: Date | null;
   entryDate: Date | null;
@@ -212,6 +213,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       checklistValidatedById: record.checklistValidatedById,
       checklistRejectionReason: record.checklistRejectionReason,
       assignedAt: record.assignedAt,
+      currentCycleStartedAt: record.currentCycleStartedAt,
       targetDeliveryDate: record.targetDeliveryDate,
       actualDeliveryDate: record.actualDeliveryDate,
       entryDate: record.entryDate,
@@ -412,6 +414,9 @@ export class PrismaVacancyRepository implements IVacancyRepository {
         ...(data.serviceType !== undefined && { serviceType: data.serviceType }),
         ...(data.currency !== undefined && { currency: data.currency }),
         ...(data.assignedAt !== undefined && { assignedAt: data.assignedAt }),
+        ...(data.currentCycleStartedAt !== undefined && {
+          currentCycleStartedAt: data.currentCycleStartedAt,
+        }),
         ...(data.salaryType !== undefined && { salaryType: data.salaryType }),
         ...(data.salaryMin !== undefined && { salaryMin: data.salaryMin }),
         ...(data.salaryMax !== undefined && { salaryMax: data.salaryMax }),

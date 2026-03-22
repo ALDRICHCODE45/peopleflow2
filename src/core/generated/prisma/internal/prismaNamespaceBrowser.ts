@@ -378,6 +378,7 @@ export const VacancyScalarFieldEnum = {
   checklistValidatedById: 'checklistValidatedById',
   checklistRejectionReason: 'checklistRejectionReason',
   assignedAt: 'assignedAt',
+  currentCycleStartedAt: 'currentCycleStartedAt',
   targetDeliveryDate: 'targetDeliveryDate',
   actualDeliveryDate: 'actualDeliveryDate',
   entryDate: 'entryDate',
