@@ -10,6 +10,11 @@ import { es } from "date-fns/locale";
 import { Badge } from "@/core/shared/ui/shadcn/badge";
 import { cn } from "@/core/lib/utils";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/core/shared/ui/shadcn/tooltip";
+import {
   Avatar,
   AvatarFallback,
   AvatarImage,
@@ -96,9 +101,21 @@ export function createClientColumns(
     {
       header: "Nombre",
       accessorKey: "nombre",
-      cell: ({ row }) => (
-        <span className="font-medium truncate">{row.original.nombre}</span>
-      ),
+      cell: ({ row }) => {
+        const nombre = row.original.nombre;
+        return (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className="block max-w-[200px] truncate font-medium">
+                {nombre}
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{nombre}</p>
+            </TooltipContent>
+          </Tooltip>
+        );
+      },
       size: 20,
     },
     {
