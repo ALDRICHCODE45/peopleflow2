@@ -9,7 +9,13 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Badge } from "@/core/shared/ui/shadcn/badge";
 import { cn } from "@/core/lib/utils";
-import { Avatar, AvatarFallback } from "@/core/shared/ui/shadcn/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/core/shared/ui/shadcn/avatar";
+import { Skeleton } from "@/core/shared/ui/shadcn/skeleton";
+import { useUserById } from "@/features/Administracion/usuarios/frontend/hooks/useUserById";
 
 // ── Color maps ───────────────────────────────────────────────────────────────
 
@@ -33,6 +39,52 @@ const feeTypeColorMap: Record<string, string> = {
 
 function EmptyCell() {
   return <span className="text-muted-foreground text-xs italic">—</span>;
+}
+
+// ── Generador cell (avatar + name + email via useUserById) ───────────────────
+
+function GeneradorCell({ generadorId }: { generadorId: string | null }) {
+  const { data: user, isLoading } = useUserById(generadorId);
+
+  if (!generadorId) return <EmptyCell />;
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center gap-2">
+        <Skeleton className="h-8 w-8 rounded-full" />
+        <div className="space-y-1">
+          <Skeleton className="h-3.5 w-20" />
+          <Skeleton className="h-3 w-28" />
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) return <EmptyCell />;
+
+  const initials = user.name
+    ? user.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
+    : user.email[0].toUpperCase();
+
+  return (
+    <div className="flex items-center gap-2 max-w-[200px]">
+      <Avatar className="h-8 w-8 flex-shrink-0">
+        <AvatarImage src={user.avatar ?? undefined} alt={user.name} />
+        <AvatarFallback className="text-[10px]">{initials}</AvatarFallback>
+      </Avatar>
+      <div className="min-w-0 flex-1">
+        <div className="font-medium truncate text-sm">{user.name || "-"}</div>
+        <span className="text-muted-foreground text-xs truncate block">
+          {user.email}
+        </span>
+      </div>
+    </div>
+  );
 }
 
 // ── Column factory ───────────────────────────────────────────────────────────
@@ -154,27 +206,10 @@ export function createClientColumns(
     },
     {
       header: "Generador",
-      accessorKey: "generadorName",
-      cell: ({ row }) => {
-        const name = row.original.generadorName;
-        if (!name) return <EmptyCell />;
-        const initials = name
-          .split(" ")
-          .map((n: string) => n[0])
-          .join("")
-          .toUpperCase()
-          .slice(0, 2);
-        return (
-          <div className="flex items-center gap-2 max-w-[180px]">
-            <Avatar className="h-7 w-7 flex-shrink-0">
-              <AvatarFallback className="text-[10px] bg-violet-100 text-violet-700 dark:bg-violet-900 dark:text-violet-300">
-                {initials}
-              </AvatarFallback>
-            </Avatar>
-            <span className="truncate text-sm">{name}</span>
-          </div>
-        );
-      },
+      accessorKey: "generadorId",
+      cell: ({ row }) => (
+        <GeneradorCell generadorId={row.original.generadorId} />
+      ),
       size: 14,
       enableSorting: false,
     },
