@@ -223,6 +223,8 @@ export type UserWhereInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryListRelationFilter
   vacancyChecklistValidated?: Prisma.VacancyListRelationFilter
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryListRelationFilter
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryListRelationFilter
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -251,6 +253,8 @@ export type UserOrderByWithRelationInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryOrderByRelationAggregateInput
   vacancyChecklistValidated?: Prisma.VacancyOrderByRelationAggregateInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryOrderByRelationAggregateInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryOrderByRelationAggregateInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -282,6 +286,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryListRelationFilter
   vacancyChecklistValidated?: Prisma.VacancyListRelationFilter
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryListRelationFilter
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryListRelationFilter
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -338,6 +344,8 @@ export type UserCreateInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -366,6 +374,8 @@ export type UserUncheckedCreateInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserUpdateInput = {
@@ -394,6 +404,8 @@ export type UserUpdateInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -422,6 +434,8 @@ export type UserUncheckedUpdateInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -770,6 +784,34 @@ export type UserUpdateOneRequiredWithoutTernaHistoriesValidatedNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTernaHistoriesValidatedInput, Prisma.UserUpdateWithoutTernaHistoriesValidatedInput>, Prisma.UserUncheckedUpdateWithoutTernaHistoriesValidatedInput>
 }
 
+export type UserCreateNestedOneWithoutRecruiterAssignmentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRecruiterAssignmentsInput, Prisma.UserUncheckedCreateWithoutRecruiterAssignmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRecruiterAssignmentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutRecruiterAssignmentsAssignedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRecruiterAssignmentsAssignedInput, Prisma.UserUncheckedCreateWithoutRecruiterAssignmentsAssignedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRecruiterAssignmentsAssignedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutRecruiterAssignmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRecruiterAssignmentsInput, Prisma.UserUncheckedCreateWithoutRecruiterAssignmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRecruiterAssignmentsInput
+  upsert?: Prisma.UserUpsertWithoutRecruiterAssignmentsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRecruiterAssignmentsInput, Prisma.UserUpdateWithoutRecruiterAssignmentsInput>, Prisma.UserUncheckedUpdateWithoutRecruiterAssignmentsInput>
+}
+
+export type UserUpdateOneRequiredWithoutRecruiterAssignmentsAssignedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRecruiterAssignmentsAssignedInput, Prisma.UserUncheckedCreateWithoutRecruiterAssignmentsAssignedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRecruiterAssignmentsAssignedInput
+  upsert?: Prisma.UserUpsertWithoutRecruiterAssignmentsAssignedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRecruiterAssignmentsAssignedInput, Prisma.UserUpdateWithoutRecruiterAssignmentsAssignedInput>, Prisma.UserUncheckedUpdateWithoutRecruiterAssignmentsAssignedInput>
+}
+
 export type UserCreateWithoutSessionsInput = {
   id?: string
   email: string
@@ -795,6 +837,8 @@ export type UserCreateWithoutSessionsInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -822,6 +866,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -865,6 +911,8 @@ export type UserUpdateWithoutSessionsInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -892,6 +940,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -919,6 +969,8 @@ export type UserCreateWithoutAccountsInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -946,6 +998,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -989,6 +1043,8 @@ export type UserUpdateWithoutAccountsInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -1016,6 +1072,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserCreateWithoutUserRolesInput = {
@@ -1043,6 +1101,8 @@ export type UserCreateWithoutUserRolesInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserUncheckedCreateWithoutUserRolesInput = {
@@ -1070,6 +1130,8 @@ export type UserUncheckedCreateWithoutUserRolesInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserCreateOrConnectWithoutUserRolesInput = {
@@ -1113,6 +1175,8 @@ export type UserUpdateWithoutUserRolesInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserRolesInput = {
@@ -1140,6 +1204,8 @@ export type UserUncheckedUpdateWithoutUserRolesInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserCreateWithoutLeadsAssignedInput = {
@@ -1167,6 +1233,8 @@ export type UserCreateWithoutLeadsAssignedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserUncheckedCreateWithoutLeadsAssignedInput = {
@@ -1194,6 +1262,8 @@ export type UserUncheckedCreateWithoutLeadsAssignedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserCreateOrConnectWithoutLeadsAssignedInput = {
@@ -1226,6 +1296,8 @@ export type UserCreateWithoutLeadsCreatedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserUncheckedCreateWithoutLeadsCreatedInput = {
@@ -1253,6 +1325,8 @@ export type UserUncheckedCreateWithoutLeadsCreatedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserCreateOrConnectWithoutLeadsCreatedInput = {
@@ -1296,6 +1370,8 @@ export type UserUpdateWithoutLeadsAssignedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLeadsAssignedInput = {
@@ -1323,6 +1399,8 @@ export type UserUncheckedUpdateWithoutLeadsAssignedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUpsertWithoutLeadsCreatedInput = {
@@ -1361,6 +1439,8 @@ export type UserUpdateWithoutLeadsCreatedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLeadsCreatedInput = {
@@ -1388,6 +1468,8 @@ export type UserUncheckedUpdateWithoutLeadsCreatedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserCreateWithoutLeadStatusChangesInput = {
@@ -1415,6 +1497,8 @@ export type UserCreateWithoutLeadStatusChangesInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserUncheckedCreateWithoutLeadStatusChangesInput = {
@@ -1442,6 +1526,8 @@ export type UserUncheckedCreateWithoutLeadStatusChangesInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserCreateOrConnectWithoutLeadStatusChangesInput = {
@@ -1485,6 +1571,8 @@ export type UserUpdateWithoutLeadStatusChangesInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLeadStatusChangesInput = {
@@ -1512,6 +1600,8 @@ export type UserUncheckedUpdateWithoutLeadStatusChangesInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserCreateWithoutInteractionsInput = {
@@ -1539,6 +1629,8 @@ export type UserCreateWithoutInteractionsInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserUncheckedCreateWithoutInteractionsInput = {
@@ -1566,6 +1658,8 @@ export type UserUncheckedCreateWithoutInteractionsInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserCreateOrConnectWithoutInteractionsInput = {
@@ -1609,6 +1703,8 @@ export type UserUpdateWithoutInteractionsInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInteractionsInput = {
@@ -1636,6 +1732,8 @@ export type UserUncheckedUpdateWithoutInteractionsInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserCreateWithoutAttachmentsValidatedInput = {
@@ -1663,6 +1761,8 @@ export type UserCreateWithoutAttachmentsValidatedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserUncheckedCreateWithoutAttachmentsValidatedInput = {
@@ -1690,6 +1790,8 @@ export type UserUncheckedCreateWithoutAttachmentsValidatedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserCreateOrConnectWithoutAttachmentsValidatedInput = {
@@ -1722,6 +1824,8 @@ export type UserCreateWithoutAttachmentsUploadedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserUncheckedCreateWithoutAttachmentsUploadedInput = {
@@ -1749,6 +1853,8 @@ export type UserUncheckedCreateWithoutAttachmentsUploadedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserCreateOrConnectWithoutAttachmentsUploadedInput = {
@@ -1792,6 +1898,8 @@ export type UserUpdateWithoutAttachmentsValidatedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAttachmentsValidatedInput = {
@@ -1819,6 +1927,8 @@ export type UserUncheckedUpdateWithoutAttachmentsValidatedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUpsertWithoutAttachmentsUploadedInput = {
@@ -1857,6 +1967,8 @@ export type UserUpdateWithoutAttachmentsUploadedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAttachmentsUploadedInput = {
@@ -1884,6 +1996,8 @@ export type UserUncheckedUpdateWithoutAttachmentsUploadedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserCreateWithoutVacanciesAsRecruiterInput = {
@@ -1911,6 +2025,8 @@ export type UserCreateWithoutVacanciesAsRecruiterInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserUncheckedCreateWithoutVacanciesAsRecruiterInput = {
@@ -1938,6 +2054,8 @@ export type UserUncheckedCreateWithoutVacanciesAsRecruiterInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserCreateOrConnectWithoutVacanciesAsRecruiterInput = {
@@ -1970,6 +2088,8 @@ export type UserCreateWithoutVacancyChecklistValidatedInput = {
   vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserUncheckedCreateWithoutVacancyChecklistValidatedInput = {
@@ -1997,6 +2117,8 @@ export type UserUncheckedCreateWithoutVacancyChecklistValidatedInput = {
   vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserCreateOrConnectWithoutVacancyChecklistValidatedInput = {
@@ -2029,6 +2151,8 @@ export type UserCreateWithoutVacanciesCreatedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserUncheckedCreateWithoutVacanciesCreatedInput = {
@@ -2056,6 +2180,8 @@ export type UserUncheckedCreateWithoutVacanciesCreatedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserCreateOrConnectWithoutVacanciesCreatedInput = {
@@ -2099,6 +2225,8 @@ export type UserUpdateWithoutVacanciesAsRecruiterInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutVacanciesAsRecruiterInput = {
@@ -2126,6 +2254,8 @@ export type UserUncheckedUpdateWithoutVacanciesAsRecruiterInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUpsertWithoutVacancyChecklistValidatedInput = {
@@ -2164,6 +2294,8 @@ export type UserUpdateWithoutVacancyChecklistValidatedInput = {
   vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutVacancyChecklistValidatedInput = {
@@ -2191,6 +2323,8 @@ export type UserUncheckedUpdateWithoutVacancyChecklistValidatedInput = {
   vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUpsertWithoutVacanciesCreatedInput = {
@@ -2229,6 +2363,8 @@ export type UserUpdateWithoutVacanciesCreatedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutVacanciesCreatedInput = {
@@ -2256,6 +2392,8 @@ export type UserUncheckedUpdateWithoutVacanciesCreatedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserCreateWithoutVacancyStatusChangesInput = {
@@ -2283,6 +2421,8 @@ export type UserCreateWithoutVacancyStatusChangesInput = {
   vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
   vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserUncheckedCreateWithoutVacancyStatusChangesInput = {
@@ -2310,6 +2450,8 @@ export type UserUncheckedCreateWithoutVacancyStatusChangesInput = {
   vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserCreateOrConnectWithoutVacancyStatusChangesInput = {
@@ -2353,6 +2495,8 @@ export type UserUpdateWithoutVacancyStatusChangesInput = {
   vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutVacancyStatusChangesInput = {
@@ -2380,6 +2524,8 @@ export type UserUncheckedUpdateWithoutVacancyStatusChangesInput = {
   vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserCreateWithoutNotificationsCreatedInput = {
@@ -2407,6 +2553,8 @@ export type UserCreateWithoutNotificationsCreatedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsCreatedInput = {
@@ -2434,6 +2582,8 @@ export type UserUncheckedCreateWithoutNotificationsCreatedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsCreatedInput = {
@@ -2477,6 +2627,8 @@ export type UserUpdateWithoutNotificationsCreatedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsCreatedInput = {
@@ -2504,6 +2656,8 @@ export type UserUncheckedUpdateWithoutNotificationsCreatedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserCreateWithoutClientsGeneratedInput = {
@@ -2531,6 +2685,8 @@ export type UserCreateWithoutClientsGeneratedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserUncheckedCreateWithoutClientsGeneratedInput = {
@@ -2558,6 +2714,8 @@ export type UserUncheckedCreateWithoutClientsGeneratedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserCreateOrConnectWithoutClientsGeneratedInput = {
@@ -2590,6 +2748,8 @@ export type UserCreateWithoutClientsCreatedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserUncheckedCreateWithoutClientsCreatedInput = {
@@ -2617,6 +2777,8 @@ export type UserUncheckedCreateWithoutClientsCreatedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserCreateOrConnectWithoutClientsCreatedInput = {
@@ -2660,6 +2822,8 @@ export type UserUpdateWithoutClientsGeneratedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutClientsGeneratedInput = {
@@ -2687,6 +2851,8 @@ export type UserUncheckedUpdateWithoutClientsGeneratedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUpsertWithoutClientsCreatedInput = {
@@ -2725,6 +2891,8 @@ export type UserUpdateWithoutClientsCreatedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutClientsCreatedInput = {
@@ -2752,6 +2920,8 @@ export type UserUncheckedUpdateWithoutClientsCreatedInput = {
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
   ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserCreateWithoutTernaHistoriesValidatedInput = {
@@ -2779,6 +2949,8 @@ export type UserCreateWithoutTernaHistoriesValidatedInput = {
   vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserUncheckedCreateWithoutTernaHistoriesValidatedInput = {
@@ -2806,6 +2978,8 @@ export type UserUncheckedCreateWithoutTernaHistoriesValidatedInput = {
   vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutRecruiterInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutAssignedByInput
 }
 
 export type UserCreateOrConnectWithoutTernaHistoriesValidatedInput = {
@@ -2849,6 +3023,8 @@ export type UserUpdateWithoutTernaHistoriesValidatedInput = {
   vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutAssignedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTernaHistoriesValidatedInput = {
@@ -2876,6 +3052,272 @@ export type UserUncheckedUpdateWithoutTernaHistoriesValidatedInput = {
   vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
   vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutRecruiterNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutAssignedByNestedInput
+}
+
+export type UserCreateWithoutRecruiterAssignmentsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  avatar?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emailVerified?: boolean
+  image?: string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  leadsAssigned?: Prisma.LeadCreateNestedManyWithoutAssignedToInput
+  leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
+  attachmentsUploaded?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentCreateNestedManyWithoutValidatedByInput
+  notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
+  ternaHistoriesValidated?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutValidatedByInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutAssignedByInput
+}
+
+export type UserUncheckedCreateWithoutRecruiterAssignmentsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  avatar?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emailVerified?: boolean
+  image?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  leadsAssigned?: Prisma.LeadUncheckedCreateNestedManyWithoutAssignedToInput
+  leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedCreateNestedManyWithoutValidatedByInput
+  notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
+  ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutValidatedByInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutAssignedByInput
+}
+
+export type UserCreateOrConnectWithoutRecruiterAssignmentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRecruiterAssignmentsInput, Prisma.UserUncheckedCreateWithoutRecruiterAssignmentsInput>
+}
+
+export type UserCreateWithoutRecruiterAssignmentsAssignedInput = {
+  id?: string
+  email: string
+  name?: string | null
+  avatar?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emailVerified?: boolean
+  image?: string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  leadsAssigned?: Prisma.LeadCreateNestedManyWithoutAssignedToInput
+  leadsCreated?: Prisma.LeadCreateNestedManyWithoutCreatedByInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryCreateNestedManyWithoutChangedByInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutCreatedByInput
+  attachmentsUploaded?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentCreateNestedManyWithoutValidatedByInput
+  notificationsCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyCreateNestedManyWithoutChecklistValidatedByInput
+  ternaHistoriesValidated?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutRecruiterInput
+}
+
+export type UserUncheckedCreateWithoutRecruiterAssignmentsAssignedInput = {
+  id?: string
+  email: string
+  name?: string | null
+  avatar?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emailVerified?: boolean
+  image?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  leadsAssigned?: Prisma.LeadUncheckedCreateNestedManyWithoutAssignedToInput
+  leadsCreated?: Prisma.LeadUncheckedCreateNestedManyWithoutCreatedByInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutCreatedByInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedCreateNestedManyWithoutValidatedByInput
+  notificationsCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  clientsGenerated?: Prisma.ClientUncheckedCreateNestedManyWithoutGeneradorInput
+  clientsCreated?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedCreateNestedManyWithoutRecruiterInput
+  vacanciesCreated?: Prisma.VacancyUncheckedCreateNestedManyWithoutCreatedByInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedCreateNestedManyWithoutChecklistValidatedByInput
+  ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutValidatedByInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutRecruiterInput
+}
+
+export type UserCreateOrConnectWithoutRecruiterAssignmentsAssignedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRecruiterAssignmentsAssignedInput, Prisma.UserUncheckedCreateWithoutRecruiterAssignmentsAssignedInput>
+}
+
+export type UserUpsertWithoutRecruiterAssignmentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRecruiterAssignmentsInput, Prisma.UserUncheckedUpdateWithoutRecruiterAssignmentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRecruiterAssignmentsInput, Prisma.UserUncheckedCreateWithoutRecruiterAssignmentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutRecruiterAssignmentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRecruiterAssignmentsInput, Prisma.UserUncheckedUpdateWithoutRecruiterAssignmentsInput>
+}
+
+export type UserUpdateWithoutRecruiterAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  leadsAssigned?: Prisma.LeadUpdateManyWithoutAssignedToNestedInput
+  leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUpdateManyWithoutValidatedByNestedInput
+  notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
+  ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutAssignedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRecruiterAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  leadsAssigned?: Prisma.LeadUncheckedUpdateManyWithoutAssignedToNestedInput
+  leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedUpdateManyWithoutValidatedByNestedInput
+  notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
+  ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignmentsAssigned?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutAssignedByNestedInput
+}
+
+export type UserUpsertWithoutRecruiterAssignmentsAssignedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRecruiterAssignmentsAssignedInput, Prisma.UserUncheckedUpdateWithoutRecruiterAssignmentsAssignedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRecruiterAssignmentsAssignedInput, Prisma.UserUncheckedCreateWithoutRecruiterAssignmentsAssignedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutRecruiterAssignmentsAssignedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRecruiterAssignmentsAssignedInput, Prisma.UserUncheckedUpdateWithoutRecruiterAssignmentsAssignedInput>
+}
+
+export type UserUpdateWithoutRecruiterAssignmentsAssignedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  leadsAssigned?: Prisma.LeadUpdateManyWithoutAssignedToNestedInput
+  leadsCreated?: Prisma.LeadUpdateManyWithoutCreatedByNestedInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUpdateManyWithoutChangedByNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutCreatedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUpdateManyWithoutValidatedByNestedInput
+  notificationsCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUpdateManyWithoutChecklistValidatedByNestedInput
+  ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutRecruiterNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRecruiterAssignmentsAssignedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  leadsAssigned?: Prisma.LeadUncheckedUpdateManyWithoutAssignedToNestedInput
+  leadsCreated?: Prisma.LeadUncheckedUpdateManyWithoutCreatedByNestedInput
+  leadStatusChanges?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutCreatedByNestedInput
+  attachmentsUploaded?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  attachmentsValidated?: Prisma.AttachmentUncheckedUpdateManyWithoutValidatedByNestedInput
+  notificationsCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  clientsGenerated?: Prisma.ClientUncheckedUpdateManyWithoutGeneradorNestedInput
+  clientsCreated?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacanciesAsRecruiter?: Prisma.VacancyUncheckedUpdateManyWithoutRecruiterNestedInput
+  vacanciesCreated?: Prisma.VacancyUncheckedUpdateManyWithoutCreatedByNestedInput
+  vacancyStatusChanges?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  vacancyChecklistValidated?: Prisma.VacancyUncheckedUpdateManyWithoutChecklistValidatedByNestedInput
+  ternaHistoriesValidated?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutValidatedByNestedInput
+  recruiterAssignments?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutRecruiterNestedInput
 }
 
 
@@ -2901,6 +3343,8 @@ export type UserCountOutputType = {
   vacancyStatusChanges: number
   vacancyChecklistValidated: number
   ternaHistoriesValidated: number
+  recruiterAssignments: number
+  recruiterAssignmentsAssigned: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2921,6 +3365,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   vacancyStatusChanges?: boolean | UserCountOutputTypeCountVacancyStatusChangesArgs
   vacancyChecklistValidated?: boolean | UserCountOutputTypeCountVacancyChecklistValidatedArgs
   ternaHistoriesValidated?: boolean | UserCountOutputTypeCountTernaHistoriesValidatedArgs
+  recruiterAssignments?: boolean | UserCountOutputTypeCountRecruiterAssignmentsArgs
+  recruiterAssignmentsAssigned?: boolean | UserCountOutputTypeCountRecruiterAssignmentsAssignedArgs
 }
 
 /**
@@ -3052,6 +3498,20 @@ export type UserCountOutputTypeCountTernaHistoriesValidatedArgs<ExtArgs extends 
   where?: Prisma.VacancyTernaHistoryWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountRecruiterAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RecruiterAssignmentHistoryWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountRecruiterAssignmentsAssignedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RecruiterAssignmentHistoryWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -3079,6 +3539,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   vacancyStatusChanges?: boolean | Prisma.User$vacancyStatusChangesArgs<ExtArgs>
   vacancyChecklistValidated?: boolean | Prisma.User$vacancyChecklistValidatedArgs<ExtArgs>
   ternaHistoriesValidated?: boolean | Prisma.User$ternaHistoriesValidatedArgs<ExtArgs>
+  recruiterAssignments?: boolean | Prisma.User$recruiterAssignmentsArgs<ExtArgs>
+  recruiterAssignmentsAssigned?: boolean | Prisma.User$recruiterAssignmentsAssignedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -3134,6 +3596,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   vacancyStatusChanges?: boolean | Prisma.User$vacancyStatusChangesArgs<ExtArgs>
   vacancyChecklistValidated?: boolean | Prisma.User$vacancyChecklistValidatedArgs<ExtArgs>
   ternaHistoriesValidated?: boolean | Prisma.User$ternaHistoriesValidatedArgs<ExtArgs>
+  recruiterAssignments?: boolean | Prisma.User$recruiterAssignmentsArgs<ExtArgs>
+  recruiterAssignmentsAssigned?: boolean | Prisma.User$recruiterAssignmentsAssignedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -3159,6 +3623,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     vacancyStatusChanges: Prisma.$VacancyStatusHistoryPayload<ExtArgs>[]
     vacancyChecklistValidated: Prisma.$VacancyPayload<ExtArgs>[]
     ternaHistoriesValidated: Prisma.$VacancyTernaHistoryPayload<ExtArgs>[]
+    recruiterAssignments: Prisma.$RecruiterAssignmentHistoryPayload<ExtArgs>[]
+    recruiterAssignmentsAssigned: Prisma.$RecruiterAssignmentHistoryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3580,6 +4046,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   vacancyStatusChanges<T extends Prisma.User$vacancyStatusChangesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$vacancyStatusChangesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyStatusHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   vacancyChecklistValidated<T extends Prisma.User$vacancyChecklistValidatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$vacancyChecklistValidatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ternaHistoriesValidated<T extends Prisma.User$ternaHistoriesValidatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ternaHistoriesValidatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyTernaHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  recruiterAssignments<T extends Prisma.User$recruiterAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$recruiterAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecruiterAssignmentHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  recruiterAssignmentsAssigned<T extends Prisma.User$recruiterAssignmentsAssignedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$recruiterAssignmentsAssignedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecruiterAssignmentHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4410,6 +4878,54 @@ export type User$ternaHistoriesValidatedArgs<ExtArgs extends runtime.Types.Exten
   take?: number
   skip?: number
   distinct?: Prisma.VacancyTernaHistoryScalarFieldEnum | Prisma.VacancyTernaHistoryScalarFieldEnum[]
+}
+
+/**
+ * User.recruiterAssignments
+ */
+export type User$recruiterAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RecruiterAssignmentHistory
+   */
+  select?: Prisma.RecruiterAssignmentHistorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RecruiterAssignmentHistory
+   */
+  omit?: Prisma.RecruiterAssignmentHistoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RecruiterAssignmentHistoryInclude<ExtArgs> | null
+  where?: Prisma.RecruiterAssignmentHistoryWhereInput
+  orderBy?: Prisma.RecruiterAssignmentHistoryOrderByWithRelationInput | Prisma.RecruiterAssignmentHistoryOrderByWithRelationInput[]
+  cursor?: Prisma.RecruiterAssignmentHistoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RecruiterAssignmentHistoryScalarFieldEnum | Prisma.RecruiterAssignmentHistoryScalarFieldEnum[]
+}
+
+/**
+ * User.recruiterAssignmentsAssigned
+ */
+export type User$recruiterAssignmentsAssignedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RecruiterAssignmentHistory
+   */
+  select?: Prisma.RecruiterAssignmentHistorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RecruiterAssignmentHistory
+   */
+  omit?: Prisma.RecruiterAssignmentHistoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RecruiterAssignmentHistoryInclude<ExtArgs> | null
+  where?: Prisma.RecruiterAssignmentHistoryWhereInput
+  orderBy?: Prisma.RecruiterAssignmentHistoryOrderByWithRelationInput | Prisma.RecruiterAssignmentHistoryOrderByWithRelationInput[]
+  cursor?: Prisma.RecruiterAssignmentHistoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RecruiterAssignmentHistoryScalarFieldEnum | Prisma.RecruiterAssignmentHistoryScalarFieldEnum[]
 }
 
 /**

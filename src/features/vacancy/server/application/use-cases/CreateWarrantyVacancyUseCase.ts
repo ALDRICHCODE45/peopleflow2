@@ -10,6 +10,8 @@ export interface CreateWarrantyVacancyUseCaseInput
   extends CreateWarrantyVacancyInput {
   tenantId: string;
   userId: string;
+  recruiterName?: string | null;
+  createdByName?: string | null;
 }
 
 export interface CreateWarrantyVacancyOutput {
@@ -69,6 +71,7 @@ export class CreateWarrantyVacancyUseCase {
         originVacancyId: input.originVacancyId,
         position: input.position,
         recruiterId: input.recruiterId,
+        recruiterName: input.recruiterName ?? null,
         clientId: original.clientId,
         saleType,
         serviceType: input.serviceType ?? original.serviceType,
@@ -91,6 +94,7 @@ export class CreateWarrantyVacancyUseCase {
           : null,
         tenantId: input.tenantId,
         createdById: input.userId,
+        createdByName: input.createdByName ?? null,
       };
 
       // 5. Create the warranty vacancy (with checklist + attachments duplication)

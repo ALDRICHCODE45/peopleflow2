@@ -8,6 +8,7 @@ import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/applicatio
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
 import { CreateWarrantyVacancyUseCase } from "../../application/use-cases/CreateWarrantyVacancyUseCase";
+
 import { Routes } from "@core/shared/constants/routes";
 import type {
   CreateWarrantyVacancyInput,
@@ -44,11 +45,16 @@ export async function createWarrantyVacancyAction(
       return { error: "Sin permisos para crear vacantes de garantía" };
     }
 
+    // Fetch recruiter name for initial assignment record
+    const recruiterContact = await prismaVacancyRepository.findRecruiterContactById(data.recruiterId);
+
     const useCase = new CreateWarrantyVacancyUseCase(prismaVacancyRepository);
     const result = await useCase.execute({
       ...data,
       tenantId,
       userId: session.user.id,
+      recruiterName: recruiterContact?.name ?? null,
+      createdByName: session.user.name ?? null,
     });
 
     if (!result.success) {

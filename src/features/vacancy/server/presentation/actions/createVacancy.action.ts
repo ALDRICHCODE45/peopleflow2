@@ -8,6 +8,7 @@ import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
+import { prismaRecruiterAssignmentHistoryRepository } from "../../infrastructure/repositories/PrismaRecruiterAssignmentHistoryRepository";
 import { CreateVacancyUseCase } from "../../application/use-cases/CreateVacancyUseCase";
 import { Routes } from "@core/shared/constants/routes";
 import { inngest } from "@/core/shared/inngest/inngest";
@@ -86,7 +87,13 @@ export async function createVacancyAction(
         ? TargetDeliveryDate.from(parseISO(data.targetDeliveryDate)).value
         : TargetDeliveryDate.calculate(assignedAt, serviceType as VacancyServiceType).value;
 
-    const useCase = new CreateVacancyUseCase(prismaVacancyRepository);
+    // Fetch recruiter name for the initial assignment record
+    const recruiterContact = await prismaVacancyRepository.findRecruiterContactById(data.recruiterId);
+
+    const useCase = new CreateVacancyUseCase(
+      prismaVacancyRepository,
+      prismaRecruiterAssignmentHistoryRepository,
+    );
     const result = await useCase.execute({
       position: data.position,
       recruiterId: data.recruiterId,
@@ -109,6 +116,8 @@ export async function createVacancyAction(
       targetDeliveryDate,
       tenantId,
       createdById: session.user.id,
+      recruiterName: recruiterContact?.name ?? null,
+      createdByName: session.user.name ?? null,
     });
 
     if (!result.success) {

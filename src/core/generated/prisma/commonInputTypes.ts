@@ -599,6 +599,40 @@ export type EnumInactiveTimeUnitWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumInactiveTimeUnitFilter<$PrismaModel>
 }
 
+export type EnumVacancyStatusNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.VacancyStatus | Prisma.EnumVacancyStatusFieldRefInput<$PrismaModel> | null
+  in?: $Enums.VacancyStatus[] | Prisma.ListEnumVacancyStatusFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.VacancyStatus[] | Prisma.ListEnumVacancyStatusFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumVacancyStatusNullableFilter<$PrismaModel> | $Enums.VacancyStatus | null
+}
+
+export type EnumReassignmentReasonNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReassignmentReason | Prisma.EnumReassignmentReasonFieldRefInput<$PrismaModel> | null
+  in?: $Enums.ReassignmentReason[] | Prisma.ListEnumReassignmentReasonFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.ReassignmentReason[] | Prisma.ListEnumReassignmentReasonFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumReassignmentReasonNullableFilter<$PrismaModel> | $Enums.ReassignmentReason | null
+}
+
+export type EnumVacancyStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.VacancyStatus | Prisma.EnumVacancyStatusFieldRefInput<$PrismaModel> | null
+  in?: $Enums.VacancyStatus[] | Prisma.ListEnumVacancyStatusFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.VacancyStatus[] | Prisma.ListEnumVacancyStatusFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumVacancyStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.VacancyStatus | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumVacancyStatusNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumVacancyStatusNullableFilter<$PrismaModel>
+}
+
+export type EnumReassignmentReasonNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReassignmentReason | Prisma.EnumReassignmentReasonFieldRefInput<$PrismaModel> | null
+  in?: $Enums.ReassignmentReason[] | Prisma.ListEnumReassignmentReasonFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.ReassignmentReason[] | Prisma.ListEnumReassignmentReasonFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumReassignmentReasonNullableWithAggregatesFilter<$PrismaModel> | $Enums.ReassignmentReason | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumReassignmentReasonNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumReassignmentReasonNullableFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -1157,6 +1191,40 @@ export type NestedEnumInactiveTimeUnitWithAggregatesFilter<$PrismaModel = never>
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumInactiveTimeUnitFilter<$PrismaModel>
   _max?: Prisma.NestedEnumInactiveTimeUnitFilter<$PrismaModel>
+}
+
+export type NestedEnumVacancyStatusNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.VacancyStatus | Prisma.EnumVacancyStatusFieldRefInput<$PrismaModel> | null
+  in?: $Enums.VacancyStatus[] | Prisma.ListEnumVacancyStatusFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.VacancyStatus[] | Prisma.ListEnumVacancyStatusFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumVacancyStatusNullableFilter<$PrismaModel> | $Enums.VacancyStatus | null
+}
+
+export type NestedEnumReassignmentReasonNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReassignmentReason | Prisma.EnumReassignmentReasonFieldRefInput<$PrismaModel> | null
+  in?: $Enums.ReassignmentReason[] | Prisma.ListEnumReassignmentReasonFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.ReassignmentReason[] | Prisma.ListEnumReassignmentReasonFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumReassignmentReasonNullableFilter<$PrismaModel> | $Enums.ReassignmentReason | null
+}
+
+export type NestedEnumVacancyStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.VacancyStatus | Prisma.EnumVacancyStatusFieldRefInput<$PrismaModel> | null
+  in?: $Enums.VacancyStatus[] | Prisma.ListEnumVacancyStatusFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.VacancyStatus[] | Prisma.ListEnumVacancyStatusFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumVacancyStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.VacancyStatus | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumVacancyStatusNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumVacancyStatusNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumReassignmentReasonNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReassignmentReason | Prisma.EnumReassignmentReasonFieldRefInput<$PrismaModel> | null
+  in?: $Enums.ReassignmentReason[] | Prisma.ListEnumReassignmentReasonFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.ReassignmentReason[] | Prisma.ListEnumReassignmentReasonFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumReassignmentReasonNullableWithAggregatesFilter<$PrismaModel> | $Enums.ReassignmentReason | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumReassignmentReasonNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumReassignmentReasonNullableFilter<$PrismaModel>
 }
 
 

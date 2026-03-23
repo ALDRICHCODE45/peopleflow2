@@ -48,6 +48,10 @@ model User {
   vacancyChecklistValidated Vacancy[]              @relation("VacancyChecklistValidator")
   ternaHistoriesValidated   VacancyTernaHistory[]  @relation("TernaHistoryValidator")
 
+  // Relaciones con módulo de Historial de Asignaciones de Reclutador
+  recruiterAssignments          RecruiterAssignmentHistory[] @relation("AssignmentRecruiter")
+  recruiterAssignmentsAssigned  RecruiterAssignmentHistory[] @relation("AssignmentAssignedBy")
+
   @@map("user")
 }
 
@@ -140,6 +144,7 @@ model Tenant {
   vacancyStatusHistory   VacancyStatusHistory[]
   vacancyConfig          VacancyConfig?
   vacancyTernaHistories  VacancyTernaHistory[]
+  recruiterAssignmentHistory RecruiterAssignmentHistory[]
 
   // Relación con configuración de notificaciones
   notificationConfig NotificationConfig?
@@ -582,6 +587,13 @@ enum CandidateStatus {
   DESCARTADO
 }
 
+enum ReassignmentReason {
+  REASSIGNMENT
+  PERFORMANCE
+  WORKLOAD
+  OTHER
+}
+
 model Vacancy {
   id       String        @id @default(cuid())
   // Identificación
@@ -670,6 +682,7 @@ model Vacancy {
   statusHistory  VacancyStatusHistory[]
   attachments    Attachment[]           @relation("VacancyAttachments")
   ternaHistories VacancyTernaHistory[]
+  recruiterAssignmentHistory RecruiterAssignmentHistory[]
 
   @@index([tenantId])
   @@index([status])
@@ -1060,4 +1073,52 @@ model VacancyTernaHistoryCandidate {
 
   @@index([ternaHistoryId])
   @@map("vacancy_terna_history_candidate")
+}
+
+// Historial de asignaciones de reclutador por vacante
+// Se crea automáticamente al asignar/reasignar un reclutador — nunca se elimina
+model RecruiterAssignmentHistory {
+  id        String @id @default(cuid())
+  vacancyId String
+  vacancy   Vacancy @relation(fields: [vacancyId], references: [id], onDelete: Cascade)
+
+  // Reclutador asignado
+  recruiterId   String
+  recruiter     User   @relation("AssignmentRecruiter", fields: [recruiterId], references: [id], onDelete: Restrict)
+  recruiterName String // Snapshot del nombre al momento de la asignación
+
+  // Período de asignación
+  assignedAt   DateTime  @default(now())
+  unassignedAt DateTime? // null = asignación actual
+  durationDays Int?      // Calculado al cerrar la asignación
+
+  // Snapshot del estado de la vacante
+  vacancyStatusOnEntry VacancyStatus  // Estado cuando fue asignado
+  vacancyStatusOnExit  VacancyStatus? // Estado cuando fue desasignado
+
+  // Motivo de la reasignación
+  reason ReassignmentReason? // null para la primera asignación
+  notes  String?             @db.Text
+
+  // Snapshots de contexto
+  targetDeliveryDate DateTime? // Snapshot de la fecha objetivo al momento de la asignación
+  wasOverdue         Boolean   @default(false) // ¿La vacante estaba vencida al momento de la asignación?
+
+  // Quién realizó la asignación
+  assignedById   String
+  assignedBy     User   @relation("AssignmentAssignedBy", fields: [assignedById], references: [id], onDelete: Restrict)
+  assignedByName String // Snapshot del nombre de quien asignó
+
+  // Multi-tenancy
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([vacancyId])
+  @@index([tenantId])
+  @@index([recruiterId])
+  @@index([vacancyId, assignedAt])
+  @@map("recruiter_assignment_history")
 }

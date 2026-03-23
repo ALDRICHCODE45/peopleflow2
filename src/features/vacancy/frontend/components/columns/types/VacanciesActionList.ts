@@ -1,3 +1,4 @@
+import { UserSwitchIcon } from "@hugeicons/core-free-icons";
 import type { IconSvgElement } from "@hugeicons/react";
 
 export interface VacancyAction {
@@ -13,6 +14,7 @@ export const createVacancyActions = (
   onDelete: (() => void) | undefined,
   onViewDetail?: () => void,
   onApplyWarranty?: () => void,
+  onReassign?: () => void,
 ): VacancyAction[] => {
   const actions: VacancyAction[] = [];
 
@@ -29,6 +31,15 @@ export const createVacancyActions = (
       id: "edit",
       label: "Editar",
       onClick: onEdit,
+    });
+  }
+
+  if (onReassign) {
+    actions.push({
+      id: "reassign",
+      label: "Reasignar",
+      icon: UserSwitchIcon,
+      onClick: onReassign,
     });
   }
 

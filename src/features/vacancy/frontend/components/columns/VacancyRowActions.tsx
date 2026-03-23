@@ -5,7 +5,7 @@ import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { VacancyActionsDropdown } from "./VacanciesActionsDropdown";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { createVacancyActions } from "./types/VacanciesActionList";
-import type { VacancyDTO } from "../../types/vacancy.types";
+import type { VacancyDTO, VacancyStatusType } from "../../types/vacancy.types";
 import { useDeleteVacancy } from "../../hooks/useDeleteVacancy";
 import { LoadingModalState } from "@/core/shared/components/LoadingModalState";
 import dynamic from "next/dynamic";
@@ -13,7 +13,16 @@ import { useUpdateVacancy } from "../../hooks/useUpdateVacancy";
 import { VacancySheetForm } from "../VacancySheetForm";
 import { usePermissions } from "@/core/shared/hooks/use-permissions";
 import { ApplyWarrantyDialog } from "../ApplyWarrantyDialog";
+import { ReassignVacancyDialog } from "../ReassignVacancyDialog";
 
+/** Statuses where a vacancy can be reassigned (active, not terminal) */
+const REASSIGNABLE_STATUSES: VacancyStatusType[] = [
+  "QUICK_MEETING",
+  "HUNTING",
+  "FOLLOW_UP",
+  "PRE_PLACEMENT",
+  "STAND_BY",
+];
 
 const DeleteVacancyAlertDialog = dynamic(
   () =>
@@ -56,6 +65,13 @@ export function VacancyRowActions({ row, onViewDetail }: VacancyRowActionsProps)
       PermissionActions.vacantes.gestionar,
     ]);
 
+  const canReassign =
+    isSuperAdmin ||
+    hasAnyPermission([
+      PermissionActions.vacantes.reasignar,
+      PermissionActions.vacantes.gestionar,
+    ]);
+
   const {
     isOpen: isDeleteOpen,
     openModal: openDeleteModal,
@@ -72,6 +88,12 @@ export function VacancyRowActions({ row, onViewDetail }: VacancyRowActionsProps)
     isOpen: isWarrantyOpen,
     openModal: openWarrantyModal,
     closeModal: closeWarrantyModal,
+  } = useModalState();
+
+  const {
+    isOpen: isReassignOpen,
+    openModal: openReassignModal,
+    closeModal: closeReassignModal,
   } = useModalState();
 
   const deleteVacancyMutation = useDeleteVacancy();
@@ -103,11 +125,17 @@ export function VacancyRowActions({ row, onViewDetail }: VacancyRowActionsProps)
     !vacancy.isWarranty &&
     !vacancy.warrantyVacancyId;
 
+  // Show reassign action only for active (non-terminal) vacancies
+  const showReassignAction =
+    canReassign &&
+    REASSIGNABLE_STATUSES.includes(vacancy.status as VacancyStatusType);
+
   const actions = createVacancyActions(
     canEdit ? openUpdateModal : undefined,
     canDelete ? openDeleteModal : undefined,
     onViewDetail ? () => onViewDetail(vacancy.id) : undefined,
     showWarrantyAction ? openWarrantyModal : undefined,
+    showReassignAction ? openReassignModal : undefined,
   );
 
   return (
@@ -151,6 +179,16 @@ export function VacancyRowActions({ row, onViewDetail }: VacancyRowActionsProps)
           vacancyId={vacancy.id}
           open={isWarrantyOpen}
           onOpenChange={(o) => !o && closeWarrantyModal()}
+        />
+      )}
+
+      {isReassignOpen && (
+        <ReassignVacancyDialog
+          open={isReassignOpen}
+          onOpenChange={(o) => !o && closeReassignModal()}
+          vacancyId={vacancy.id}
+          vacancyPosition={vacancy.position}
+          currentRecruiterId={vacancy.recruiterId}
         />
       )}
     </>

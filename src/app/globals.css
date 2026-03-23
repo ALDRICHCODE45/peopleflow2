@@ -125,6 +125,16 @@
   }
 }
 
+/* ─── Scrollbar utilities ─── */
+
+@utility scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* ─── Toast Design Tokens ─── */
 
 :root {

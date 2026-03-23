@@ -39,6 +39,13 @@ export type CandidateStatus =
 
 export type CandidateMatchRating = "CUMPLE" | "NO_CUMPLE" | "PARCIAL";
 
+// Motivo de reasignación (mirror del enum ReassignmentReason de Prisma)
+export type ReassignmentReasonType =
+  | "REASSIGNMENT"
+  | "PERFORMANCE"
+  | "WORKLOAD"
+  | "OTHER";
+
 // Currency type (mirror del enum de Prisma)
 export type VacancyCurrency = "MXN" | "USD";
 
@@ -93,6 +100,7 @@ export interface VacancyDTO {
   checklistItems?: VacancyChecklistItemDTO[];
   statusHistory?: VacancyStatusHistoryDTO[];
   attachments?: AttachmentDTO[];
+  recruiterAssignmentHistory?: RecruiterAssignmentHistoryDTO[];
 }
 
 /**
@@ -169,6 +177,40 @@ export interface VacancyStatusHistoryDTO {
   changedByName?: string | null;
   tenantId: string;
   createdAt: string;
+}
+
+// DTO de historial de asignación de reclutador
+export interface RecruiterAssignmentHistoryDTO {
+  id: string;
+  vacancyId: string;
+  recruiterId: string;
+  recruiterName: string;
+  assignedAt: string;
+  unassignedAt: string | null;
+  durationDays: number | null;
+  vacancyStatusOnEntry: VacancyStatusType;
+  vacancyStatusOnExit: VacancyStatusType | null;
+  reason: ReassignmentReasonType | null;
+  notes: string | null;
+  targetDeliveryDate: string | null;
+  wasOverdue: boolean;
+  assignedById: string;
+  assignedByName: string;
+  tenantId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Tipos de entrada/resultado para reasignación
+export interface ReassignVacancyInput {
+  vacancyId: string;
+  newRecruiterId: string;
+  reason: ReassignmentReasonType;
+  notes?: string;
+}
+
+export interface ReassignVacancyResult {
+  error: string | null;
 }
 
 // DTO de config
@@ -387,6 +429,13 @@ export const VACANCY_MODALITY_LABELS: Record<VacancyModality, string> = {
   PRESENCIAL: "Presencial",
   REMOTO: "Remoto",
   HIBRIDO: "Híbrido",
+};
+
+export const REASSIGNMENT_REASON_LABELS: Record<ReassignmentReasonType, string> = {
+  REASSIGNMENT: "Reasignación",
+  PERFORMANCE: "Desempeño",
+  WORKLOAD: "Carga de trabajo",
+  OTHER: "Otro",
 };
 
 export const CANDIDATE_STATUS_LABELS: Record<CandidateStatus, string> = {

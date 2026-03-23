@@ -35,6 +35,7 @@ export interface CreateVacancyData {
 
 export interface UpdateVacancyData {
   position?: string;
+  recruiterId?: string;
   serviceType?: VacancyServiceType;
   currency?: VacancyCurrency | null;
   assignedAt?: Date;
@@ -100,6 +101,7 @@ export interface CreateWarrantyVacancyData {
   originVacancyId: string;
   position: string;
   recruiterId: string;
+  recruiterName?: string | null;
   clientId: string;
   saleType: VacancySaleType;
   serviceType: VacancyServiceType;
@@ -119,6 +121,7 @@ export interface CreateWarrantyVacancyData {
   targetDeliveryDate?: Date | null;
   tenantId: string;
   createdById: string | null;
+  createdByName?: string | null;
 }
 
 export interface ChecklistValidationResult {

@@ -13,6 +13,12 @@ import {
 } from "@/core/shared/ui/shadcn/tabs";
 import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@shadcn/dropdown-menu";
 import { Skeleton } from "@/core/shared/ui/shadcn/skeleton";
 import { Separator } from "@/core/shared/ui/shadcn/separator";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -27,6 +33,7 @@ import {
   Clock01Icon,
   SentIcon,
   SecurityIcon,
+  MoreVerticalIcon,
 } from "@hugeicons/core-free-icons";
 import { useModalState } from "@/core/shared/hooks/useModalState";
 import { useVacancyDetailQuery } from "../hooks/useVacancyDetailQuery";
@@ -54,6 +61,7 @@ import { VacancyProgressIndicator } from "./VacancyProgressIndicator";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { ApplyWarrantyDialog } from "./ApplyWarrantyDialog";
+import { RecruiterAssignmentTimeline } from "./RecruiterAssignmentTimeline";
 
 interface VacancyDetailSheetProps {
   vacancyId: string | null;
@@ -210,10 +218,10 @@ export function VacancyDetailSheet({
           ) : (
             <>
               {/* Header */}
-              <SheetHeader className="px-6 pt-6 pb-4 border-b">
+              <SheetHeader className="px-4 md:px-6 pt-4 md:pt-6 pb-3 md:pb-4 border-b">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
-                    <SheetTitle className="text-lg font-semibold truncate">
+                    <SheetTitle className="text-base md:text-lg font-semibold truncate">
                       {vacancy.position}
                     </SheetTitle>
                     <div className="flex items-center gap-2 mt-1.5 flex-wrap">
@@ -237,7 +245,7 @@ export function VacancyDetailSheet({
                         </Badge>
                       )}
                     </div>
-                    <div className="flex gap-4 mt-2 text-xs text-muted-foreground flex-wrap">
+                    <div className="flex flex-col md:flex-row gap-1 md:gap-4 mt-2 text-xs text-muted-foreground flex-wrap">
                       {vacancy.clientName && (
                         <span>
                           <span className="font-medium text-foreground">
@@ -288,84 +296,139 @@ export function VacancyDetailSheet({
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">
-                    <PermissionGuard
-                      permissions={[PermissionActions.vacantes.gestionar]}
-                    >
-                      {vacancy.status === "PRE_PLACEMENT" && (
-                        <Button
-                          size="sm"
-                          className="gap-1.5 bg-green-600 hover:bg-green-700 text-white"
-                          onClick={() => {
-                            setTransitionInitialStatus("PLACEMENT");
-                            setTransitionDialogKey((k) => k + 1);
-                            openTransition();
-                          }}
+                    {/* Desktop: inline action buttons */}
+                    {!isMobile && (
+                      <>
+                        <PermissionGuard
+                          permissions={[PermissionActions.vacantes.gestionar]}
                         >
-                          <HugeiconsIcon
-                            icon={CheckmarkBadge01Icon}
-                            size={14}
-                            strokeWidth={2}
-                          />
-                          Confirmar placement
-                        </Button>
-                      )}
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setTransitionInitialStatus(undefined);
-                          setTransitionDialogKey((k) => k + 1);
-                          openTransition();
-                        }}
-                        className="gap-1.5"
-                      >
-                        <HugeiconsIcon
-                          icon={RefreshIcon}
-                          size={14}
-                          strokeWidth={2}
-                        />
-                        Cambiar estado
-                      </Button>
-                    </PermissionGuard>
-                    {["QUICK_MEETING", "HUNTING", "FOLLOW_UP", "PRE_PLACEMENT"].includes(vacancy.status) && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={openRequestValidation}
-                        className="gap-1.5"
-                      >
-                        <HugeiconsIcon
-                          icon={SentIcon}
-                          size={14}
-                          strokeWidth={2}
-                        />
-                        Solicitar validación
-                      </Button>
-                    )}
-                    <PermissionGuard
-                      permissions={[
-                        PermissionActions.vacantes.crear,
-                        PermissionActions.vacantes.gestionar,
-                      ]}
-                    >
-                      {vacancy.status === "PLACEMENT" &&
-                        !vacancy.isWarranty &&
-                        !vacancy.warrantyVacancyId && (
+                          {vacancy.status === "PRE_PLACEMENT" && (
+                            <Button
+                              size="sm"
+                              className="gap-1.5 bg-green-600 hover:bg-green-700 text-white"
+                              onClick={() => {
+                                setTransitionInitialStatus("PLACEMENT");
+                                setTransitionDialogKey((k) => k + 1);
+                                openTransition();
+                              }}
+                            >
+                              <HugeiconsIcon
+                                icon={CheckmarkBadge01Icon}
+                                size={14}
+                                strokeWidth={2}
+                              />
+                              Confirmar placement
+                            </Button>
+                          )}
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={openWarranty}
-                            className="gap-1.5 border-purple-300 text-purple-700 hover:bg-purple-50 dark:border-purple-700 dark:text-purple-300 dark:hover:bg-purple-950"
+                            onClick={() => {
+                              setTransitionInitialStatus(undefined);
+                              setTransitionDialogKey((k) => k + 1);
+                              openTransition();
+                            }}
+                            className="gap-1.5"
                           >
                             <HugeiconsIcon
-                              icon={SecurityIcon}
+                              icon={RefreshIcon}
                               size={14}
                               strokeWidth={2}
                             />
-                            Aplicar garantía
+                            Cambiar estado
+                          </Button>
+                        </PermissionGuard>
+                        {["QUICK_MEETING", "HUNTING", "FOLLOW_UP", "PRE_PLACEMENT"].includes(vacancy.status) && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={openRequestValidation}
+                            className="gap-1.5"
+                          >
+                            <HugeiconsIcon
+                              icon={SentIcon}
+                              size={14}
+                              strokeWidth={2}
+                            />
+                            Solicitar validación
                           </Button>
                         )}
-                    </PermissionGuard>
+                        <PermissionGuard
+                          permissions={[
+                            PermissionActions.vacantes.crear,
+                            PermissionActions.vacantes.gestionar,
+                          ]}
+                        >
+                          {vacancy.status === "PLACEMENT" &&
+                            !vacancy.isWarranty &&
+                            !vacancy.warrantyVacancyId && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={openWarranty}
+                                className="gap-1.5 border-purple-300 text-purple-700 hover:bg-purple-50 dark:border-purple-700 dark:text-purple-300 dark:hover:bg-purple-950"
+                              >
+                                <HugeiconsIcon
+                                  icon={SecurityIcon}
+                                  size={14}
+                                  strokeWidth={2}
+                                />
+                                Aplicar garantía
+                              </Button>
+                            )}
+                        </PermissionGuard>
+                      </>
+                    )}
+
+                    {/* Mobile: actions dropdown */}
+                    {isMobile && (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline" size="icon-sm" aria-label="Acciones">
+                            <HugeiconsIcon icon={MoreVerticalIcon} size={16} />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          {vacancy.status === "PRE_PLACEMENT" && (
+                            <DropdownMenuItem
+                              onClick={() => {
+                                setTransitionInitialStatus("PLACEMENT");
+                                setTransitionDialogKey((k) => k + 1);
+                                openTransition();
+                              }}
+                            >
+                              <HugeiconsIcon icon={CheckmarkBadge01Icon} size={14} />
+                              Confirmar placement
+                            </DropdownMenuItem>
+                          )}
+                          <DropdownMenuItem
+                            onClick={() => {
+                              setTransitionInitialStatus(undefined);
+                              setTransitionDialogKey((k) => k + 1);
+                              openTransition();
+                            }}
+                          >
+                            <HugeiconsIcon icon={RefreshIcon} size={14} />
+                            Cambiar estado
+                          </DropdownMenuItem>
+                          {["QUICK_MEETING", "HUNTING", "FOLLOW_UP", "PRE_PLACEMENT"].includes(vacancy.status) && (
+                            <DropdownMenuItem onClick={openRequestValidation}>
+                              <HugeiconsIcon icon={SentIcon} size={14} />
+                              Solicitar validación
+                            </DropdownMenuItem>
+                          )}
+                          {vacancy.status === "PLACEMENT" &&
+                            !vacancy.isWarranty &&
+                            !vacancy.warrantyVacancyId && (
+                              <DropdownMenuItem onClick={openWarranty}>
+                                <HugeiconsIcon icon={SecurityIcon} size={14} />
+                                Aplicar garantía
+                              </DropdownMenuItem>
+                            )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    )}
+
                     <Button
                       variant="ghost"
                       size="icon-sm"
@@ -379,53 +442,57 @@ export function VacancyDetailSheet({
               </SheetHeader>
 
               {/* Tabs */}
-              <div className="flex-1 px-6 py-4">
+              <div className="flex-1 px-4 md:px-6 py-3 md:py-4">
                 <Tabs defaultValue="info">
-                  <TabsList className="w-full">
-                    <TabsTrigger value="info" className="flex-1">
-                      Información
-                    </TabsTrigger>
-                    <TabsTrigger value="files" className="flex-1">
-                      Archivos{" "}
-                      {attachments.length > 0 && (
-                        <Badge
-                          variant="outline"
-                          className="ml-1 text-xs size-5 p-0 flex items-center justify-center"
-                        >
-                          {attachments.length}
-                        </Badge>
-                      )}
-                    </TabsTrigger>
-                    <TabsTrigger value="candidates" className="flex-1">
-                      Candidatos{" "}
-                      {vacancy.candidates && vacancy.candidates.length > 0 && (
-                        <Badge
-                          variant="outline"
-                          className="ml-1 text-xs size-5 p-0 flex items-center justify-center"
-                        >
-                          {vacancy.candidates.length}
-                        </Badge>
-                      )}
-                    </TabsTrigger>
-                    <TabsTrigger value="checklist" className="flex-1">
-                      Checklist{" "}
-                      {vacancy.checklistItems &&
-                        vacancy.checklistItems.length > 0 && (
+                  <div className="relative">
+                    {/* Gradient fade hints for scroll on mobile */}
+                    <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-background to-transparent z-10 md:hidden" />
+                    <TabsList className="w-full overflow-x-auto md:overflow-x-visible scrollbar-hide justify-start md:justify-center">
+                      <TabsTrigger value="info" className="shrink-0 md:flex-1">
+                        Información
+                      </TabsTrigger>
+                      <TabsTrigger value="files" className="shrink-0 md:flex-1">
+                        Archivos{" "}
+                        {attachments.length > 0 && (
                           <Badge
                             variant="outline"
                             className="ml-1 text-xs size-5 p-0 flex items-center justify-center"
                           >
-                            {vacancy.checklistItems.length}
+                            {attachments.length}
                           </Badge>
                         )}
-                    </TabsTrigger>
-                    <TabsTrigger value="history" className="flex-1">
-                      Historial
-                    </TabsTrigger>
-                  </TabsList>
+                      </TabsTrigger>
+                      <TabsTrigger value="candidates" className="shrink-0 md:flex-1">
+                        Candidatos{" "}
+                        {vacancy.candidates && vacancy.candidates.length > 0 && (
+                          <Badge
+                            variant="outline"
+                            className="ml-1 text-xs size-5 p-0 flex items-center justify-center"
+                          >
+                            {vacancy.candidates.length}
+                          </Badge>
+                        )}
+                      </TabsTrigger>
+                      <TabsTrigger value="checklist" className="shrink-0 md:flex-1">
+                        Checklist{" "}
+                        {vacancy.checklistItems &&
+                          vacancy.checklistItems.length > 0 && (
+                            <Badge
+                              variant="outline"
+                              className="ml-1 text-xs size-5 p-0 flex items-center justify-center"
+                            >
+                              {vacancy.checklistItems.length}
+                            </Badge>
+                          )}
+                      </TabsTrigger>
+                      <TabsTrigger value="history" className="shrink-0 md:flex-1">
+                        Historial
+                      </TabsTrigger>
+                    </TabsList>
+                  </div>
 
                   {/* ---- Tab: Información ---- */}
-                  <TabsContent value="info" className="mt-4 space-y-5">
+                  <TabsContent value="info" className="mt-3 md:mt-4 space-y-4 md:space-y-5">
                     {/* Fechas */}
                     <div>
                       <VacancyProgressIndicator
@@ -435,7 +502,7 @@ export function VacancyDetailSheet({
                         status={vacancy.status}
                         variant="expanded"
                       />
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                         <InfoRow
                           label="Fecha de asignación"
                           value={formatDateSafe(vacancy.assignedAt)}
@@ -462,7 +529,7 @@ export function VacancyDetailSheet({
                       <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">
                         Condiciones laborales
                       </h4>
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                         <InfoRow
                           label="Modalidad"
                           value={
@@ -484,7 +551,7 @@ export function VacancyDetailSheet({
                       <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">
                         Compensación
                       </h4>
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                         <InfoRow
                           label="Salario mínimo"
                           value={
@@ -549,7 +616,7 @@ export function VacancyDetailSheet({
                   </TabsContent>
 
                   {/* ---- Tab: Archivos ---- */}
-                  <TabsContent value="files" className="mt-4">
+                  <TabsContent value="files" className="mt-3 md:mt-4">
                     <AttachmentsSection
                       vacancy={vacancy}
                       attachments={attachments}
@@ -558,8 +625,8 @@ export function VacancyDetailSheet({
                   </TabsContent>
 
                   {/* ---- Tab: Candidatos ---- */}
-                  <TabsContent value="candidates" className="mt-4 space-y-3">
-                    <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <TabsContent value="candidates" className="mt-3 md:mt-4 space-y-3">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 flex-wrap">
                       <span className="text-sm font-medium">
                         {vacancy.candidates?.length ?? 0} candidato(s)
                       </span>
@@ -646,35 +713,51 @@ export function VacancyDetailSheet({
                   </TabsContent>
 
                   {/* ---- Tab: Checklist ---- */}
-                  <TabsContent value="checklist" className="mt-4">
+                  <TabsContent value="checklist" className="mt-3 md:mt-4">
                     <ChecklistSection vacancy={vacancy} />
                   </TabsContent>
 
                   {/* ---- Tab: Historial ---- */}
-                  <TabsContent value="history" className="mt-4">
-                    {!vacancy.statusHistory ||
-                      vacancy.statusHistory.length === 0 ? (
-                      <div className="flex flex-col items-center justify-center py-10 text-muted-foreground gap-2">
-                        <HugeiconsIcon
-                          icon={ArrowRight01Icon}
-                          size={32}
-                          strokeWidth={1.5}
-                        />
-                        <p className="text-sm">Sin historial de estados</p>
-                      </div>
-                    ) : (
-                      <div className="space-y-0 mt-2">
-                        {[...vacancy.statusHistory]
-                          .sort(
-                            (a, b) =>
-                              new Date(b.createdAt).getTime() -
-                              new Date(a.createdAt).getTime(),
-                          )
-                          .map((item) => (
-                            <HistoryItem key={item.id} item={item} />
-                          ))}
-                      </div>
-                    )}
+                  <TabsContent value="history" className="mt-3 md:mt-4 space-y-4 md:space-y-6">
+                    {/* Status history */}
+                    <div>
+                      <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">
+                        Historial de estados
+                      </h4>
+                      {!vacancy.statusHistory ||
+                        vacancy.statusHistory.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center py-10 text-muted-foreground gap-2">
+                          <HugeiconsIcon
+                            icon={ArrowRight01Icon}
+                            size={32}
+                            strokeWidth={1.5}
+                          />
+                          <p className="text-sm">Sin historial de estados</p>
+                        </div>
+                      ) : (
+                        <div className="space-y-0 mt-2">
+                          {[...vacancy.statusHistory]
+                            .sort(
+                              (a, b) =>
+                                new Date(b.createdAt).getTime() -
+                                new Date(a.createdAt).getTime(),
+                            )
+                            .map((item) => (
+                              <HistoryItem key={item.id} item={item} />
+                            ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <Separator />
+
+                    {/* Recruiter assignment history */}
+                    <div>
+                      <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">
+                        Asignaciones de reclutador
+                      </h4>
+                      <RecruiterAssignmentTimeline vacancyId={vacancy.id} />
+                    </div>
                   </TabsContent>
                 </Tabs>
               </div>

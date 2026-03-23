@@ -78,7 +78,8 @@ export const ModelName = {
   Client: 'Client',
   NotificationConfig: 'NotificationConfig',
   VacancyTernaHistory: 'VacancyTernaHistory',
-  VacancyTernaHistoryCandidate: 'VacancyTernaHistoryCandidate'
+  VacancyTernaHistoryCandidate: 'VacancyTernaHistoryCandidate',
+  RecruiterAssignmentHistory: 'RecruiterAssignmentHistory'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -591,6 +592,30 @@ export const VacancyTernaHistoryCandidateScalarFieldEnum = {
 } as const
 
 export type VacancyTernaHistoryCandidateScalarFieldEnum = (typeof VacancyTernaHistoryCandidateScalarFieldEnum)[keyof typeof VacancyTernaHistoryCandidateScalarFieldEnum]
+
+
+export const RecruiterAssignmentHistoryScalarFieldEnum = {
+  id: 'id',
+  vacancyId: 'vacancyId',
+  recruiterId: 'recruiterId',
+  recruiterName: 'recruiterName',
+  assignedAt: 'assignedAt',
+  unassignedAt: 'unassignedAt',
+  durationDays: 'durationDays',
+  vacancyStatusOnEntry: 'vacancyStatusOnEntry',
+  vacancyStatusOnExit: 'vacancyStatusOnExit',
+  reason: 'reason',
+  notes: 'notes',
+  targetDeliveryDate: 'targetDeliveryDate',
+  wasOverdue: 'wasOverdue',
+  assignedById: 'assignedById',
+  assignedByName: 'assignedByName',
+  tenantId: 'tenantId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RecruiterAssignmentHistoryScalarFieldEnum = (typeof RecruiterAssignmentHistoryScalarFieldEnum)[keyof typeof RecruiterAssignmentHistoryScalarFieldEnum]
 
 
 export const SortOrder = {

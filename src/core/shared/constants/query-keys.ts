@@ -4,6 +4,8 @@ export const vacancyQueryKeys = {
     ["vacancy", "detail", tenantId, vacancyId] as const,
   attachments: (tenantId: string, vacancyId: string) =>
     ["vacancy", "attachments", tenantId, vacancyId] as const,
+  assignmentHistory: (tenantId: string, vacancyId: string) =>
+    ["recruiter-assignment-history", tenantId, vacancyId] as const,
 };
 
 export const leadsQueryKeys = {

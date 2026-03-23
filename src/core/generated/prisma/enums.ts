@@ -131,6 +131,16 @@ export const CandidateStatus = {
 export type CandidateStatus = (typeof CandidateStatus)[keyof typeof CandidateStatus]
 
 
+export const ReassignmentReason = {
+  REASSIGNMENT: 'REASSIGNMENT',
+  PERFORMANCE: 'PERFORMANCE',
+  WORKLOAD: 'WORKLOAD',
+  OTHER: 'OTHER'
+} as const
+
+export type ReassignmentReason = (typeof ReassignmentReason)[keyof typeof ReassignmentReason]
+
+
 export const Currency = {
   MXN: 'MXN',
   USD: 'USD'

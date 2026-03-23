@@ -410,6 +410,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       where: { id, tenantId },
       data: {
         ...(data.position !== undefined && { position: data.position }),
+        ...(data.recruiterId !== undefined && { recruiterId: data.recruiterId }),
         ...(data.status !== undefined && { status: data.status }),
         ...(data.serviceType !== undefined && { serviceType: data.serviceType }),
         ...(data.currency !== undefined && { currency: data.currency }),
@@ -691,7 +692,25 @@ export class PrismaVacancyRepository implements IVacancyRepository {
         });
       }
 
-      // 4. Return the created vacancy with relations
+      // 4. Create initial recruiter assignment record
+      await tx.recruiterAssignmentHistory.create({
+        data: {
+          vacancyId: newVacancy.id,
+          recruiterId: data.recruiterId,
+          recruiterName: data.recruiterName ?? "Reclutador",
+          assignedAt: new Date(),
+          vacancyStatusOnEntry: "QUICK_MEETING",
+          reason: null,
+          notes: null,
+          targetDeliveryDate: data.targetDeliveryDate ?? null,
+          wasOverdue: false,
+          assignedById: data.createdById ?? data.recruiterId,
+          assignedByName: data.createdByName ?? "Sistema",
+          tenantId: data.tenantId,
+        },
+      });
+
+      // 5. Return the created vacancy with relations
       const created = await tx.vacancy.findUnique({
         where: { id: newVacancy.id },
         include: {

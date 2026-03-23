@@ -5,6 +5,7 @@ import type {
 } from "@features/vacancy/frontend/types/vacancy.types";
 import type { Vacancy } from "../../domain/entities/Vacancy";
 import type { IVacancyRepository } from "../../domain/interfaces/IVacancyRepository";
+import type { IRecruiterAssignmentHistoryRepository } from "../../domain/interfaces/IRecruiterAssignmentHistoryRepository";
 import { SalaryRangeVO } from "../../domain/value-objects/SalaryRange";
 import { VacancySaleTypeService } from "../../domain/services/VacancySaleTypeService";
 
@@ -30,6 +31,8 @@ export interface CreateVacancyInput {
   assignedAt?: Date;
   tenantId: string;
   createdById?: string | null;
+  recruiterName?: string | null;
+  createdByName?: string | null;
 }
 
 export interface CreateVacancyOutput {
@@ -39,7 +42,10 @@ export interface CreateVacancyOutput {
 }
 
 export class CreateVacancyUseCase {
-  constructor(private readonly vacancyRepo: IVacancyRepository) {}
+  constructor(
+    private readonly vacancyRepo: IVacancyRepository,
+    private readonly assignmentRepo?: IRecruiterAssignmentHistoryRepository,
+  ) {}
 
   async execute(input: CreateVacancyInput): Promise<CreateVacancyOutput> {
     try {
@@ -105,6 +111,31 @@ export class CreateVacancyUseCase {
         tenantId: input.tenantId,
         createdById: input.createdById ?? null,
       });
+
+      // 5. Create initial recruiter assignment record
+      if (this.assignmentRepo && vacancy) {
+        try {
+          await this.assignmentRepo.create({
+            vacancyId: vacancy.id,
+            recruiterId: input.recruiterId,
+            recruiterName: input.recruiterName ?? "Reclutador",
+            assignedAt: input.assignedAt ?? new Date(),
+            vacancyStatusOnEntry: "QUICK_MEETING",
+            reason: null,
+            notes: null,
+            targetDeliveryDate: input.targetDeliveryDate ?? null,
+            wasOverdue: false,
+            assignedById: input.createdById ?? input.recruiterId,
+            assignedByName: input.createdByName ?? "Sistema",
+            tenantId: input.tenantId,
+          });
+        } catch (assignmentError) {
+          console.error(
+            "Error creating initial assignment record (non-fatal):",
+            assignmentError,
+          );
+        }
+      }
 
       return { success: true, vacancy };
     } catch (error) {

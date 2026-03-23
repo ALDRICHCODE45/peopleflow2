@@ -295,6 +295,14 @@ const RECLUTAMIENTO_PERMISSIONS: PermissionDefinition[] = [
     action: "modificar-fecha-tentativa-entrega",
     description: "Modificar la fecha tentativa de entrega de una vacante",
   },
+  // Vacantes - Reasignación de reclutador
+  {
+    name: "vacantes:reasignar",
+    resource: "vacantes",
+    action: "reasignar",
+    description:
+      "Reasignar el reclutador de una vacante a otro usuario",
+  },
   // Vacantes - Modular
   {
     name: "vacantes:gestionar",
@@ -634,6 +642,7 @@ export const PermissionActions = {
     rechazarChecklist: "vacantes:rechazar-checklist",
     modificarFechaAsignacion: "vacantes:modificar-fecha-asignacion",
     modificarFechaTentativaEntrega: "vacantes:modificar-fecha-tentativa-entrega",
+    reasignar: "vacantes:reasignar",
     gestionar: "vacantes:gestionar",
   },
   candidatos: {

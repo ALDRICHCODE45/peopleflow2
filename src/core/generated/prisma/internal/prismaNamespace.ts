@@ -411,7 +411,8 @@ export const ModelName = {
   Client: 'Client',
   NotificationConfig: 'NotificationConfig',
   VacancyTernaHistory: 'VacancyTernaHistory',
-  VacancyTernaHistoryCandidate: 'VacancyTernaHistoryCandidate'
+  VacancyTernaHistoryCandidate: 'VacancyTernaHistoryCandidate',
+  RecruiterAssignmentHistory: 'RecruiterAssignmentHistory'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -427,7 +428,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "tenant" | "role" | "userRole" | "rolePermission" | "permission" | "sector" | "subsector" | "leadOrigin" | "lead" | "leadStatusHistory" | "contact" | "interaction" | "attachment" | "vacancy" | "vacancyChecklistItem" | "vacancyCandidate" | "vacancyCandidateMatch" | "vacancyStatusHistory" | "vacancyConfig" | "notification" | "client" | "notificationConfig" | "vacancyTernaHistory" | "vacancyTernaHistoryCandidate"
+    modelProps: "user" | "session" | "account" | "verification" | "tenant" | "role" | "userRole" | "rolePermission" | "permission" | "sector" | "subsector" | "leadOrigin" | "lead" | "leadStatusHistory" | "contact" | "interaction" | "attachment" | "vacancy" | "vacancyChecklistItem" | "vacancyCandidate" | "vacancyCandidateMatch" | "vacancyStatusHistory" | "vacancyConfig" | "notification" | "client" | "notificationConfig" | "vacancyTernaHistory" | "vacancyTernaHistoryCandidate" | "recruiterAssignmentHistory"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2503,6 +2504,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    RecruiterAssignmentHistory: {
+      payload: Prisma.$RecruiterAssignmentHistoryPayload<ExtArgs>
+      fields: Prisma.RecruiterAssignmentHistoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RecruiterAssignmentHistoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecruiterAssignmentHistoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RecruiterAssignmentHistoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecruiterAssignmentHistoryPayload>
+        }
+        findFirst: {
+          args: Prisma.RecruiterAssignmentHistoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecruiterAssignmentHistoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RecruiterAssignmentHistoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecruiterAssignmentHistoryPayload>
+        }
+        findMany: {
+          args: Prisma.RecruiterAssignmentHistoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecruiterAssignmentHistoryPayload>[]
+        }
+        create: {
+          args: Prisma.RecruiterAssignmentHistoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecruiterAssignmentHistoryPayload>
+        }
+        createMany: {
+          args: Prisma.RecruiterAssignmentHistoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RecruiterAssignmentHistoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecruiterAssignmentHistoryPayload>[]
+        }
+        delete: {
+          args: Prisma.RecruiterAssignmentHistoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecruiterAssignmentHistoryPayload>
+        }
+        update: {
+          args: Prisma.RecruiterAssignmentHistoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecruiterAssignmentHistoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.RecruiterAssignmentHistoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RecruiterAssignmentHistoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RecruiterAssignmentHistoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecruiterAssignmentHistoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.RecruiterAssignmentHistoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecruiterAssignmentHistoryPayload>
+        }
+        aggregate: {
+          args: Prisma.RecruiterAssignmentHistoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRecruiterAssignmentHistory>
+        }
+        groupBy: {
+          args: Prisma.RecruiterAssignmentHistoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RecruiterAssignmentHistoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RecruiterAssignmentHistoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RecruiterAssignmentHistoryCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -3038,6 +3113,30 @@ export const VacancyTernaHistoryCandidateScalarFieldEnum = {
 export type VacancyTernaHistoryCandidateScalarFieldEnum = (typeof VacancyTernaHistoryCandidateScalarFieldEnum)[keyof typeof VacancyTernaHistoryCandidateScalarFieldEnum]
 
 
+export const RecruiterAssignmentHistoryScalarFieldEnum = {
+  id: 'id',
+  vacancyId: 'vacancyId',
+  recruiterId: 'recruiterId',
+  recruiterName: 'recruiterName',
+  assignedAt: 'assignedAt',
+  unassignedAt: 'unassignedAt',
+  durationDays: 'durationDays',
+  vacancyStatusOnEntry: 'vacancyStatusOnEntry',
+  vacancyStatusOnExit: 'vacancyStatusOnExit',
+  reason: 'reason',
+  notes: 'notes',
+  targetDeliveryDate: 'targetDeliveryDate',
+  wasOverdue: 'wasOverdue',
+  assignedById: 'assignedById',
+  assignedByName: 'assignedByName',
+  tenantId: 'tenantId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RecruiterAssignmentHistoryScalarFieldEnum = (typeof RecruiterAssignmentHistoryScalarFieldEnum)[keyof typeof RecruiterAssignmentHistoryScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -3399,6 +3498,20 @@ export type EnumInactiveTimeUnitFieldRefInput<$PrismaModel> = FieldRefInputType<
 export type ListEnumInactiveTimeUnitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InactiveTimeUnit[]'>
     
 
+
+/**
+ * Reference to a field of type 'ReassignmentReason'
+ */
+export type EnumReassignmentReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReassignmentReason'>
+    
+
+
+/**
+ * Reference to a field of type 'ReassignmentReason[]'
+ */
+export type ListEnumReassignmentReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReassignmentReason[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -3522,6 +3635,7 @@ export type GlobalOmitConfig = {
   notificationConfig?: Prisma.NotificationConfigOmit
   vacancyTernaHistory?: Prisma.VacancyTernaHistoryOmit
   vacancyTernaHistoryCandidate?: Prisma.VacancyTernaHistoryCandidateOmit
+  recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryOmit
 }
 
 /* Types for Logging */

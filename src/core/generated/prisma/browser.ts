@@ -157,3 +157,8 @@ export type VacancyTernaHistory = Prisma.VacancyTernaHistoryModel
  * 
  */
 export type VacancyTernaHistoryCandidate = Prisma.VacancyTernaHistoryCandidateModel
+/**
+ * Model RecruiterAssignmentHistory
+ * 
+ */
+export type RecruiterAssignmentHistory = Prisma.RecruiterAssignmentHistoryModel
