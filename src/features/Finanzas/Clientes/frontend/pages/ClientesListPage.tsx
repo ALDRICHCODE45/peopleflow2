@@ -1,16 +1,19 @@
 "use client";
 
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useState } from "react";
 import { usePaginatedClientsQuery } from "../hooks/usePaginatedClientsQuery";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { DataTable } from "@/core/shared/components/DataTable/DataTable";
-import { ClientColumns } from "../components/columns/ClientColumns";
+import { createClientColumns } from "../components/columns/ClientColumns";
 import { createTableConfig } from "@/core/shared/helpers/createTableConfig";
 import { ClientesTableConfig } from "../components/tableConfig/ClientesTableConfig";
 import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
 import { useServerPaginatedTable } from "@/core/shared/hooks/useServerPaginatedTable";
 import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
+import { ClientSheetForm } from "../components/ClientSheetForm";
+import type { ClientDTO } from "../types/client.types";
+
 export function ClientListPage() {
   // Server-side pagination state (no tabs for clients)
   const {
@@ -46,6 +49,26 @@ export function ClientListPage() {
   // Solo mostrar skeleton si es carga inicial SIN datos previos
   const showInitialLoading = isPending && !data;
 
+  // Edit sheet state
+  const [editingClient, setEditingClient] = useState<ClientDTO | undefined>();
+  const [sheetOpen, setSheetOpen] = useState(false);
+
+  const handleEdit = useCallback((client: ClientDTO) => {
+    setEditingClient(client);
+    setSheetOpen(true);
+  }, []);
+
+  const handleSheetOpenChange = useCallback((open: boolean) => {
+    setSheetOpen(open);
+    if (!open) setEditingClient(undefined);
+  }, []);
+
+  // Memoize columns with edit callback
+  const columns = useMemo(
+    () => createClientColumns(handleEdit),
+    [handleEdit],
+  );
+
   // Table configuration with server-side enabled
   const tableConfig = useMemo(
     () =>
@@ -76,7 +99,7 @@ export function ClientListPage() {
             ]}
           >
             <DataTable
-              columns={ClientColumns}
+              columns={columns}
               data={clients}
               config={tableConfig}
               isLoading={showInitialLoading}
@@ -90,6 +113,12 @@ export function ClientListPage() {
           </PermissionGuard>
         </div>
       </CardContent>
+
+      <ClientSheetForm
+        client={editingClient}
+        open={sheetOpen}
+        onOpenChange={handleSheetOpenChange}
+      />
     </Card>
   );
 }

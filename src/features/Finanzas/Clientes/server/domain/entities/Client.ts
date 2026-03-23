@@ -35,6 +35,14 @@ export interface ClientProps {
   creditDays: number | null;
   cancellationFee: number | null;
   warrantyMonths: number | null;
+
+  // Datos Fiscales
+  rfc: string | null;
+  codigoPostalFiscal: string | null;
+  nombreComercial: string | null;
+  ubicacion: string | null;
+  regimenFiscal: string | null;
+  figura: string | null;
 }
 
 export class Client {
@@ -136,6 +144,32 @@ export class Client {
     return this.props.warrantyMonths;
   }
 
+  // --- Datos Fiscales ---
+
+  get rfc(): string | null {
+    return this.props.rfc;
+  }
+
+  get codigoPostalFiscal(): string | null {
+    return this.props.codigoPostalFiscal;
+  }
+
+  get nombreComercial(): string | null {
+    return this.props.nombreComercial;
+  }
+
+  get ubicacion(): string | null {
+    return this.props.ubicacion;
+  }
+
+  get regimenFiscal(): string | null {
+    return this.props.regimenFiscal;
+  }
+
+  get figura(): string | null {
+    return this.props.figura;
+  }
+
   // --- Domain methods ---
 
   /**
@@ -144,6 +178,20 @@ export class Client {
    */
   hasCommercialTerms(): boolean {
     return this.props.paymentScheme !== null;
+  }
+
+  /**
+   * Retorna true si el cliente tiene al menos un dato fiscal definido
+   */
+  hasFiscalData(): boolean {
+    return (
+      this.props.rfc !== null ||
+      this.props.codigoPostalFiscal !== null ||
+      this.props.nombreComercial !== null ||
+      this.props.ubicacion !== null ||
+      this.props.regimenFiscal !== null ||
+      this.props.figura !== null
+    );
   }
 
   toJSON() {
@@ -171,6 +219,13 @@ export class Client {
       creditDays: this.props.creditDays,
       cancellationFee: this.props.cancellationFee,
       warrantyMonths: this.props.warrantyMonths,
+      // Datos Fiscales
+      rfc: this.props.rfc,
+      codigoPostalFiscal: this.props.codigoPostalFiscal,
+      nombreComercial: this.props.nombreComercial,
+      ubicacion: this.props.ubicacion,
+      regimenFiscal: this.props.regimenFiscal,
+      figura: this.props.figura,
     };
   }
 }

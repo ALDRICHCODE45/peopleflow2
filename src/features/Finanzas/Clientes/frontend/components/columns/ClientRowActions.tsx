@@ -1,6 +1,6 @@
 "use client";
 
-import { Row } from "@tanstack/react-table";
+import type { Row } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
@@ -15,14 +15,26 @@ import {
   DropdownMenuTrigger,
 } from "@/core/shared/ui/shadcn/dropdown-menu";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { MoreVerticalIcon } from "@hugeicons/core-free-icons";
+import {
+  MoreVerticalIcon,
+  PencilEdit01Icon,
+} from "@hugeicons/core-free-icons";
 
-export function ClientRowActions({ row }: { row: Row<ClientDTO> }) {
+interface ClientRowActionsProps {
+  row: Row<ClientDTO>;
+  onEdit?: (client: ClientDTO) => void;
+}
+
+export function ClientRowActions({ row, onEdit }: ClientRowActionsProps) {
   const client = row.original;
   const router = useRouter();
 
   const handleViewDetail = () => {
     router.push(`/finanzas/clientes/${client.id}`);
+  };
+
+  const handleEdit = () => {
+    onEdit?.(client);
   };
 
   return (
@@ -47,6 +59,19 @@ export function ClientRowActions({ row }: { row: Row<ClientDTO> }) {
             Ver detalle
           </DropdownMenuItem>
         </PermissionGuard>
+        {onEdit && (
+          <PermissionGuard
+            permissions={[
+              PermissionActions.clientes.editar,
+              PermissionActions.clientes.gestionar,
+            ]}
+          >
+            <DropdownMenuItem onClick={handleEdit}>
+              <HugeiconsIcon icon={PencilEdit01Icon} className="size-4 mr-2" />
+              Editar
+            </DropdownMenuItem>
+          </PermissionGuard>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -30,6 +30,17 @@ export interface PaginatedClientResult {
   totalCount: number;
 }
 
+// --- Fiscal data ---
+
+export interface FiscalData {
+  rfc?: string | null;
+  codigoPostalFiscal?: string | null;
+  nombreComercial?: string | null;
+  ubicacion?: string | null;
+  regimenFiscal?: string | null;
+  figura?: string | null;
+}
+
 // --- Commercial terms ---
 
 export interface CommercialTermsData {
@@ -58,6 +69,7 @@ export interface CreateClientData {
 export interface UpdateClientData {
   nombre?: string;
   commercialTerms?: CommercialTermsData;
+  fiscalData?: FiscalData;
 }
 
 export interface IClientRepository {

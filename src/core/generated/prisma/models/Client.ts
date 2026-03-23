@@ -60,6 +60,12 @@ export type ClientMinAggregateOutputType = {
   creditDays: number | null
   cancellationFee: number | null
   warrantyMonths: number | null
+  rfc: string | null
+  codigoPostalFiscal: string | null
+  nombreComercial: string | null
+  ubicacion: string | null
+  regimenFiscal: string | null
+  figura: string | null
   tenantId: string | null
   createdById: string | null
   createdAt: Date | null
@@ -82,6 +88,12 @@ export type ClientMaxAggregateOutputType = {
   creditDays: number | null
   cancellationFee: number | null
   warrantyMonths: number | null
+  rfc: string | null
+  codigoPostalFiscal: string | null
+  nombreComercial: string | null
+  ubicacion: string | null
+  regimenFiscal: string | null
+  figura: string | null
   tenantId: string | null
   createdById: string | null
   createdAt: Date | null
@@ -104,6 +116,12 @@ export type ClientCountAggregateOutputType = {
   creditDays: number
   cancellationFee: number
   warrantyMonths: number
+  rfc: number
+  codigoPostalFiscal: number
+  nombreComercial: number
+  ubicacion: number
+  regimenFiscal: number
+  figura: number
   tenantId: number
   createdById: number
   createdAt: number
@@ -146,6 +164,12 @@ export type ClientMinAggregateInputType = {
   creditDays?: true
   cancellationFee?: true
   warrantyMonths?: true
+  rfc?: true
+  codigoPostalFiscal?: true
+  nombreComercial?: true
+  ubicacion?: true
+  regimenFiscal?: true
+  figura?: true
   tenantId?: true
   createdById?: true
   createdAt?: true
@@ -168,6 +192,12 @@ export type ClientMaxAggregateInputType = {
   creditDays?: true
   cancellationFee?: true
   warrantyMonths?: true
+  rfc?: true
+  codigoPostalFiscal?: true
+  nombreComercial?: true
+  ubicacion?: true
+  regimenFiscal?: true
+  figura?: true
   tenantId?: true
   createdById?: true
   createdAt?: true
@@ -190,6 +220,12 @@ export type ClientCountAggregateInputType = {
   creditDays?: true
   cancellationFee?: true
   warrantyMonths?: true
+  rfc?: true
+  codigoPostalFiscal?: true
+  nombreComercial?: true
+  ubicacion?: true
+  regimenFiscal?: true
+  figura?: true
   tenantId?: true
   createdById?: true
   createdAt?: true
@@ -299,6 +335,12 @@ export type ClientGroupByOutputType = {
   creditDays: number | null
   cancellationFee: number | null
   warrantyMonths: number | null
+  rfc: string | null
+  codigoPostalFiscal: string | null
+  nombreComercial: string | null
+  ubicacion: string | null
+  regimenFiscal: string | null
+  figura: string | null
   tenantId: string
   createdById: string | null
   createdAt: Date
@@ -344,6 +386,12 @@ export type ClientWhereInput = {
   creditDays?: Prisma.IntNullableFilter<"Client"> | number | null
   cancellationFee?: Prisma.FloatNullableFilter<"Client"> | number | null
   warrantyMonths?: Prisma.IntNullableFilter<"Client"> | number | null
+  rfc?: Prisma.StringNullableFilter<"Client"> | string | null
+  codigoPostalFiscal?: Prisma.StringNullableFilter<"Client"> | string | null
+  nombreComercial?: Prisma.StringNullableFilter<"Client"> | string | null
+  ubicacion?: Prisma.StringNullableFilter<"Client"> | string | null
+  regimenFiscal?: Prisma.StringNullableFilter<"Client"> | string | null
+  figura?: Prisma.StringNullableFilter<"Client"> | string | null
   tenantId?: Prisma.StringFilter<"Client"> | string
   createdById?: Prisma.StringNullableFilter<"Client"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Client"> | Date | string
@@ -372,6 +420,12 @@ export type ClientOrderByWithRelationInput = {
   creditDays?: Prisma.SortOrderInput | Prisma.SortOrder
   cancellationFee?: Prisma.SortOrderInput | Prisma.SortOrder
   warrantyMonths?: Prisma.SortOrderInput | Prisma.SortOrder
+  rfc?: Prisma.SortOrderInput | Prisma.SortOrder
+  codigoPostalFiscal?: Prisma.SortOrderInput | Prisma.SortOrder
+  nombreComercial?: Prisma.SortOrderInput | Prisma.SortOrder
+  ubicacion?: Prisma.SortOrderInput | Prisma.SortOrder
+  regimenFiscal?: Prisma.SortOrderInput | Prisma.SortOrder
+  figura?: Prisma.SortOrderInput | Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -403,6 +457,12 @@ export type ClientWhereUniqueInput = Prisma.AtLeast<{
   creditDays?: Prisma.IntNullableFilter<"Client"> | number | null
   cancellationFee?: Prisma.FloatNullableFilter<"Client"> | number | null
   warrantyMonths?: Prisma.IntNullableFilter<"Client"> | number | null
+  rfc?: Prisma.StringNullableFilter<"Client"> | string | null
+  codigoPostalFiscal?: Prisma.StringNullableFilter<"Client"> | string | null
+  nombreComercial?: Prisma.StringNullableFilter<"Client"> | string | null
+  ubicacion?: Prisma.StringNullableFilter<"Client"> | string | null
+  regimenFiscal?: Prisma.StringNullableFilter<"Client"> | string | null
+  figura?: Prisma.StringNullableFilter<"Client"> | string | null
   tenantId?: Prisma.StringFilter<"Client"> | string
   createdById?: Prisma.StringNullableFilter<"Client"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Client"> | Date | string
@@ -431,6 +491,12 @@ export type ClientOrderByWithAggregationInput = {
   creditDays?: Prisma.SortOrderInput | Prisma.SortOrder
   cancellationFee?: Prisma.SortOrderInput | Prisma.SortOrder
   warrantyMonths?: Prisma.SortOrderInput | Prisma.SortOrder
+  rfc?: Prisma.SortOrderInput | Prisma.SortOrder
+  codigoPostalFiscal?: Prisma.SortOrderInput | Prisma.SortOrder
+  nombreComercial?: Prisma.SortOrderInput | Prisma.SortOrder
+  ubicacion?: Prisma.SortOrderInput | Prisma.SortOrder
+  regimenFiscal?: Prisma.SortOrderInput | Prisma.SortOrder
+  figura?: Prisma.SortOrderInput | Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -461,6 +527,12 @@ export type ClientScalarWhereWithAggregatesInput = {
   creditDays?: Prisma.IntNullableWithAggregatesFilter<"Client"> | number | null
   cancellationFee?: Prisma.FloatNullableWithAggregatesFilter<"Client"> | number | null
   warrantyMonths?: Prisma.IntNullableWithAggregatesFilter<"Client"> | number | null
+  rfc?: Prisma.StringNullableWithAggregatesFilter<"Client"> | string | null
+  codigoPostalFiscal?: Prisma.StringNullableWithAggregatesFilter<"Client"> | string | null
+  nombreComercial?: Prisma.StringNullableWithAggregatesFilter<"Client"> | string | null
+  ubicacion?: Prisma.StringNullableWithAggregatesFilter<"Client"> | string | null
+  regimenFiscal?: Prisma.StringNullableWithAggregatesFilter<"Client"> | string | null
+  figura?: Prisma.StringNullableWithAggregatesFilter<"Client"> | string | null
   tenantId?: Prisma.StringWithAggregatesFilter<"Client"> | string
   createdById?: Prisma.StringNullableWithAggregatesFilter<"Client"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Client"> | Date | string
@@ -480,6 +552,12 @@ export type ClientCreateInput = {
   creditDays?: number | null
   cancellationFee?: number | null
   warrantyMonths?: number | null
+  rfc?: string | null
+  codigoPostalFiscal?: string | null
+  nombreComercial?: string | null
+  ubicacion?: string | null
+  regimenFiscal?: string | null
+  figura?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lead: Prisma.LeadCreateNestedOneWithoutClientInput
@@ -506,6 +584,12 @@ export type ClientUncheckedCreateInput = {
   creditDays?: number | null
   cancellationFee?: number | null
   warrantyMonths?: number | null
+  rfc?: string | null
+  codigoPostalFiscal?: string | null
+  nombreComercial?: string | null
+  ubicacion?: string | null
+  regimenFiscal?: string | null
+  figura?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
@@ -526,6 +610,12 @@ export type ClientUpdateInput = {
   creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codigoPostalFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nombreComercial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regimenFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lead?: Prisma.LeadUpdateOneRequiredWithoutClientNestedInput
@@ -552,6 +642,12 @@ export type ClientUncheckedUpdateInput = {
   creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codigoPostalFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nombreComercial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regimenFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -575,6 +671,12 @@ export type ClientCreateManyInput = {
   creditDays?: number | null
   cancellationFee?: number | null
   warrantyMonths?: number | null
+  rfc?: string | null
+  codigoPostalFiscal?: string | null
+  nombreComercial?: string | null
+  ubicacion?: string | null
+  regimenFiscal?: string | null
+  figura?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
@@ -594,6 +696,12 @@ export type ClientUpdateManyMutationInput = {
   creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codigoPostalFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nombreComercial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regimenFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -614,6 +722,12 @@ export type ClientUncheckedUpdateManyInput = {
   creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codigoPostalFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nombreComercial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regimenFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -656,6 +770,12 @@ export type ClientCountOrderByAggregateInput = {
   creditDays?: Prisma.SortOrder
   cancellationFee?: Prisma.SortOrder
   warrantyMonths?: Prisma.SortOrder
+  rfc?: Prisma.SortOrder
+  codigoPostalFiscal?: Prisma.SortOrder
+  nombreComercial?: Prisma.SortOrder
+  ubicacion?: Prisma.SortOrder
+  regimenFiscal?: Prisma.SortOrder
+  figura?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -687,6 +807,12 @@ export type ClientMaxOrderByAggregateInput = {
   creditDays?: Prisma.SortOrder
   cancellationFee?: Prisma.SortOrder
   warrantyMonths?: Prisma.SortOrder
+  rfc?: Prisma.SortOrder
+  codigoPostalFiscal?: Prisma.SortOrder
+  nombreComercial?: Prisma.SortOrder
+  ubicacion?: Prisma.SortOrder
+  regimenFiscal?: Prisma.SortOrder
+  figura?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -709,6 +835,12 @@ export type ClientMinOrderByAggregateInput = {
   creditDays?: Prisma.SortOrder
   cancellationFee?: Prisma.SortOrder
   warrantyMonths?: Prisma.SortOrder
+  rfc?: Prisma.SortOrder
+  codigoPostalFiscal?: Prisma.SortOrder
+  nombreComercial?: Prisma.SortOrder
+  ubicacion?: Prisma.SortOrder
+  regimenFiscal?: Prisma.SortOrder
+  figura?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -971,6 +1103,12 @@ export type ClientCreateWithoutGeneradorInput = {
   creditDays?: number | null
   cancellationFee?: number | null
   warrantyMonths?: number | null
+  rfc?: string | null
+  codigoPostalFiscal?: string | null
+  nombreComercial?: string | null
+  ubicacion?: string | null
+  regimenFiscal?: string | null
+  figura?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lead: Prisma.LeadCreateNestedOneWithoutClientInput
@@ -995,6 +1133,12 @@ export type ClientUncheckedCreateWithoutGeneradorInput = {
   creditDays?: number | null
   cancellationFee?: number | null
   warrantyMonths?: number | null
+  rfc?: string | null
+  codigoPostalFiscal?: string | null
+  nombreComercial?: string | null
+  ubicacion?: string | null
+  regimenFiscal?: string | null
+  figura?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
@@ -1025,6 +1169,12 @@ export type ClientCreateWithoutCreatedByInput = {
   creditDays?: number | null
   cancellationFee?: number | null
   warrantyMonths?: number | null
+  rfc?: string | null
+  codigoPostalFiscal?: string | null
+  nombreComercial?: string | null
+  ubicacion?: string | null
+  regimenFiscal?: string | null
+  figura?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lead: Prisma.LeadCreateNestedOneWithoutClientInput
@@ -1050,6 +1200,12 @@ export type ClientUncheckedCreateWithoutCreatedByInput = {
   creditDays?: number | null
   cancellationFee?: number | null
   warrantyMonths?: number | null
+  rfc?: string | null
+  codigoPostalFiscal?: string | null
+  nombreComercial?: string | null
+  ubicacion?: string | null
+  regimenFiscal?: string | null
+  figura?: string | null
   tenantId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1101,6 +1257,12 @@ export type ClientScalarWhereInput = {
   creditDays?: Prisma.IntNullableFilter<"Client"> | number | null
   cancellationFee?: Prisma.FloatNullableFilter<"Client"> | number | null
   warrantyMonths?: Prisma.IntNullableFilter<"Client"> | number | null
+  rfc?: Prisma.StringNullableFilter<"Client"> | string | null
+  codigoPostalFiscal?: Prisma.StringNullableFilter<"Client"> | string | null
+  nombreComercial?: Prisma.StringNullableFilter<"Client"> | string | null
+  ubicacion?: Prisma.StringNullableFilter<"Client"> | string | null
+  regimenFiscal?: Prisma.StringNullableFilter<"Client"> | string | null
+  figura?: Prisma.StringNullableFilter<"Client"> | string | null
   tenantId?: Prisma.StringFilter<"Client"> | string
   createdById?: Prisma.StringNullableFilter<"Client"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Client"> | Date | string
@@ -1136,6 +1298,12 @@ export type ClientCreateWithoutTenantInput = {
   creditDays?: number | null
   cancellationFee?: number | null
   warrantyMonths?: number | null
+  rfc?: string | null
+  codigoPostalFiscal?: string | null
+  nombreComercial?: string | null
+  ubicacion?: string | null
+  regimenFiscal?: string | null
+  figura?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lead: Prisma.LeadCreateNestedOneWithoutClientInput
@@ -1161,6 +1329,12 @@ export type ClientUncheckedCreateWithoutTenantInput = {
   creditDays?: number | null
   cancellationFee?: number | null
   warrantyMonths?: number | null
+  rfc?: string | null
+  codigoPostalFiscal?: string | null
+  nombreComercial?: string | null
+  ubicacion?: string | null
+  regimenFiscal?: string | null
+  figura?: string | null
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1206,6 +1380,12 @@ export type ClientCreateWithoutOrigenInput = {
   creditDays?: number | null
   cancellationFee?: number | null
   warrantyMonths?: number | null
+  rfc?: string | null
+  codigoPostalFiscal?: string | null
+  nombreComercial?: string | null
+  ubicacion?: string | null
+  regimenFiscal?: string | null
+  figura?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lead: Prisma.LeadCreateNestedOneWithoutClientInput
@@ -1230,6 +1410,12 @@ export type ClientUncheckedCreateWithoutOrigenInput = {
   creditDays?: number | null
   cancellationFee?: number | null
   warrantyMonths?: number | null
+  rfc?: string | null
+  codigoPostalFiscal?: string | null
+  nombreComercial?: string | null
+  ubicacion?: string | null
+  regimenFiscal?: string | null
+  figura?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
@@ -1276,6 +1462,12 @@ export type ClientCreateWithoutLeadInput = {
   creditDays?: number | null
   cancellationFee?: number | null
   warrantyMonths?: number | null
+  rfc?: string | null
+  codigoPostalFiscal?: string | null
+  nombreComercial?: string | null
+  ubicacion?: string | null
+  regimenFiscal?: string | null
+  figura?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   generador?: Prisma.UserCreateNestedOneWithoutClientsGeneratedInput
@@ -1300,6 +1492,12 @@ export type ClientUncheckedCreateWithoutLeadInput = {
   creditDays?: number | null
   cancellationFee?: number | null
   warrantyMonths?: number | null
+  rfc?: string | null
+  codigoPostalFiscal?: string | null
+  nombreComercial?: string | null
+  ubicacion?: string | null
+  regimenFiscal?: string | null
+  figura?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
@@ -1336,6 +1534,12 @@ export type ClientUpdateWithoutLeadInput = {
   creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codigoPostalFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nombreComercial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regimenFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   generador?: Prisma.UserUpdateOneWithoutClientsGeneratedNestedInput
@@ -1360,6 +1564,12 @@ export type ClientUncheckedUpdateWithoutLeadInput = {
   creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codigoPostalFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nombreComercial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regimenFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1380,6 +1590,12 @@ export type ClientCreateWithoutVacanciesInput = {
   creditDays?: number | null
   cancellationFee?: number | null
   warrantyMonths?: number | null
+  rfc?: string | null
+  codigoPostalFiscal?: string | null
+  nombreComercial?: string | null
+  ubicacion?: string | null
+  regimenFiscal?: string | null
+  figura?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lead: Prisma.LeadCreateNestedOneWithoutClientInput
@@ -1405,6 +1621,12 @@ export type ClientUncheckedCreateWithoutVacanciesInput = {
   creditDays?: number | null
   cancellationFee?: number | null
   warrantyMonths?: number | null
+  rfc?: string | null
+  codigoPostalFiscal?: string | null
+  nombreComercial?: string | null
+  ubicacion?: string | null
+  regimenFiscal?: string | null
+  figura?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
@@ -1440,6 +1662,12 @@ export type ClientUpdateWithoutVacanciesInput = {
   creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codigoPostalFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nombreComercial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regimenFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lead?: Prisma.LeadUpdateOneRequiredWithoutClientNestedInput
@@ -1465,6 +1693,12 @@ export type ClientUncheckedUpdateWithoutVacanciesInput = {
   creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codigoPostalFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nombreComercial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regimenFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1486,6 +1720,12 @@ export type ClientCreateManyGeneradorInput = {
   creditDays?: number | null
   cancellationFee?: number | null
   warrantyMonths?: number | null
+  rfc?: string | null
+  codigoPostalFiscal?: string | null
+  nombreComercial?: string | null
+  ubicacion?: string | null
+  regimenFiscal?: string | null
+  figura?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
@@ -1508,6 +1748,12 @@ export type ClientCreateManyCreatedByInput = {
   creditDays?: number | null
   cancellationFee?: number | null
   warrantyMonths?: number | null
+  rfc?: string | null
+  codigoPostalFiscal?: string | null
+  nombreComercial?: string | null
+  ubicacion?: string | null
+  regimenFiscal?: string | null
+  figura?: string | null
   tenantId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1526,6 +1772,12 @@ export type ClientUpdateWithoutGeneradorInput = {
   creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codigoPostalFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nombreComercial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regimenFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lead?: Prisma.LeadUpdateOneRequiredWithoutClientNestedInput
@@ -1550,6 +1802,12 @@ export type ClientUncheckedUpdateWithoutGeneradorInput = {
   creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codigoPostalFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nombreComercial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regimenFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1572,6 +1830,12 @@ export type ClientUncheckedUpdateManyWithoutGeneradorInput = {
   creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codigoPostalFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nombreComercial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regimenFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1591,6 +1855,12 @@ export type ClientUpdateWithoutCreatedByInput = {
   creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codigoPostalFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nombreComercial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regimenFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lead?: Prisma.LeadUpdateOneRequiredWithoutClientNestedInput
@@ -1616,6 +1886,12 @@ export type ClientUncheckedUpdateWithoutCreatedByInput = {
   creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codigoPostalFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nombreComercial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regimenFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1638,6 +1914,12 @@ export type ClientUncheckedUpdateManyWithoutCreatedByInput = {
   creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codigoPostalFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nombreComercial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regimenFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1659,6 +1941,12 @@ export type ClientCreateManyTenantInput = {
   creditDays?: number | null
   cancellationFee?: number | null
   warrantyMonths?: number | null
+  rfc?: string | null
+  codigoPostalFiscal?: string | null
+  nombreComercial?: string | null
+  ubicacion?: string | null
+  regimenFiscal?: string | null
+  figura?: string | null
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1677,6 +1965,12 @@ export type ClientUpdateWithoutTenantInput = {
   creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codigoPostalFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nombreComercial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regimenFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lead?: Prisma.LeadUpdateOneRequiredWithoutClientNestedInput
@@ -1702,6 +1996,12 @@ export type ClientUncheckedUpdateWithoutTenantInput = {
   creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codigoPostalFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nombreComercial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regimenFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1724,6 +2024,12 @@ export type ClientUncheckedUpdateManyWithoutTenantInput = {
   creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codigoPostalFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nombreComercial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regimenFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1744,6 +2050,12 @@ export type ClientCreateManyOrigenInput = {
   creditDays?: number | null
   cancellationFee?: number | null
   warrantyMonths?: number | null
+  rfc?: string | null
+  codigoPostalFiscal?: string | null
+  nombreComercial?: string | null
+  ubicacion?: string | null
+  regimenFiscal?: string | null
+  figura?: string | null
   tenantId: string
   createdById?: string | null
   createdAt?: Date | string
@@ -1763,6 +2075,12 @@ export type ClientUpdateWithoutOrigenInput = {
   creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codigoPostalFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nombreComercial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regimenFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lead?: Prisma.LeadUpdateOneRequiredWithoutClientNestedInput
@@ -1787,6 +2105,12 @@ export type ClientUncheckedUpdateWithoutOrigenInput = {
   creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codigoPostalFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nombreComercial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regimenFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1809,6 +2133,12 @@ export type ClientUncheckedUpdateManyWithoutOrigenInput = {
   creditDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cancellationFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   warrantyMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rfc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codigoPostalFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nombreComercial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ubicacion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regimenFiscal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1862,6 +2192,12 @@ export type ClientSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   creditDays?: boolean
   cancellationFee?: boolean
   warrantyMonths?: boolean
+  rfc?: boolean
+  codigoPostalFiscal?: boolean
+  nombreComercial?: boolean
+  ubicacion?: boolean
+  regimenFiscal?: boolean
+  figura?: boolean
   tenantId?: boolean
   createdById?: boolean
   createdAt?: boolean
@@ -1891,6 +2227,12 @@ export type ClientSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   creditDays?: boolean
   cancellationFee?: boolean
   warrantyMonths?: boolean
+  rfc?: boolean
+  codigoPostalFiscal?: boolean
+  nombreComercial?: boolean
+  ubicacion?: boolean
+  regimenFiscal?: boolean
+  figura?: boolean
   tenantId?: boolean
   createdById?: boolean
   createdAt?: boolean
@@ -1918,6 +2260,12 @@ export type ClientSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   creditDays?: boolean
   cancellationFee?: boolean
   warrantyMonths?: boolean
+  rfc?: boolean
+  codigoPostalFiscal?: boolean
+  nombreComercial?: boolean
+  ubicacion?: boolean
+  regimenFiscal?: boolean
+  figura?: boolean
   tenantId?: boolean
   createdById?: boolean
   createdAt?: boolean
@@ -1945,13 +2293,19 @@ export type ClientSelectScalar = {
   creditDays?: boolean
   cancellationFee?: boolean
   warrantyMonths?: boolean
+  rfc?: boolean
+  codigoPostalFiscal?: boolean
+  nombreComercial?: boolean
+  ubicacion?: boolean
+  regimenFiscal?: boolean
+  figura?: boolean
   tenantId?: boolean
   createdById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ClientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nombre" | "leadId" | "generadorId" | "origenId" | "currency" | "initialPositions" | "paymentScheme" | "advanceType" | "advanceValue" | "feeType" | "feeValue" | "creditDays" | "cancellationFee" | "warrantyMonths" | "tenantId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["client"]>
+export type ClientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nombre" | "leadId" | "generadorId" | "origenId" | "currency" | "initialPositions" | "paymentScheme" | "advanceType" | "advanceValue" | "feeType" | "feeValue" | "creditDays" | "cancellationFee" | "warrantyMonths" | "rfc" | "codigoPostalFiscal" | "nombreComercial" | "ubicacion" | "regimenFiscal" | "figura" | "tenantId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["client"]>
 export type ClientInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lead?: boolean | Prisma.LeadDefaultArgs<ExtArgs>
   generador?: boolean | Prisma.Client$generadorArgs<ExtArgs>
@@ -2002,6 +2356,12 @@ export type $ClientPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     creditDays: number | null
     cancellationFee: number | null
     warrantyMonths: number | null
+    rfc: string | null
+    codigoPostalFiscal: string | null
+    nombreComercial: string | null
+    ubicacion: string | null
+    regimenFiscal: string | null
+    figura: string | null
     tenantId: string
     createdById: string | null
     createdAt: Date
@@ -2450,6 +2810,12 @@ export interface ClientFieldRefs {
   readonly creditDays: Prisma.FieldRef<"Client", 'Int'>
   readonly cancellationFee: Prisma.FieldRef<"Client", 'Float'>
   readonly warrantyMonths: Prisma.FieldRef<"Client", 'Int'>
+  readonly rfc: Prisma.FieldRef<"Client", 'String'>
+  readonly codigoPostalFiscal: Prisma.FieldRef<"Client", 'String'>
+  readonly nombreComercial: Prisma.FieldRef<"Client", 'String'>
+  readonly ubicacion: Prisma.FieldRef<"Client", 'String'>
+  readonly regimenFiscal: Prisma.FieldRef<"Client", 'String'>
+  readonly figura: Prisma.FieldRef<"Client", 'String'>
   readonly tenantId: Prisma.FieldRef<"Client", 'String'>
   readonly createdById: Prisma.FieldRef<"Client", 'String'>
   readonly createdAt: Prisma.FieldRef<"Client", 'DateTime'>

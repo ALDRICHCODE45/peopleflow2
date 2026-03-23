@@ -13,7 +13,8 @@ import {
   updateClientAction,
   getClientsListAction,
 } from "../../server/presentation/actions/client.actions";
-import type { UpdateClientData } from "../../server/domain/interfaces/IClientRepository";
+import { updateClientFiscalDataAction } from "../../server/presentation/actions/updateClientFiscalData.action";
+import type { UpdateClientData, FiscalData } from "../../server/domain/interfaces/IClientRepository";
 import type { ClientDTO } from "../types/client.types";
 
 // --- Query key factory ---
@@ -105,6 +106,50 @@ export function useUpdateClient() {
         type: "error",
         title: "Error",
         description: error.message || "Error al actualizar el cliente",
+      });
+    },
+  });
+}
+
+/**
+ * Hook para actualizar los datos fiscales de un cliente
+ */
+export function useUpdateClientFiscalData() {
+  const queryClient = useQueryClient();
+  const { tenant } = useTenant();
+
+  return useMutation({
+    mutationFn: async ({
+      clientId,
+      fiscalData,
+    }: {
+      clientId: string;
+      fiscalData: FiscalData;
+    }) => {
+      const result = await updateClientFiscalDataAction(clientId, fiscalData);
+      if (result.error) throw new Error(result.error);
+      return result.data;
+    },
+    onSuccess: (_data, variables) => {
+      showToast({
+        type: "success",
+        title: "Datos fiscales actualizados",
+        description: "Los datos fiscales se actualizaron correctamente",
+      });
+      if (tenant?.id) {
+        queryClient.invalidateQueries({
+          queryKey: clientsQueryKeys.all(tenant.id),
+        });
+        queryClient.invalidateQueries({
+          queryKey: clientsQueryKeys.detail(tenant.id, variables.clientId),
+        });
+      }
+    },
+    onError: (error: Error) => {
+      showToast({
+        type: "error",
+        title: "Error",
+        description: error.message || "Error al actualizar datos fiscales",
       });
     },
   });

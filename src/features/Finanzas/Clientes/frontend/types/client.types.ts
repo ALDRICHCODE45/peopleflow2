@@ -55,6 +55,24 @@ export interface ClientDTO {
   creditDays: number | null;
   cancellationFee: number | null;
   warrantyMonths: number | null;
+  // Datos Fiscales
+  rfc: string | null;
+  codigoPostalFiscal: string | null;
+  nombreComercial: string | null;
+  ubicacion: string | null;
+  regimenFiscal: string | null;
+  figura: string | null;
+}
+
+// --- Form data para el dialog de datos fiscales ---
+
+export interface FiscalDataFormData {
+  rfc: string;
+  codigoPostalFiscal: string;
+  nombreComercial: string;
+  ubicacion: string;
+  regimenFiscal: string;
+  figura: string;
 }
 
 // --- Form data para el dialog de condiciones comerciales ---
@@ -75,6 +93,11 @@ export interface CommercialTermsFormData {
 // --- Result types para server actions ---
 
 export interface UpdateClientResult {
+  error: string | null;
+  data?: ClientDTO;
+}
+
+export interface UpdateFiscalDataResult {
   error: string | null;
   data?: ClientDTO;
 }

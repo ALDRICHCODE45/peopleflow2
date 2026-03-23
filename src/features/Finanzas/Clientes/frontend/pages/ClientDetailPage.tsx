@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
@@ -8,6 +9,8 @@ import {
   Calendar03Icon,
   Shield01Icon,
   Invoice01Icon,
+  Building04Icon,
+  PencilEdit01Icon,
 } from "@hugeicons/core-free-icons";
 import {
   Card,
@@ -16,15 +19,19 @@ import {
   CardTitle,
 } from "@/core/shared/ui/shadcn/card";
 import { Badge } from "@/core/shared/ui/shadcn/badge";
+import { Button } from "@/core/shared/ui/shadcn/button";
 import { Skeleton } from "@/core/shared/ui/shadcn/skeleton";
-import { useClientById } from "../hooks/useClient";
+import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
+import { PermissionActions } from "@/core/shared/constants/permissions";
+import { useClientById, useUpdateClientFiscalData } from "../hooks/useClient";
+import { FiscalDataDialog } from "../components/FiscalDataDialog";
 import {
   CurrencyLabels,
   PaymentSchemeLabels,
   AdvanceTypeLabels,
   FeeTypeLabels,
 } from "../types/client.types";
-import type { ClientDTO } from "../types/client.types";
+import type { ClientDTO, FiscalDataFormData } from "../types/client.types";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
@@ -226,6 +233,86 @@ function WarrantySection({ client }: { client: ClientDTO }) {
   );
 }
 
+// --- Sección de Datos Fiscales ---
+
+function FiscalDataSection({
+  client,
+  onEdit,
+}: {
+  client: ClientDTO;
+  onEdit: () => void;
+}) {
+  const hasFiscalData =
+    client.rfc !== null ||
+    client.codigoPostalFiscal !== null ||
+    client.nombreComercial !== null ||
+    client.ubicacion !== null ||
+    client.regimenFiscal !== null ||
+    client.figura !== null;
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <HugeiconsIcon icon={Building04Icon} className="size-5" />
+            Datos Fiscales
+          </CardTitle>
+          <PermissionGuard
+            permissions={[
+              PermissionActions.clientes.editar,
+              PermissionActions.clientes.gestionar,
+            ]}
+          >
+            <Button variant="outline" size="sm" onClick={onEdit}>
+              <HugeiconsIcon icon={PencilEdit01Icon} className="size-4 mr-1" />
+              Editar
+            </Button>
+          </PermissionGuard>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {!hasFiscalData ? (
+          <div className="flex flex-col items-center justify-center py-8 text-center">
+            <HugeiconsIcon
+              icon={Building04Icon}
+              className="size-12 text-muted-foreground/40 mb-3"
+            />
+            <p className="text-muted-foreground text-sm">
+              No hay datos fiscales configurados
+            </p>
+            <p className="text-muted-foreground/60 text-xs mt-1">
+              Haz clic en &quot;Editar&quot; para agregar los datos fiscales
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <DetailField label="RFC" value={client.rfc} />
+            <DetailField
+              label="Código Postal Fiscal"
+              value={client.codigoPostalFiscal}
+            />
+            <DetailField
+              label="Nombre Comercial"
+              value={client.nombreComercial}
+            />
+            <DetailField
+              label="Régimen Fiscal"
+              value={client.regimenFiscal}
+            />
+            <div className="sm:col-span-2">
+              <DetailField label="Ubicación" value={client.ubicacion} />
+            </div>
+            <div className="sm:col-span-2">
+              <DetailField label="Figura" value={client.figura} />
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 // --- Sección de Info General ---
 
 function GeneralInfoSection({ client }: { client: ClientDTO }) {
@@ -279,6 +366,31 @@ function ClientDetailSkeleton() {
 
 export function ClientDetailPage({ clientId }: ClientDetailPageProps) {
   const { data: client, isLoading, error } = useClientById(clientId);
+  const [fiscalDialogOpen, setFiscalDialogOpen] = useState(false);
+  const updateFiscalData = useUpdateClientFiscalData();
+
+  const handleFiscalDataSubmit = (data: FiscalDataFormData) => {
+    if (!client) return;
+
+    updateFiscalData.mutate(
+      {
+        clientId: client.id,
+        fiscalData: {
+          rfc: data.rfc.trim() || null,
+          codigoPostalFiscal: data.codigoPostalFiscal.trim() || null,
+          nombreComercial: data.nombreComercial.trim() || null,
+          ubicacion: data.ubicacion.trim() || null,
+          regimenFiscal: data.regimenFiscal.trim() || null,
+          figura: data.figura.trim() || null,
+        },
+      },
+      {
+        onSuccess: () => {
+          setFiscalDialogOpen(false);
+        },
+      },
+    );
+  };
 
   if (isLoading) {
     return (
@@ -328,8 +440,23 @@ export function ClientDetailPage({ clientId }: ClientDetailPageProps) {
       {/* Garantía */}
       <WarrantySection client={client} />
 
+      {/* Datos Fiscales */}
+      <FiscalDataSection
+        client={client}
+        onEdit={() => setFiscalDialogOpen(true)}
+      />
+
       {/* Info general */}
       <GeneralInfoSection client={client} />
+
+      {/* Dialog de Datos Fiscales */}
+      <FiscalDataDialog
+        open={fiscalDialogOpen}
+        onOpenChange={setFiscalDialogOpen}
+        client={client}
+        onSubmit={handleFiscalDataSubmit}
+        isSubmitting={updateFiscalData.isPending}
+      />
     </div>
   );
 }

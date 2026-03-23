@@ -49,6 +49,13 @@ function toDomain(
     creditDays: number | null;
     cancellationFee: number | null;
     warrantyMonths: number | null;
+    // Datos Fiscales
+    rfc: string | null;
+    codigoPostalFiscal: string | null;
+    nombreComercial: string | null;
+    ubicacion: string | null;
+    regimenFiscal: string | null;
+    figura: string | null;
   },
 ): Client {
   const props: ClientProps = {
@@ -75,6 +82,13 @@ function toDomain(
     creditDays: client.creditDays,
     cancellationFee: client.cancellationFee,
     warrantyMonths: client.warrantyMonths,
+    // Datos Fiscales
+    rfc: client.rfc,
+    codigoPostalFiscal: client.codigoPostalFiscal,
+    nombreComercial: client.nombreComercial,
+    ubicacion: client.ubicacion,
+    regimenFiscal: client.regimenFiscal,
+    figura: client.figura,
   };
   return new Client(props);
 }
@@ -213,6 +227,7 @@ class PrismaClientRepositoryImpl implements IClientRepository {
     }
 
     const terms = data.commercialTerms;
+    const fiscal = data.fiscalData;
 
     const client = await prisma.client.update({
       where: { id },
@@ -230,6 +245,15 @@ class PrismaClientRepositoryImpl implements IClientRepository {
           creditDays: terms.creditDays,
           cancellationFee: terms.cancellationFee,
           warrantyMonths: terms.warrantyMonths,
+        }),
+        // Datos Fiscales
+        ...(fiscal && {
+          rfc: fiscal.rfc,
+          codigoPostalFiscal: fiscal.codigoPostalFiscal,
+          nombreComercial: fiscal.nombreComercial,
+          ubicacion: fiscal.ubicacion,
+          regimenFiscal: fiscal.regimenFiscal,
+          figura: fiscal.figura,
         }),
       },
       include: CLIENT_INCLUDE,
