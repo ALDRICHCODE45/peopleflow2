@@ -137,15 +137,9 @@ export function ClientCommercialInfo({ client }: ClientCommercialInfoProps) {
       <CardContent>
         {!hasCommercialData ? (
           <EmptyState
-            icon={
-              <HugeiconsIcon
-                icon={Briefcase01Icon}
-                className="size-10"
-                strokeWidth={1.5}
-              />
-            }
+            icon={Briefcase01Icon}
             title="No hay información comercial"
-            description="Configura los términos comerciales del cliente"
+            description="Moneda, esquema de pago y condiciones de crédito aún no configurados"
           />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

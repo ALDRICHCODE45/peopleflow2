@@ -81,15 +81,13 @@ export function ClientFiscalInfo({ client, onEdit }: ClientFiscalInfoProps) {
       <CardContent>
         {!hasFiscalData ? (
           <EmptyState
-            icon={
-              <HugeiconsIcon
-                icon={Building04Icon}
-                className="size-10"
-                strokeWidth={1.5}
-              />
-            }
+            icon={Building04Icon}
             title="No hay datos fiscales configurados"
-            description='Haz clic en "Editar" para agregar los datos fiscales'
+            description="Agrega RFC, régimen fiscal y más datos para facturación"
+            action={{
+              label: "Configurar datos fiscales",
+              onClick: onEdit,
+            }}
           />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
