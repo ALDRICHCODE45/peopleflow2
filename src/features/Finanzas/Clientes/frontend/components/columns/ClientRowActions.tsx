@@ -15,10 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/core/shared/ui/shadcn/dropdown-menu";
 import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  MoreVerticalIcon,
-  PencilEdit01Icon,
-} from "@hugeicons/core-free-icons";
+import { MoreVerticalIcon, PencilEdit01Icon } from "@hugeicons/core-free-icons";
 
 interface ClientRowActionsProps {
   row: Row<ClientDTO>;
@@ -66,10 +63,7 @@ export function ClientRowActions({ row, onEdit }: ClientRowActionsProps) {
               PermissionActions.clientes.gestionar,
             ]}
           >
-            <DropdownMenuItem onClick={handleEdit}>
-              <HugeiconsIcon icon={PencilEdit01Icon} className="size-4 mr-2" />
-              Editar
-            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleEdit}>Editar</DropdownMenuItem>
           </PermissionGuard>
         )}
       </DropdownMenuContent>

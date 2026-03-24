@@ -66,13 +66,7 @@ function getInitials(name: string): string {
 function ContactsEmptyState() {
   return (
     <EmptyState
-      icon={
-        <HugeiconsIcon
-          icon={UserMultiple02Icon}
-          className="size-10"
-          strokeWidth={1.5}
-        />
-      }
+      icon={UserMultiple02Icon}
       title="No hay contactos registrados"
       description="Agrega contactos de la empresa"
     />

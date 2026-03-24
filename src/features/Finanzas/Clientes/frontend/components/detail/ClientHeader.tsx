@@ -191,13 +191,9 @@ export function ClientHeader({ client, onEdit }: ClientHeaderProps) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem onClick={onEdit}>
-                    <HugeiconsIcon icon={PencilEdit01Icon} className="size-4" />
                     Editar Cliente
                   </DropdownMenuItem>
-                  <DropdownMenuItem disabled>
-                    <HugeiconsIcon icon={Briefcase01Icon} className="size-4" />
-                    Crear Vacante
-                  </DropdownMenuItem>
+                  <DropdownMenuItem disabled>Crear Vacante</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             )}

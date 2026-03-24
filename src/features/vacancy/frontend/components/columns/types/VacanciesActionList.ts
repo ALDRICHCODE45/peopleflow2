@@ -38,7 +38,6 @@ export const createVacancyActions = (
     actions.push({
       id: "reassign",
       label: "Reasignar",
-      icon: UserSwitchIcon,
       onClick: onReassign,
     });
   }
