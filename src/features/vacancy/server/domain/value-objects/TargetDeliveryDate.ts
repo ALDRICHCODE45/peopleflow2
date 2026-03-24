@@ -1,3 +1,4 @@
+import { addDays, isWeekend, nextMonday, format } from "date-fns";
 import type { VacancyServiceType } from "@features/vacancy/frontend/types/vacancy.types";
 
 const SERVICE_TYPE_DAYS: Record<VacancyServiceType, number> = {
@@ -12,20 +13,19 @@ export class TargetDeliveryDate {
     assignedAt: Date,
     serviceType: VacancyServiceType,
   ): TargetDeliveryDate {
-    const date = new Date(assignedAt);
-    date.setDate(date.getDate() + SERVICE_TYPE_DAYS[serviceType]);
-    return new TargetDeliveryDate(TargetDeliveryDate.adjustForWeekend(date));
+    let target = addDays(assignedAt, SERVICE_TYPE_DAYS[serviceType]);
+    if (isWeekend(target)) {
+      target = nextMonday(target);
+    }
+    return new TargetDeliveryDate(target);
   }
 
   static from(date: Date): TargetDeliveryDate {
-    return new TargetDeliveryDate(TargetDeliveryDate.adjustForWeekend(new Date(date)));
-  }
-
-  private static adjustForWeekend(date: Date): Date {
-    const day = date.getDay();
-    if (day === 6) date.setDate(date.getDate() + 2); // Saturday -> Monday
-    if (day === 0) date.setDate(date.getDate() + 1); // Sunday -> Monday
-    return date;
+    let adjusted = new Date(date);
+    if (isWeekend(adjusted)) {
+      adjusted = nextMonday(adjusted);
+    }
+    return new TargetDeliveryDate(adjusted);
   }
 
   get value(): Date {
@@ -37,6 +37,6 @@ export class TargetDeliveryDate {
   }
 
   toDateString(): string {
-    return this.date.toISOString().split("T")[0];
+    return format(this.date, "yyyy-MM-dd");
   }
 }

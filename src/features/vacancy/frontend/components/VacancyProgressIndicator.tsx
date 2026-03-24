@@ -94,9 +94,10 @@ function calculateProgress(
 
 // ── Color resolution ─────────────────────────────────────────────────────────
 
-function resolveColor(data: ProgressData): ProgressColor {
+function resolveColor(data: ProgressData, targetDeliveryDate: string | null): ProgressColor {
   if (data.isTerminal) return "muted";
   if (data.isDelivered || data.isCompleted) return "blue";
+  if (data.totalDays === 0 && !targetDeliveryDate) return "muted";
   if (data.remainingDays < 0) return "darkRed";
 
   const { totalDays, remainingDays } = data;
@@ -137,7 +138,7 @@ const TRACK_COLOR_CLASSES: Record<ProgressColor, string> = {
 
 // ── Label helpers ────────────────────────────────────────────────────────────
 
-function formatCompactLabel(data: ProgressData): string {
+function formatCompactLabel(data: ProgressData, targetDeliveryDate: string | null): string {
   if (data.isTerminal) return "Inactiva";
   if (data.isDelivered) {
     if (data.deliveryDelta !== null && data.deliveryDelta > 0) {
@@ -146,7 +147,8 @@ function formatCompactLabel(data: ProgressData): string {
     return "Entregada";
   }
   if (data.isCompleted) return "Placement";
-  if (data.totalDays === 0) return "Sin fecha";
+  if (data.totalDays === 0 && !targetDeliveryDate) return "Sin fecha";
+  if (data.totalDays === 0) return `${Math.abs(data.remainingDays)}d tarde`;
   if (data.remainingDays < 0) return `${Math.abs(data.remainingDays)}d tarde`;
   if (data.remainingDays === 0) return "Hoy";
   return `${data.remainingDays}d`;
@@ -186,13 +188,15 @@ function formatExpandedSublabel(
 function CompactIndicator({
   data,
   color,
+  targetDeliveryDate,
 }: {
   data: ProgressData;
   color: ProgressColor;
+  targetDeliveryDate: string | null;
 }) {
-  const label = formatCompactLabel(data);
-  const hasBar = data.totalDays > 0 || data.isDelivered || data.isCompleted;
-  const barProgress = data.isDelivered || data.isCompleted ? 1 : data.progress;
+  const label = formatCompactLabel(data, targetDeliveryDate);
+  const hasBar = data.totalDays > 0 || data.remainingDays < 0 || data.isDelivered || data.isCompleted;
+  const barProgress = data.isDelivered || data.isCompleted ? 1 : data.remainingDays < 0 ? 1 : data.progress;
 
   return (
     <div className="flex flex-col gap-1 min-w-[80px] max-w-[120px]">
@@ -225,8 +229,8 @@ function ExpandedIndicator({
   actualDeliveryDate: string | null;
 }) {
   const sublabel = formatExpandedSublabel(data, targetDeliveryDate, actualDeliveryDate);
-  const hasBar = data.totalDays > 0 || data.isDelivered || data.isCompleted;
-  const barProgress = data.isDelivered || data.isCompleted ? 1 : data.progress;
+  const hasBar = data.totalDays > 0 || data.remainingDays < 0 || data.isDelivered || data.isCompleted;
+  const barProgress = data.isDelivered || data.isCompleted ? 1 : data.remainingDays < 0 ? 1 : data.progress;
   const percentage = Math.round(barProgress * 100);
 
   return (
@@ -269,7 +273,7 @@ export function VacancyProgressIndicator({
   variant = "compact",
 }: VacancyProgressIndicatorProps) {
   const data = calculateProgress(currentCycleStartedAt, targetDeliveryDate, actualDeliveryDate, status);
-  const color = resolveColor(data);
+  const color = resolveColor(data, targetDeliveryDate);
 
   if (variant === "expanded") {
     return (
@@ -282,5 +286,5 @@ export function VacancyProgressIndicator({
     );
   }
 
-  return <CompactIndicator data={data} color={color} />;
+  return <CompactIndicator data={data} color={color} targetDeliveryDate={targetDeliveryDate} />;
 }

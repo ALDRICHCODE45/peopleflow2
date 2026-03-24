@@ -2,6 +2,7 @@
 
 import { useForm, useStore } from "@tanstack/react-form";
 import { useCallback, useEffect } from "react";
+import { addDays, isWeekend, nextMonday, parseISO, format } from "date-fns";
 import { useUpdateVacancy } from "./useUpdateVacancy";
 import { useTenantUsersQuery } from "@/features/Administracion/usuarios/frontend/hooks/useUsers";
 import { useClientsForSelect } from "./useClientsForSelect";
@@ -14,22 +15,17 @@ const SERVICE_TYPE_DAYS: Record<VacancyServiceType, number> = {
   END_TO_END: 9,
 };
 
-function adjustForWeekend(date: Date): Date {
-  const day = date.getDay();
-  if (day === 6) date.setDate(date.getDate() + 2); // Saturday -> Monday
-  if (day === 0) date.setDate(date.getDate() + 1); // Sunday -> Monday
-  return date;
-}
-
 function calculateTargetDeliveryDate(
   assignedAt: string,
   serviceType: VacancyServiceType | "",
 ): string {
   if (!assignedAt || serviceType === "") return "";
-  const date = new Date(assignedAt);
-  date.setDate(date.getDate() + SERVICE_TYPE_DAYS[serviceType]);
-  adjustForWeekend(date);
-  return date.toISOString().split("T")[0];
+  const start = parseISO(assignedAt);
+  let target = addDays(start, SERVICE_TYPE_DAYS[serviceType]);
+  if (isWeekend(target)) {
+    target = nextMonday(target);
+  }
+  return format(target, "yyyy-MM-dd");
 }
 
 export function useEditVacancyForm({
