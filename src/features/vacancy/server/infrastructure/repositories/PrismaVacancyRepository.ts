@@ -237,12 +237,12 @@ export class PrismaVacancyRepository implements IVacancyRepository {
   }
 
   async findById(id: string, tenantId: string): Promise<Vacancy | null> {
-    const record = await prisma.vacancy.findUnique({
-      where: { id },
+    const record = await prisma.vacancy.findFirst({
+      where: { id, tenantId },
       include: this.getDetailInclude(),
     });
 
-    if (!record || record.tenantId !== tenantId) return null;
+    if (!record) return null;
 
     // Map related sub-entities into DTOs
     type DetailRecord = typeof record & {
@@ -469,8 +469,8 @@ export class PrismaVacancyRepository implements IVacancyRepository {
 
     if (result.count === 0) return null;
 
-    const updated = await prisma.vacancy.findUnique({
-      where: { id },
+    const updated = await prisma.vacancy.findFirst({
+      where: { id, tenantId },
       include: this.getBaseInclude(),
     });
 

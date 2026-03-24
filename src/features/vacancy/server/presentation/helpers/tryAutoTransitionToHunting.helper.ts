@@ -30,8 +30,8 @@ export async function tryAutoTransitionToHunting(
 
     // 2. Check all 3 guard conditions in parallel
     const [jobDescCount, perfilMuestraValidatedCount] = await Promise.all([
-      prismaVacancyAttachmentRepository.countBySubType(vacancyId, "JOB_DESCRIPTION"),
-      prismaVacancyAttachmentRepository.countBySubType(vacancyId, "PERFIL_MUESTRA", true),
+      prismaVacancyAttachmentRepository.countBySubType(vacancyId, "JOB_DESCRIPTION", tenantId),
+      prismaVacancyAttachmentRepository.countBySubType(vacancyId, "PERFIL_MUESTRA", tenantId, true),
     ]);
 
     const hasJobDescription = jobDescCount > 0;

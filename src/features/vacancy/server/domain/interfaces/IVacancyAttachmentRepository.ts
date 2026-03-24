@@ -18,8 +18,8 @@ export interface VacancyAttachmentRecord {
 export interface IVacancyAttachmentRepository {
   findByVacancyId(vacancyId: string, tenantId: string): Promise<VacancyAttachmentRecord[]>;
   findById(attachmentId: string, tenantId: string): Promise<VacancyAttachmentRecord | null>;
-  deleteById(attachmentId: string): Promise<void>;
-  validate(attachmentId: string, validatedById: string): Promise<VacancyAttachmentRecord>;
-  reject(attachmentId: string, reason: string): Promise<VacancyAttachmentRecord>;
-  countBySubType(vacancyId: string, subType: string, onlyValidated?: boolean): Promise<number>;
+  deleteById(attachmentId: string, tenantId: string): Promise<void>;
+  validate(attachmentId: string, validatedById: string, tenantId: string): Promise<VacancyAttachmentRecord>;
+  reject(attachmentId: string, reason: string, tenantId: string): Promise<VacancyAttachmentRecord>;
+  countBySubType(vacancyId: string, subType: string, tenantId: string, onlyValidated?: boolean): Promise<number>;
 }

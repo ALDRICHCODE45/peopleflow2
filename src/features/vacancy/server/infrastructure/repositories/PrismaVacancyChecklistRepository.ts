@@ -43,11 +43,11 @@ export class PrismaVacancyChecklistRepository
     id: string,
     tenantId: string
   ): Promise<VacancyChecklistItem | null> {
-    const record = await prisma.vacancyChecklistItem.findUnique({
-      where: { id },
+    const record = await prisma.vacancyChecklistItem.findFirst({
+      where: { id, tenantId },
     });
 
-    if (!record || record.tenantId !== tenantId) return null;
+    if (!record) return null;
     return this.mapToDomain(record as unknown as PrismaChecklistRecord);
   }
 
@@ -99,8 +99,8 @@ export class PrismaVacancyChecklistRepository
 
     if (result.count === 0) return null;
 
-    const updated = await prisma.vacancyChecklistItem.findUnique({
-      where: { id },
+    const updated = await prisma.vacancyChecklistItem.findFirst({
+      where: { id, tenantId },
     });
 
     if (!updated) return null;

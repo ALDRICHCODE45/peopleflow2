@@ -4,6 +4,8 @@ import { auth } from "@lib/auth";
 import { headers } from "next/headers";
 import prisma from "@/core/lib/prisma";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
+import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
+import { PermissionActions } from "@/core/shared/constants/permissions";
 import { prismaVacancyRepository } from "../../infrastructure/repositories/PrismaVacancyRepository";
 import { inngest } from "@/core/shared/inngest/inngest";
 import { InngestEvents } from "@core/shared/constants/inngest-events";
@@ -37,6 +39,19 @@ export async function requestValidationAction(input: {
     const tenantId = await getActiveTenantId();
     if (!tenantId) return { error: ServerErrors.noActiveTenant };
 
+    const hasPermission = await new CheckAnyPermissonUseCase().execute({
+      userId: session.user.id,
+      permissions: [
+        PermissionActions.vacantes.editar,
+        PermissionActions.vacantes.gestionar,
+      ],
+      tenantId,
+    });
+
+    if (!hasPermission) {
+      return { error: "Sin permisos para solicitar validación de vacantes" };
+    }
+
     // Load vacancy via domain repository
     const vacancy = await prismaVacancyRepository.findById(
       input.vacancyId,
@@ -53,7 +68,7 @@ export async function requestValidationAction(input: {
       )) ??
       "Cliente";
 
-    // Load notification config
+    // Load notification config (scoped by tenantId — no cross-tenant leak)
     const config = await prisma.notificationConfig.findUnique({
       where: { tenantId },
     });
@@ -72,7 +87,7 @@ export async function requestValidationAction(input: {
       };
     }
 
-    // Fetch recipient users
+    // Fetch recipient users (IDs sourced from tenant-scoped config — safe)
     const recipients = await prisma.user.findMany({
       where: { id: { in: config.recipientUserIds } },
       select: { id: true, email: true, name: true },

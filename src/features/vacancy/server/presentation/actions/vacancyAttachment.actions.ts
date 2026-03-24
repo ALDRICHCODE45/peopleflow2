@@ -140,7 +140,7 @@ export async function deleteVacancyAttachmentAction(
     }
 
     // Delete from DB via repository
-    await prismaVacancyAttachmentRepository.deleteById(attachmentId);
+    await prismaVacancyAttachmentRepository.deleteById(attachmentId, tenantId);
 
     revalidatePath(Routes.reclutamiento.vacantes);
     return { error: null, success: true };
@@ -165,7 +165,11 @@ export async function validateAttachmentAction(input: {
     ]);
     if (!hasPermission) return { error: "Sin permisos para validar archivos" };
 
-    const record = await prismaVacancyAttachmentRepository.validate(input.attachmentId, session.user.id);
+    // Verify attachment belongs to the correct vacancy AND tenant (W6)
+    const attachment = await prismaVacancyAttachmentRepository.findById(input.attachmentId, tenantId);
+    if (!attachment) return { error: "Attachment no encontrado" };
+
+    const record = await prismaVacancyAttachmentRepository.validate(input.attachmentId, session.user.id, tenantId);
 
     // Try auto-transition QUICK_MEETING → HUNTING if all guards pass
     await tryAutoTransitionToHunting(input.vacancyId, tenantId, session.user.id);
@@ -194,7 +198,11 @@ export async function rejectAttachmentAction(input: {
     ]);
     if (!hasPermission) return { error: "Sin permisos para rechazar archivos" };
 
-    const record = await prismaVacancyAttachmentRepository.reject(input.attachmentId, input.reason);
+    // Verify attachment belongs to the correct vacancy AND tenant (W6)
+    const existingAttachment = await prismaVacancyAttachmentRepository.findById(input.attachmentId, tenantId);
+    if (!existingAttachment) return { error: "Attachment no encontrado" };
+
+    const record = await prismaVacancyAttachmentRepository.reject(input.attachmentId, input.reason, tenantId);
 
     // Fetch vacancy to get recruiter info and position
     const vacancy = await prismaVacancyRepository.findById(input.vacancyId, tenantId);

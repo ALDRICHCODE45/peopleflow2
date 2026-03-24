@@ -1,9 +1,14 @@
 "use client";
 
 /**
- * STUB TEMPORAL — Fase 6 (Frontend Hooks)
- * Este hook usa el patrón legacy useState/useEffect.
- * TODO: Reemplazar completamente con TanStack Query en Fase 6.
+ * @deprecated Este hook NO tiene tenant scoping y usa el patrón legacy useState/useEffect.
+ * NO está importado en ningún componente del proyecto.
+ * Usar en su lugar:
+ * - `useVacanciesQuery` (listado simple con TanStack Query + tenant scope)
+ * - `usePaginatedVacanciesQuery` (listado paginado con TanStack Query + tenant scope)
+ * - Mutaciones individuales: `useCreateVacancy`, `useUpdateVacancy`, `useDeleteVacancy`
+ *
+ * TODO: Eliminar este archivo cuando se confirme que no hay dependencias externas.
  */
 
 import { useState, useEffect, useCallback } from "react";
@@ -38,6 +43,7 @@ export interface UseVacanciesReturn {
   updateFilters: (newFilters: UseVacanciesFilters) => void;
 }
 
+/** @deprecated Use `useVacanciesQuery` or `usePaginatedVacanciesQuery` instead. */
 export function useVacancies(initialFilters?: UseVacanciesFilters): UseVacanciesReturn {
   const [vacancies, setVacancies] = useState<VacancyDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);

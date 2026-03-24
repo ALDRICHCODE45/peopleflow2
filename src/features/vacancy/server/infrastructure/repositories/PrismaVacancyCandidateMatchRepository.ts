@@ -34,6 +34,24 @@ export class PrismaVacancyCandidateMatchRepository
   }
 
   async upsert(data: UpsertMatchData): Promise<CandidateMatchData> {
+    // Verify tenant ownership before upsert — the @@unique([candidateId, checklistItemId])
+    // does NOT include tenantId, so a raw upsert could match a cross-tenant record.
+    const existing = await prisma.vacancyCandidateMatch.findUnique({
+      where: {
+        candidateId_checklistItemId: {
+          candidateId: data.candidateId,
+          checklistItemId: data.checklistItemId,
+        },
+      },
+      select: { id: true, tenantId: true },
+    });
+
+    if (existing && existing.tenantId !== data.tenantId) {
+      throw new Error(
+        "Tenant mismatch: cannot update a candidate match belonging to another tenant",
+      );
+    }
+
     const record = await prisma.vacancyCandidateMatch.upsert({
       where: {
         candidateId_checklistItemId: {

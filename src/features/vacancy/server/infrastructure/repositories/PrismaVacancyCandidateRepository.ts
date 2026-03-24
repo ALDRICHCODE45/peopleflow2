@@ -75,11 +75,11 @@ export class PrismaVacancyCandidateRepository
     id: string,
     tenantId: string
   ): Promise<VacancyCandidate | null> {
-    const record = await prisma.vacancyCandidate.findUnique({
-      where: { id },
+    const record = await prisma.vacancyCandidate.findFirst({
+      where: { id, tenantId },
     });
 
-    if (!record || record.tenantId !== tenantId) return null;
+    if (!record) return null;
     return this.mapToDomain(record as unknown as PrismaCandidateRecord);
   }
 
@@ -189,8 +189,8 @@ export class PrismaVacancyCandidateRepository
 
     if (result.count === 0) return null;
 
-    const updated = await prisma.vacancyCandidate.findUnique({
-      where: { id },
+    const updated = await prisma.vacancyCandidate.findFirst({
+      where: { id, tenantId },
     });
 
     if (!updated) return null;

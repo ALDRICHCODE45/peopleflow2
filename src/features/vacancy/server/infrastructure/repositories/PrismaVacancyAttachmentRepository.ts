@@ -80,42 +80,51 @@ export class PrismaVacancyAttachmentRepository implements IVacancyAttachmentRepo
     return toRecord(record as unknown as PrismaAttachmentRecord);
   }
 
-  async deleteById(attachmentId: string): Promise<void> {
-    await prisma.attachment.delete({ where: { id: attachmentId } });
+  async deleteById(attachmentId: string, tenantId: string): Promise<void> {
+    await prisma.attachment.deleteMany({ where: { id: attachmentId, tenantId } });
   }
 
-  async validate(attachmentId: string, validatedById: string): Promise<VacancyAttachmentRecord> {
-    const record = await prisma.attachment.update({
-      where: { id: attachmentId },
+  async validate(attachmentId: string, validatedById: string, tenantId: string): Promise<VacancyAttachmentRecord> {
+    await prisma.attachment.updateMany({
+      where: { id: attachmentId, tenantId },
       data: {
         isValidated: true,
         validatedAt: new Date(),
         validatedById,
         rejectionReason: null,
       },
+    });
+    const record = await prisma.attachment.findFirst({
+      where: { id: attachmentId, tenantId },
       select: ATTACHMENT_SELECT,
     });
+    if (!record) throw new Error("Attachment not found after validate");
     return toRecord(record as unknown as PrismaAttachmentRecord);
   }
 
-  async reject(attachmentId: string, reason: string): Promise<VacancyAttachmentRecord> {
-    const record = await prisma.attachment.update({
-      where: { id: attachmentId },
+  async reject(attachmentId: string, reason: string, tenantId: string): Promise<VacancyAttachmentRecord> {
+    await prisma.attachment.updateMany({
+      where: { id: attachmentId, tenantId },
       data: {
         isValidated: false,
         validatedAt: null,
         validatedById: null,
         rejectionReason: reason,
       },
+    });
+    const record = await prisma.attachment.findFirst({
+      where: { id: attachmentId, tenantId },
       select: ATTACHMENT_SELECT,
     });
+    if (!record) throw new Error("Attachment not found after reject");
     return toRecord(record as unknown as PrismaAttachmentRecord);
   }
 
-  async countBySubType(vacancyId: string, subType: string, onlyValidated = false): Promise<number> {
+  async countBySubType(vacancyId: string, subType: string, tenantId: string, onlyValidated = false): Promise<number> {
     return prisma.attachment.count({
       where: {
         vacancyId,
+        tenantId,
         subType: subType as $Enums.AttachmentSubType,
         ...(onlyValidated ? { isValidated: true } : {}),
       },

@@ -3,6 +3,8 @@
 import { auth } from "@lib/auth";
 import { headers } from "next/headers";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
+import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
+import { PermissionActions } from "@/core/shared/constants/permissions";
 import { prismaRecruiterAssignmentHistoryRepository } from "../../infrastructure/repositories/PrismaRecruiterAssignmentHistoryRepository";
 import { GetRecruiterAssignmentHistoryUseCase } from "../../application/use-cases/GetRecruiterAssignmentHistoryUseCase";
 import type { RecruiterAssignmentHistoryDTO } from "../../../frontend/types/vacancy.types";
@@ -27,6 +29,19 @@ export async function getRecruiterAssignmentHistoryAction(
     const tenantId = await getActiveTenantId();
     if (!tenantId) {
       return { error: ServerErrors.noActiveTenant, data: [] };
+    }
+
+    const hasPermission = await new CheckAnyPermissonUseCase().execute({
+      userId: session.user.id,
+      permissions: [
+        PermissionActions.vacantes.acceder,
+        PermissionActions.vacantes.gestionar,
+      ],
+      tenantId,
+    });
+
+    if (!hasPermission) {
+      return { error: "Sin permisos para acceder a vacantes", data: [] };
     }
 
     const useCase = new GetRecruiterAssignmentHistoryUseCase(

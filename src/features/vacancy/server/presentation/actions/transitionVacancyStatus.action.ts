@@ -80,8 +80,8 @@ export async function transitionVacancyStatusAction(
     // Only relevant for QUICK_MEETING → HUNTING transition, but we query always
     // to keep the action generic (cheap query, correct behavior)
     const [jobDescCount, perfilMuestraValidatedCount] = await Promise.all([
-      prismaVacancyAttachmentRepository.countBySubType(input.vacancyId, "JOB_DESCRIPTION"),
-      prismaVacancyAttachmentRepository.countBySubType(input.vacancyId, "PERFIL_MUESTRA", true),
+      prismaVacancyAttachmentRepository.countBySubType(input.vacancyId, "JOB_DESCRIPTION", tenantId),
+      prismaVacancyAttachmentRepository.countBySubType(input.vacancyId, "PERFIL_MUESTRA", tenantId, true),
     ]);
 
     const useCase = new TransitionVacancyStatusUseCase(
