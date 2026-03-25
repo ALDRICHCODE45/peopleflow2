@@ -44,6 +44,9 @@ export const ROUTE_PERMISSIONS: Record<string, string> = {
   // Clientes
   "/finanzas/clientes": "clientes:acceder",
 
+  // Facturas
+  "/finanzas/facturas": "facturas:acceder",
+
   // ═══════════════════════════════════════════════════════════════
   // MÓDULO: RECLUTAMIENTO
   // ═══════════════════════════════════════════════════════════════
@@ -200,6 +203,7 @@ export const ROUTE_PRIORITY: string[] = [
   "/finanzas/ingresos",
   "/finanzas/egresos",
   "/finanzas/clientes",
+  "/finanzas/facturas",
   // Reclutamiento
   Routes.reclutamiento.vacantes,
   "/reclutamiento/kanban",

@@ -208,6 +208,40 @@ const FINANZAS_PERMISSIONS: PermissionDefinition[] = [
     description:
       "Gestionar completamente el módulo de clientes (incluye todas las acciones)",
   },
+
+  // Facturas - Granulares
+  {
+    name: "facturas:acceder",
+    resource: "facturas",
+    action: "acceder",
+    description: "Acceder al módulo de facturas",
+  },
+  {
+    name: "facturas:crear",
+    resource: "facturas",
+    action: "crear",
+    description: "Crear nuevas facturas",
+  },
+  {
+    name: "facturas:editar",
+    resource: "facturas",
+    action: "editar",
+    description: "Editar facturas existentes",
+  },
+  {
+    name: "facturas:eliminar",
+    resource: "facturas",
+    action: "eliminar",
+    description: "Eliminar facturas",
+  },
+  // Facturas - Modular
+  {
+    name: "facturas:gestionar",
+    resource: "facturas",
+    action: "gestionar",
+    description:
+      "Gestionar completamente el módulo de facturas (incluye todas las acciones)",
+  },
 ];
 
 /**
@@ -626,6 +660,13 @@ export const PermissionActions = {
     editar: "clientes:editar",
     eliminar: "clientes:eliminar",
     gestionar: "clientes:gestionar",
+  },
+  facturas: {
+    acceder: "facturas:acceder",
+    crear: "facturas:crear",
+    editar: "facturas:editar",
+    eliminar: "facturas:eliminar",
+    gestionar: "facturas:gestionar",
   },
 
   // Módulo: Reclutamiento

@@ -61,9 +61,9 @@ export function filterSidebarLinks(
         // Obtener el permiso requerido para esta ruta
         const requiredPermission = getRequiredPermission(item.url);
 
-        // Si la ruta no requiere permisos específicos, permitir acceso
+        // Si la ruta no tiene permisos configurados, denegar acceso por defecto (deny-by-default)
         if (!requiredPermission) {
-          return true;
+          return false;
         }
 
         // Verificar si el usuario tiene el permiso requerido
@@ -81,9 +81,9 @@ export function filterSidebarLinks(
       // Si el módulo no tiene subitems, verificar el permiso del módulo directamente
       const requiredPermission = getRequiredPermission(modulo.url);
 
-      // Si no requiere permisos específicos o el usuario los tiene, incluirlo
+      // Denegar acceso por defecto si no hay permisos configurados (deny-by-default)
       if (
-        !requiredPermission ||
+        requiredPermission &&
         hasPermission(userPermissions, requiredPermission)
       ) {
         filteredModules.push(modulo);
@@ -114,7 +114,7 @@ export function canViewModule(
   if (!modulo.items || modulo.items.length === 0) {
     const requiredPermission = getRequiredPermission(modulo.url);
     return (
-      !requiredPermission || hasPermission(userPermissions, requiredPermission)
+      !!requiredPermission && hasPermission(userPermissions, requiredPermission)
     );
   }
 
@@ -122,7 +122,7 @@ export function canViewModule(
   return modulo.items.some((item) => {
     const requiredPermission = getRequiredPermission(item.url);
     return (
-      !requiredPermission || hasPermission(userPermissions, requiredPermission)
+      !!requiredPermission && hasPermission(userPermissions, requiredPermission)
     );
   });
 }
