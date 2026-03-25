@@ -25,13 +25,16 @@ export function useUpdateVacancy(): UseMutationResult<VacancyDTO | undefined, Er
       }
       return result.vacancy;
     },
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
       showToast({
         type: "success",
         title: "Vacante actualizada",
         description: "La vacante fue actualizada exitosamente",
       });
       if (tenant?.id) {
+        queryClient.invalidateQueries({
+          queryKey: vacancyQueryKeys.detail(tenant.id, variables.id),
+        });
         queryClient.invalidateQueries({
           queryKey: vacancyQueryKeys.all(tenant.id),
         });

@@ -431,7 +431,7 @@ export function VacancyFormFields({
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="Celular, Laptop, etc.."
+                    placeholder="Auto, Celular, Laptop etc.."
                     rows={2}
                   />
                 </Field>

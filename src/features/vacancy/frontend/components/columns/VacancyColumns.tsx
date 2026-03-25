@@ -51,13 +51,6 @@ export function createVacancyColumns(
       size: 22,
     },
     {
-      header: "Estado",
-      accessorKey: "status",
-      cell: ({ row }) => <VacancyStatusBadge status={row.original.status} />,
-      size: 16,
-      enableSorting: false,
-    },
-    {
       header: "Cliente",
       accessorKey: "clientName",
       cell: ({ row }) => {
@@ -84,27 +77,10 @@ export function createVacancyColumns(
       enableSorting: false,
     },
     {
-      header: "Modalidad",
-      accessorKey: "modality",
-      cell: ({ row }) => {
-        const modality = row.original.modality;
-        if (!modality)
-          return (
-            <span className="text-muted-foreground italic text-xs">—</span>
-          );
-        return <VacancyModalityBadge modality={modality} />;
-      },
-      size: 10,
-      enableSorting: false,
-    },
-    {
-      header: "Tipo Venta",
-      accessorKey: "saleType",
-      cell: ({ row }) => {
-        const saleType = row.original.saleType;
-        return <VacancySalesTypeBadge type={saleType} />;
-      },
-      size: 10,
+      header: "Estado",
+      accessorKey: "status",
+      cell: ({ row }) => <VacancyStatusBadge status={row.original.status} />,
+      size: 16,
       enableSorting: false,
     },
     {
@@ -137,6 +113,30 @@ export function createVacancyColumns(
         );
       },
       size: 12,
+      enableSorting: false,
+    },
+    {
+      header: "Modalidad",
+      accessorKey: "modality",
+      cell: ({ row }) => {
+        const modality = row.original.modality;
+        if (!modality)
+          return (
+            <span className="text-muted-foreground italic text-xs">—</span>
+          );
+        return <VacancyModalityBadge modality={modality} />;
+      },
+      size: 10,
+      enableSorting: false,
+    },
+    {
+      header: "Tipo Venta",
+      accessorKey: "saleType",
+      cell: ({ row }) => {
+        const saleType = row.original.saleType;
+        return <VacancySalesTypeBadge type={saleType} />;
+      },
+      size: 10,
       enableSorting: false,
     },
     {

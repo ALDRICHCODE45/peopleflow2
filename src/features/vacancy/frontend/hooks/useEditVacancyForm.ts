@@ -1,14 +1,29 @@
 "use client";
 
 import { useForm, useStore } from "@tanstack/react-form";
-import { useCallback, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { addDays, isWeekend, nextMonday, parseISO, format } from "date-fns";
 import { useUpdateVacancy } from "./useUpdateVacancy";
+import { useVacancyDetailQuery } from "./useVacancyDetailQuery";
 import { useTenantUsersQuery } from "@/features/Administracion/usuarios/frontend/hooks/useUsers";
 import { useClientsForSelect } from "./useClientsForSelect";
+import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { useModalState } from "@/core/shared/hooks/useModalState";
+import {
+  addChecklistItemAction,
+  updateChecklistItemAction,
+  deleteChecklistItemAction,
+} from "../../server/presentation/actions/checklist.actions";
+import { vacancyQueryKeys } from "@core/shared/constants/query-keys";
 import type { VacancyServiceType, VacancyDTO } from "../types/vacancy.types";
 import type { VacancyFormValues } from "../types/vacancy-form.types";
+
+/** Tracks a checklist item during editing — existing items have an `id`. */
+interface EditableChecklistItem {
+  id: string | null;
+  requirement: string;
+}
 
 const SERVICE_TYPE_DAYS: Record<VacancyServiceType, number> = {
   SOURCING: 5,
@@ -37,11 +52,55 @@ export function useEditVacancyForm({
   vacancy: VacancyDTO;
   canEditTargetDeliveryDate: boolean;
 }) {
+  const queryClient = useQueryClient();
+  const { tenant } = useTenant();
   const updateVacancyMutation = useUpdateVacancy();
   const { data: users = [] } = useTenantUsersQuery();
   const { data: clients = [] } = useClientsForSelect();
 
   const detailsModal = useModalState();
+
+  // Fetch the full vacancy detail (includes checklistItems).
+  // The vacancy prop comes from the list query which does NOT include checklistItems.
+  const { data: fullVacancy } = useVacancyDetailQuery(vacancy.id);
+
+  // ── Checklist state ────────────────────────────────────────
+  // Use checklistItems from the detail query when available, otherwise fall back to the prop
+  const resolvedChecklist = fullVacancy?.checklistItems ?? vacancy.checklistItems ?? [];
+
+  const initialChecklist: EditableChecklistItem[] = resolvedChecklist
+    .slice()
+    .sort((a, b) => a.order - b.order)
+    .map((item) => ({ id: item.id, requirement: item.requirement }));
+
+  const [checklist, setChecklist] = useState<EditableChecklistItem[]>(initialChecklist);
+  const checklistSyncedRef = useRef(false);
+
+  // Sync checklist when the detail query resolves (only once)
+  useEffect(() => {
+    if (fullVacancy?.checklistItems && !checklistSyncedRef.current) {
+      checklistSyncedRef.current = true;
+      const items: EditableChecklistItem[] = fullVacancy.checklistItems
+        .slice()
+        .sort((a, b) => a.order - b.order)
+        .map((item) => ({ id: item.id, requirement: item.requirement }));
+      setChecklist(items);
+    }
+  }, [fullVacancy?.checklistItems]);
+
+  const addChecklistItem = useCallback(() => {
+    setChecklist((prev) => [...prev, { id: null, requirement: "" }]);
+  }, []);
+
+  const updateChecklistItem = useCallback((index: number, value: string) => {
+    setChecklist((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, requirement: value } : item)),
+    );
+  }, []);
+
+  const removeChecklistItem = useCallback((index: number) => {
+    setChecklist((prev) => prev.filter((_, i) => i !== index));
+  }, []);
 
   const defaultValues: VacancyFormValues = {
     position: vacancy.position,
@@ -95,6 +154,46 @@ export function useEditVacancyForm({
           targetDeliveryDate: value.targetDeliveryDate || undefined,
         },
       });
+
+      // ── Sync checklist items ─────────────────────────────────
+      const originalChecklistItems = fullVacancy?.checklistItems ?? vacancy.checklistItems ?? [];
+      const existingIds = new Set(checklist.filter((c) => c.id).map((c) => c.id!));
+      const originalIds = new Set(originalChecklistItems.map((i) => i.id));
+
+      // Delete removed items
+      for (const origId of originalIds) {
+        if (!existingIds.has(origId)) {
+          await deleteChecklistItemAction(origId);
+        }
+      }
+
+      // Add new items & update existing ones
+      for (let i = 0; i < checklist.length; i++) {
+        const item = checklist[i];
+        if (!item.requirement.trim()) continue;
+
+        if (item.id) {
+          // Existing item — update requirement and order
+          const original = originalChecklistItems.find((o) => o.id === item.id);
+          if (original && (original.requirement !== item.requirement.trim() || original.order !== i)) {
+            await updateChecklistItemAction(item.id, {
+              requirement: item.requirement.trim(),
+              order: i,
+            });
+          }
+        } else {
+          // New item — add
+          await addChecklistItemAction(vacancy.id, item.requirement.trim(), i);
+        }
+      }
+
+      // Invalidate detail query so VacancyDetailSheet refetches with updated checklist
+      if (tenant?.id) {
+        queryClient.invalidateQueries({
+          queryKey: vacancyQueryKeys.detail(tenant.id, vacancy.id),
+        });
+      }
+
       onClose();
     },
   });
@@ -129,10 +228,14 @@ export function useEditVacancyForm({
     form,
     users,
     clients,
+    checklist,
     detailsModal,
     canEditTargetDeliveryDate,
     isSubmitting: updateVacancyMutation.isPending,
     handleClientChange,
+    addChecklistItem,
+    updateChecklistItem,
+    removeChecklistItem,
   };
 }
 
