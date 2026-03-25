@@ -34,7 +34,7 @@ export const FeeTypeLabels: Record<string, string> = {
 export interface ClientDTO {
   id: string;
   nombre: string;
-  leadId: string;
+  leadId: string | null;
   generadorId: string | null;
   generadorName?: string | null;
   origenId: string | null;

@@ -13,7 +13,7 @@ import type {
 export interface ClientProps {
   id: string;
   nombre: string;
-  leadId: string;
+  leadId: string | null;
   generadorId: string | null;
   generadorName?: string | null;
   origenId: string | null;
@@ -62,7 +62,7 @@ export class Client {
     return this.props.nombre;
   }
 
-  get leadId(): string {
+  get leadId(): string | null {
     return this.props.leadId;
   }
 

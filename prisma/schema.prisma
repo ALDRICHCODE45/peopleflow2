@@ -943,9 +943,9 @@ model Client {
   id     String @id @default(uuid())
   nombre String // Copiado de Lead.companyName
 
-  // Trazabilidad al Lead original
-  leadId String @unique
-  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Restrict)
+  // Trazabilidad al Lead original (null para creación manual)
+  leadId String? @unique
+  lead   Lead?   @relation(fields: [leadId], references: [id], onDelete: Restrict)
 
   // Usuario que generó el cliente (assignedTo del Lead)
   generadorId String?

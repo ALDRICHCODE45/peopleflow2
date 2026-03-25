@@ -1045,10 +1045,12 @@ export type LeadCreateNestedOneWithoutClientInput = {
   connect?: Prisma.LeadWhereUniqueInput
 }
 
-export type LeadUpdateOneRequiredWithoutClientNestedInput = {
+export type LeadUpdateOneWithoutClientNestedInput = {
   create?: Prisma.XOR<Prisma.LeadCreateWithoutClientInput, Prisma.LeadUncheckedCreateWithoutClientInput>
   connectOrCreate?: Prisma.LeadCreateOrConnectWithoutClientInput
   upsert?: Prisma.LeadUpsertWithoutClientInput
+  disconnect?: Prisma.LeadWhereInput | boolean
+  delete?: Prisma.LeadWhereInput | boolean
   connect?: Prisma.LeadWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.LeadUpdateToOneWithWhereWithoutClientInput, Prisma.LeadUpdateWithoutClientInput>, Prisma.LeadUncheckedUpdateWithoutClientInput>
 }

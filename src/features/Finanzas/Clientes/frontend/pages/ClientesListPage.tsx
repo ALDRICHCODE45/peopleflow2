@@ -12,6 +12,10 @@ import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
 import { useServerPaginatedTable } from "@/core/shared/hooks/useServerPaginatedTable";
 import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
 import { ClientSheetForm } from "../components/ClientSheetForm";
+import { CreateClientDialog } from "../components/CreateClientDialog";
+import { Button } from "@/core/shared/ui/shadcn/button";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { PlusSignIcon } from "@hugeicons/core-free-icons";
 import type { ClientDTO } from "../types/client.types";
 
 export function ClientListPage() {
@@ -48,6 +52,9 @@ export function ClientListPage() {
 
   // Solo mostrar skeleton si es carga inicial SIN datos previos
   const showInitialLoading = isPending && !data;
+
+  // Create dialog state
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   // Edit sheet state
   const [editingClient, setEditingClient] = useState<ClientDTO | undefined>();
@@ -87,10 +94,23 @@ export function ClientListPage() {
     <Card className="p-2 m-1">
       <CardContent>
         <div className="space-y-6">
-          <TablePresentation
-            title="Gestión de Clientes"
-            subtitle="Administra los clientes de tu organización"
-          />
+          <div className="flex items-center justify-between">
+            <TablePresentation
+              title="Gestión de Clientes"
+              subtitle="Administra los clientes de tu organización"
+            />
+            <PermissionGuard
+              permissions={[
+                PermissionActions.clientes.crear,
+                PermissionActions.clientes.gestionar,
+              ]}
+            >
+              <Button onClick={() => setCreateDialogOpen(true)} size="sm">
+                <HugeiconsIcon icon={PlusSignIcon} size={16} />
+                Nuevo Cliente
+              </Button>
+            </PermissionGuard>
+          </div>
 
           <PermissionGuard
             permissions={[
@@ -118,6 +138,11 @@ export function ClientListPage() {
         client={editingClient}
         open={sheetOpen}
         onOpenChange={handleSheetOpenChange}
+      />
+
+      <CreateClientDialog
+        open={createDialogOpen}
+        onClose={() => setCreateDialogOpen(false)}
       />
     </Card>
   );

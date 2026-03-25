@@ -322,7 +322,7 @@ export type ClientGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 export type ClientGroupByOutputType = {
   id: string
   nombre: string
-  leadId: string
+  leadId: string | null
   generadorId: string | null
   origenId: string | null
   currency: $Enums.Currency | null
@@ -373,7 +373,7 @@ export type ClientWhereInput = {
   NOT?: Prisma.ClientWhereInput | Prisma.ClientWhereInput[]
   id?: Prisma.StringFilter<"Client"> | string
   nombre?: Prisma.StringFilter<"Client"> | string
-  leadId?: Prisma.StringFilter<"Client"> | string
+  leadId?: Prisma.StringNullableFilter<"Client"> | string | null
   generadorId?: Prisma.StringNullableFilter<"Client"> | string | null
   origenId?: Prisma.StringNullableFilter<"Client"> | string | null
   currency?: Prisma.EnumCurrencyNullableFilter<"Client"> | $Enums.Currency | null
@@ -396,7 +396,7 @@ export type ClientWhereInput = {
   createdById?: Prisma.StringNullableFilter<"Client"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Client"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Client"> | Date | string
-  lead?: Prisma.XOR<Prisma.LeadScalarRelationFilter, Prisma.LeadWhereInput>
+  lead?: Prisma.XOR<Prisma.LeadNullableScalarRelationFilter, Prisma.LeadWhereInput> | null
   generador?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   origen?: Prisma.XOR<Prisma.LeadOriginNullableScalarRelationFilter, Prisma.LeadOriginWhereInput> | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -407,7 +407,7 @@ export type ClientWhereInput = {
 export type ClientOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   nombre?: Prisma.SortOrder
-  leadId?: Prisma.SortOrder
+  leadId?: Prisma.SortOrderInput | Prisma.SortOrder
   generadorId?: Prisma.SortOrderInput | Prisma.SortOrder
   origenId?: Prisma.SortOrderInput | Prisma.SortOrder
   currency?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -467,7 +467,7 @@ export type ClientWhereUniqueInput = Prisma.AtLeast<{
   createdById?: Prisma.StringNullableFilter<"Client"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Client"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Client"> | Date | string
-  lead?: Prisma.XOR<Prisma.LeadScalarRelationFilter, Prisma.LeadWhereInput>
+  lead?: Prisma.XOR<Prisma.LeadNullableScalarRelationFilter, Prisma.LeadWhereInput> | null
   generador?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   origen?: Prisma.XOR<Prisma.LeadOriginNullableScalarRelationFilter, Prisma.LeadOriginWhereInput> | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -478,7 +478,7 @@ export type ClientWhereUniqueInput = Prisma.AtLeast<{
 export type ClientOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   nombre?: Prisma.SortOrder
-  leadId?: Prisma.SortOrder
+  leadId?: Prisma.SortOrderInput | Prisma.SortOrder
   generadorId?: Prisma.SortOrderInput | Prisma.SortOrder
   origenId?: Prisma.SortOrderInput | Prisma.SortOrder
   currency?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -514,7 +514,7 @@ export type ClientScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ClientScalarWhereWithAggregatesInput | Prisma.ClientScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Client"> | string
   nombre?: Prisma.StringWithAggregatesFilter<"Client"> | string
-  leadId?: Prisma.StringWithAggregatesFilter<"Client"> | string
+  leadId?: Prisma.StringNullableWithAggregatesFilter<"Client"> | string | null
   generadorId?: Prisma.StringNullableWithAggregatesFilter<"Client"> | string | null
   origenId?: Prisma.StringNullableWithAggregatesFilter<"Client"> | string | null
   currency?: Prisma.EnumCurrencyNullableWithAggregatesFilter<"Client"> | $Enums.Currency | null
@@ -560,7 +560,7 @@ export type ClientCreateInput = {
   figura?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  lead: Prisma.LeadCreateNestedOneWithoutClientInput
+  lead?: Prisma.LeadCreateNestedOneWithoutClientInput
   generador?: Prisma.UserCreateNestedOneWithoutClientsGeneratedInput
   origen?: Prisma.LeadOriginCreateNestedOneWithoutClientsInput
   tenant: Prisma.TenantCreateNestedOneWithoutClientsInput
@@ -571,7 +571,7 @@ export type ClientCreateInput = {
 export type ClientUncheckedCreateInput = {
   id?: string
   nombre: string
-  leadId: string
+  leadId?: string | null
   generadorId?: string | null
   origenId?: string | null
   currency?: $Enums.Currency | null
@@ -618,7 +618,7 @@ export type ClientUpdateInput = {
   figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lead?: Prisma.LeadUpdateOneRequiredWithoutClientNestedInput
+  lead?: Prisma.LeadUpdateOneWithoutClientNestedInput
   generador?: Prisma.UserUpdateOneWithoutClientsGeneratedNestedInput
   origen?: Prisma.LeadOriginUpdateOneWithoutClientsNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutClientsNestedInput
@@ -629,7 +629,7 @@ export type ClientUpdateInput = {
 export type ClientUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
-  leadId?: Prisma.StringFieldUpdateOperationsInput | string
+  leadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
@@ -658,7 +658,7 @@ export type ClientUncheckedUpdateInput = {
 export type ClientCreateManyInput = {
   id?: string
   nombre: string
-  leadId: string
+  leadId?: string | null
   generadorId?: string | null
   origenId?: string | null
   currency?: $Enums.Currency | null
@@ -709,7 +709,7 @@ export type ClientUpdateManyMutationInput = {
 export type ClientUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
-  leadId?: Prisma.StringFieldUpdateOperationsInput | string
+  leadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
@@ -1111,7 +1111,7 @@ export type ClientCreateWithoutGeneradorInput = {
   figura?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  lead: Prisma.LeadCreateNestedOneWithoutClientInput
+  lead?: Prisma.LeadCreateNestedOneWithoutClientInput
   origen?: Prisma.LeadOriginCreateNestedOneWithoutClientsInput
   tenant: Prisma.TenantCreateNestedOneWithoutClientsInput
   createdBy?: Prisma.UserCreateNestedOneWithoutClientsCreatedInput
@@ -1121,7 +1121,7 @@ export type ClientCreateWithoutGeneradorInput = {
 export type ClientUncheckedCreateWithoutGeneradorInput = {
   id?: string
   nombre: string
-  leadId: string
+  leadId?: string | null
   origenId?: string | null
   currency?: $Enums.Currency | null
   initialPositions?: number | null
@@ -1177,7 +1177,7 @@ export type ClientCreateWithoutCreatedByInput = {
   figura?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  lead: Prisma.LeadCreateNestedOneWithoutClientInput
+  lead?: Prisma.LeadCreateNestedOneWithoutClientInput
   generador?: Prisma.UserCreateNestedOneWithoutClientsGeneratedInput
   origen?: Prisma.LeadOriginCreateNestedOneWithoutClientsInput
   tenant: Prisma.TenantCreateNestedOneWithoutClientsInput
@@ -1187,7 +1187,7 @@ export type ClientCreateWithoutCreatedByInput = {
 export type ClientUncheckedCreateWithoutCreatedByInput = {
   id?: string
   nombre: string
-  leadId: string
+  leadId?: string | null
   generadorId?: string | null
   origenId?: string | null
   currency?: $Enums.Currency | null
@@ -1244,7 +1244,7 @@ export type ClientScalarWhereInput = {
   NOT?: Prisma.ClientScalarWhereInput | Prisma.ClientScalarWhereInput[]
   id?: Prisma.StringFilter<"Client"> | string
   nombre?: Prisma.StringFilter<"Client"> | string
-  leadId?: Prisma.StringFilter<"Client"> | string
+  leadId?: Prisma.StringNullableFilter<"Client"> | string | null
   generadorId?: Prisma.StringNullableFilter<"Client"> | string | null
   origenId?: Prisma.StringNullableFilter<"Client"> | string | null
   currency?: Prisma.EnumCurrencyNullableFilter<"Client"> | $Enums.Currency | null
@@ -1306,7 +1306,7 @@ export type ClientCreateWithoutTenantInput = {
   figura?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  lead: Prisma.LeadCreateNestedOneWithoutClientInput
+  lead?: Prisma.LeadCreateNestedOneWithoutClientInput
   generador?: Prisma.UserCreateNestedOneWithoutClientsGeneratedInput
   origen?: Prisma.LeadOriginCreateNestedOneWithoutClientsInput
   createdBy?: Prisma.UserCreateNestedOneWithoutClientsCreatedInput
@@ -1316,7 +1316,7 @@ export type ClientCreateWithoutTenantInput = {
 export type ClientUncheckedCreateWithoutTenantInput = {
   id?: string
   nombre: string
-  leadId: string
+  leadId?: string | null
   generadorId?: string | null
   origenId?: string | null
   currency?: $Enums.Currency | null
@@ -1388,7 +1388,7 @@ export type ClientCreateWithoutOrigenInput = {
   figura?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  lead: Prisma.LeadCreateNestedOneWithoutClientInput
+  lead?: Prisma.LeadCreateNestedOneWithoutClientInput
   generador?: Prisma.UserCreateNestedOneWithoutClientsGeneratedInput
   tenant: Prisma.TenantCreateNestedOneWithoutClientsInput
   createdBy?: Prisma.UserCreateNestedOneWithoutClientsCreatedInput
@@ -1398,7 +1398,7 @@ export type ClientCreateWithoutOrigenInput = {
 export type ClientUncheckedCreateWithoutOrigenInput = {
   id?: string
   nombre: string
-  leadId: string
+  leadId?: string | null
   generadorId?: string | null
   currency?: $Enums.Currency | null
   initialPositions?: number | null
@@ -1598,7 +1598,7 @@ export type ClientCreateWithoutVacanciesInput = {
   figura?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  lead: Prisma.LeadCreateNestedOneWithoutClientInput
+  lead?: Prisma.LeadCreateNestedOneWithoutClientInput
   generador?: Prisma.UserCreateNestedOneWithoutClientsGeneratedInput
   origen?: Prisma.LeadOriginCreateNestedOneWithoutClientsInput
   tenant: Prisma.TenantCreateNestedOneWithoutClientsInput
@@ -1608,7 +1608,7 @@ export type ClientCreateWithoutVacanciesInput = {
 export type ClientUncheckedCreateWithoutVacanciesInput = {
   id?: string
   nombre: string
-  leadId: string
+  leadId?: string | null
   generadorId?: string | null
   origenId?: string | null
   currency?: $Enums.Currency | null
@@ -1670,7 +1670,7 @@ export type ClientUpdateWithoutVacanciesInput = {
   figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lead?: Prisma.LeadUpdateOneRequiredWithoutClientNestedInput
+  lead?: Prisma.LeadUpdateOneWithoutClientNestedInput
   generador?: Prisma.UserUpdateOneWithoutClientsGeneratedNestedInput
   origen?: Prisma.LeadOriginUpdateOneWithoutClientsNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutClientsNestedInput
@@ -1680,7 +1680,7 @@ export type ClientUpdateWithoutVacanciesInput = {
 export type ClientUncheckedUpdateWithoutVacanciesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
-  leadId?: Prisma.StringFieldUpdateOperationsInput | string
+  leadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
@@ -1708,7 +1708,7 @@ export type ClientUncheckedUpdateWithoutVacanciesInput = {
 export type ClientCreateManyGeneradorInput = {
   id?: string
   nombre: string
-  leadId: string
+  leadId?: string | null
   origenId?: string | null
   currency?: $Enums.Currency | null
   initialPositions?: number | null
@@ -1735,7 +1735,7 @@ export type ClientCreateManyGeneradorInput = {
 export type ClientCreateManyCreatedByInput = {
   id?: string
   nombre: string
-  leadId: string
+  leadId?: string | null
   generadorId?: string | null
   origenId?: string | null
   currency?: $Enums.Currency | null
@@ -1780,7 +1780,7 @@ export type ClientUpdateWithoutGeneradorInput = {
   figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lead?: Prisma.LeadUpdateOneRequiredWithoutClientNestedInput
+  lead?: Prisma.LeadUpdateOneWithoutClientNestedInput
   origen?: Prisma.LeadOriginUpdateOneWithoutClientsNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutClientsNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutClientsCreatedNestedInput
@@ -1790,7 +1790,7 @@ export type ClientUpdateWithoutGeneradorInput = {
 export type ClientUncheckedUpdateWithoutGeneradorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
-  leadId?: Prisma.StringFieldUpdateOperationsInput | string
+  leadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1818,7 +1818,7 @@ export type ClientUncheckedUpdateWithoutGeneradorInput = {
 export type ClientUncheckedUpdateManyWithoutGeneradorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
-  leadId?: Prisma.StringFieldUpdateOperationsInput | string
+  leadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1863,7 +1863,7 @@ export type ClientUpdateWithoutCreatedByInput = {
   figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lead?: Prisma.LeadUpdateOneRequiredWithoutClientNestedInput
+  lead?: Prisma.LeadUpdateOneWithoutClientNestedInput
   generador?: Prisma.UserUpdateOneWithoutClientsGeneratedNestedInput
   origen?: Prisma.LeadOriginUpdateOneWithoutClientsNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutClientsNestedInput
@@ -1873,7 +1873,7 @@ export type ClientUpdateWithoutCreatedByInput = {
 export type ClientUncheckedUpdateWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
-  leadId?: Prisma.StringFieldUpdateOperationsInput | string
+  leadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
@@ -1901,7 +1901,7 @@ export type ClientUncheckedUpdateWithoutCreatedByInput = {
 export type ClientUncheckedUpdateManyWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
-  leadId?: Prisma.StringFieldUpdateOperationsInput | string
+  leadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
@@ -1928,7 +1928,7 @@ export type ClientUncheckedUpdateManyWithoutCreatedByInput = {
 export type ClientCreateManyTenantInput = {
   id?: string
   nombre: string
-  leadId: string
+  leadId?: string | null
   generadorId?: string | null
   origenId?: string | null
   currency?: $Enums.Currency | null
@@ -1973,7 +1973,7 @@ export type ClientUpdateWithoutTenantInput = {
   figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lead?: Prisma.LeadUpdateOneRequiredWithoutClientNestedInput
+  lead?: Prisma.LeadUpdateOneWithoutClientNestedInput
   generador?: Prisma.UserUpdateOneWithoutClientsGeneratedNestedInput
   origen?: Prisma.LeadOriginUpdateOneWithoutClientsNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutClientsCreatedNestedInput
@@ -1983,7 +1983,7 @@ export type ClientUpdateWithoutTenantInput = {
 export type ClientUncheckedUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
-  leadId?: Prisma.StringFieldUpdateOperationsInput | string
+  leadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
@@ -2011,7 +2011,7 @@ export type ClientUncheckedUpdateWithoutTenantInput = {
 export type ClientUncheckedUpdateManyWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
-  leadId?: Prisma.StringFieldUpdateOperationsInput | string
+  leadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
@@ -2038,7 +2038,7 @@ export type ClientUncheckedUpdateManyWithoutTenantInput = {
 export type ClientCreateManyOrigenInput = {
   id?: string
   nombre: string
-  leadId: string
+  leadId?: string | null
   generadorId?: string | null
   currency?: $Enums.Currency | null
   initialPositions?: number | null
@@ -2083,7 +2083,7 @@ export type ClientUpdateWithoutOrigenInput = {
   figura?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lead?: Prisma.LeadUpdateOneRequiredWithoutClientNestedInput
+  lead?: Prisma.LeadUpdateOneWithoutClientNestedInput
   generador?: Prisma.UserUpdateOneWithoutClientsGeneratedNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutClientsNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutClientsCreatedNestedInput
@@ -2093,7 +2093,7 @@ export type ClientUpdateWithoutOrigenInput = {
 export type ClientUncheckedUpdateWithoutOrigenInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
-  leadId?: Prisma.StringFieldUpdateOperationsInput | string
+  leadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -2121,7 +2121,7 @@ export type ClientUncheckedUpdateWithoutOrigenInput = {
 export type ClientUncheckedUpdateManyWithoutOrigenInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
-  leadId?: Prisma.StringFieldUpdateOperationsInput | string
+  leadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generadorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
   initialPositions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -2202,7 +2202,7 @@ export type ClientSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   createdById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  lead?: boolean | Prisma.LeadDefaultArgs<ExtArgs>
+  lead?: boolean | Prisma.Client$leadArgs<ExtArgs>
   generador?: boolean | Prisma.Client$generadorArgs<ExtArgs>
   origen?: boolean | Prisma.Client$origenArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -2237,7 +2237,7 @@ export type ClientSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   createdById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  lead?: boolean | Prisma.LeadDefaultArgs<ExtArgs>
+  lead?: boolean | Prisma.Client$leadArgs<ExtArgs>
   generador?: boolean | Prisma.Client$generadorArgs<ExtArgs>
   origen?: boolean | Prisma.Client$origenArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -2270,7 +2270,7 @@ export type ClientSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   createdById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  lead?: boolean | Prisma.LeadDefaultArgs<ExtArgs>
+  lead?: boolean | Prisma.Client$leadArgs<ExtArgs>
   generador?: boolean | Prisma.Client$generadorArgs<ExtArgs>
   origen?: boolean | Prisma.Client$origenArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -2307,7 +2307,7 @@ export type ClientSelectScalar = {
 
 export type ClientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nombre" | "leadId" | "generadorId" | "origenId" | "currency" | "initialPositions" | "paymentScheme" | "advanceType" | "advanceValue" | "feeType" | "feeValue" | "creditDays" | "cancellationFee" | "warrantyMonths" | "rfc" | "codigoPostalFiscal" | "nombreComercial" | "ubicacion" | "regimenFiscal" | "figura" | "tenantId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["client"]>
 export type ClientInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  lead?: boolean | Prisma.LeadDefaultArgs<ExtArgs>
+  lead?: boolean | Prisma.Client$leadArgs<ExtArgs>
   generador?: boolean | Prisma.Client$generadorArgs<ExtArgs>
   origen?: boolean | Prisma.Client$origenArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -2316,14 +2316,14 @@ export type ClientInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   _count?: boolean | Prisma.ClientCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ClientIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  lead?: boolean | Prisma.LeadDefaultArgs<ExtArgs>
+  lead?: boolean | Prisma.Client$leadArgs<ExtArgs>
   generador?: boolean | Prisma.Client$generadorArgs<ExtArgs>
   origen?: boolean | Prisma.Client$origenArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Client$createdByArgs<ExtArgs>
 }
 export type ClientIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  lead?: boolean | Prisma.LeadDefaultArgs<ExtArgs>
+  lead?: boolean | Prisma.Client$leadArgs<ExtArgs>
   generador?: boolean | Prisma.Client$generadorArgs<ExtArgs>
   origen?: boolean | Prisma.Client$origenArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -2333,7 +2333,7 @@ export type ClientIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type $ClientPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Client"
   objects: {
-    lead: Prisma.$LeadPayload<ExtArgs>
+    lead: Prisma.$LeadPayload<ExtArgs> | null
     generador: Prisma.$UserPayload<ExtArgs> | null
     origen: Prisma.$LeadOriginPayload<ExtArgs> | null
     tenant: Prisma.$TenantPayload<ExtArgs>
@@ -2343,7 +2343,7 @@ export type $ClientPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     nombre: string
-    leadId: string
+    leadId: string | null
     generadorId: string | null
     origenId: string | null
     currency: $Enums.Currency | null
@@ -2760,7 +2760,7 @@ readonly fields: ClientFieldRefs;
  */
 export interface Prisma__ClientClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  lead<T extends Prisma.LeadDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LeadDefaultArgs<ExtArgs>>): Prisma.Prisma__LeadClient<runtime.Types.Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  lead<T extends Prisma.Client$leadArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$leadArgs<ExtArgs>>): Prisma.Prisma__LeadClient<runtime.Types.Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   generador<T extends Prisma.Client$generadorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$generadorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   origen<T extends Prisma.Client$origenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$origenArgs<ExtArgs>>): Prisma.Prisma__LeadOriginClient<runtime.Types.Result.GetResult<Prisma.$LeadOriginPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -3213,6 +3213,25 @@ export type ClientDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Limit how many Clients to delete.
    */
   limit?: number
+}
+
+/**
+ * Client.lead
+ */
+export type Client$leadArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Lead
+   */
+  select?: Prisma.LeadSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Lead
+   */
+  omit?: Prisma.LeadOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LeadInclude<ExtArgs> | null
+  where?: Prisma.LeadWhereInput
 }
 
 /**

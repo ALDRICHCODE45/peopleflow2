@@ -58,7 +58,7 @@ export interface CommercialTermsData {
 
 export interface CreateClientData {
   nombre: string;
-  leadId: string;
+  leadId: string | null;
   generadorId: string | null;
   origenId: string | null;
   tenantId: string;

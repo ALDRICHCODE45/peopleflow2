@@ -29,7 +29,7 @@ function toDomain(
   client: {
     id: string;
     nombre: string;
-    leadId: string;
+    leadId: string | null;
     generadorId: string | null;
     generador?: { name: string | null } | null;
     origenId: string | null;
@@ -100,7 +100,7 @@ class PrismaClientRepositoryImpl implements IClientRepository {
     const client = await prisma.client.create({
       data: {
         nombre: data.nombre,
-        leadId: data.leadId,
+        leadId: data.leadId ?? undefined,
         generadorId: data.generadorId,
         origenId: data.origenId,
         tenantId: data.tenantId,
