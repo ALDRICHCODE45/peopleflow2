@@ -13,6 +13,7 @@ import { Label } from "@shadcn/label";
 import { Switch } from "@shadcn/switch";
 import { CurrencyInput } from "@/core/shared/components/CurrencyInput";
 import { DatePicker } from "@shadcn/date-picker";
+import { ScrollArea } from "@shadcn/scroll-area";
 import { useIsMobile } from "@/core/shared/hooks/use-mobile";
 import { useTenantUsersQuery } from "@/features/Administracion/usuarios/frontend/hooks/useUsers";
 import { useClientsForSelect } from "../../hooks/useClientsForSelect";
@@ -142,6 +143,7 @@ export function VacancySheetFilters({
           </SheetDescription>
         </SheetHeader>
 
+        <ScrollArea className="max-h-[75vh]">
         <div className="space-y-4 p-3 mb-10">
           {/* Tipo de venta */}
           <FilterMultiSelect
@@ -304,6 +306,7 @@ export function VacancySheetFilters({
             </div>
           </div>
         </div>
+        </ScrollArea>
       </SheetContent>
     </Sheet>
   );
