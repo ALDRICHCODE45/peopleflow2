@@ -105,8 +105,12 @@ export const LeadColumns: ColumnDef<Lead>[] = [
     cell: ({ row }) => {
       const count = row.original.contactsCount ?? 0;
       return (
-        <Badge variant="outline" className="font-normal whitespace-nowrap">
-          {count} {count === 1 ? "contacto" : "contactos"}
+        <Badge
+          variant="secondary"
+          className="font-medium whitespace-nowrap gap-1.5 rounded-sm"
+        >
+          <span className="font-semibold">{count}</span>
+          {count === 1 ? "contacto" : "contactos"}
         </Badge>
       );
     },
