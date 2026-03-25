@@ -508,7 +508,7 @@ export function VacancyDetailSheet({
                           value={formatDateSafe(vacancy.assignedAt)}
                         />
                         <InfoRow
-                          label="Fecha tentativa de entrega"
+                          label="Fecha máxima de entrega"
                           value={formatDateSafe(vacancy.targetDeliveryDate)}
                         />
                         <InfoRow

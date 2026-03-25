@@ -109,7 +109,7 @@ function HasRollbackDateGuard(ctx: VacancyTransitionContext): GuardResult {
   return {
     passes: !!(ctx.input.newTargetDeliveryDate),
     reason:
-      "Debe establecer una nueva fecha tentativa de entrega para el nuevo ciclo",
+      "Debe establecer una nueva fecha máxima de entrega para el nuevo ciclo",
   };
 }
 

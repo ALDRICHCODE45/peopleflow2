@@ -335,7 +335,7 @@ function WarrantyFormContent({
               />
             </Field>
             <Field>
-              <FieldLabel>Fecha tentativa de entrega</FieldLabel>
+              <FieldLabel>Fecha máxima de entrega</FieldLabel>
               <DatePicker
                 value={form.targetDeliveryDate}
                 onChange={(v) => updateField("targetDeliveryDate", v)}

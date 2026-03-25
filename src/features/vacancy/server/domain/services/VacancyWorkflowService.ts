@@ -103,7 +103,7 @@ export class VacancyWorkflowService {
 
   /**
    * Valida un rollback (retorno a HUNTING desde FOLLOW_UP o PRE_PLACEMENT).
-   * Requiere: motivo + nueva fecha tentativa de entrega.
+   * Requiere: motivo + nueva fecha máxima de entrega.
    */
   static validateRollback(
     currentStatus: VacancyStatusType,
@@ -127,7 +127,7 @@ export class VacancyWorkflowService {
       return {
         valid: false,
         error:
-          "Debe establecer una nueva fecha tentativa de entrega para el nuevo ciclo",
+          "Debe establecer una nueva fecha máxima de entrega para el nuevo ciclo",
       };
     }
     return { valid: true };

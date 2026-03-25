@@ -208,15 +208,15 @@ export function VacancyFormFields({
             )}
           </form.Field>
 
-          {/* Fecha Tentativa de Entrega */}
+          {/* Fecha Máxima de Entrega */}
           <form.Field name="targetDeliveryDate">
             {(field) => (
               <Field>
-                <FieldLabel>Fecha Tentativa de Entrega</FieldLabel>
+                <FieldLabel>Fecha Máxima de Entrega</FieldLabel>
                 <DatePicker
                   value={field.state.value}
                   onChange={(v) => field.handleChange(v)}
-                  placeholder="Seleccionar fecha tentativa de entrega"
+                  placeholder="Seleccionar fecha máxima de entrega"
                   disabled={!canEditTargetDeliveryDate}
                 />
               </Field>

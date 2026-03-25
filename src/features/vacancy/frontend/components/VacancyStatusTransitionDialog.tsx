@@ -387,7 +387,7 @@ export function VacancyStatusTransitionDialog({
 
               <Field>
                 <FieldLabel>
-                  Nueva fecha tentativa de entrega{" "}
+                  Nueva fecha máxima de entrega{" "}
                   <span className="text-destructive">*</span>
                 </FieldLabel>
                 <DatePicker

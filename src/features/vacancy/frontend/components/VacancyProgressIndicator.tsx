@@ -175,7 +175,7 @@ function formatExpandedSublabel(
     return `Entregada el ${actualFormatted}`;
   }
   if (data.isCompleted) return "Placement confirmado";
-  if (data.totalDays === 0 && !targetDeliveryDate) return "Sin fecha tentativa de entrega";
+  if (data.totalDays === 0 && !targetDeliveryDate) return "Sin fecha máxima de entrega";
   if (data.remainingDays < 0) {
     const overdue = Math.abs(data.remainingDays);
     return `${data.elapsedDays}d transcurridos · ${overdue}d de atraso`;
