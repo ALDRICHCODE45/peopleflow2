@@ -17,7 +17,10 @@ import {
 } from "../../server/presentation/actions/checklist.actions";
 import { vacancyQueryKeys } from "@core/shared/constants/query-keys";
 import type { VacancyServiceType, VacancyDTO } from "../types/vacancy.types";
-import type { VacancyFormValues } from "../types/vacancy-form.types";
+import type {
+  VacancyFormValues,
+  VacancyFormValidationErrors,
+} from "../types/vacancy-form.types";
 
 /** Tracks a checklist item during editing — existing items have an `id`. */
 interface EditableChecklistItem {
@@ -74,6 +77,8 @@ export function useEditVacancyForm({
     .map((item) => ({ id: item.id, requirement: item.requirement }));
 
   const [checklist, setChecklist] = useState<EditableChecklistItem[]>(initialChecklist);
+  const [validationErrors, setValidationErrors] =
+    useState<VacancyFormValidationErrors>({});
   const checklistSyncedRef = useRef(false);
 
   // Sync checklist when the detail query resolves (only once)
@@ -102,6 +107,50 @@ export function useEditVacancyForm({
     setChecklist((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
+  /**
+   * Validates required fields checked at submit time.
+   */
+  const validateRequiredFields = useCallback(
+    (values: VacancyFormValues): VacancyFormValidationErrors => {
+      const errors: VacancyFormValidationErrors = {};
+
+      if (!values.currency) {
+        errors.currency = "La moneda es requerida";
+      }
+
+      if (values.salaryType === "FIXED") {
+        if (values.salaryFixed == null) {
+          errors.salary = "El salario fijo es requerido";
+        }
+      } else {
+        if (values.salaryMax == null) {
+          errors.salary = "El salario máximo es requerido";
+        }
+      }
+
+      if (!values.benefits?.trim()) {
+        errors.benefits = "Las prestaciones son requeridas";
+      }
+
+      if (!values.tools?.trim()) {
+        errors.tools = "Las herramientas son requeridas";
+      }
+
+      if (!values.modality) {
+        errors.modality = "La modalidad es requerida";
+      }
+
+      const nonEmptyItems = checklist.filter((item) => item.requirement.trim());
+      if (nonEmptyItems.length === 0) {
+        errors.checklist =
+          "Debe agregar al menos 1 requisito en el checklist";
+      }
+
+      return errors;
+    },
+    [checklist],
+  );
+
   const defaultValues: VacancyFormValues = {
     position: vacancy.position,
     recruiterId: vacancy.recruiterId,
@@ -127,6 +176,25 @@ export function useEditVacancyForm({
   const form = useForm({
     defaultValues,
     onSubmit: async ({ value }) => {
+      // Run required-field validation before submitting
+      const errors = validateRequiredFields(value);
+      if (Object.keys(errors).length > 0) {
+        setValidationErrors(errors);
+
+        if (
+          errors.currency ||
+          errors.salary ||
+          errors.benefits ||
+          errors.tools ||
+          errors.modality
+        ) {
+          detailsModal.openModal();
+        }
+        return;
+      }
+
+      setValidationErrors({});
+
       await updateVacancyMutation.mutateAsync({
         id: vacancy.id,
         data: {
@@ -229,6 +297,7 @@ export function useEditVacancyForm({
     users,
     clients,
     checklist,
+    validationErrors,
     detailsModal,
     canEditTargetDeliveryDate,
     isSubmitting: updateVacancyMutation.isPending,

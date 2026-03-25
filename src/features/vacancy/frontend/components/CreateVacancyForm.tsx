@@ -9,6 +9,7 @@ import { useCreateVacancyForm } from "../hooks/useCreateVacancyForm";
 import { VacancyFormFields } from "./VacancyFormFields";
 import { usePermissions } from "@/core/shared/hooks/use-permissions";
 import { PermissionActions } from "@/core/shared/constants/permissions";
+import { FieldError } from "@/core/shared/ui/shadcn/field";
 
 interface CreateVacancyFormProps {
   onClose: () => void;
@@ -34,6 +35,7 @@ export function CreateVacancyForm({ onClose }: CreateVacancyFormProps) {
     checklist,
     sendNotification,
     setSendNotification,
+    validationErrors,
     detailsModal,
     isSubmitting,
     handleClientChange,
@@ -65,7 +67,7 @@ export function CreateVacancyForm({ onClose }: CreateVacancyFormProps) {
     <>
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Agrega los requisitos que debe cumplir el candidato.
+          Agrega los requisitos que debe cumplir el candidato. *
         </p>
         <Button
           type="button"
@@ -79,8 +81,16 @@ export function CreateVacancyForm({ onClose }: CreateVacancyFormProps) {
         </Button>
       </div>
 
+      {validationErrors.checklist && (
+        <FieldError>{validationErrors.checklist}</FieldError>
+      )}
+
       {checklist.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-10 text-center">
+        <div
+          className={`flex flex-col items-center justify-center rounded-lg border border-dashed py-10 text-center ${
+            validationErrors.checklist ? "border-destructive" : ""
+          }`}
+        >
           <p className="text-sm text-muted-foreground">
             No hay requisitos aún.
           </p>
@@ -146,6 +156,7 @@ export function CreateVacancyForm({ onClose }: CreateVacancyFormProps) {
         handleClientChange={handleClientChange}
         showChecklist={true}
         checklistSlot={checklistSlot}
+        validationErrors={validationErrors}
       />
 
       {/* Action buttons */}

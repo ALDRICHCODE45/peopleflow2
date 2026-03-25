@@ -43,3 +43,16 @@ export interface VacancyFormValues {
  * TanStack Form generics (ReactFormExtendedApi<...>).
  */
 export type VacancyForm = ReturnType<typeof useCreateVacancyForm>["form"];
+
+/**
+ * Validation errors for required fields that live inside the "Detalles" modal
+ * or the checklist tab. These are checked on submit attempt.
+ */
+export interface VacancyFormValidationErrors {
+  currency?: string;
+  salary?: string;
+  benefits?: string;
+  tools?: string;
+  modality?: string;
+  checklist?: string;
+}

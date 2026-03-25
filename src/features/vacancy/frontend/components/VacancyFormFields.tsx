@@ -52,7 +52,10 @@ import type {
   VacancySalaryType,
   VacancyCurrency,
 } from "../types/vacancy.types";
-import type { VacancyForm } from "../types/vacancy-form.types";
+import type {
+  VacancyForm,
+  VacancyFormValidationErrors,
+} from "../types/vacancy-form.types";
 import { WorkSchedulePicker } from "./WorkSchedulePicker";
 import { SalaryFields } from "./SalaryFields";
 
@@ -72,6 +75,8 @@ export interface VacancyFormFieldsProps {
   handleClientChange: (clientId: string) => void;
   showChecklist?: boolean;
   checklistSlot?: React.ReactNode;
+  /** Validation errors for required fields checked on submit */
+  validationErrors?: VacancyFormValidationErrors;
 }
 
 export function VacancyFormFields({
@@ -90,6 +95,7 @@ export function VacancyFormFields({
   handleClientChange,
   showChecklist = false,
   checklistSlot,
+  validationErrors = {},
 }: VacancyFormFieldsProps) {
   const serviceTypeOptions = (
     Object.entries(VACANCY_SERVICE_TYPE_LABELS) as [
@@ -338,43 +344,53 @@ export function VacancyFormFields({
           <div className="max-h-[40vh] overflow-y-auto space-y-4 overflow-x-hidden">
             {/* Moneda */}
             <form.Field name="currency">
-              {(field) => (
-                <Field>
-                  <FieldLabel htmlFor={field.name}>Moneda</FieldLabel>
-                  <Select
-                    value={field.state.value || "none"}
-                    onValueChange={(v) =>
-                      field.handleChange(
-                        v === "none" ? "" : (v as VacancyCurrency),
-                      )
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecciona la moneda" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">Sin moneda</SelectItem>
-                      {(
-                        Object.entries(VACANCY_CURRENCY_LABELS) as [
-                          VacancyCurrency,
-                          string,
-                        ][]
-                      ).map(([value, label]) => (
-                        <SelectItem key={value} value={value}>
-                          {label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </Field>
-              )}
+              {(field) => {
+                const hasError =
+                  (field.state.meta.isTouched && !field.state.value) ||
+                  !!validationErrors.currency;
+                return (
+                  <Field data-invalid={hasError}>
+                    <FieldLabel htmlFor={field.name}>
+                      Moneda (moneda en la que pagará el cliente) *
+                    </FieldLabel>
+                    <Select
+                      value={field.state.value || "none"}
+                      onValueChange={(v) =>
+                        field.handleChange(
+                          v === "none" ? "" : (v as VacancyCurrency),
+                        )
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona la moneda" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">Sin moneda</SelectItem>
+                        {(
+                          Object.entries(VACANCY_CURRENCY_LABELS) as [
+                            VacancyCurrency,
+                            string,
+                          ][]
+                        ).map(([value, label]) => (
+                          <SelectItem key={value} value={value}>
+                            {label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {hasError && (
+                      <FieldError>La moneda es requerida</FieldError>
+                    )}
+                  </Field>
+                );
+              }}
             </form.Field>
 
             {/* Tipo de Salario */}
             <form.Field name="salaryType">
               {(field) => (
                 <Field>
-                  <FieldLabel>Tipo de Salario</FieldLabel>
+                  <FieldLabel>Tipo de Salario *</FieldLabel>
                   <Select
                     value={field.state.value}
                     onValueChange={(v) =>
@@ -402,40 +418,67 @@ export function VacancyFormFields({
             </form.Field>
 
             {/* Salario condicional según tipo */}
-            <SalaryFields form={form} />
+            <SalaryFields
+              form={form}
+              salaryError={validationErrors.salary}
+            />
 
             {/* Prestaciones */}
             <form.Field name="benefits">
-              {(field) => (
-                <Field>
-                  <FieldLabel htmlFor={field.name}>Prestaciones</FieldLabel>
-                  <Textarea
-                    id={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="Seguro médico, vales de despensa, etc."
-                    rows={2}
-                  />
-                </Field>
-              )}
+              {(field) => {
+                const hasError =
+                  (field.state.meta.isTouched &&
+                    !field.state.value?.trim()) ||
+                  !!validationErrors.benefits;
+                return (
+                  <Field data-invalid={hasError}>
+                    <FieldLabel htmlFor={field.name}>
+                      Prestaciones *
+                    </FieldLabel>
+                    <Textarea
+                      id={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      placeholder="Seguro médico, vales de despensa, etc."
+                      rows={2}
+                      aria-invalid={hasError}
+                    />
+                    {hasError && (
+                      <FieldError>Las prestaciones son requeridas</FieldError>
+                    )}
+                  </Field>
+                );
+              }}
             </form.Field>
 
             {/* Herramientas */}
             <form.Field name="tools">
-              {(field) => (
-                <Field>
-                  <FieldLabel htmlFor={field.name}>Herramientas</FieldLabel>
-                  <Textarea
-                    id={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="Auto, Celular, Laptop etc.."
-                    rows={2}
-                  />
-                </Field>
-              )}
+              {(field) => {
+                const hasError =
+                  (field.state.meta.isTouched &&
+                    !field.state.value?.trim()) ||
+                  !!validationErrors.tools;
+                return (
+                  <Field data-invalid={hasError}>
+                    <FieldLabel htmlFor={field.name}>
+                      Herramientas *
+                    </FieldLabel>
+                    <Textarea
+                      id={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      placeholder="Auto, Celular, Laptop etc.."
+                      rows={2}
+                      aria-invalid={hasError}
+                    />
+                    {hasError && (
+                      <FieldError>Las herramientas son requeridas</FieldError>
+                    )}
+                  </Field>
+                );
+              }}
             </form.Field>
 
             {/* Comisiones/Bonos */}
@@ -459,31 +502,39 @@ export function VacancyFormFields({
 
             {/* Modalidad */}
             <form.Field name="modality">
-              {(field) => (
-                <Field>
-                  <FieldLabel htmlFor={field.name}>Modalidad</FieldLabel>
-                  <Select
-                    value={field.state.value ?? "none"}
-                    onValueChange={(v) =>
-                      field.handleChange(
-                        v === "none" ? undefined : (v as VacancyModality),
-                      )
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecciona la modalidad" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">Sin modalidad</SelectItem>
-                      {modalityOptions.map((opt) => (
-                        <SelectItem key={opt.value} value={opt.value}>
-                          {opt.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </Field>
-              )}
+              {(field) => {
+                const hasError =
+                  (field.state.meta.isTouched && !field.state.value) ||
+                  !!validationErrors.modality;
+                return (
+                  <Field data-invalid={hasError}>
+                    <FieldLabel htmlFor={field.name}>Modalidad *</FieldLabel>
+                    <Select
+                      value={field.state.value ?? "none"}
+                      onValueChange={(v) =>
+                        field.handleChange(
+                          v === "none" ? undefined : (v as VacancyModality),
+                        )
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona la modalidad" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">Sin modalidad</SelectItem>
+                        {modalityOptions.map((opt) => (
+                          <SelectItem key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {hasError && (
+                      <FieldError>La modalidad es requerida</FieldError>
+                    )}
+                  </Field>
+                );
+              }}
             </form.Field>
 
             {/* Horario */}
@@ -540,7 +591,7 @@ export function VacancyFormFields({
                 <Field>
                   <div className="flex items-center justify-between">
                     <FieldLabel htmlFor={field.name} className="cursor-pointer">
-                      Requiere Psicometría
+                      Requiere Psicometría *
                     </FieldLabel>
                     <Switch
                       id={field.name}

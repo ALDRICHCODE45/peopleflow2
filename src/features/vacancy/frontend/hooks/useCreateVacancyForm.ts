@@ -10,6 +10,7 @@ import { useModalState } from "@/core/shared/hooks/useModalState";
 import { addChecklistItemAction } from "../../server/presentation/actions/checklist.actions";
 import type { VacancyServiceType } from "../types/vacancy.types";
 import type { VacancyFormValues } from "../types/vacancy-form.types";
+import type { VacancyFormValidationErrors } from "../types/vacancy-form.types";
 
 const SERVICE_TYPE_DAYS: Record<VacancyServiceType, number> = {
   SOURCING: 5,
@@ -42,6 +43,8 @@ export function useCreateVacancyForm({
 
   const [checklist, setChecklist] = useState<string[]>([]);
   const [sendNotification, setSendNotification] = useState(false);
+  const [validationErrors, setValidationErrors] =
+    useState<VacancyFormValidationErrors>({});
   const detailsModal = useModalState();
 
   const today = format(new Date(), "yyyy-MM-dd");
@@ -59,7 +62,7 @@ export function useCreateVacancyForm({
     salaryMin: undefined,
     salaryMax: undefined,
     benefits: "",
-    tools: "N/A",
+    tools: "",
     commissions: "N/A",
     modality: undefined,
     schedule: "",
@@ -68,9 +71,82 @@ export function useCreateVacancyForm({
     requiresPsychometry: false,
   };
 
+  /**
+   * Validates required fields that live outside the standard TanStack Form
+   * isTouched flow (details modal + checklist tab).
+   * Returns the errors object (empty = valid).
+   */
+  const validateRequiredFields = useCallback(
+    (values: VacancyFormValues): VacancyFormValidationErrors => {
+      const errors: VacancyFormValidationErrors = {};
+
+      // Currency
+      if (!values.currency) {
+        errors.currency = "La moneda es requerida";
+      }
+
+      // Salary (conditional on type)
+      if (values.salaryType === "FIXED") {
+        if (values.salaryFixed == null) {
+          errors.salary = "El salario fijo es requerido";
+        }
+      } else {
+        // RANGE — maxSalary is required
+        if (values.salaryMax == null) {
+          errors.salary = "El salario máximo es requerido";
+        }
+      }
+
+      // Benefits
+      if (!values.benefits?.trim()) {
+        errors.benefits = "Las prestaciones son requeridas";
+      }
+
+      // Tools
+      if (!values.tools?.trim()) {
+        errors.tools = "Las herramientas son requeridas";
+      }
+
+      // Modality
+      if (!values.modality) {
+        errors.modality = "La modalidad es requerida";
+      }
+
+      // Checklist — at least 1 non-empty item
+      const nonEmptyItems = checklist.filter((item) => item.trim());
+      if (nonEmptyItems.length === 0) {
+        errors.checklist =
+          "Debe agregar al menos 1 requisito en el checklist";
+      }
+
+      return errors;
+    },
+    [checklist],
+  );
+
   const form = useForm({
     defaultValues,
     onSubmit: async ({ value }) => {
+      // Run required-field validation before submitting
+      const errors = validateRequiredFields(value);
+      if (Object.keys(errors).length > 0) {
+        setValidationErrors(errors);
+
+        // If any detail-modal field has errors, open the modal
+        if (
+          errors.currency ||
+          errors.salary ||
+          errors.benefits ||
+          errors.tools ||
+          errors.modality
+        ) {
+          detailsModal.openModal();
+        }
+        return;
+      }
+
+      setValidationErrors({});
+
       const created = await createVacancyMutation.mutateAsync({
         position: value.position,
         recruiterId: value.recruiterId,
@@ -155,6 +231,8 @@ export function useCreateVacancyForm({
     checklist,
     sendNotification,
     setSendNotification,
+    validationErrors,
+    setValidationErrors,
     detailsModal,
     canEditTargetDeliveryDate,
     isSubmitting: createVacancyMutation.isPending,
