@@ -2,8 +2,8 @@
 import { lazy, Suspense } from "react";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
-import { Row } from "@tanstack/react-table";
-import { Lead } from "../../types";
+import type { Row } from "@tanstack/react-table";
+import type { Lead } from "../../types";
 import { useModalState } from "@/core/shared/hooks";
 
 const LeadDetailSheet = lazy(() =>
@@ -25,9 +25,16 @@ export const EmpresaNameDetials = ({ row }: { row: Row<Lead> }) => {
     <div>
       <div
         onClick={() => openDetailModal()}
-        className="flex flex-col min-w-0 w-full overflow-hidden cursor-pointer"
+        className="flex flex-col min-w-0 w-full overflow-hidden cursor-pointer group"
       >
-        <p className="font-medium truncate">{lead.companyName}</p>
+        <span className="truncate font-medium group-hover:text-primary transition-colors group-hover:underline underline-offset-4 decoration-primary/50">
+          {lead.companyName}
+        </span>
+        {lead.sectorName && (
+          <span className="text-xs text-muted-foreground truncate">
+            {lead.sectorName}
+          </span>
+        )}
       </div>
 
       {isDetailOpen && (
