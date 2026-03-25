@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@shadcn/button";
 import { Input } from "@shadcn/input";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -12,6 +12,7 @@ import { VacancyFormFields } from "./VacancyFormFields";
 import { usePermissions } from "@/core/shared/hooks/use-permissions";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { FieldError } from "@/core/shared/ui/shadcn/field";
+import type { VacancyFormTab } from "../types/vacancy-form.types";
 
 interface EditVacancyFormProps {
   onClose: () => void;
@@ -19,6 +20,7 @@ interface EditVacancyFormProps {
 }
 
 export function EditVacancyForm({ onClose, vacancy }: EditVacancyFormProps) {
+  const [activeTab, setActiveTab] = useState<VacancyFormTab>("basic");
   const { hasAnyPermission, isSuperAdmin } = usePermissions();
 
   const canEditAssignedAt =
@@ -41,7 +43,7 @@ export function EditVacancyForm({ onClose, vacancy }: EditVacancyFormProps) {
     addChecklistItem,
     updateChecklistItem,
     removeChecklistItem,
-  } = useEditVacancyForm({ onClose, vacancy, canEditTargetDeliveryDate });
+  } = useEditVacancyForm({ onClose, vacancy, canEditTargetDeliveryDate, setActiveTab });
 
   const userOptions = useMemo(
     () =>
@@ -156,6 +158,8 @@ export function EditVacancyForm({ onClose, vacancy }: EditVacancyFormProps) {
         showChecklist={true}
         checklistSlot={checklistSlot}
         validationErrors={validationErrors}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
       />
 
       {/* Action buttons */}

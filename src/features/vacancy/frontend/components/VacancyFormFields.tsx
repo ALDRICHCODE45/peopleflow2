@@ -55,6 +55,7 @@ import type {
 import type {
   VacancyForm,
   VacancyFormValidationErrors,
+  VacancyFormTab,
 } from "../types/vacancy-form.types";
 import { WorkSchedulePicker } from "./WorkSchedulePicker";
 import { SalaryFields } from "./SalaryFields";
@@ -77,6 +78,10 @@ export interface VacancyFormFieldsProps {
   checklistSlot?: React.ReactNode;
   /** Validation errors for required fields checked on submit */
   validationErrors?: VacancyFormValidationErrors;
+  /** Controlled active tab for programmatic switching on validation errors */
+  activeTab?: VacancyFormTab;
+  /** Callback when user manually switches tabs */
+  onTabChange?: (tab: VacancyFormTab) => void;
 }
 
 export function VacancyFormFields({
@@ -96,6 +101,8 @@ export function VacancyFormFields({
   showChecklist = false,
   checklistSlot,
   validationErrors = {},
+  activeTab,
+  onTabChange,
 }: VacancyFormFieldsProps) {
   const serviceTypeOptions = (
     Object.entries(VACANCY_SERVICE_TYPE_LABELS) as [
@@ -110,7 +117,12 @@ export function VacancyFormFields({
 
   return (
     <>
-      <Tabs defaultValue="basic" className="w-full">
+      <Tabs
+        value={activeTab}
+        defaultValue="basic"
+        onValueChange={(v) => onTabChange?.(v as VacancyFormTab)}
+        className="w-full"
+      >
         <TabsList className="w-full mb-4">
           <TabsTrigger value="basic" className="flex-1">
             Información Básica

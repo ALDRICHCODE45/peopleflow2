@@ -56,3 +56,6 @@ export interface VacancyFormValidationErrors {
   modality?: string;
   checklist?: string;
 }
+
+/** The two tab values used in the vacancy form tabs. */
+export type VacancyFormTab = "basic" | "checklist";

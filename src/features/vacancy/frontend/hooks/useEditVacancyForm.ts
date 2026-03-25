@@ -15,11 +15,13 @@ import {
   updateChecklistItemAction,
   deleteChecklistItemAction,
 } from "../../server/presentation/actions/checklist.actions";
+import { showToast } from "@/core/shared/components/ShowToast";
 import { vacancyQueryKeys } from "@core/shared/constants/query-keys";
 import type { VacancyServiceType, VacancyDTO } from "../types/vacancy.types";
 import type {
   VacancyFormValues,
   VacancyFormValidationErrors,
+  VacancyFormTab,
 } from "../types/vacancy-form.types";
 
 /** Tracks a checklist item during editing — existing items have an `id`. */
@@ -50,10 +52,12 @@ export function useEditVacancyForm({
   onClose,
   vacancy,
   canEditTargetDeliveryDate,
+  setActiveTab,
 }: {
   onClose: () => void;
   vacancy: VacancyDTO;
   canEditTargetDeliveryDate: boolean;
+  setActiveTab: (tab: VacancyFormTab) => void;
 }) {
   const queryClient = useQueryClient();
   const { tenant } = useTenant();
@@ -181,6 +185,7 @@ export function useEditVacancyForm({
       if (Object.keys(errors).length > 0) {
         setValidationErrors(errors);
 
+        // If any detail-modal field has errors, open the modal and switch to info tab
         if (
           errors.currency ||
           errors.salary ||
@@ -188,7 +193,23 @@ export function useEditVacancyForm({
           errors.tools ||
           errors.modality
         ) {
+          setActiveTab("basic");
           detailsModal.openModal();
+          showToast({
+            type: "error",
+            title: "Campos requeridos",
+            description:
+              "Completa los campos obligatorios en los detalles de la vacante",
+          });
+        } else if (errors.checklist) {
+          // Checklist error only — switch to checklist tab
+          setActiveTab("checklist");
+          showToast({
+            type: "error",
+            title: "Checklist requerido",
+            description:
+              "Agrega al menos un requisito en el checklist",
+          });
         }
         return;
       }

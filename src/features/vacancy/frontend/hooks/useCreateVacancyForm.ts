@@ -8,9 +8,11 @@ import { useTenantUsersQuery } from "@/features/Administracion/usuarios/frontend
 import { useClientsForSelect } from "./useClientsForSelect";
 import { useModalState } from "@/core/shared/hooks/useModalState";
 import { addChecklistItemAction } from "../../server/presentation/actions/checklist.actions";
+import { showToast } from "@/core/shared/components/ShowToast";
 import type { VacancyServiceType } from "../types/vacancy.types";
 import type { VacancyFormValues } from "../types/vacancy-form.types";
 import type { VacancyFormValidationErrors } from "../types/vacancy-form.types";
+import type { VacancyFormTab } from "../types/vacancy-form.types";
 
 const SERVICE_TYPE_DAYS: Record<VacancyServiceType, number> = {
   SOURCING: 5,
@@ -33,9 +35,11 @@ function calculateTargetDeliveryDate(
 export function useCreateVacancyForm({
   onClose,
   canEditTargetDeliveryDate,
+  setActiveTab,
 }: {
   onClose: () => void;
   canEditTargetDeliveryDate: boolean;
+  setActiveTab: (tab: VacancyFormTab) => void;
 }) {
   const createVacancyMutation = useCreateVacancy();
   const { data: users = [] } = useTenantUsersQuery();
@@ -132,7 +136,7 @@ export function useCreateVacancyForm({
       if (Object.keys(errors).length > 0) {
         setValidationErrors(errors);
 
-        // If any detail-modal field has errors, open the modal
+        // If any detail-modal field has errors, open the modal and switch to info tab
         if (
           errors.currency ||
           errors.salary ||
@@ -140,7 +144,23 @@ export function useCreateVacancyForm({
           errors.tools ||
           errors.modality
         ) {
+          setActiveTab("basic");
           detailsModal.openModal();
+          showToast({
+            type: "error",
+            title: "Campos requeridos",
+            description:
+              "Completa los campos obligatorios en los detalles de la vacante",
+          });
+        } else if (errors.checklist) {
+          // Checklist error only — switch to checklist tab
+          setActiveTab("checklist");
+          showToast({
+            type: "error",
+            title: "Checklist requerido",
+            description:
+              "Agrega al menos un requisito en el checklist",
+          });
         }
         return;
       }
