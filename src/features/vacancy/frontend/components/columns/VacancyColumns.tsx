@@ -7,14 +7,10 @@ import {
 import { VacancyProgressIndicator } from "../VacancyProgressIndicator";
 import { VacancyRowActions } from "./VacancyRowActions";
 import { VacancyNameDetails } from "./VacancyNameDetails";
+import { RecruiterReassignPopover } from "./RecruiterReassignPopover";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Checkbox } from "@/core/shared/ui/shadcn/checkbox";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/core/shared/ui/shadcn/avatar";
 import { VacancySalesTypeBadge } from "../VacancyVentaTypeBadge";
 import {
   Tooltip,
@@ -83,35 +79,7 @@ export function createVacancyColumns(
     {
       header: "Recruiter",
       accessorKey: "recruiterName",
-      cell: ({ row }) => {
-        const { recruiterName, recruiterEmail, recruiterAvatar, recruiterId } =
-          row.original;
-        const name = recruiterName ?? recruiterId;
-        const initials = name
-          ? name
-              .split(" ")
-              .map((n: string) => n[0])
-              .join("")
-              .toUpperCase()
-              .slice(0, 2)
-          : "?";
-        return (
-          <div className="flex items-center gap-3 max-w-[200px]">
-            <Avatar className="h-9 w-9 flex-shrink-0">
-              <AvatarImage src={recruiterAvatar ?? undefined} alt={name} />
-              <AvatarFallback className="text-xs">{initials}</AvatarFallback>
-            </Avatar>
-            <div className="min-w-0 flex-1">
-              <div className="font-medium text-sm truncate">{name}</div>
-              {recruiterEmail && (
-                <span className="text-muted-foreground text-xs truncate block">
-                  {recruiterEmail}
-                </span>
-              )}
-            </div>
-          </div>
-        );
-      },
+      cell: ({ row }) => <RecruiterReassignPopover vacancy={row.original} />,
       size: 16,
       enableSorting: false,
     },
