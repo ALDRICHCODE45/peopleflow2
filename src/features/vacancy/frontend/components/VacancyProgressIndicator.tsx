@@ -151,7 +151,7 @@ function formatCompactLabel(data: ProgressData, targetDeliveryDate: string | nul
   if (data.totalDays === 0) return `${Math.abs(data.remainingDays)}d tarde`;
   if (data.remainingDays < 0) return `${Math.abs(data.remainingDays)}d tarde`;
   if (data.remainingDays === 0) return "Hoy";
-  return `${data.remainingDays}d`;
+  return `${data.elapsedDays}d`;
 }
 
 function formatExpandedSublabel(

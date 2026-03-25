@@ -98,6 +98,22 @@ export function createVacancyColumns(
       size: 12,
     },
     {
+      header: "Fecha Máxima",
+      accessorKey: "targetDeliveryDate",
+      cell: ({ row }) => {
+        const dateStr = row.original.targetDeliveryDate;
+
+        return (
+          <span className="whitespace-nowrap text-sm">
+            {dateStr
+              ? format(new Date(dateStr), "d MMM yyyy", { locale: es })
+              : "-"}
+          </span>
+        );
+      },
+      size: 12,
+    },
+    {
       id: "progress",
       header: "Progreso",
       cell: ({ row }) => {
