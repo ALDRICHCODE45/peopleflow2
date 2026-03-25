@@ -1,14 +1,26 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { VacancyDTO } from "../../types/vacancy.types";
-import { VacancyStatusBadge, VacancyModalityBadge } from "../VacancyStatusBadge";
+import {
+  VacancyStatusBadge,
+  VacancyModalityBadge,
+} from "../VacancyStatusBadge";
 import { VacancyProgressIndicator } from "../VacancyProgressIndicator";
 import { VacancyRowActions } from "./VacancyRowActions";
+import { VacancyNameDetails } from "./VacancyNameDetails";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Checkbox } from "@/core/shared/ui/shadcn/checkbox";
-import { Avatar, AvatarFallback, AvatarImage } from "@/core/shared/ui/shadcn/avatar";
-import { Badge } from "@shadcn/badge";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/core/shared/ui/shadcn/avatar";
 import { VacancySalesTypeBadge } from "../VacancyVentaTypeBadge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/core/shared/ui/shadcn/tooltip";
 
 export function createVacancyColumns(
   onViewDetail?: (id: string) => void,
@@ -38,16 +50,7 @@ export function createVacancyColumns(
       header: "Posición",
       accessorKey: "position",
       cell: ({ row }) => (
-        <div className="flex items-center gap-1.5 max-w-50">
-          <span className="font-medium truncate">
-            {row.original.position}
-          </span>
-          {row.original.isWarranty && (
-            <Badge className="bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-950 dark:text-purple-300 dark:border-purple-800 text-[10px] px-1.5 py-0 shrink-0">
-              Garantía
-            </Badge>
-          )}
-        </div>
+        <VacancyNameDetails row={row} onViewDetail={onViewDetail} />
       ),
       size: 22,
     },
@@ -64,9 +67,14 @@ export function createVacancyColumns(
       cell: ({ row }) => {
         const { clientName, clientId } = row.original;
         return (
-          <span className="truncate block max-w-37.5">
-            {clientName ?? clientId}
-          </span>
+          <Tooltip>
+            <TooltipTrigger>
+              <span className="truncate block max-w-29">
+                {clientName ?? clientId}
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>{clientName}</TooltipContent>
+          </Tooltip>
         );
       },
       size: 14,
@@ -76,10 +84,16 @@ export function createVacancyColumns(
       header: "Recruiter",
       accessorKey: "recruiterName",
       cell: ({ row }) => {
-        const { recruiterName, recruiterEmail, recruiterAvatar, recruiterId } = row.original;
+        const { recruiterName, recruiterEmail, recruiterAvatar, recruiterId } =
+          row.original;
         const name = recruiterName ?? recruiterId;
         const initials = name
-          ? name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
+          ? name
+              .split(" ")
+              .map((n: string) => n[0])
+              .join("")
+              .toUpperCase()
+              .slice(0, 2)
           : "?";
         return (
           <div className="flex items-center gap-3 max-w-[200px]">
@@ -107,7 +121,9 @@ export function createVacancyColumns(
       cell: ({ row }) => {
         const modality = row.original.modality;
         if (!modality)
-          return <span className="text-muted-foreground italic text-xs">—</span>;
+          return (
+            <span className="text-muted-foreground italic text-xs">—</span>
+          );
         return <VacancyModalityBadge modality={modality} />;
       },
       size: 10,
