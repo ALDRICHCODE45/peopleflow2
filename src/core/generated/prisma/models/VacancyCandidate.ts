@@ -52,6 +52,10 @@ export type VacancyCandidateMinAggregateOutputType = {
   currentModality: $Enums.VacancyModality | null
   countryCode: string | null
   regionCode: string | null
+  workCity: string | null
+  candidateCountryCode: string | null
+  candidateRegionCode: string | null
+  candidateCity: string | null
   currentCommissions: string | null
   currentBenefits: string | null
   otherBenefits: string | null
@@ -78,6 +82,10 @@ export type VacancyCandidateMaxAggregateOutputType = {
   currentModality: $Enums.VacancyModality | null
   countryCode: string | null
   regionCode: string | null
+  workCity: string | null
+  candidateCountryCode: string | null
+  candidateRegionCode: string | null
+  candidateCity: string | null
   currentCommissions: string | null
   currentBenefits: string | null
   otherBenefits: string | null
@@ -104,6 +112,10 @@ export type VacancyCandidateCountAggregateOutputType = {
   currentModality: number
   countryCode: number
   regionCode: number
+  workCity: number
+  candidateCountryCode: number
+  candidateRegionCode: number
+  candidateCity: number
   currentCommissions: number
   currentBenefits: number
   otherBenefits: number
@@ -144,6 +156,10 @@ export type VacancyCandidateMinAggregateInputType = {
   currentModality?: true
   countryCode?: true
   regionCode?: true
+  workCity?: true
+  candidateCountryCode?: true
+  candidateRegionCode?: true
+  candidateCity?: true
   currentCommissions?: true
   currentBenefits?: true
   otherBenefits?: true
@@ -170,6 +186,10 @@ export type VacancyCandidateMaxAggregateInputType = {
   currentModality?: true
   countryCode?: true
   regionCode?: true
+  workCity?: true
+  candidateCountryCode?: true
+  candidateRegionCode?: true
+  candidateCity?: true
   currentCommissions?: true
   currentBenefits?: true
   otherBenefits?: true
@@ -196,6 +216,10 @@ export type VacancyCandidateCountAggregateInputType = {
   currentModality?: true
   countryCode?: true
   regionCode?: true
+  workCity?: true
+  candidateCountryCode?: true
+  candidateRegionCode?: true
+  candidateCity?: true
   currentCommissions?: true
   currentBenefits?: true
   otherBenefits?: true
@@ -309,6 +333,10 @@ export type VacancyCandidateGroupByOutputType = {
   currentModality: $Enums.VacancyModality | null
   countryCode: string | null
   regionCode: string | null
+  workCity: string | null
+  candidateCountryCode: string | null
+  candidateRegionCode: string | null
+  candidateCity: string | null
   currentCommissions: string | null
   currentBenefits: string | null
   otherBenefits: string | null
@@ -358,6 +386,10 @@ export type VacancyCandidateWhereInput = {
   currentModality?: Prisma.EnumVacancyModalityNullableFilter<"VacancyCandidate"> | $Enums.VacancyModality | null
   countryCode?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
   regionCode?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
+  workCity?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
+  candidateCountryCode?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
+  candidateRegionCode?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
+  candidateCity?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
   currentCommissions?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
   currentBenefits?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
   otherBenefits?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
@@ -388,6 +420,10 @@ export type VacancyCandidateOrderByWithRelationInput = {
   currentModality?: Prisma.SortOrderInput | Prisma.SortOrder
   countryCode?: Prisma.SortOrderInput | Prisma.SortOrder
   regionCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  workCity?: Prisma.SortOrderInput | Prisma.SortOrder
+  candidateCountryCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  candidateRegionCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  candidateCity?: Prisma.SortOrderInput | Prisma.SortOrder
   currentCommissions?: Prisma.SortOrderInput | Prisma.SortOrder
   currentBenefits?: Prisma.SortOrderInput | Prisma.SortOrder
   otherBenefits?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -421,6 +457,10 @@ export type VacancyCandidateWhereUniqueInput = Prisma.AtLeast<{
   currentModality?: Prisma.EnumVacancyModalityNullableFilter<"VacancyCandidate"> | $Enums.VacancyModality | null
   countryCode?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
   regionCode?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
+  workCity?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
+  candidateCountryCode?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
+  candidateRegionCode?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
+  candidateCity?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
   currentCommissions?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
   currentBenefits?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
   otherBenefits?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
@@ -451,6 +491,10 @@ export type VacancyCandidateOrderByWithAggregationInput = {
   currentModality?: Prisma.SortOrderInput | Prisma.SortOrder
   countryCode?: Prisma.SortOrderInput | Prisma.SortOrder
   regionCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  workCity?: Prisma.SortOrderInput | Prisma.SortOrder
+  candidateCountryCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  candidateRegionCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  candidateCity?: Prisma.SortOrderInput | Prisma.SortOrder
   currentCommissions?: Prisma.SortOrderInput | Prisma.SortOrder
   currentBenefits?: Prisma.SortOrderInput | Prisma.SortOrder
   otherBenefits?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -485,6 +529,10 @@ export type VacancyCandidateScalarWhereWithAggregatesInput = {
   currentModality?: Prisma.EnumVacancyModalityNullableWithAggregatesFilter<"VacancyCandidate"> | $Enums.VacancyModality | null
   countryCode?: Prisma.StringNullableWithAggregatesFilter<"VacancyCandidate"> | string | null
   regionCode?: Prisma.StringNullableWithAggregatesFilter<"VacancyCandidate"> | string | null
+  workCity?: Prisma.StringNullableWithAggregatesFilter<"VacancyCandidate"> | string | null
+  candidateCountryCode?: Prisma.StringNullableWithAggregatesFilter<"VacancyCandidate"> | string | null
+  candidateRegionCode?: Prisma.StringNullableWithAggregatesFilter<"VacancyCandidate"> | string | null
+  candidateCity?: Prisma.StringNullableWithAggregatesFilter<"VacancyCandidate"> | string | null
   currentCommissions?: Prisma.StringNullableWithAggregatesFilter<"VacancyCandidate"> | string | null
   currentBenefits?: Prisma.StringNullableWithAggregatesFilter<"VacancyCandidate"> | string | null
   otherBenefits?: Prisma.StringNullableWithAggregatesFilter<"VacancyCandidate"> | string | null
@@ -510,6 +558,10 @@ export type VacancyCandidateCreateInput = {
   currentModality?: $Enums.VacancyModality | null
   countryCode?: string | null
   regionCode?: string | null
+  workCity?: string | null
+  candidateCountryCode?: string | null
+  candidateRegionCode?: string | null
+  candidateCity?: string | null
   currentCommissions?: string | null
   currentBenefits?: string | null
   otherBenefits?: string | null
@@ -539,6 +591,10 @@ export type VacancyCandidateUncheckedCreateInput = {
   currentModality?: $Enums.VacancyModality | null
   countryCode?: string | null
   regionCode?: string | null
+  workCity?: string | null
+  candidateCountryCode?: string | null
+  candidateRegionCode?: string | null
+  candidateCity?: string | null
   currentCommissions?: string | null
   currentBenefits?: string | null
   otherBenefits?: string | null
@@ -566,6 +622,10 @@ export type VacancyCandidateUpdateInput = {
   currentModality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
   countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCountryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateRegionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentCommissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otherBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -595,6 +655,10 @@ export type VacancyCandidateUncheckedUpdateInput = {
   currentModality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
   countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCountryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateRegionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentCommissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otherBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -623,6 +687,10 @@ export type VacancyCandidateCreateManyInput = {
   currentModality?: $Enums.VacancyModality | null
   countryCode?: string | null
   regionCode?: string | null
+  workCity?: string | null
+  candidateCountryCode?: string | null
+  candidateRegionCode?: string | null
+  candidateCity?: string | null
   currentCommissions?: string | null
   currentBenefits?: string | null
   otherBenefits?: string | null
@@ -648,6 +716,10 @@ export type VacancyCandidateUpdateManyMutationInput = {
   currentModality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
   countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCountryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateRegionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentCommissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otherBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -673,6 +745,10 @@ export type VacancyCandidateUncheckedUpdateManyInput = {
   currentModality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
   countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCountryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateRegionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentCommissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otherBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -714,6 +790,10 @@ export type VacancyCandidateCountOrderByAggregateInput = {
   currentModality?: Prisma.SortOrder
   countryCode?: Prisma.SortOrder
   regionCode?: Prisma.SortOrder
+  workCity?: Prisma.SortOrder
+  candidateCountryCode?: Prisma.SortOrder
+  candidateRegionCode?: Prisma.SortOrder
+  candidateCity?: Prisma.SortOrder
   currentCommissions?: Prisma.SortOrder
   currentBenefits?: Prisma.SortOrder
   otherBenefits?: Prisma.SortOrder
@@ -746,6 +826,10 @@ export type VacancyCandidateMaxOrderByAggregateInput = {
   currentModality?: Prisma.SortOrder
   countryCode?: Prisma.SortOrder
   regionCode?: Prisma.SortOrder
+  workCity?: Prisma.SortOrder
+  candidateCountryCode?: Prisma.SortOrder
+  candidateRegionCode?: Prisma.SortOrder
+  candidateCity?: Prisma.SortOrder
   currentCommissions?: Prisma.SortOrder
   currentBenefits?: Prisma.SortOrder
   otherBenefits?: Prisma.SortOrder
@@ -772,6 +856,10 @@ export type VacancyCandidateMinOrderByAggregateInput = {
   currentModality?: Prisma.SortOrder
   countryCode?: Prisma.SortOrder
   regionCode?: Prisma.SortOrder
+  workCity?: Prisma.SortOrder
+  candidateCountryCode?: Prisma.SortOrder
+  candidateRegionCode?: Prisma.SortOrder
+  candidateCity?: Prisma.SortOrder
   currentCommissions?: Prisma.SortOrder
   currentBenefits?: Prisma.SortOrder
   otherBenefits?: Prisma.SortOrder
@@ -930,6 +1018,10 @@ export type VacancyCandidateCreateWithoutTenantInput = {
   currentModality?: $Enums.VacancyModality | null
   countryCode?: string | null
   regionCode?: string | null
+  workCity?: string | null
+  candidateCountryCode?: string | null
+  candidateRegionCode?: string | null
+  candidateCity?: string | null
   currentCommissions?: string | null
   currentBenefits?: string | null
   otherBenefits?: string | null
@@ -958,6 +1050,10 @@ export type VacancyCandidateUncheckedCreateWithoutTenantInput = {
   currentModality?: $Enums.VacancyModality | null
   countryCode?: string | null
   regionCode?: string | null
+  workCity?: string | null
+  candidateCountryCode?: string | null
+  candidateRegionCode?: string | null
+  candidateCity?: string | null
   currentCommissions?: string | null
   currentBenefits?: string | null
   otherBenefits?: string | null
@@ -1014,6 +1110,10 @@ export type VacancyCandidateScalarWhereInput = {
   currentModality?: Prisma.EnumVacancyModalityNullableFilter<"VacancyCandidate"> | $Enums.VacancyModality | null
   countryCode?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
   regionCode?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
+  workCity?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
+  candidateCountryCode?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
+  candidateRegionCode?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
+  candidateCity?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
   currentCommissions?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
   currentBenefits?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
   otherBenefits?: Prisma.StringNullableFilter<"VacancyCandidate"> | string | null
@@ -1039,6 +1139,10 @@ export type VacancyCandidateCreateWithoutAttachmentsInput = {
   currentModality?: $Enums.VacancyModality | null
   countryCode?: string | null
   regionCode?: string | null
+  workCity?: string | null
+  candidateCountryCode?: string | null
+  candidateRegionCode?: string | null
+  candidateCity?: string | null
   currentCommissions?: string | null
   currentBenefits?: string | null
   otherBenefits?: string | null
@@ -1067,6 +1171,10 @@ export type VacancyCandidateUncheckedCreateWithoutAttachmentsInput = {
   currentModality?: $Enums.VacancyModality | null
   countryCode?: string | null
   regionCode?: string | null
+  workCity?: string | null
+  candidateCountryCode?: string | null
+  candidateRegionCode?: string | null
+  candidateCity?: string | null
   currentCommissions?: string | null
   currentBenefits?: string | null
   otherBenefits?: string | null
@@ -1109,6 +1217,10 @@ export type VacancyCandidateUpdateWithoutAttachmentsInput = {
   currentModality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
   countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCountryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateRegionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentCommissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otherBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1137,6 +1249,10 @@ export type VacancyCandidateUncheckedUpdateWithoutAttachmentsInput = {
   currentModality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
   countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCountryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateRegionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentCommissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otherBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1163,6 +1279,10 @@ export type VacancyCandidateCreateWithoutVacancyInput = {
   currentModality?: $Enums.VacancyModality | null
   countryCode?: string | null
   regionCode?: string | null
+  workCity?: string | null
+  candidateCountryCode?: string | null
+  candidateRegionCode?: string | null
+  candidateCity?: string | null
   currentCommissions?: string | null
   currentBenefits?: string | null
   otherBenefits?: string | null
@@ -1190,6 +1310,10 @@ export type VacancyCandidateUncheckedCreateWithoutVacancyInput = {
   currentModality?: $Enums.VacancyModality | null
   countryCode?: string | null
   regionCode?: string | null
+  workCity?: string | null
+  candidateCountryCode?: string | null
+  candidateRegionCode?: string | null
+  candidateCity?: string | null
   currentCommissions?: string | null
   currentBenefits?: string | null
   otherBenefits?: string | null
@@ -1243,6 +1367,10 @@ export type VacancyCandidateCreateWithoutChecklistMatchesInput = {
   currentModality?: $Enums.VacancyModality | null
   countryCode?: string | null
   regionCode?: string | null
+  workCity?: string | null
+  candidateCountryCode?: string | null
+  candidateRegionCode?: string | null
+  candidateCity?: string | null
   currentCommissions?: string | null
   currentBenefits?: string | null
   otherBenefits?: string | null
@@ -1271,6 +1399,10 @@ export type VacancyCandidateUncheckedCreateWithoutChecklistMatchesInput = {
   currentModality?: $Enums.VacancyModality | null
   countryCode?: string | null
   regionCode?: string | null
+  workCity?: string | null
+  candidateCountryCode?: string | null
+  candidateRegionCode?: string | null
+  candidateCity?: string | null
   currentCommissions?: string | null
   currentBenefits?: string | null
   otherBenefits?: string | null
@@ -1313,6 +1445,10 @@ export type VacancyCandidateUpdateWithoutChecklistMatchesInput = {
   currentModality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
   countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCountryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateRegionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentCommissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otherBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1341,6 +1477,10 @@ export type VacancyCandidateUncheckedUpdateWithoutChecklistMatchesInput = {
   currentModality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
   countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCountryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateRegionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentCommissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otherBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1368,6 +1508,10 @@ export type VacancyCandidateCreateManyTenantInput = {
   currentModality?: $Enums.VacancyModality | null
   countryCode?: string | null
   regionCode?: string | null
+  workCity?: string | null
+  candidateCountryCode?: string | null
+  candidateRegionCode?: string | null
+  candidateCity?: string | null
   currentCommissions?: string | null
   currentBenefits?: string | null
   otherBenefits?: string | null
@@ -1392,6 +1536,10 @@ export type VacancyCandidateUpdateWithoutTenantInput = {
   currentModality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
   countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCountryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateRegionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentCommissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otherBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1420,6 +1568,10 @@ export type VacancyCandidateUncheckedUpdateWithoutTenantInput = {
   currentModality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
   countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCountryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateRegionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentCommissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otherBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1447,6 +1599,10 @@ export type VacancyCandidateUncheckedUpdateManyWithoutTenantInput = {
   currentModality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
   countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCountryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateRegionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentCommissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otherBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1471,6 +1627,10 @@ export type VacancyCandidateCreateManyVacancyInput = {
   currentModality?: $Enums.VacancyModality | null
   countryCode?: string | null
   regionCode?: string | null
+  workCity?: string | null
+  candidateCountryCode?: string | null
+  candidateRegionCode?: string | null
+  candidateCity?: string | null
   currentCommissions?: string | null
   currentBenefits?: string | null
   otherBenefits?: string | null
@@ -1496,6 +1656,10 @@ export type VacancyCandidateUpdateWithoutVacancyInput = {
   currentModality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
   countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCountryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateRegionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentCommissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otherBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1523,6 +1687,10 @@ export type VacancyCandidateUncheckedUpdateWithoutVacancyInput = {
   currentModality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
   countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCountryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateRegionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentCommissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otherBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1550,6 +1718,10 @@ export type VacancyCandidateUncheckedUpdateManyWithoutVacancyInput = {
   currentModality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
   countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCountryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateRegionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  candidateCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentCommissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otherBenefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1616,6 +1788,10 @@ export type VacancyCandidateSelect<ExtArgs extends runtime.Types.Extensions.Inte
   currentModality?: boolean
   countryCode?: boolean
   regionCode?: boolean
+  workCity?: boolean
+  candidateCountryCode?: boolean
+  candidateRegionCode?: boolean
+  candidateCity?: boolean
   currentCommissions?: boolean
   currentBenefits?: boolean
   otherBenefits?: boolean
@@ -1647,6 +1823,10 @@ export type VacancyCandidateSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   currentModality?: boolean
   countryCode?: boolean
   regionCode?: boolean
+  workCity?: boolean
+  candidateCountryCode?: boolean
+  candidateRegionCode?: boolean
+  candidateCity?: boolean
   currentCommissions?: boolean
   currentBenefits?: boolean
   otherBenefits?: boolean
@@ -1675,6 +1855,10 @@ export type VacancyCandidateSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   currentModality?: boolean
   countryCode?: boolean
   regionCode?: boolean
+  workCity?: boolean
+  candidateCountryCode?: boolean
+  candidateRegionCode?: boolean
+  candidateCity?: boolean
   currentCommissions?: boolean
   currentBenefits?: boolean
   otherBenefits?: boolean
@@ -1703,6 +1887,10 @@ export type VacancyCandidateSelectScalar = {
   currentModality?: boolean
   countryCode?: boolean
   regionCode?: boolean
+  workCity?: boolean
+  candidateCountryCode?: boolean
+  candidateRegionCode?: boolean
+  candidateCity?: boolean
   currentCommissions?: boolean
   currentBenefits?: boolean
   otherBenefits?: boolean
@@ -1715,7 +1903,7 @@ export type VacancyCandidateSelectScalar = {
   updatedAt?: boolean
 }
 
-export type VacancyCandidateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "vacancyId" | "firstName" | "lastName" | "email" | "phone" | "isCurrentlyEmployed" | "currentCompany" | "currentSalary" | "salaryExpectation" | "currentModality" | "countryCode" | "regionCode" | "currentCommissions" | "currentBenefits" | "otherBenefits" | "status" | "isInTerna" | "isFinalist" | "finalSalary" | "tenantId" | "createdAt" | "updatedAt", ExtArgs["result"]["vacancyCandidate"]>
+export type VacancyCandidateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "vacancyId" | "firstName" | "lastName" | "email" | "phone" | "isCurrentlyEmployed" | "currentCompany" | "currentSalary" | "salaryExpectation" | "currentModality" | "countryCode" | "regionCode" | "workCity" | "candidateCountryCode" | "candidateRegionCode" | "candidateCity" | "currentCommissions" | "currentBenefits" | "otherBenefits" | "status" | "isInTerna" | "isFinalist" | "finalSalary" | "tenantId" | "createdAt" | "updatedAt", ExtArgs["result"]["vacancyCandidate"]>
 export type VacancyCandidateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   vacancy?: boolean | Prisma.VacancyDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1754,6 +1942,10 @@ export type $VacancyCandidatePayload<ExtArgs extends runtime.Types.Extensions.In
     currentModality: $Enums.VacancyModality | null
     countryCode: string | null
     regionCode: string | null
+    workCity: string | null
+    candidateCountryCode: string | null
+    candidateRegionCode: string | null
+    candidateCity: string | null
     currentCommissions: string | null
     currentBenefits: string | null
     otherBenefits: string | null
@@ -2204,6 +2396,10 @@ export interface VacancyCandidateFieldRefs {
   readonly currentModality: Prisma.FieldRef<"VacancyCandidate", 'VacancyModality'>
   readonly countryCode: Prisma.FieldRef<"VacancyCandidate", 'String'>
   readonly regionCode: Prisma.FieldRef<"VacancyCandidate", 'String'>
+  readonly workCity: Prisma.FieldRef<"VacancyCandidate", 'String'>
+  readonly candidateCountryCode: Prisma.FieldRef<"VacancyCandidate", 'String'>
+  readonly candidateRegionCode: Prisma.FieldRef<"VacancyCandidate", 'String'>
+  readonly candidateCity: Prisma.FieldRef<"VacancyCandidate", 'String'>
   readonly currentCommissions: Prisma.FieldRef<"VacancyCandidate", 'String'>
   readonly currentBenefits: Prisma.FieldRef<"VacancyCandidate", 'String'>
   readonly otherBenefits: Prisma.FieldRef<"VacancyCandidate", 'String'>

@@ -230,17 +230,17 @@ export function CandidateDetailSheet({
         {/* ── Sección: Situación actual ── */}
         <div className="px-6 py-5 space-y-3">
           <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-            Situación actual
+            Situación actual o última
           </p>
           <div className="space-y-3">
             <InfoRow
               icon={Building04Icon}
-              label="Empresa"
+              label="Empresa actual o última"
               value={candidate.currentCompany}
             />
             <InfoRow
               icon={Briefcase01Icon}
-              label="Modalidad"
+              label="Modalidad actual o última"
               value={
                 candidate.currentModality
                   ? (VACANCY_MODALITY_LABELS[candidate.currentModality] ??
@@ -251,7 +251,7 @@ export function CandidateDetailSheet({
             {hasLocationInfo && (
               <InfoRow
                 icon={Location01Icon}
-                label="Ubicación"
+                label="Ubicación (trabajo actual o último)"
                 value={
                   [
                     resolveRegionName(candidate.countryCode, candidate.regionCode),
@@ -293,11 +293,11 @@ export function CandidateDetailSheet({
               </p>
               <div className="grid grid-cols-2 gap-2">
                 <SalaryBlock
-                  label="Salario actual"
+                  label="Sueldo actual o último (bruto)"
                   value={candidate.currentSalary}
                 />
                 <SalaryBlock
-                  label="Expectativa"
+                  label="Expectativa económica (bruto)"
                   value={candidate.salaryExpectation}
                 />
                 {candidate.finalSalary != null && (
@@ -312,14 +312,14 @@ export function CandidateDetailSheet({
               {candidate.currentCommissions && (
                 <InfoRow
                   icon={MoneyBag01Icon}
-                  label="Comisiones actuales"
+                  label="Bonos / Comisiones"
                   value={candidate.currentCommissions}
                 />
               )}
               {candidate.currentBenefits && (
                 <InfoRow
                   icon={MoneyBag01Icon}
-                  label="Beneficios actuales"
+                  label="Prestaciones actuales o últimas"
                   value={candidate.currentBenefits}
                 />
               )}

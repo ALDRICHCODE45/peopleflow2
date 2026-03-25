@@ -49,6 +49,10 @@ export class UpdateCandidateUseCase {
       if (fields.currentModality !== undefined) updateData.currentModality = fields.currentModality;
       if (fields.countryCode !== undefined) updateData.countryCode = fields.countryCode;
       if (fields.regionCode !== undefined) updateData.regionCode = fields.regionCode;
+      if (fields.workCity !== undefined) updateData.workCity = fields.workCity;
+      if (fields.candidateCountryCode !== undefined) updateData.candidateCountryCode = fields.candidateCountryCode;
+      if (fields.candidateRegionCode !== undefined) updateData.candidateRegionCode = fields.candidateRegionCode;
+      if (fields.candidateCity !== undefined) updateData.candidateCity = fields.candidateCity;
       if (fields.currentCommissions !== undefined) updateData.currentCommissions = fields.currentCommissions;
       if (fields.currentBenefits !== undefined) updateData.currentBenefits = fields.currentBenefits;
       if (fields.otherBenefits !== undefined) updateData.otherBenefits = fields.otherBenefits;

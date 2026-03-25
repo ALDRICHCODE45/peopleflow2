@@ -27,6 +27,10 @@ type PrismaCandidateRecord = {
   currentModality: string | null;
   countryCode: string | null;
   regionCode: string | null;
+  workCity: string | null;
+  candidateCountryCode: string | null;
+  candidateRegionCode: string | null;
+  candidateCity: string | null;
   currentCommissions: string | null;
   currentBenefits: string | null;
   otherBenefits: string | null;
@@ -57,6 +61,10 @@ export class PrismaVacancyCandidateRepository
       currentModality: (record.currentModality as VacancyModality) ?? null,
       countryCode: record.countryCode,
       regionCode: record.regionCode,
+      workCity: record.workCity,
+      candidateCountryCode: record.candidateCountryCode,
+      candidateRegionCode: record.candidateRegionCode,
+      candidateCity: record.candidateCity,
       currentCommissions: record.currentCommissions,
       currentBenefits: record.currentBenefits,
       otherBenefits: record.otherBenefits,
@@ -125,6 +133,10 @@ export class PrismaVacancyCandidateRepository
         currentModality: data.currentModality ?? null,
         countryCode: data.countryCode ?? null,
         regionCode: data.regionCode ?? null,
+        workCity: data.workCity ?? null,
+        candidateCountryCode: data.candidateCountryCode ?? null,
+        candidateRegionCode: data.candidateRegionCode ?? null,
+        candidateCity: data.candidateCity ?? null,
         currentCommissions: data.currentCommissions ?? null,
         currentBenefits: data.currentBenefits ?? null,
         otherBenefits: data.otherBenefits ?? null,
@@ -170,6 +182,18 @@ export class PrismaVacancyCandidateRepository
         }),
         ...(data.regionCode !== undefined && {
           regionCode: data.regionCode,
+        }),
+        ...(data.workCity !== undefined && {
+          workCity: data.workCity,
+        }),
+        ...(data.candidateCountryCode !== undefined && {
+          candidateCountryCode: data.candidateCountryCode,
+        }),
+        ...(data.candidateRegionCode !== undefined && {
+          candidateRegionCode: data.candidateRegionCode,
+        }),
+        ...(data.candidateCity !== undefined && {
+          candidateCity: data.candidateCity,
         }),
         ...(data.currentCommissions !== undefined && {
           currentCommissions: data.currentCommissions,

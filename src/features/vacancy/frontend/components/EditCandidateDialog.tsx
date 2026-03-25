@@ -78,12 +78,14 @@ interface FormState {
   currentModality: VacancyModality | "";
   currentCountryCode: string;
   currentRegionCode: string;
+  workCity: string;
   currentSalary: string;
   salaryExpectation: string;
   currentCommissions: string;
   currentBenefits: string;
   candidateCountryCode: string;
   candidateRegionCode: string;
+  candidateCity: string;
   otherBenefits: string;
 }
 
@@ -98,6 +100,7 @@ function candidateToFormState(candidate: VacancyCandidateDTO): FormState {
     currentModality: candidate.currentModality ?? "",
     currentCountryCode: candidate.countryCode ?? "",
     currentRegionCode: candidate.regionCode ?? "",
+    workCity: candidate.workCity ?? "",
     currentSalary:
       candidate.currentSalary != null ? String(candidate.currentSalary) : "",
     salaryExpectation:
@@ -106,8 +109,9 @@ function candidateToFormState(candidate: VacancyCandidateDTO): FormState {
         : "",
     currentCommissions: candidate.currentCommissions ?? "",
     currentBenefits: candidate.currentBenefits ?? "",
-    candidateCountryCode: "",
-    candidateRegionCode: "",
+    candidateCountryCode: candidate.candidateCountryCode ?? "",
+    candidateRegionCode: candidate.candidateRegionCode ?? "",
+    candidateCity: candidate.candidateCity ?? "",
     otherBenefits: candidate.otherBenefits ?? "",
   };
 }
@@ -286,6 +290,10 @@ export function EditCandidateDialog({
         currentModality: form.currentModality || null,
         countryCode: form.currentCountryCode || null,
         regionCode: form.currentRegionCode || null,
+        workCity: form.workCity.trim() || null,
+        candidateCountryCode: form.candidateCountryCode || null,
+        candidateRegionCode: form.candidateRegionCode || null,
+        candidateCity: form.candidateCity.trim() || null,
         currentSalary: form.currentSalary ? Number(form.currentSalary) : null,
         salaryExpectation: form.salaryExpectation
           ? Number(form.salaryExpectation)
@@ -382,21 +390,19 @@ export function EditCandidateDialog({
                   />
                 </div>
 
-                {form.isCurrentlyEmployed && (
-                  <Field>
-                    <FieldLabel>Empresa actual</FieldLabel>
-                    <Input
-                      placeholder="Nombre de la empresa"
-                      value={form.currentCompany}
-                      onChange={(e) =>
-                        handleChange("currentCompany", e.target.value)
-                      }
-                    />
-                  </Field>
-                )}
+                <Field>
+                  <FieldLabel>Empresa actual o última</FieldLabel>
+                  <Input
+                    placeholder="Nombre de la empresa"
+                    value={form.currentCompany}
+                    onChange={(e) =>
+                      handleChange("currentCompany", e.target.value)
+                    }
+                  />
+                </Field>
 
                 <Field>
-                  <FieldLabel>Modalidad actual</FieldLabel>
+                    <FieldLabel>Modalidad actual o última</FieldLabel>
                   <Select
                     value={form.currentModality}
                     onValueChange={(v) =>
@@ -423,7 +429,7 @@ export function EditCandidateDialog({
 
                 <div className="grid grid-cols-2 gap-3">
                   <Field>
-                    <FieldLabel>País (trabajo actual)</FieldLabel>
+                    <FieldLabel>País (trabajo actual o último)</FieldLabel>
                     <CountrySelect
                       value={form.currentCountryCode}
                       onChange={(val) => {
@@ -436,7 +442,7 @@ export function EditCandidateDialog({
                   </Field>
 
                   <Field>
-                    <FieldLabel>Estado/Ciudad (trabajo actual)</FieldLabel>
+                    <FieldLabel>Estado/Ciudad (trabajo actual o último)</FieldLabel>
                     <RegionSelect
                       value={form.currentRegionCode}
                       countryCode={form.currentCountryCode}
@@ -445,6 +451,15 @@ export function EditCandidateDialog({
                     />
                   </Field>
                 </div>
+
+                <Field>
+                  <FieldLabel>Municipio o zona</FieldLabel>
+                  <Input
+                    placeholder="Ej. Tecámac, Polanco, San Pedro Garza..."
+                    value={form.workCity}
+                    onChange={(e) => handleChange("workCity", e.target.value)}
+                  />
+                </Field>
               </div>
             </div>
 
@@ -454,7 +469,7 @@ export function EditCandidateDialog({
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                   <Field>
-                    <FieldLabel>Salario actual</FieldLabel>
+                    <FieldLabel>Sueldo actual o último (bruto)</FieldLabel>
                     <CurrencyInput
                       value={form.currentSalary}
                       onChange={(value) =>
@@ -464,7 +479,7 @@ export function EditCandidateDialog({
                   </Field>
 
                   <Field>
-                    <FieldLabel>Expectativa salarial</FieldLabel>
+                    <FieldLabel>Expectativa económica (bruto)</FieldLabel>
                     <CurrencyInput
                       value={form.salaryExpectation}
                       onChange={(value) =>
@@ -475,7 +490,7 @@ export function EditCandidateDialog({
                 </div>
 
                 <Field>
-                  <FieldLabel>Comisiones actuales</FieldLabel>
+                  <FieldLabel>Bonos / Comisiones</FieldLabel>
                   <Textarea
                     placeholder="Describe las comisiones..."
                     value={form.currentCommissions}
@@ -487,13 +502,23 @@ export function EditCandidateDialog({
                 </Field>
 
                 <Field>
-                  <FieldLabel>Beneficios actuales</FieldLabel>
+                  <FieldLabel>Prestaciones actuales o últimas</FieldLabel>
                   <Textarea
                     placeholder="Describe los beneficios..."
                     value={form.currentBenefits}
                     onChange={(e) =>
                       handleChange("currentBenefits", e.target.value)
                     }
+                    rows={2}
+                  />
+                </Field>
+
+                <Field>
+                  <FieldLabel>Otros beneficios esperados</FieldLabel>
+                  <Textarea
+                    placeholder="Otros beneficios que espera recibir..."
+                    value={form.otherBenefits}
+                    onChange={(e) => handleChange("otherBenefits", e.target.value)}
                     rows={2}
                   />
                 </Field>
@@ -530,12 +555,11 @@ export function EditCandidateDialog({
                 </div>
 
                 <Field>
-                  <FieldLabel>Otros beneficios esperados</FieldLabel>
-                  <Textarea
-                    placeholder="Otros beneficios que espera recibir..."
-                    value={form.otherBenefits}
-                    onChange={(e) => handleChange("otherBenefits", e.target.value)}
-                    rows={2}
+                  <FieldLabel>Municipio o zona</FieldLabel>
+                  <Input
+                    placeholder="Ej. Tecámac, Polanco, San Pedro Garza..."
+                    value={form.candidateCity}
+                    onChange={(e) => handleChange("candidateCity", e.target.value)}
                   />
                 </Field>
               </div>

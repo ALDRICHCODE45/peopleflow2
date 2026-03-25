@@ -17,6 +17,10 @@ export interface CreateCandidateData {
   currentModality?: VacancyModality | null;
   countryCode?: string | null;
   regionCode?: string | null;
+  workCity?: string | null;
+  candidateCountryCode?: string | null;
+  candidateRegionCode?: string | null;
+  candidateCity?: string | null;
   currentCommissions?: string | null;
   currentBenefits?: string | null;
   otherBenefits?: string | null;
@@ -35,6 +39,10 @@ export interface UpdateCandidateData {
   currentModality?: VacancyModality | null;
   countryCode?: string | null;
   regionCode?: string | null;
+  workCity?: string | null;
+  candidateCountryCode?: string | null;
+  candidateRegionCode?: string | null;
+  candidateCity?: string | null;
   currentCommissions?: string | null;
   currentBenefits?: string | null;
   otherBenefits?: string | null;

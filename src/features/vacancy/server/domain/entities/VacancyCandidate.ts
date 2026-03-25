@@ -18,6 +18,10 @@ export interface VacancyCandidateProps {
   currentModality: VacancyModality | null;
   countryCode: string | null;
   regionCode: string | null;
+  workCity: string | null;
+  candidateCountryCode: string | null;
+  candidateRegionCode: string | null;
+  candidateCity: string | null;
   currentCommissions: string | null;
   currentBenefits: string | null;
   otherBenefits: string | null;
@@ -89,6 +93,22 @@ export class VacancyCandidate {
 
   get regionCode(): string | null {
     return this.props.regionCode;
+  }
+
+  get workCity(): string | null {
+    return this.props.workCity;
+  }
+
+  get candidateCountryCode(): string | null {
+    return this.props.candidateCountryCode;
+  }
+
+  get candidateRegionCode(): string | null {
+    return this.props.candidateRegionCode;
+  }
+
+  get candidateCity(): string | null {
+    return this.props.candidateCity;
   }
 
   get currentCommissions(): string | null {
@@ -173,6 +193,10 @@ export class VacancyCandidate {
       currentModality: this.props.currentModality,
       countryCode: this.props.countryCode,
       regionCode: this.props.regionCode,
+      workCity: this.props.workCity,
+      candidateCountryCode: this.props.candidateCountryCode,
+      candidateRegionCode: this.props.candidateRegionCode,
+      candidateCity: this.props.candidateCity,
       currentCommissions: this.props.currentCommissions,
       currentBenefits: this.props.currentBenefits,
       otherBenefits: this.props.otherBenefits,

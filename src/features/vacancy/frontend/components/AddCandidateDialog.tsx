@@ -59,12 +59,14 @@ interface FormState {
   currentModality: VacancyModality | "";
   currentCountryCode: string;
   currentRegionCode: string;
+  workCity: string;
   currentSalary: string;
   salaryExpectation: string;
   currentCommissions: string;
   currentBenefits: string;
   candidateCountryCode: string;
   candidateRegionCode: string;
+  candidateCity: string;
   otherBenefits: string;
 }
 
@@ -78,12 +80,14 @@ const INITIAL_STATE: FormState = {
   currentModality: "",
   currentCountryCode: "",
   currentRegionCode: "",
+  workCity: "",
   currentSalary: "",
   salaryExpectation: "",
   currentCommissions: "",
   currentBenefits: "",
   candidateCountryCode: "",
   candidateRegionCode: "",
+  candidateCity: "",
   otherBenefits: "",
 };
 
@@ -110,9 +114,9 @@ export function AddCandidateDialog({
   vacancyId,
 }: AddCandidateDialogProps) {
   const [form, setForm] = useState<FormState>(INITIAL_STATE);
-  const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>(
-    {}
-  );
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof FormState, string>>
+  >({});
 
   const addCandidateMutation = useAddCandidate();
 
@@ -141,7 +145,13 @@ export function AddCandidateDialog({
 
   // Separate mutation for CV upload (runs after candidate is created)
   const uploadCvMutation = useMutation({
-    mutationFn: async ({ file, candidateId }: { file: File; candidateId: string }) => {
+    mutationFn: async ({
+      file,
+      candidateId,
+    }: {
+      file: File;
+      candidateId: string;
+    }) => {
       const formData = new FormData();
       formData.append("file", file);
       const ext = file.name.split(".").pop() ?? "pdf";
@@ -149,8 +159,10 @@ export function AddCandidateDialog({
       const result = await uploadFileAction({
         formData,
         key,
-        attachableType: "VACANCY_CANDIDATE" as import("@/core/generated/prisma/client").AttachableType,
-        subType: "CV" as import("@/core/generated/prisma/client").AttachmentSubType,
+        attachableType:
+          "VACANCY_CANDIDATE" as import("@/core/generated/prisma/client").AttachableType,
+        subType:
+          "CV" as import("@/core/generated/prisma/client").AttachmentSubType,
         vacancyCandidateId: candidateId,
       });
       if (result.error) throw new Error(result.error);
@@ -160,7 +172,7 @@ export function AddCandidateDialog({
 
   const handleChange = <K extends keyof FormState>(
     key: K,
-    value: FormState[K]
+    value: FormState[K],
   ) => {
     setForm((prev) => ({ ...prev, [key]: value }));
     if (errors[key]) {
@@ -195,8 +207,16 @@ export function AddCandidateDialog({
         currentModality: form.currentModality || undefined,
         countryCode: form.currentCountryCode || undefined,
         regionCode: form.currentRegionCode || undefined,
-        currentSalary: form.currentSalary ? Number(form.currentSalary) : undefined,
-        salaryExpectation: form.salaryExpectation ? Number(form.salaryExpectation) : undefined,
+        workCity: form.workCity.trim() || undefined,
+        candidateCountryCode: form.candidateCountryCode || undefined,
+        candidateRegionCode: form.candidateRegionCode || undefined,
+        candidateCity: form.candidateCity.trim() || undefined,
+        currentSalary: form.currentSalary
+          ? Number(form.currentSalary)
+          : undefined,
+        salaryExpectation: form.salaryExpectation
+          ? Number(form.salaryExpectation)
+          : undefined,
         currentCommissions: form.currentCommissions.trim() || undefined,
         currentBenefits: form.currentBenefits.trim() || undefined,
         otherBenefits: form.otherBenefits.trim() || undefined,
@@ -206,10 +226,22 @@ export function AddCandidateDialog({
     // Upload CV if one was selected — after candidate exists in DB
     if (cvFile && candidate?.id) {
       try {
-        await uploadCvMutation.mutateAsync({ file: cvFile, candidateId: candidate.id });
-        showToast({ type: "success", title: "CV subido", description: "El CV fue adjuntado al candidato" });
+        await uploadCvMutation.mutateAsync({
+          file: cvFile,
+          candidateId: candidate.id,
+        });
+        showToast({
+          type: "success",
+          title: "CV subido",
+          description: "El CV fue adjuntado al candidato",
+        });
       } catch {
-        showToast({ type: "error", title: "CV no subido", description: "El candidato fue creado pero el CV no pudo subirse. Podés intentarlo desde el perfil del candidato." });
+        showToast({
+          type: "error",
+          title: "CV no subido",
+          description:
+            "El candidato fue creado pero el CV no pudo subirse. Podés intentarlo desde el perfil del candidato.",
+        });
       }
     }
 
@@ -233,7 +265,6 @@ export function AddCandidateDialog({
 
         <ScrollArea className="max-h-[75vh]">
           <div className="space-y-6 py-2 px-1 pr-4">
-
             {/* ── Sección 1: Datos personales ─────────────────────── */}
             <div>
               <SectionHeader title="Datos personales" />
@@ -246,7 +277,9 @@ export function AddCandidateDialog({
                     <Input
                       placeholder="Juan"
                       value={form.firstName}
-                      onChange={(e) => handleChange("firstName", e.target.value)}
+                      onChange={(e) =>
+                        handleChange("firstName", e.target.value)
+                      }
                     />
                     {errors.firstName && (
                       <FieldError>{errors.firstName}</FieldError>
@@ -297,23 +330,25 @@ export function AddCandidateDialog({
                   <span className="text-sm">¿Actualmente empleado?</span>
                   <Switch
                     checked={form.isCurrentlyEmployed}
-                    onCheckedChange={(v) => handleChange("isCurrentlyEmployed", v)}
+                    onCheckedChange={(v) =>
+                      handleChange("isCurrentlyEmployed", v)
+                    }
                   />
                 </div>
 
-                {form.isCurrentlyEmployed && (
-                  <Field>
-                    <FieldLabel>Empresa actual</FieldLabel>
-                    <Input
-                      placeholder="Nombre de la empresa"
-                      value={form.currentCompany}
-                      onChange={(e) => handleChange("currentCompany", e.target.value)}
-                    />
-                  </Field>
-                )}
+                <Field>
+                  <FieldLabel>Empresa actual o última</FieldLabel>
+                  <Input
+                    placeholder="Nombre de la empresa"
+                    value={form.currentCompany}
+                    onChange={(e) =>
+                      handleChange("currentCompany", e.target.value)
+                    }
+                  />
+                </Field>
 
                 <Field>
-                  <FieldLabel>Modalidad actual</FieldLabel>
+                  <FieldLabel>Modalidad actual o última</FieldLabel>
                   <Select
                     value={form.currentModality}
                     onValueChange={(v) =>
@@ -340,7 +375,7 @@ export function AddCandidateDialog({
 
                 <div className="grid grid-cols-2 gap-3">
                   <Field>
-                    <FieldLabel>País (trabajo actual)</FieldLabel>
+                    <FieldLabel>País (trabajo actual o último)</FieldLabel>
                     <CountrySelect
                       value={form.currentCountryCode}
                       onChange={(val) => {
@@ -353,7 +388,9 @@ export function AddCandidateDialog({
                   </Field>
 
                   <Field>
-                    <FieldLabel>Estado/Ciudad (trabajo actual)</FieldLabel>
+                    <FieldLabel>
+                      Estado/Ciudad (trabajo actual o último)
+                    </FieldLabel>
                     <RegionSelect
                       value={form.currentRegionCode}
                       countryCode={form.currentCountryCode}
@@ -362,6 +399,15 @@ export function AddCandidateDialog({
                     />
                   </Field>
                 </div>
+
+                <Field>
+                  <FieldLabel>Municipio o zona</FieldLabel>
+                  <Input
+                    placeholder="Ej. Tecámac, Polanco, San Pedro Garza..."
+                    value={form.workCity}
+                    onChange={(e) => handleChange("workCity", e.target.value)}
+                  />
+                </Field>
               </div>
             </div>
 
@@ -371,7 +417,7 @@ export function AddCandidateDialog({
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                   <Field>
-                    <FieldLabel>Salario actual</FieldLabel>
+                    <FieldLabel>Sueldo actual o último (bruto)</FieldLabel>
                     <CurrencyInput
                       value={form.currentSalary}
                       onChange={(value) => handleChange("currentSalary", value)}
@@ -379,7 +425,7 @@ export function AddCandidateDialog({
                   </Field>
 
                   <Field>
-                    <FieldLabel>Expectativa salarial</FieldLabel>
+                    <FieldLabel>Expectativa económica (bruto)</FieldLabel>
                     <CurrencyInput
                       value={form.salaryExpectation}
                       onChange={(value) =>
@@ -390,21 +436,39 @@ export function AddCandidateDialog({
                 </div>
 
                 <Field>
-                  <FieldLabel>Comisiones actuales</FieldLabel>
+                  <FieldLabel>
+                    Bonos / Comisiones (Últimas o Actuales)
+                  </FieldLabel>
                   <Textarea
-                    placeholder="Describe las comisiones..."
+                    placeholder="Ej. 10% comisión, bono anual..."
                     value={form.currentCommissions}
-                    onChange={(e) => handleChange("currentCommissions", e.target.value)}
+                    onChange={(e) =>
+                      handleChange("currentCommissions", e.target.value)
+                    }
                     rows={2}
                   />
                 </Field>
 
                 <Field>
-                  <FieldLabel>Beneficios actuales</FieldLabel>
+                  <FieldLabel>Prestaciones actuales o últimas</FieldLabel>
                   <Textarea
-                    placeholder="Describe los beneficios..."
+                    placeholder="Describe prestaciones (vales, SGMM, vacaciones, etc.)"
                     value={form.currentBenefits}
-                    onChange={(e) => handleChange("currentBenefits", e.target.value)}
+                    onChange={(e) =>
+                      handleChange("currentBenefits", e.target.value)
+                    }
+                    rows={2}
+                  />
+                </Field>
+
+                <Field>
+                  <FieldLabel>Otros beneficios esperados</FieldLabel>
+                  <Textarea
+                    placeholder="Otros beneficios que espera recibir..."
+                    value={form.otherBenefits}
+                    onChange={(e) =>
+                      handleChange("otherBenefits", e.target.value)
+                    }
                     rows={2}
                   />
                 </Field>
@@ -434,19 +498,22 @@ export function AddCandidateDialog({
                     <RegionSelect
                       value={form.candidateRegionCode}
                       countryCode={form.candidateCountryCode}
-                      onChange={(val) => handleChange("candidateRegionCode", val)}
+                      onChange={(val) =>
+                        handleChange("candidateRegionCode", val)
+                      }
                       placeholder="Seleccionar estado"
                     />
                   </Field>
                 </div>
 
                 <Field>
-                  <FieldLabel>Otros beneficios esperados</FieldLabel>
-                  <Textarea
-                    placeholder="Otros beneficios que espera recibir..."
-                    value={form.otherBenefits}
-                    onChange={(e) => handleChange("otherBenefits", e.target.value)}
-                    rows={2}
+                  <FieldLabel>Municipio o zona</FieldLabel>
+                  <Input
+                    placeholder="Ej. Tecámac, Polanco, San Pedro Garza..."
+                    value={form.candidateCity}
+                    onChange={(e) =>
+                      handleChange("candidateCity", e.target.value)
+                    }
                   />
                 </Field>
               </div>
@@ -467,7 +534,9 @@ export function AddCandidateDialog({
                       className="shrink-0"
                     />
                     <div className="min-w-0">
-                      <p className="text-sm font-medium truncate">{cvFile.name}</p>
+                      <p className="text-sm font-medium truncate">
+                        {cvFile.name}
+                      </p>
                       <p className="text-xs text-muted-foreground">
                         {formatBytes(cvFile.size)}
                       </p>
@@ -526,7 +595,6 @@ export function AddCandidateDialog({
                 </div>
               )}
             </div>
-
           </div>
         </ScrollArea>
 
@@ -536,13 +604,15 @@ export function AddCandidateDialog({
           </Button>
           <Button
             onClick={handleSubmit}
-            disabled={addCandidateMutation.isPending || uploadCvMutation.isPending}
+            disabled={
+              addCandidateMutation.isPending || uploadCvMutation.isPending
+            }
           >
             {addCandidateMutation.isPending
               ? "Creando candidato..."
               : uploadCvMutation.isPending
-              ? "Subiendo CV..."
-              : "Agregar candidato"}
+                ? "Subiendo CV..."
+                : "Agregar candidato"}
           </Button>
         </DialogFooter>
       </DialogContent>

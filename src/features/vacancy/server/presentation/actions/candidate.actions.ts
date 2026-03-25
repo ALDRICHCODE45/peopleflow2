@@ -78,6 +78,10 @@ export async function addCandidateAction(
       currentModality: data.currentModality ?? null,
       countryCode: data.countryCode ?? null,
       regionCode: data.regionCode ?? null,
+      workCity: data.workCity ?? null,
+      candidateCountryCode: data.candidateCountryCode ?? null,
+      candidateRegionCode: data.candidateRegionCode ?? null,
+      candidateCity: data.candidateCity ?? null,
       currentCommissions: data.currentCommissions ?? null,
       currentBenefits: data.currentBenefits ?? null,
       otherBenefits: data.otherBenefits ?? null,
@@ -107,6 +111,10 @@ export interface UpdateCandidateInput {
   currentModality?: VacancyModality | null;
   countryCode?: string | null;
   regionCode?: string | null;
+  workCity?: string | null;
+  candidateCountryCode?: string | null;
+  candidateRegionCode?: string | null;
+  candidateCity?: string | null;
   currentCommissions?: string | null;
   currentBenefits?: string | null;
   otherBenefits?: string | null;

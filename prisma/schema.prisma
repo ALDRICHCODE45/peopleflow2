@@ -739,9 +739,13 @@ model VacancyCandidate {
   currentSalary       Float?          // Sueldo actual/último (bruto)
   salaryExpectation   Float?          // Expectativa económica (bruto)
   currentModality     VacancyModality? // Modalidad actual o última
-  countryCode         String?         // Código de país (ISO 3166-1 alpha-2)
-  regionCode          String?         // Código de región/estado
-  currentCommissions  String?         // Bonos/comisiones en trabajo actual o último
+  countryCode          String?          // País del trabajo actual o último (ISO 3166-1 alpha-2)
+  regionCode           String?          // Estado/ciudad del trabajo actual o último
+  workCity             String?          // Municipio o zona del trabajo actual o último (texto libre)
+  candidateCountryCode String?          // País de residencia del candidato
+  candidateRegionCode  String?          // Estado/ciudad de residencia del candidato
+  candidateCity        String?          // Municipio o zona de residencia del candidato (texto libre)
+  currentCommissions   String?          // Bonos/comisiones en trabajo actual o último
   currentBenefits     String?         // Prestaciones actuales o últimas
   otherBenefits       String? @db.Text // Otros beneficios (campo abierto)
 

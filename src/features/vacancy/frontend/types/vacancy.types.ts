@@ -125,9 +125,12 @@ export interface VacancyCandidateDTO {
   currentModality: VacancyModality | null;
   countryCode: string | null;
   regionCode: string | null;
+  workCity: string | null;
+  candidateCountryCode: string | null;
+  candidateRegionCode: string | null;
+  candidateCity: string | null;
   currentCommissions: string | null;
   currentBenefits: string | null;
-
   otherBenefits: string | null;
   status: CandidateStatus;
   isInTerna: boolean;
@@ -524,7 +527,12 @@ export interface AddCandidateFormData {
   currentModality?: VacancyModality;
   countryCode?: string;
   regionCode?: string;
+  workCity?: string;
+  candidateCountryCode?: string;
+  candidateRegionCode?: string;
+  candidateCity?: string;
   currentCommissions?: string;
+
   currentBenefits?: string;
   otherBenefits?: string;
 }
