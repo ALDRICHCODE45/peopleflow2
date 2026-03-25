@@ -1,8 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
 import Image from "next/image";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Dialog,
   DialogContent,
@@ -10,27 +8,14 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@shadcn/dialog";
-import { Button } from "@shadcn/button";
-import { Input } from "@shadcn/input";
-import { Switch } from "@shadcn/switch";
-import { CurrencyInput } from "@/core/shared/components/CurrencyInput";
-import { Textarea } from "@shadcn/textarea";
-import { Separator } from "@/core/shared/ui/shadcn/separator";
-import { ScrollArea } from "@shadcn/scroll-area";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@shadcn/select";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@shadcn/dropdown-menu";
-import { Field, FieldLabel, FieldError } from "@/core/shared/ui/shadcn/field";
+import { Button } from "@shadcn/button";
+import { ScrollArea } from "@shadcn/scroll-area";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Upload01Icon,
@@ -40,80 +25,16 @@ import {
   ArrowMoveUpLeftIcon,
 } from "@hugeicons/core-free-icons";
 import { cn } from "@lib/utils";
-import { PhoneInput } from "@/core/shared/components/phone-input";
-import CountrySelect from "@/core/shared/components/CountrySelect";
-import RegionSelect from "@/core/shared/components/RegionSelect";
-import { useUpdateCandidate } from "../hooks/useVacancyDetailMutations";
-import { useDeleteVacancyAttachment } from "../hooks/useVacancyAttachments";
-import { uploadFileAction } from "@core/storage/actions/uploadFile.action";
-import { StorageKeys } from "@core/storage/StorageKeys";
-import {
-  useFileUpload,
-  type FileWithPreview,
-} from "@/core/shared/hooks/use-upload-file";
-import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
-import { showToast } from "@/core/shared/components/ShowToast";
-import { vacancyQueryKeys } from "@core/shared/constants/query-keys";
-import type {
-  VacancyCandidateDTO,
-  VacancyModality,
-  AttachmentDTO,
-} from "../types/vacancy.types";
-import { VACANCY_MODALITY_LABELS } from "../types/vacancy.types";
+import { Separator } from "@/core/shared/ui/shadcn/separator";
+import { useEditCandidateForm } from "../hooks/useEditCandidateForm";
+import { CandidateFormFields } from "./CandidateFormFields";
+import type { VacancyCandidateDTO } from "../types/vacancy.types";
 
 interface EditCandidateDialogProps {
   open: boolean;
   onClose: () => void;
   candidate: VacancyCandidateDTO;
   vacancyId: string;
-}
-
-interface FormState {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  isCurrentlyEmployed: boolean;
-  currentCompany: string;
-  currentModality: VacancyModality | "";
-  currentCountryCode: string;
-  currentRegionCode: string;
-  workCity: string;
-  currentSalary: string;
-  salaryExpectation: string;
-  currentCommissions: string;
-  currentBenefits: string;
-  candidateCountryCode: string;
-  candidateRegionCode: string;
-  candidateCity: string;
-  otherBenefits: string;
-}
-
-function candidateToFormState(candidate: VacancyCandidateDTO): FormState {
-  return {
-    firstName: candidate.firstName,
-    lastName: candidate.lastName,
-    email: candidate.email ?? "",
-    phone: candidate.phone ?? "",
-    isCurrentlyEmployed: candidate.isCurrentlyEmployed ?? false,
-    currentCompany: candidate.currentCompany ?? "",
-    currentModality: candidate.currentModality ?? "",
-    currentCountryCode: candidate.countryCode ?? "",
-    currentRegionCode: candidate.regionCode ?? "",
-    workCity: candidate.workCity ?? "",
-    currentSalary:
-      candidate.currentSalary != null ? String(candidate.currentSalary) : "",
-    salaryExpectation:
-      candidate.salaryExpectation != null
-        ? String(candidate.salaryExpectation)
-        : "",
-    currentCommissions: candidate.currentCommissions ?? "",
-    currentBenefits: candidate.currentBenefits ?? "",
-    candidateCountryCode: candidate.candidateCountryCode ?? "",
-    candidateRegionCode: candidate.candidateRegionCode ?? "",
-    candidateCity: candidate.candidateCity ?? "",
-    otherBenefits: candidate.otherBenefits ?? "",
-  };
 }
 
 function SectionHeader({ title }: { title: string }) {
@@ -145,433 +66,51 @@ export function EditCandidateDialog({
   candidate,
   vacancyId,
 }: EditCandidateDialogProps) {
-  const [form, setForm] = useState<FormState>(() =>
-    candidateToFormState(candidate),
-  );
-  const [errors, setErrors] = useState<
-    Partial<Record<keyof FormState, string>>
-  >({});
-
-  const updateCandidateMutation = useUpdateCandidate();
-  const deleteAttachmentMutation = useDeleteVacancyAttachment(vacancyId);
-  const { tenant } = useTenant();
-  const queryClient = useQueryClient();
-
-  // ── CV state ──────────────────────────────────────────────────────────────
-  const existingCv = useMemo<AttachmentDTO | null>(
-    () => candidate.attachments?.find((a) => a.subType === "CV") ?? null,
-    [candidate.attachments],
-  );
-
-  const [
-    { files: cvFiles, isDragging: cvIsDragging, errors: cvErrors },
-    {
-      getInputProps: getCvInputProps,
-      openFileDialog: openCvDialog,
-      clearFiles: clearCvFiles,
-      handleDragEnter: cvDragEnter,
-      handleDragLeave: cvDragLeave,
-      handleDragOver: cvDragOver,
-      handleDrop: cvDrop,
-    },
-  ] = useFileUpload({
-    accept: ".pdf,.doc,.docx",
-    multiple: false,
-    maxSize: 10 * 1024 * 1024,
-    onFilesAdded: (added: FileWithPreview[]) => {
-      const first = added[0];
-      if (first && first.file instanceof File) {
-        uploadCvMutation.mutate({ file: first.file });
-      }
-    },
-  });
-
-  const pendingCvFile =
-    cvFiles[0]?.file instanceof File ? cvFiles[0].file : null;
-
-  const uploadCvMutation = useMutation({
-    mutationFn: async ({ file }: { file: File }) => {
-      const formData = new FormData();
-      formData.append("file", file);
-      const ext = file.name.split(".").pop() ?? "pdf";
-      const key = StorageKeys.candidateCV(vacancyId, candidate.id, ext);
-      const result = await uploadFileAction({
-        formData,
-        key,
-        attachableType:
-          "VACANCY_CANDIDATE" as import("@/core/generated/prisma/client").AttachableType,
-        subType:
-          "CV" as import("@/core/generated/prisma/client").AttachmentSubType,
-        vacancyCandidateId: candidate.id,
-      });
-      if (result.error) throw new Error(result.error);
-      return result.attachment;
-    },
-    onSuccess: () => {
-      showToast({
-        type: "success",
-        title: "CV subido",
-        description: "El CV fue adjuntado al candidato",
-      });
-      clearCvFiles();
-      if (tenant?.id) {
-        queryClient.invalidateQueries({
-          queryKey: vacancyQueryKeys.detail(tenant.id, vacancyId),
-        });
-      }
-    },
-    onError: (error: Error) => {
-      showToast({
-        type: "error",
-        title: "Error al subir CV",
-        description: error.message ?? "No se pudo subir el CV",
-      });
-      clearCvFiles();
-    },
-  });
-
-  const handleDeleteCv = async (attachmentId: string) => {
-    await deleteAttachmentMutation.mutateAsync(attachmentId);
-  };
-
-  const handleReplaceCv = (attachmentId: string) => {
-    // Delete old first, then open file dialog to pick a new one
-    deleteAttachmentMutation.mutate(attachmentId, {
-      onSuccess: () => {
-        openCvDialog();
-      },
-    });
-  };
-
-  const handleDownloadCv = (url: string, fileName: string) => {
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = fileName;
-    a.target = "_blank";
-    a.rel = "noopener noreferrer";
-    a.click();
-  };
-
-  const handleChange = <K extends keyof FormState>(
-    key: K,
-    value: FormState[K],
-  ) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
-    if (errors[key]) {
-      setErrors((prev) => ({ ...prev, [key]: undefined }));
-    }
-  };
-
-  const validate = (): boolean => {
-    const newErrors: Partial<Record<keyof FormState, string>> = {};
-    if (!form.firstName.trim()) {
-      newErrors.firstName = "El nombre es requerido";
-    }
-    if (!form.lastName.trim()) {
-      newErrors.lastName = "El apellido es requerido";
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async () => {
-    if (!validate()) return;
-
-    await updateCandidateMutation.mutateAsync({
-      candidateId: candidate.id,
-      vacancyId,
-      data: {
-        firstName: form.firstName.trim(),
-        lastName: form.lastName.trim(),
-        email: form.email.trim() || null,
-        phone: form.phone.trim() || null,
-        isCurrentlyEmployed: form.isCurrentlyEmployed,
-        currentCompany: form.currentCompany.trim() || null,
-        currentModality: form.currentModality || null,
-        countryCode: form.currentCountryCode || null,
-        regionCode: form.currentRegionCode || null,
-        workCity: form.workCity.trim() || null,
-        candidateCountryCode: form.candidateCountryCode || null,
-        candidateRegionCode: form.candidateRegionCode || null,
-        candidateCity: form.candidateCity.trim() || null,
-        currentSalary: form.currentSalary ? Number(form.currentSalary) : null,
-        salaryExpectation: form.salaryExpectation
-          ? Number(form.salaryExpectation)
-          : null,
-        currentCommissions: form.currentCommissions.trim() || null,
-        currentBenefits: form.currentBenefits.trim() || null,
-        otherBenefits: form.otherBenefits.trim() || null,
-      },
-    });
-
-    onClose();
-  };
-
-  const handleClose = () => {
-    setForm(candidateToFormState(candidate));
-    setErrors({});
-    onClose();
-  };
+  const {
+    form,
+    isSubmitting,
+    existingCv,
+    pendingCvFile,
+    cvIsDragging,
+    cvErrors,
+    getCvInputProps,
+    openCvDialog,
+    cvDragEnter,
+    cvDragLeave,
+    cvDragOver,
+    cvDrop,
+    uploadCvIsPending,
+    deleteAttachmentIsPending,
+    handleDeleteCv,
+    handleReplaceCv,
+    handleDownloadCv,
+  } = useEditCandidateForm({ vacancyId, candidate, onClose });
 
   return (
-    <Dialog open={open} onOpenChange={(o) => !o && handleClose()}>
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>Editar candidato</DialogTitle>
         </DialogHeader>
 
         <ScrollArea className="max-h-[75vh]">
-          <div className="space-y-6 py-2 px-1 pr-4">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              form.handleSubmit();
+            }}
+            className="py-2 px-1 pr-4"
+            id="edit-candidate-form"
+          >
+            <CandidateFormFields form={form} />
 
-            {/* ── Sección 1: Datos personales ─────────────────────── */}
-            <div>
-              <SectionHeader title="Datos personales" />
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-3">
-                  <Field>
-                    <FieldLabel>
-                      Nombre <span className="text-destructive">*</span>
-                    </FieldLabel>
-                    <Input
-                      placeholder="Juan"
-                      value={form.firstName}
-                      onChange={(e) => handleChange("firstName", e.target.value)}
-                    />
-                    {errors.firstName && (
-                      <FieldError>{errors.firstName}</FieldError>
-                    )}
-                  </Field>
-
-                  <Field>
-                    <FieldLabel>
-                      Apellido <span className="text-destructive">*</span>
-                    </FieldLabel>
-                    <Input
-                      placeholder="García"
-                      value={form.lastName}
-                      onChange={(e) => handleChange("lastName", e.target.value)}
-                    />
-                    {errors.lastName && (
-                      <FieldError>{errors.lastName}</FieldError>
-                    )}
-                  </Field>
-                </div>
-
-                <Field>
-                  <FieldLabel>Email</FieldLabel>
-                  <Input
-                    type="email"
-                    placeholder="juan@ejemplo.com"
-                    value={form.email}
-                    onChange={(e) => handleChange("email", e.target.value)}
-                  />
-                </Field>
-
-                <Field>
-                  <FieldLabel>Teléfono</FieldLabel>
-                  <PhoneInput
-                    value={form.phone}
-                    onChange={(val) => handleChange("phone", val)}
-                    defaultCountry="MX"
-                  />
-                </Field>
-              </div>
-            </div>
-
-            {/* ── Sección 2: Situación laboral ────────────────────── */}
-            <div>
-              <SectionHeader title="Situación laboral" />
-              <div className="space-y-4">
-                <div className="flex items-center justify-between rounded-md border p-3">
-                  <span className="text-sm">¿Actualmente empleado?</span>
-                  <Switch
-                    checked={form.isCurrentlyEmployed}
-                    onCheckedChange={(v) => handleChange("isCurrentlyEmployed", v)}
-                  />
-                </div>
-
-                <Field>
-                  <FieldLabel>Empresa actual o última</FieldLabel>
-                  <Input
-                    placeholder="Nombre de la empresa"
-                    value={form.currentCompany}
-                    onChange={(e) =>
-                      handleChange("currentCompany", e.target.value)
-                    }
-                  />
-                </Field>
-
-                <Field>
-                    <FieldLabel>Modalidad actual o última</FieldLabel>
-                  <Select
-                    value={form.currentModality}
-                    onValueChange={(v) =>
-                      handleChange("currentModality", v as VacancyModality | "")
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Seleccionar modalidad" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {(
-                        Object.entries(VACANCY_MODALITY_LABELS) as [
-                          VacancyModality,
-                          string,
-                        ][]
-                      ).map(([value, label]) => (
-                        <SelectItem key={value} value={value}>
-                          {label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </Field>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <Field>
-                    <FieldLabel>País (trabajo actual o último)</FieldLabel>
-                    <CountrySelect
-                      value={form.currentCountryCode}
-                      onChange={(val) => {
-                        handleChange("currentCountryCode", val);
-                        handleChange("currentRegionCode", "");
-                      }}
-                      priorityOptions={["MX"]}
-                      placeholder="Seleccionar país"
-                    />
-                  </Field>
-
-                  <Field>
-                    <FieldLabel>Estado/Ciudad (trabajo actual o último)</FieldLabel>
-                    <RegionSelect
-                      value={form.currentRegionCode}
-                      countryCode={form.currentCountryCode}
-                      onChange={(val) => handleChange("currentRegionCode", val)}
-                      placeholder="Seleccionar estado"
-                    />
-                  </Field>
-                </div>
-
-                <Field>
-                  <FieldLabel>Municipio o zona</FieldLabel>
-                  <Input
-                    placeholder="Ej. Tecámac, Polanco, San Pedro Garza..."
-                    value={form.workCity}
-                    onChange={(e) => handleChange("workCity", e.target.value)}
-                  />
-                </Field>
-              </div>
-            </div>
-
-            {/* ── Sección 3: Compensación ──────────────────────────── */}
-            <div>
-              <SectionHeader title="Compensación" />
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-3">
-                  <Field>
-                    <FieldLabel>Sueldo actual o último (bruto)</FieldLabel>
-                    <CurrencyInput
-                      value={form.currentSalary}
-                      onChange={(value) =>
-                        handleChange("currentSalary", value)
-                      }
-                    />
-                  </Field>
-
-                  <Field>
-                    <FieldLabel>Expectativa económica (bruto)</FieldLabel>
-                    <CurrencyInput
-                      value={form.salaryExpectation}
-                      onChange={(value) =>
-                        handleChange("salaryExpectation", value)
-                      }
-                    />
-                  </Field>
-                </div>
-
-                <Field>
-                  <FieldLabel>Bonos / Comisiones</FieldLabel>
-                  <Textarea
-                    placeholder="Describe las comisiones..."
-                    value={form.currentCommissions}
-                    onChange={(e) =>
-                      handleChange("currentCommissions", e.target.value)
-                    }
-                    rows={2}
-                  />
-                </Field>
-
-                <Field>
-                  <FieldLabel>Prestaciones actuales o últimas</FieldLabel>
-                  <Textarea
-                    placeholder="Describe los beneficios..."
-                    value={form.currentBenefits}
-                    onChange={(e) =>
-                      handleChange("currentBenefits", e.target.value)
-                    }
-                    rows={2}
-                  />
-                </Field>
-
-                <Field>
-                  <FieldLabel>Otros beneficios esperados</FieldLabel>
-                  <Textarea
-                    placeholder="Otros beneficios que espera recibir..."
-                    value={form.otherBenefits}
-                    onChange={(e) => handleChange("otherBenefits", e.target.value)}
-                    rows={2}
-                  />
-                </Field>
-              </div>
-            </div>
-
-            {/* ── Sección 4: Ubicación del candidato ──────────────── */}
-            <div>
-              <SectionHeader title="Ubicación del candidato" />
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-3">
-                  <Field>
-                    <FieldLabel>País de residencia</FieldLabel>
-                    <CountrySelect
-                      value={form.candidateCountryCode}
-                      onChange={(val) => {
-                        handleChange("candidateCountryCode", val);
-                        handleChange("candidateRegionCode", "");
-                      }}
-                      priorityOptions={["MX"]}
-                      placeholder="Seleccionar país"
-                    />
-                  </Field>
-
-                  <Field>
-                    <FieldLabel>Estado/Ciudad de residencia</FieldLabel>
-                    <RegionSelect
-                      value={form.candidateRegionCode}
-                      countryCode={form.candidateCountryCode}
-                      onChange={(val) => handleChange("candidateRegionCode", val)}
-                      placeholder="Seleccionar estado"
-                    />
-                  </Field>
-                </div>
-
-                <Field>
-                  <FieldLabel>Municipio o zona</FieldLabel>
-                  <Input
-                    placeholder="Ej. Tecámac, Polanco, San Pedro Garza..."
-                    value={form.candidateCity}
-                    onChange={(e) => handleChange("candidateCity", e.target.value)}
-                  />
-                </Field>
-              </div>
-            </div>
-
-            {/* ── Sección 5: CV ────────────────────────────────────── */}
-            <div>
+            {/* ── CV Section (immediate upload) ─────────────────── */}
+            <div className="mt-6">
               <SectionHeader title="CV del candidato" />
               <input {...getCvInputProps()} className="hidden" />
 
               {/* Uploading indicator */}
-              {uploadCvMutation.isPending && pendingCvFile && (
+              {uploadCvIsPending && pendingCvFile && (
                 <div className="flex items-center justify-between gap-3 rounded-lg border bg-muted/50 px-4 py-3">
                   <div className="flex items-center gap-3 min-w-0">
                     <Image
@@ -594,7 +133,7 @@ export function EditCandidateDialog({
               )}
 
               {/* Existing CV attached */}
-              {!uploadCvMutation.isPending && existingCv && (
+              {!uploadCvIsPending && existingCv && (
                 <div className="flex items-center justify-between gap-3 rounded-lg border bg-muted/50 px-4 py-3">
                   <div className="flex items-center gap-3 min-w-0">
                     <Image
@@ -627,25 +166,40 @@ export function EditCandidateDialog({
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem
                         onClick={() =>
-                          handleDownloadCv(existingCv.fileUrl, existingCv.fileName)
+                          handleDownloadCv(
+                            existingCv.fileUrl,
+                            existingCv.fileName,
+                          )
                         }
                       >
-                        <HugeiconsIcon icon={Download04Icon} size={14} className="mr-2" />
+                        <HugeiconsIcon
+                          icon={Download04Icon}
+                          size={14}
+                          className="mr-2"
+                        />
                         Descargar
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => handleReplaceCv(existingCv.id)}
-                        disabled={deleteAttachmentMutation.isPending}
+                        disabled={deleteAttachmentIsPending}
                       >
-                        <HugeiconsIcon icon={ArrowMoveUpLeftIcon} size={14} className="mr-2" />
+                        <HugeiconsIcon
+                          icon={ArrowMoveUpLeftIcon}
+                          size={14}
+                          className="mr-2"
+                        />
                         Reemplazar
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => handleDeleteCv(existingCv.id)}
-                        disabled={deleteAttachmentMutation.isPending}
+                        disabled={deleteAttachmentIsPending}
                         className="text-destructive focus:text-destructive"
                       >
-                        <HugeiconsIcon icon={Delete02Icon} size={14} className="mr-2" />
+                        <HugeiconsIcon
+                          icon={Delete02Icon}
+                          size={14}
+                          className="mr-2"
+                        />
                         Eliminar
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -654,7 +208,7 @@ export function EditCandidateDialog({
               )}
 
               {/* No CV — show drop zone */}
-              {!uploadCvMutation.isPending && !existingCv && (
+              {!uploadCvIsPending && !existingCv && (
                 <div
                   onDragEnter={cvDragEnter}
                   onDragLeave={cvDragLeave}
@@ -675,7 +229,9 @@ export function EditCandidateDialog({
                       strokeWidth={1.5}
                       className={cn(
                         "transition-colors",
-                        cvIsDragging ? "text-primary" : "text-muted-foreground",
+                        cvIsDragging
+                          ? "text-primary"
+                          : "text-muted-foreground",
                       )}
                     />
                     <div>
@@ -697,19 +253,19 @@ export function EditCandidateDialog({
                 </div>
               )}
             </div>
-
-          </div>
+          </form>
         </ScrollArea>
 
         <DialogFooter>
-          <Button variant="outline" onClick={handleClose}>
+          <Button variant="outline" onClick={onClose}>
             Cancelar
           </Button>
           <Button
-            onClick={handleSubmit}
-            disabled={updateCandidateMutation.isPending}
+            type="submit"
+            form="edit-candidate-form"
+            disabled={isSubmitting}
           >
-            {updateCandidateMutation.isPending ? "Guardando..." : "Guardar cambios"}
+            {isSubmitting ? "Guardando..." : "Guardar cambios"}
           </Button>
         </DialogFooter>
       </DialogContent>
