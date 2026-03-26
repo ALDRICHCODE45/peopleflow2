@@ -58,13 +58,16 @@ export function CandidateCard({ candidate, vacancyId, checklistItems = [] }: Can
 
   const canEdit = isSuperAdmin || hasAnyPermission([
     PermissionActions.candidatos.editar,
+    PermissionActions.candidatos.gestionar,
     PermissionActions.vacantes.gestionar,
   ]);
   const canDelete = isSuperAdmin || hasAnyPermission([
     PermissionActions.candidatos.eliminar,
+    PermissionActions.candidatos.gestionar,
     PermissionActions.vacantes.gestionar,
   ]);
   const canChecklist = isSuperAdmin || hasAnyPermission([
+    PermissionActions.candidatos.gestionar,
     PermissionActions.vacantes.gestionar,
   ]);
 

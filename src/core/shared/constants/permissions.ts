@@ -282,11 +282,11 @@ const RECLUTAMIENTO_PERMISSIONS: PermissionDefinition[] = [
       "Validar la terna de candidatos y mover la vacante a Follow Up (requiere permiso de Manager o Líder de Reclutamiento)",
   },
   {
-    name: "vacantes:autorizar-retroceso",
+    name: "vacantes:actualizar-estado",
     resource: "vacantes",
-    action: "autorizar-retroceso",
+    action: "actualizar-estado",
     description:
-      "Autorizar el retroceso de una vacante al estado Hunting desde Follow Up o Pre-Placement",
+      "Cambiar el estado de una vacante (transiciones y retrocesos)",
   },
   // Vacantes - Archivos (JD + Perfiles Muestra)
   {
@@ -302,6 +302,13 @@ const RECLUTAMIENTO_PERMISSIONS: PermissionDefinition[] = [
     action: "eliminar-archivos",
     description:
       "Eliminar archivos de vacantes (Job Description y Perfiles Muestra)",
+  },
+  {
+    name: "vacantes:subir-archivos",
+    resource: "vacantes",
+    action: "subir-archivos",
+    description:
+      "Subir archivos a vacantes (Job Description, Perfiles Muestra y CVs de candidatos)",
   },
   // Vacantes - Checklist
   {
@@ -676,9 +683,10 @@ export const PermissionActions = {
     editar: "vacantes:editar",
     eliminar: "vacantes:eliminar",
     validarTerna: "vacantes:validar-terna",
-    autorizarRetroceso: "vacantes:autorizar-retroceso",
+    actualizarEstado: "vacantes:actualizar-estado" as const,
     revisarArchivos: "vacantes:revisar-archivos",
     eliminarArchivos: "vacantes:eliminar-archivos",
+    subirArchivos: "vacantes:subir-archivos" as const,
     validarChecklist: "vacantes:validar-checklist",
     rechazarChecklist: "vacantes:rechazar-checklist",
     modificarFechaAsignacion: "vacantes:modificar-fecha-asignacion",

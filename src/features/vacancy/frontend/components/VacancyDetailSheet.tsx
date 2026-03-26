@@ -60,6 +60,7 @@ import { VacancySalesTypeBadge } from "./VacancyVentaTypeBadge";
 import { VacancyProgressIndicator } from "./VacancyProgressIndicator";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
+import { usePermissions } from "@/core/shared/hooks/use-permissions";
 import { ApplyWarrantyDialog } from "./ApplyWarrantyDialog";
 import { RecruiterAssignmentTimeline } from "./RecruiterAssignmentTimeline";
 
@@ -201,6 +202,16 @@ export function VacancyDetailSheet({
     closeModal: closeWarranty,
   } = useModalState();
 
+  const { hasAnyPermission, isSuperAdmin } = usePermissions();
+
+  const canAccessCandidates =
+    isSuperAdmin ||
+    hasAnyPermission([
+      PermissionActions.candidatos.acceder,
+      PermissionActions.candidatos.gestionar,
+      PermissionActions.vacantes.gestionar,
+    ]);
+
   const [transitionInitialStatus, setTransitionInitialStatus] = useState<VacancyStatusType | undefined>(undefined);
   const [transitionDialogKey, setTransitionDialogKey] = useState(0);
 
@@ -300,7 +311,7 @@ export function VacancyDetailSheet({
                     {!isMobile && (
                       <>
                         <PermissionGuard
-                          permissions={[PermissionActions.vacantes.gestionar]}
+                          permissions={[PermissionActions.vacantes.actualizarEstado, PermissionActions.vacantes.gestionar]}
                         >
                           {vacancy.status === "PRE_PLACEMENT" && (
                             <Button
@@ -338,21 +349,25 @@ export function VacancyDetailSheet({
                             Cambiar estado
                           </Button>
                         </PermissionGuard>
-                        {["QUICK_MEETING", "HUNTING", "FOLLOW_UP", "PRE_PLACEMENT"].includes(vacancy.status) && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={openRequestValidation}
-                            className="gap-1.5"
-                          >
-                            <HugeiconsIcon
-                              icon={SentIcon}
-                              size={14}
-                              strokeWidth={2}
-                            />
-                            Solicitar validación
-                          </Button>
-                        )}
+                        <PermissionGuard
+                          permissions={[PermissionActions.vacantes.editar, PermissionActions.vacantes.gestionar]}
+                        >
+                          {["QUICK_MEETING", "HUNTING", "FOLLOW_UP", "PRE_PLACEMENT"].includes(vacancy.status) && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={openRequestValidation}
+                              className="gap-1.5"
+                            >
+                              <HugeiconsIcon
+                                icon={SentIcon}
+                                size={14}
+                                strokeWidth={2}
+                              />
+                              Solicitar validación
+                            </Button>
+                          )}
+                        </PermissionGuard>
                         <PermissionGuard
                           permissions={[
                             PermissionActions.vacantes.crear,
@@ -389,7 +404,7 @@ export function VacancyDetailSheet({
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          {vacancy.status === "PRE_PLACEMENT" && (
+                          {(isSuperAdmin || hasAnyPermission([PermissionActions.vacantes.actualizarEstado, PermissionActions.vacantes.gestionar])) && vacancy.status === "PRE_PLACEMENT" && (
                             <DropdownMenuItem
                               onClick={() => {
                                 setTransitionInitialStatus("PLACEMENT");
@@ -401,17 +416,19 @@ export function VacancyDetailSheet({
                               Confirmar placement
                             </DropdownMenuItem>
                           )}
-                          <DropdownMenuItem
-                            onClick={() => {
-                              setTransitionInitialStatus(undefined);
-                              setTransitionDialogKey((k) => k + 1);
-                              openTransition();
-                            }}
-                          >
-                            <HugeiconsIcon icon={RefreshIcon} size={14} />
-                            Cambiar estado
-                          </DropdownMenuItem>
-                          {["QUICK_MEETING", "HUNTING", "FOLLOW_UP", "PRE_PLACEMENT"].includes(vacancy.status) && (
+                          {(isSuperAdmin || hasAnyPermission([PermissionActions.vacantes.actualizarEstado, PermissionActions.vacantes.gestionar])) && (
+                            <DropdownMenuItem
+                              onClick={() => {
+                                setTransitionInitialStatus(undefined);
+                                setTransitionDialogKey((k) => k + 1);
+                                openTransition();
+                              }}
+                            >
+                              <HugeiconsIcon icon={RefreshIcon} size={14} />
+                              Cambiar estado
+                            </DropdownMenuItem>
+                          )}
+                          {(isSuperAdmin || hasAnyPermission([PermissionActions.vacantes.editar, PermissionActions.vacantes.gestionar])) && ["QUICK_MEETING", "HUNTING", "FOLLOW_UP", "PRE_PLACEMENT"].includes(vacancy.status) && (
                             <DropdownMenuItem onClick={openRequestValidation}>
                               <HugeiconsIcon icon={SentIcon} size={14} />
                               Solicitar validación
@@ -462,17 +479,19 @@ export function VacancyDetailSheet({
                           </Badge>
                         )}
                       </TabsTrigger>
-                      <TabsTrigger value="candidates" className="shrink-0 md:flex-1">
-                        Candidatos{" "}
-                        {vacancy.candidates && vacancy.candidates.length > 0 && (
-                          <Badge
-                            variant="outline"
-                            className="ml-1 text-xs size-5 p-0 flex items-center justify-center"
-                          >
-                            {vacancy.candidates.length}
-                          </Badge>
-                        )}
-                      </TabsTrigger>
+                      {canAccessCandidates && (
+                        <TabsTrigger value="candidates" className="shrink-0 md:flex-1">
+                          Candidatos{" "}
+                          {vacancy.candidates && vacancy.candidates.length > 0 && (
+                            <Badge
+                              variant="outline"
+                              className="ml-1 text-xs size-5 p-0 flex items-center justify-center"
+                            >
+                              {vacancy.candidates.length}
+                            </Badge>
+                          )}
+                        </TabsTrigger>
+                      )}
                       <TabsTrigger value="checklist" className="shrink-0 md:flex-1">
                         Checklist{" "}
                         {vacancy.checklistItems &&
@@ -625,92 +644,95 @@ export function VacancyDetailSheet({
                   </TabsContent>
 
                   {/* ---- Tab: Candidatos ---- */}
-                  <TabsContent value="candidates" className="mt-3 md:mt-4 space-y-3">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 flex-wrap">
-                      <span className="text-sm font-medium">
-                        {vacancy.candidates?.length ?? 0} candidato(s)
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={openTernaHistory}
-                          className="gap-1.5 text-muted-foreground hover:text-foreground"
-                        >
-                          <HugeiconsIcon
-                            icon={Clock01Icon}
-                            size={14}
-                            strokeWidth={2}
-                          />
-                          Historial
-                        </Button>
-                        <PermissionGuard
-                          permissions={[
-                            PermissionActions.vacantes.validarTerna,
-                            PermissionActions.vacantes.gestionar,
-                          ]}
-                        >
-                          {vacancy.status === "HUNTING" && (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={openValidateTerna}
-                              className="gap-1.5 border-amber-300 text-amber-700 hover:bg-amber-50"
-                            >
-                              <HugeiconsIcon
-                                icon={UserMultiple02Icon}
-                                size={14}
-                                strokeWidth={2}
-                              />
-                              Validar terna
-                            </Button>
-                          )}
-                        </PermissionGuard>
-                        <PermissionGuard
-                          permissions={[
-                            PermissionActions.candidatos.crear,
-                            PermissionActions.vacantes.gestionar,
-                          ]}
-                        >
+                  {canAccessCandidates && (
+                    <TabsContent value="candidates" className="mt-3 md:mt-4 space-y-3">
+                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 flex-wrap">
+                        <span className="text-sm font-medium">
+                          {vacancy.candidates?.length ?? 0} candidato(s)
+                        </span>
+                        <div className="flex items-center gap-2">
                           <Button
-                            variant="outline"
+                            variant="ghost"
                             size="sm"
-                            onClick={openAddCandidate}
-                            className="gap-1.5"
+                            onClick={openTernaHistory}
+                            className="gap-1.5 text-muted-foreground hover:text-foreground"
                           >
                             <HugeiconsIcon
-                              icon={UserAdd01Icon}
+                              icon={Clock01Icon}
                               size={14}
                               strokeWidth={2}
                             />
-                            Agregar candidato
+                            Historial
                           </Button>
-                        </PermissionGuard>
+                          <PermissionGuard
+                            permissions={[
+                              PermissionActions.vacantes.validarTerna,
+                              PermissionActions.vacantes.gestionar,
+                            ]}
+                          >
+                            {vacancy.status === "HUNTING" && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={openValidateTerna}
+                                className="gap-1.5 border-amber-300 text-amber-700 hover:bg-amber-50"
+                              >
+                                <HugeiconsIcon
+                                  icon={UserMultiple02Icon}
+                                  size={14}
+                                  strokeWidth={2}
+                                />
+                                Validar terna
+                              </Button>
+                            )}
+                          </PermissionGuard>
+                          <PermissionGuard
+                            permissions={[
+                              PermissionActions.candidatos.crear,
+                              PermissionActions.candidatos.gestionar,
+                              PermissionActions.vacantes.gestionar,
+                            ]}
+                          >
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={openAddCandidate}
+                              className="gap-1.5"
+                            >
+                              <HugeiconsIcon
+                                icon={UserAdd01Icon}
+                                size={14}
+                                strokeWidth={2}
+                              />
+                              Agregar candidato
+                            </Button>
+                          </PermissionGuard>
+                        </div>
                       </div>
-                    </div>
 
-                    {!vacancy.candidates || vacancy.candidates.length === 0 ? (
-                      <div className="flex flex-col items-center justify-center py-10 text-muted-foreground gap-2">
-                        <HugeiconsIcon
-                          icon={UserAdd01Icon}
-                          size={32}
-                          strokeWidth={1.5}
-                        />
-                        <p className="text-sm">No hay candidatos aún</p>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        {vacancy.candidates.map((candidate) => (
-                          <CandidateCard
-                            key={candidate.id}
-                            candidate={candidate}
-                            vacancyId={vacancy.id}
-                            checklistItems={vacancy.checklistItems ?? []}
+                      {!vacancy.candidates || vacancy.candidates.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center py-10 text-muted-foreground gap-2">
+                          <HugeiconsIcon
+                            icon={UserAdd01Icon}
+                            size={32}
+                            strokeWidth={1.5}
                           />
-                        ))}
-                      </div>
-                    )}
-                  </TabsContent>
+                          <p className="text-sm">No hay candidatos aún</p>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          {vacancy.candidates.map((candidate) => (
+                            <CandidateCard
+                              key={candidate.id}
+                              candidate={candidate}
+                              vacancyId={vacancy.id}
+                              checklistItems={vacancy.checklistItems ?? []}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </TabsContent>
+                  )}
 
                   {/* ---- Tab: Checklist ---- */}
                   <TabsContent value="checklist" className="mt-3 md:mt-4">

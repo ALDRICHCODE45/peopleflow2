@@ -383,6 +383,13 @@ export function AttachmentsSection({
       PermissionActions.vacantes.gestionar,
     ]);
 
+  const canUploadAttachments =
+    isSuperAdmin ||
+    hasAnyPermission([
+      PermissionActions.vacantes.subirArchivos,
+      PermissionActions.vacantes.gestionar,
+    ]);
+
   const jobDescriptions = attachments.filter((a) => a.subType === "JOB_DESCRIPTION");
   const perfilesMuestra = attachments.filter((a) => a.subType === "PERFIL_MUESTRA");
 
@@ -420,7 +427,7 @@ export function AttachmentsSection({
               />
             ))}
           </div>
-        ) : (
+        ) : canUploadAttachments ? (
           <FileDropZone
             vacancyId={vacancy.id}
             subType="JOB_DESCRIPTION"
@@ -428,6 +435,10 @@ export function AttachmentsSection({
             label="Arrastrá o hacé clic para subir el Job Description"
             description="PDF, DOC o DOCX"
           />
+        ) : (
+          <p className="text-xs text-muted-foreground py-4 text-center">
+            No hay archivos cargados
+          </p>
         )}
       </FolderSection>
 
@@ -439,22 +450,30 @@ export function AttachmentsSection({
         defaultOpen={false}
         folderItems={PERFILES_MUESTRA_ITEMS}
         headerAction={
-          <FileUploadButton
-            vacancyId={vacancy.id}
-            subType="PERFIL_MUESTRA"
-            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-            label="Agregar perfil"
-          />
+          canUploadAttachments ? (
+            <FileUploadButton
+              vacancyId={vacancy.id}
+              subType="PERFIL_MUESTRA"
+              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+              label="Agregar perfil"
+            />
+          ) : undefined
         }
       >
         {perfilesMuestra.length === 0 ? (
-          <FileDropZone
-            vacancyId={vacancy.id}
-            subType="PERFIL_MUESTRA"
-            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-            label="Arrastrá o hacé clic para subir un Perfil Muestra"
-            description="PDF, DOC, DOCX, JPG o PNG"
-          />
+          canUploadAttachments ? (
+            <FileDropZone
+              vacancyId={vacancy.id}
+              subType="PERFIL_MUESTRA"
+              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+              label="Arrastrá o hacé clic para subir un Perfil Muestra"
+              description="PDF, DOC, DOCX, JPG o PNG"
+            />
+          ) : (
+            <p className="text-xs text-muted-foreground py-4 text-center">
+              No hay archivos cargados
+            </p>
+          )
         ) : (
           <div className="space-y-2">
             {perfilesMuestra.map((attachment) => (

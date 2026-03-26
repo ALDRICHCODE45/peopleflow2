@@ -25,11 +25,17 @@ export function EditVacancyForm({ onClose, vacancy }: EditVacancyFormProps) {
 
   const canEditAssignedAt =
     isSuperAdmin ||
-    hasAnyPermission([PermissionActions.vacantes.modificarFechaAsignacion]);
+    hasAnyPermission([
+      PermissionActions.vacantes.modificarFechaAsignacion,
+      PermissionActions.vacantes.gestionar,
+    ]);
 
   const canEditTargetDeliveryDate =
     isSuperAdmin ||
-    hasAnyPermission([PermissionActions.vacantes.modificarFechaTentativaEntrega]);
+    hasAnyPermission([
+      PermissionActions.vacantes.modificarFechaTentativaEntrega,
+      PermissionActions.vacantes.gestionar,
+    ]);
 
   const {
     form,

@@ -7,6 +7,8 @@ import { getActiveTenantId } from "@features/vacancy/server/presentation/helpers
 import { storageAdapter } from "@core/storage/StorageModule";
 import { AttachableType, AttachmentSubType } from "../../generated/prisma/client";
 import { ServerErrors } from "@core/shared/constants/error-messages";
+import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
+import { PermissionActions } from "@/core/shared/constants/permissions";
 
 export interface UploadFileActionInput {
   formData: FormData;
@@ -45,7 +47,22 @@ export async function uploadFileAction(
       return { error: ServerErrors.noActiveTenant };
     }
 
-    // 3. Extract file from FormData
+    // 3. Permission check for vacancy-related uploads
+    if (input.attachableType === "VACANCY" || input.attachableType === "VACANCY_CANDIDATE") {
+      const hasPermission = await new CheckAnyPermissonUseCase().execute({
+        userId: session.user.id,
+        permissions: [
+          PermissionActions.vacantes.subirArchivos,
+          PermissionActions.vacantes.gestionar,
+        ],
+        tenantId,
+      });
+      if (!hasPermission) {
+        return { error: "Sin permisos para subir archivos a vacantes" };
+      }
+    }
+
+    // 4. Extract file from FormData
     const file = input.formData.get("file");
     if (!(file instanceof File)) {
       return { error: "No se encontró el archivo en el formulario" };
@@ -59,11 +76,11 @@ export async function uploadFileAction(
       return { error: "El archivo está vacío" };
     }
 
-    // 4. Convert File to Buffer
+    // 5. Convert File to Buffer
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // 5. Upload to storage
+    // 6. Upload to storage
     const uploadResult = await storageAdapter.upload({
       buffer,
       fileName,
@@ -76,7 +93,7 @@ export async function uploadFileAction(
       return { error: uploadResult.error };
     }
 
-    // 6. Create Attachment record in the DB
+    // 7. Create Attachment record in the DB
     const attachment = await prisma.attachment.create({
       data: {
         fileName,

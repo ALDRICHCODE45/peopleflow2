@@ -37,7 +37,10 @@ export async function saveCandidateMatchAction(
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({
       userId: session.user.id,
-      permissions: [PermissionActions.vacantes.gestionar],
+      permissions: [
+        PermissionActions.candidatos.gestionar,
+        PermissionActions.vacantes.gestionar,
+      ],
       tenantId,
     });
 

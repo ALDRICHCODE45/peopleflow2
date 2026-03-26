@@ -50,6 +50,7 @@ export async function addCandidateAction(
       userId: session.user.id,
       permissions: [
         PermissionActions.candidatos.crear,
+        PermissionActions.candidatos.gestionar,
         PermissionActions.vacantes.gestionar,
       ],
       tenantId,
@@ -148,6 +149,7 @@ export async function updateCandidateAction(
       userId: session.user.id,
       permissions: [
         PermissionActions.candidatos.editar,
+        PermissionActions.candidatos.gestionar,
         PermissionActions.vacantes.gestionar,
       ],
       tenantId,
@@ -200,6 +202,7 @@ export async function removeCandidateAction(
       userId: session.user.id,
       permissions: [
         PermissionActions.candidatos.eliminar,
+        PermissionActions.candidatos.gestionar,
         PermissionActions.vacantes.gestionar,
       ],
       tenantId,
@@ -256,7 +259,10 @@ export async function selectFinalistAction(
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({
       userId: session.user.id,
-      permissions: [PermissionActions.vacantes.gestionar],
+      permissions: [
+        PermissionActions.candidatos.gestionar,
+        PermissionActions.vacantes.gestionar,
+      ],
       tenantId,
     });
 

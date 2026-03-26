@@ -52,7 +52,7 @@ export async function transitionVacancyStatusAction(
       userId: session.user.id,
       permissions: [
         PermissionActions.vacantes.gestionar,
-        PermissionActions.vacantes.autorizarRetroceso,
+        PermissionActions.vacantes.actualizarEstado,
       ],
       tenantId,
     });
