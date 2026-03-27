@@ -72,7 +72,6 @@ export function useClientsListQuery() {
  */
 export function useUpdateClient() {
   const queryClient = useQueryClient();
-  const { tenant } = useTenant();
 
   return useMutation({
     mutationFn: async ({
@@ -86,20 +85,14 @@ export function useUpdateClient() {
       if (result.error) throw new Error(result.error);
       return result.data;
     },
-    onSuccess: (_data, variables) => {
+    onSuccess: () => {
       showToast({
         type: "success",
         title: "Cliente actualizado",
         description: "Las condiciones comerciales se actualizaron correctamente",
       });
-      if (tenant?.id) {
-        queryClient.invalidateQueries({
-          queryKey: clientsQueryKeys.all(tenant.id),
-        });
-        queryClient.invalidateQueries({
-          queryKey: clientsQueryKeys.detail(tenant.id, variables.clientId),
-        });
-      }
+      // Invalidar todas las queries de clients (mismo patrón que Leads)
+      queryClient.invalidateQueries({ queryKey: ["clients"] });
     },
     onError: (error: Error) => {
       showToast({
@@ -116,7 +109,6 @@ export function useUpdateClient() {
  */
 export function useUpdateClientFiscalData() {
   const queryClient = useQueryClient();
-  const { tenant } = useTenant();
 
   return useMutation({
     mutationFn: async ({
@@ -130,20 +122,13 @@ export function useUpdateClientFiscalData() {
       if (result.error) throw new Error(result.error);
       return result.data;
     },
-    onSuccess: (_data, variables) => {
+    onSuccess: () => {
       showToast({
         type: "success",
         title: "Datos fiscales actualizados",
         description: "Los datos fiscales se actualizaron correctamente",
       });
-      if (tenant?.id) {
-        queryClient.invalidateQueries({
-          queryKey: clientsQueryKeys.all(tenant.id),
-        });
-        queryClient.invalidateQueries({
-          queryKey: clientsQueryKeys.detail(tenant.id, variables.clientId),
-        });
-      }
+      queryClient.invalidateQueries({ queryKey: ["clients"] });
     },
     onError: (error: Error) => {
       showToast({

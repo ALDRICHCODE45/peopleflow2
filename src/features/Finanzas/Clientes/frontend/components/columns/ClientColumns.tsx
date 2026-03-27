@@ -171,7 +171,11 @@ export function createClientColumns(
 
         const label = FeeTypeLabels[feeType] ?? feeType;
         const displayValue =
-          feeType === "PERCENTAGE" ? `${feeValue}%` : `$${feeValue.toLocaleString()}`;
+          feeType === "PERCENTAGE"
+            ? `${feeValue}%`
+            : feeType === "FIXED"
+              ? `$${feeValue.toLocaleString()}`
+              : feeValue.toString();
         const typeColor = feeTypeColorMap[feeType] ?? "text-muted-foreground";
 
         return (
@@ -211,9 +215,9 @@ export function createClientColumns(
         if (months == null) return <EmptyCell />;
         return (
           <Badge
-            variant="info"
-            className="font-medium whitespace-nowrap"
+            className="font-medium rounded-sm inline-flex items-center gap-1.5 px-2.5 whitespace-nowrap border-0 bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400"
           >
+            <span className="h-[6px] w-[6px] rounded-full bg-current shrink-0" />
             {months} {months === 1 ? "mes" : "meses"}
           </Badge>
         );
