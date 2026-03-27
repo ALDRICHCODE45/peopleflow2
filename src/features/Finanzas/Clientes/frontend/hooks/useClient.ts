@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-query";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { showToast } from "@/core/shared/components/ShowToast";
+import { clientsQueryKeys } from "@core/shared/constants/query-keys";
 import {
   getClientByIdAction,
   updateClientAction,
@@ -16,14 +17,6 @@ import {
 import { updateClientFiscalDataAction } from "../../server/presentation/actions/updateClientFiscalData.action";
 import type { UpdateClientData, FiscalData } from "../../server/domain/interfaces/IClientRepository";
 import type { ClientDTO } from "../types/client.types";
-
-// --- Query key factory ---
-
-export const clientsQueryKeys = {
-  all: (tenantId: string) => ["clients", "list", tenantId] as const,
-  detail: (tenantId: string, clientId: string) =>
-    ["clients", "detail", tenantId, clientId] as const,
-};
 
 // --- Queries ---
 
@@ -53,7 +46,7 @@ export function useClientsListQuery() {
   const { tenant } = useTenant();
 
   return useQuery<ClientDTO[]>({
-    queryKey: clientsQueryKeys.all(tenant?.id ?? ""),
+    queryKey: [...clientsQueryKeys.paginated(tenant?.id ?? ""), "all"],
     queryFn: async () => {
       const result = await getClientsListAction();
       if (result.error) throw new Error(result.error);
@@ -72,6 +65,7 @@ export function useClientsListQuery() {
  */
 export function useUpdateClient() {
   const queryClient = useQueryClient();
+  const { tenant } = useTenant();
 
   return useMutation({
     mutationFn: async ({
@@ -85,14 +79,21 @@ export function useUpdateClient() {
       if (result.error) throw new Error(result.error);
       return result.data;
     },
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
       showToast({
         type: "success",
         title: "Cliente actualizado",
         description: "Las condiciones comerciales se actualizaron correctamente",
       });
-      // Invalidar todas las queries de clients (mismo patrón que Leads)
-      queryClient.invalidateQueries({ queryKey: ["clients"] });
+
+      if (tenant?.id) {
+        queryClient.invalidateQueries({
+          queryKey: clientsQueryKeys.paginated(tenant.id),
+        });
+        queryClient.invalidateQueries({
+          queryKey: clientsQueryKeys.detail(tenant.id, variables.clientId),
+        });
+      }
     },
     onError: (error: Error) => {
       showToast({
@@ -109,6 +110,7 @@ export function useUpdateClient() {
  */
 export function useUpdateClientFiscalData() {
   const queryClient = useQueryClient();
+  const { tenant } = useTenant();
 
   return useMutation({
     mutationFn: async ({
@@ -122,13 +124,21 @@ export function useUpdateClientFiscalData() {
       if (result.error) throw new Error(result.error);
       return result.data;
     },
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
       showToast({
         type: "success",
         title: "Datos fiscales actualizados",
         description: "Los datos fiscales se actualizaron correctamente",
       });
-      queryClient.invalidateQueries({ queryKey: ["clients"] });
+
+      if (tenant?.id) {
+        queryClient.invalidateQueries({
+          queryKey: clientsQueryKeys.paginated(tenant.id),
+        });
+        queryClient.invalidateQueries({
+          queryKey: clientsQueryKeys.detail(tenant.id, variables.clientId),
+        });
+      }
     },
     onError: (error: Error) => {
       showToast({

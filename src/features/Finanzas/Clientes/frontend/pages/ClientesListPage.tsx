@@ -1,24 +1,31 @@
 "use client";
 
-import { useMemo, useCallback, useState } from "react";
+import { useMemo, useCallback } from "react";
 import { usePaginatedClientsQuery } from "../hooks/usePaginatedClientsQuery";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
+import { usePermissions } from "@/core/shared/hooks/use-permissions";
 import { DataTable } from "@/core/shared/components/DataTable/DataTable";
 import { createClientColumns } from "../components/columns/ClientColumns";
+import { useModalState } from "@/core/shared/hooks/useModalState";
 import { createTableConfig } from "@/core/shared/helpers/createTableConfig";
 import { ClientesTableConfig } from "../components/tableConfig/ClientesTableConfig";
 import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
 import { useServerPaginatedTable } from "@/core/shared/hooks/useServerPaginatedTable";
 import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
-import { ClientSheetForm } from "../components/ClientSheetForm";
 import { CreateClientDialog } from "../components/CreateClientDialog";
-import { Button } from "@/core/shared/ui/shadcn/button";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { PlusSignIcon } from "@hugeicons/core-free-icons";
-import type { ClientDTO } from "../types/client.types";
 
 export function ClientListPage() {
+  const { hasAnyPermission, isSuperAdmin } = usePermissions();
+  const canCreateClient =
+    isSuperAdmin ||
+    hasAnyPermission([
+      PermissionActions.clientes.crear,
+      PermissionActions.clientes.gestionar,
+    ]);
+
+  const { isOpen, openModal, closeModal } = useModalState();
+
   // Server-side pagination state (no tabs for clients)
   const {
     pagination,
@@ -37,13 +44,12 @@ export function ClientListPage() {
   }, [handleGlobalFilterChange, setPagination]);
 
   // Query with server-side pagination
-  const { data, isFetching, isPending } =
-    usePaginatedClientsQuery({
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-      sorting: sorting.map((s) => ({ id: s.id, desc: s.desc })),
-      globalFilter: debouncedSearch || undefined,
-    });
+  const { data, isFetching, isPending } = usePaginatedClientsQuery({
+    pageIndex: pagination.pageIndex,
+    pageSize: pagination.pageSize,
+    sorting: sorting.map((s) => ({ id: s.id, desc: s.desc })),
+    globalFilter: debouncedSearch || undefined,
+  });
 
   // Extract data from paginated response
   const clients = data?.data ?? [];
@@ -53,33 +59,18 @@ export function ClientListPage() {
   // Solo mostrar skeleton si es carga inicial SIN datos previos
   const showInitialLoading = isPending && !data;
 
-  // Create dialog state
-  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const handleAdd = useCallback(() => {
+    openModal();
+  }, [openModal]);
 
-  // Edit sheet state
-  const [editingClient, setEditingClient] = useState<ClientDTO | undefined>();
-  const [sheetOpen, setSheetOpen] = useState(false);
-
-  const handleEdit = useCallback((client: ClientDTO) => {
-    setEditingClient(client);
-    setSheetOpen(true);
-  }, []);
-
-  const handleSheetOpenChange = useCallback((open: boolean) => {
-    setSheetOpen(open);
-    if (!open) setEditingClient(undefined);
-  }, []);
-
-  // Memoize columns with edit callback
-  const columns = useMemo(
-    () => createClientColumns(handleEdit),
-    [handleEdit],
-  );
+  // Memoize columns — no external callbacks needed
+  const columns = useMemo(() => createClientColumns(), []);
 
   // Table configuration with server-side enabled
   const tableConfig = useMemo(
     () =>
       createTableConfig(ClientesTableConfig, {
+        onAdd: canCreateClient ? handleAdd : undefined,
         onClearFilters: handleClearFilters,
         serverSide: {
           enabled: true,
@@ -87,30 +78,23 @@ export function ClientListPage() {
           pageCount: paginationMeta?.pageCount ?? 0,
         },
       }),
-    [totalCount, paginationMeta?.pageCount, handleClearFilters],
+    [
+      totalCount,
+      paginationMeta?.pageCount,
+      canCreateClient,
+      handleAdd,
+      handleClearFilters,
+    ],
   );
 
   return (
     <Card className="p-2 m-1">
       <CardContent>
         <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <TablePresentation
-              title="Gestión de Clientes"
-              subtitle="Administra los clientes de tu organización"
-            />
-            <PermissionGuard
-              permissions={[
-                PermissionActions.clientes.crear,
-                PermissionActions.clientes.gestionar,
-              ]}
-            >
-              <Button onClick={() => setCreateDialogOpen(true)} size="sm">
-                <HugeiconsIcon icon={PlusSignIcon} size={16} />
-                Nuevo Cliente
-              </Button>
-            </PermissionGuard>
-          </div>
+          <TablePresentation
+            title="Gestion de Clientes"
+            subtitle="Administra los clientes de tu organizacion"
+          />
 
           <PermissionGuard
             permissions={[
@@ -131,19 +115,19 @@ export function ClientListPage() {
               onGlobalFilterChange={handleGlobalFilterChange}
             />
           </PermissionGuard>
+
+          <PermissionGuard
+            permissions={[
+              PermissionActions.clientes.crear,
+              PermissionActions.clientes.gestionar,
+            ]}
+          >
+            {isOpen && (
+              <CreateClientDialog open={isOpen} onClose={closeModal} />
+            )}
+          </PermissionGuard>
         </div>
       </CardContent>
-
-      <ClientSheetForm
-        client={editingClient}
-        open={sheetOpen}
-        onOpenChange={handleSheetOpenChange}
-      />
-
-      <CreateClientDialog
-        open={createDialogOpen}
-        onClose={() => setCreateDialogOpen(false)}
-      />
     </Card>
   );
 }

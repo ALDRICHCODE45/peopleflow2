@@ -32,3 +32,10 @@ export const usersQueryKeys = {
 export const permissionsQueryKeys = {
   byRole: (roleId: string) => ["permissions", "by-role", roleId] as const,
 };
+
+export const clientsQueryKeys = {
+  paginated: (tenantId: string) =>
+    ["clients", "paginated", tenantId] as const,
+  detail: (tenantId: string, clientId: string) =>
+    ["clients", "detail", tenantId, clientId] as const,
+};

@@ -94,9 +94,7 @@ function GeneradorCell({ generadorId }: { generadorId: string | null }) {
 
 // ── Column factory ───────────────────────────────────────────────────────────
 
-export function createClientColumns(
-  onEdit?: (client: ClientDTO) => void,
-): ColumnDef<ClientDTO>[] {
+export function createClientColumns(): ColumnDef<ClientDTO>[] {
   return [
     {
       header: "Nombre",
@@ -251,7 +249,7 @@ export function createClientColumns(
     {
       id: "actions",
       header: () => <span className="sr-only">Acciones</span>,
-      cell: ({ row }) => <ClientRowActions row={row} onEdit={onEdit} />,
+      cell: ({ row }) => <ClientRowActions row={row} />,
       size: 4,
       enableHiding: false,
       enableSorting: false,

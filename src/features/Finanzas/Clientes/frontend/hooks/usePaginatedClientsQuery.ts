@@ -1,9 +1,10 @@
 "use client";
 
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import type { ClientDTO } from "../types/client.types";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
+import { clientsQueryKeys } from "@core/shared/constants/query-keys";
 import { getPaginatedClientsAction } from "../../server/presentation/actions/getPaginatedClients.action";
+import type { ClientDTO } from "../types/client.types";
 import type {
   PaginatedResponse,
   SortingParam,
@@ -17,15 +18,13 @@ export interface PaginatedClientsQueryParams {
   globalFilter?: string;
 }
 
-/** Query Key Factory */
+/** Query Key Factory — builds the full key including params */
 export const getPaginatedClientsQueryKey = (
   tenantId: string,
   params: PaginatedClientsQueryParams,
 ) =>
   [
-    "clients",
-    "paginated",
-    tenantId,
+    ...clientsQueryKeys.paginated(tenantId),
     {
       pageIndex: params.pageIndex,
       pageSize: params.pageSize,
@@ -68,7 +67,7 @@ export function usePaginatedClientsQuery(params: PaginatedClientsQueryParams) {
     },
     enabled: !!tenant?.id,
     placeholderData: keepPreviousData,
+    staleTime: 30_000,
     refetchOnWindowFocus: false,
-    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 }

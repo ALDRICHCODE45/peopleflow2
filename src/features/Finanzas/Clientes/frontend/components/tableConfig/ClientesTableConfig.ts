@@ -1,3 +1,4 @@
+import { PlusSignIcon } from "@hugeicons/core-free-icons";
 import { TableConfig } from "@/core/shared/components/DataTable/TableTypes.types";
 import type { ClientDTO } from "../../types/client.types";
 import { ClientesTableFilters } from "./ClientesTableFilters";
@@ -7,7 +8,9 @@ export const ClientesTableConfig: TableConfig<ClientDTO> = {
     customFilter: {
       component: ClientesTableFilters,
       props: {
-        showAddButton: false,
+        addButtonText: "Nuevo Cliente",
+        addButtonIcon: PlusSignIcon,
+        showAddButton: true,
       },
     },
     searchColumn: "nombre",
@@ -15,7 +18,8 @@ export const ClientesTableConfig: TableConfig<ClientDTO> = {
     showSearch: true,
   },
   actions: {
-    showAddButton: false,
+    showAddButton: true,
+    addButtonText: "Nuevo Cliente",
     showBulkActions: false,
   },
   emptyStateMessage: "No se encontraron clientes",

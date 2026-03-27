@@ -3,8 +3,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
 import { showToast } from "@/core/shared/components/ShowToast";
+import { clientsQueryKeys } from "@core/shared/constants/query-keys";
 import { createClientManualAction } from "../../server/presentation/actions/createClientManual.action";
-import { clientsQueryKeys } from "./useClient";
 
 interface CreateClientInput {
   companyName: string;
@@ -32,11 +32,7 @@ export function useCreateClient() {
       });
       if (tenant?.id) {
         queryClient.invalidateQueries({
-          queryKey: clientsQueryKeys.all(tenant.id),
-        });
-        // Invalidar también las queries paginadas
-        queryClient.invalidateQueries({
-          queryKey: ["clients", "paginated", tenant.id],
+          queryKey: clientsQueryKeys.paginated(tenant.id),
         });
       }
     },

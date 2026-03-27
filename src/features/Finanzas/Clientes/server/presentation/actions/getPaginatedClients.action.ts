@@ -80,8 +80,10 @@ export async function getPaginatedClientsAction(
     const totalCount = result.totalCount || 0;
     const pageSize = params.pageSize || 10;
 
+    const clientDTOs = result.data?.map((client) => client.toJSON()) || [];
+
     return {
-      data: result.data?.map((client) => client.toJSON()) || [],
+      data: clientDTOs,
       pagination: {
         pageIndex: params.pageIndex,
         pageSize,
