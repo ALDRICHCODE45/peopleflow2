@@ -138,6 +138,16 @@ export type VacancyConfig = Prisma.VacancyConfigModel
  */
 export type Notification = Prisma.NotificationModel
 /**
+ * Model Invoice
+ * 
+ */
+export type Invoice = Prisma.InvoiceModel
+/**
+ * Model InvoiceFolioCounter
+ * 
+ */
+export type InvoiceFolioCounter = Prisma.InvoiceFolioCounterModel
+/**
  * Model Client
  * 
  */

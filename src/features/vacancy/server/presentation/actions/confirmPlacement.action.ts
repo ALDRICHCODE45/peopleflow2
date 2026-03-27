@@ -13,7 +13,10 @@ import { ConfirmPlacementUseCase } from "../../application/use-cases/ConfirmPlac
 import type { ConfirmPlacementResult } from "../../../frontend/types/vacancy.types";
 import { ServerErrors } from "@core/shared/constants/error-messages";
 
-export async function confirmPlacementAction(vacancyId: string): Promise<ConfirmPlacementResult> {
+export async function confirmPlacementAction(
+  vacancyId: string,
+  hiredCandidateId?: string
+): Promise<ConfirmPlacementResult> {
   try {
     const headersList = await headers();
     const session = await auth.api.getSession({ headers: headersList });
@@ -46,6 +49,7 @@ export async function confirmPlacementAction(vacancyId: string): Promise<Confirm
       vacancyId,
       tenantId,
       changedById: session.user.id,
+      hiredCandidateId,
     });
 
     if (!result.success) {

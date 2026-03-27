@@ -11,4 +11,7 @@ export const StorageKeys = {
 
   candidateCV: (vacancyId: string, candidateId: string, ext: string) =>
     `vacancies/${vacancyId}/candidates/${candidateId}/cv/${crypto.randomUUID()}.${ext}`,
+
+  invoiceComplemento: (invoiceId: string, ext: string) =>
+    `invoices/${invoiceId}/complemento/${crypto.randomUUID()}.${ext}`,
 };

@@ -48,6 +48,14 @@ export interface VacancyProps {
   placementConfirmedAt: Date | null;
   commissionDate: Date | null;
   congratsEmailSent: boolean;
+  // Candidato contratado (FK directa)
+  hiredCandidateId: string | null;
+  hiredCandidate?: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string | null;
+  } | null;
   tenantId: string;
   createdById: string | null;
   createdAt: Date;
@@ -215,6 +223,14 @@ export class Vacancy {
 
   get congratsEmailSent(): boolean {
     return this.props.congratsEmailSent;
+  }
+
+  get hiredCandidateId(): string | null {
+    return this.props.hiredCandidateId;
+  }
+
+  get hiredCandidate(): { id: string; firstName: string; lastName: string; email: string | null; } | null {
+    return this.props.hiredCandidate ?? null;
   }
 
   get tenantId(): string {

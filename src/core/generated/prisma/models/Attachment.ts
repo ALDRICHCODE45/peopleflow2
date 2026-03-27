@@ -47,6 +47,7 @@ export type AttachmentMinAggregateOutputType = {
   interactionId: string | null
   vacancyId: string | null
   vacancyCandidateId: string | null
+  invoiceId: string | null
   isValidated: boolean | null
   validatedById: string | null
   validatedAt: Date | null
@@ -69,6 +70,7 @@ export type AttachmentMaxAggregateOutputType = {
   interactionId: string | null
   vacancyId: string | null
   vacancyCandidateId: string | null
+  invoiceId: string | null
   isValidated: boolean | null
   validatedById: string | null
   validatedAt: Date | null
@@ -91,6 +93,7 @@ export type AttachmentCountAggregateOutputType = {
   interactionId: number
   vacancyId: number
   vacancyCandidateId: number
+  invoiceId: number
   isValidated: number
   validatedById: number
   validatedAt: number
@@ -123,6 +126,7 @@ export type AttachmentMinAggregateInputType = {
   interactionId?: true
   vacancyId?: true
   vacancyCandidateId?: true
+  invoiceId?: true
   isValidated?: true
   validatedById?: true
   validatedAt?: true
@@ -145,6 +149,7 @@ export type AttachmentMaxAggregateInputType = {
   interactionId?: true
   vacancyId?: true
   vacancyCandidateId?: true
+  invoiceId?: true
   isValidated?: true
   validatedById?: true
   validatedAt?: true
@@ -167,6 +172,7 @@ export type AttachmentCountAggregateInputType = {
   interactionId?: true
   vacancyId?: true
   vacancyCandidateId?: true
+  invoiceId?: true
   isValidated?: true
   validatedById?: true
   validatedAt?: true
@@ -276,6 +282,7 @@ export type AttachmentGroupByOutputType = {
   interactionId: string | null
   vacancyId: string | null
   vacancyCandidateId: string | null
+  invoiceId: string | null
   isValidated: boolean
   validatedById: string | null
   validatedAt: Date | null
@@ -321,6 +328,7 @@ export type AttachmentWhereInput = {
   interactionId?: Prisma.StringNullableFilter<"Attachment"> | string | null
   vacancyId?: Prisma.StringNullableFilter<"Attachment"> | string | null
   vacancyCandidateId?: Prisma.StringNullableFilter<"Attachment"> | string | null
+  invoiceId?: Prisma.StringNullableFilter<"Attachment"> | string | null
   isValidated?: Prisma.BoolFilter<"Attachment"> | boolean
   validatedById?: Prisma.StringNullableFilter<"Attachment"> | string | null
   validatedAt?: Prisma.DateTimeNullableFilter<"Attachment"> | Date | string | null
@@ -333,6 +341,7 @@ export type AttachmentWhereInput = {
   interaction?: Prisma.XOR<Prisma.InteractionNullableScalarRelationFilter, Prisma.InteractionWhereInput> | null
   vacancy?: Prisma.XOR<Prisma.VacancyNullableScalarRelationFilter, Prisma.VacancyWhereInput> | null
   vacancyCandidate?: Prisma.XOR<Prisma.VacancyCandidateNullableScalarRelationFilter, Prisma.VacancyCandidateWhereInput> | null
+  invoice?: Prisma.XOR<Prisma.InvoiceNullableScalarRelationFilter, Prisma.InvoiceWhereInput> | null
   validatedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   uploadedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -351,6 +360,7 @@ export type AttachmentOrderByWithRelationInput = {
   interactionId?: Prisma.SortOrderInput | Prisma.SortOrder
   vacancyId?: Prisma.SortOrderInput | Prisma.SortOrder
   vacancyCandidateId?: Prisma.SortOrderInput | Prisma.SortOrder
+  invoiceId?: Prisma.SortOrderInput | Prisma.SortOrder
   isValidated?: Prisma.SortOrder
   validatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   validatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -363,6 +373,7 @@ export type AttachmentOrderByWithRelationInput = {
   interaction?: Prisma.InteractionOrderByWithRelationInput
   vacancy?: Prisma.VacancyOrderByWithRelationInput
   vacancyCandidate?: Prisma.VacancyCandidateOrderByWithRelationInput
+  invoice?: Prisma.InvoiceOrderByWithRelationInput
   validatedBy?: Prisma.UserOrderByWithRelationInput
   tenant?: Prisma.TenantOrderByWithRelationInput
   uploadedBy?: Prisma.UserOrderByWithRelationInput
@@ -384,6 +395,7 @@ export type AttachmentWhereUniqueInput = Prisma.AtLeast<{
   interactionId?: Prisma.StringNullableFilter<"Attachment"> | string | null
   vacancyId?: Prisma.StringNullableFilter<"Attachment"> | string | null
   vacancyCandidateId?: Prisma.StringNullableFilter<"Attachment"> | string | null
+  invoiceId?: Prisma.StringNullableFilter<"Attachment"> | string | null
   isValidated?: Prisma.BoolFilter<"Attachment"> | boolean
   validatedById?: Prisma.StringNullableFilter<"Attachment"> | string | null
   validatedAt?: Prisma.DateTimeNullableFilter<"Attachment"> | Date | string | null
@@ -396,6 +408,7 @@ export type AttachmentWhereUniqueInput = Prisma.AtLeast<{
   interaction?: Prisma.XOR<Prisma.InteractionNullableScalarRelationFilter, Prisma.InteractionWhereInput> | null
   vacancy?: Prisma.XOR<Prisma.VacancyNullableScalarRelationFilter, Prisma.VacancyWhereInput> | null
   vacancyCandidate?: Prisma.XOR<Prisma.VacancyCandidateNullableScalarRelationFilter, Prisma.VacancyCandidateWhereInput> | null
+  invoice?: Prisma.XOR<Prisma.InvoiceNullableScalarRelationFilter, Prisma.InvoiceWhereInput> | null
   validatedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   uploadedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -414,6 +427,7 @@ export type AttachmentOrderByWithAggregationInput = {
   interactionId?: Prisma.SortOrderInput | Prisma.SortOrder
   vacancyId?: Prisma.SortOrderInput | Prisma.SortOrder
   vacancyCandidateId?: Prisma.SortOrderInput | Prisma.SortOrder
+  invoiceId?: Prisma.SortOrderInput | Prisma.SortOrder
   isValidated?: Prisma.SortOrder
   validatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   validatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -444,6 +458,7 @@ export type AttachmentScalarWhereWithAggregatesInput = {
   interactionId?: Prisma.StringNullableWithAggregatesFilter<"Attachment"> | string | null
   vacancyId?: Prisma.StringNullableWithAggregatesFilter<"Attachment"> | string | null
   vacancyCandidateId?: Prisma.StringNullableWithAggregatesFilter<"Attachment"> | string | null
+  invoiceId?: Prisma.StringNullableWithAggregatesFilter<"Attachment"> | string | null
   isValidated?: Prisma.BoolWithAggregatesFilter<"Attachment"> | boolean
   validatedById?: Prisma.StringNullableWithAggregatesFilter<"Attachment"> | string | null
   validatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Attachment"> | Date | string | null
@@ -470,6 +485,7 @@ export type AttachmentCreateInput = {
   interaction?: Prisma.InteractionCreateNestedOneWithoutAttachmentsInput
   vacancy?: Prisma.VacancyCreateNestedOneWithoutAttachmentsInput
   vacancyCandidate?: Prisma.VacancyCandidateCreateNestedOneWithoutAttachmentsInput
+  invoice?: Prisma.InvoiceCreateNestedOneWithoutAttachmentsInput
   validatedBy?: Prisma.UserCreateNestedOneWithoutAttachmentsValidatedInput
   tenant: Prisma.TenantCreateNestedOneWithoutAttachmentsInput
   uploadedBy: Prisma.UserCreateNestedOneWithoutAttachmentsUploadedInput
@@ -488,6 +504,7 @@ export type AttachmentUncheckedCreateInput = {
   interactionId?: string | null
   vacancyId?: string | null
   vacancyCandidateId?: string | null
+  invoiceId?: string | null
   isValidated?: boolean
   validatedById?: string | null
   validatedAt?: Date | string | null
@@ -514,6 +531,7 @@ export type AttachmentUpdateInput = {
   interaction?: Prisma.InteractionUpdateOneWithoutAttachmentsNestedInput
   vacancy?: Prisma.VacancyUpdateOneWithoutAttachmentsNestedInput
   vacancyCandidate?: Prisma.VacancyCandidateUpdateOneWithoutAttachmentsNestedInput
+  invoice?: Prisma.InvoiceUpdateOneWithoutAttachmentsNestedInput
   validatedBy?: Prisma.UserUpdateOneWithoutAttachmentsValidatedNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutAttachmentsNestedInput
   uploadedBy?: Prisma.UserUpdateOneRequiredWithoutAttachmentsUploadedNestedInput
@@ -532,6 +550,7 @@ export type AttachmentUncheckedUpdateInput = {
   interactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyCandidateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   validatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -554,6 +573,7 @@ export type AttachmentCreateManyInput = {
   interactionId?: string | null
   vacancyId?: string | null
   vacancyCandidateId?: string | null
+  invoiceId?: string | null
   isValidated?: boolean
   validatedById?: string | null
   validatedAt?: Date | string | null
@@ -590,6 +610,7 @@ export type AttachmentUncheckedUpdateManyInput = {
   interactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyCandidateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   validatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -622,6 +643,7 @@ export type AttachmentCountOrderByAggregateInput = {
   interactionId?: Prisma.SortOrder
   vacancyId?: Prisma.SortOrder
   vacancyCandidateId?: Prisma.SortOrder
+  invoiceId?: Prisma.SortOrder
   isValidated?: Prisma.SortOrder
   validatedById?: Prisma.SortOrder
   validatedAt?: Prisma.SortOrder
@@ -648,6 +670,7 @@ export type AttachmentMaxOrderByAggregateInput = {
   interactionId?: Prisma.SortOrder
   vacancyId?: Prisma.SortOrder
   vacancyCandidateId?: Prisma.SortOrder
+  invoiceId?: Prisma.SortOrder
   isValidated?: Prisma.SortOrder
   validatedById?: Prisma.SortOrder
   validatedAt?: Prisma.SortOrder
@@ -670,6 +693,7 @@ export type AttachmentMinOrderByAggregateInput = {
   interactionId?: Prisma.SortOrder
   vacancyId?: Prisma.SortOrder
   vacancyCandidateId?: Prisma.SortOrder
+  invoiceId?: Prisma.SortOrder
   isValidated?: Prisma.SortOrder
   validatedById?: Prisma.SortOrder
   validatedAt?: Prisma.SortOrder
@@ -1035,6 +1059,48 @@ export type AttachmentUncheckedUpdateManyWithoutVacancyCandidateNestedInput = {
   deleteMany?: Prisma.AttachmentScalarWhereInput | Prisma.AttachmentScalarWhereInput[]
 }
 
+export type AttachmentCreateNestedManyWithoutInvoiceInput = {
+  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutInvoiceInput, Prisma.AttachmentUncheckedCreateWithoutInvoiceInput> | Prisma.AttachmentCreateWithoutInvoiceInput[] | Prisma.AttachmentUncheckedCreateWithoutInvoiceInput[]
+  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutInvoiceInput | Prisma.AttachmentCreateOrConnectWithoutInvoiceInput[]
+  createMany?: Prisma.AttachmentCreateManyInvoiceInputEnvelope
+  connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+}
+
+export type AttachmentUncheckedCreateNestedManyWithoutInvoiceInput = {
+  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutInvoiceInput, Prisma.AttachmentUncheckedCreateWithoutInvoiceInput> | Prisma.AttachmentCreateWithoutInvoiceInput[] | Prisma.AttachmentUncheckedCreateWithoutInvoiceInput[]
+  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutInvoiceInput | Prisma.AttachmentCreateOrConnectWithoutInvoiceInput[]
+  createMany?: Prisma.AttachmentCreateManyInvoiceInputEnvelope
+  connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+}
+
+export type AttachmentUpdateManyWithoutInvoiceNestedInput = {
+  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutInvoiceInput, Prisma.AttachmentUncheckedCreateWithoutInvoiceInput> | Prisma.AttachmentCreateWithoutInvoiceInput[] | Prisma.AttachmentUncheckedCreateWithoutInvoiceInput[]
+  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutInvoiceInput | Prisma.AttachmentCreateOrConnectWithoutInvoiceInput[]
+  upsert?: Prisma.AttachmentUpsertWithWhereUniqueWithoutInvoiceInput | Prisma.AttachmentUpsertWithWhereUniqueWithoutInvoiceInput[]
+  createMany?: Prisma.AttachmentCreateManyInvoiceInputEnvelope
+  set?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  disconnect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  delete?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  update?: Prisma.AttachmentUpdateWithWhereUniqueWithoutInvoiceInput | Prisma.AttachmentUpdateWithWhereUniqueWithoutInvoiceInput[]
+  updateMany?: Prisma.AttachmentUpdateManyWithWhereWithoutInvoiceInput | Prisma.AttachmentUpdateManyWithWhereWithoutInvoiceInput[]
+  deleteMany?: Prisma.AttachmentScalarWhereInput | Prisma.AttachmentScalarWhereInput[]
+}
+
+export type AttachmentUncheckedUpdateManyWithoutInvoiceNestedInput = {
+  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutInvoiceInput, Prisma.AttachmentUncheckedCreateWithoutInvoiceInput> | Prisma.AttachmentCreateWithoutInvoiceInput[] | Prisma.AttachmentUncheckedCreateWithoutInvoiceInput[]
+  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutInvoiceInput | Prisma.AttachmentCreateOrConnectWithoutInvoiceInput[]
+  upsert?: Prisma.AttachmentUpsertWithWhereUniqueWithoutInvoiceInput | Prisma.AttachmentUpsertWithWhereUniqueWithoutInvoiceInput[]
+  createMany?: Prisma.AttachmentCreateManyInvoiceInputEnvelope
+  set?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  disconnect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  delete?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  update?: Prisma.AttachmentUpdateWithWhereUniqueWithoutInvoiceInput | Prisma.AttachmentUpdateWithWhereUniqueWithoutInvoiceInput[]
+  updateMany?: Prisma.AttachmentUpdateManyWithWhereWithoutInvoiceInput | Prisma.AttachmentUpdateManyWithWhereWithoutInvoiceInput[]
+  deleteMany?: Prisma.AttachmentScalarWhereInput | Prisma.AttachmentScalarWhereInput[]
+}
+
 export type AttachmentCreateWithoutUploadedByInput = {
   id?: string
   fileName: string
@@ -1052,6 +1118,7 @@ export type AttachmentCreateWithoutUploadedByInput = {
   interaction?: Prisma.InteractionCreateNestedOneWithoutAttachmentsInput
   vacancy?: Prisma.VacancyCreateNestedOneWithoutAttachmentsInput
   vacancyCandidate?: Prisma.VacancyCandidateCreateNestedOneWithoutAttachmentsInput
+  invoice?: Prisma.InvoiceCreateNestedOneWithoutAttachmentsInput
   validatedBy?: Prisma.UserCreateNestedOneWithoutAttachmentsValidatedInput
   tenant: Prisma.TenantCreateNestedOneWithoutAttachmentsInput
 }
@@ -1069,6 +1136,7 @@ export type AttachmentUncheckedCreateWithoutUploadedByInput = {
   interactionId?: string | null
   vacancyId?: string | null
   vacancyCandidateId?: string | null
+  invoiceId?: string | null
   isValidated?: boolean
   validatedById?: string | null
   validatedAt?: Date | string | null
@@ -1104,6 +1172,7 @@ export type AttachmentCreateWithoutValidatedByInput = {
   interaction?: Prisma.InteractionCreateNestedOneWithoutAttachmentsInput
   vacancy?: Prisma.VacancyCreateNestedOneWithoutAttachmentsInput
   vacancyCandidate?: Prisma.VacancyCandidateCreateNestedOneWithoutAttachmentsInput
+  invoice?: Prisma.InvoiceCreateNestedOneWithoutAttachmentsInput
   tenant: Prisma.TenantCreateNestedOneWithoutAttachmentsInput
   uploadedBy: Prisma.UserCreateNestedOneWithoutAttachmentsUploadedInput
 }
@@ -1121,6 +1190,7 @@ export type AttachmentUncheckedCreateWithoutValidatedByInput = {
   interactionId?: string | null
   vacancyId?: string | null
   vacancyCandidateId?: string | null
+  invoiceId?: string | null
   isValidated?: boolean
   validatedAt?: Date | string | null
   rejectionReason?: string | null
@@ -1171,6 +1241,7 @@ export type AttachmentScalarWhereInput = {
   interactionId?: Prisma.StringNullableFilter<"Attachment"> | string | null
   vacancyId?: Prisma.StringNullableFilter<"Attachment"> | string | null
   vacancyCandidateId?: Prisma.StringNullableFilter<"Attachment"> | string | null
+  invoiceId?: Prisma.StringNullableFilter<"Attachment"> | string | null
   isValidated?: Prisma.BoolFilter<"Attachment"> | boolean
   validatedById?: Prisma.StringNullableFilter<"Attachment"> | string | null
   validatedAt?: Prisma.DateTimeNullableFilter<"Attachment"> | Date | string | null
@@ -1213,6 +1284,7 @@ export type AttachmentCreateWithoutTenantInput = {
   interaction?: Prisma.InteractionCreateNestedOneWithoutAttachmentsInput
   vacancy?: Prisma.VacancyCreateNestedOneWithoutAttachmentsInput
   vacancyCandidate?: Prisma.VacancyCandidateCreateNestedOneWithoutAttachmentsInput
+  invoice?: Prisma.InvoiceCreateNestedOneWithoutAttachmentsInput
   validatedBy?: Prisma.UserCreateNestedOneWithoutAttachmentsValidatedInput
   uploadedBy: Prisma.UserCreateNestedOneWithoutAttachmentsUploadedInput
 }
@@ -1230,6 +1302,7 @@ export type AttachmentUncheckedCreateWithoutTenantInput = {
   interactionId?: string | null
   vacancyId?: string | null
   vacancyCandidateId?: string | null
+  invoiceId?: string | null
   isValidated?: boolean
   validatedById?: string | null
   validatedAt?: Date | string | null
@@ -1280,6 +1353,7 @@ export type AttachmentCreateWithoutLeadInput = {
   interaction?: Prisma.InteractionCreateNestedOneWithoutAttachmentsInput
   vacancy?: Prisma.VacancyCreateNestedOneWithoutAttachmentsInput
   vacancyCandidate?: Prisma.VacancyCandidateCreateNestedOneWithoutAttachmentsInput
+  invoice?: Prisma.InvoiceCreateNestedOneWithoutAttachmentsInput
   validatedBy?: Prisma.UserCreateNestedOneWithoutAttachmentsValidatedInput
   tenant: Prisma.TenantCreateNestedOneWithoutAttachmentsInput
   uploadedBy: Prisma.UserCreateNestedOneWithoutAttachmentsUploadedInput
@@ -1297,6 +1371,7 @@ export type AttachmentUncheckedCreateWithoutLeadInput = {
   interactionId?: string | null
   vacancyId?: string | null
   vacancyCandidateId?: string | null
+  invoiceId?: string | null
   isValidated?: boolean
   validatedById?: string | null
   validatedAt?: Date | string | null
@@ -1348,6 +1423,7 @@ export type AttachmentCreateWithoutContactInput = {
   interaction?: Prisma.InteractionCreateNestedOneWithoutAttachmentsInput
   vacancy?: Prisma.VacancyCreateNestedOneWithoutAttachmentsInput
   vacancyCandidate?: Prisma.VacancyCandidateCreateNestedOneWithoutAttachmentsInput
+  invoice?: Prisma.InvoiceCreateNestedOneWithoutAttachmentsInput
   validatedBy?: Prisma.UserCreateNestedOneWithoutAttachmentsValidatedInput
   tenant: Prisma.TenantCreateNestedOneWithoutAttachmentsInput
   uploadedBy: Prisma.UserCreateNestedOneWithoutAttachmentsUploadedInput
@@ -1365,6 +1441,7 @@ export type AttachmentUncheckedCreateWithoutContactInput = {
   interactionId?: string | null
   vacancyId?: string | null
   vacancyCandidateId?: string | null
+  invoiceId?: string | null
   isValidated?: boolean
   validatedById?: string | null
   validatedAt?: Date | string | null
@@ -1416,6 +1493,7 @@ export type AttachmentCreateWithoutInteractionInput = {
   contact?: Prisma.ContactCreateNestedOneWithoutAttachmentsInput
   vacancy?: Prisma.VacancyCreateNestedOneWithoutAttachmentsInput
   vacancyCandidate?: Prisma.VacancyCandidateCreateNestedOneWithoutAttachmentsInput
+  invoice?: Prisma.InvoiceCreateNestedOneWithoutAttachmentsInput
   validatedBy?: Prisma.UserCreateNestedOneWithoutAttachmentsValidatedInput
   tenant: Prisma.TenantCreateNestedOneWithoutAttachmentsInput
   uploadedBy: Prisma.UserCreateNestedOneWithoutAttachmentsUploadedInput
@@ -1433,6 +1511,7 @@ export type AttachmentUncheckedCreateWithoutInteractionInput = {
   contactId?: string | null
   vacancyId?: string | null
   vacancyCandidateId?: string | null
+  invoiceId?: string | null
   isValidated?: boolean
   validatedById?: string | null
   validatedAt?: Date | string | null
@@ -1484,6 +1563,7 @@ export type AttachmentCreateWithoutVacancyInput = {
   contact?: Prisma.ContactCreateNestedOneWithoutAttachmentsInput
   interaction?: Prisma.InteractionCreateNestedOneWithoutAttachmentsInput
   vacancyCandidate?: Prisma.VacancyCandidateCreateNestedOneWithoutAttachmentsInput
+  invoice?: Prisma.InvoiceCreateNestedOneWithoutAttachmentsInput
   validatedBy?: Prisma.UserCreateNestedOneWithoutAttachmentsValidatedInput
   tenant: Prisma.TenantCreateNestedOneWithoutAttachmentsInput
   uploadedBy: Prisma.UserCreateNestedOneWithoutAttachmentsUploadedInput
@@ -1501,6 +1581,7 @@ export type AttachmentUncheckedCreateWithoutVacancyInput = {
   contactId?: string | null
   interactionId?: string | null
   vacancyCandidateId?: string | null
+  invoiceId?: string | null
   isValidated?: boolean
   validatedById?: string | null
   validatedAt?: Date | string | null
@@ -1552,6 +1633,7 @@ export type AttachmentCreateWithoutVacancyCandidateInput = {
   contact?: Prisma.ContactCreateNestedOneWithoutAttachmentsInput
   interaction?: Prisma.InteractionCreateNestedOneWithoutAttachmentsInput
   vacancy?: Prisma.VacancyCreateNestedOneWithoutAttachmentsInput
+  invoice?: Prisma.InvoiceCreateNestedOneWithoutAttachmentsInput
   validatedBy?: Prisma.UserCreateNestedOneWithoutAttachmentsValidatedInput
   tenant: Prisma.TenantCreateNestedOneWithoutAttachmentsInput
   uploadedBy: Prisma.UserCreateNestedOneWithoutAttachmentsUploadedInput
@@ -1569,6 +1651,7 @@ export type AttachmentUncheckedCreateWithoutVacancyCandidateInput = {
   contactId?: string | null
   interactionId?: string | null
   vacancyId?: string | null
+  invoiceId?: string | null
   isValidated?: boolean
   validatedById?: string | null
   validatedAt?: Date | string | null
@@ -1604,6 +1687,76 @@ export type AttachmentUpdateManyWithWhereWithoutVacancyCandidateInput = {
   data: Prisma.XOR<Prisma.AttachmentUpdateManyMutationInput, Prisma.AttachmentUncheckedUpdateManyWithoutVacancyCandidateInput>
 }
 
+export type AttachmentCreateWithoutInvoiceInput = {
+  id?: string
+  fileName: string
+  fileUrl: string
+  fileSize: number
+  mimeType: string
+  attachableType: $Enums.AttachableType
+  subType?: $Enums.AttachmentSubType
+  isValidated?: boolean
+  validatedAt?: Date | string | null
+  rejectionReason?: string | null
+  createdAt?: Date | string
+  lead?: Prisma.LeadCreateNestedOneWithoutAttachmentsInput
+  contact?: Prisma.ContactCreateNestedOneWithoutAttachmentsInput
+  interaction?: Prisma.InteractionCreateNestedOneWithoutAttachmentsInput
+  vacancy?: Prisma.VacancyCreateNestedOneWithoutAttachmentsInput
+  vacancyCandidate?: Prisma.VacancyCandidateCreateNestedOneWithoutAttachmentsInput
+  validatedBy?: Prisma.UserCreateNestedOneWithoutAttachmentsValidatedInput
+  tenant: Prisma.TenantCreateNestedOneWithoutAttachmentsInput
+  uploadedBy: Prisma.UserCreateNestedOneWithoutAttachmentsUploadedInput
+}
+
+export type AttachmentUncheckedCreateWithoutInvoiceInput = {
+  id?: string
+  fileName: string
+  fileUrl: string
+  fileSize: number
+  mimeType: string
+  attachableType: $Enums.AttachableType
+  subType?: $Enums.AttachmentSubType
+  leadId?: string | null
+  contactId?: string | null
+  interactionId?: string | null
+  vacancyId?: string | null
+  vacancyCandidateId?: string | null
+  isValidated?: boolean
+  validatedById?: string | null
+  validatedAt?: Date | string | null
+  rejectionReason?: string | null
+  tenantId: string
+  uploadedById: string
+  createdAt?: Date | string
+}
+
+export type AttachmentCreateOrConnectWithoutInvoiceInput = {
+  where: Prisma.AttachmentWhereUniqueInput
+  create: Prisma.XOR<Prisma.AttachmentCreateWithoutInvoiceInput, Prisma.AttachmentUncheckedCreateWithoutInvoiceInput>
+}
+
+export type AttachmentCreateManyInvoiceInputEnvelope = {
+  data: Prisma.AttachmentCreateManyInvoiceInput | Prisma.AttachmentCreateManyInvoiceInput[]
+  skipDuplicates?: boolean
+}
+
+export type AttachmentUpsertWithWhereUniqueWithoutInvoiceInput = {
+  where: Prisma.AttachmentWhereUniqueInput
+  update: Prisma.XOR<Prisma.AttachmentUpdateWithoutInvoiceInput, Prisma.AttachmentUncheckedUpdateWithoutInvoiceInput>
+  create: Prisma.XOR<Prisma.AttachmentCreateWithoutInvoiceInput, Prisma.AttachmentUncheckedCreateWithoutInvoiceInput>
+}
+
+export type AttachmentUpdateWithWhereUniqueWithoutInvoiceInput = {
+  where: Prisma.AttachmentWhereUniqueInput
+  data: Prisma.XOR<Prisma.AttachmentUpdateWithoutInvoiceInput, Prisma.AttachmentUncheckedUpdateWithoutInvoiceInput>
+}
+
+export type AttachmentUpdateManyWithWhereWithoutInvoiceInput = {
+  where: Prisma.AttachmentScalarWhereInput
+  data: Prisma.XOR<Prisma.AttachmentUpdateManyMutationInput, Prisma.AttachmentUncheckedUpdateManyWithoutInvoiceInput>
+}
+
 export type AttachmentCreateManyUploadedByInput = {
   id?: string
   fileName: string
@@ -1617,6 +1770,7 @@ export type AttachmentCreateManyUploadedByInput = {
   interactionId?: string | null
   vacancyId?: string | null
   vacancyCandidateId?: string | null
+  invoiceId?: string | null
   isValidated?: boolean
   validatedById?: string | null
   validatedAt?: Date | string | null
@@ -1638,6 +1792,7 @@ export type AttachmentCreateManyValidatedByInput = {
   interactionId?: string | null
   vacancyId?: string | null
   vacancyCandidateId?: string | null
+  invoiceId?: string | null
   isValidated?: boolean
   validatedAt?: Date | string | null
   rejectionReason?: string | null
@@ -1663,6 +1818,7 @@ export type AttachmentUpdateWithoutUploadedByInput = {
   interaction?: Prisma.InteractionUpdateOneWithoutAttachmentsNestedInput
   vacancy?: Prisma.VacancyUpdateOneWithoutAttachmentsNestedInput
   vacancyCandidate?: Prisma.VacancyCandidateUpdateOneWithoutAttachmentsNestedInput
+  invoice?: Prisma.InvoiceUpdateOneWithoutAttachmentsNestedInput
   validatedBy?: Prisma.UserUpdateOneWithoutAttachmentsValidatedNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutAttachmentsNestedInput
 }
@@ -1680,6 +1836,7 @@ export type AttachmentUncheckedUpdateWithoutUploadedByInput = {
   interactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyCandidateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   validatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1701,6 +1858,7 @@ export type AttachmentUncheckedUpdateManyWithoutUploadedByInput = {
   interactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyCandidateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   validatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1726,6 +1884,7 @@ export type AttachmentUpdateWithoutValidatedByInput = {
   interaction?: Prisma.InteractionUpdateOneWithoutAttachmentsNestedInput
   vacancy?: Prisma.VacancyUpdateOneWithoutAttachmentsNestedInput
   vacancyCandidate?: Prisma.VacancyCandidateUpdateOneWithoutAttachmentsNestedInput
+  invoice?: Prisma.InvoiceUpdateOneWithoutAttachmentsNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutAttachmentsNestedInput
   uploadedBy?: Prisma.UserUpdateOneRequiredWithoutAttachmentsUploadedNestedInput
 }
@@ -1743,6 +1902,7 @@ export type AttachmentUncheckedUpdateWithoutValidatedByInput = {
   interactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyCandidateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1764,6 +1924,7 @@ export type AttachmentUncheckedUpdateManyWithoutValidatedByInput = {
   interactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyCandidateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1785,6 +1946,7 @@ export type AttachmentCreateManyTenantInput = {
   interactionId?: string | null
   vacancyId?: string | null
   vacancyCandidateId?: string | null
+  invoiceId?: string | null
   isValidated?: boolean
   validatedById?: string | null
   validatedAt?: Date | string | null
@@ -1810,6 +1972,7 @@ export type AttachmentUpdateWithoutTenantInput = {
   interaction?: Prisma.InteractionUpdateOneWithoutAttachmentsNestedInput
   vacancy?: Prisma.VacancyUpdateOneWithoutAttachmentsNestedInput
   vacancyCandidate?: Prisma.VacancyCandidateUpdateOneWithoutAttachmentsNestedInput
+  invoice?: Prisma.InvoiceUpdateOneWithoutAttachmentsNestedInput
   validatedBy?: Prisma.UserUpdateOneWithoutAttachmentsValidatedNestedInput
   uploadedBy?: Prisma.UserUpdateOneRequiredWithoutAttachmentsUploadedNestedInput
 }
@@ -1827,6 +1990,7 @@ export type AttachmentUncheckedUpdateWithoutTenantInput = {
   interactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyCandidateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   validatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1848,6 +2012,7 @@ export type AttachmentUncheckedUpdateManyWithoutTenantInput = {
   interactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyCandidateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   validatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1868,6 +2033,7 @@ export type AttachmentCreateManyLeadInput = {
   interactionId?: string | null
   vacancyId?: string | null
   vacancyCandidateId?: string | null
+  invoiceId?: string | null
   isValidated?: boolean
   validatedById?: string | null
   validatedAt?: Date | string | null
@@ -1893,6 +2059,7 @@ export type AttachmentUpdateWithoutLeadInput = {
   interaction?: Prisma.InteractionUpdateOneWithoutAttachmentsNestedInput
   vacancy?: Prisma.VacancyUpdateOneWithoutAttachmentsNestedInput
   vacancyCandidate?: Prisma.VacancyCandidateUpdateOneWithoutAttachmentsNestedInput
+  invoice?: Prisma.InvoiceUpdateOneWithoutAttachmentsNestedInput
   validatedBy?: Prisma.UserUpdateOneWithoutAttachmentsValidatedNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutAttachmentsNestedInput
   uploadedBy?: Prisma.UserUpdateOneRequiredWithoutAttachmentsUploadedNestedInput
@@ -1910,6 +2077,7 @@ export type AttachmentUncheckedUpdateWithoutLeadInput = {
   interactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyCandidateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   validatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1931,6 +2099,7 @@ export type AttachmentUncheckedUpdateManyWithoutLeadInput = {
   interactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyCandidateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   validatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1952,6 +2121,7 @@ export type AttachmentCreateManyContactInput = {
   interactionId?: string | null
   vacancyId?: string | null
   vacancyCandidateId?: string | null
+  invoiceId?: string | null
   isValidated?: boolean
   validatedById?: string | null
   validatedAt?: Date | string | null
@@ -1977,6 +2147,7 @@ export type AttachmentUpdateWithoutContactInput = {
   interaction?: Prisma.InteractionUpdateOneWithoutAttachmentsNestedInput
   vacancy?: Prisma.VacancyUpdateOneWithoutAttachmentsNestedInput
   vacancyCandidate?: Prisma.VacancyCandidateUpdateOneWithoutAttachmentsNestedInput
+  invoice?: Prisma.InvoiceUpdateOneWithoutAttachmentsNestedInput
   validatedBy?: Prisma.UserUpdateOneWithoutAttachmentsValidatedNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutAttachmentsNestedInput
   uploadedBy?: Prisma.UserUpdateOneRequiredWithoutAttachmentsUploadedNestedInput
@@ -1994,6 +2165,7 @@ export type AttachmentUncheckedUpdateWithoutContactInput = {
   interactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyCandidateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   validatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2015,6 +2187,7 @@ export type AttachmentUncheckedUpdateManyWithoutContactInput = {
   interactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyCandidateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   validatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2036,6 +2209,7 @@ export type AttachmentCreateManyInteractionInput = {
   contactId?: string | null
   vacancyId?: string | null
   vacancyCandidateId?: string | null
+  invoiceId?: string | null
   isValidated?: boolean
   validatedById?: string | null
   validatedAt?: Date | string | null
@@ -2061,6 +2235,7 @@ export type AttachmentUpdateWithoutInteractionInput = {
   contact?: Prisma.ContactUpdateOneWithoutAttachmentsNestedInput
   vacancy?: Prisma.VacancyUpdateOneWithoutAttachmentsNestedInput
   vacancyCandidate?: Prisma.VacancyCandidateUpdateOneWithoutAttachmentsNestedInput
+  invoice?: Prisma.InvoiceUpdateOneWithoutAttachmentsNestedInput
   validatedBy?: Prisma.UserUpdateOneWithoutAttachmentsValidatedNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutAttachmentsNestedInput
   uploadedBy?: Prisma.UserUpdateOneRequiredWithoutAttachmentsUploadedNestedInput
@@ -2078,6 +2253,7 @@ export type AttachmentUncheckedUpdateWithoutInteractionInput = {
   contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyCandidateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   validatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2099,6 +2275,7 @@ export type AttachmentUncheckedUpdateManyWithoutInteractionInput = {
   contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyCandidateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   validatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2120,6 +2297,7 @@ export type AttachmentCreateManyVacancyInput = {
   contactId?: string | null
   interactionId?: string | null
   vacancyCandidateId?: string | null
+  invoiceId?: string | null
   isValidated?: boolean
   validatedById?: string | null
   validatedAt?: Date | string | null
@@ -2145,6 +2323,7 @@ export type AttachmentUpdateWithoutVacancyInput = {
   contact?: Prisma.ContactUpdateOneWithoutAttachmentsNestedInput
   interaction?: Prisma.InteractionUpdateOneWithoutAttachmentsNestedInput
   vacancyCandidate?: Prisma.VacancyCandidateUpdateOneWithoutAttachmentsNestedInput
+  invoice?: Prisma.InvoiceUpdateOneWithoutAttachmentsNestedInput
   validatedBy?: Prisma.UserUpdateOneWithoutAttachmentsValidatedNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutAttachmentsNestedInput
   uploadedBy?: Prisma.UserUpdateOneRequiredWithoutAttachmentsUploadedNestedInput
@@ -2162,6 +2341,7 @@ export type AttachmentUncheckedUpdateWithoutVacancyInput = {
   contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   interactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyCandidateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   validatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2183,6 +2363,7 @@ export type AttachmentUncheckedUpdateManyWithoutVacancyInput = {
   contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   interactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyCandidateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   validatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2204,6 +2385,7 @@ export type AttachmentCreateManyVacancyCandidateInput = {
   contactId?: string | null
   interactionId?: string | null
   vacancyId?: string | null
+  invoiceId?: string | null
   isValidated?: boolean
   validatedById?: string | null
   validatedAt?: Date | string | null
@@ -2229,6 +2411,7 @@ export type AttachmentUpdateWithoutVacancyCandidateInput = {
   contact?: Prisma.ContactUpdateOneWithoutAttachmentsNestedInput
   interaction?: Prisma.InteractionUpdateOneWithoutAttachmentsNestedInput
   vacancy?: Prisma.VacancyUpdateOneWithoutAttachmentsNestedInput
+  invoice?: Prisma.InvoiceUpdateOneWithoutAttachmentsNestedInput
   validatedBy?: Prisma.UserUpdateOneWithoutAttachmentsValidatedNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutAttachmentsNestedInput
   uploadedBy?: Prisma.UserUpdateOneRequiredWithoutAttachmentsUploadedNestedInput
@@ -2246,6 +2429,7 @@ export type AttachmentUncheckedUpdateWithoutVacancyCandidateInput = {
   contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   interactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   validatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2267,6 +2451,95 @@ export type AttachmentUncheckedUpdateManyWithoutVacancyCandidateInput = {
   contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   interactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  validatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AttachmentCreateManyInvoiceInput = {
+  id?: string
+  fileName: string
+  fileUrl: string
+  fileSize: number
+  mimeType: string
+  attachableType: $Enums.AttachableType
+  subType?: $Enums.AttachmentSubType
+  leadId?: string | null
+  contactId?: string | null
+  interactionId?: string | null
+  vacancyId?: string | null
+  vacancyCandidateId?: string | null
+  isValidated?: boolean
+  validatedById?: string | null
+  validatedAt?: Date | string | null
+  rejectionReason?: string | null
+  tenantId: string
+  uploadedById: string
+  createdAt?: Date | string
+}
+
+export type AttachmentUpdateWithoutInvoiceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.StringFieldUpdateOperationsInput | string
+  fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  fileSize?: Prisma.IntFieldUpdateOperationsInput | number
+  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
+  attachableType?: Prisma.EnumAttachableTypeFieldUpdateOperationsInput | $Enums.AttachableType
+  subType?: Prisma.EnumAttachmentSubTypeFieldUpdateOperationsInput | $Enums.AttachmentSubType
+  isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lead?: Prisma.LeadUpdateOneWithoutAttachmentsNestedInput
+  contact?: Prisma.ContactUpdateOneWithoutAttachmentsNestedInput
+  interaction?: Prisma.InteractionUpdateOneWithoutAttachmentsNestedInput
+  vacancy?: Prisma.VacancyUpdateOneWithoutAttachmentsNestedInput
+  vacancyCandidate?: Prisma.VacancyCandidateUpdateOneWithoutAttachmentsNestedInput
+  validatedBy?: Prisma.UserUpdateOneWithoutAttachmentsValidatedNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutAttachmentsNestedInput
+  uploadedBy?: Prisma.UserUpdateOneRequiredWithoutAttachmentsUploadedNestedInput
+}
+
+export type AttachmentUncheckedUpdateWithoutInvoiceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.StringFieldUpdateOperationsInput | string
+  fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  fileSize?: Prisma.IntFieldUpdateOperationsInput | number
+  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
+  attachableType?: Prisma.EnumAttachableTypeFieldUpdateOperationsInput | $Enums.AttachableType
+  subType?: Prisma.EnumAttachmentSubTypeFieldUpdateOperationsInput | $Enums.AttachmentSubType
+  leadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  interactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vacancyCandidateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  validatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AttachmentUncheckedUpdateManyWithoutInvoiceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.StringFieldUpdateOperationsInput | string
+  fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  fileSize?: Prisma.IntFieldUpdateOperationsInput | number
+  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
+  attachableType?: Prisma.EnumAttachableTypeFieldUpdateOperationsInput | $Enums.AttachableType
+  subType?: Prisma.EnumAttachmentSubTypeFieldUpdateOperationsInput | $Enums.AttachmentSubType
+  leadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  interactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vacancyCandidateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isValidated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   validatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2291,6 +2564,7 @@ export type AttachmentSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   interactionId?: boolean
   vacancyId?: boolean
   vacancyCandidateId?: boolean
+  invoiceId?: boolean
   isValidated?: boolean
   validatedById?: boolean
   validatedAt?: boolean
@@ -2303,6 +2577,7 @@ export type AttachmentSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   interaction?: boolean | Prisma.Attachment$interactionArgs<ExtArgs>
   vacancy?: boolean | Prisma.Attachment$vacancyArgs<ExtArgs>
   vacancyCandidate?: boolean | Prisma.Attachment$vacancyCandidateArgs<ExtArgs>
+  invoice?: boolean | Prisma.Attachment$invoiceArgs<ExtArgs>
   validatedBy?: boolean | Prisma.Attachment$validatedByArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -2321,6 +2596,7 @@ export type AttachmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   interactionId?: boolean
   vacancyId?: boolean
   vacancyCandidateId?: boolean
+  invoiceId?: boolean
   isValidated?: boolean
   validatedById?: boolean
   validatedAt?: boolean
@@ -2333,6 +2609,7 @@ export type AttachmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   interaction?: boolean | Prisma.Attachment$interactionArgs<ExtArgs>
   vacancy?: boolean | Prisma.Attachment$vacancyArgs<ExtArgs>
   vacancyCandidate?: boolean | Prisma.Attachment$vacancyCandidateArgs<ExtArgs>
+  invoice?: boolean | Prisma.Attachment$invoiceArgs<ExtArgs>
   validatedBy?: boolean | Prisma.Attachment$validatedByArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -2351,6 +2628,7 @@ export type AttachmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   interactionId?: boolean
   vacancyId?: boolean
   vacancyCandidateId?: boolean
+  invoiceId?: boolean
   isValidated?: boolean
   validatedById?: boolean
   validatedAt?: boolean
@@ -2363,6 +2641,7 @@ export type AttachmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   interaction?: boolean | Prisma.Attachment$interactionArgs<ExtArgs>
   vacancy?: boolean | Prisma.Attachment$vacancyArgs<ExtArgs>
   vacancyCandidate?: boolean | Prisma.Attachment$vacancyCandidateArgs<ExtArgs>
+  invoice?: boolean | Prisma.Attachment$invoiceArgs<ExtArgs>
   validatedBy?: boolean | Prisma.Attachment$validatedByArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -2381,6 +2660,7 @@ export type AttachmentSelectScalar = {
   interactionId?: boolean
   vacancyId?: boolean
   vacancyCandidateId?: boolean
+  invoiceId?: boolean
   isValidated?: boolean
   validatedById?: boolean
   validatedAt?: boolean
@@ -2390,13 +2670,14 @@ export type AttachmentSelectScalar = {
   createdAt?: boolean
 }
 
-export type AttachmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fileName" | "fileUrl" | "fileSize" | "mimeType" | "attachableType" | "subType" | "leadId" | "contactId" | "interactionId" | "vacancyId" | "vacancyCandidateId" | "isValidated" | "validatedById" | "validatedAt" | "rejectionReason" | "tenantId" | "uploadedById" | "createdAt", ExtArgs["result"]["attachment"]>
+export type AttachmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fileName" | "fileUrl" | "fileSize" | "mimeType" | "attachableType" | "subType" | "leadId" | "contactId" | "interactionId" | "vacancyId" | "vacancyCandidateId" | "invoiceId" | "isValidated" | "validatedById" | "validatedAt" | "rejectionReason" | "tenantId" | "uploadedById" | "createdAt", ExtArgs["result"]["attachment"]>
 export type AttachmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lead?: boolean | Prisma.Attachment$leadArgs<ExtArgs>
   contact?: boolean | Prisma.Attachment$contactArgs<ExtArgs>
   interaction?: boolean | Prisma.Attachment$interactionArgs<ExtArgs>
   vacancy?: boolean | Prisma.Attachment$vacancyArgs<ExtArgs>
   vacancyCandidate?: boolean | Prisma.Attachment$vacancyCandidateArgs<ExtArgs>
+  invoice?: boolean | Prisma.Attachment$invoiceArgs<ExtArgs>
   validatedBy?: boolean | Prisma.Attachment$validatedByArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -2407,6 +2688,7 @@ export type AttachmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.E
   interaction?: boolean | Prisma.Attachment$interactionArgs<ExtArgs>
   vacancy?: boolean | Prisma.Attachment$vacancyArgs<ExtArgs>
   vacancyCandidate?: boolean | Prisma.Attachment$vacancyCandidateArgs<ExtArgs>
+  invoice?: boolean | Prisma.Attachment$invoiceArgs<ExtArgs>
   validatedBy?: boolean | Prisma.Attachment$validatedByArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -2417,6 +2699,7 @@ export type AttachmentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   interaction?: boolean | Prisma.Attachment$interactionArgs<ExtArgs>
   vacancy?: boolean | Prisma.Attachment$vacancyArgs<ExtArgs>
   vacancyCandidate?: boolean | Prisma.Attachment$vacancyCandidateArgs<ExtArgs>
+  invoice?: boolean | Prisma.Attachment$invoiceArgs<ExtArgs>
   validatedBy?: boolean | Prisma.Attachment$validatedByArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -2430,6 +2713,7 @@ export type $AttachmentPayload<ExtArgs extends runtime.Types.Extensions.Internal
     interaction: Prisma.$InteractionPayload<ExtArgs> | null
     vacancy: Prisma.$VacancyPayload<ExtArgs> | null
     vacancyCandidate: Prisma.$VacancyCandidatePayload<ExtArgs> | null
+    invoice: Prisma.$InvoicePayload<ExtArgs> | null
     validatedBy: Prisma.$UserPayload<ExtArgs> | null
     tenant: Prisma.$TenantPayload<ExtArgs>
     uploadedBy: Prisma.$UserPayload<ExtArgs>
@@ -2447,6 +2731,7 @@ export type $AttachmentPayload<ExtArgs extends runtime.Types.Extensions.Internal
     interactionId: string | null
     vacancyId: string | null
     vacancyCandidateId: string | null
+    invoiceId: string | null
     isValidated: boolean
     validatedById: string | null
     validatedAt: Date | null
@@ -2853,6 +3138,7 @@ export interface Prisma__AttachmentClient<T, Null = never, ExtArgs extends runti
   interaction<T extends Prisma.Attachment$interactionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Attachment$interactionArgs<ExtArgs>>): Prisma.Prisma__InteractionClient<runtime.Types.Result.GetResult<Prisma.$InteractionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   vacancy<T extends Prisma.Attachment$vacancyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Attachment$vacancyArgs<ExtArgs>>): Prisma.Prisma__VacancyClient<runtime.Types.Result.GetResult<Prisma.$VacancyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   vacancyCandidate<T extends Prisma.Attachment$vacancyCandidateArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Attachment$vacancyCandidateArgs<ExtArgs>>): Prisma.Prisma__VacancyCandidateClient<runtime.Types.Result.GetResult<Prisma.$VacancyCandidatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  invoice<T extends Prisma.Attachment$invoiceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Attachment$invoiceArgs<ExtArgs>>): Prisma.Prisma__InvoiceClient<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   validatedBy<T extends Prisma.Attachment$validatedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Attachment$validatedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   uploadedBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -2897,6 +3183,7 @@ export interface AttachmentFieldRefs {
   readonly interactionId: Prisma.FieldRef<"Attachment", 'String'>
   readonly vacancyId: Prisma.FieldRef<"Attachment", 'String'>
   readonly vacancyCandidateId: Prisma.FieldRef<"Attachment", 'String'>
+  readonly invoiceId: Prisma.FieldRef<"Attachment", 'String'>
   readonly isValidated: Prisma.FieldRef<"Attachment", 'Boolean'>
   readonly validatedById: Prisma.FieldRef<"Attachment", 'String'>
   readonly validatedAt: Prisma.FieldRef<"Attachment", 'DateTime'>
@@ -3392,6 +3679,25 @@ export type Attachment$vacancyCandidateArgs<ExtArgs extends runtime.Types.Extens
    */
   include?: Prisma.VacancyCandidateInclude<ExtArgs> | null
   where?: Prisma.VacancyCandidateWhereInput
+}
+
+/**
+ * Attachment.invoice
+ */
+export type Attachment$invoiceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Invoice
+   */
+  select?: Prisma.InvoiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Invoice
+   */
+  omit?: Prisma.InvoiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceInclude<ExtArgs> | null
+  where?: Prisma.InvoiceWhereInput
 }
 
 /**

@@ -59,6 +59,7 @@ export interface UpdateVacancyData {
   placementConfirmedAt?: Date | null;
   commissionDate?: Date | null;
   congratsEmailSent?: boolean;
+  hiredCandidateId?: string | null; // FK al candidato contratado
   status?: VacancyStatusType;
   checklistValidatedAt?: Date | null;
   checklistValidatedById?: string | null;

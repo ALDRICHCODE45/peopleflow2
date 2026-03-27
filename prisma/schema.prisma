@@ -52,6 +52,9 @@ model User {
   recruiterAssignments          RecruiterAssignmentHistory[] @relation("AssignmentRecruiter")
   recruiterAssignmentsAssigned  RecruiterAssignmentHistory[] @relation("AssignmentAssignedBy")
 
+  // Relaciones con módulo de Facturación
+  invoicesCreated Invoice[] @relation("InvoiceCreatedBy")
+
   @@map("user")
 }
 
@@ -148,6 +151,10 @@ model Tenant {
 
   // Relación con configuración de notificaciones
   notificationConfig NotificationConfig?
+
+  // Relaciones con módulo de Facturación
+  invoices             Invoice[]
+  invoiceFolioCounter  InvoiceFolioCounter?
 
   @@map("tenant")
 }
@@ -260,12 +267,14 @@ enum AttachableType {
   INTERACTION
   VACANCY
   VACANCY_CANDIDATE
+  INVOICE
 }
 
 enum AttachmentSubType {
   JOB_DESCRIPTION
   PERFIL_MUESTRA
   CV
+  COMPLEMENTO_PAGO
   OTHER
 }
 
@@ -514,6 +523,8 @@ model Attachment {
   vacancy            Vacancy?         @relation("VacancyAttachments", fields: [vacancyId], references: [id], onDelete: Cascade)
   vacancyCandidateId String?
   vacancyCandidate   VacancyCandidate? @relation("CandidateAttachments", fields: [vacancyCandidateId], references: [id], onDelete: Cascade)
+  invoiceId          String?
+  invoice            Invoice?          @relation("InvoiceAttachments", fields: [invoiceId], references: [id], onDelete: Cascade)
 
   // Validación (para JOB_DESCRIPTION y PERFIL_MUESTRA)
   isValidated     Boolean   @default(false)
@@ -536,6 +547,7 @@ model Attachment {
   @@index([interactionId])
   @@index([vacancyId])
   @@index([vacancyCandidateId])
+  @@index([invoiceId])
   @@index([tenantId])
   @@index([attachableType])
   @@index([subType])
@@ -660,6 +672,10 @@ model Vacancy {
   commissionDate       DateTime? // Día 15 del mes siguiente — generado automáticamente
   congratsEmailSent    Boolean   @default(false) // Si se envió correo de felicitaciones
 
+  // Candidato contratado (FK directa para consultas rápidas)
+  hiredCandidateId String? @unique // FK al candidato contratado
+  hiredCandidate   VacancyCandidate? @relation("HiredCandidate", fields: [hiredCandidateId], references: [id], onDelete: SetNull)
+
   // Warranty (Garantía)
   isWarranty      Boolean  @default(false)
   originVacancyId String?  @unique
@@ -683,6 +699,9 @@ model Vacancy {
   attachments    Attachment[]           @relation("VacancyAttachments")
   ternaHistories VacancyTernaHistory[]
   recruiterAssignmentHistory RecruiterAssignmentHistory[]
+
+  // Relación con Facturas
+  invoices Invoice[]
 
   @@index([tenantId])
   @@index([status])
@@ -770,6 +789,9 @@ model VacancyCandidate {
 
   // Match cualitativo contra el checklist
   checklistMatches VacancyCandidateMatch[]
+
+  // Relación inversa: si este candidato fue contratado en esta vacante
+  hiredVacancy Vacancy? @relation("HiredCandidate")
 
   @@index([vacancyId])
   @@index([tenantId])
@@ -936,6 +958,127 @@ enum FeeType {
 }
 
 // =============================================
+// ENUMS DEL MÓDULO DE FACTURACIÓN
+// =============================================
+
+enum InvoiceType {
+  ANTICIPO
+  FULL
+  LIQUIDACION
+}
+
+enum InvoicePaymentType {
+  PUE   // Pago en Una Exhibición
+  PPD   // Pago en Parcialidades o Diferido
+}
+
+enum InvoiceStatus {
+  POR_COBRAR
+  PAGADA
+}
+
+// =============================================
+// MÓDULO DE FACTURACIÓN
+// =============================================
+
+model Invoice {
+  id    String @id @default(cuid())
+  folio String // Auto-generated: "A001", "A002"... unique per tenant
+
+  // --- Tipo ---
+  type        InvoiceType
+  paymentType InvoicePaymentType
+
+  // --- Relaciones principales ---
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id], onDelete: Restrict)
+
+  vacancyId String?
+  vacancy   Vacancy? @relation(fields: [vacancyId], references: [id], onDelete: Restrict)
+
+  // Self-ref: LIQUIDACION → its ANTICIPO (1:1 via @unique)
+  anticipoInvoiceId String?  @unique
+  anticipoInvoice   Invoice? @relation("LiquidacionAnticipo", fields: [anticipoInvoiceId], references: [id], onDelete: Restrict)
+  liquidacion       Invoice? @relation("LiquidacionAnticipo")
+
+  // --- Snapshots: Candidato (finalist) ---
+  candidateId   String?
+  candidateName String?
+
+  // --- Snapshots: Hunter (recruiter) ---
+  hunterId   String?
+  hunterName String?
+
+  // --- Snapshots: Datos fiscales del cliente ---
+  razonSocial     String?
+  nombreComercial String?
+  ubicacion       String?
+  figura          String?
+  rfc             String?
+  codigoPostal    String?
+  regimen         String?
+
+  // --- Snapshots: Datos de la vacante ---
+  posicion String?
+
+  // --- Datos económicos ---
+  currency Currency
+  salario  Float?
+  feeType  FeeType?
+  feeValue Float?
+
+  // --- Cálculos ---
+  subtotal          Float
+  ivaRate           Float   // 0.16 for MXN, 0.0 for USD
+  ivaAmount         Float
+  anticipoDeduccion Float   @default(0) // Only for LIQUIDACION
+  total             Float
+
+  // --- Fechas ---
+  issuedAt     DateTime
+  paymentDate  DateTime?
+  mesPlacement DateTime?
+
+  // --- Estado ---
+  status InvoiceStatus @default(POR_COBRAR)
+
+  // --- Adicional ---
+  banco String?
+
+  // --- Multi-tenancy ---
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // --- Auditoría ---
+  createdById String?
+  createdBy   User?    @relation("InvoiceCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // --- Hijas ---
+  attachments Attachment[] @relation("InvoiceAttachments")
+
+  @@unique([folio, tenantId])
+  @@index([tenantId])
+  @@index([clientId])
+  @@index([vacancyId])
+  @@index([tenantId, status])
+  @@index([tenantId, type])
+  @@index([tenantId, createdAt])
+  @@map("invoice")
+}
+
+model InvoiceFolioCounter {
+  id       String @id @default(cuid())
+  tenantId String @unique
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  prefix   String @default("A")
+  counter  Int    @default(0)
+
+  @@map("invoice_folio_counter")
+}
+
+// =============================================
 // MÓDULO DE CLIENTES (FINANZAS)
 // =============================================
 
@@ -987,6 +1130,9 @@ model Client {
 
   // Relación con Vacantes
   vacancies Vacancy[]
+
+  // Relación con Facturas
+  invoices Invoice[]
 
   @@index([tenantId])
   @@index([generadorId])

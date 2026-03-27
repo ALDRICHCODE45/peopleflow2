@@ -17,4 +17,7 @@ export const Routes = {
     kanban: "/generacion-de-leads/kanban",
     list: "/generacion-de-leads/leads",
   },
+  finanzas: {
+    facturas: "/finanzas/facturas",
+  },
 } as const;

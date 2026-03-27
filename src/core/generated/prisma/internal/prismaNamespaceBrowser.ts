@@ -75,6 +75,8 @@ export const ModelName = {
   VacancyStatusHistory: 'VacancyStatusHistory',
   VacancyConfig: 'VacancyConfig',
   Notification: 'Notification',
+  Invoice: 'Invoice',
+  InvoiceFolioCounter: 'InvoiceFolioCounter',
   Client: 'Client',
   NotificationConfig: 'NotificationConfig',
   VacancyTernaHistory: 'VacancyTernaHistory',
@@ -342,6 +344,7 @@ export const AttachmentScalarFieldEnum = {
   interactionId: 'interactionId',
   vacancyId: 'vacancyId',
   vacancyCandidateId: 'vacancyCandidateId',
+  invoiceId: 'invoiceId',
   isValidated: 'isValidated',
   validatedById: 'validatedById',
   validatedAt: 'validatedAt',
@@ -387,6 +390,7 @@ export const VacancyScalarFieldEnum = {
   placementConfirmedAt: 'placementConfirmedAt',
   commissionDate: 'commissionDate',
   congratsEmailSent: 'congratsEmailSent',
+  hiredCandidateId: 'hiredCandidateId',
   isWarranty: 'isWarranty',
   originVacancyId: 'originVacancyId',
   tenantId: 'tenantId',
@@ -519,6 +523,59 @@ export const NotificationScalarFieldEnum = {
 } as const
 
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const InvoiceScalarFieldEnum = {
+  id: 'id',
+  folio: 'folio',
+  type: 'type',
+  paymentType: 'paymentType',
+  clientId: 'clientId',
+  vacancyId: 'vacancyId',
+  anticipoInvoiceId: 'anticipoInvoiceId',
+  candidateId: 'candidateId',
+  candidateName: 'candidateName',
+  hunterId: 'hunterId',
+  hunterName: 'hunterName',
+  razonSocial: 'razonSocial',
+  nombreComercial: 'nombreComercial',
+  ubicacion: 'ubicacion',
+  figura: 'figura',
+  rfc: 'rfc',
+  codigoPostal: 'codigoPostal',
+  regimen: 'regimen',
+  posicion: 'posicion',
+  currency: 'currency',
+  salario: 'salario',
+  feeType: 'feeType',
+  feeValue: 'feeValue',
+  subtotal: 'subtotal',
+  ivaRate: 'ivaRate',
+  ivaAmount: 'ivaAmount',
+  anticipoDeduccion: 'anticipoDeduccion',
+  total: 'total',
+  issuedAt: 'issuedAt',
+  paymentDate: 'paymentDate',
+  mesPlacement: 'mesPlacement',
+  status: 'status',
+  banco: 'banco',
+  tenantId: 'tenantId',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeof InvoiceScalarFieldEnum]
+
+
+export const InvoiceFolioCounterScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  prefix: 'prefix',
+  counter: 'counter'
+} as const
+
+export type InvoiceFolioCounterScalarFieldEnum = (typeof InvoiceFolioCounterScalarFieldEnum)[keyof typeof InvoiceFolioCounterScalarFieldEnum]
 
 
 export const ClientScalarFieldEnum = {

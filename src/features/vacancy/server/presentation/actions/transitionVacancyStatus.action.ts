@@ -1,6 +1,7 @@
 "use server";
 
 import { auth } from "@lib/auth";
+import prisma from "@/core/lib/prisma";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { parseISO } from "date-fns";
@@ -111,11 +112,17 @@ export async function transitionVacancyStatusAction(
 
     // If transition requires hired candidate, mark them as CONTRATADO
     if (needsHiredCandidate && input.hiredCandidateId) {
+      // 1. Mark candidate as hired
       await prismaVacancyCandidateRepository.markAsContratado(
         input.hiredCandidateId,
         input.vacancyId,
         tenantId,
       );
+      // 2. Update vacancy with FK to hired candidate
+      await prisma.vacancy.update({
+        where: { id: input.vacancyId },
+        data: { hiredCandidateId: input.hiredCandidateId },
+      });
     }
 
     // On rollback to HUNTING: reset all candidates to EN_PROCESO and clear terna

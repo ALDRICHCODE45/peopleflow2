@@ -408,6 +408,8 @@ export const ModelName = {
   VacancyStatusHistory: 'VacancyStatusHistory',
   VacancyConfig: 'VacancyConfig',
   Notification: 'Notification',
+  Invoice: 'Invoice',
+  InvoiceFolioCounter: 'InvoiceFolioCounter',
   Client: 'Client',
   NotificationConfig: 'NotificationConfig',
   VacancyTernaHistory: 'VacancyTernaHistory',
@@ -428,7 +430,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "tenant" | "role" | "userRole" | "rolePermission" | "permission" | "sector" | "subsector" | "leadOrigin" | "lead" | "leadStatusHistory" | "contact" | "interaction" | "attachment" | "vacancy" | "vacancyChecklistItem" | "vacancyCandidate" | "vacancyCandidateMatch" | "vacancyStatusHistory" | "vacancyConfig" | "notification" | "client" | "notificationConfig" | "vacancyTernaHistory" | "vacancyTernaHistoryCandidate" | "recruiterAssignmentHistory"
+    modelProps: "user" | "session" | "account" | "verification" | "tenant" | "role" | "userRole" | "rolePermission" | "permission" | "sector" | "subsector" | "leadOrigin" | "lead" | "leadStatusHistory" | "contact" | "interaction" | "attachment" | "vacancy" | "vacancyChecklistItem" | "vacancyCandidate" | "vacancyCandidateMatch" | "vacancyStatusHistory" | "vacancyConfig" | "notification" | "invoice" | "invoiceFolioCounter" | "client" | "notificationConfig" | "vacancyTernaHistory" | "vacancyTernaHistoryCandidate" | "recruiterAssignmentHistory"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2208,6 +2210,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Invoice: {
+      payload: Prisma.$InvoicePayload<ExtArgs>
+      fields: Prisma.InvoiceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InvoiceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InvoiceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePayload>
+        }
+        findFirst: {
+          args: Prisma.InvoiceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InvoiceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePayload>
+        }
+        findMany: {
+          args: Prisma.InvoiceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePayload>[]
+        }
+        create: {
+          args: Prisma.InvoiceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePayload>
+        }
+        createMany: {
+          args: Prisma.InvoiceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InvoiceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePayload>[]
+        }
+        delete: {
+          args: Prisma.InvoiceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePayload>
+        }
+        update: {
+          args: Prisma.InvoiceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePayload>
+        }
+        deleteMany: {
+          args: Prisma.InvoiceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InvoiceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InvoiceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePayload>[]
+        }
+        upsert: {
+          args: Prisma.InvoiceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePayload>
+        }
+        aggregate: {
+          args: Prisma.InvoiceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInvoice>
+        }
+        groupBy: {
+          args: Prisma.InvoiceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InvoiceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InvoiceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InvoiceCountAggregateOutputType> | number
+        }
+      }
+    }
+    InvoiceFolioCounter: {
+      payload: Prisma.$InvoiceFolioCounterPayload<ExtArgs>
+      fields: Prisma.InvoiceFolioCounterFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InvoiceFolioCounterFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceFolioCounterPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InvoiceFolioCounterFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceFolioCounterPayload>
+        }
+        findFirst: {
+          args: Prisma.InvoiceFolioCounterFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceFolioCounterPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InvoiceFolioCounterFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceFolioCounterPayload>
+        }
+        findMany: {
+          args: Prisma.InvoiceFolioCounterFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceFolioCounterPayload>[]
+        }
+        create: {
+          args: Prisma.InvoiceFolioCounterCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceFolioCounterPayload>
+        }
+        createMany: {
+          args: Prisma.InvoiceFolioCounterCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InvoiceFolioCounterCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceFolioCounterPayload>[]
+        }
+        delete: {
+          args: Prisma.InvoiceFolioCounterDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceFolioCounterPayload>
+        }
+        update: {
+          args: Prisma.InvoiceFolioCounterUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceFolioCounterPayload>
+        }
+        deleteMany: {
+          args: Prisma.InvoiceFolioCounterDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InvoiceFolioCounterUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InvoiceFolioCounterUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceFolioCounterPayload>[]
+        }
+        upsert: {
+          args: Prisma.InvoiceFolioCounterUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoiceFolioCounterPayload>
+        }
+        aggregate: {
+          args: Prisma.InvoiceFolioCounterAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInvoiceFolioCounter>
+        }
+        groupBy: {
+          args: Prisma.InvoiceFolioCounterGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InvoiceFolioCounterGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InvoiceFolioCounterCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InvoiceFolioCounterCountAggregateOutputType> | number
+        }
+      }
+    }
     Client: {
       payload: Prisma.$ClientPayload<ExtArgs>
       fields: Prisma.ClientFieldRefs
@@ -2861,6 +3011,7 @@ export const AttachmentScalarFieldEnum = {
   interactionId: 'interactionId',
   vacancyId: 'vacancyId',
   vacancyCandidateId: 'vacancyCandidateId',
+  invoiceId: 'invoiceId',
   isValidated: 'isValidated',
   validatedById: 'validatedById',
   validatedAt: 'validatedAt',
@@ -2906,6 +3057,7 @@ export const VacancyScalarFieldEnum = {
   placementConfirmedAt: 'placementConfirmedAt',
   commissionDate: 'commissionDate',
   congratsEmailSent: 'congratsEmailSent',
+  hiredCandidateId: 'hiredCandidateId',
   isWarranty: 'isWarranty',
   originVacancyId: 'originVacancyId',
   tenantId: 'tenantId',
@@ -3038,6 +3190,59 @@ export const NotificationScalarFieldEnum = {
 } as const
 
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const InvoiceScalarFieldEnum = {
+  id: 'id',
+  folio: 'folio',
+  type: 'type',
+  paymentType: 'paymentType',
+  clientId: 'clientId',
+  vacancyId: 'vacancyId',
+  anticipoInvoiceId: 'anticipoInvoiceId',
+  candidateId: 'candidateId',
+  candidateName: 'candidateName',
+  hunterId: 'hunterId',
+  hunterName: 'hunterName',
+  razonSocial: 'razonSocial',
+  nombreComercial: 'nombreComercial',
+  ubicacion: 'ubicacion',
+  figura: 'figura',
+  rfc: 'rfc',
+  codigoPostal: 'codigoPostal',
+  regimen: 'regimen',
+  posicion: 'posicion',
+  currency: 'currency',
+  salario: 'salario',
+  feeType: 'feeType',
+  feeValue: 'feeValue',
+  subtotal: 'subtotal',
+  ivaRate: 'ivaRate',
+  ivaAmount: 'ivaAmount',
+  anticipoDeduccion: 'anticipoDeduccion',
+  total: 'total',
+  issuedAt: 'issuedAt',
+  paymentDate: 'paymentDate',
+  mesPlacement: 'mesPlacement',
+  status: 'status',
+  banco: 'banco',
+  tenantId: 'tenantId',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeof InvoiceScalarFieldEnum]
+
+
+export const InvoiceFolioCounterScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  prefix: 'prefix',
+  counter: 'counter'
+} as const
+
+export type InvoiceFolioCounterScalarFieldEnum = (typeof InvoiceFolioCounterScalarFieldEnum)[keyof typeof InvoiceFolioCounterScalarFieldEnum]
 
 
 export const ClientScalarFieldEnum = {
@@ -3454,6 +3659,62 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 
 
 /**
+ * Reference to a field of type 'InvoiceType'
+ */
+export type EnumInvoiceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvoiceType'>
+    
+
+
+/**
+ * Reference to a field of type 'InvoiceType[]'
+ */
+export type ListEnumInvoiceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvoiceType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'InvoicePaymentType'
+ */
+export type EnumInvoicePaymentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvoicePaymentType'>
+    
+
+
+/**
+ * Reference to a field of type 'InvoicePaymentType[]'
+ */
+export type ListEnumInvoicePaymentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvoicePaymentType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'FeeType'
+ */
+export type EnumFeeTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FeeType'>
+    
+
+
+/**
+ * Reference to a field of type 'FeeType[]'
+ */
+export type ListEnumFeeTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FeeType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'InvoiceStatus'
+ */
+export type EnumInvoiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvoiceStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'InvoiceStatus[]'
+ */
+export type ListEnumInvoiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvoiceStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'PaymentScheme'
  */
 export type EnumPaymentSchemeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentScheme'>
@@ -3478,20 +3739,6 @@ export type EnumAdvanceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
  * Reference to a field of type 'AdvanceType[]'
  */
 export type ListEnumAdvanceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdvanceType[]'>
-    
-
-
-/**
- * Reference to a field of type 'FeeType'
- */
-export type EnumFeeTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FeeType'>
-    
-
-
-/**
- * Reference to a field of type 'FeeType[]'
- */
-export type ListEnumFeeTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FeeType[]'>
     
 
 
@@ -3641,6 +3888,8 @@ export type GlobalOmitConfig = {
   vacancyStatusHistory?: Prisma.VacancyStatusHistoryOmit
   vacancyConfig?: Prisma.VacancyConfigOmit
   notification?: Prisma.NotificationOmit
+  invoice?: Prisma.InvoiceOmit
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterOmit
   client?: Prisma.ClientOmit
   notificationConfig?: Prisma.NotificationConfigOmit
   vacancyTernaHistory?: Prisma.VacancyTernaHistoryOmit

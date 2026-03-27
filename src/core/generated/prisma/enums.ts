@@ -58,7 +58,8 @@ export const AttachableType = {
   CONTACT: 'CONTACT',
   INTERACTION: 'INTERACTION',
   VACANCY: 'VACANCY',
-  VACANCY_CANDIDATE: 'VACANCY_CANDIDATE'
+  VACANCY_CANDIDATE: 'VACANCY_CANDIDATE',
+  INVOICE: 'INVOICE'
 } as const
 
 export type AttachableType = (typeof AttachableType)[keyof typeof AttachableType]
@@ -68,6 +69,7 @@ export const AttachmentSubType = {
   JOB_DESCRIPTION: 'JOB_DESCRIPTION',
   PERFIL_MUESTRA: 'PERFIL_MUESTRA',
   CV: 'CV',
+  COMPLEMENTO_PAGO: 'COMPLEMENTO_PAGO',
   OTHER: 'OTHER'
 } as const
 
@@ -172,6 +174,31 @@ export const FeeType = {
 } as const
 
 export type FeeType = (typeof FeeType)[keyof typeof FeeType]
+
+
+export const InvoiceType = {
+  ANTICIPO: 'ANTICIPO',
+  FULL: 'FULL',
+  LIQUIDACION: 'LIQUIDACION'
+} as const
+
+export type InvoiceType = (typeof InvoiceType)[keyof typeof InvoiceType]
+
+
+export const InvoicePaymentType = {
+  PUE: 'PUE',
+  PPD: 'PPD'
+} as const
+
+export type InvoicePaymentType = (typeof InvoicePaymentType)[keyof typeof InvoicePaymentType]
+
+
+export const InvoiceStatus = {
+  POR_COBRAR: 'POR_COBRAR',
+  PAGADA: 'PAGADA'
+} as const
+
+export type InvoiceStatus = (typeof InvoiceStatus)[keyof typeof InvoiceStatus]
 
 
 export const InactiveTimeUnit = {

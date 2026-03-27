@@ -204,6 +204,8 @@ export type TenantWhereInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryListRelationFilter
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryListRelationFilter
   notificationConfig?: Prisma.XOR<Prisma.NotificationConfigNullableScalarRelationFilter, Prisma.NotificationConfigWhereInput> | null
+  invoices?: Prisma.InvoiceListRelationFilter
+  invoiceFolioCounter?: Prisma.XOR<Prisma.InvoiceFolioCounterNullableScalarRelationFilter, Prisma.InvoiceFolioCounterWhereInput> | null
 }
 
 export type TenantOrderByWithRelationInput = {
@@ -234,6 +236,8 @@ export type TenantOrderByWithRelationInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryOrderByRelationAggregateInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryOrderByRelationAggregateInput
   notificationConfig?: Prisma.NotificationConfigOrderByWithRelationInput
+  invoices?: Prisma.InvoiceOrderByRelationAggregateInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterOrderByWithRelationInput
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -267,6 +271,8 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryListRelationFilter
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryListRelationFilter
   notificationConfig?: Prisma.XOR<Prisma.NotificationConfigNullableScalarRelationFilter, Prisma.NotificationConfigWhereInput> | null
+  invoices?: Prisma.InvoiceListRelationFilter
+  invoiceFolioCounter?: Prisma.XOR<Prisma.InvoiceFolioCounterNullableScalarRelationFilter, Prisma.InvoiceFolioCounterWhereInput> | null
 }, "id" | "name" | "slug">
 
 export type TenantOrderByWithAggregationInput = {
@@ -319,6 +325,8 @@ export type TenantCreateInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateInput = {
@@ -349,6 +357,8 @@ export type TenantUncheckedCreateInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUpdateInput = {
@@ -379,6 +389,8 @@ export type TenantUpdateInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateInput = {
@@ -409,6 +421,8 @@ export type TenantUncheckedUpdateInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
@@ -733,6 +747,34 @@ export type TenantUpdateOneRequiredWithoutNotificationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutNotificationsInput, Prisma.TenantUpdateWithoutNotificationsInput>, Prisma.TenantUncheckedUpdateWithoutNotificationsInput>
 }
 
+export type TenantCreateNestedOneWithoutInvoicesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInvoicesInput, Prisma.TenantUncheckedCreateWithoutInvoicesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInvoicesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutInvoicesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInvoicesInput, Prisma.TenantUncheckedCreateWithoutInvoicesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInvoicesInput
+  upsert?: Prisma.TenantUpsertWithoutInvoicesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutInvoicesInput, Prisma.TenantUpdateWithoutInvoicesInput>, Prisma.TenantUncheckedUpdateWithoutInvoicesInput>
+}
+
+export type TenantCreateNestedOneWithoutInvoiceFolioCounterInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInvoiceFolioCounterInput, Prisma.TenantUncheckedCreateWithoutInvoiceFolioCounterInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInvoiceFolioCounterInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutInvoiceFolioCounterNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInvoiceFolioCounterInput, Prisma.TenantUncheckedCreateWithoutInvoiceFolioCounterInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInvoiceFolioCounterInput
+  upsert?: Prisma.TenantUpsertWithoutInvoiceFolioCounterInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutInvoiceFolioCounterInput, Prisma.TenantUpdateWithoutInvoiceFolioCounterInput>, Prisma.TenantUncheckedUpdateWithoutInvoiceFolioCounterInput>
+}
+
 export type TenantCreateNestedOneWithoutClientsInput = {
   create?: Prisma.XOR<Prisma.TenantCreateWithoutClientsInput, Prisma.TenantUncheckedCreateWithoutClientsInput>
   connectOrCreate?: Prisma.TenantCreateOrConnectWithoutClientsInput
@@ -816,6 +858,8 @@ export type TenantCreateWithoutSessionsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutSessionsInput = {
@@ -845,6 +889,8 @@ export type TenantUncheckedCreateWithoutSessionsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSessionsInput = {
@@ -890,6 +936,8 @@ export type TenantUpdateWithoutSessionsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutSessionsInput = {
@@ -919,6 +967,8 @@ export type TenantUncheckedUpdateWithoutSessionsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutRolesInput = {
@@ -948,6 +998,8 @@ export type TenantCreateWithoutRolesInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutRolesInput = {
@@ -977,6 +1029,8 @@ export type TenantUncheckedCreateWithoutRolesInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutRolesInput = {
@@ -1022,6 +1076,8 @@ export type TenantUpdateWithoutRolesInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutRolesInput = {
@@ -1051,6 +1107,8 @@ export type TenantUncheckedUpdateWithoutRolesInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutUserRolesInput = {
@@ -1080,6 +1138,8 @@ export type TenantCreateWithoutUserRolesInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutUserRolesInput = {
@@ -1109,6 +1169,8 @@ export type TenantUncheckedCreateWithoutUserRolesInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutUserRolesInput = {
@@ -1154,6 +1216,8 @@ export type TenantUpdateWithoutUserRolesInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutUserRolesInput = {
@@ -1183,6 +1247,8 @@ export type TenantUncheckedUpdateWithoutUserRolesInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutSectorsInput = {
@@ -1212,6 +1278,8 @@ export type TenantCreateWithoutSectorsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutSectorsInput = {
@@ -1241,6 +1309,8 @@ export type TenantUncheckedCreateWithoutSectorsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSectorsInput = {
@@ -1286,6 +1356,8 @@ export type TenantUpdateWithoutSectorsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutSectorsInput = {
@@ -1315,6 +1387,8 @@ export type TenantUncheckedUpdateWithoutSectorsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutSubsectorsInput = {
@@ -1344,6 +1418,8 @@ export type TenantCreateWithoutSubsectorsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutSubsectorsInput = {
@@ -1373,6 +1449,8 @@ export type TenantUncheckedCreateWithoutSubsectorsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSubsectorsInput = {
@@ -1418,6 +1496,8 @@ export type TenantUpdateWithoutSubsectorsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutSubsectorsInput = {
@@ -1447,6 +1527,8 @@ export type TenantUncheckedUpdateWithoutSubsectorsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutLeadOriginsInput = {
@@ -1476,6 +1558,8 @@ export type TenantCreateWithoutLeadOriginsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutLeadOriginsInput = {
@@ -1505,6 +1589,8 @@ export type TenantUncheckedCreateWithoutLeadOriginsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutLeadOriginsInput = {
@@ -1550,6 +1636,8 @@ export type TenantUpdateWithoutLeadOriginsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutLeadOriginsInput = {
@@ -1579,6 +1667,8 @@ export type TenantUncheckedUpdateWithoutLeadOriginsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutLeadsInput = {
@@ -1608,6 +1698,8 @@ export type TenantCreateWithoutLeadsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutLeadsInput = {
@@ -1637,6 +1729,8 @@ export type TenantUncheckedCreateWithoutLeadsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutLeadsInput = {
@@ -1682,6 +1776,8 @@ export type TenantUpdateWithoutLeadsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutLeadsInput = {
@@ -1711,6 +1807,8 @@ export type TenantUncheckedUpdateWithoutLeadsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutLeadStatusHistoryInput = {
@@ -1740,6 +1838,8 @@ export type TenantCreateWithoutLeadStatusHistoryInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutLeadStatusHistoryInput = {
@@ -1769,6 +1869,8 @@ export type TenantUncheckedCreateWithoutLeadStatusHistoryInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutLeadStatusHistoryInput = {
@@ -1814,6 +1916,8 @@ export type TenantUpdateWithoutLeadStatusHistoryInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutLeadStatusHistoryInput = {
@@ -1843,6 +1947,8 @@ export type TenantUncheckedUpdateWithoutLeadStatusHistoryInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutContactsInput = {
@@ -1872,6 +1978,8 @@ export type TenantCreateWithoutContactsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutContactsInput = {
@@ -1901,6 +2009,8 @@ export type TenantUncheckedCreateWithoutContactsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutContactsInput = {
@@ -1946,6 +2056,8 @@ export type TenantUpdateWithoutContactsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutContactsInput = {
@@ -1975,6 +2087,8 @@ export type TenantUncheckedUpdateWithoutContactsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInteractionsInput = {
@@ -2004,6 +2118,8 @@ export type TenantCreateWithoutInteractionsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInteractionsInput = {
@@ -2033,6 +2149,8 @@ export type TenantUncheckedCreateWithoutInteractionsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInteractionsInput = {
@@ -2078,6 +2196,8 @@ export type TenantUpdateWithoutInteractionsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInteractionsInput = {
@@ -2107,6 +2227,8 @@ export type TenantUncheckedUpdateWithoutInteractionsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutAttachmentsInput = {
@@ -2136,6 +2258,8 @@ export type TenantCreateWithoutAttachmentsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAttachmentsInput = {
@@ -2165,6 +2289,8 @@ export type TenantUncheckedCreateWithoutAttachmentsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAttachmentsInput = {
@@ -2210,6 +2336,8 @@ export type TenantUpdateWithoutAttachmentsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAttachmentsInput = {
@@ -2239,6 +2367,8 @@ export type TenantUncheckedUpdateWithoutAttachmentsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutVacanciesInput = {
@@ -2268,6 +2398,8 @@ export type TenantCreateWithoutVacanciesInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutVacanciesInput = {
@@ -2297,6 +2429,8 @@ export type TenantUncheckedCreateWithoutVacanciesInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutVacanciesInput = {
@@ -2342,6 +2476,8 @@ export type TenantUpdateWithoutVacanciesInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutVacanciesInput = {
@@ -2371,6 +2507,8 @@ export type TenantUncheckedUpdateWithoutVacanciesInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutVacancyChecklistItemsInput = {
@@ -2400,6 +2538,8 @@ export type TenantCreateWithoutVacancyChecklistItemsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutVacancyChecklistItemsInput = {
@@ -2429,6 +2569,8 @@ export type TenantUncheckedCreateWithoutVacancyChecklistItemsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutVacancyChecklistItemsInput = {
@@ -2474,6 +2616,8 @@ export type TenantUpdateWithoutVacancyChecklistItemsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutVacancyChecklistItemsInput = {
@@ -2503,6 +2647,8 @@ export type TenantUncheckedUpdateWithoutVacancyChecklistItemsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutVacancyCandidatesInput = {
@@ -2532,6 +2678,8 @@ export type TenantCreateWithoutVacancyCandidatesInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutVacancyCandidatesInput = {
@@ -2561,6 +2709,8 @@ export type TenantUncheckedCreateWithoutVacancyCandidatesInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutVacancyCandidatesInput = {
@@ -2606,6 +2756,8 @@ export type TenantUpdateWithoutVacancyCandidatesInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutVacancyCandidatesInput = {
@@ -2635,6 +2787,8 @@ export type TenantUncheckedUpdateWithoutVacancyCandidatesInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutVacancyCandidateMatchsInput = {
@@ -2664,6 +2818,8 @@ export type TenantCreateWithoutVacancyCandidateMatchsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutVacancyCandidateMatchsInput = {
@@ -2693,6 +2849,8 @@ export type TenantUncheckedCreateWithoutVacancyCandidateMatchsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutVacancyCandidateMatchsInput = {
@@ -2738,6 +2896,8 @@ export type TenantUpdateWithoutVacancyCandidateMatchsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutVacancyCandidateMatchsInput = {
@@ -2767,6 +2927,8 @@ export type TenantUncheckedUpdateWithoutVacancyCandidateMatchsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutVacancyStatusHistoryInput = {
@@ -2796,6 +2958,8 @@ export type TenantCreateWithoutVacancyStatusHistoryInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutVacancyStatusHistoryInput = {
@@ -2825,6 +2989,8 @@ export type TenantUncheckedCreateWithoutVacancyStatusHistoryInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutVacancyStatusHistoryInput = {
@@ -2870,6 +3036,8 @@ export type TenantUpdateWithoutVacancyStatusHistoryInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutVacancyStatusHistoryInput = {
@@ -2899,6 +3067,8 @@ export type TenantUncheckedUpdateWithoutVacancyStatusHistoryInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutVacancyConfigInput = {
@@ -2928,6 +3098,8 @@ export type TenantCreateWithoutVacancyConfigInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutVacancyConfigInput = {
@@ -2957,6 +3129,8 @@ export type TenantUncheckedCreateWithoutVacancyConfigInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutVacancyConfigInput = {
@@ -3002,6 +3176,8 @@ export type TenantUpdateWithoutVacancyConfigInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutVacancyConfigInput = {
@@ -3031,6 +3207,8 @@ export type TenantUncheckedUpdateWithoutVacancyConfigInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutNotificationsInput = {
@@ -3060,6 +3238,8 @@ export type TenantCreateWithoutNotificationsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutNotificationsInput = {
@@ -3089,6 +3269,8 @@ export type TenantUncheckedCreateWithoutNotificationsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutNotificationsInput = {
@@ -3134,6 +3316,8 @@ export type TenantUpdateWithoutNotificationsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutNotificationsInput = {
@@ -3163,6 +3347,288 @@ export type TenantUncheckedUpdateWithoutNotificationsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutInvoicesInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
+  vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
+  recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
+  notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutInvoicesInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginUncheckedCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
+  vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
+  recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
+  notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutInvoicesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInvoicesInput, Prisma.TenantUncheckedCreateWithoutInvoicesInput>
+}
+
+export type TenantUpsertWithoutInvoicesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutInvoicesInput, Prisma.TenantUncheckedUpdateWithoutInvoicesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInvoicesInput, Prisma.TenantUncheckedCreateWithoutInvoicesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutInvoicesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutInvoicesInput, Prisma.TenantUncheckedUpdateWithoutInvoicesInput>
+}
+
+export type TenantUpdateWithoutInvoicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
+  vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
+  recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
+  notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutInvoicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUncheckedUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
+  vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutInvoiceFolioCounterInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutActiveTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  clients?: Prisma.ClientCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
+  vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
+  recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
+  notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutInvoiceFolioCounterInput = {
+  id?: string
+  name: string
+  slug: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutActiveTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  leads?: Prisma.LeadUncheckedCreateNestedManyWithoutTenantInput
+  sectors?: Prisma.SectorUncheckedCreateNestedManyWithoutTenantInput
+  subsectors?: Prisma.SubsectorUncheckedCreateNestedManyWithoutTenantInput
+  leadOrigins?: Prisma.LeadOriginUncheckedCreateNestedManyWithoutTenantInput
+  contacts?: Prisma.ContactUncheckedCreateNestedManyWithoutTenantInput
+  interactions?: Prisma.InteractionUncheckedCreateNestedManyWithoutTenantInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  clients?: Prisma.ClientUncheckedCreateNestedManyWithoutTenantInput
+  vacancies?: Prisma.VacancyUncheckedCreateNestedManyWithoutTenantInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedCreateNestedManyWithoutTenantInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutTenantInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
+  vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
+  recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
+  notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutInvoiceFolioCounterInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInvoiceFolioCounterInput, Prisma.TenantUncheckedCreateWithoutInvoiceFolioCounterInput>
+}
+
+export type TenantUpsertWithoutInvoiceFolioCounterInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutInvoiceFolioCounterInput, Prisma.TenantUncheckedUpdateWithoutInvoiceFolioCounterInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInvoiceFolioCounterInput, Prisma.TenantUncheckedCreateWithoutInvoiceFolioCounterInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutInvoiceFolioCounterInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutInvoiceFolioCounterInput, Prisma.TenantUncheckedUpdateWithoutInvoiceFolioCounterInput>
+}
+
+export type TenantUpdateWithoutInvoiceFolioCounterInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutActiveTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  clients?: Prisma.ClientUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
+  vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
+  recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
+  notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutInvoiceFolioCounterInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutActiveTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  leads?: Prisma.LeadUncheckedUpdateManyWithoutTenantNestedInput
+  sectors?: Prisma.SectorUncheckedUpdateManyWithoutTenantNestedInput
+  subsectors?: Prisma.SubsectorUncheckedUpdateManyWithoutTenantNestedInput
+  leadOrigins?: Prisma.LeadOriginUncheckedUpdateManyWithoutTenantNestedInput
+  contacts?: Prisma.ContactUncheckedUpdateManyWithoutTenantNestedInput
+  interactions?: Prisma.InteractionUncheckedUpdateManyWithoutTenantNestedInput
+  leadStatusHistory?: Prisma.LeadStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  clients?: Prisma.ClientUncheckedUpdateManyWithoutTenantNestedInput
+  vacancies?: Prisma.VacancyUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyChecklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyCandidateMatchs?: Prisma.VacancyCandidateMatchUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyStatusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
+  vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutClientsInput = {
@@ -3192,6 +3658,8 @@ export type TenantCreateWithoutClientsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutClientsInput = {
@@ -3221,6 +3689,8 @@ export type TenantUncheckedCreateWithoutClientsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutClientsInput = {
@@ -3266,6 +3736,8 @@ export type TenantUpdateWithoutClientsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutClientsInput = {
@@ -3295,6 +3767,8 @@ export type TenantUncheckedUpdateWithoutClientsInput = {
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutNotificationConfigInput = {
@@ -3324,6 +3798,8 @@ export type TenantCreateWithoutNotificationConfigInput = {
   vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutNotificationConfigInput = {
@@ -3353,6 +3829,8 @@ export type TenantUncheckedCreateWithoutNotificationConfigInput = {
   vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutNotificationConfigInput = {
@@ -3398,6 +3876,8 @@ export type TenantUpdateWithoutNotificationConfigInput = {
   vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutNotificationConfigInput = {
@@ -3427,6 +3907,8 @@ export type TenantUncheckedUpdateWithoutNotificationConfigInput = {
   vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutVacancyTernaHistoriesInput = {
@@ -3456,6 +3938,8 @@ export type TenantCreateWithoutVacancyTernaHistoriesInput = {
   vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutVacancyTernaHistoriesInput = {
@@ -3485,6 +3969,8 @@ export type TenantUncheckedCreateWithoutVacancyTernaHistoriesInput = {
   vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutVacancyTernaHistoriesInput = {
@@ -3530,6 +4016,8 @@ export type TenantUpdateWithoutVacancyTernaHistoriesInput = {
   vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutVacancyTernaHistoriesInput = {
@@ -3559,6 +4047,8 @@ export type TenantUncheckedUpdateWithoutVacancyTernaHistoriesInput = {
   vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutRecruiterAssignmentHistoryInput = {
@@ -3588,6 +4078,8 @@ export type TenantCreateWithoutRecruiterAssignmentHistoryInput = {
   vacancyConfig?: Prisma.VacancyConfigCreateNestedOneWithoutTenantInput
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterCreateNestedOneWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutRecruiterAssignmentHistoryInput = {
@@ -3617,6 +4109,8 @@ export type TenantUncheckedCreateWithoutRecruiterAssignmentHistoryInput = {
   vacancyConfig?: Prisma.VacancyConfigUncheckedCreateNestedOneWithoutTenantInput
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutTenantInput
   notificationConfig?: Prisma.NotificationConfigUncheckedCreateNestedOneWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedCreateNestedOneWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutRecruiterAssignmentHistoryInput = {
@@ -3662,6 +4156,8 @@ export type TenantUpdateWithoutRecruiterAssignmentHistoryInput = {
   vacancyConfig?: Prisma.VacancyConfigUpdateOneWithoutTenantNestedInput
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUpdateOneWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutRecruiterAssignmentHistoryInput = {
@@ -3691,6 +4187,8 @@ export type TenantUncheckedUpdateWithoutRecruiterAssignmentHistoryInput = {
   vacancyConfig?: Prisma.VacancyConfigUncheckedUpdateOneWithoutTenantNestedInput
   vacancyTernaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutTenantNestedInput
   notificationConfig?: Prisma.NotificationConfigUncheckedUpdateOneWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  invoiceFolioCounter?: Prisma.InvoiceFolioCounterUncheckedUpdateOneWithoutTenantNestedInput
 }
 
 
@@ -3719,6 +4217,7 @@ export type TenantCountOutputType = {
   vacancyStatusHistory: number
   vacancyTernaHistories: number
   recruiterAssignmentHistory: number
+  invoices: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3742,6 +4241,7 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   vacancyStatusHistory?: boolean | TenantCountOutputTypeCountVacancyStatusHistoryArgs
   vacancyTernaHistories?: boolean | TenantCountOutputTypeCountVacancyTernaHistoriesArgs
   recruiterAssignmentHistory?: boolean | TenantCountOutputTypeCountRecruiterAssignmentHistoryArgs
+  invoices?: boolean | TenantCountOutputTypeCountInvoicesArgs
 }
 
 /**
@@ -3894,6 +4394,13 @@ export type TenantCountOutputTypeCountRecruiterAssignmentHistoryArgs<ExtArgs ext
   where?: Prisma.RecruiterAssignmentHistoryWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountInvoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvoiceWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -3923,6 +4430,8 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   vacancyTernaHistories?: boolean | Prisma.Tenant$vacancyTernaHistoriesArgs<ExtArgs>
   recruiterAssignmentHistory?: boolean | Prisma.Tenant$recruiterAssignmentHistoryArgs<ExtArgs>
   notificationConfig?: boolean | Prisma.Tenant$notificationConfigArgs<ExtArgs>
+  invoices?: boolean | Prisma.Tenant$invoicesArgs<ExtArgs>
+  invoiceFolioCounter?: boolean | Prisma.Tenant$invoiceFolioCounterArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
 
@@ -3974,6 +4483,8 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   vacancyTernaHistories?: boolean | Prisma.Tenant$vacancyTernaHistoriesArgs<ExtArgs>
   recruiterAssignmentHistory?: boolean | Prisma.Tenant$recruiterAssignmentHistoryArgs<ExtArgs>
   notificationConfig?: boolean | Prisma.Tenant$notificationConfigArgs<ExtArgs>
+  invoices?: boolean | Prisma.Tenant$invoicesArgs<ExtArgs>
+  invoiceFolioCounter?: boolean | Prisma.Tenant$invoiceFolioCounterArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TenantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -4004,6 +4515,8 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     vacancyTernaHistories: Prisma.$VacancyTernaHistoryPayload<ExtArgs>[]
     recruiterAssignmentHistory: Prisma.$RecruiterAssignmentHistoryPayload<ExtArgs>[]
     notificationConfig: Prisma.$NotificationConfigPayload<ExtArgs> | null
+    invoices: Prisma.$InvoicePayload<ExtArgs>[]
+    invoiceFolioCounter: Prisma.$InvoiceFolioCounterPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4427,6 +4940,8 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   vacancyTernaHistories<T extends Prisma.Tenant$vacancyTernaHistoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$vacancyTernaHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyTernaHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   recruiterAssignmentHistory<T extends Prisma.Tenant$recruiterAssignmentHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$recruiterAssignmentHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecruiterAssignmentHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notificationConfig<T extends Prisma.Tenant$notificationConfigArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$notificationConfigArgs<ExtArgs>>): Prisma.Prisma__NotificationConfigClient<runtime.Types.Result.GetResult<Prisma.$NotificationConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  invoices<T extends Prisma.Tenant$invoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  invoiceFolioCounter<T extends Prisma.Tenant$invoiceFolioCounterArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$invoiceFolioCounterArgs<ExtArgs>>): Prisma.Prisma__InvoiceFolioCounterClient<runtime.Types.Result.GetResult<Prisma.$InvoiceFolioCounterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5364,6 +5879,49 @@ export type Tenant$notificationConfigArgs<ExtArgs extends runtime.Types.Extensio
    */
   include?: Prisma.NotificationConfigInclude<ExtArgs> | null
   where?: Prisma.NotificationConfigWhereInput
+}
+
+/**
+ * Tenant.invoices
+ */
+export type Tenant$invoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Invoice
+   */
+  select?: Prisma.InvoiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Invoice
+   */
+  omit?: Prisma.InvoiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceInclude<ExtArgs> | null
+  where?: Prisma.InvoiceWhereInput
+  orderBy?: Prisma.InvoiceOrderByWithRelationInput | Prisma.InvoiceOrderByWithRelationInput[]
+  cursor?: Prisma.InvoiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvoiceScalarFieldEnum | Prisma.InvoiceScalarFieldEnum[]
+}
+
+/**
+ * Tenant.invoiceFolioCounter
+ */
+export type Tenant$invoiceFolioCounterArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InvoiceFolioCounter
+   */
+  select?: Prisma.InvoiceFolioCounterSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InvoiceFolioCounter
+   */
+  omit?: Prisma.InvoiceFolioCounterOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceFolioCounterInclude<ExtArgs> | null
+  where?: Prisma.InvoiceFolioCounterWhereInput
 }
 
 /**

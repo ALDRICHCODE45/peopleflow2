@@ -61,6 +61,9 @@ type VacancyWithRelations = {
   isWarranty: boolean;
   originVacancyId: string | null;
   warrantyVacancy: { id: string } | null;
+  // Candidato contratado (FK directa)
+  hiredCandidateId: string | null;
+  hiredCandidate: { id: string; firstName: string; lastName: string; email: string | null } | null;
   tenantId: string;
   createdById: string | null;
   createdAt: Date;
@@ -81,6 +84,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       recruiter: { select: { name: true, email: true, avatar: true } },
       client: { select: { nombre: true, warrantyMonths: true } },
       warrantyVacancy: { select: { id: true } },
+      hiredCandidate: { select: { id: true, firstName: true, lastName: true, email: true } },
     } as const;
   }
 
@@ -221,6 +225,16 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       placementConfirmedAt: record.placementConfirmedAt,
       commissionDate: record.commissionDate,
       congratsEmailSent: record.congratsEmailSent,
+      // Candidato contratado
+      hiredCandidateId: record.hiredCandidateId,
+      hiredCandidate: record.hiredCandidate
+        ? {
+            id: record.hiredCandidate.id,
+            firstName: record.hiredCandidate.firstName,
+            lastName: record.hiredCandidate.lastName,
+            email: record.hiredCandidate.email,
+          }
+        : null,
       isWarranty: record.isWarranty,
       originVacancyId: record.originVacancyId,
       warrantyVacancyId: record.warrantyVacancy?.id ?? null,

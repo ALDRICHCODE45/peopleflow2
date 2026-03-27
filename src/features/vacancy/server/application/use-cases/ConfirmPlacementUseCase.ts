@@ -7,6 +7,7 @@ export interface ConfirmPlacementInput {
   tenantId: string;
   changedById: string;
   congratsEmailSent?: boolean;
+  hiredCandidateId?: string; // ID del candidato que se está contratando
 }
 
 export interface ConfirmPlacementOutput {
@@ -51,6 +52,7 @@ export class ConfirmPlacementUseCase {
           placementConfirmedAt: new Date(),
           commissionDate,
           congratsEmailSent: input.congratsEmailSent ?? false,
+          hiredCandidateId: input.hiredCandidateId ?? null, // FK al candidato contratado
         }),
         this.statusHistoryRepo.create({
           vacancyId,

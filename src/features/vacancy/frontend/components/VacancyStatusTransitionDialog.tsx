@@ -100,7 +100,7 @@ export function VacancyStatusTransitionDialog({
 
   const isFixedSalary = vacancySalaryType === "FIXED";
   const needsSalaryAndDate = isPrePlacement || isPlacementFromFollowUp || isPlacementFromPrePlacement;
-  const needsHiredCandidate = isPrePlacement || isPlacementFromFollowUp;
+  const needsHiredCandidate = isPrePlacement || isPlacementFromFollowUp || isPlacementFromPrePlacement;
   const needsReason = isRollbackToHunting || isTerminal;
   const needsNewTargetDate = isRollbackToHunting;
   const showCongratsSwitch = isPlacementFromFollowUp || isPlacementFromPrePlacement;

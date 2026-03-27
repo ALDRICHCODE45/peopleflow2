@@ -39,3 +39,13 @@ export const clientsQueryKeys = {
   detail: (tenantId: string, clientId: string) =>
     ["clients", "detail", tenantId, clientId] as const,
 };
+
+export const invoiceQueryKeys = {
+  all: (tenantId: string) => ["invoices", "paginated", tenantId] as const,
+  detail: (tenantId: string, invoiceId: string) =>
+    ["invoices", "detail", tenantId, invoiceId] as const,
+  availableAnticipos: (tenantId: string, clientId: string) =>
+    ["invoices", "available-anticipos", tenantId, clientId] as const,
+  vacancyOptions: (tenantId: string, clientId?: string) =>
+    ["invoices", "vacancy-options", tenantId, clientId ?? "all"] as const,
+};
