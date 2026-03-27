@@ -477,6 +477,41 @@ export function createInvoiceColumns(
       size: 6,
       enableSorting: false,
     },
+    // ── Complemento ─────────────────────────────────────
+    {
+      header: "Complemento",
+      accessorKey: "hasComplemento",
+      cell: ({ row }) => {
+        const invoice = row.original;
+        if (invoice.paymentType !== "PPD") return <EmptyCell />;
+        if (!invoice.complemento) {
+          return (
+            <Badge
+              className="bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300 font-medium rounded-sm border-0"
+            >
+              Pendiente
+            </Badge>
+          );
+        }
+        return (
+          <a
+            href={invoice.complemento.fileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+          >
+            <Badge
+              className="bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300 font-medium rounded-sm border-0"
+            >
+              Ver PDF
+            </Badge>
+          </a>
+        );
+      },
+      size: 6,
+      enableSorting: false,
+    },
     // ── Acciones ──────────────────────────────────────────
     {
       id: "actions",
@@ -501,4 +536,5 @@ export const defaultInvoiceColumnVisibility: Record<string, boolean> = {
   regimen: false,
   banco: false,
   mesPlacement: false,
+  hasComplemento: false,
 };

@@ -333,25 +333,65 @@ export function InvoiceDetailSheet({
             </div>
           </div>
 
-          {/* PPD info */}
+          {/* PPD Complemento */}
           {isPPD && (
             <div className="pt-3 border-t">
-              <div className="rounded-md border bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800 p-3 text-sm">
-                <div className="flex items-center gap-2">
-                  <Badge
-                    variant="outline"
-                    className="bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800"
-                  >
-                    {invoice.hasComplemento ? "Complemento Adjunto" : "Sin Complemento"}
-                  </Badge>
-                  <span className="text-amber-700 dark:text-amber-300">
-                    Factura PPD -{" "}
-                    {invoice.hasComplemento
-                      ? "Lista para marcar como pagada"
-                      : "Requiere complemento de pago"}
-                  </span>
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">
+                Complemento de Pago (PPD)
+              </h4>
+              {invoice.complemento ? (
+                <div className="rounded-lg border bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800 p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Badge
+                        variant="outline"
+                        className="bg-green-100 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800"
+                      >
+                        Adjunto
+                      </Badge>
+                      <span className="text-sm font-medium truncate max-w-[200px]">
+                        {invoice.complemento.fileName}
+                      </span>
+                    </div>
+                    <a
+                      href={invoice.complemento.fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm font-medium text-primary hover:underline shrink-0"
+                    >
+                      Ver / Descargar
+                    </a>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4 text-xs text-muted-foreground">
+                    <div>
+                      <span className="uppercase tracking-wide">Tamaño</span>
+                      <p className="text-sm text-foreground mt-0.5">
+                        {(invoice.complemento.fileSize / 1024).toFixed(1)} KB
+                      </p>
+                    </div>
+                    <div>
+                      <span className="uppercase tracking-wide">Subido</span>
+                      <p className="text-sm text-foreground mt-0.5">
+                        {formatDateSafe(invoice.complemento.createdAt)}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="rounded-lg border bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800 p-4">
+                  <div className="flex items-center gap-2">
+                    <Badge
+                      variant="outline"
+                      className="bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800"
+                    >
+                      Pendiente
+                    </Badge>
+                    <span className="text-sm text-amber-700 dark:text-amber-300">
+                      Requiere complemento de pago antes de marcar como pagada
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

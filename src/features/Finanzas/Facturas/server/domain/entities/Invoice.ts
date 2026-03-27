@@ -12,6 +12,17 @@ import type {
   InvoiceStatus,
 } from "@/core/generated/prisma/client";
 
+// --- Complemento attachment info ---
+
+export interface ComplementoInfo {
+  id: string;
+  fileName: string;
+  fileUrl: string;
+  fileSize: number;
+  mimeType: string;
+  createdAt: string; // ISO string in DTO
+}
+
 // --- DTO (dates as ISO strings for client boundary) ---
 
 export interface InvoiceDTO {
@@ -61,6 +72,7 @@ export interface InvoiceDTO {
   status: InvoiceStatus;
   banco: string | null;
   hasComplemento: boolean;
+  complemento: ComplementoInfo | null;
   // Tenant + audit
   tenantId: string;
   createdById: string | null;
@@ -118,6 +130,14 @@ export interface InvoiceProps {
   status: InvoiceStatus;
   banco: string | null;
   hasComplemento?: boolean;
+  complemento?: {
+    id: string;
+    fileName: string;
+    fileUrl: string;
+    fileSize: number;
+    mimeType: string;
+    createdAt: Date;
+  } | null;
   // Tenant + audit
   tenantId: string;
   createdById: string | null;
@@ -460,6 +480,16 @@ export class Invoice {
       status: this.props.status,
       banco: this.props.banco,
       hasComplemento: this.props.hasComplemento ?? false,
+      complemento: this.props.complemento
+        ? {
+            id: this.props.complemento.id,
+            fileName: this.props.complemento.fileName,
+            fileUrl: this.props.complemento.fileUrl,
+            fileSize: this.props.complemento.fileSize,
+            mimeType: this.props.complemento.mimeType,
+            createdAt: this.props.complemento.createdAt.toISOString(),
+          }
+        : null,
       tenantId: this.props.tenantId,
       createdById: this.props.createdById,
       createdByName: this.props.createdByName ?? null,

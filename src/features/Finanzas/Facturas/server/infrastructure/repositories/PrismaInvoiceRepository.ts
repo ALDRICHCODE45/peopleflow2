@@ -22,7 +22,7 @@ const INVOICE_INCLUDE = {
   anticipoInvoice: { select: { folio: true, total: true } },
   attachments: {
     where: { subType: "COMPLEMENTO_PAGO" as const },
-    select: { id: true },
+    select: { id: true, fileName: true, fileUrl: true, fileSize: true, mimeType: true, createdAt: true },
     take: 1,
   },
 } as const;
@@ -75,9 +75,10 @@ function toDomain(
     createdBy?: { name: string | null } | null;
     createdAt: Date;
     updatedAt: Date;
-    attachments?: { id: string }[];
+    attachments?: { id: string; fileName: string; fileUrl: string; fileSize: number; mimeType: string; createdAt: Date }[];
   },
 ): Invoice {
+  const complementoAttachment = invoice.attachments?.[0] ?? null;
   const props: InvoiceProps = {
     id: invoice.id,
     folio: invoice.folio,
@@ -117,7 +118,17 @@ function toDomain(
     mesPlacement: invoice.mesPlacement,
     status: invoice.status as InvoiceProps["status"],
     banco: invoice.banco,
-    hasComplemento: (invoice.attachments?.length ?? 0) > 0,
+    hasComplemento: !!complementoAttachment,
+    complemento: complementoAttachment
+      ? {
+          id: complementoAttachment.id,
+          fileName: complementoAttachment.fileName,
+          fileUrl: complementoAttachment.fileUrl,
+          fileSize: complementoAttachment.fileSize,
+          mimeType: complementoAttachment.mimeType,
+          createdAt: complementoAttachment.createdAt,
+        }
+      : null,
     tenantId: invoice.tenantId,
     createdById: invoice.createdById,
     createdByName: invoice.createdBy?.name ?? null,
