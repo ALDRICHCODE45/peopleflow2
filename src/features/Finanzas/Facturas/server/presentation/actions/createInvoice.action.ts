@@ -5,7 +5,10 @@ import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 
 import { prismaInvoiceRepository } from "../../infrastructure/repositories/PrismaInvoiceRepository";
-import { CreateInvoiceUseCase } from "../../application/use-cases/CreateInvoiceUseCase";
+import {
+  CreateInvoiceUseCase,
+  type CreateInvoiceInput,
+} from "../../application/use-cases/CreateInvoiceUseCase";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
@@ -45,7 +48,8 @@ export interface CreateInvoiceActionInput {
   salario?: number | null;
   feeType?: FeeType | null;
   feeValue?: number | null;
-  manualTotal?: number | null; // ANTICIPO only
+  advanceType?: string | null;
+  advanceValue?: number | null;
   // Dates (ISO strings from client)
   issuedAt: string;
   mesPlacement?: string | null;
@@ -119,7 +123,8 @@ export async function createInvoiceAction(
       salario: input.salario,
       feeType: input.feeType,
       feeValue: input.feeValue,
-      manualTotal: input.manualTotal,
+      advanceType: input.advanceType as CreateInvoiceInput["advanceType"],
+      advanceValue: input.advanceValue,
       // Dates (parse ISO strings to Date)
       issuedAt: new Date(input.issuedAt),
       mesPlacement: input.mesPlacement ? new Date(input.mesPlacement) : null,

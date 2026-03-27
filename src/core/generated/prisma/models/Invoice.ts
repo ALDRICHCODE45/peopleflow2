@@ -29,6 +29,7 @@ export type AggregateInvoice = {
 export type InvoiceAvgAggregateOutputType = {
   salario: number | null
   feeValue: number | null
+  advanceValue: number | null
   subtotal: number | null
   ivaRate: number | null
   ivaAmount: number | null
@@ -39,6 +40,7 @@ export type InvoiceAvgAggregateOutputType = {
 export type InvoiceSumAggregateOutputType = {
   salario: number | null
   feeValue: number | null
+  advanceValue: number | null
   subtotal: number | null
   ivaRate: number | null
   ivaAmount: number | null
@@ -70,6 +72,8 @@ export type InvoiceMinAggregateOutputType = {
   salario: number | null
   feeType: $Enums.FeeType | null
   feeValue: number | null
+  advanceType: $Enums.AdvanceType | null
+  advanceValue: number | null
   subtotal: number | null
   ivaRate: number | null
   ivaAmount: number | null
@@ -110,6 +114,8 @@ export type InvoiceMaxAggregateOutputType = {
   salario: number | null
   feeType: $Enums.FeeType | null
   feeValue: number | null
+  advanceType: $Enums.AdvanceType | null
+  advanceValue: number | null
   subtotal: number | null
   ivaRate: number | null
   ivaAmount: number | null
@@ -150,6 +156,8 @@ export type InvoiceCountAggregateOutputType = {
   salario: number
   feeType: number
   feeValue: number
+  advanceType: number
+  advanceValue: number
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -171,6 +179,7 @@ export type InvoiceCountAggregateOutputType = {
 export type InvoiceAvgAggregateInputType = {
   salario?: true
   feeValue?: true
+  advanceValue?: true
   subtotal?: true
   ivaRate?: true
   ivaAmount?: true
@@ -181,6 +190,7 @@ export type InvoiceAvgAggregateInputType = {
 export type InvoiceSumAggregateInputType = {
   salario?: true
   feeValue?: true
+  advanceValue?: true
   subtotal?: true
   ivaRate?: true
   ivaAmount?: true
@@ -212,6 +222,8 @@ export type InvoiceMinAggregateInputType = {
   salario?: true
   feeType?: true
   feeValue?: true
+  advanceType?: true
+  advanceValue?: true
   subtotal?: true
   ivaRate?: true
   ivaAmount?: true
@@ -252,6 +264,8 @@ export type InvoiceMaxAggregateInputType = {
   salario?: true
   feeType?: true
   feeValue?: true
+  advanceType?: true
+  advanceValue?: true
   subtotal?: true
   ivaRate?: true
   ivaAmount?: true
@@ -292,6 +306,8 @@ export type InvoiceCountAggregateInputType = {
   salario?: true
   feeType?: true
   feeValue?: true
+  advanceType?: true
+  advanceValue?: true
   subtotal?: true
   ivaRate?: true
   ivaAmount?: true
@@ -419,6 +435,8 @@ export type InvoiceGroupByOutputType = {
   salario: number | null
   feeType: $Enums.FeeType | null
   feeValue: number | null
+  advanceType: $Enums.AdvanceType | null
+  advanceValue: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -482,6 +500,8 @@ export type InvoiceWhereInput = {
   salario?: Prisma.FloatNullableFilter<"Invoice"> | number | null
   feeType?: Prisma.EnumFeeTypeNullableFilter<"Invoice"> | $Enums.FeeType | null
   feeValue?: Prisma.FloatNullableFilter<"Invoice"> | number | null
+  advanceType?: Prisma.EnumAdvanceTypeNullableFilter<"Invoice"> | $Enums.AdvanceType | null
+  advanceValue?: Prisma.FloatNullableFilter<"Invoice"> | number | null
   subtotal?: Prisma.FloatFilter<"Invoice"> | number
   ivaRate?: Prisma.FloatFilter<"Invoice"> | number
   ivaAmount?: Prisma.FloatFilter<"Invoice"> | number
@@ -529,6 +549,8 @@ export type InvoiceOrderByWithRelationInput = {
   salario?: Prisma.SortOrderInput | Prisma.SortOrder
   feeType?: Prisma.SortOrderInput | Prisma.SortOrder
   feeValue?: Prisma.SortOrderInput | Prisma.SortOrder
+  advanceType?: Prisma.SortOrderInput | Prisma.SortOrder
+  advanceValue?: Prisma.SortOrderInput | Prisma.SortOrder
   subtotal?: Prisma.SortOrder
   ivaRate?: Prisma.SortOrder
   ivaAmount?: Prisma.SortOrder
@@ -580,6 +602,8 @@ export type InvoiceWhereUniqueInput = Prisma.AtLeast<{
   salario?: Prisma.FloatNullableFilter<"Invoice"> | number | null
   feeType?: Prisma.EnumFeeTypeNullableFilter<"Invoice"> | $Enums.FeeType | null
   feeValue?: Prisma.FloatNullableFilter<"Invoice"> | number | null
+  advanceType?: Prisma.EnumAdvanceTypeNullableFilter<"Invoice"> | $Enums.AdvanceType | null
+  advanceValue?: Prisma.FloatNullableFilter<"Invoice"> | number | null
   subtotal?: Prisma.FloatFilter<"Invoice"> | number
   ivaRate?: Prisma.FloatFilter<"Invoice"> | number
   ivaAmount?: Prisma.FloatFilter<"Invoice"> | number
@@ -627,6 +651,8 @@ export type InvoiceOrderByWithAggregationInput = {
   salario?: Prisma.SortOrderInput | Prisma.SortOrder
   feeType?: Prisma.SortOrderInput | Prisma.SortOrder
   feeValue?: Prisma.SortOrderInput | Prisma.SortOrder
+  advanceType?: Prisma.SortOrderInput | Prisma.SortOrder
+  advanceValue?: Prisma.SortOrderInput | Prisma.SortOrder
   subtotal?: Prisma.SortOrder
   ivaRate?: Prisma.SortOrder
   ivaAmount?: Prisma.SortOrder
@@ -675,6 +701,8 @@ export type InvoiceScalarWhereWithAggregatesInput = {
   salario?: Prisma.FloatNullableWithAggregatesFilter<"Invoice"> | number | null
   feeType?: Prisma.EnumFeeTypeNullableWithAggregatesFilter<"Invoice"> | $Enums.FeeType | null
   feeValue?: Prisma.FloatNullableWithAggregatesFilter<"Invoice"> | number | null
+  advanceType?: Prisma.EnumAdvanceTypeNullableWithAggregatesFilter<"Invoice"> | $Enums.AdvanceType | null
+  advanceValue?: Prisma.FloatNullableWithAggregatesFilter<"Invoice"> | number | null
   subtotal?: Prisma.FloatWithAggregatesFilter<"Invoice"> | number
   ivaRate?: Prisma.FloatWithAggregatesFilter<"Invoice"> | number
   ivaAmount?: Prisma.FloatWithAggregatesFilter<"Invoice"> | number
@@ -712,6 +740,8 @@ export type InvoiceCreateInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -757,6 +787,8 @@ export type InvoiceUncheckedCreateInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -796,6 +828,8 @@ export type InvoiceUpdateInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -841,6 +875,8 @@ export type InvoiceUncheckedUpdateInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -883,6 +919,8 @@ export type InvoiceCreateManyInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -920,6 +958,8 @@ export type InvoiceUpdateManyMutationInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -958,6 +998,8 @@ export type InvoiceUncheckedUpdateManyInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1018,6 +1060,8 @@ export type InvoiceCountOrderByAggregateInput = {
   salario?: Prisma.SortOrder
   feeType?: Prisma.SortOrder
   feeValue?: Prisma.SortOrder
+  advanceType?: Prisma.SortOrder
+  advanceValue?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
   ivaRate?: Prisma.SortOrder
   ivaAmount?: Prisma.SortOrder
@@ -1037,6 +1081,7 @@ export type InvoiceCountOrderByAggregateInput = {
 export type InvoiceAvgOrderByAggregateInput = {
   salario?: Prisma.SortOrder
   feeValue?: Prisma.SortOrder
+  advanceValue?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
   ivaRate?: Prisma.SortOrder
   ivaAmount?: Prisma.SortOrder
@@ -1068,6 +1113,8 @@ export type InvoiceMaxOrderByAggregateInput = {
   salario?: Prisma.SortOrder
   feeType?: Prisma.SortOrder
   feeValue?: Prisma.SortOrder
+  advanceType?: Prisma.SortOrder
+  advanceValue?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
   ivaRate?: Prisma.SortOrder
   ivaAmount?: Prisma.SortOrder
@@ -1108,6 +1155,8 @@ export type InvoiceMinOrderByAggregateInput = {
   salario?: Prisma.SortOrder
   feeType?: Prisma.SortOrder
   feeValue?: Prisma.SortOrder
+  advanceType?: Prisma.SortOrder
+  advanceValue?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
   ivaRate?: Prisma.SortOrder
   ivaAmount?: Prisma.SortOrder
@@ -1127,6 +1176,7 @@ export type InvoiceMinOrderByAggregateInput = {
 export type InvoiceSumOrderByAggregateInput = {
   salario?: Prisma.SortOrder
   feeValue?: Prisma.SortOrder
+  advanceValue?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
   ivaRate?: Prisma.SortOrder
   ivaAmount?: Prisma.SortOrder
@@ -1310,6 +1360,10 @@ export type NullableEnumFeeTypeFieldUpdateOperationsInput = {
   set?: $Enums.FeeType | null
 }
 
+export type NullableEnumAdvanceTypeFieldUpdateOperationsInput = {
+  set?: $Enums.AdvanceType | null
+}
+
 export type FloatFieldUpdateOperationsInput = {
   set?: number
   increment?: number
@@ -1415,6 +1469,8 @@ export type InvoiceCreateWithoutCreatedByInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -1459,6 +1515,8 @@ export type InvoiceUncheckedCreateWithoutCreatedByInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -1529,6 +1587,8 @@ export type InvoiceScalarWhereInput = {
   salario?: Prisma.FloatNullableFilter<"Invoice"> | number | null
   feeType?: Prisma.EnumFeeTypeNullableFilter<"Invoice"> | $Enums.FeeType | null
   feeValue?: Prisma.FloatNullableFilter<"Invoice"> | number | null
+  advanceType?: Prisma.EnumAdvanceTypeNullableFilter<"Invoice"> | $Enums.AdvanceType | null
+  advanceValue?: Prisma.FloatNullableFilter<"Invoice"> | number | null
   subtotal?: Prisma.FloatFilter<"Invoice"> | number
   ivaRate?: Prisma.FloatFilter<"Invoice"> | number
   ivaAmount?: Prisma.FloatFilter<"Invoice"> | number
@@ -1566,6 +1626,8 @@ export type InvoiceCreateWithoutTenantInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -1610,6 +1672,8 @@ export type InvoiceUncheckedCreateWithoutTenantInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -1674,6 +1738,8 @@ export type InvoiceCreateWithoutAttachmentsInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -1718,6 +1784,8 @@ export type InvoiceUncheckedCreateWithoutAttachmentsInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -1772,6 +1840,8 @@ export type InvoiceUpdateWithoutAttachmentsInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1816,6 +1886,8 @@ export type InvoiceUncheckedUpdateWithoutAttachmentsInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1854,6 +1926,8 @@ export type InvoiceCreateWithoutVacancyInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -1897,6 +1971,8 @@ export type InvoiceUncheckedCreateWithoutVacancyInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -1962,6 +2038,8 @@ export type InvoiceCreateWithoutLiquidacionInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -2006,6 +2084,8 @@ export type InvoiceUncheckedCreateWithoutLiquidacionInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -2049,6 +2129,8 @@ export type InvoiceCreateWithoutAnticipoInvoiceInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -2092,6 +2174,8 @@ export type InvoiceUncheckedCreateWithoutAnticipoInvoiceInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -2147,6 +2231,8 @@ export type InvoiceUpdateWithoutLiquidacionInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -2191,6 +2277,8 @@ export type InvoiceUncheckedUpdateWithoutLiquidacionInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -2240,6 +2328,8 @@ export type InvoiceUpdateWithoutAnticipoInvoiceInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -2283,6 +2373,8 @@ export type InvoiceUncheckedUpdateWithoutAnticipoInvoiceInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -2322,6 +2414,8 @@ export type InvoiceCreateWithoutClientInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -2365,6 +2459,8 @@ export type InvoiceUncheckedCreateWithoutClientInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -2433,6 +2529,8 @@ export type InvoiceCreateManyCreatedByInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -2469,6 +2567,8 @@ export type InvoiceUpdateWithoutCreatedByInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -2513,6 +2613,8 @@ export type InvoiceUncheckedUpdateWithoutCreatedByInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -2554,6 +2656,8 @@ export type InvoiceUncheckedUpdateManyWithoutCreatedByInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -2593,6 +2697,8 @@ export type InvoiceCreateManyTenantInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -2629,6 +2735,8 @@ export type InvoiceUpdateWithoutTenantInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -2673,6 +2781,8 @@ export type InvoiceUncheckedUpdateWithoutTenantInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -2714,6 +2824,8 @@ export type InvoiceUncheckedUpdateManyWithoutTenantInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -2752,6 +2864,8 @@ export type InvoiceCreateManyVacancyInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -2789,6 +2903,8 @@ export type InvoiceUpdateWithoutVacancyInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -2832,6 +2948,8 @@ export type InvoiceUncheckedUpdateWithoutVacancyInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -2873,6 +2991,8 @@ export type InvoiceUncheckedUpdateManyWithoutVacancyInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -2912,6 +3032,8 @@ export type InvoiceCreateManyClientInput = {
   salario?: number | null
   feeType?: $Enums.FeeType | null
   feeValue?: number | null
+  advanceType?: $Enums.AdvanceType | null
+  advanceValue?: number | null
   subtotal: number
   ivaRate: number
   ivaAmount: number
@@ -2949,6 +3071,8 @@ export type InvoiceUpdateWithoutClientInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -2992,6 +3116,8 @@ export type InvoiceUncheckedUpdateWithoutClientInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -3033,6 +3159,8 @@ export type InvoiceUncheckedUpdateManyWithoutClientInput = {
   salario?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   feeType?: Prisma.NullableEnumFeeTypeFieldUpdateOperationsInput | $Enums.FeeType | null
   feeValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  advanceType?: Prisma.NullableEnumAdvanceTypeFieldUpdateOperationsInput | $Enums.AdvanceType | null
+  advanceValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaRate?: Prisma.FloatFieldUpdateOperationsInput | number
   ivaAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -3104,6 +3232,8 @@ export type InvoiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   salario?: boolean
   feeType?: boolean
   feeValue?: boolean
+  advanceType?: boolean
+  advanceValue?: boolean
   subtotal?: boolean
   ivaRate?: boolean
   ivaAmount?: boolean
@@ -3152,6 +3282,8 @@ export type InvoiceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   salario?: boolean
   feeType?: boolean
   feeValue?: boolean
+  advanceType?: boolean
+  advanceValue?: boolean
   subtotal?: boolean
   ivaRate?: boolean
   ivaAmount?: boolean
@@ -3197,6 +3329,8 @@ export type InvoiceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   salario?: boolean
   feeType?: boolean
   feeValue?: boolean
+  advanceType?: boolean
+  advanceValue?: boolean
   subtotal?: boolean
   ivaRate?: boolean
   ivaAmount?: boolean
@@ -3242,6 +3376,8 @@ export type InvoiceSelectScalar = {
   salario?: boolean
   feeType?: boolean
   feeValue?: boolean
+  advanceType?: boolean
+  advanceValue?: boolean
   subtotal?: boolean
   ivaRate?: boolean
   ivaAmount?: boolean
@@ -3258,7 +3394,7 @@ export type InvoiceSelectScalar = {
   updatedAt?: boolean
 }
 
-export type InvoiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "folio" | "type" | "paymentType" | "clientId" | "vacancyId" | "anticipoInvoiceId" | "candidateId" | "candidateName" | "hunterId" | "hunterName" | "razonSocial" | "nombreComercial" | "ubicacion" | "figura" | "rfc" | "codigoPostal" | "regimen" | "posicion" | "currency" | "salario" | "feeType" | "feeValue" | "subtotal" | "ivaRate" | "ivaAmount" | "anticipoDeduccion" | "total" | "issuedAt" | "paymentDate" | "mesPlacement" | "status" | "banco" | "tenantId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["invoice"]>
+export type InvoiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "folio" | "type" | "paymentType" | "clientId" | "vacancyId" | "anticipoInvoiceId" | "candidateId" | "candidateName" | "hunterId" | "hunterName" | "razonSocial" | "nombreComercial" | "ubicacion" | "figura" | "rfc" | "codigoPostal" | "regimen" | "posicion" | "currency" | "salario" | "feeType" | "feeValue" | "advanceType" | "advanceValue" | "subtotal" | "ivaRate" | "ivaAmount" | "anticipoDeduccion" | "total" | "issuedAt" | "paymentDate" | "mesPlacement" | "status" | "banco" | "tenantId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["invoice"]>
 export type InvoiceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   vacancy?: boolean | Prisma.Invoice$vacancyArgs<ExtArgs>
@@ -3319,6 +3455,8 @@ export type $InvoicePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     salario: number | null
     feeType: $Enums.FeeType | null
     feeValue: number | null
+    advanceType: $Enums.AdvanceType | null
+    advanceValue: number | null
     subtotal: number
     ivaRate: number
     ivaAmount: number
@@ -3786,6 +3924,8 @@ export interface InvoiceFieldRefs {
   readonly salario: Prisma.FieldRef<"Invoice", 'Float'>
   readonly feeType: Prisma.FieldRef<"Invoice", 'FeeType'>
   readonly feeValue: Prisma.FieldRef<"Invoice", 'Float'>
+  readonly advanceType: Prisma.FieldRef<"Invoice", 'AdvanceType'>
+  readonly advanceValue: Prisma.FieldRef<"Invoice", 'Float'>
   readonly subtotal: Prisma.FieldRef<"Invoice", 'Float'>
   readonly ivaRate: Prisma.FieldRef<"Invoice", 'Float'>
   readonly ivaAmount: Prisma.FieldRef<"Invoice", 'Float'>

@@ -4,6 +4,7 @@
  */
 
 import type {
+  AdvanceType,
   Currency,
   FeeType,
   InvoiceType,
@@ -45,6 +46,8 @@ export interface InvoiceDTO {
   salario: number | null;
   feeType: FeeType | null;
   feeValue: number | null;
+  advanceType: AdvanceType | null;
+  advanceValue: number | null;
   subtotal: number;
   ivaRate: number;
   ivaAmount: number;
@@ -100,6 +103,8 @@ export interface InvoiceProps {
   salario: number | null;
   feeType: FeeType | null;
   feeValue: number | null;
+  advanceType: AdvanceType | null;
+  advanceValue: number | null;
   subtotal: number;
   ivaRate: number;
   ivaAmount: number;
@@ -244,6 +249,14 @@ export class Invoice {
 
   get feeValue(): number | null {
     return this.props.feeValue;
+  }
+
+  get advanceType(): AdvanceType | null {
+    return this.props.advanceType;
+  }
+
+  get advanceValue(): number | null {
+    return this.props.advanceValue;
   }
 
   get subtotal(): number {
@@ -434,6 +447,8 @@ export class Invoice {
       salario: this.props.salario,
       feeType: this.props.feeType,
       feeValue: this.props.feeValue,
+      advanceType: this.props.advanceType ?? null,
+      advanceValue: this.props.advanceValue ?? null,
       subtotal: this.props.subtotal,
       ivaRate: this.props.ivaRate,
       ivaAmount: this.props.ivaAmount,

@@ -1103,10 +1103,6 @@ export type NullableEnumPaymentSchemeFieldUpdateOperationsInput = {
   set?: $Enums.PaymentScheme | null
 }
 
-export type NullableEnumAdvanceTypeFieldUpdateOperationsInput = {
-  set?: $Enums.AdvanceType | null
-}
-
 export type ClientCreateWithoutGeneradorInput = {
   id?: string
   nombre: string

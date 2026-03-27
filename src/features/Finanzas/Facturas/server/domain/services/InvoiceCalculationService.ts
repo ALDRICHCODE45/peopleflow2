@@ -3,7 +3,7 @@
  * Stateless — todos los métodos son estáticos y puros (sin side effects)
  */
 
-import type { Currency, FeeType } from "@/core/generated/prisma/client";
+import type { AdvanceType, Currency, FeeType } from "@/core/generated/prisma/client";
 import { InvoiceFee } from "../value-objects/InvoiceCalculation";
 
 // --- Utilidad de redondeo a 2 decimales ---
@@ -28,6 +28,15 @@ export interface FullInvoiceCalculationInput {
   salaryFixed: number;
   currency: Currency;
   anticipoAmount?: number;
+}
+
+export interface AnticipoCalculationInput {
+  feeType: FeeType;
+  feeValue: number;
+  salaryFixed: number;
+  advanceType: AdvanceType;
+  advanceValue: number;
+  currency: Currency;
 }
 
 export class InvoiceCalculationService {
@@ -67,22 +76,39 @@ export class InvoiceCalculationService {
   }
 
   /**
-   * Back-calcula subtotal e IVA a partir de un total manual (para ANTICIPO).
-   * El usuario ingresa un total y el sistema deduce el desglose:
-   * - MXN: subtotal = total / 1.16, ivaAmount = total - subtotal
-   * - USD: subtotal = total, ivaAmount = 0
+   * Cálculo completo para ANTICIPO:
+   * 1. Calcula fee base desde feeType/feeValue/salary (misma lógica que FULL)
+   * 2. Aplica advance: PERCENTAGE → feeBase × (advanceValue/100), FIXED → advanceValue directo
+   * 3. subtotal = resultado del advance
+   * 4. IVA se SUMA al subtotal (forward-calc, nunca back-calc)
+   * 5. total = subtotal + ivaAmount
    */
-  static calculateFromAnticipo(
-    totalInput: number,
-    ivaRate: number
-  ): { subtotal: number; ivaAmount: number } {
-    if (ivaRate === 0) {
-      return { subtotal: roundCurrency(totalInput), ivaAmount: 0 };
-    }
+  static calculateAnticipoInvoice(
+    params: AnticipoCalculationInput
+  ): FeeCalculationResult {
+    const { feeType, feeValue, salaryFixed, advanceType, advanceValue, currency } = params;
 
-    const subtotal = roundCurrency(totalInput / (1 + ivaRate));
-    const ivaAmount = roundCurrency(totalInput - subtotal);
-    return { subtotal, ivaAmount };
+    // 1. Fee base (same as FULL)
+    const feeBase = InvoiceCalculationService.calculateFee(feeType, feeValue, salaryFixed);
+
+    // 2. Apply advance to fee base
+    const subtotal =
+      advanceType === "PERCENTAGE"
+        ? roundCurrency(feeBase * (advanceValue / 100))
+        : roundCurrency(advanceValue);
+
+    // 3. IVA forward-calculated
+    const ivaRate = InvoiceCalculationService.calculateIvaRate(currency);
+    const ivaAmount = roundCurrency(subtotal * ivaRate);
+    const total = roundCurrency(subtotal + ivaAmount);
+
+    return {
+      subtotal,
+      ivaRate,
+      ivaAmount,
+      anticipoDeduccion: 0,
+      total,
+    };
   }
 
   /**

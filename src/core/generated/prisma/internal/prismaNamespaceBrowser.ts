@@ -549,6 +549,8 @@ export const InvoiceScalarFieldEnum = {
   salario: 'salario',
   feeType: 'feeType',
   feeValue: 'feeValue',
+  advanceType: 'advanceType',
+  advanceValue: 'advanceValue',
   subtotal: 'subtotal',
   ivaRate: 'ivaRate',
   ivaAmount: 'ivaAmount',

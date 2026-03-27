@@ -17,6 +17,7 @@ import {
   type FeeCalculationResult,
 } from "../../domain/services/InvoiceCalculationService";
 import type {
+  AdvanceType,
   Currency,
   FeeType,
   InvoicePaymentType,
@@ -51,7 +52,8 @@ export interface CreateInvoiceInput {
   salario?: number | null;
   feeType?: FeeType | null;
   feeValue?: number | null;
-  manualTotal?: number | null; // ANTICIPO only
+  advanceType?: AdvanceType | null;
+  advanceValue?: number | null;
   // Dates
   issuedAt: Date;
   mesPlacement?: Date | null;
@@ -92,10 +94,7 @@ export class CreateInvoiceUseCase {
         };
       }
 
-      if (
-        (input.type === "FULL" || input.type === "LIQUIDACION") &&
-        !input.vacancyId
-      ) {
+      if (!input.vacancyId) {
         return {
           success: false,
           error: "Debe seleccionar una vacante para este tipo de factura",
@@ -123,7 +122,7 @@ export class CreateInvoiceUseCase {
           };
         }
 
-        if (input.type !== "ANTICIPO" && vacancy.clientId !== input.clientId) {
+        if (vacancy.clientId !== input.clientId) {
           return {
             success: false,
             error: "La vacante no pertenece al cliente seleccionado",
@@ -134,27 +133,53 @@ export class CreateInvoiceUseCase {
       // 2. Calcular totales según tipo
       let calculation: FeeCalculationResult;
 
+      // Resolve advance data: input overrides client snapshot
+      const resolvedAdvanceType =
+        input.advanceType ?? client.advanceType ?? null;
+      const resolvedAdvanceValue =
+        input.advanceValue ?? client.advanceValue ?? null;
+
       if (input.type === "ANTICIPO") {
-        // ANTICIPO: usuario ingresa total manual, sistema back-calcula
-        if (!input.manualTotal || input.manualTotal <= 0) {
+        // ANTICIPO: require fee + advance data for forward calculation
+        if (!input.feeType || !input.feeValue || input.feeValue <= 0) {
           return {
             success: false,
-            error: "El total del anticipo debe ser mayor a 0",
+            error: "Debe especificar tipo y valor de fee",
           };
         }
 
-        const ivaRate =
-          InvoiceCalculationService.calculateIvaRate(resolvedCurrency);
-        const { subtotal, ivaAmount } =
-          InvoiceCalculationService.calculateFromAnticipo(input.manualTotal, ivaRate);
+        if (
+          (input.feeType === "PERCENTAGE" || input.feeType === "MONTHS") &&
+          (!input.salario || input.salario <= 0)
+        ) {
+          return {
+            success: false,
+            error: "El salario es requerido para el tipo de fee seleccionado",
+          };
+        }
 
-        calculation = {
-          subtotal,
-          ivaRate,
-          ivaAmount,
-          anticipoDeduccion: 0,
-          total: input.manualTotal,
-        };
+        if (!resolvedAdvanceType || !resolvedAdvanceValue || resolvedAdvanceValue <= 0) {
+          return {
+            success: false,
+            error: "Debe especificar tipo y valor de anticipo",
+          };
+        }
+
+        if (resolvedAdvanceType === "PERCENTAGE" && resolvedAdvanceValue > 100) {
+          return {
+            success: false,
+            error: "El porcentaje de anticipo no puede ser mayor a 100%",
+          };
+        }
+
+        calculation = InvoiceCalculationService.calculateAnticipoInvoice({
+          feeType: input.feeType,
+          feeValue: input.feeValue,
+          salaryFixed: input.salario ?? 0,
+          advanceType: resolvedAdvanceType,
+          advanceValue: resolvedAdvanceValue,
+          currency: resolvedCurrency,
+        });
       } else {
         // FULL o LIQUIDACION: requiere fee data
         if (!input.feeType || !input.feeValue || input.feeValue <= 0) {
@@ -246,8 +271,10 @@ export class CreateInvoiceUseCase {
         posicion: input.posicion ?? null,
         currency: resolvedCurrency,
         salario: input.salario ?? null,
-        feeType: input.type === "ANTICIPO" ? null : (input.feeType ?? null),
-        feeValue: input.type === "ANTICIPO" ? null : (input.feeValue ?? null),
+        feeType: input.feeType ?? null,
+        feeValue: input.feeValue ?? null,
+        advanceType: resolvedAdvanceType,
+        advanceValue: resolvedAdvanceValue,
         subtotal: calculation.subtotal,
         ivaRate: calculation.ivaRate,
         ivaAmount: calculation.ivaAmount,

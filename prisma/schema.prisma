@@ -1026,6 +1026,8 @@ model Invoice {
   salario  Float?
   feeType  FeeType?
   feeValue Float?
+  advanceType  AdvanceType?  // Snapshot from Client (FIXED | PERCENTAGE)
+  advanceValue Float?        // Snapshot from Client (amount or %)
 
   // --- Cálculos ---
   subtotal          Float

@@ -12,7 +12,7 @@ import { PermissionActions } from "@/core/shared/constants/permissions";
 import { ServerErrors } from "@core/shared/constants/error-messages";
 
 import type { InvoiceDTO } from "../../domain/entities/Invoice";
-import type { Currency, FeeType } from "@/core/generated/prisma/client";
+import type { Currency, FeeType, AdvanceType } from "@/core/generated/prisma/client";
 
 // --- Input / Output ---
 
@@ -36,6 +36,8 @@ export interface UpdateInvoiceActionInput {
   salario?: number | null;
   feeType?: FeeType | null;
   feeValue?: number | null;
+  advanceType?: string | null;
+  advanceValue?: number | null;
   // Dates (ISO strings from client)
   issuedAt?: string;
   mesPlacement?: string | null;
@@ -107,6 +109,8 @@ export async function updateInvoiceAction(
       salario: input.salario,
       feeType: input.feeType,
       feeValue: input.feeValue,
+      advanceType: input.advanceType as AdvanceType | null | undefined,
+      advanceValue: input.advanceValue,
       // Dates (parse ISO strings to Date when provided)
       ...(input.issuedAt !== undefined && { issuedAt: new Date(input.issuedAt) }),
       ...(input.mesPlacement !== undefined && {

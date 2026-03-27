@@ -10,6 +10,7 @@ export type {
   InvoiceStatus,
   Currency,
   FeeType,
+  AdvanceType,
 } from "@/core/generated/prisma/client";
 
 // Re-export del DTO canónico del dominio
@@ -37,6 +38,11 @@ export const FeeTypeLabels: Record<string, string> = {
   PERCENTAGE: "Porcentaje del sueldo",
   FIXED: "Monto Fijo",
   MONTHS: "Meses de Sueldo",
+};
+
+export const AdvanceTypeLabels: Record<string, string> = {
+  FIXED: "Monto fijo",
+  PERCENTAGE: "Porcentaje",
 };
 
 export const CurrencyLabels: Record<string, string> = {
@@ -75,7 +81,8 @@ export interface CreateInvoiceFormData {
   salario?: number | null;
   feeType?: string | null;
   feeValue?: number | null;
-  manualTotal?: number | null; // ANTICIPO only
+  advanceType?: string | null;
+  advanceValue?: number | null;
   // Dates (ISO strings)
   issuedAt: string;
   mesPlacement?: string | null;
@@ -103,6 +110,8 @@ export interface UpdateInvoiceFormData {
   salario?: number | null;
   feeType?: string | null;
   feeValue?: number | null;
+  advanceType?: string | null;
+  advanceValue?: number | null;
   // Dates (ISO strings)
   issuedAt?: string;
   mesPlacement?: string | null;

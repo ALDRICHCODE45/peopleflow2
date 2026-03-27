@@ -11,7 +11,7 @@ import type {
   UpdateInvoiceData,
 } from "../../domain/interfaces/IInvoiceRepository";
 import { InvoiceCalculationService } from "../../domain/services/InvoiceCalculationService";
-import type { Currency, FeeType } from "@/core/generated/prisma/client";
+import type { AdvanceType, Currency, FeeType } from "@/core/generated/prisma/client";
 
 // --- Input / Output ---
 
@@ -36,6 +36,8 @@ export interface UpdateInvoiceInput {
   salario?: number | null;
   feeType?: FeeType | null;
   feeValue?: number | null;
+  advanceType?: AdvanceType | null;
+  advanceValue?: number | null;
   // Dates
   issuedAt?: Date;
   mesPlacement?: Date | null;
@@ -95,26 +97,74 @@ export class UpdateInvoiceUseCase {
         input.feeType !== undefined ||
         input.feeValue !== undefined ||
         input.salario !== undefined ||
-        input.currency !== undefined;
+        input.currency !== undefined ||
+        input.advanceType !== undefined ||
+        input.advanceValue !== undefined;
 
       if (economicFieldChanged) {
         const newCurrency = input.currency ?? existing.currency;
         const newFeeType = input.feeType !== undefined ? input.feeType : existing.feeType;
         const newFeeValue = input.feeValue !== undefined ? input.feeValue : existing.feeValue;
         const newSalario = input.salario !== undefined ? input.salario : existing.salario;
+        const newAdvanceType = input.advanceType !== undefined ? input.advanceType : existing.advanceType;
+        const newAdvanceValue = input.advanceValue !== undefined ? input.advanceValue : existing.advanceValue;
 
         updateData.currency = newCurrency;
 
         if (existing.isAnticipo()) {
-          // ANTICIPO: no recalcular fee, pero actualizar IVA rate si cambió currency
-          const ivaRate = InvoiceCalculationService.calculateIvaRate(newCurrency);
-          const { subtotal, ivaAmount } =
-            InvoiceCalculationService.calculateFromAnticipo(existing.total, ivaRate);
+          // ANTICIPO: forward-calc with advance fields
+          // Guard: legacy invoice (advanceType=null) with no advance data provided → keep existing totals
+          if (!newAdvanceType || !newAdvanceValue || newAdvanceValue <= 0) {
+            // Legacy ANTICIPO or missing advance data — just update currency/IVA rate if changed
+            const ivaRate = InvoiceCalculationService.calculateIvaRate(newCurrency);
+            updateData.ivaRate = ivaRate;
+            // Keep existing totals untouched
+          } else {
+            // Validate advance percentage ceiling
+            if (newAdvanceType === "PERCENTAGE" && newAdvanceValue > 100) {
+              return {
+                success: false,
+                error: "El porcentaje de anticipo no puede ser mayor a 100%",
+              };
+            }
 
-          updateData.subtotal = subtotal;
-          updateData.ivaRate = ivaRate;
-          updateData.ivaAmount = ivaAmount;
-          updateData.total = existing.total; // El total del anticipo no cambia
+            if (!newFeeType || !newFeeValue || newFeeValue <= 0) {
+              return {
+                success: false,
+                error: "Debe especificar tipo y valor de fee",
+              };
+            }
+
+            if (
+              (newFeeType === "PERCENTAGE" || newFeeType === "MONTHS") &&
+              (!newSalario || newSalario <= 0)
+            ) {
+              return {
+                success: false,
+                error: "El salario es requerido para el tipo de fee seleccionado",
+              };
+            }
+
+            const calculation = InvoiceCalculationService.calculateAnticipoInvoice({
+              feeType: newFeeType,
+              feeValue: newFeeValue,
+              salaryFixed: newSalario ?? 0,
+              advanceType: newAdvanceType,
+              advanceValue: newAdvanceValue,
+              currency: newCurrency,
+            });
+
+            updateData.feeType = newFeeType;
+            updateData.feeValue = newFeeValue;
+            updateData.salario = newSalario;
+            updateData.advanceType = newAdvanceType;
+            updateData.advanceValue = newAdvanceValue;
+            updateData.subtotal = calculation.subtotal;
+            updateData.ivaRate = calculation.ivaRate;
+            updateData.ivaAmount = calculation.ivaAmount;
+            updateData.anticipoDeduccion = calculation.anticipoDeduccion;
+            updateData.total = calculation.total;
+          }
         } else {
           // FULL / LIQUIDACION: recalcular todo
           if (!newFeeType || !newFeeValue || newFeeValue <= 0) {

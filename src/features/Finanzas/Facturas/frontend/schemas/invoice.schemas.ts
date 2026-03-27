@@ -48,7 +48,8 @@ export const createInvoiceSchema = z
     salario: z.number().positive("Sueldo debe ser mayor a 0").nullable().optional(),
     feeType: z.enum(["PERCENTAGE", "FIXED", "MONTHS"]).nullable().optional(),
     feeValue: z.number().positive("Valor del fee debe ser mayor a 0").nullable().optional(),
-    manualTotal: z.number().positive("Total debe ser mayor a 0").nullable().optional(),
+    advanceType: z.enum(["FIXED", "PERCENTAGE"]).nullable().optional(),
+    advanceValue: z.number().positive("Valor del anticipo debe ser mayor a 0").nullable().optional(),
 
     // Dates
     issuedAt: z.string().min(1, "Fecha de emisi\u00f3n es requerida"),
@@ -92,13 +93,64 @@ export const createInvoiceSchema = z
       }
     }
 
-    // ANTICIPO requiere total manual
-    if (data.type === "ANTICIPO" && !data.manualTotal) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Total es requerido para anticipo",
-        path: ["manualTotal"],
-      });
+    // ANTICIPO requiere vacancyId, fee y advance data
+    if (data.type === "ANTICIPO") {
+      if (!data.vacancyId) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Vacante es requerida",
+          path: ["vacancyId"],
+        });
+      }
+      if (!data.feeType) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Tipo de fee es requerido",
+          path: ["feeType"],
+        });
+      }
+      if (!data.feeValue) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Valor del fee es requerido",
+          path: ["feeValue"],
+        });
+      }
+      if (
+        (data.feeType === "PERCENTAGE" || data.feeType === "MONTHS") &&
+        !data.salario
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Sueldo es requerido",
+          path: ["salario"],
+        });
+      }
+      if (!data.advanceType) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Tipo de anticipo es requerido",
+          path: ["advanceType"],
+        });
+      }
+      if (!data.advanceValue) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Valor del anticipo es requerido",
+          path: ["advanceValue"],
+        });
+      }
+      if (
+        data.advanceType === "PERCENTAGE" &&
+        data.advanceValue != null &&
+        data.advanceValue > 100
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "El porcentaje de anticipo no puede superar 100%",
+          path: ["advanceValue"],
+        });
+      }
     }
 
     // FULL y LIQUIDACION requieren vacancyId
@@ -136,6 +188,8 @@ export const updateInvoiceSchema = z.object({
   salario: z.number().positive("Sueldo debe ser mayor a 0").nullable().optional(),
   feeType: z.enum(["PERCENTAGE", "FIXED", "MONTHS"]).nullable().optional(),
   feeValue: z.number().positive("Valor del fee debe ser mayor a 0").nullable().optional(),
+  advanceType: z.enum(["FIXED", "PERCENTAGE"]).nullable().optional(),
+  advanceValue: z.number().positive("Valor del anticipo debe ser mayor a 0").nullable().optional(),
   // Dates
   issuedAt: z.string().optional(),
   mesPlacement: z.string().nullable().optional(),

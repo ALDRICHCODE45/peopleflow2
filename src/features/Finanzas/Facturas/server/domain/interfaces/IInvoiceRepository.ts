@@ -4,11 +4,13 @@
  */
 
 import type {
+  AdvanceType,
   Currency,
   FeeType,
   InvoicePaymentType,
   InvoiceStatus,
   InvoiceType,
+  PaymentScheme,
 } from "@/core/generated/prisma/client";
 import type { Invoice } from "../entities/Invoice";
 
@@ -40,6 +42,11 @@ export interface ClientBillingSnapshot {
   id: string;
   tenantId: string;
   currency: Currency | null;
+  feeType: FeeType | null;
+  feeValue: number | null;
+  advanceType: AdvanceType | null;
+  advanceValue: number | null;
+  paymentScheme: PaymentScheme | null;
 }
 
 export interface VacancyBillingSnapshot {
@@ -79,6 +86,8 @@ export interface CreateInvoiceData {
   salario: number | null;
   feeType: FeeType | null;
   feeValue: number | null;
+  advanceType: AdvanceType | null;
+  advanceValue: number | null;
   subtotal: number;
   ivaRate: number;
   ivaAmount: number;
@@ -113,6 +122,8 @@ export interface UpdateInvoiceData {
   salario?: number | null;
   feeType?: FeeType | null;
   feeValue?: number | null;
+  advanceType?: AdvanceType | null;
+  advanceValue?: number | null;
   subtotal?: number;
   ivaRate?: number;
   ivaAmount?: number;

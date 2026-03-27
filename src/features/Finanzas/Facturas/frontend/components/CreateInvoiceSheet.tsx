@@ -34,6 +34,7 @@ import {
   InvoicePaymentTypeLabels,
   FeeTypeLabels,
   CurrencyLabels,
+  AdvanceTypeLabels,
 } from "../types/invoice.types";
 import type {
   InvoiceType,
@@ -80,7 +81,8 @@ interface InvoiceFormState {
   salario: number | null;
   feeType: string;
   feeValue: number | null;
-  manualTotal: number | null;
+  advanceType: string;
+  advanceValue: number | null;
   // Dates
   issuedAt: string;
   mesPlacement: string;
@@ -112,7 +114,8 @@ const initialFormState: InvoiceFormState = {
   salario: null,
   feeType: "",
   feeValue: null,
-  manualTotal: null,
+  advanceType: "",
+  advanceValue: null,
   issuedAt: new Date().toISOString().split("T")[0],
   mesPlacement: "",
   banco: "",
@@ -153,7 +156,7 @@ export function CreateInvoiceSheet({
 
   const { data: clients = [] } = useClientsListQuery();
   const { data: rawVacancyOptions = [] } = useInvoiceVacancyOptions(
-    form.type !== "ANTICIPO" && form.clientId ? form.clientId : undefined,
+    form.clientId ? form.clientId : undefined,
   );
   const createInvoiceMutation = useCreateInvoice();
 
@@ -173,9 +176,8 @@ export function CreateInvoiceSheet({
 
   const isAnticipo = form.type === "ANTICIPO";
   const isLiquidacion = form.type === "LIQUIDACION";
-  const isFull = form.type === "FULL";
-  const requiresVacancy = isFull || isLiquidacion;
-  const requiresFee = isFull || isLiquidacion;
+  const requiresVacancy = true; // All three types require vacancy
+  const requiresFee = true; // All three types require fee
 
   const selectedClient = useMemo(
     () => clients.find((c: ClientDTO) => c.id === form.clientId),
@@ -241,7 +243,10 @@ export function CreateInvoiceSheet({
         currency: client.currency ?? "MXN",
         feeType: client.feeType ?? "",
         feeValue: client.feeValue ?? null,
-        // Reset anticipo selection when client changes
+        // Auto-fill advance terms
+        advanceType: client.advanceType ?? "",
+        advanceValue: client.advanceValue ?? null,
+        // Reset vacancy selection when client changes
         vacancyId: "",
         posicion: "",
         salario: null,
@@ -277,7 +282,6 @@ export function CreateInvoiceSheet({
         mesPlacement: "",
         anticipoInvoiceId: "",
         anticipoTotal: null,
-        manualTotal: null,
       }));
       setErrors({});
     },
@@ -302,8 +306,19 @@ export function CreateInvoiceSheet({
     }
 
     if (isAnticipo) {
-      if (!form.manualTotal || form.manualTotal <= 0) {
-        newErrors.manualTotal = "Total es requerido para anticipo";
+      if (!form.advanceType) {
+        newErrors.advanceType = "Tipo de anticipo es requerido";
+      }
+      if (!form.advanceValue || form.advanceValue <= 0) {
+        newErrors.advanceValue = "Valor del anticipo es requerido";
+      }
+      if (
+        form.advanceType === "PERCENTAGE" &&
+        form.advanceValue != null &&
+        form.advanceValue > 100
+      ) {
+        newErrors.advanceValue =
+          "El porcentaje de anticipo no puede superar 100%";
       }
     }
 
@@ -393,7 +408,8 @@ export function CreateInvoiceSheet({
         salario: form.salario,
         feeType: (form.feeType || null) as FeeType | null,
         feeValue: form.feeValue,
-        manualTotal: form.manualTotal,
+        advanceType: form.advanceType || null,
+        advanceValue: form.advanceValue,
         // Dates
         issuedAt: form.issuedAt
           ? new Date(form.issuedAt + "T12:00:00").toISOString()
@@ -795,67 +811,157 @@ export function CreateInvoiceSheet({
                 </Select>
               </Field>
 
-              {isAnticipo ? (
-                /* ANTICIPO: Manual total input */
-                <Field data-invalid={!!errors.manualTotal}>
-                  <FieldLabel>Total del Anticipo *</FieldLabel>
-                  <CurrencyInput
-                    value={form.manualTotal ?? ""}
-                    onChange={(v) =>
-                      updateField(
-                        "manualTotal",
-                        v === "" ? null : parseFloat(v),
-                      )
+              {/* Fee fields — shown for ALL types */}
+              <Field data-invalid={!!errors.salario}>
+                <FieldLabel>Sueldo *</FieldLabel>
+                <CurrencyInput
+                  value={form.salario ?? ""}
+                  onChange={(v) =>
+                    updateField(
+                      "salario",
+                      v === "" ? null : parseFloat(v),
+                    )
+                  }
+                  prefix={form.currency === "USD" ? "USD $ " : "$ "}
+                  placeholder="0"
+                />
+                {errors.salario && (
+                  <FieldError>{errors.salario}</FieldError>
+                )}
+              </Field>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Field data-invalid={!!errors.feeType}>
+                  <FieldLabel>Tipo de Fee *</FieldLabel>
+                  <Select
+                    value={form.feeType || "none"}
+                    onValueChange={(v) =>
+                      updateField("feeType", v === "none" ? "" : v)
                     }
-                    prefix={form.currency === "USD" ? "USD $ " : "$ "}
-                    placeholder="0"
-                  />
-                  {errors.manualTotal && (
-                    <FieldError>{errors.manualTotal}</FieldError>
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Tipo de fee" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">
+                        Seleccionar tipo
+                      </SelectItem>
+                      {Object.entries(FeeTypeLabels).map(
+                        ([value, label]) => (
+                          <SelectItem key={value} value={value}>
+                            {label}
+                          </SelectItem>
+                        ),
+                      )}
+                    </SelectContent>
+                  </Select>
+                  {errors.feeType && (
+                    <FieldError>{errors.feeType}</FieldError>
                   )}
-                  <p className="text-xs text-muted-foreground mt-1">
-                    El subtotal e IVA se calcularán automáticamente a partir del
-                    total
-                  </p>
                 </Field>
-              ) : (
-                /* FULL / LIQUIDACION: Fee-based calculation */
-                <>
-                  <Field data-invalid={!!errors.salario}>
-                    <FieldLabel>Sueldo *</FieldLabel>
-                    <CurrencyInput
-                      value={form.salario ?? ""}
+
+                <Field data-invalid={!!errors.feeValue}>
+                  <FieldLabel>
+                    {form.feeType === "PERCENTAGE"
+                      ? "Porcentaje de Fee *"
+                      : form.feeType === "MONTHS"
+                        ? "Meses de Sueldo *"
+                        : "Monto de Fee *"}
+                  </FieldLabel>
+                  {form.feeType === "PERCENTAGE" ? (
+                    <PercentInput
+                      value={form.feeValue ?? ""}
                       onChange={(v) =>
                         updateField(
-                          "salario",
+                          "feeValue",
+                          v === "" ? null : parseFloat(v),
+                        )
+                      }
+                      placeholder="0"
+                    />
+                  ) : form.feeType === "MONTHS" ? (
+                    <NumericFormat
+                      customInput={Input}
+                      value={form.feeValue ?? ""}
+                      decimalScale={1}
+                      decimalSeparator="."
+                      allowNegative={false}
+                      suffix=" meses"
+                      placeholder="0 meses"
+                      onValueChange={({ floatValue }) =>
+                        updateField("feeValue", floatValue ?? null)
+                      }
+                    />
+                  ) : (
+                    <CurrencyInput
+                      value={form.feeValue ?? ""}
+                      onChange={(v) =>
+                        updateField(
+                          "feeValue",
                           v === "" ? null : parseFloat(v),
                         )
                       }
                       prefix={form.currency === "USD" ? "USD $ " : "$ "}
                       placeholder="0"
                     />
-                    {errors.salario && (
-                      <FieldError>{errors.salario}</FieldError>
+                  )}
+                  {errors.feeValue && (
+                    <FieldError>{errors.feeValue}</FieldError>
+                  )}
+                </Field>
+              </div>
+
+              {/* Advance fields — ANTICIPO only */}
+              {isAnticipo && (
+                <>
+                  {/* Warning: client has no advance config */}
+                  {selectedClient &&
+                    !selectedClient.advanceType && (
+                      <div className="flex items-start gap-2 rounded-md border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/20 p-3 text-sm text-blue-700 dark:text-blue-300">
+                        <HugeiconsIcon
+                          icon={InformationCircleIcon}
+                          className="size-5 shrink-0 mt-0.5"
+                        />
+                        <span>
+                          Este cliente no tiene anticipo configurado. Ingresa
+                          los datos de anticipo manualmente.
+                        </span>
+                      </div>
                     )}
-                  </Field>
+
+                  {/* Warning: client paymentScheme !== ADVANCE */}
+                  {selectedClient &&
+                    selectedClient.paymentScheme &&
+                    selectedClient.paymentScheme !== "ADVANCE" && (
+                      <div className="flex items-start gap-2 rounded-md border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/20 p-3 text-sm text-amber-700 dark:text-amber-300">
+                        <HugeiconsIcon
+                          icon={Alert02Icon}
+                          className="size-5 shrink-0 mt-0.5"
+                        />
+                        <span>
+                          El esquema de cobro de este cliente no incluye
+                          anticipo.
+                        </span>
+                      </div>
+                    )}
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Field data-invalid={!!errors.feeType}>
-                      <FieldLabel>Tipo de Fee *</FieldLabel>
+                    <Field data-invalid={!!errors.advanceType}>
+                      <FieldLabel>Tipo de Anticipo *</FieldLabel>
                       <Select
-                        value={form.feeType || "none"}
+                        value={form.advanceType || "none"}
                         onValueChange={(v) =>
-                          updateField("feeType", v === "none" ? "" : v)
+                          updateField("advanceType", v === "none" ? "" : v)
                         }
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Tipo de fee" />
+                          <SelectValue placeholder="Tipo de anticipo" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="none">
                             Seleccionar tipo
                           </SelectItem>
-                          {Object.entries(FeeTypeLabels).map(
+                          {Object.entries(AdvanceTypeLabels).map(
                             ([value, label]) => (
                               <SelectItem key={value} value={value}>
                                 {label}
@@ -864,49 +970,34 @@ export function CreateInvoiceSheet({
                           )}
                         </SelectContent>
                       </Select>
-                      {errors.feeType && (
-                        <FieldError>{errors.feeType}</FieldError>
+                      {errors.advanceType && (
+                        <FieldError>{errors.advanceType}</FieldError>
                       )}
                     </Field>
 
-                    <Field data-invalid={!!errors.feeValue}>
+                    <Field data-invalid={!!errors.advanceValue}>
                       <FieldLabel>
-                        {form.feeType === "PERCENTAGE"
-                          ? "Porcentaje de Fee *"
-                          : form.feeType === "MONTHS"
-                            ? "Meses de Sueldo *"
-                            : "Monto de Fee *"}
+                        {form.advanceType === "PERCENTAGE"
+                          ? "Porcentaje de Anticipo *"
+                          : "Monto de Anticipo *"}
                       </FieldLabel>
-                      {form.feeType === "PERCENTAGE" ? (
+                      {form.advanceType === "PERCENTAGE" ? (
                         <PercentInput
-                          value={form.feeValue ?? ""}
+                          value={form.advanceValue ?? ""}
                           onChange={(v) =>
                             updateField(
-                              "feeValue",
+                              "advanceValue",
                               v === "" ? null : parseFloat(v),
                             )
                           }
                           placeholder="0"
                         />
-                      ) : form.feeType === "MONTHS" ? (
-                        <NumericFormat
-                          customInput={Input}
-                          value={form.feeValue ?? ""}
-                          decimalScale={1}
-                          decimalSeparator="."
-                          allowNegative={false}
-                          suffix=" meses"
-                          placeholder="0 meses"
-                          onValueChange={({ floatValue }) =>
-                            updateField("feeValue", floatValue ?? null)
-                          }
-                        />
                       ) : (
                         <CurrencyInput
-                          value={form.feeValue ?? ""}
+                          value={form.advanceValue ?? ""}
                           onChange={(v) =>
                             updateField(
-                              "feeValue",
+                              "advanceValue",
                               v === "" ? null : parseFloat(v),
                             )
                           }
@@ -914,8 +1005,8 @@ export function CreateInvoiceSheet({
                           placeholder="0"
                         />
                       )}
-                      {errors.feeValue && (
-                        <FieldError>{errors.feeValue}</FieldError>
+                      {errors.advanceValue && (
+                        <FieldError>{errors.advanceValue}</FieldError>
                       )}
                     </Field>
                   </div>
@@ -929,7 +1020,8 @@ export function CreateInvoiceSheet({
                 feeType={form.feeType || null}
                 feeValue={form.feeValue}
                 salario={form.salario}
-                manualTotal={form.manualTotal}
+                advanceType={form.advanceType || null}
+                advanceValue={form.advanceValue}
                 anticipoTotal={form.anticipoTotal}
               />
             </fieldset>

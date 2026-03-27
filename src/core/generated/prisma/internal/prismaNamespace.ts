@@ -3216,6 +3216,8 @@ export const InvoiceScalarFieldEnum = {
   salario: 'salario',
   feeType: 'feeType',
   feeValue: 'feeValue',
+  advanceType: 'advanceType',
+  advanceValue: 'advanceValue',
   subtotal: 'subtotal',
   ivaRate: 'ivaRate',
   ivaAmount: 'ivaAmount',
@@ -3701,6 +3703,20 @@ export type ListEnumFeeTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
 
 
 /**
+ * Reference to a field of type 'AdvanceType'
+ */
+export type EnumAdvanceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdvanceType'>
+    
+
+
+/**
+ * Reference to a field of type 'AdvanceType[]'
+ */
+export type ListEnumAdvanceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdvanceType[]'>
+    
+
+
+/**
  * Reference to a field of type 'InvoiceStatus'
  */
 export type EnumInvoiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvoiceStatus'>
@@ -3725,20 +3741,6 @@ export type EnumPaymentSchemeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'PaymentScheme[]'
  */
 export type ListEnumPaymentSchemeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentScheme[]'>
-    
-
-
-/**
- * Reference to a field of type 'AdvanceType'
- */
-export type EnumAdvanceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdvanceType'>
-    
-
-
-/**
- * Reference to a field of type 'AdvanceType[]'
- */
-export type ListEnumAdvanceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdvanceType[]'>
     
 
 

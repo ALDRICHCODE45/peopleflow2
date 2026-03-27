@@ -9,7 +9,8 @@ interface InvoiceCalculationPreviewProps {
   feeType: string | null;
   feeValue: number | null;
   salario: number | null;
-  manualTotal: number | null;
+  advanceType: string | null;
+  advanceValue: number | null;
   anticipoTotal: number | null;
 }
 
@@ -35,71 +36,78 @@ export function InvoiceCalculationPreview({
   feeType,
   feeValue,
   salario,
-  manualTotal,
+  advanceType,
+  advanceValue,
   anticipoTotal,
 }: InvoiceCalculationPreviewProps) {
   const calculation = useMemo(() => {
     const ivaRate = currency === "MXN" ? 0.16 : 0.0;
 
-    if (type === "ANTICIPO") {
-      const total = manualTotal ?? 0;
-      if (total <= 0) return null;
-
-      let subtotal: number;
-      let ivaAmount: number;
-
-      if (ivaRate === 0) {
-        subtotal = roundCurrency(total);
-        ivaAmount = 0;
-      } else {
-        subtotal = roundCurrency(total / (1 + ivaRate));
-        ivaAmount = roundCurrency(total - subtotal);
-      }
-
-      return {
-        subtotal,
-        ivaRate,
-        ivaAmount,
-        anticipoDeduccion: 0,
-        total: roundCurrency(total),
-      };
-    }
-
-    // FULL or LIQUIDACION
+    // Calculate fee base (shared by ANTICIPO and FULL/LIQUIDACION)
     if (!feeType || !feeValue || feeValue <= 0) return null;
 
-    let baseAmount: number;
+    let feeBase: number;
 
     switch (feeType) {
       case "PERCENTAGE":
         if (!salario || salario <= 0) return null;
-        baseAmount = salario * (feeValue / 100);
+        feeBase = salario * (feeValue / 100);
         break;
       case "FIXED":
-        baseAmount = feeValue;
+        feeBase = feeValue;
         break;
       case "MONTHS":
         if (!salario || salario <= 0) return null;
-        baseAmount = salario * feeValue;
+        feeBase = salario * feeValue;
         break;
       default:
         return null;
     }
 
-    const subtotal = roundCurrency(baseAmount);
+    feeBase = roundCurrency(feeBase);
+
+    if (type === "ANTICIPO") {
+      // Forward calc: feeBase → advance → subtotal → +IVA → total
+      if (!advanceType || !advanceValue || advanceValue <= 0) return null;
+
+      const subtotal =
+        advanceType === "PERCENTAGE"
+          ? roundCurrency(feeBase * (advanceValue / 100))
+          : roundCurrency(advanceValue);
+
+      const ivaAmount = roundCurrency(subtotal * ivaRate);
+      const total = roundCurrency(subtotal + ivaAmount);
+
+      return {
+        feeBase,
+        advanceType,
+        advanceValue,
+        subtotal,
+        ivaRate,
+        ivaAmount,
+        anticipoDeduccion: 0,
+        total,
+      };
+    }
+
+    // FULL or LIQUIDACION
+    const subtotal = feeBase;
     const ivaAmount = roundCurrency(subtotal * ivaRate);
     const anticipoDeduccion =
       type === "LIQUIDACION" ? roundCurrency(anticipoTotal ?? 0) : 0;
     const total = roundCurrency(subtotal + ivaAmount - anticipoDeduccion);
 
     return {
+      feeBase: null,
+      advanceType: null,
+      advanceValue: null,
       subtotal,
       ivaRate,
       ivaAmount,
       anticipoDeduccion,
       total,
     };
-  }, [type, currency, feeType, feeValue, salario, manualTotal, anticipoTotal]);
+  }, [type, currency, feeType, feeValue, salario, advanceType, advanceValue, anticipoTotal]);
 
   if (!calculation) {
     return (
@@ -118,6 +126,31 @@ export function InvoiceCalculationPreview({
       </h4>
 
       <div className="space-y-1.5 text-sm">
+        {/* ANTICIPO: show fee base → advance → subtotal chain */}
+        {type === "ANTICIPO" && calculation.feeBase != null && (
+          <>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Fee base</span>
+              <span className="font-medium">
+                {formatCurrency(calculation.feeBase, currency)}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">
+                Anticipo (
+                {calculation.advanceType === "PERCENTAGE"
+                  ? `${calculation.advanceValue}%`
+                  : "Fijo"}
+                )
+              </span>
+              <span className="font-medium">
+                {formatCurrency(calculation.subtotal, currency)}
+              </span>
+            </div>
+            <div className="border-t my-1" />
+          </>
+        )}
+
         <div className="flex justify-between">
           <span className="text-muted-foreground">Subtotal</span>
           <span className="font-medium">

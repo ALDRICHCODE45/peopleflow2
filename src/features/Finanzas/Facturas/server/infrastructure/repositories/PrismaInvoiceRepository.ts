@@ -58,6 +58,8 @@ function toDomain(
     salario: number | null;
     feeType: string | null;
     feeValue: number | null;
+    advanceType: string | null;
+    advanceValue: number | null;
     subtotal: number;
     ivaRate: number;
     ivaAmount: number;
@@ -103,6 +105,8 @@ function toDomain(
     salario: invoice.salario,
     feeType: invoice.feeType as InvoiceProps["feeType"],
     feeValue: invoice.feeValue,
+    advanceType: (invoice.advanceType as InvoiceProps["advanceType"]) ?? null,
+    advanceValue: invoice.advanceValue ?? null,
     subtotal: invoice.subtotal,
     ivaRate: invoice.ivaRate,
     ivaAmount: invoice.ivaAmount,
@@ -168,6 +172,8 @@ class PrismaInvoiceRepositoryImpl implements IInvoiceRepository {
           salario: data.salario,
           feeType: data.feeType,
           feeValue: data.feeValue,
+          advanceType: data.advanceType,
+          advanceValue: data.advanceValue,
           subtotal: data.subtotal,
           ivaRate: data.ivaRate,
           ivaAmount: data.ivaAmount,
@@ -269,6 +275,8 @@ class PrismaInvoiceRepositoryImpl implements IInvoiceRepository {
         ...(data.salario !== undefined && { salario: data.salario }),
         ...(data.feeType !== undefined && { feeType: data.feeType }),
         ...(data.feeValue !== undefined && { feeValue: data.feeValue }),
+        ...(data.advanceType !== undefined && { advanceType: data.advanceType }),
+        ...(data.advanceValue !== undefined && { advanceValue: data.advanceValue }),
         ...(data.subtotal !== undefined && { subtotal: data.subtotal }),
         ...(data.ivaRate !== undefined && { ivaRate: data.ivaRate }),
         ...(data.ivaAmount !== undefined && { ivaAmount: data.ivaAmount }),
@@ -387,6 +395,11 @@ class PrismaInvoiceRepositoryImpl implements IInvoiceRepository {
         id: true,
         tenantId: true,
         currency: true,
+        feeType: true,
+        feeValue: true,
+        advanceType: true,
+        advanceValue: true,
+        paymentScheme: true,
       },
     });
 
@@ -398,6 +411,11 @@ class PrismaInvoiceRepositoryImpl implements IInvoiceRepository {
       id: client.id,
       tenantId: client.tenantId,
       currency: client.currency,
+      feeType: client.feeType,
+      feeValue: client.feeValue,
+      advanceType: client.advanceType,
+      advanceValue: client.advanceValue,
+      paymentScheme: client.paymentScheme,
     };
   }
 
