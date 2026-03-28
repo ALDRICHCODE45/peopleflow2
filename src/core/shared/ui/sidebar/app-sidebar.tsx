@@ -27,12 +27,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     ? {
         name: user.name || "Usuario",
         email: user.email || "usuario@bdp.com",
-        avatar: user.image || "/placeholder-avatar.jpg",
+        avatar: user.image ?? "",
       }
     : {
         name: "Usuario",
         email: "usuario@bdp.com",
-        avatar: "/placeholder-avatar.jpg",
+        avatar: "",
       };
 
   // Filtrar los links del sidebar basándose en los permisos del usuario

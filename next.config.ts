@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
       bodySizeLimit: "10mb",
+      allowedOrigins: [
+        "www.peopleflow.tech",
+        "peopleflow.tech",
+      ],
     },
   },
   async redirects() {
