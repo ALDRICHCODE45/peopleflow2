@@ -5,21 +5,8 @@ import { useAvailableAnticipos } from "../hooks/useAvailableAnticipos";
 import { SearchableSelect } from "@/core/shared/components/SearchableSelect";
 import { Spinner } from "@shadcn/spinner";
 import { Badge } from "@shadcn/badge";
-
-interface AnticipoSelectorProps {
-  clientId: string | undefined;
-  value: string | undefined;
-  onChange: (anticipoId: string, anticipoTotal: number) => void;
-  disabled?: boolean;
-}
-
-function formatCurrency(amount: number, currency: string): string {
-  const prefix = currency === "USD" ? "USD $" : "$";
-  return `${prefix}${amount.toLocaleString("es-MX", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
-}
+import { formatCompactCurrency } from "../helpers/invoice.helpers";
+import type { AnticipoSelectorProps } from "../types/invoice.types";
 
 /**
  * Selector de anticipos disponibles (no consumidos) para un cliente.
@@ -37,7 +24,7 @@ export function AnticipoSelector({
     () =>
       (anticipos ?? []).map((a) => ({
         value: a.id,
-        label: `${a.folio} — ${formatCurrency(a.total, a.currency)}`,
+        label: `${a.folio} — ${formatCompactCurrency(a.total, a.currency)}`,
         folio: a.folio,
         total: a.total,
         currency: a.currency,
@@ -92,7 +79,7 @@ export function AnticipoSelector({
           <div className="flex items-center justify-between w-full gap-2">
             <span className="font-medium">{opt.folio}</span>
             <Badge variant="secondary" className="font-mono text-xs">
-              {formatCurrency(opt.total, opt.currency)}
+              {formatCompactCurrency(opt.total, opt.currency)}
             </Badge>
           </div>
         )}
@@ -107,7 +94,7 @@ export function AnticipoSelector({
           <div className="flex justify-between">
             <span className="text-muted-foreground">Monto a deducir:</span>
             <span className="font-bold text-blue-700 dark:text-blue-300">
-              {formatCurrency(selectedAnticipo.total, selectedAnticipo.currency)}
+              {formatCompactCurrency(selectedAnticipo.total, selectedAnticipo.currency)}
             </span>
           </div>
         </div>

@@ -3,92 +3,50 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@shadcn/sheet";
 import { Badge } from "@/core/shared/ui/shadcn/badge";
 import { Separator } from "@/core/shared/ui/shadcn/separator";
+import {
+  Item,
+  ItemMedia,
+  ItemContent,
+  ItemTitle,
+  ItemDescription,
+  ItemActions,
+} from "@shadcn/item";
+import { Button } from "@/core/shared/ui/shadcn/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/core/shared/ui/shadcn/tooltip";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  CheckmarkCircle02Icon,
+  Download01Icon,
+  Link04Icon,
+  Alert02Icon,
+} from "@hugeicons/core-free-icons";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useIsMobile } from "@/core/shared/hooks/use-mobile";
-import type { InvoiceDTO } from "../types/invoice.types";
+import { InfoItem } from "./InfoItem";
+import {
+  formatInvoiceCurrency,
+  formatFeeDisplay,
+  formatDateSafe,
+  formatMonthSafe,
+  formatFileSize,
+} from "../helpers/invoice.helpers";
 import {
   InvoiceTypeLabels,
   InvoicePaymentTypeLabels,
   InvoiceStatusLabels,
   FeeTypeLabels,
   CurrencyLabels,
+  invoiceTypeColorMap,
+  INVOICE_TYPES,
+  INVOICE_PAYMENT_TYPES,
+  INVOICE_STATUSES,
 } from "../types/invoice.types";
-
-interface InvoiceDetailSheetProps {
-  invoice: InvoiceDTO | null;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}
-
-function formatDateSafe(isoString: string | null | undefined): string {
-  if (!isoString) return "—";
-  try {
-    return format(new Date(isoString), "d MMM yyyy", { locale: es });
-  } catch {
-    return "—";
-  }
-}
-
-function formatMonthSafe(isoString: string | null | undefined): string {
-  if (!isoString) return "—";
-  try {
-    return format(new Date(isoString), "MMMM yyyy", { locale: es });
-  } catch {
-    return "—";
-  }
-}
-
-function formatCurrency(value: number, currency: string): string {
-  return new Intl.NumberFormat("es-MX", {
-    style: "currency",
-    currency: currency === "USD" ? "USD" : "MXN",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(value);
-}
-
-function formatFee(feeType: string | null, feeValue: number | null): string {
-  if (!feeType || feeValue == null) return "—";
-  switch (feeType) {
-    case "PERCENTAGE":
-      return `${feeValue}%`;
-    case "FIXED":
-      return `$${feeValue.toLocaleString("es-MX")}`;
-    case "MONTHS":
-      return `${feeValue} ${feeValue === 1 ? "mes" : "meses"}`;
-    default:
-      return String(feeValue);
-  }
-}
-
-function InfoItem({
-  label,
-  value,
-}: {
-  label: string;
-  value: string | null | undefined;
-}) {
-  if (!value) {
-    return (
-      <div>
-        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-          {label}
-        </p>
-        <p className="text-sm mt-0.5 italic">No ingresado</p>
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-        {label}
-      </p>
-      <p className="text-sm mt-0.5">{value}</p>
-    </div>
-  );
-}
+import type { InvoiceDetailSheetProps } from "../types/invoice.types";
 
 export function InvoiceDetailSheet({
   invoice,
@@ -100,11 +58,11 @@ export function InvoiceDetailSheet({
 
   if (!invoice) return null;
 
-  const isAnticipo = invoice.type === "ANTICIPO";
-  const isLiquidacion = invoice.type === "LIQUIDACION";
-  const isFull = invoice.type === "FULL";
-  const isPPD = invoice.paymentType === "PPD";
-  const isPagada = invoice.status === "PAGADA";
+  const isAnticipo = invoice.type === INVOICE_TYPES.ANTICIPO;
+  const isLiquidacion = invoice.type === INVOICE_TYPES.LIQUIDACION;
+  const isFull = invoice.type === INVOICE_TYPES.FULL;
+  const isPPD = invoice.paymentType === INVOICE_PAYMENT_TYPES.PPD;
+  const isPagada = invoice.status === INVOICE_STATUSES.PAGADA;
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -121,7 +79,7 @@ export function InvoiceDetailSheet({
                 Factura {invoice.folio}
               </SheetTitle>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 sm:mr-4">
               <Badge
                 variant={isPagada ? "default" : "outline"}
                 className={
@@ -134,18 +92,16 @@ export function InvoiceDetailSheet({
               </Badge>
               <Badge
                 className={
-                  invoice.type === "ANTICIPO"
-                    ? "bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800"
-                    : invoice.type === "FULL"
-                      ? "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800"
-                      : "bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-950 dark:text-purple-300 dark:border-purple-800"
+                  invoiceTypeColorMap[invoice.type] ??
+                  "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
                 }
               >
                 {InvoiceTypeLabels[invoice.type] ?? invoice.type}
               </Badge>
               <Badge variant="outline">
-                {InvoicePaymentTypeLabels[invoice.paymentType]?.split(" - ")[0] ??
-                  invoice.paymentType}
+                {InvoicePaymentTypeLabels[invoice.paymentType]?.split(
+                  " - ",
+                )[0] ?? invoice.paymentType}
               </Badge>
             </div>
           </div>
@@ -168,7 +124,10 @@ export function InvoiceDetailSheet({
               Cliente
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <InfoItem label="Nombre Comercial" value={invoice.nombreComercial} />
+              <InfoItem
+                label="Nombre Comercial"
+                value={invoice.nombreComercial}
+              />
               <InfoItem label="Razón Social" value={invoice.razonSocial} />
             </div>
           </div>
@@ -185,10 +144,7 @@ export function InvoiceDetailSheet({
               <InfoItem label="Código Postal" value={invoice.codigoPostal} />
               <InfoItem label="Régimen Fiscal" value={invoice.regimen} />
               <InfoItem label="Figura" value={invoice.figura} />
-              <InfoItem
-                label="Ubicación"
-                value={invoice.ubicacion}
-              />
+              <InfoItem label="Ubicación" value={invoice.ubicacion} />
             </div>
           </div>
 
@@ -203,9 +159,15 @@ export function InvoiceDetailSheet({
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <InfoItem label="Posición" value={invoice.posicion} />
-                  <InfoItem label="Mes de Placement" value={formatMonthSafe(invoice.mesPlacement)} />
+                  <InfoItem
+                    label="Mes de Placement"
+                    value={formatMonthSafe(invoice.mesPlacement)}
+                  />
                   <InfoItem label="Candidato" value={invoice.candidateName} />
-                  <InfoItem label="Hunter / Reclutador" value={invoice.hunterName} />
+                  <InfoItem
+                    label="Hunter / Reclutador"
+                    value={invoice.hunterName}
+                  />
                 </div>
               </div>
 
@@ -213,22 +175,35 @@ export function InvoiceDetailSheet({
             </>
           )}
 
-          {/* Liquidacion info */}
+          {/* Liquidacion — Anticipo vinculado */}
           {isLiquidacion && invoice.anticipoFolio && (
             <>
-              <div className="rounded-lg border bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800 p-4 space-y-3">
-                <h4 className="text-xs font-semibold uppercase tracking-wide text-blue-700 dark:text-blue-300">
-                  Liquidación - Anticipo Vinculado
-                </h4>
+              <div className="rounded-lg border-l-4 border-l-blue-500 border border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-950/10 p-4 space-y-3">
+                <div className="flex items-center gap-2">
+                  <HugeiconsIcon
+                    icon={Link04Icon}
+                    size={16}
+                    className="text-blue-600 dark:text-blue-400"
+                  />
+                  <h4 className="text-xs font-semibold uppercase tracking-wide text-blue-700 dark:text-blue-300">
+                    Anticipo Vinculado
+                  </h4>
+                </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs text-muted-foreground">Folio Anticipo</p>
-                    <p className="text-sm font-medium">{invoice.anticipoFolio}</p>
+                    <p className="text-xs text-muted-foreground">
+                      Folio Anticipo
+                    </p>
+                    <p className="text-sm font-semibold">
+                      {invoice.anticipoFolio}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">Monto Deducido</p>
+                    <p className="text-xs text-muted-foreground">
+                      Monto Deducido
+                    </p>
                     <p className="text-sm font-bold text-blue-700 dark:text-blue-300">
-                      {formatCurrency(
+                      {formatInvoiceCurrency(
                         invoice.anticipoDeduccion,
                         invoice.currency,
                       )}
@@ -257,7 +232,10 @@ export function InvoiceDetailSheet({
                     label="Sueldo"
                     value={
                       invoice.salario != null
-                        ? formatCurrency(invoice.salario, invoice.currency)
+                        ? formatInvoiceCurrency(
+                            invoice.salario,
+                            invoice.currency,
+                          )
                         : null
                     }
                   />
@@ -265,13 +243,13 @@ export function InvoiceDetailSheet({
                     label="Tipo de Fee"
                     value={
                       invoice.feeType
-                        ? FeeTypeLabels[invoice.feeType] ?? invoice.feeType
+                        ? (FeeTypeLabels[invoice.feeType] ?? invoice.feeType)
                         : null
                     }
                   />
                   <InfoItem
                     label="Valor del Fee"
-                    value={formatFee(invoice.feeType, invoice.feeValue)}
+                    value={formatFeeDisplay(invoice.feeType, invoice.feeValue)}
                   />
                 </>
               )}
@@ -282,7 +260,7 @@ export function InvoiceDetailSheet({
           <Separator />
 
           {/* Totales */}
-          <div className="rounded-lg border bg-muted/30 p-4 space-y-3">
+          <div className="rounded-lg border-l-4 border-l-primary border border-border bg-muted/20 p-4 space-y-3">
             <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Totales
             </h4>
@@ -290,7 +268,7 @@ export function InvoiceDetailSheet({
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Subtotal</span>
                 <span className="font-medium">
-                  {formatCurrency(invoice.subtotal, invoice.currency)}
+                  {formatInvoiceCurrency(invoice.subtotal, invoice.currency)}
                 </span>
               </div>
               <div className="flex justify-between text-sm">
@@ -298,14 +276,14 @@ export function InvoiceDetailSheet({
                   IVA ({(invoice.ivaRate * 100).toFixed(0)}%)
                 </span>
                 <span className="font-medium">
-                  {formatCurrency(invoice.ivaAmount, invoice.currency)}
+                  {formatInvoiceCurrency(invoice.ivaAmount, invoice.currency)}
                 </span>
               </div>
               <Separator />
               <div className="flex justify-between items-center pt-2">
                 <span className="font-semibold">Total</span>
                 <span className="text-xl font-bold">
-                  {formatCurrency(invoice.total, invoice.currency)}
+                  {formatInvoiceCurrency(invoice.total, invoice.currency)}
                 </span>
               </div>
             </div>
@@ -333,62 +311,79 @@ export function InvoiceDetailSheet({
             </div>
           </div>
 
-          {/* PPD Complemento */}
+          {/* PPD Complemento — Item pattern matching Vacantes AttachmentRow */}
           {isPPD && (
             <div className="pt-3 border-t">
               <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">
                 Complemento de Pago (PPD)
               </h4>
               {invoice.complemento ? (
-                <div className="rounded-lg border bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800 p-4 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Badge
-                        variant="outline"
-                        className="bg-green-100 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800"
-                      >
-                        Adjunto
-                      </Badge>
-                      <span className="text-sm font-medium truncate max-w-[200px]">
+                /* eslint-disable @next/next/no-img-element */
+                <Item variant="outline" size="sm" className="group">
+                  <ItemMedia className="size-9 shrink-0 self-start">
+                    <img
+                      src="/icons/pdf.svg"
+                      alt="PDF"
+                      className="size-9 object-contain"
+                    />
+                  </ItemMedia>
+
+                  <ItemContent>
+                    <ItemTitle>
+                      <span className="truncate">
                         {invoice.complemento.fileName}
                       </span>
-                    </div>
-                    <a
-                      href={invoice.complemento.fileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm font-medium text-primary hover:underline shrink-0"
-                    >
-                      Ver / Descargar
-                    </a>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 text-xs text-muted-foreground">
-                    <div>
-                      <span className="uppercase tracking-wide">Tamaño</span>
-                      <p className="text-sm text-foreground mt-0.5">
-                        {(invoice.complemento.fileSize / 1024).toFixed(1)} KB
-                      </p>
-                    </div>
-                    <div>
-                      <span className="uppercase tracking-wide">Subido</span>
-                      <p className="text-sm text-foreground mt-0.5">
-                        {formatDateSafe(invoice.complemento.createdAt)}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                      <Badge className="bg-green-100 text-green-700 border-green-200 text-xs gap-1">
+                        <HugeiconsIcon icon={CheckmarkCircle02Icon} size={11} />
+                        Adjunto
+                      </Badge>
+                    </ItemTitle>
+
+                    <ItemDescription>
+                      {formatFileSize(invoice.complemento.fileSize)}
+                      {" · "}
+                      Subido el {formatDateSafe(invoice.complemento.createdAt)}
+                    </ItemDescription>
+                  </ItemContent>
+
+                  <ItemActions className="opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="size-8"
+                          asChild
+                        >
+                          <a
+                            href={invoice.complemento.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <HugeiconsIcon icon={Download01Icon} size={15} />
+                          </a>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Descargar</TooltipContent>
+                    </Tooltip>
+                  </ItemActions>
+                </Item>
               ) : (
-                <div className="rounded-lg border bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800 p-4">
-                  <div className="flex items-center gap-2">
-                    <Badge
-                      variant="outline"
-                      className="bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800"
-                    >
-                      Pendiente
-                    </Badge>
-                    <span className="text-sm text-amber-700 dark:text-amber-300">
+                /* eslint-enable @next/next/no-img-element */
+                <div className="flex items-center gap-3 rounded-lg border border-dashed border-amber-300 dark:border-amber-700 bg-amber-50/50 dark:bg-amber-950/10 p-4">
+                  <HugeiconsIcon
+                    icon={Alert02Icon}
+                    size={20}
+                    className="text-amber-500 dark:text-amber-400 shrink-0"
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-amber-700 dark:text-amber-300">
+                      Complemento pendiente
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
                       Requiere complemento de pago antes de marcar como pagada
-                    </span>
+                    </p>
                   </div>
                 </div>
               )}

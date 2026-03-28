@@ -5,7 +5,16 @@ import {
   InvoicePaymentTypeLabels,
   InvoiceStatusLabels,
   FeeTypeLabels,
+  invoiceTypeColorMap,
+  paymentTypeColorMap,
+  statusColorMap,
+  INVOICE_PAYMENT_TYPES,
 } from "../../types/invoice.types";
+import {
+  formatInvoiceCurrency,
+  formatFeeDisplay,
+} from "../../helpers/invoice.helpers";
+import { EmptyCell } from "../EmptyCell";
 import { InvoiceRowActions } from "./InvoiceRowActions";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -16,57 +25,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/core/shared/ui/shadcn/tooltip";
-
-// -- Color maps ---------------------------------------------------------------
-
-const invoiceTypeColorMap: Record<string, string> = {
-  ANTICIPO: "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300",
-  FULL: "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300",
-  LIQUIDACION:
-    "bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300",
-};
-
-const paymentTypeColorMap: Record<string, string> = {
-  PUE: "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300",
-  PPD: "bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300",
-};
-
-const statusColorMap: Record<string, string> = {
-  POR_COBRAR:
-    "bg-yellow-100 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300",
-  PAGADA: "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300",
-};
-
-// -- Helpers ------------------------------------------------------------------
-
-function EmptyCell() {
-  return <span className="text-muted-foreground text-xs italic">—</span>;
-}
-
-/** Currency-aware number formatter */
-function formatCurrency(value: number, currency: string): string {
-  return new Intl.NumberFormat("es-MX", {
-    style: "currency",
-    currency: currency === "USD" ? "USD" : "MXN",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(value);
-}
-
-/** Format fee display based on feeType */
-function formatFee(feeType: string | null, feeValue: number | null): string {
-  if (!feeType || feeValue == null) return "—";
-  switch (feeType) {
-    case "PERCENTAGE":
-      return `${feeValue}%`;
-    case "FIXED":
-      return `$${feeValue.toLocaleString("es-MX")}`;
-    case "MONTHS":
-      return `${feeValue} ${feeValue === 1 ? "mes" : "meses"}`;
-    default:
-      return String(feeValue);
-  }
-}
 
 // -- Column factory -----------------------------------------------------------
 
@@ -194,7 +152,7 @@ export function createInvoiceColumns(
         if (salario == null) return <EmptyCell />;
         return (
           <span className="whitespace-nowrap text-sm">
-            {formatCurrency(salario, currency)}
+            {formatInvoiceCurrency(salario, currency)}
           </span>
         );
       },
@@ -207,7 +165,7 @@ export function createInvoiceColumns(
       cell: ({ row }) => {
         const { feeType, feeValue } = row.original;
         if (!feeType || feeValue == null) return <EmptyCell />;
-        const feeDisplay = formatFee(feeType, feeValue);
+        const feeDisplay = formatFeeDisplay(feeType, feeValue);
         const label = FeeTypeLabels[feeType] ?? feeType;
         return (
           <Tooltip>
@@ -229,7 +187,7 @@ export function createInvoiceColumns(
       accessorKey: "subtotal",
       cell: ({ row }) => (
         <span className="whitespace-nowrap text-sm">
-          {formatCurrency(row.original.subtotal, row.original.currency)}
+          {formatInvoiceCurrency(row.original.subtotal, row.original.currency)}
         </span>
       ),
       size: 7,
@@ -240,7 +198,7 @@ export function createInvoiceColumns(
       accessorKey: "ivaAmount",
       cell: ({ row }) => (
         <span className="whitespace-nowrap text-sm">
-          {formatCurrency(row.original.ivaAmount, row.original.currency)}
+          {formatInvoiceCurrency(row.original.ivaAmount, row.original.currency)}
         </span>
       ),
       size: 6,
@@ -251,7 +209,7 @@ export function createInvoiceColumns(
       accessorKey: "total",
       cell: ({ row }) => (
         <span className="whitespace-nowrap text-sm font-bold">
-          {formatCurrency(row.original.total, row.original.currency)}
+          {formatInvoiceCurrency(row.original.total, row.original.currency)}
         </span>
       ),
       size: 8,
@@ -377,7 +335,6 @@ export function createInvoiceColumns(
       enableSorting: false,
     },
     // ── Hidden by default columns ─────────────────────────
-    // These columns exist for column-visibility toggle but are hidden by default
     {
       header: "RFC",
       accessorKey: "rfc",
@@ -483,7 +440,7 @@ export function createInvoiceColumns(
       accessorKey: "hasComplemento",
       cell: ({ row }) => {
         const invoice = row.original;
-        if (invoice.paymentType !== "PPD") return <EmptyCell />;
+        if (invoice.paymentType !== INVOICE_PAYMENT_TYPES.PPD) return <EmptyCell />;
         if (!invoice.complemento) {
           return (
             <Badge

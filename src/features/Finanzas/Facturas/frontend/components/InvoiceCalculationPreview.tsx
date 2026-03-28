@@ -2,6 +2,16 @@
 
 import { useMemo } from "react";
 import { Badge } from "@shadcn/badge";
+import {
+  formatCompactCurrency,
+  roundCurrency,
+} from "../helpers/invoice.helpers";
+import {
+  INVOICE_TYPES,
+  FEE_TYPES,
+  CURRENCIES,
+  ADVANCE_TYPES,
+} from "../types/invoice.types";
 
 interface InvoiceCalculationPreviewProps {
   type: string;
@@ -12,18 +22,6 @@ interface InvoiceCalculationPreviewProps {
   advanceType: string | null;
   advanceValue: number | null;
   anticipoTotal: number | null;
-}
-
-function roundCurrency(value: number): number {
-  return Math.round(value * 100) / 100;
-}
-
-function formatCurrency(amount: number, currency: string): string {
-  const prefix = currency === "USD" ? "USD $" : "$";
-  return `${prefix}${amount.toLocaleString("es-MX", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
 }
 
 /**
@@ -41,7 +39,7 @@ export function InvoiceCalculationPreview({
   anticipoTotal,
 }: InvoiceCalculationPreviewProps) {
   const calculation = useMemo(() => {
-    const ivaRate = currency === "MXN" ? 0.16 : 0.0;
+    const ivaRate = currency === CURRENCIES.MXN ? 0.16 : 0.0;
 
     // Calculate fee base (shared by ANTICIPO and FULL/LIQUIDACION)
     if (!feeType || !feeValue || feeValue <= 0) return null;
@@ -49,14 +47,14 @@ export function InvoiceCalculationPreview({
     let feeBase: number;
 
     switch (feeType) {
-      case "PERCENTAGE":
+      case FEE_TYPES.PERCENTAGE:
         if (!salario || salario <= 0) return null;
         feeBase = salario * (feeValue / 100);
         break;
-      case "FIXED":
+      case FEE_TYPES.FIXED:
         feeBase = feeValue;
         break;
-      case "MONTHS":
+      case FEE_TYPES.MONTHS:
         if (!salario || salario <= 0) return null;
         feeBase = salario * feeValue;
         break;
@@ -66,12 +64,12 @@ export function InvoiceCalculationPreview({
 
     feeBase = roundCurrency(feeBase);
 
-    if (type === "ANTICIPO") {
+    if (type === INVOICE_TYPES.ANTICIPO) {
       // Forward calc: feeBase → advance → subtotal → +IVA → total
       if (!advanceType || !advanceValue || advanceValue <= 0) return null;
 
       const subtotal =
-        advanceType === "PERCENTAGE"
+        advanceType === ADVANCE_TYPES.PERCENTAGE
           ? roundCurrency(feeBase * (advanceValue / 100))
           : roundCurrency(advanceValue);
 
@@ -94,7 +92,7 @@ export function InvoiceCalculationPreview({
     const subtotal = feeBase;
     const ivaAmount = roundCurrency(subtotal * ivaRate);
     const anticipoDeduccion =
-      type === "LIQUIDACION" ? roundCurrency(anticipoTotal ?? 0) : 0;
+      type === INVOICE_TYPES.LIQUIDACION ? roundCurrency(anticipoTotal ?? 0) : 0;
     const total = roundCurrency(subtotal + ivaAmount - anticipoDeduccion);
 
     return {
@@ -127,24 +125,24 @@ export function InvoiceCalculationPreview({
 
       <div className="space-y-1.5 text-sm">
         {/* ANTICIPO: show fee base → advance → subtotal chain */}
-        {type === "ANTICIPO" && calculation.feeBase != null && (
+        {type === INVOICE_TYPES.ANTICIPO && calculation.feeBase != null && (
           <>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Fee base</span>
               <span className="font-medium">
-                {formatCurrency(calculation.feeBase, currency)}
+                {formatCompactCurrency(calculation.feeBase, currency)}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">
                 Anticipo (
-                {calculation.advanceType === "PERCENTAGE"
+                {calculation.advanceType === ADVANCE_TYPES.PERCENTAGE
                   ? `${calculation.advanceValue}%`
                   : "Fijo"}
                 )
               </span>
               <span className="font-medium">
-                {formatCurrency(calculation.subtotal, currency)}
+                {formatCompactCurrency(calculation.subtotal, currency)}
               </span>
             </div>
             <div className="border-t my-1" />
@@ -154,7 +152,7 @@ export function InvoiceCalculationPreview({
         <div className="flex justify-between">
           <span className="text-muted-foreground">Subtotal</span>
           <span className="font-medium">
-            {formatCurrency(calculation.subtotal, currency)}
+            {formatCompactCurrency(calculation.subtotal, currency)}
           </span>
         </div>
 
@@ -163,15 +161,15 @@ export function InvoiceCalculationPreview({
             IVA ({ivaPercent}%)
           </span>
           <span className="font-medium">
-            {formatCurrency(calculation.ivaAmount, currency)}
+            {formatCompactCurrency(calculation.ivaAmount, currency)}
           </span>
         </div>
 
-        {type === "LIQUIDACION" && calculation.anticipoDeduccion > 0 && (
+        {type === INVOICE_TYPES.LIQUIDACION && calculation.anticipoDeduccion > 0 && (
           <div className="flex justify-between text-orange-600 dark:text-orange-400">
             <span>Deducción anticipo</span>
             <span className="font-medium">
-              - {formatCurrency(calculation.anticipoDeduccion, currency)}
+              - {formatCompactCurrency(calculation.anticipoDeduccion, currency)}
             </span>
           </div>
         )}
@@ -179,11 +177,11 @@ export function InvoiceCalculationPreview({
         <div className="border-t pt-2 mt-2 flex justify-between items-center">
           <span className="font-semibold">Total</span>
           <span className="text-lg font-bold">
-            {formatCurrency(calculation.total, currency)}
+            {formatCompactCurrency(calculation.total, currency)}
           </span>
         </div>
 
-        {calculation.total <= 0 && type === "LIQUIDACION" && (
+        {calculation.total <= 0 && type === INVOICE_TYPES.LIQUIDACION && (
           <Badge variant="destructive" className="mt-1">
             El total debe ser mayor a 0
           </Badge>

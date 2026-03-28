@@ -11,14 +11,7 @@ import {
   AlertDialogTitle,
 } from "@/core/shared/ui/shadcn/alert-dialog";
 import { Spinner } from "@/core/shared/ui/shadcn/spinner";
-
-interface DeleteInvoiceDialogProps {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  onConfirmDelete: () => void;
-  invoiceFolio: string;
-  isLoading?: boolean;
-}
+import type { DeleteInvoiceDialogProps } from "../types/invoice.types";
 
 /**
  * Confirmation dialog for invoice deletion.
