@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { resolveCountryName, resolveRegionName } from "@lib/resolve-location";
-import { format } from "date-fns";
+import { format, differenceInDays, startOfDay } from "date-fns";
 import { es } from "date-fns/locale";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@shadcn/sheet";
 import {
@@ -538,6 +538,19 @@ export function VacancyDetailSheet({
                           label="Fecha de ingreso"
                           value={formatDateSafe(vacancy.entryDate)}
                         />
+                        {vacancy.placementConfirmedAt && (
+                          <InfoRow
+                            label="Tiempo a Placement"
+                            value={(() => {
+                              const days = differenceInDays(
+                                startOfDay(new Date(vacancy.placementConfirmedAt)),
+                                startOfDay(new Date(vacancy.assignedAt)),
+                              );
+                              if (days === 0) return "Mismo día";
+                              return `${days} día${days !== 1 ? "s" : ""}`;
+                            })()}
+                          />
+                        )}
                       </div>
                     </div>
 
