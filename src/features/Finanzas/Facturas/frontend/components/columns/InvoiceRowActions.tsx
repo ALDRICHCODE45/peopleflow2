@@ -49,6 +49,7 @@ const DeleteInvoiceDialog = dynamic(
 
 interface InvoiceRowActionsProps {
   row: Row<InvoiceDTO>;
+  onViewDetail?: (invoice: InvoiceDTO) => void;
 }
 
 /**
@@ -58,7 +59,7 @@ interface InvoiceRowActionsProps {
  *
  * Follows VacancyRowActions pattern exactly.
  */
-export function InvoiceRowActions({ row }: InvoiceRowActionsProps) {
+export function InvoiceRowActions({ row, onViewDetail }: InvoiceRowActionsProps) {
   const invoice = row.original;
   const { hasAnyPermission, isSuperAdmin } = usePermissions();
 
@@ -119,7 +120,12 @@ export function InvoiceRowActions({ row }: InvoiceRowActionsProps) {
               PermissionActions.facturas.gestionar,
             ]}
           >
-            <DropdownMenuItem disabled>Ver detalle</DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={!onViewDetail}
+              onClick={() => onViewDetail?.(invoice)}
+            >
+              Ver detalle
+            </DropdownMenuItem>
           </PermissionGuard>
 
           <PermissionGuard

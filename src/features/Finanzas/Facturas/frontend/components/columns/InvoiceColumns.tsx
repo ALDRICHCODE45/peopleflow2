@@ -473,7 +473,9 @@ export function createInvoiceColumns(
     {
       id: "actions",
       header: () => <span className="sr-only">Acciones</span>,
-      cell: ({ row }) => <InvoiceRowActions row={row} />,
+      cell: ({ row }) => (
+        <InvoiceRowActions row={row} onViewDetail={onRowClick} />
+      ),
       size: 5,
       enableHiding: false,
       enableSorting: false,
