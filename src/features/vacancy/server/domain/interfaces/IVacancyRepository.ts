@@ -7,6 +7,7 @@ import type {
   VacancySalaryType,
 } from "@features/vacancy/frontend/types/vacancy.types";
 import type { Vacancy } from "../entities/Vacancy";
+import type { BulkActionResult } from "../types/bulk-action.types";
 
 export interface CreateVacancyData {
   position: string;
@@ -132,8 +133,20 @@ export interface ChecklistValidationResult {
   checklistRejectionReason: string | null;
 }
 
+export interface BulkDeleteVacanciesData {
+  vacancyIds: string[];
+  tenantId: string;
+}
+
+export interface BulkDuplicateVacanciesData {
+  vacancyIds: string[];
+  tenantId: string;
+  createdById: string | null;
+}
+
 export interface IVacancyRepository {
   findById(id: string, tenantId: string): Promise<Vacancy | null>;
+  findByIds(ids: string[], tenantId: string): Promise<Vacancy[]>;
   findByTenantId(
     tenantId: string,
     filters?: FindVacanciesFilters
@@ -157,4 +170,8 @@ export interface IVacancyRepository {
   rejectChecklist(vacancyId: string, tenantId: string, reason: string): Promise<ChecklistValidationResult>;
   findByOriginVacancyId(originVacancyId: string, tenantId: string): Promise<Vacancy | null>;
   createWarrantyVacancy(data: CreateWarrantyVacancyData): Promise<Vacancy>;
+  bulkDelete(ids: string[], tenantId: string): Promise<BulkActionResult>;
+  bulkDelete(data: BulkDeleteVacanciesData): Promise<BulkActionResult>;
+  bulkDuplicate(ids: string[], tenantId: string): Promise<BulkActionResult>;
+  bulkDuplicate(data: BulkDuplicateVacanciesData): Promise<BulkActionResult>;
 }

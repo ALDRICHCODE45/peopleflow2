@@ -14,6 +14,7 @@ import { VacancySheetForm } from "../VacancySheetForm";
 import { usePermissions } from "@/core/shared/hooks/use-permissions";
 import { ApplyWarrantyDialog } from "../ApplyWarrantyDialog";
 import { ReassignVacancyDialog } from "../ReassignVacancyDialog";
+import { useDuplicateVacancy } from "../../hooks/useDuplicateVacancy";
 
 /** Statuses where a vacancy can be reassigned (active, not terminal) */
 const REASSIGNABLE_STATUSES: VacancyStatusType[] = [
@@ -65,6 +66,8 @@ export function VacancyRowActions({ row, onViewDetail }: VacancyRowActionsProps)
       PermissionActions.vacantes.gestionar,
     ]);
 
+  const canDuplicate = canCreateWarranty;
+
   const canReassign =
     isSuperAdmin ||
     hasAnyPermission([
@@ -98,6 +101,7 @@ export function VacancyRowActions({ row, onViewDetail }: VacancyRowActionsProps)
 
   const deleteVacancyMutation = useDeleteVacancy();
   const updateVacancyMutation = useUpdateVacancy();
+  const duplicateVacancyMutation = useDuplicateVacancy();
 
   const handleUpdate = async (
     data: Parameters<typeof updateVacancyMutation.mutateAsync>[0]["data"]
@@ -118,6 +122,10 @@ export function VacancyRowActions({ row, onViewDetail }: VacancyRowActionsProps)
     closeDeleteModal();
   };
 
+  const handleDuplicate = async () => {
+    await duplicateVacancyMutation.mutateAsync(vacancy.id);
+  };
+
   // Show warranty action only for PLACEMENT vacancies without existing warranty
   const showWarrantyAction =
     canCreateWarranty &&
@@ -136,6 +144,7 @@ export function VacancyRowActions({ row, onViewDetail }: VacancyRowActionsProps)
     onViewDetail ? () => onViewDetail(vacancy.id) : undefined,
     showWarrantyAction ? openWarrantyModal : undefined,
     showReassignAction ? openReassignModal : undefined,
+    canDuplicate ? handleDuplicate : undefined,
   );
 
   return (

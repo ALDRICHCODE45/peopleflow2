@@ -11,6 +11,7 @@ import {
   Tick02Icon,
   PencilEdit01Icon,
   Share01Icon,
+  Add01Icon,
 } from "@hugeicons/core-free-icons";
 import { Button } from "@shadcn/button";
 import { Table as TanstackTable } from "@tanstack/react-table";
@@ -164,7 +165,7 @@ export function DataTableFilters<TData>({
               aria-label="Seleccionar todas las filas"
             />
             <span className="text-sm font-medium text-primary">
-              {selectedCount} Selected
+              {selectedCount} seleccionados
             </span>
           </div>
 
@@ -175,7 +176,7 @@ export function DataTableFilters<TData>({
             className="gap-2 text-muted-foreground hover:text-foreground"
           >
             <HugeiconsIcon icon={Tick02Icon} className="h-4 w-4" />
-            Select All
+            Seleccionar todo
           </Button>
 
           {config.actions?.onBulkShare && (
@@ -225,7 +226,28 @@ export function DataTableFilters<TData>({
               className="gap-2 text-destructive hover:text-destructive"
             >
               <HugeiconsIcon icon={DeleteIcon} className="h-4 w-4" />
-              Delete
+              Eliminar
+            </Button>
+          )}
+
+          {config.actions?.onBulkDuplicate && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                const selectedIds = table
+                  .getSelectedRowModel()
+                  .rows.map((row) => {
+                    const record = row.original as { id?: string };
+                    return typeof record.id === "string" ? record.id : null;
+                  })
+                  .filter((id): id is string => id !== null);
+                config.actions?.onBulkDuplicate?.(selectedIds);
+              }}
+              className="gap-2 text-muted-foreground hover:text-foreground"
+            >
+              <HugeiconsIcon icon={Add01Icon} className="h-4 w-4" />
+              Duplicar
             </Button>
           )}
 

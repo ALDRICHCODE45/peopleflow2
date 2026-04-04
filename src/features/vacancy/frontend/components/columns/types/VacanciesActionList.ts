@@ -1,4 +1,4 @@
-import { UserSwitchIcon } from "@hugeicons/core-free-icons";
+import { Copy01Icon } from "@hugeicons/core-free-icons";
 import type { IconSvgElement } from "@hugeicons/react";
 
 export interface VacancyAction {
@@ -15,6 +15,7 @@ export const createVacancyActions = (
   onViewDetail?: () => void,
   onApplyWarranty?: () => void,
   onReassign?: () => void,
+  onDuplicate?: () => void,
 ): VacancyAction[] => {
   const actions: VacancyAction[] = [];
 
@@ -47,6 +48,15 @@ export const createVacancyActions = (
       id: "warranty",
       label: "Aplicar garantía",
       onClick: onApplyWarranty,
+    });
+  }
+
+  if (onDuplicate) {
+    actions.push({
+      id: "duplicate",
+      label: "Duplicar",
+      icon: Copy01Icon,
+      onClick: onDuplicate,
     });
   }
 

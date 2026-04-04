@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { Spinner } from "@shadcn/spinner";
 import {
   ColumnDef,
@@ -23,6 +23,7 @@ import {
   UserPlus,
   DeleteIcon,
   UserSwitchIcon,
+  Add01Icon,
 } from "@hugeicons/core-free-icons";
 
 import { TableBodyDataTable } from "./DataTableBody";
@@ -47,6 +48,7 @@ interface DataTableProps<TData, TValue> {
   // Estado controlado desde el padre (server-side)
   pagination?: PaginationState;
   sorting?: SortingState;
+  clearSelectionSignal?: number;
 }
 
 /** Componente de overlay de carga sutil para refetches */
@@ -71,6 +73,7 @@ export function DataTable<TData, TValue>({
   // Estado controlado (server-side)
   pagination: paginationProp,
   sorting: sortingProp,
+  clearSelectionSignal,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -368,6 +371,14 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  useEffect(() => {
+    if (clearSelectionSignal === undefined) {
+      return;
+    }
+
+    table.toggleAllRowsSelected(false);
+  }, [clearSelectionSignal, table]);
+
   return (
     <div
       className="space-y-4 w-full max-w-full min-w-0 overflow-hidden"
@@ -420,6 +431,14 @@ export function DataTable<TData, TValue>({
             actions={(() => {
               const getSelectedRows = () =>
                 table.getSelectedRowModel().rows.map((row) => row.original);
+              const getSelectedIds = () =>
+                table
+                  .getSelectedRowModel()
+                  .rows.map((row) => {
+                    const record = row.original as { id?: string };
+                    return typeof record.id === "string" ? record.id : null;
+                  })
+                  .filter((id): id is string => id !== null);
               const actions: BulkAction[] = [];
 
               if (finalConfig.actions?.onBulkReasign) {
@@ -443,6 +462,16 @@ export function DataTable<TData, TValue>({
                   ),
                   onClick: () => finalConfig.actions?.onBulkDelete?.(getSelectedRows()),
                   variant: "destructive",
+                });
+              }
+
+              if (finalConfig.actions?.onBulkDuplicate) {
+                actions.push({
+                  id: "duplicate",
+                  label: "Duplicar",
+                  icon: <HugeiconsIcon icon={Add01Icon} className="h-4 w-4" />,
+                  onClick: () => finalConfig.actions?.onBulkDuplicate?.(getSelectedIds()),
+                  variant: "outline",
                 });
               }
 

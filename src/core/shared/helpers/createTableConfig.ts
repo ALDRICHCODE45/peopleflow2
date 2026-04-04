@@ -37,6 +37,9 @@ export const createTableConfig = <T>(
       onAdd: restHandlers.onAdd || baseConfig.actions?.onAdd,
       ...(restHandlers.onBulkDelete ? { onBulkDelete: restHandlers.onBulkDelete } : {}),
       ...(restHandlers.onBulkReasign ? { onBulkReasign: restHandlers.onBulkReasign } : {}),
+      ...(restHandlers.onBulkDuplicate
+        ? { onBulkDuplicate: restHandlers.onBulkDuplicate }
+        : {}),
     } as TableConfig<T>["actions"],
     // Agregar configuración server-side si se proporciona
     ...(serverSide && { serverSide }),

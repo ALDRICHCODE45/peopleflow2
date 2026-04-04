@@ -216,6 +216,34 @@ export interface ReassignVacancyResult {
   error: string | null;
 }
 
+export interface BulkActionFailure {
+  id: string;
+  reason: string;
+}
+
+export interface BulkActionResult {
+  succeeded: string[];
+  failed: BulkActionFailure[];
+}
+
+export interface BulkDeleteVacanciesInput {
+  ids: string[];
+  vacancyIds: string[];
+}
+
+export interface BulkReassignVacanciesInput {
+  ids: string[];
+  vacancyIds: string[];
+  recruiterId: string;
+  reason: ReassignmentReasonType;
+  notes?: string;
+}
+
+export interface BulkDuplicateVacanciesInput {
+  ids: string[];
+  vacancyIds: string[];
+}
+
 // DTO de config
 export interface VacancyConfigDTO {
   id: string;
@@ -258,6 +286,26 @@ export interface UpdateVacancyResult {
 export interface DeleteVacancyResult {
   error: string | null;
   success: boolean;
+}
+export interface BulkDeleteVacanciesResult {
+  error: string | null;
+  data?: BulkActionResult;
+  result?: BulkActionResult;
+}
+export interface BulkReassignVacanciesResult {
+  error: string | null;
+  data?: BulkActionResult;
+  result?: BulkActionResult;
+}
+export interface BulkDuplicateVacanciesResult {
+  error: string | null;
+  data?: BulkActionResult;
+  result?: BulkActionResult;
+}
+export interface DuplicateVacancyResult {
+  error: string | null;
+  data?: { id: string };
+  vacancy?: VacancyDTO;
 }
 export interface TransitionVacancyStatusResult {
   error: string | null;

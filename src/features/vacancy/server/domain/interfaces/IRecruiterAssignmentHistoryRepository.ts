@@ -3,6 +3,7 @@ import type {
   ReassignmentReasonType,
   RecruiterAssignmentHistoryDTO,
 } from "@features/vacancy/frontend/types/vacancy.types";
+import type { BulkActionResult } from "../types/bulk-action.types";
 
 export interface CreateAssignmentData {
   vacancyId: string;
@@ -33,6 +34,32 @@ export interface ReassignData {
   assignedByName: string;
 }
 
+export interface BulkReassignInput {
+  vacancyIds: string[];
+  newRecruiterId: string;
+  reason: string;
+  notes?: string;
+  assignedByUserId: string;
+  assignedByName: string;
+  tenantId: string;
+}
+
+export interface LegacyBulkReassignInput {
+  tenantId: string;
+  recruiterId: string;
+  recruiterName: string;
+  reason: ReassignmentReasonType;
+  notes?: string | null;
+  assignedById: string;
+  assignedByName: string;
+  vacancies: Array<{
+    id: string;
+    currentStatus: VacancyStatusType;
+    targetDeliveryDate: Date | null;
+    wasOverdue: boolean;
+  }>;
+}
+
 export interface IRecruiterAssignmentHistoryRepository {
   create(data: CreateAssignmentData): Promise<RecruiterAssignmentHistoryDTO>;
 
@@ -52,4 +79,7 @@ export interface IRecruiterAssignmentHistoryRepository {
    * and currentCycleStartedAt, creates new assignment record.
    */
   reassign(data: ReassignData): Promise<RecruiterAssignmentHistoryDTO>;
+
+  bulkReassign(input: BulkReassignInput): Promise<BulkActionResult>;
+  bulkReassign(input: LegacyBulkReassignInput): Promise<BulkActionResult>;
 }

@@ -1,14 +1,17 @@
 import prisma from "@lib/prisma";
 import type {
   IRecruiterAssignmentHistoryRepository,
+  BulkReassignInput,
   CreateAssignmentData,
+  LegacyBulkReassignInput,
   ReassignData,
 } from "../../domain/interfaces/IRecruiterAssignmentHistoryRepository";
 import type {
   RecruiterAssignmentHistoryDTO,
+  ReassignmentReasonType,
   VacancyStatusType,
 } from "@features/vacancy/frontend/types/vacancy.types";
-import type { ReassignmentReasonType } from "@features/vacancy/frontend/types/vacancy.types";
+import type { BulkActionResult } from "../../domain/types/bulk-action.types";
 
 type PrismaAssignmentRecord = {
   id: string;
@@ -188,6 +191,160 @@ export class PrismaRecruiterAssignmentHistoryRepository
     });
 
     return this.mapToDTO(result as unknown as PrismaAssignmentRecord);
+  }
+
+  async bulkReassign(input: BulkReassignInput): Promise<BulkActionResult>;
+  async bulkReassign(input: LegacyBulkReassignInput): Promise<BulkActionResult>;
+  async bulkReassign(
+    input: BulkReassignInput | LegacyBulkReassignInput,
+  ): Promise<BulkActionResult> {
+    const normalized = "vacancyIds" in input
+      ? {
+          tenantId: input.tenantId,
+          vacancyIds: Array.from(new Set(input.vacancyIds)),
+          recruiterId: input.newRecruiterId,
+          recruiterName: null as string | null,
+          reason: input.reason,
+          notes: input.notes ?? null,
+          assignedById: input.assignedByUserId,
+          assignedByName: input.assignedByName,
+        }
+      : {
+          tenantId: input.tenantId,
+          vacancyIds: Array.from(new Set(input.vacancies.map((vacancy) => vacancy.id))),
+          recruiterId: input.recruiterId,
+          recruiterName: input.recruiterName,
+          reason: input.reason,
+          notes: input.notes ?? null,
+          assignedById: input.assignedById,
+          assignedByName: input.assignedByName,
+        };
+
+    if (normalized.vacancyIds.length === 0) {
+      return { succeeded: [], failed: [] };
+    }
+
+    const vacancies = await prisma.vacancy.findMany({
+      where: {
+        tenantId: normalized.tenantId,
+        id: { in: normalized.vacancyIds },
+      },
+      select: {
+        id: true,
+        status: true,
+        targetDeliveryDate: true,
+      },
+    });
+
+    const foundIds = new Set(vacancies.map((vacancy) => vacancy.id));
+    const missingFailed: BulkActionResult["failed"] = normalized.vacancyIds
+      .filter((id) => !foundIds.has(id))
+      .map((id) => ({
+        id,
+        reason: "La vacante no existe o no pertenece al tenant activo",
+      }));
+
+    if (vacancies.length === 0) {
+      return {
+        succeeded: [],
+        failed: missingFailed,
+      };
+    }
+
+    const now = new Date();
+
+    try {
+      await prisma.$transaction(async (tx) => {
+        const currentAssignments = await tx.recruiterAssignmentHistory.findMany({
+          where: {
+            tenantId: normalized.tenantId,
+            vacancyId: { in: vacancies.map((vacancy) => vacancy.id) },
+            unassignedAt: null,
+          },
+          select: {
+            id: true,
+            vacancyId: true,
+            assignedAt: true,
+          },
+        });
+
+        if (currentAssignments.length > 0) {
+          await Promise.all(
+            currentAssignments.map((assignment) => {
+              const vacancy = vacancies.find((item) => item.id === assignment.vacancyId);
+              if (!vacancy) {
+                return Promise.resolve();
+              }
+
+              return tx.recruiterAssignmentHistory.update({
+                where: { id: assignment.id },
+                data: {
+                  unassignedAt: now,
+                  durationDays: this.computeDurationDays(assignment.assignedAt, now),
+                  vacancyStatusOnExit: vacancy.status,
+                },
+              });
+            }),
+          );
+        }
+
+        await tx.vacancy.updateMany({
+          where: {
+            tenantId: normalized.tenantId,
+            id: { in: vacancies.map((vacancy) => vacancy.id) },
+          },
+          data: {
+            recruiterId: normalized.recruiterId,
+            currentCycleStartedAt: now,
+          },
+        });
+
+        let recruiterName = normalized.recruiterName;
+        if (!recruiterName) {
+          const recruiter = await tx.user.findUnique({
+            where: { id: normalized.recruiterId },
+            select: { name: true },
+          });
+          recruiterName = recruiter?.name ?? "Reclutador";
+        }
+
+        await tx.recruiterAssignmentHistory.createMany({
+          data: vacancies.map((vacancy) => ({
+            vacancyId: vacancy.id,
+            recruiterId: normalized.recruiterId,
+            recruiterName,
+            assignedAt: now,
+            vacancyStatusOnEntry: vacancy.status,
+            reason: normalized.reason as ReassignmentReasonType,
+            notes: normalized.notes,
+            targetDeliveryDate: vacancy.targetDeliveryDate,
+            wasOverdue:
+              vacancy.targetDeliveryDate !== null && vacancy.targetDeliveryDate < now,
+            assignedById: normalized.assignedById,
+            assignedByName: normalized.assignedByName,
+            tenantId: normalized.tenantId,
+          })),
+        });
+      });
+    } catch (error) {
+      console.error("Error in bulkReassign:", error);
+
+      return {
+        succeeded: [],
+        failed: [
+          ...missingFailed,
+          ...vacancies.map((vacancy) => ({
+            id: vacancy.id,
+            reason: "No se pudo completar la reasignación",
+          })),
+        ],
+      };
+    }
+
+    return {
+      succeeded: vacancies.map((vacancy) => vacancy.id),
+      failed: missingFailed,
+    };
   }
 }
 

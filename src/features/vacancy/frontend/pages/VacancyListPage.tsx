@@ -19,6 +19,10 @@ import type { VacancyStatusType } from "../types/vacancy.types";
 import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
 import { enrichVacancyTabsWithCounts } from "../config/vacancyTabsConfig";
 import { useVacanciesFilters } from "../components/tableConfig/hooks/useVacanciesFilters";
+import type { VacancyDTO } from "../types/vacancy.types";
+import { BulkDeleteVacanciesDialog } from "../components/BulkDeleteVacanciesDialog";
+import { BulkReassignVacanciesDialog } from "../components/BulkReassignVacanciesDialog";
+import { BulkDuplicateVacanciesDialog } from "../components/BulkDuplicateVacanciesDialog";
 
 export function VacancyListPage() {
   const { hasAnyPermission, isSuperAdmin } = usePermissions();
@@ -31,6 +35,12 @@ export function VacancyListPage() {
 
   const { isOpen, openModal, closeModal } = useModalState();
   const [selectedVacancyId, setSelectedVacancyId] = useState<string | null>(null);
+  const [selectionResetSignal, setSelectionResetSignal] = useState(0);
+  const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
+  const [bulkReassignOpen, setBulkReassignOpen] = useState(false);
+  const [bulkDuplicateOpen, setBulkDuplicateOpen] = useState(false);
+  const [selectedBulkIds, setSelectedBulkIds] = useState<string[]>([]);
+  const [selectedBulkVacancies, setSelectedBulkVacancies] = useState<VacancyDTO[]>([]);
 
   // Server-side pagination state with multi-tab support
   const {
@@ -125,6 +135,31 @@ export function VacancyListPage() {
     setSelectedVacancyId(id);
   }, []);
 
+  const handleBulkDelete = useCallback((rows: VacancyDTO[]) => {
+    setSelectedBulkIds(rows.map((vacancy) => vacancy.id));
+    setBulkDeleteOpen(true);
+  }, []);
+
+  const handleBulkReassign = useCallback((rows: VacancyDTO[]) => {
+    setSelectedBulkIds(rows.map((vacancy) => vacancy.id));
+    setSelectedBulkVacancies(rows);
+    setBulkReassignOpen(true);
+  }, []);
+
+  const handleBulkDuplicate = useCallback((ids: string[]) => {
+    setSelectedBulkIds(ids);
+    setBulkDuplicateOpen(true);
+  }, []);
+
+  const handleBulkCompleted = useCallback(() => {
+    setBulkDeleteOpen(false);
+    setBulkReassignOpen(false);
+    setBulkDuplicateOpen(false);
+    setSelectedBulkIds([]);
+    setSelectedBulkVacancies([]);
+    setSelectionResetSignal((current) => current + 1);
+  }, []);
+
   // Columns factory with detail handler
   const columns = useMemo(
     () => createVacancyColumns(handleViewDetail),
@@ -169,6 +204,9 @@ export function VacancyListPage() {
         targetDeliveryDateTo: filters.targetDeliveryDateTo,
         onTargetDeliveryDateToChange: setTargetDeliveryDateTo,
         hasActiveSheetFilters: hasActiveFilters,
+        onBulkDelete: handleBulkDelete,
+        onBulkReasign: handleBulkReassign,
+        onBulkDuplicate: handleBulkDuplicate,
         serverSide: {
           enabled: true,
           totalCount,
@@ -198,6 +236,9 @@ export function VacancyListPage() {
       setAssignedAtTo,
       setTargetDeliveryDateFrom,
       setTargetDeliveryDateTo,
+      handleBulkDelete,
+      handleBulkReassign,
+      handleBulkDuplicate,
     ]
   );
 
@@ -234,6 +275,7 @@ export function VacancyListPage() {
                 onPaginationChange={createPaginationHandler(totalCount)}
                 onSortingChange={setSorting}
                 onGlobalFilterChange={handleGlobalFilterChange}
+                clearSelectionSignal={selectionResetSignal}
               />
             </PermissionGuard>
 
@@ -255,6 +297,44 @@ export function VacancyListPage() {
       <VacancyDetailSheet
         vacancyId={selectedVacancyId}
         onClose={() => setSelectedVacancyId(null)}
+      />
+
+      <BulkDeleteVacanciesDialog
+        open={bulkDeleteOpen}
+        onOpenChange={(open) => {
+          setBulkDeleteOpen(open);
+          if (!open) {
+            setSelectedBulkIds([]);
+          }
+        }}
+        selectedIds={selectedBulkIds}
+        onCompleted={handleBulkCompleted}
+      />
+
+      <BulkReassignVacanciesDialog
+        open={bulkReassignOpen}
+        onOpenChange={(open) => {
+          setBulkReassignOpen(open);
+          if (!open) {
+            setSelectedBulkIds([]);
+            setSelectedBulkVacancies([]);
+          }
+        }}
+        selectedIds={selectedBulkIds}
+        selectedVacancies={selectedBulkVacancies}
+        onCompleted={handleBulkCompleted}
+      />
+
+      <BulkDuplicateVacanciesDialog
+        open={bulkDuplicateOpen}
+        onOpenChange={(open) => {
+          setBulkDuplicateOpen(open);
+          if (!open) {
+            setSelectedBulkIds([]);
+          }
+        }}
+        selectedIds={selectedBulkIds}
+        onCompleted={handleBulkCompleted}
       />
     </>
   );

@@ -5,11 +5,14 @@ import type {
   CreateVacancyData,
   UpdateVacancyData,
   CreateWarrantyVacancyData,
+  BulkDeleteVacanciesData,
+  BulkDuplicateVacanciesData,
   FindVacanciesFilters,
   FindPaginatedVacanciesParams,
   PaginatedResult,
   ChecklistValidationResult,
 } from "../../domain/interfaces/IVacancyRepository";
+import type { BulkActionResult } from "../../domain/types/bulk-action.types";
 import type {
   VacancyStatusType,
   VacancySaleType,
@@ -79,6 +82,36 @@ const ALLOWED_ORDER_FIELDS = [
 ];
 
 export class PrismaVacancyRepository implements IVacancyRepository {
+  private escapeRegExp(input: string): string {
+    return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  private getNextDuplicatePosition(originalPosition: string, existingPositions: string[]): string {
+    const escapedPosition = this.escapeRegExp(originalPosition);
+    const duplicateRegex = new RegExp(`^${escapedPosition} \\((?:copia)(?: (\\d+))?\\)$`);
+
+    let maxCounter = 0;
+
+    for (const position of existingPositions) {
+      const match = duplicateRegex.exec(position);
+      if (!match) {
+        continue;
+      }
+
+      const counter = match[1] ? Number.parseInt(match[1], 10) : 1;
+
+      if (!Number.isNaN(counter)) {
+        maxCounter = Math.max(maxCounter, counter);
+      }
+    }
+
+    const nextCounter = maxCounter + 1;
+
+    return nextCounter === 1
+      ? `${originalPosition} (copia)`
+      : `${originalPosition} (copia ${nextCounter})`;
+  }
+
   private getBaseInclude() {
     return {
       recruiter: { select: { name: true, email: true, avatar: true } },
@@ -352,6 +385,25 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       checklistItems,
       statusHistory,
     });
+  }
+
+  async findByIds(ids: string[], tenantId: string): Promise<Vacancy[]> {
+    if (ids.length === 0) {
+      return [];
+    }
+
+    const uniqueIds = Array.from(new Set(ids));
+    const records = await prisma.vacancy.findMany({
+      where: {
+        tenantId,
+        id: { in: uniqueIds },
+      },
+      include: this.getBaseInclude(),
+    });
+
+    return records.map((record) =>
+      this.mapToDomain(record as unknown as VacancyWithRelations),
+    );
   }
 
   async findByTenantId(
@@ -746,6 +798,205 @@ export class PrismaVacancyRepository implements IVacancyRepository {
     }
 
     return this.mapToDomain(result as unknown as VacancyWithRelations);
+  }
+
+  async bulkDelete(ids: string[], tenantId: string): Promise<BulkActionResult>;
+  async bulkDelete(data: BulkDeleteVacanciesData): Promise<BulkActionResult>;
+  async bulkDelete(
+    inputOrIds: BulkDeleteVacanciesData | string[],
+    tenantIdArg?: string,
+  ): Promise<BulkActionResult> {
+    const ids = Array.isArray(inputOrIds) ? inputOrIds : inputOrIds.vacancyIds;
+    const tenantId = Array.isArray(inputOrIds) ? tenantIdArg : inputOrIds.tenantId;
+
+    if (!tenantId) {
+      return {
+        succeeded: [],
+        failed: ids.map((id) => ({ id, reason: "No hay tenant activo" })),
+      };
+    }
+
+    if (ids.length === 0) {
+      return { succeeded: [], failed: [] };
+    }
+
+    const requestedIds = Array.from(new Set(ids));
+
+    const [tenantVacancies, linkedInvoices] = await Promise.all([
+      prisma.vacancy.findMany({
+        where: {
+          tenantId,
+          id: { in: requestedIds },
+        },
+        select: { id: true },
+      }),
+      prisma.invoice.findMany({
+        where: {
+          vacancyId: { in: requestedIds },
+        },
+        select: { vacancyId: true },
+      }),
+    ]);
+
+    const tenantOwnedIds = new Set(tenantVacancies.map((vacancy) => vacancy.id));
+    const blockedByInvoiceIds = new Set(
+      linkedInvoices
+        .map((invoice) => invoice.vacancyId)
+        .filter((vacancyId): vacancyId is string => Boolean(vacancyId)),
+    );
+
+    const deletableIds = requestedIds.filter(
+      (id) => tenantOwnedIds.has(id) && !blockedByInvoiceIds.has(id),
+    );
+
+    if (deletableIds.length > 0) {
+      await prisma.vacancy.deleteMany({
+        where: {
+          tenantId,
+          id: { in: deletableIds },
+        },
+      });
+    }
+
+    const failed = requestedIds
+      .filter((id) => !deletableIds.includes(id))
+      .map((id) => {
+        if (!tenantOwnedIds.has(id)) {
+          return {
+            id,
+            reason: "La vacante no existe o no pertenece al tenant activo",
+          };
+        }
+
+        return {
+          id,
+          reason: "Tiene facturas vinculadas",
+        };
+      });
+
+    return {
+      succeeded: deletableIds,
+      failed,
+    };
+  }
+
+  async bulkDuplicate(ids: string[], tenantId: string): Promise<BulkActionResult>;
+  async bulkDuplicate(data: BulkDuplicateVacanciesData): Promise<BulkActionResult>;
+  async bulkDuplicate(
+    inputOrIds: BulkDuplicateVacanciesData | string[],
+    tenantIdArg?: string,
+  ): Promise<BulkActionResult> {
+    const ids = Array.isArray(inputOrIds) ? inputOrIds : inputOrIds.vacancyIds;
+    const tenantId = Array.isArray(inputOrIds) ? tenantIdArg : inputOrIds.tenantId;
+    const createdById = Array.isArray(inputOrIds) ? null : inputOrIds.createdById;
+
+    if (!tenantId) {
+      return {
+        succeeded: [],
+        failed: ids.map((id) => ({ id, reason: "No hay tenant activo" })),
+      };
+    }
+
+    if (ids.length === 0) {
+      return { succeeded: [], failed: [] };
+    }
+
+    const requestedIds = Array.from(new Set(ids));
+    const originals = await prisma.vacancy.findMany({
+      where: {
+        tenantId,
+        id: { in: requestedIds },
+      },
+      include: {
+        checklistItems: true,
+      },
+    });
+
+    const foundIds = new Set(originals.map((vacancy) => vacancy.id));
+
+    const succeeded: string[] = [];
+    const failed: BulkActionResult["failed"] = requestedIds
+      .filter((id) => !foundIds.has(id))
+      .map((id) => ({ id, reason: "La vacante no existe o no pertenece al tenant activo" }));
+
+    for (const original of originals) {
+      try {
+        const createdId = await prisma.$transaction(async (tx) => {
+          const existingDuplicates = await tx.vacancy.findMany({
+            where: {
+              tenantId,
+              OR: [
+                { position: `${original.position} (copia)` },
+                { position: { startsWith: `${original.position} (copia ` } },
+              ],
+            },
+            select: { position: true },
+          });
+
+          const duplicatePosition = this.getNextDuplicatePosition(
+            original.position,
+            existingDuplicates.map((vacancy) => vacancy.position),
+          );
+
+          const duplicated = await tx.vacancy.create({
+            data: {
+              position: duplicatePosition,
+              status: "QUICK_MEETING",
+              recruiterId: original.recruiterId,
+              clientId: original.clientId,
+              saleType: original.saleType,
+              serviceType: original.serviceType,
+              currency: original.currency,
+              salaryType: original.salaryType,
+              salaryMin: original.salaryMin,
+              salaryMax: original.salaryMax,
+              salaryFixed: original.salaryFixed,
+              commissions: original.commissions,
+              benefits: original.benefits,
+              tools: original.tools,
+              modality: original.modality,
+              schedule: original.schedule,
+              countryCode: original.countryCode,
+              regionCode: original.regionCode,
+              requiresPsychometry: original.requiresPsychometry,
+              targetDeliveryDate: original.targetDeliveryDate,
+              assignedAt: new Date(),
+              currentCycleStartedAt: new Date(),
+              tenantId,
+              createdById,
+            },
+            select: { id: true },
+          });
+
+          if (original.checklistItems.length > 0) {
+            await tx.vacancyChecklistItem.createMany({
+              data: original.checklistItems.map((item) => ({
+                vacancyId: duplicated.id,
+                requirement: item.requirement,
+                isCompleted: false,
+                order: item.order,
+                tenantId,
+              })),
+            });
+          }
+
+          return duplicated.id;
+        });
+
+        succeeded.push(createdId);
+      } catch (error) {
+        console.error("Error duplicating vacancy in bulkDuplicate:", error);
+        failed.push({
+          id: original.id,
+          reason: "No se pudo duplicar la vacante",
+        });
+      }
+    }
+
+    return {
+      succeeded,
+      failed,
+    };
   }
 }
 

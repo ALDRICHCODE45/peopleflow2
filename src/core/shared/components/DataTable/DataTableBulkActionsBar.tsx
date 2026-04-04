@@ -34,14 +34,14 @@ export function DataTableBulkActionsBar({
     <Card
       className="sticky bottom-0 left-0 right-0 py-0 mx-1 z-10 bg-background border-t shadow-sm animate-in slide-in-from-bottom-2 duration-300"
       role="toolbar"
-      aria-label={`${selectedCount} seleccionados`}
+      aria-label={`${selectedCount} seleccionados con ${actions.length} acciones`}
       // Improved touch target size on mobile
       style={{ touchAction: "manipulation" }}
     >
       <div className="flex flex-col gap-2 px-2 py-2 sm:flex-row sm:items-center sm:justify-between sm:px-4 sm:py-3">
         <div className="flex items-center gap-2 sm:gap-3 justify-between sm:justify-start w-full sm:w-auto">
           <Badge variant="secondary" className="px-2 py-1  sm:text-sm">
-            {selectedCount} Seleccionado{selectedCount !== 1 ? "s" : ""}
+            {selectedCount} seleccionados
           </Badge>
           {onClearSelection && (
             <Button
