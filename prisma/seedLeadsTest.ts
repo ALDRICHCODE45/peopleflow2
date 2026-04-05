@@ -10,6 +10,7 @@
 import "dotenv/config";
 import { PrismaClient, LeadStatus } from "../src/core/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import countryRegionData from "country-region-data/data.json";
 import pg from "pg";
 
 const { Pool } = pg;
@@ -95,31 +96,22 @@ const COMPANY_SUFFIXES = [
   "360",
 ];
 
-const CITIES = [
-  "CDMX",
-  "Monterrey",
-  "Guadalajara",
-  "Puebla",
-  "Querétaro",
-  "Tijuana",
-  "León",
-  "Mérida",
-  "Cancún",
-  "San Luis Potosí",
-];
+interface Region {
+  name: string;
+  shortCode: string;
+}
 
-const STREETS = [
-  "Av. Reforma",
-  "Blvd. Insurgentes",
-  "Paseo de la Reforma",
-  "Av. Universidad",
-  "Av. Chapultepec",
-  "Blvd. Miguel de Cervantes",
-  "Av. Constitución",
-  "Calle Hidalgo",
-  "Av. Revolución",
-  "Blvd. Díaz Ordaz",
-];
+interface CountryRegion {
+  countryName: string;
+  countryShortCode: string;
+  regions: Region[];
+}
+
+const LOCATION_COUNTRIES = ["MX", "US", "CO", "AR", "CL", "PE"];
+
+const locationCatalog = (countryRegionData as CountryRegion[]).filter((country) =>
+  LOCATION_COUNTRIES.includes(country.countryShortCode),
+);
 
 // =============================================
 // DISTRIBUCIÓN DE LEADS POR STATUS
@@ -185,11 +177,35 @@ const SUB_ORIGIN_OPTIONS = [
   null, // Some leads may not have a sub-origin
 ];
 
-function generateAddress(): string {
-  const street = randomElement(STREETS);
-  const number = randomInt(100, 9999);
-  const city = randomElement(CITIES);
-  return `${street} ${number}, ${city}`;
+function generatePostalCode(countryCode: string): string {
+  switch (countryCode) {
+    case "MX":
+    case "US":
+      return String(randomInt(10000, 99999));
+    case "AR":
+      return String(randomInt(1000, 9999));
+    case "CO":
+    case "CL":
+    case "PE":
+      return String(randomInt(100000, 999999));
+    default:
+      return String(randomInt(10000, 99999));
+  }
+}
+
+function generateLocationCodes(): {
+  countryCode: string;
+  regionCode: string | null;
+  postalCode: string;
+} {
+  const country = randomElement(locationCatalog);
+  const region = country.regions.length > 0 ? randomElement(country.regions) : null;
+
+  return {
+    countryCode: country.countryShortCode,
+    regionCode: region?.shortCode ?? null,
+    postalCode: generatePostalCode(country.countryShortCode),
+  };
 }
 
 function generateWebsite(companyName: string): string {
@@ -306,12 +322,15 @@ async function seedTestLeads() {
             : null;
         const origin = randomElement(origins);
         const companyName = generateCompanyName(globalIndex);
+        const location = generateLocationCodes();
 
         leadsData.push({
           companyName,
           website: generateWebsite(companyName),
           linkedInUrl: generateLinkedInUrl(companyName),
-          address: generateAddress(),
+          countryCode: location.countryCode,
+          regionCode: location.regionCode,
+          postalCode: location.postalCode,
           subOrigin: randomElement(SUB_ORIGIN_OPTIONS),
           employeeCount: randomElement(EMPLOYEE_COUNT_OPTIONS),
           notes: randomElement(NOTES_TEMPLATES),
