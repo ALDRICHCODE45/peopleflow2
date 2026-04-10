@@ -89,7 +89,10 @@ export const InteractionItem = memo(function InteractionItem({
               <p className="text-xs text-muted-foreground mb-1">
                 Evidencias ({interaction.attachments.length})
               </p>
-              <InteractionAttachmentsList attachments={interaction.attachments} />
+              <InteractionAttachmentsList
+                attachments={interaction.attachments}
+                compact
+              />
             </div>
           )}
         </div>

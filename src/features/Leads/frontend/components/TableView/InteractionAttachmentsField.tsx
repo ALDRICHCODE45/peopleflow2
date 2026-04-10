@@ -9,6 +9,7 @@ import {
   FileAttachmentIcon,
   Upload01Icon,
 } from "@hugeicons/core-free-icons";
+import { Badge } from "@shadcn/badge";
 import { Button } from "@/core/shared/ui/shadcn/button";
 import { cn } from "@/core/lib/utils";
 import {
@@ -21,6 +22,8 @@ export const INTERACTION_ATTACHMENTS_MAX_FILES = 5;
 export const INTERACTION_ATTACHMENTS_MAX_SIZE_BYTES = 10 * 1024 * 1024;
 export const INTERACTION_ATTACHMENTS_ACCEPT =
   ".jpg,.jpeg,.png,.webp,.pdf,.doc,.docx,.xls,.xlsx,.csv,image/jpeg,image/png,image/webp,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv";
+const INTERACTION_ATTACHMENTS_FORMATS_LABEL =
+  "JPG, PNG, WEBP, PDF, DOC, DOCX, XLS, XLSX, CSV";
 
 function isImageMimeType(mimeType: string): boolean {
   return mimeType.startsWith("image/");
@@ -45,6 +48,7 @@ interface InteractionAttachmentsListProps {
   attachments: InteractionAttachment[];
   onDeleteAttachment?: (attachmentId: string) => void;
   deletingAttachmentId?: string | null;
+  compact?: boolean;
 }
 
 /* eslint-disable @next/next/no-img-element */
@@ -52,6 +56,7 @@ export const InteractionAttachmentsList = memo(function InteractionAttachmentsLi
   attachments,
   onDeleteAttachment,
   deletingAttachmentId,
+  compact = false,
 }: InteractionAttachmentsListProps) {
   if (attachments.length === 0) return null;
 
@@ -65,9 +70,17 @@ export const InteractionAttachmentsList = memo(function InteractionAttachmentsLi
         return (
           <div
             key={attachment.id}
-            className="flex items-center gap-3 rounded-md border border-border/60 bg-muted/20 p-2"
+            className={cn(
+              "group flex items-center gap-3 rounded-xl border border-border/60 bg-background/80 p-2.5 transition-colors hover:bg-muted/30",
+              compact && "rounded-lg p-2",
+            )}
           >
-            <div className="shrink-0 size-10 rounded-md bg-background border border-border/40 flex items-center justify-center overflow-hidden">
+            <div
+              className={cn(
+                "shrink-0 rounded-lg bg-background border border-border/40 flex items-center justify-center overflow-hidden",
+                compact ? "size-9" : "size-11",
+              )}
+            >
               {isImage ? (
                 <img
                   src={attachment.fileUrl}
@@ -78,20 +91,30 @@ export const InteractionAttachmentsList = memo(function InteractionAttachmentsLi
                 <img
                   src={fileIcon.src}
                   alt={fileIcon.alt}
-                  className="h-6 w-6 object-contain"
+                  className={cn("object-contain", compact ? "h-5 w-5" : "h-6 w-6")}
                 />
               )}
             </div>
 
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium">{attachment.fileName}</p>
-              <p className="text-xs text-muted-foreground">
-                {formatBytes(attachment.fileSize)}
+              <p className={cn("truncate font-medium", compact ? "text-xs" : "text-sm")}>
+                {attachment.fileName}
               </p>
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <span>{formatBytes(attachment.fileSize)}</span>
+                <span>•</span>
+                <span>{isImage ? "Imagen" : fileIcon.alt}</span>
+              </div>
             </div>
 
             <div className="flex items-center gap-1">
-              <Button type="button" variant="ghost" size="icon" className="size-8" asChild>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className={cn("text-muted-foreground", compact ? "size-7" : "size-8")}
+                asChild
+              >
                 <a href={attachment.fileUrl} target="_blank" rel="noopener noreferrer">
                   <HugeiconsIcon icon={Download01Icon} size={14} />
                 </a>
@@ -102,7 +125,7 @@ export const InteractionAttachmentsList = memo(function InteractionAttachmentsLi
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="size-8 text-destructive"
+                  className={cn("text-destructive", compact ? "size-7" : "size-8")}
                   disabled={isDeleting}
                   onClick={() => onDeleteAttachment(attachment.id)}
                 >
@@ -160,17 +183,32 @@ export function InteractionAttachmentsField({
   onDragOver,
   onDrop,
 }: InteractionAttachmentsFieldProps) {
+  const totalCount = existingAttachments.length + queuedFiles.length;
+  const remaining = Math.max(0, INTERACTION_ATTACHMENTS_MAX_FILES - totalCount);
   const canAddMore =
-    existingAttachments.length + queuedFiles.length <
-    INTERACTION_ATTACHMENTS_MAX_FILES;
+    totalCount < INTERACTION_ATTACHMENTS_MAX_FILES;
 
   return (
     <div className="space-y-3">
-      <div>
-        <p className="text-sm font-medium">Evidencias (opcional)</p>
-        <p className="text-xs text-muted-foreground">
-          Máx. {INTERACTION_ATTACHMENTS_MAX_FILES} archivos · {formatBytes(INTERACTION_ATTACHMENTS_MAX_SIZE_BYTES)} por archivo
-        </p>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-sm font-semibold">Evidencias (opcional)</p>
+          <p className="text-xs text-muted-foreground">
+            Adjuntá soporte de la interacción para seguimiento comercial.
+          </p>
+        </div>
+        <Badge variant={canAddMore ? "outline" : "secondary"} className="text-xs">
+          {totalCount}/{INTERACTION_ATTACHMENTS_MAX_FILES}
+        </Badge>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-2 text-[11px]">
+        <span className="rounded-full border border-border/60 bg-muted/40 px-2 py-0.5 text-muted-foreground">
+          Hasta {formatBytes(INTERACTION_ATTACHMENTS_MAX_SIZE_BYTES)} por archivo
+        </span>
+        <span className="rounded-full border border-border/60 bg-muted/40 px-2 py-0.5 text-muted-foreground">
+          {INTERACTION_ATTACHMENTS_FORMATS_LABEL}
+        </span>
       </div>
 
       <div
@@ -179,25 +217,51 @@ export function InteractionAttachmentsField({
         onDragOver={onDragOver}
         onDrop={onDrop}
         className={cn(
-          "rounded-lg border-2 border-dashed p-4 transition-colors cursor-pointer",
+          "rounded-xl border-2 border-dashed p-4 transition-colors cursor-pointer",
           isDragging
             ? "border-primary bg-primary/5"
             : "border-muted-foreground/25 hover:border-muted-foreground/50",
           (disabled || isUploading || !canAddMore) && "pointer-events-none opacity-60",
+          !canAddMore && "border-amber-400/60 bg-amber-50/40 dark:bg-amber-500/5",
         )}
         onClick={canAddMore && !disabled && !isUploading ? onOpenFileDialog : undefined}
       >
         <input {...inputProps} className="hidden" disabled={disabled || isUploading || !canAddMore} />
 
-        <div className="flex items-center gap-2 text-sm">
-          <HugeiconsIcon icon={Upload01Icon} className="size-4 text-muted-foreground" />
-          <span>
-            {isUploading
-              ? "Subiendo archivos..."
-              : canAddMore
-                ? "Arrastrá archivos o hacé clic para seleccionar"
-                : "Límite de archivos alcanzado"}
-          </span>
+        <div className="flex items-center gap-3">
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <HugeiconsIcon icon={Upload01Icon} className="size-4" />
+          </div>
+
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-medium">
+              {isUploading
+                ? "Subiendo archivos..."
+                : canAddMore
+                  ? "Arrastrá archivos o hacé clic para seleccionar"
+                  : "Límite de archivos alcanzado"}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {canAddMore
+                ? remaining === 1
+                  ? "Te queda 1 archivo disponible"
+                  : `Te quedan ${remaining} archivos disponibles`
+                : "Eliminá un archivo para poder agregar otro"}
+            </p>
+          </div>
+
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpenFileDialog();
+            }}
+            disabled={!canAddMore || disabled || isUploading}
+          >
+            Seleccionar
+          </Button>
         </div>
       </div>
 
@@ -206,10 +270,15 @@ export function InteractionAttachmentsField({
       )}
 
       {existingAttachments.length > 0 && (
-        <div className="space-y-2">
-          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-            Adjuntos actuales
-          </p>
+        <div className="space-y-2 rounded-xl border border-border/60 bg-muted/10 p-3">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+              Adjuntos actuales
+            </p>
+            <Badge variant="outline" className="text-[10px]">
+              {existingAttachments.length}
+            </Badge>
+          </div>
           <InteractionAttachmentsList
             attachments={existingAttachments}
             onDeleteAttachment={onDeleteExistingAttachment}
@@ -219,10 +288,13 @@ export function InteractionAttachmentsField({
       )}
 
       {queuedFiles.length > 0 && (
-        <div className="space-y-2">
-          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-            Pendientes por subir ({queuedFiles.length})
-          </p>
+        <div className="space-y-2 rounded-xl border border-primary/20 bg-primary/5 p-3">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+              Pendientes por subir
+            </p>
+            <Badge className="text-[10px]">{queuedFiles.length}</Badge>
+          </div>
 
           <div className="space-y-2">
             {queuedFiles.map((queuedFile) => {
@@ -234,9 +306,9 @@ export function InteractionAttachmentsField({
               return (
                 <div
                   key={queuedFile.id}
-                  className="flex items-center gap-3 rounded-md border border-border/60 bg-background p-2"
+                  className="flex items-center gap-3 rounded-xl border border-border/60 bg-background p-2.5"
                 >
-                  <div className="shrink-0 size-10 rounded-md bg-muted/30 border border-border/40 flex items-center justify-center overflow-hidden">
+                  <div className="shrink-0 size-11 rounded-lg bg-muted/30 border border-border/40 flex items-center justify-center overflow-hidden">
                     {isImage && queuedFile.preview ? (
                       <img
                         src={queuedFile.preview}
@@ -250,9 +322,11 @@ export function InteractionAttachmentsField({
 
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium">{fileName}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {formatBytes(fileSize)}
-                    </p>
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <span>{formatBytes(fileSize)}</span>
+                      <span>•</span>
+                      <span>{isImage ? "Imagen" : "Documento"}</span>
+                    </div>
                   </div>
 
                   <Button
