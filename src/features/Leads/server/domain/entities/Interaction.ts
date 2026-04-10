@@ -3,7 +3,11 @@
  * Representa una interacción/seguimiento con un contacto
  */
 
-import type { Interaction as InteractionDTO, InteractionType } from "../../../frontend/types";
+import type {
+  Interaction as InteractionDTO,
+  InteractionAttachment,
+  InteractionType,
+} from "../../../frontend/types";
 
 export interface InteractionProps {
   id: string;
@@ -17,6 +21,7 @@ export interface InteractionProps {
   tenantId: string;
   createdAt: Date;
   updatedAt: Date;
+  attachments?: InteractionAttachment[];
 }
 
 export class Interaction {
@@ -74,6 +79,10 @@ export class Interaction {
     return this.props.updatedAt;
   }
 
+  get attachments(): InteractionAttachment[] {
+    return this.props.attachments ?? [];
+  }
+
   // =============================================
   // MÉTODOS DE NEGOCIO
   // =============================================
@@ -101,6 +110,7 @@ export class Interaction {
       tenantId: this.props.tenantId,
       createdAt: this.props.createdAt.toISOString(),
       updatedAt: this.props.updatedAt.toISOString(),
+      attachments: this.props.attachments,
     };
   }
 }

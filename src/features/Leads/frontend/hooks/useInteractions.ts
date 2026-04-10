@@ -2,16 +2,33 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { showToast } from "@/core/shared/components/ShowToast";
-import type { InteractionFormData, Interaction } from "../types";
+import type {
+  InteractionFormData,
+  Interaction,
+  InteractionAttachment,
+} from "../types";
 import { leadsQueryKeys } from "@core/shared/constants/query-keys";
 import {
   addInteractionAction,
+  deleteInteractionAttachmentAction,
   getInteractionsByLeadAction,
   getInteractionsByContactAction,
+  uploadInteractionAttachmentAction,
   updateInteractionAction,
   deleteInteractionAction,
 } from "../../server/presentation/actions/interaction.actions";
 import type { InteractionType } from "../types";
+
+interface UploadInteractionAttachmentsInput {
+  interactionId: string;
+  contactId: string;
+  files: File[];
+}
+
+interface UploadInteractionAttachmentsOutput {
+  uploaded: InteractionAttachment[];
+  failed: { fileName: string; error: string }[];
+}
 
 /**
  * Hook para obtener interacciones de un lead
@@ -94,7 +111,6 @@ export function useUpdateInteraction() {
   return useMutation({
     mutationFn: async ({
       interactionId,
-      contactId,
       data,
     }: {
       interactionId: string;
@@ -141,7 +157,6 @@ export function useDeleteInteraction() {
   return useMutation({
     mutationFn: async ({
       interactionId,
-      contactId,
     }: {
       interactionId: string;
       contactId: string;
@@ -167,6 +182,124 @@ export function useDeleteInteraction() {
         type: "error",
         title: "Error",
         description: error.message || "Error al eliminar la interacción",
+      });
+    },
+  });
+}
+
+/**
+ * Hook para subir múltiples adjuntos de interacción.
+ */
+export function useUploadInteractionAttachments() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      interactionId,
+      files,
+    }: UploadInteractionAttachmentsInput): Promise<UploadInteractionAttachmentsOutput> => {
+      const uploaded: InteractionAttachment[] = [];
+      const failed: { fileName: string; error: string }[] = [];
+
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const result = await uploadInteractionAttachmentAction(
+          formData,
+          interactionId,
+        );
+
+        if (result.error || !result.attachment) {
+          failed.push({
+            fileName: file.name,
+            error: result.error ?? "Error al subir archivo",
+          });
+          continue;
+        }
+
+        uploaded.push(result.attachment);
+      }
+
+      if (uploaded.length === 0 && failed.length > 0) {
+        throw new Error(failed[0]?.error ?? "No se pudieron subir los archivos");
+      }
+
+      return { uploaded, failed };
+    },
+    onSuccess: (result, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: leadsQueryKeys.interactionsByContact(variables.contactId),
+      });
+
+      if (result.uploaded.length > 0) {
+        showToast({
+          type: "success",
+          title: "Evidencias subidas",
+          description:
+            result.uploaded.length === 1
+              ? "Se subió 1 archivo correctamente"
+              : `Se subieron ${result.uploaded.length} archivos correctamente`,
+        });
+      }
+
+      if (result.failed.length > 0) {
+        showToast({
+          type: "error",
+          title: "Algunos archivos no se pudieron subir",
+          description: `${result.failed.length} archivo(s) con error`,
+        });
+      }
+    },
+    onError: (error: Error) => {
+      showToast({
+        type: "error",
+        title: "Error",
+        description: error.message || "Error al subir evidencias",
+      });
+    },
+  });
+}
+
+/**
+ * Hook para eliminar adjuntos de una interacción.
+ */
+export function useDeleteInteractionAttachment() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      attachmentId,
+      interactionId,
+    }: {
+      attachmentId: string;
+      interactionId: string;
+      contactId: string;
+    }) => {
+      const result = await deleteInteractionAttachmentAction(
+        attachmentId,
+        interactionId,
+      );
+      if (result.error) {
+        throw new Error(result.error);
+      }
+      return result.success;
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: leadsQueryKeys.interactionsByContact(variables.contactId),
+      });
+      showToast({
+        type: "success",
+        title: "Archivo eliminado",
+        description: "La evidencia se eliminó correctamente",
+      });
+    },
+    onError: (error: Error) => {
+      showToast({
+        type: "error",
+        title: "Error",
+        description: error.message || "Error al eliminar la evidencia",
       });
     },
   });

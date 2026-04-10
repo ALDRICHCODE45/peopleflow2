@@ -4,11 +4,11 @@ import { useForm } from "@tanstack/react-form";
 import { format } from "date-fns";
 import { useAddInteraction } from "./useInteractions";
 import { createInteractionSchema } from "../schemas/interaction.schema";
-import type { InteractionType } from "../types";
+import type { Interaction, InteractionType } from "../types";
 
 interface UseCreateInteractionFormProps {
   fixedContactId?: string;
-  onSuccess: () => void;
+  onSuccess: (interaction?: Interaction) => Promise<void> | void;
 }
 
 export function useCreateInteractionForm({
@@ -29,14 +29,14 @@ export function useCreateInteractionForm({
       onSubmit: createInteractionSchema,
     },
     onSubmit: async ({ value }) => {
-      await addInteractionMutation.mutateAsync({
+      const interaction = await addInteractionMutation.mutateAsync({
         contactId: value.contactId,
         type: value.type,
         subject: value.subject,
         content: value.content || undefined,
         date: value.date ? new Date(value.date).toISOString() : undefined,
       });
-      onSuccess();
+      await onSuccess(interaction);
     },
   });
 

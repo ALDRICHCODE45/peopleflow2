@@ -14,4 +14,7 @@ export const StorageKeys = {
 
   invoiceComplemento: (invoiceId: string, ext: string) =>
     `invoices/${invoiceId}/complemento/${crypto.randomUUID()}.${ext}`,
+
+  leadInteractionEvidence: (interactionId: string, ext: string) =>
+    `leads/interactions/${interactionId}/evidence/${crypto.randomUUID()}.${ext}`,
 };

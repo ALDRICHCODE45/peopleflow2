@@ -178,6 +178,20 @@ export interface Interaction {
   tenantId: string;
   createdAt: string;
   updatedAt: string;
+  attachments?: InteractionAttachment[];
+}
+
+export interface InteractionAttachment {
+  id: string;
+  fileName: string;
+  fileUrl: string;
+  fileSize: number;
+  mimeType: string;
+  subType: "OTHER";
+  interactionId: string;
+  tenantId: string;
+  uploadedById: string;
+  createdAt: string;
 }
 
 export interface LeadStatusHistoryItem {
@@ -301,6 +315,16 @@ export interface UpdateInteractionResult {
 }
 
 export interface DeleteInteractionResult {
+  error: string | null;
+  success: boolean;
+}
+
+export interface UploadInteractionAttachmentResult {
+  error: string | null;
+  attachment?: InteractionAttachment;
+}
+
+export interface DeleteInteractionAttachmentResult {
   error: string | null;
   success: boolean;
 }

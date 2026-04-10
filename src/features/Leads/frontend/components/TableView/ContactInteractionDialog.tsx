@@ -25,7 +25,7 @@ export const ContactInteractionDialog = ({
 }: Props) => {
   return (
     <Dialog onOpenChange={onOpenChange} open={isOpen}>
-      <DialogContent>
+      <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>Ingresa una nueva interacción</DialogTitle>
           <DialogDescription />

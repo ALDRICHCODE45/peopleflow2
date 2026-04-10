@@ -29,7 +29,7 @@ export function EditInteractionDialog({
 }: Props) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>Editar interacción</DialogTitle>
           <DialogDescription>

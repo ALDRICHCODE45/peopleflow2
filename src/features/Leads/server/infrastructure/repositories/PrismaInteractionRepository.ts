@@ -1,6 +1,6 @@
 import prisma from "@lib/prisma";
 import { Interaction, type InteractionProps } from "../../domain/entities/Interaction";
-import type { InteractionType } from "../../../frontend/types";
+import type { InteractionAttachment, InteractionType } from "../../../frontend/types";
 import type {
   IInteractionRepository,
   CreateInteractionData,
@@ -24,7 +24,34 @@ export class PrismaInteractionRepository implements IInteractionRepository {
     tenantId: string;
     createdAt: Date;
     updatedAt: Date;
+    attachments?: {
+      id: string;
+      fileName: string;
+      fileUrl: string;
+      fileSize: number;
+      mimeType: string;
+      subType: string;
+      interactionId: string | null;
+      tenantId: string;
+      uploadedById: string;
+      createdAt: Date;
+    }[];
   }): Interaction {
+    const attachments: InteractionAttachment[] = (interaction.attachments ?? [])
+      .filter((attachment) => Boolean(attachment.interactionId))
+      .map((attachment) => ({
+        id: attachment.id,
+        fileName: attachment.fileName,
+        fileUrl: attachment.fileUrl,
+        fileSize: attachment.fileSize,
+        mimeType: attachment.mimeType,
+        subType: "OTHER",
+        interactionId: attachment.interactionId ?? "",
+        tenantId: attachment.tenantId,
+        uploadedById: attachment.uploadedById,
+        createdAt: attachment.createdAt.toISOString(),
+      }));
+
     const props: InteractionProps = {
       id: interaction.id,
       type: interaction.type as InteractionType,
@@ -37,6 +64,7 @@ export class PrismaInteractionRepository implements IInteractionRepository {
       tenantId: interaction.tenantId,
       createdAt: interaction.createdAt,
       updatedAt: interaction.updatedAt,
+      attachments,
     };
     return new Interaction(props);
   }
@@ -44,7 +72,25 @@ export class PrismaInteractionRepository implements IInteractionRepository {
   async findById(id: string, tenantId: string): Promise<Interaction | null> {
     const interaction = await prisma.interaction.findFirst({
       where: { id, tenantId },
-      include: { createdBy: { select: { name: true } } },
+      include: {
+        createdBy: { select: { name: true } },
+        attachments: {
+          where: { attachableType: "INTERACTION" },
+          orderBy: { createdAt: "desc" },
+          select: {
+            id: true,
+            fileName: true,
+            fileUrl: true,
+            fileSize: true,
+            mimeType: true,
+            subType: true,
+            interactionId: true,
+            tenantId: true,
+            uploadedById: true,
+            createdAt: true,
+          },
+        },
+      },
     });
 
     if (!interaction) return null;
@@ -54,7 +100,25 @@ export class PrismaInteractionRepository implements IInteractionRepository {
   async findByContactId(contactId: string, tenantId: string): Promise<Interaction[]> {
     const interactions = await prisma.interaction.findMany({
       where: { contactId, tenantId },
-      include: { createdBy: { select: { name: true } } },
+      include: {
+        createdBy: { select: { name: true } },
+        attachments: {
+          where: { attachableType: "INTERACTION" },
+          orderBy: { createdAt: "desc" },
+          select: {
+            id: true,
+            fileName: true,
+            fileUrl: true,
+            fileSize: true,
+            mimeType: true,
+            subType: true,
+            interactionId: true,
+            tenantId: true,
+            uploadedById: true,
+            createdAt: true,
+          },
+        },
+      },
       orderBy: { date: "desc" },
     });
 
@@ -67,7 +131,25 @@ export class PrismaInteractionRepository implements IInteractionRepository {
         tenantId,
         contact: { leadId },
       },
-      include: { createdBy: { select: { name: true } } },
+      include: {
+        createdBy: { select: { name: true } },
+        attachments: {
+          where: { attachableType: "INTERACTION" },
+          orderBy: { createdAt: "desc" },
+          select: {
+            id: true,
+            fileName: true,
+            fileUrl: true,
+            fileSize: true,
+            mimeType: true,
+            subType: true,
+            interactionId: true,
+            tenantId: true,
+            uploadedById: true,
+            createdAt: true,
+          },
+        },
+      },
       orderBy: { date: "desc" },
     });
 
@@ -85,7 +167,25 @@ export class PrismaInteractionRepository implements IInteractionRepository {
         createdById: data.createdById,
         tenantId: data.tenantId,
       },
-      include: { createdBy: { select: { name: true } } },
+      include: {
+        createdBy: { select: { name: true } },
+        attachments: {
+          where: { attachableType: "INTERACTION" },
+          orderBy: { createdAt: "desc" },
+          select: {
+            id: true,
+            fileName: true,
+            fileUrl: true,
+            fileSize: true,
+            mimeType: true,
+            subType: true,
+            interactionId: true,
+            tenantId: true,
+            uploadedById: true,
+            createdAt: true,
+          },
+        },
+      },
     });
 
     return this.mapToDomain(interaction);
@@ -105,7 +205,25 @@ export class PrismaInteractionRepository implements IInteractionRepository {
           ...(data.content !== undefined && { content: data.content }),
           ...(data.date !== undefined && { date: data.date }),
         },
-        include: { createdBy: { select: { name: true } } },
+        include: {
+          createdBy: { select: { name: true } },
+          attachments: {
+            where: { attachableType: "INTERACTION" },
+            orderBy: { createdAt: "desc" },
+            select: {
+              id: true,
+              fileName: true,
+              fileUrl: true,
+              fileSize: true,
+              mimeType: true,
+              subType: true,
+              interactionId: true,
+              tenantId: true,
+              uploadedById: true,
+              createdAt: true,
+            },
+          },
+        },
       });
 
       return this.mapToDomain(interaction);

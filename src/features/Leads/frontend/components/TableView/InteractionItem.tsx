@@ -11,6 +11,7 @@ import type { Interaction } from "../../types";
 import { INTERACTION_TYPE_LABELS, INTERACTION_ICONS } from "../../types";
 import { InteractionActionsDropdown } from "./InteractionActionsDropdown";
 import { createInteractionActions } from "./createInteractionActions";
+import { InteractionAttachmentsList } from "./InteractionAttachmentsField";
 
 interface InteractionItemProps {
   interaction: Interaction;
@@ -81,6 +82,15 @@ export const InteractionItem = memo(function InteractionItem({
             <p className="text-xs text-muted-foreground/80 pt-1">
               Por {interaction.createdByName}
             </p>
+          )}
+
+          {interaction.attachments && interaction.attachments.length > 0 && (
+            <div className="pt-1">
+              <p className="text-xs text-muted-foreground mb-1">
+                Evidencias ({interaction.attachments.length})
+              </p>
+              <InteractionAttachmentsList attachments={interaction.attachments} />
+            </div>
           )}
         </div>
 

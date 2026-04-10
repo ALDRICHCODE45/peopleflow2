@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Button } from "@/core/shared/ui/shadcn/button";
 import { Input } from "@/core/shared/ui/shadcn/input";
@@ -13,9 +14,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/core/shared/ui/shadcn/select";
+import { useFileUpload } from "@/core/shared/hooks/use-upload-file";
 import { useEditInteractionForm } from "../../hooks/useEditInteractionForm";
+import {
+  useDeleteInteractionAttachment,
+  useUploadInteractionAttachments,
+} from "../../hooks/useInteractions";
 import { INTERACTION_TYPE_OPTIONS, INTERACTION_ICONS } from "../../types";
 import type { Interaction, InteractionType } from "../../types";
+import {
+  InteractionAttachmentsField,
+  INTERACTION_ATTACHMENTS_ACCEPT,
+  INTERACTION_ATTACHMENTS_MAX_FILES,
+  INTERACTION_ATTACHMENTS_MAX_SIZE_BYTES,
+} from "./InteractionAttachmentsField";
 
 interface EditInteractionFormProps {
   interaction: Interaction;
@@ -28,10 +40,60 @@ export function EditInteractionForm({
   onSuccess,
   onCancel,
 }: EditInteractionFormProps) {
+  const [deletingAttachmentId, setDeletingAttachmentId] = useState<string | null>(
+    null,
+  );
+  const uploadInteractionAttachmentsMutation = useUploadInteractionAttachments();
+  const deleteInteractionAttachmentMutation = useDeleteInteractionAttachment();
+
+  const [uploadState, uploadActions] = useFileUpload({
+    accept: INTERACTION_ATTACHMENTS_ACCEPT,
+    multiple: true,
+    maxFiles: Math.max(
+      0,
+      INTERACTION_ATTACHMENTS_MAX_FILES - (interaction.attachments?.length ?? 0),
+    ),
+    maxSize: INTERACTION_ATTACHMENTS_MAX_SIZE_BYTES,
+  });
+
+  const queuedFiles = useMemo(
+    () =>
+      uploadState.files
+        .map((queuedFile) => queuedFile.file)
+        .filter((file): file is File => file instanceof File),
+    [uploadState.files],
+  );
+
   const { form, isSubmitting } = useEditInteractionForm({
     interaction,
-    onSuccess,
+    onSuccess: async (updatedInteraction) => {
+      if (updatedInteraction && queuedFiles.length > 0) {
+        await uploadInteractionAttachmentsMutation.mutateAsync({
+          interactionId: updatedInteraction.id,
+          contactId: updatedInteraction.contactId,
+          files: queuedFiles,
+        });
+      }
+
+      uploadActions.clearFiles();
+      onSuccess();
+    },
   });
+
+  const isPending = isSubmitting || uploadInteractionAttachmentsMutation.isPending;
+
+  const handleDeleteAttachment = async (attachmentId: string) => {
+    setDeletingAttachmentId(attachmentId);
+    try {
+      await deleteInteractionAttachmentMutation.mutateAsync({
+        attachmentId,
+        interactionId: interaction.id,
+        contactId: interaction.contactId,
+      });
+    } finally {
+      setDeletingAttachmentId(null);
+    }
+  };
 
   return (
     <form
@@ -124,17 +186,38 @@ export function EditInteractionForm({
         )}
       </form.Field>
 
+      <InteractionAttachmentsField
+        queuedFiles={uploadState.files}
+        existingAttachments={interaction.attachments ?? []}
+        deletingAttachmentId={deletingAttachmentId}
+        isDragging={uploadState.isDragging}
+        errors={uploadState.errors}
+        inputProps={uploadActions.getInputProps()}
+        onOpenFileDialog={uploadActions.openFileDialog}
+        onRemoveQueuedFile={uploadActions.removeFile}
+        onDeleteExistingAttachment={handleDeleteAttachment}
+        onDragEnter={uploadActions.handleDragEnter}
+        onDragLeave={uploadActions.handleDragLeave}
+        onDragOver={uploadActions.handleDragOver}
+        onDrop={uploadActions.handleDrop}
+        isUploading={uploadInteractionAttachmentsMutation.isPending}
+        disabled={isSubmitting || deleteInteractionAttachmentMutation.isPending}
+      />
+
       <div className="flex justify-end gap-2 pt-2">
         <Button
           type="button"
           variant="outline"
-          onClick={onCancel}
-          disabled={isSubmitting}
+          onClick={() => {
+            uploadActions.clearFiles();
+            onCancel();
+          }}
+          disabled={isPending || deleteInteractionAttachmentMutation.isPending}
         >
           Cancelar
         </Button>
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Guardando..." : "Actualizar interacción"}
+        <Button type="submit" disabled={isPending || deleteInteractionAttachmentMutation.isPending}>
+          {isPending ? "Guardando..." : "Actualizar interacción"}
         </Button>
       </div>
     </form>

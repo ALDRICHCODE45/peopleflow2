@@ -8,7 +8,7 @@ import type { Interaction } from "../types";
 
 interface UseEditInteractionFormProps {
   interaction: Interaction;
-  onSuccess: () => void;
+  onSuccess: (interaction?: Interaction) => Promise<void> | void;
 }
 
 export function useEditInteractionForm({
@@ -28,7 +28,7 @@ export function useEditInteractionForm({
       onSubmit: editInteractionSchema,
     },
     onSubmit: async ({ value }) => {
-      await updateInteractionMutation.mutateAsync({
+      const updatedInteraction = await updateInteractionMutation.mutateAsync({
         interactionId: interaction.id,
         contactId: interaction.contactId,
         data: {
@@ -38,7 +38,7 @@ export function useEditInteractionForm({
           date: value.date ? new Date(value.date).toISOString() : undefined,
         },
       });
-      onSuccess();
+      await onSuccess(updatedInteraction);
     },
   });
 
