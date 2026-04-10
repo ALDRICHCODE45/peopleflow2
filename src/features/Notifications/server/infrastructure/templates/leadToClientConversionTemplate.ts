@@ -1,13 +1,15 @@
 export interface LeadToClientConversionEmailData {
   recipientName: string;
   leadName: string;
+  assignedToName: string;
+  tenantName: string;
   appUrl: string;
 }
 
 export function generateLeadToClientConversionEmail(
   data: LeadToClientConversionEmailData
 ): string {
-  const { recipientName, leadName, appUrl } = data;
+  const { recipientName, leadName, assignedToName, tenantName, appUrl } = data;
 
   return `
 <!DOCTYPE html>
@@ -58,7 +60,7 @@ export function generateLeadToClientConversionEmail(
 
               <!-- Message -->
               <p style="margin: 0 0 16px 0; font-size: 16px; line-height: 1.6; color: #3f3f46;">
-                El lead <strong style="color: #9333ea;">"${leadName}"</strong> ha completado su proceso exitosamente y ahora es oficialmente un <strong style="color: #9333ea;">cliente</strong>.
+                El lead <strong style="color: #9333ea;">"${leadName}"</strong>, asignado a <strong style="color: #9333ea;">"${assignedToName}"</strong> en el tenant <strong style="color: #9333ea;">"${tenantName}"</strong>, completó su proceso exitosamente y ahora es oficialmente un <strong style="color: #9333ea;">cliente</strong>.
               </p>
 
               <p style="margin: 0 0 16px 0; font-size: 16px; line-height: 1.6; color: #3f3f46;">
@@ -66,7 +68,7 @@ export function generateLeadToClientConversionEmail(
               </p>
 
               <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #3f3f46;">
-                Da seguimiento desde el modulo de clientes para continuar brindando un servicio excepcional.
+                Da seguimiento desde el módulo de clientes para continuar brindando un servicio excepcional.
               </p>
 
               <!-- CTA Button -->
@@ -124,18 +126,18 @@ export function generateLeadToClientConversionEmail(
 export function generateLeadToClientConversionPlainText(
   data: LeadToClientConversionEmailData
 ): string {
-  const { recipientName, leadName, appUrl } = data;
+  const { recipientName, leadName, assignedToName, tenantName, appUrl } = data;
 
   return `
 Nuevo Cliente Registrado
 
 Hola ${recipientName},
 
-El lead "${leadName}" ha completado su proceso exitosamente y ahora es oficialmente un cliente.
+El lead "${leadName}", asignado a "${assignedToName}" en el tenant "${tenantName}", ha completado su proceso exitosamente y ahora es oficialmente un cliente.
 
 Las posiciones fueron asignadas y el registro de cliente fue creado exitosamente en el sistema.
 
-Da seguimiento desde el modulo de clientes para continuar brindando un servicio excepcional.
+Da seguimiento desde el módulo de clientes para continuar brindando un servicio excepcional.
 
 Ver cliente en sistema: ${appUrl}
 

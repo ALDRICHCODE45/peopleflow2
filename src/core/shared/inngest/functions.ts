@@ -78,8 +78,7 @@ const handleLeadStatusChangeNotification = inngest.createFunction(
   },
   { event: InngestEvents.lead.statusChanged },
   async ({ event, step }) => {
-    const { tenantId, newStatus, companyName, leadId, changedById } =
-      event.data;
+    const { tenantId, newStatus, companyName, leadId, changedById } = event.data;
 
     // Step 1: Load tenant config and verify it should trigger
     const config = await step.run("load-config", async () => {
@@ -114,6 +113,33 @@ const handleLeadStatusChangeNotification = inngest.createFunction(
       return { skipped: true, reason: "No valid recipients found" };
     }
 
+    const leadTenantContext = await step.run(
+      "fetch-lead-tenant-context",
+      async () => {
+        const [tenant, lead] = await Promise.all([
+          prisma.tenant.findUnique({
+            where: { id: tenantId },
+            select: { name: true },
+          }),
+          prisma.lead.findFirst({
+            where: { id: leadId, tenantId, isDeleted: false },
+            select: {
+              companyName: true,
+              assignedTo: {
+                select: { name: true },
+              },
+            },
+          }),
+        ]);
+
+        return {
+          tenantName: tenant?.name ?? "Tenant no identificado",
+          leadName: lead?.companyName ?? companyName,
+          assignedToName: lead?.assignedTo?.name ?? "Sin generador asignado",
+        };
+      },
+    );
+
     // Step 3: Send notification to each recipient
     const isConversion = newStatus === "POSICIONES_ASIGNADAS";
     const statusLabel = STATUS_LABELS[newStatus] || newStatus;
@@ -134,22 +160,26 @@ const handleLeadStatusChangeNotification = inngest.createFunction(
         if (isConversion) {
           const emailData = {
             recipientName,
-            leadName: companyName,
+            leadName: leadTenantContext.leadName,
+            assignedToName: leadTenantContext.assignedToName,
+            tenantName: leadTenantContext.tenantName,
             appUrl: APP_URL,
           };
           htmlTemplate = generateLeadToClientConversionEmail(emailData);
           plainTextBody = generateLeadToClientConversionPlainText(emailData);
-          subject = `Lead "${companyName}" es ahora un Cliente`;
+          subject = `Lead "${leadTenantContext.leadName}" de ${leadTenantContext.tenantName} asignado a ${leadTenantContext.assignedToName} ahora es Cliente`;
         } else {
           const emailData = {
             recipientName,
-            leadName: companyName,
+            leadName: leadTenantContext.leadName,
+            assignedToName: leadTenantContext.assignedToName,
+            tenantName: leadTenantContext.tenantName,
             newStatus: statusLabel,
             appUrl: APP_URL,
           };
           htmlTemplate = generateLeadStatusChangeEmail(emailData);
           plainTextBody = generateLeadStatusChangePlainText(emailData);
-          subject = `Lead "${companyName}" cambió a ${statusLabel}`;
+          subject = `Lead "${leadTenantContext.leadName}" de ${leadTenantContext.tenantName} asignado a ${leadTenantContext.assignedToName} cambió a ${statusLabel}`;
         }
 
         await notificationUseCase.execute({
@@ -161,7 +191,9 @@ const handleLeadStatusChangeNotification = inngest.createFunction(
           priority: isConversion ? "HIGH" : "MEDIUM",
           metadata: {
             leadId,
-            leadName: companyName,
+            leadName: leadTenantContext.leadName,
+            tenantName: leadTenantContext.tenantName,
+            assignedToName: leadTenantContext.assignedToName,
             triggerEvent: isConversion
               ? "LEAD_TO_CLIENT_CONVERSION"
               : "LEAD_STATUS_CHANGE",
@@ -191,8 +223,7 @@ const handleLeadInactivityAlert = inngest.createFunction(
   },
   { event: InngestEvents.lead.statusChanged },
   async ({ event, step }) => {
-    const { tenantId, newStatus, companyName, leadId, changedById } =
-      event.data;
+    const { tenantId, newStatus, companyName, leadId, changedById } = event.data;
 
     // Step 1: Load config and check if inactivity monitoring applies
     const config = await step.run("load-config", async () => {
@@ -219,7 +250,15 @@ const handleLeadInactivityAlert = inngest.createFunction(
     const currentLead = await step.run("verify-lead-status", async () => {
       return prisma.lead.findFirst({
         where: { id: leadId, tenantId, isDeleted: false },
-        select: { status: true, companyName: true },
+        select: {
+          status: true,
+          companyName: true,
+          assignedTo: {
+            select: {
+              name: true,
+            },
+          },
+        },
       });
     });
 
@@ -254,8 +293,18 @@ const handleLeadInactivityAlert = inngest.createFunction(
       return { skipped: true, reason: "No valid recipients" };
     }
 
+    const tenantName = await step.run("get-tenant-name", async () => {
+      const tenant = await prisma.tenant.findUnique({
+        where: { id: tenantId },
+        select: { name: true },
+      });
+      return tenant?.name ?? "Tenant no identificado";
+    });
+
     const statusLabel = STATUS_LABELS[newStatus] || newStatus;
     const inactiveDuration = `${config.leadInactiveTimeValue} ${config.leadInactiveTimeUnit === "HOURS" ? "horas" : "días"}`;
+    const leadName = currentLead.companyName || companyName;
+    const assignedToName = currentLead.assignedTo?.name || "Sin generador asignado";
 
     for (const recipient of recipients) {
       await step.run(`send-inactivity-alert-${recipient.id}`, async () => {
@@ -267,7 +316,9 @@ const handleLeadInactivityAlert = inngest.createFunction(
         const recipientName = recipient.name || "Usuario";
         const emailData = {
           recipientName,
-          leadName: currentLead.companyName,
+          leadName,
+          assignedToName,
+          tenantName,
           currentStatus: statusLabel,
           inactiveDuration,
           appUrl: APP_URL,
@@ -280,12 +331,14 @@ const handleLeadInactivityAlert = inngest.createFunction(
           tenantId,
           provider: "EMAIL",
           recipient: recipient.email,
-          subject: `Lead "${currentLead.companyName}" sin actividad por ${inactiveDuration}`,
+          subject: `Lead "${leadName}" de ${tenantName} asignado a ${assignedToName} sin actividad por ${inactiveDuration}`,
           body: plainTextBody,
           priority: "HIGH",
           metadata: {
             leadId,
-            leadName: currentLead.companyName,
+            leadName,
+            tenantName,
+            assignedToName,
             triggerEvent: "LEAD_INACTIVITY_ALERT",
             currentStatus: newStatus,
             inactiveDuration,

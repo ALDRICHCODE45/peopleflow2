@@ -1,6 +1,8 @@
 export interface LeadInactivityAlertEmailData {
   recipientName: string;
   leadName: string;
+  assignedToName: string;
+  tenantName: string;
   currentStatus: string;
   inactiveDuration: string;
   appUrl: string;
@@ -9,8 +11,15 @@ export interface LeadInactivityAlertEmailData {
 export function generateLeadInactivityAlertEmail(
   data: LeadInactivityAlertEmailData,
 ): string {
-  const { recipientName, leadName, currentStatus, inactiveDuration, appUrl } =
-    data;
+  const {
+    recipientName,
+    leadName,
+    assignedToName,
+    tenantName,
+    currentStatus,
+    inactiveDuration,
+    appUrl,
+  } = data;
 
   return `
 <!DOCTYPE html>
@@ -61,11 +70,11 @@ export function generateLeadInactivityAlertEmail(
 
               <!-- Message -->
               <p style="margin: 0 0 16px 0; font-size: 16px; line-height: 1.6; color: #3f3f46;">
-                El lead <strong style="color: #9333ea;">"${leadName}"</strong> lleva <strong style="color: #dc2626;">${inactiveDuration}</strong> sin actividad en el estado <strong style="color: #9333ea;">"${currentStatus}"</strong>.
+                El lead <strong style="color: #9333ea;">"${leadName}"</strong>, asignado a <strong style="color: #9333ea;">"${assignedToName}"</strong> en el tenant <strong style="color: #9333ea;">"${tenantName}"</strong>, lleva <strong style="color: #dc2626;">${inactiveDuration}</strong> sin actividad en el estado <strong style="color: #9333ea;">"${currentStatus}"</strong>.
               </p>
 
               <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #3f3f46;">
-                Te recomendamos dar seguimiento para mantener activa la oportunidad y evitar perder el interes del prospecto.
+                Te recomendamos coordinar seguimiento con el generador asignado para mantener activa la oportunidad y evitar perder el interés del prospecto.
               </p>
 
               <!-- CTA Button -->
@@ -123,17 +132,24 @@ export function generateLeadInactivityAlertEmail(
 export function generateLeadInactivityAlertPlainText(
   data: LeadInactivityAlertEmailData,
 ): string {
-  const { recipientName, leadName, currentStatus, inactiveDuration, appUrl } =
-    data;
+  const {
+    recipientName,
+    leadName,
+    assignedToName,
+    tenantName,
+    currentStatus,
+    inactiveDuration,
+    appUrl,
+  } = data;
 
   return `
 Alerta de Inactividad
 
 Hola ${recipientName},
 
-El lead "${leadName}" lleva ${inactiveDuration} sin actividad en el estado "${currentStatus}".
+El lead "${leadName}", asignado a "${assignedToName}" en el tenant "${tenantName}", lleva ${inactiveDuration} sin actividad en el estado "${currentStatus}".
 
-Te recomendamos dar seguimiento para mantener activa la oportunidad y evitar perder el interes del prospecto.
+Te recomendamos coordinar seguimiento con el generador asignado para mantener activa la oportunidad y evitar perder el interés del prospecto.
 
 Ver lead en sistema: ${appUrl}
 

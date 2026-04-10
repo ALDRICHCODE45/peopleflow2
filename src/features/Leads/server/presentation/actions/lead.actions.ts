@@ -95,7 +95,7 @@ export async function createLeadAction(data: {
       tenantId,
     });
 
-    if (!hasPermission) {
+    if (!hasPermission.hasAnyPermission) {
       return { error: "No tienes permisos para crear leads" };
     }
 
@@ -173,7 +173,7 @@ export async function updateLeadAction(
       tenantId,
     });
 
-    if (!hasPermission) {
+    if (!hasPermission.hasAnyPermission) {
       return { error: "No tienes permisos para editar leads" };
     }
 
@@ -236,7 +236,7 @@ export async function deleteLeadAction(
       tenantId,
     });
 
-    if (!hasPermission) {
+    if (!hasPermission.hasAnyPermission) {
       return {
         error: "No tienes permisos para eliminar leads",
         success: false,
@@ -304,7 +304,7 @@ export async function getLeadByIdAction(
       tenantId,
     });
 
-    if (!hasPermission) {
+    if (!hasPermission.hasAnyPermission) {
       return { error: "No tienes permisos para ver leads" };
     }
 
@@ -368,7 +368,7 @@ export async function updateLeadStatusAction(
       tenantId,
     });
 
-    if (!hasPermission) {
+    if (!hasPermission.hasAnyPermission) {
       return { error: "No tienes permisos para editar leads" };
     }
 
@@ -465,7 +465,7 @@ export const reasignLeadAction = async (
       tenantId,
     });
 
-    if (!hasPermission) {
+    if (!hasPermission.hasAnyPermission) {
       return { error: "No tienes permisos para editar leads" };
     }
 
@@ -525,7 +525,7 @@ export async function bulkDeleteLeadsAction(
       tenantId,
     });
 
-    if (!hasPermission) {
+    if (!hasPermission.hasAnyPermission) {
       return {
         error: "No tienes permisos para eliminar leads",
         success: false,
@@ -599,7 +599,7 @@ export async function bulkReasignLeadsAction(
       tenantId,
     });
 
-    if (!hasPermission) {
+    if (!hasPermission.hasAnyPermission) {
       return {
         error: "No tienes permisos para reasignar leads",
         success: false,
@@ -670,7 +670,7 @@ export async function getLeadStatusHistoryAction(
       tenantId,
     });
 
-    if (!hasPermission) {
+    if (!hasPermission.hasAnyPermission) {
       return { error: "No tienes permisos para ver leads", history: [] };
     }
 

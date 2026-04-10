@@ -76,7 +76,7 @@ export async function getPaginatedLeadsAction(
       tenantId,
     });
 
-    if (!hasPermission) {
+    if (!hasPermission.hasAnyPermission) {
       return { error: "No tienes permisos para ver leads" };
     }
 

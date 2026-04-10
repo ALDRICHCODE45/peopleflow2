@@ -48,7 +48,7 @@ export async function getNotificationConfigAction(): Promise<GetNotificationConf
       tenantId,
     });
 
-    if (!hasPermission) {
+    if (!hasPermission.hasAnyPermission) {
       return { error: "No tienes permisos para acceder a la configuración" };
     }
 
@@ -109,7 +109,7 @@ export async function saveNotificationConfigAction(data: {
       tenantId,
     });
 
-    if (!hasPermission) {
+    if (!hasPermission.hasAnyPermission) {
       return { error: "No tienes permisos para editar la configuración" };
     }
 

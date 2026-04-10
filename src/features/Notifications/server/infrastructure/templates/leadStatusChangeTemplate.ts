@@ -1,6 +1,8 @@
 export interface LeadStatusChangeEmailData {
   recipientName: string;
   leadName: string;
+  assignedToName: string;
+  tenantName: string;
   newStatus: string;
   appUrl: string;
 }
@@ -8,7 +10,7 @@ export interface LeadStatusChangeEmailData {
 export function generateLeadStatusChangeEmail(
   data: LeadStatusChangeEmailData
 ): string {
-  const { recipientName, leadName, newStatus, appUrl } = data;
+  const { recipientName, leadName, assignedToName, tenantName, newStatus, appUrl } = data;
 
   return `
 <!DOCTYPE html>
@@ -59,11 +61,11 @@ export function generateLeadStatusChangeEmail(
 
               <!-- Message -->
               <p style="margin: 0 0 16px 0; font-size: 16px; line-height: 1.6; color: #3f3f46;">
-                El lead <strong style="color: #9333ea;">"${leadName}"</strong> ha cambiado a estado <strong style="color: #9333ea;">"${newStatus}"</strong>.
+                El lead <strong style="color: #9333ea;">"${leadName}"</strong>, asignado a <strong style="color: #9333ea;">"${assignedToName}"</strong> en el tenant <strong style="color: #9333ea;">"${tenantName}"</strong>, cambió al estado <strong style="color: #9333ea;">"${newStatus}"</strong>.
               </p>
 
               <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #3f3f46;">
-                Este es un momento clave para dar seguimiento y cerrar la oportunidad. No dejes pasar esta ventana de accion.
+                Este es un momento clave para dar seguimiento comercial y coordinar al generador responsable. No dejes pasar esta ventana de acción.
               </p>
 
               <!-- Hero Image -->
@@ -123,16 +125,16 @@ export function generateLeadStatusChangeEmail(
 export function generateLeadStatusChangePlainText(
   data: LeadStatusChangeEmailData
 ): string {
-  const { recipientName, leadName, newStatus, appUrl } = data;
+  const { recipientName, leadName, assignedToName, tenantName, newStatus, appUrl } = data;
 
   return `
 Cambio Importante
 
 Hola ${recipientName},
 
-El lead "${leadName}" ha cambiado a estado "${newStatus}".
+El lead "${leadName}", asignado a "${assignedToName}" en el tenant "${tenantName}", cambió al estado "${newStatus}".
 
-Este es un momento clave para dar seguimiento y cerrar la oportunidad. No dejes pasar esta ventana de accion.
+Este es un momento clave para dar seguimiento comercial y coordinar al generador responsable. No dejes pasar esta ventana de acción.
 
 Ver en sistema: ${appUrl}
 

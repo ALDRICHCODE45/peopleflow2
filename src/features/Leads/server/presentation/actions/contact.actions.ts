@@ -17,7 +17,6 @@ import { GetContactsByLeadUseCase } from "../../application/use-cases/GetContact
 
 // Types
 import type {
-  Contact,
   CreateContactResult,
   UpdateContactResult,
   DeleteContactResult,
@@ -70,7 +69,7 @@ export async function addContactToLeadAction(
       tenantId,
     });
 
-    if (!hasPermission) {
+    if (!hasPermission.hasAnyPermission) {
       return { error: "No tienes permisos para editar leads" };
     }
 
@@ -141,7 +140,7 @@ export async function updateContactAction(
       tenantId,
     });
 
-    if (!hasPermission) {
+    if (!hasPermission.hasAnyPermission) {
       return { error: "No tienes permisos para editar leads" };
     }
 
@@ -198,7 +197,7 @@ export async function deleteContactAction(
       tenantId,
     });
 
-    if (!hasPermission) {
+    if (!hasPermission.hasAnyPermission) {
       return { error: "No tienes permisos para editar leads", success: false };
     }
 
@@ -257,7 +256,7 @@ export async function getContactsByLeadAction(
       tenantId,
     });
 
-    if (!hasPermission) {
+    if (!hasPermission.hasAnyPermission) {
       return { error: "No tienes permisos para ver leads", contacts: [] };
     }
 
