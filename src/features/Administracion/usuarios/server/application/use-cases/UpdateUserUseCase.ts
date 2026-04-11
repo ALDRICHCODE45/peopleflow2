@@ -13,7 +13,7 @@ export interface UpdateUserInput {
   requestingUserId: string;
   name?: string;
   email?: string;
-  avatar?: string;
+  avatar?: string | null;
 }
 
 export interface UpdateUserOutput {
@@ -95,7 +95,7 @@ export class UpdateUserUseCase {
       }
 
       // Preparar datos para actualizar
-      const updateData: { name?: string; email?: string; avatar?: string } = {};
+      const updateData: { name?: string; email?: string; avatar?: string | null } = {};
       if (input.name !== undefined) {
         updateData.name = input.name;
       }
@@ -103,17 +103,11 @@ export class UpdateUserUseCase {
         updateData.email = input.email;
       }
       if (input.avatar !== undefined) {
-        console.log("en el caso de uso avatar es valido");
         updateData.avatar = input.avatar;
       }
 
-      console.log(
-        "avatar despues de validarla en el casao de uso",
-        input.avatar,
-      );
       // Si no hay nada que actualizar
       if (Object.keys(updateData).length === 0) {
-        console.log("No hay nada que actualizar", input.avatar);
         return {
           success: false,
           error: "No se proporcionaron datos para actualizar",
@@ -125,12 +119,6 @@ export class UpdateUserUseCase {
         where: { id: input.userId },
         data: updateData,
       });
-
-      console.log(
-        { updatedUser },
-        "user regresado despues de actualizarlo",
-        updatedUser.avatar,
-      );
 
       return {
         success: true,

@@ -22,7 +22,7 @@ export interface CreateUserData {
 export interface UpdateUserData {
   name?: string;
   email?: string;
-  avatar?: string;
+  avatar?: string | null;
 }
 
 // Result types from server actions

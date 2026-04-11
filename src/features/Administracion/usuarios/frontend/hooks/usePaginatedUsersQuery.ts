@@ -1,13 +1,14 @@
 "use client";
 
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import type { TenantUser } from "../types";
+import { usersQueryKeys } from "@/core/shared/constants/query-keys";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
-import { getPaginatedUsersAction } from "../../server/presentation/actions/getPaginatedUsersAction.action";
 import type {
   PaginatedResponse,
   SortingParam,
 } from "@/core/shared/types/pagination.types";
+import { getPaginatedUsersAction } from "../../server/presentation/actions/getPaginatedUsersAction.action";
+import type { TenantUser } from "../types";
 
 /** Parámetros para la query paginada de usuarios */
 export interface PaginatedUsersQueryParams {
@@ -20,12 +21,10 @@ export interface PaginatedUsersQueryParams {
 /** Query Key Factory - CRÍTICO: incluir TODOS los parámetros */
 export const getPaginatedUsersQueryKey = (
   tenantId: string,
-  params: PaginatedUsersQueryParams
+  params: PaginatedUsersQueryParams,
 ) =>
   [
-    "users",
-    "paginated",
-    tenantId,
+    ...usersQueryKeys.paginated(tenantId),
     {
       pageIndex: params.pageIndex,
       pageSize: params.pageSize,

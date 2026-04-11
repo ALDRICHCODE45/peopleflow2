@@ -1,7 +1,6 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import {
   getTenantUsersAction,
   createUserAction,
@@ -80,17 +79,17 @@ export function useCreateUser() {
       }
       return result.user;
     },
-    onSuccess: async () => {
+    onSuccess: () => {
       showToast({
         title: "Operación Exitosa",
         description: "Usuario creado exitosamente",
         type: "success",
       });
       if (tenant?.id) {
-        await queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           queryKey: getUsersQueryKey(tenant.id),
         });
-        await queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           queryKey: usersQueryKeys.paginated(tenant.id),
         });
       }
@@ -98,7 +97,9 @@ export function useCreateUser() {
     onError: (error: Error) => {
       showToast({
         title: "Ocurrió un Error",
-        description: "Error al crear usuario",
+        description:
+          error.message ||
+          "No se pudo crear el usuario. Revisá los datos e intentá de nuevo.",
         type: "error",
       });
     },
@@ -126,17 +127,17 @@ export function useUpdateUser() {
       }
       return result.user;
     },
-    onSuccess: async () => {
+    onSuccess: () => {
       showToast({
         title: "Operación Exitosa",
         description: "Usuario actualizado exitosamente",
         type: "success",
       });
       if (tenant?.id) {
-        await queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           queryKey: getUsersQueryKey(tenant.id),
         });
-        await queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           queryKey: usersQueryKeys.paginated(tenant.id),
         });
       }
@@ -166,17 +167,17 @@ export function useDeleteUserFromTenant() {
       }
       return result;
     },
-    onSuccess: async () => {
+    onSuccess: () => {
       showToast({
         title: "Operación Exitosa",
         description: "Usuario eliminado exitosamente",
         type: "success",
       });
       if (tenant?.id) {
-        await queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           queryKey: getUsersQueryKey(tenant.id),
         });
-        await queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           queryKey: usersQueryKeys.paginated(tenant.id),
         });
       }
@@ -212,17 +213,17 @@ export function useUpdateUserRoles() {
       }
       return result;
     },
-    onSuccess: async () => {
+    onSuccess: () => {
       showToast({
         title: "Operación Exitosa",
         description: "Roles actualizados exitosamente",
         type: "success",
       });
       if (tenant?.id) {
-        await queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           queryKey: getUsersQueryKey(tenant.id),
         });
-        await queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           queryKey: usersQueryKeys.paginated(tenant.id),
         });
       }

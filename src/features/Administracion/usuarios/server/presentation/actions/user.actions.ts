@@ -320,7 +320,15 @@ export async function createUserAction(data: {
     };
   } catch (error) {
     console.error("Error in createUserAction:", error);
-    return { error: "Error al crear usuario" };
+
+    if (error instanceof Error && error.message.trim().length > 0) {
+      return { error: error.message };
+    }
+
+    return {
+      error:
+        "No se pudo completar la creación del usuario. Intentá nuevamente en unos minutos.",
+    };
   }
 }
 
@@ -329,7 +337,7 @@ export async function createUserAction(data: {
  */
 export async function updateUserAction(
   userId: string,
-  data: { name?: string; email?: string; avatar?: string },
+  data: { name?: string; email?: string; avatar?: string | null },
 ): Promise<UpdateUserResult> {
   try {
     const headersList = await headers();
@@ -339,14 +347,10 @@ export async function updateUserAction(
       return { error: ServerErrors.notAuthenticated };
     }
 
-    console.log("Antes de la validacion en la accion", data.avatar);
     // Validar avatar si se proporciona
     if (data.avatar && !VALID_AVATAR_PATTERN.test(data.avatar)) {
-      console.log("No paso la validacion en la accion");
       return { error: "Avatar no válido" };
-      // Validar avatar si se proporciona
     }
-    console.log("Paso la validacion en la accion", data.avatar);
 
     // Obtener tenant activo
     const tenantResult = await getCurrentTenantAction();

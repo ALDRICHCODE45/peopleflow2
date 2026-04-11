@@ -39,7 +39,7 @@ export function useUserSheetForm({
           data: {
             name: value.name || undefined,
             email: value.email,
-            avatar: value.avatar || undefined,
+            avatar: value.avatar === "" ? null : value.avatar,
           },
         });
       } else {
