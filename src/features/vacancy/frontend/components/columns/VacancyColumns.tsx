@@ -10,6 +10,7 @@ import { VacancyNameDetails } from "./VacancyNameDetails";
 import { RecruiterReassignPopover } from "./RecruiterReassignPopover";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { parseDateOnly } from "../../utils/parseDateOnly";
 import { Checkbox } from "@/core/shared/ui/shadcn/checkbox";
 import { VacancySalesTypeBadge } from "../VacancyVentaTypeBadge";
 import {
@@ -88,10 +89,10 @@ export function createVacancyColumns(
       accessorKey: "assignedAt",
       cell: ({ row }) => {
         const dateStr = row.original.assignedAt;
-        const date = new Date(dateStr);
+        const date = parseDateOnly(dateStr);
         return (
           <span className="whitespace-nowrap text-sm">
-            {format(date, "d MMM yyyy", { locale: es })}
+            {date ? format(date, "d MMM yyyy", { locale: es }) : "-"}
           </span>
         );
       },
@@ -102,12 +103,10 @@ export function createVacancyColumns(
       accessorKey: "targetDeliveryDate",
       cell: ({ row }) => {
         const dateStr = row.original.targetDeliveryDate;
-
+        const date = parseDateOnly(dateStr);
         return (
           <span className="whitespace-nowrap text-sm">
-            {dateStr
-              ? format(new Date(dateStr), "d MMM yyyy", { locale: es })
-              : "-"}
+            {date ? format(date, "d MMM yyyy", { locale: es }) : "-"}
           </span>
         );
       },

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { resolveCountryName, resolveRegionName } from "@lib/resolve-location";
 import { format, differenceInDays, startOfDay } from "date-fns";
 import { es } from "date-fns/locale";
+import { parseDateOnly } from "../utils/parseDateOnly";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@shadcn/sheet";
 import {
   Tabs,
@@ -72,7 +73,9 @@ interface VacancyDetailSheetProps {
 function formatDateSafe(isoString: string | null | undefined): string {
   if (!isoString) return "—";
   try {
-    return format(new Date(isoString), "dd MMM yyyy", { locale: es });
+    const date = parseDateOnly(isoString);
+    if (!date) return "—";
+    return format(date, "dd MMM yyyy", { locale: es });
   } catch {
     return "—";
   }
@@ -542,9 +545,12 @@ export function VacancyDetailSheet({
                           <InfoRow
                             label="Tiempo a Placement"
                             value={(() => {
+                              const confirmedDate = parseDateOnly(vacancy.placementConfirmedAt);
+                              const assignedDate = parseDateOnly(vacancy.assignedAt);
+                              if (!confirmedDate || !assignedDate) return "—";
                               const days = differenceInDays(
-                                startOfDay(new Date(vacancy.placementConfirmedAt)),
-                                startOfDay(new Date(vacancy.assignedAt)),
+                                startOfDay(confirmedDate),
+                                startOfDay(assignedDate),
                               );
                               if (days === 0) return "Mismo día";
                               return `${days} día${days !== 1 ? "s" : ""}`;

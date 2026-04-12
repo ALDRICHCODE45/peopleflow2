@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { format } from "date-fns";
 import {
   Dialog,
   DialogContent,
@@ -105,8 +106,8 @@ export function VacancyStatusTransitionDialog({
   const needsNewTargetDate = isRollbackToHunting;
   const showCongratsSwitch = isPlacementFromFollowUp || isPlacementFromPrePlacement;
 
-  // Today as ISO date string YYYY-MM-DD
-  const today = new Date().toISOString().split("T")[0];
+  // Today as local date string YYYY-MM-DD (avoids UTC offset bug)
+  const today = format(new Date(), "yyyy-MM-dd");
 
   const validate = () => {
     const newErrors: Record<string, string> = {};

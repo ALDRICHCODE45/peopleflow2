@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback, useEffect } from "react";
+import { format } from "date-fns";
 import {
   Dialog,
   DialogContent,
@@ -109,7 +110,7 @@ const INITIAL_STATUS_OPTIONS: { value: VacancyStatusType; label: string }[] = [
 function buildInitialFormState(
   prefillData?: Partial<VacancyDTO> | null,
 ): WarrantyFormState {
-  const today = new Date().toISOString().split("T")[0];
+  const today = format(new Date(), "yyyy-MM-dd");
   if (!prefillData) {
     return {
       position: "",
