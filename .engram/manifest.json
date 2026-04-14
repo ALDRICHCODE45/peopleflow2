@@ -72,6 +72,14 @@
       "sessions": 2,
       "memories": 4,
       "prompts": 8
+    },
+    {
+      "id": "bb46640d",
+      "created_by": "aldrich_coder45",
+      "created_at": "2026-04-14T01:41:16Z",
+      "sessions": 1,
+      "memories": 1,
+      "prompts": 28
     }
   ]
 }
