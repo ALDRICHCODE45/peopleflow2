@@ -7,6 +7,7 @@ import { userLoginSchema } from "../schemas/userLoginSchema";
 import { authClient } from "@lib/auth-client";
 import { setOTPVerificationEmail } from "./useVerifyOTPForm";
 import { Routes } from "@core/shared/constants/routes";
+import { markSessionOtpVerified } from "@features/Auth/server/presentation/actions/markSessionOtpVerified.action";
 
 const isDev = process.env.NODE_ENV !== "production";
 
@@ -47,8 +48,10 @@ export function useSignInForm(getCaptchaToken: () => string | null) {
         return;
       }
 
-      // In development, skip OTP and redirect directly to dashboard
+      // En desarrollo: saltear el OTP pero marcar igualmente la sesión como verificada.
+      // Sin esto, requireVerifiedSession() bloquearía el acceso porque otpVerifiedAt=null.
       if (isDev) {
+        await markSessionOtpVerified();
         router.push("/");
         return;
       }

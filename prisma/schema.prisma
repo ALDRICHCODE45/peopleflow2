@@ -72,6 +72,12 @@ model Session {
   activeTenantId String?
   activeTenant   Tenant? @relation(fields: [activeTenantId], references: [id], onDelete: SetNull)
 
+  // OTP verificado en esta sesión específica.
+  // null = OTP pendiente; DateTime = timestamp exacto de verificación.
+  // Esto permite 2FA real por sesión: aunque emailVerified=true en el User,
+  // cada nueva sesión debe verificar el OTP antes de acceder a rutas protegidas.
+  otpVerifiedAt DateTime?
+
   @@unique([token])
   @@index([userId])
   @@index([activeTenantId])

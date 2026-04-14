@@ -7,6 +7,7 @@ import { authClient } from "@lib/auth-client";
 import { showToast } from "@/core/shared/components/ShowToast";
 import { Routes } from "@core/shared/constants/routes";
 import { otpSchema } from "../schemas/otpSchema";
+import { markSessionOtpVerified } from "@features/Auth/server/presentation/actions/markSessionOtpVerified.action";
 
 const MAX_ATTEMPTS = 3;
 const OTP_SESSION_KEY = "otp_verification_email";
@@ -82,6 +83,20 @@ export function useVerifyOTPForm() {
           title: "Codigo incorrecto",
           description: `Codigo invalido o expirado. Te quedan ${newAttempts} intento(s).`,
         });
+        return;
+      }
+
+      // Marcar la sesión activa como OTP verificada en la DB.
+      // Esto es CRÍTICO: requireVerifiedSession() verifica otpVerifiedAt,
+      // no emailVerified del User (que es permanente y causaba el bypass).
+      const markResult = await markSessionOtpVerified();
+      if (markResult.error) {
+        showToast({
+          type: "error",
+          title: "Error de sesion",
+          description: "No se pudo completar la verificacion. Por favor inicia sesion nuevamente.",
+        });
+        router.push(Routes.signIn);
         return;
       }
 
