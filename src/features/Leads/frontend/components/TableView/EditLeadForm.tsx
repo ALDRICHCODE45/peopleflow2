@@ -166,11 +166,7 @@ export function EditLeadForm({ lead, onOpenChange }: EditLeadFormProps) {
                   <div className="flex items-center">{opt.label}</div>
                 )}
               />
-              {field.state.meta.errors.length > 0 && (
-                <p className="text-xs text-destructive mt-1">
-                  {field.state.meta.errors[0]?.toString()}
-                </p>
-              )}
+              <FieldError errors={field.state.meta.errors} />
             </Field>
           )}
         </form.Field>
@@ -197,11 +193,7 @@ export function EditLeadForm({ lead, onOpenChange }: EditLeadFormProps) {
                   ))}
                 </SelectContent>
               </Select>
-              {field.state.meta.errors.length > 0 && (
-                <p className="text-xs text-destructive mt-1">
-                  {field.state.meta.errors[0]?.toString()}
-                </p>
-              )}
+              <FieldError errors={field.state.meta.errors} />
             </Field>
           )}
         </form.Field>
@@ -234,11 +226,7 @@ export function EditLeadForm({ lead, onOpenChange }: EditLeadFormProps) {
                   ))}
                 </SelectContent>
               </Select>
-              {field.state.meta.errors.length > 0 && (
-                <p className="text-xs text-destructive mt-1">
-                  {field.state.meta.errors[0]?.toString()}
-                </p>
-              )}
+              <FieldError errors={field.state.meta.errors} />
             </Field>
           )}
         </form.Field>
@@ -268,11 +256,7 @@ export function EditLeadForm({ lead, onOpenChange }: EditLeadFormProps) {
                   placeholder="URL especifica, publicacion, etc."
                 />
               )}
-              {field.state.meta.errors.length > 0 && (
-                <p className="text-xs text-destructive mt-1">
-                  {field.state.meta.errors[0]?.toString()}
-                </p>
-              )}
+              <FieldError errors={field.state.meta.errors} />
             </Field>
           )}
         </form.Field>

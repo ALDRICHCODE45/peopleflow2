@@ -95,11 +95,7 @@ export function CreateContactForm({
               searchPlaceholder="Buscar puesto..."
               createLabel="Agregar"
             />
-            {field.state.meta.errors.length > 0 && (
-              <p className="text-xs text-destructive mt-1">
-                {field.state.meta.errors[0]?.toString()}
-              </p>
-            )}
+            <FieldError errors={field.state.meta.errors} />
           </Field>
         )}
       </form.Field>
