@@ -33,6 +33,7 @@ interface VacanciesTableFilterProps extends BaseFilterProps {
   onGlobalFilterChange?: (value: string) => void;
   onAdd?: () => void;
   onClearFilters?: () => void;
+  isFocusMode?: boolean;
   // Inline filters
   selectedStatuses?: VacancyStatusType[];
   onStatusesChange?: (statuses: VacancyStatusType[]) => void;
@@ -106,6 +107,7 @@ export const VacanciesTableFilters = ({
   targetDeliveryDateTo = "",
   onTargetDeliveryDateToChange = noop,
   hasActiveSheetFilters = false,
+  isFocusMode = false,
 }: VacanciesTableFilterProps) => {
   const {
     openModal: openSheetFilters,
@@ -120,6 +122,88 @@ export const VacanciesTableFilters = ({
     onGlobalFilterChange?.("");
   };
 
+  // Modo foco: layout inline compacto, sin Card wrapper
+  if (isFocusMode) {
+    return (
+      <>
+        <div className="flex flex-wrap items-end gap-3 w-full min-w-0 py-2">
+          {/* Búsqueda */}
+          <div className="relative min-w-[200px] flex-1 max-w-xs">
+            <Input
+              id="vacancy-search-focus"
+              className="w-full pl-9"
+              placeholder="Buscar vacante..."
+              value={globalFilter ?? ""}
+              onChange={(e) => onGlobalFilterChange?.(e.target.value)}
+            />
+            <HugeiconsIcon
+              icon={Search}
+              className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+            />
+          </div>
+
+          {/* Estado */}
+          <div className="min-w-[180px] flex-1 max-w-xs">
+            <FilterMultiSelect
+              options={statusOptions}
+              selected={selectedStatuses}
+              onChange={(v) => onStatusesChange?.(v as VacancyStatusType[])}
+              placeholder="Todos los estados"
+            />
+          </div>
+
+          {/* Más filtros */}
+          <Button
+            onClick={openSheetFilters}
+            variant={hasActiveSheetFilters ? "default" : "outline-primary"}
+            size="sm"
+            className="flex-shrink-0"
+          >
+            <HugeiconsIcon icon={Filter} className="h-4 w-4" />
+            Más filtros
+            {hasActiveSheetFilters && (
+              <Badge variant="secondary" className="ml-1 h-5 w-5 rounded-full p-0 text-xs flex items-center justify-center">
+                •
+              </Badge>
+            )}
+          </Button>
+        </div>
+
+        <VacancySheetFilters
+          isSheetOpen={isOpenSheetFilters}
+          onOpenChange={closeSheetFilters}
+          selectedSaleTypes={selectedSaleTypes}
+          onSaleTypesChange={onSaleTypesChange}
+          selectedModalities={selectedModalities}
+          onModalitiesChange={onModalitiesChange}
+          selectedRecruiterIds={selectedRecruiterIds}
+          onRecruiterIdsChange={onRecruiterIdsChange}
+          selectedClientIds={selectedClientIds}
+          onClientIdsChange={onClientIdsChange}
+          selectedCountryCodes={selectedCountryCodes}
+          onCountryCodesChange={onCountryCodesChange}
+          selectedRegionCodes={selectedRegionCodes}
+          onRegionCodesChange={onRegionCodesChange}
+          requiresPsychometry={requiresPsychometry}
+          onRequiresPsychometryChange={onRequiresPsychometryChange}
+          salaryMin={salaryMin}
+          onSalaryMinChange={onSalaryMinChange}
+          salaryMax={salaryMax}
+          onSalaryMaxChange={onSalaryMaxChange}
+          assignedAtFrom={assignedAtFrom}
+          onAssignedAtFromChange={onAssignedAtFromChange}
+          assignedAtTo={assignedAtTo}
+          onAssignedAtToChange={onAssignedAtToChange}
+          targetDeliveryDateFrom={targetDeliveryDateFrom}
+          onTargetDeliveryDateFromChange={onTargetDeliveryDateFromChange}
+          targetDeliveryDateTo={targetDeliveryDateTo}
+          onTargetDeliveryDateToChange={onTargetDeliveryDateToChange}
+        />
+      </>
+    );
+  }
+
+  // Modo normal: Card con header completo
   return (
     <>
       <Card className="mb-6 border-0 shadow-md w-full min-w-0 overflow-hidden m-1">
@@ -183,10 +267,7 @@ export const VacanciesTableFilters = ({
                 variant={hasActiveSheetFilters ? "default" : "outline-primary"}
                 className="w-full min-w-0"
               >
-                <HugeiconsIcon
-                  icon={Filter}
-                  className="h-5 w-5 shrink"
-                />
+                <HugeiconsIcon icon={Filter} className="h-5 w-5 shrink" />
                 Filtros
                 {hasActiveSheetFilters && (
                   <Badge variant="secondary" className="ml-1 h-5 w-5 rounded-full p-0 text-xs flex items-center justify-center">

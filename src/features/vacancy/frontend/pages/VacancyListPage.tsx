@@ -12,6 +12,7 @@ import { createTableConfig } from "@/core/shared/helpers/createTableConfig";
 import { VacanciesTableConfig } from "../components/tableConfig/VacanciesTableConfig";
 import { DataTableMultiTabs } from "@/core/shared/components/DataTable/DataTableMultiTabs";
 import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
+import { Button } from "@/core/shared/ui/shadcn/button";
 import { VacancySheetForm } from "../components/VacancySheetForm";
 import { VacancyDetailSheet } from "../components/VacancyDetailSheet";
 import { useServerPaginatedTable } from "@/core/shared/hooks/useServerPaginatedTable";
@@ -23,6 +24,8 @@ import type { VacancyDTO } from "../types/vacancy.types";
 import { BulkDeleteVacanciesDialog } from "../components/BulkDeleteVacanciesDialog";
 import { BulkReassignVacanciesDialog } from "../components/BulkReassignVacanciesDialog";
 import { BulkDuplicateVacanciesDialog } from "../components/BulkDuplicateVacanciesDialog";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ExpanderIcon, Minimize01Icon } from "@hugeicons/core-free-icons";
 
 export function VacancyListPage() {
   const { hasAnyPermission, isSuperAdmin } = usePermissions();
@@ -34,13 +37,20 @@ export function VacancyListPage() {
     ]);
 
   const { isOpen, openModal, closeModal } = useModalState();
-  const [selectedVacancyId, setSelectedVacancyId] = useState<string | null>(null);
+  const [selectedVacancyId, setSelectedVacancyId] = useState<string | null>(
+    null,
+  );
   const [selectionResetSignal, setSelectionResetSignal] = useState(0);
   const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
   const [bulkReassignOpen, setBulkReassignOpen] = useState(false);
   const [bulkDuplicateOpen, setBulkDuplicateOpen] = useState(false);
   const [selectedBulkIds, setSelectedBulkIds] = useState<string[]>([]);
-  const [selectedBulkVacancies, setSelectedBulkVacancies] = useState<VacancyDTO[]>([]);
+  const [selectedBulkVacancies, setSelectedBulkVacancies] = useState<
+    VacancyDTO[]
+  >([]);
+
+  // Focus mode — estado controlado en la página
+  const [isFocusMode, setIsFocusMode] = useState(false);
 
   // Server-side pagination state with multi-tab support
   const {
@@ -93,10 +103,13 @@ export function VacancyListPage() {
     statuses: effectiveStatuses,
     saleTypes: filters.saleTypes.length > 0 ? filters.saleTypes : undefined,
     modalities: filters.modalities.length > 0 ? filters.modalities : undefined,
-    recruiterIds: filters.recruiterIds.length > 0 ? filters.recruiterIds : undefined,
+    recruiterIds:
+      filters.recruiterIds.length > 0 ? filters.recruiterIds : undefined,
     clientIds: filters.clientIds.length > 0 ? filters.clientIds : undefined,
-    countryCodes: filters.countryCodes.length > 0 ? filters.countryCodes : undefined,
-    regionCodes: filters.regionCodes.length > 0 ? filters.regionCodes : undefined,
+    countryCodes:
+      filters.countryCodes.length > 0 ? filters.countryCodes : undefined,
+    regionCodes:
+      filters.regionCodes.length > 0 ? filters.regionCodes : undefined,
     requiresPsychometry: filters.requiresPsychometry,
     salaryMin: filters.salaryMin,
     salaryMax: filters.salaryMax,
@@ -117,7 +130,7 @@ export function VacancyListPage() {
   // Tabs config with dynamic counts
   const tabsConfig = useMemo(
     () => enrichVacancyTabsWithCounts(activeTabs, totalCount),
-    [activeTabs, totalCount]
+    [activeTabs, totalCount],
   );
 
   const handleAdd = useCallback(() => {
@@ -129,7 +142,12 @@ export function VacancyListPage() {
     handleMultiTabChange([]);
     clearAdvancedFilters();
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-  }, [handleGlobalFilterChange, handleMultiTabChange, clearAdvancedFilters, setPagination]);
+  }, [
+    handleGlobalFilterChange,
+    handleMultiTabChange,
+    clearAdvancedFilters,
+    setPagination,
+  ]);
 
   const handleViewDetail = useCallback((id: string) => {
     setSelectedVacancyId(id);
@@ -163,7 +181,7 @@ export function VacancyListPage() {
   // Columns factory with detail handler
   const columns = useMemo(
     () => createVacancyColumns(handleViewDetail),
-    [handleViewDetail]
+    [handleViewDetail],
   );
 
   // Table configuration with server-side enabled
@@ -212,6 +230,12 @@ export function VacancyListPage() {
           totalCount,
           pageCount: paginationMeta?.pageCount ?? 0,
         },
+        // Focus mode controlado por la página
+        focusMode: {
+          enabled: true,
+          isFocusMode,
+          onFocusModeChange: setIsFocusMode,
+        },
       }),
     [
       totalCount,
@@ -239,7 +263,8 @@ export function VacancyListPage() {
       handleBulkDelete,
       handleBulkReassign,
       handleBulkDuplicate,
-    ]
+      isFocusMode,
+    ],
   );
 
   return (
@@ -247,16 +272,54 @@ export function VacancyListPage() {
       <Card className="p-2 m-1">
         <CardContent>
           <div className="space-y-6">
-            <TablePresentation
-              title="Gestión de Vacantes"
-              subtitle="Administra las vacantes de tu organización"
-            />
+            {/* Header y tabs — se ocultan en modo foco */}
+            {!isFocusMode && (
+              <>
+                <TablePresentation
+                  title="Gestión de Vacantes"
+                  subtitle="Administra las vacantes de tu organización"
+                />
 
-            <DataTableMultiTabs
-              tabs={tabsConfig}
-              activeTabs={activeTabs}
-              onTabsChange={handleMultiTabChange}
-            />
+                <div className="flex items-center justify-between gap-4">
+                  <DataTableMultiTabs
+                    tabs={tabsConfig}
+                    activeTabs={activeTabs}
+                    onTabsChange={handleMultiTabChange}
+                  />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsFocusMode(true)}
+                    className="gap-2 flex-shrink-0 text-muted-foreground hover:text-foreground"
+                    aria-label="Activar modo presentación"
+                  >
+                    <HugeiconsIcon icon={ExpanderIcon} className="h-4 w-4" />
+                    <span className="hidden sm:inline">Modo presentación</span>
+                  </Button>
+                </div>
+              </>
+            )}
+
+            {/* En modo foco: tabs + botón de salir en la misma fila */}
+            {isFocusMode && (
+              <div className="flex items-center justify-between gap-4">
+                <DataTableMultiTabs
+                  tabs={tabsConfig}
+                  activeTabs={activeTabs}
+                  onTabsChange={handleMultiTabChange}
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsFocusMode(false)}
+                  className="gap-2 flex-shrink-0"
+                  aria-label="Salir del modo presentación"
+                >
+                  <HugeiconsIcon icon={Minimize01Icon} className="h-4 w-4" />
+                  <span>Salir de la presentación</span>
+                </Button>
+              </div>
+            )}
 
             <PermissionGuard
               permissions={[

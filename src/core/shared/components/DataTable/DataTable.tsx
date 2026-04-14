@@ -79,6 +79,22 @@ export function DataTable<TData, TValue>({
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [globalFilter, setGlobalFilterState] = useState<string>("");
 
+  // Focus mode: controlled (padre provee isFocusMode) o uncontrolled (estado interno)
+  const isControlledFocusMode = config.focusMode?.isFocusMode !== undefined;
+  const [internalFocusMode, setInternalFocusMode] = useState(false);
+  const isFocusMode = isControlledFocusMode
+    ? (config.focusMode?.isFocusMode ?? false)
+    : internalFocusMode;
+
+  const handleToggleFocusMode = () => {
+    const next = !isFocusMode;
+    if (isControlledFocusMode) {
+      config.focusMode?.onFocusModeChange?.(next);
+    } else {
+      setInternalFocusMode(next);
+    }
+  };
+
   // Determinar si es server-side
   const isServerSide = config.serverSide?.enabled ?? false;
 
@@ -121,6 +137,11 @@ export function DataTable<TData, TValue>({
     columnOrder: {
       enabled: false,
     },
+    focusMode: {
+      enabled: false,
+      activateLabel: "Modo foco",
+      exitLabel: "Salir del modo foco",
+    },
   };
 
   // Combinar configuración por defecto con la proporcionada (memoizado)
@@ -144,6 +165,7 @@ export function DataTable<TData, TValue>({
         ...config.columnPinning,
       },
       columnOrder: { ...defaultConfig.columnOrder, ...config.columnOrder },
+      focusMode: { ...defaultConfig.focusMode, ...config.focusMode },
     }),
     [config],
   );
@@ -395,6 +417,8 @@ export function DataTable<TData, TValue>({
           config={finalConfig}
           setGlobalFilter={setGlobalFilter}
           table={table}
+          isFocusMode={isFocusMode}
+          onToggleFocusMode={handleToggleFocusMode}
         />
       </div>
 
@@ -421,8 +445,9 @@ export function DataTable<TData, TValue>({
         )}
       </div>
 
-      {/* Bulk Actions Bar (aparece en el fondo cuando hay seleccion) */}
-      {finalConfig.enableRowSelection &&
+      {/* Bulk Actions Bar (aparece en el fondo cuando hay seleccion, oculto en focus mode) */}
+      {!isFocusMode &&
+        finalConfig.enableRowSelection &&
         finalConfig.actions?.showBulkActions &&
         table.getSelectedRowModel().rows.length > 0 && (
           <DataTableBulkActionsBar

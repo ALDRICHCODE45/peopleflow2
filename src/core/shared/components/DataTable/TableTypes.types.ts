@@ -122,6 +122,24 @@ export interface ColumnOrderConfig {
   persistKey?: string;
 }
 
+// Configuración para el modo foco (presentaciones/juntas)
+export interface FocusModeConfig {
+  /** Habilitar el modo foco en esta tabla */
+  enabled: boolean;
+  /** Tooltip/label del botón para activar el modo foco */
+  activateLabel?: string;
+  /** Tooltip/label del botón para salir del modo foco */
+  exitLabel?: string;
+  /**
+   * Estado controlado externamente.
+   * Cuando se provee, el DataTable actúa en modo "controlled":
+   * el padre es dueño del estado y recibe cambios via onFocusModeChange.
+   */
+  isFocusMode?: boolean;
+  /** Callback que se dispara cuando el usuario activa/desactiva el modo foco */
+  onFocusModeChange?: (active: boolean) => void;
+}
+
 // Configuración de la tabla
 export interface TableConfig<TData> {
   filters?: FilterConfig;
@@ -139,4 +157,6 @@ export interface TableConfig<TData> {
   columnPinning?: ColumnPinningConfig;
   /** Configuración para reordenar columnas (drag & drop) */
   columnOrder?: ColumnOrderConfig;
+  /** Configuración para el modo foco (oculta acciones, muestra solo filtros + tabla) */
+  focusMode?: FocusModeConfig;
 }

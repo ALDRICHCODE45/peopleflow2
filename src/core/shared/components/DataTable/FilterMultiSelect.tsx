@@ -24,7 +24,7 @@ interface FilterOption {
 }
 
 interface FilterMultiSelectProps {
-  label: string;
+  label?: string;
   options: FilterOption[];
   selected: string[];
   onChange: (selected: string[]) => void;
@@ -55,9 +55,11 @@ export const FilterMultiSelect = memo(function FilterMultiSelect({
 
   return (
     <div className="space-y-2 w-full min-w-0">
-      <Label className="text-xs font-medium text-muted-foreground">
-        {label}
-      </Label>
+      {label && (
+        <Label className="text-xs font-medium text-muted-foreground">
+          {label}
+        </Label>
+      )}
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="w-full justify-between min-w-0" disabled={disabled}>

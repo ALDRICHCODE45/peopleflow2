@@ -23,12 +23,18 @@ interface DataTableFiltersProps<TData> {
   config: TableConfig<TData>;
   table: Table<TData>;
   setGlobalFilter: (value: string) => void;
+  /** Pasado desde DataTable — el filtro lo reenvía al customFilter */
+  isFocusMode?: boolean;
+  /** No usado aquí — el toggle vive en el padre junto a las tabs */
+  onToggleFocusMode?: () => void;
 }
 
 export function DataTableFilters<TData>({
   config,
   table,
   setGlobalFilter,
+  isFocusMode = false,
+  onToggleFocusMode,
 }: DataTableFiltersProps<TData>) {
   const inputRef = useRef<HTMLInputElement>(null);
   const id = useId();
@@ -68,6 +74,7 @@ export function DataTableFilters<TData>({
         table={table as TanstackTable<unknown>}
         onGlobalFilterChange={setGlobalFilter}
         onExport={config.actions?.onExport}
+        isFocusMode={isFocusMode}
         {...customFilterProps}
       />
     );
@@ -114,43 +121,45 @@ export function DataTableFilters<TData>({
           )}
         </div>
 
-        {/* Lado derecho: Add button */}
-        {CustomActionComponent ? (
-          <div className="w-full sm:w-auto min-w-0 flex-shrink-0">
-            <CustomActionComponent
-              table={table as TanstackTable<unknown>}
-              onAdd={config.actions?.onAdd}
-              onExport={config.actions?.onExport}
-              onRefresh={config.actions?.onRefresh}
-              customActions={config.actions?.customActions}
-              {...customActionProps}
-            />
-          </div>
-        ) : (
-          <div className="flex items-center gap-2 flex-shrink-0">
-            {config.actions?.showAddButton && config.actions.onAdd && (
-              <Button
-                variant="default"
-                size="sm"
-                onClick={config.actions.onAdd}
-                className="gap-2"
-              >
-                {config.actions.addButtonIcon}
-                <span>{config.actions.addButtonText || "Agregar"}</span>
-              </Button>
-            )}
-            {config.enableColumnVisibility && (
-              <ColumnVisibilitySelector
+        {/* Lado derecho: acciones (ocultas en focus mode) */}
+        {!isFocusMode && (
+          CustomActionComponent ? (
+            <div className="w-full sm:w-auto min-w-0 flex-shrink-0">
+              <CustomActionComponent
                 table={table as TanstackTable<unknown>}
+                onAdd={config.actions?.onAdd}
+                onExport={config.actions?.onExport}
+                onRefresh={config.actions?.onRefresh}
+                customActions={config.actions?.customActions}
+                {...customActionProps}
               />
-            )}
-            {config.actions?.customActions}
-          </div>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 flex-shrink-0">
+              {config.actions?.showAddButton && config.actions.onAdd && (
+                <Button
+                  variant="default"
+                  size="sm"
+                  onClick={config.actions.onAdd}
+                  className="gap-2"
+                >
+                  {config.actions.addButtonIcon}
+                  <span>{config.actions.addButtonText || "Agregar"}</span>
+                </Button>
+              )}
+              {config.enableColumnVisibility && (
+                <ColumnVisibilitySelector
+                  table={table as TanstackTable<unknown>}
+                />
+              )}
+              {config.actions?.customActions}
+            </div>
+          )
         )}
       </div>
 
-      {/* Barra de acciones bulk (aparece cuando hay seleccion) */}
-      {config.enableRowSelection && hasSelection && (
+      {/* Barra de acciones bulk (aparece cuando hay seleccion, oculta en focus mode) */}
+      {!isFocusMode && config.enableRowSelection && hasSelection && (
         <div className="flex items-center gap-1 py-2 px-3 bg-muted/30 rounded-lg border">
           <div className="flex items-center gap-2 mr-4">
             <Checkbox
