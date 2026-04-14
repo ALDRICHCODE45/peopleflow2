@@ -15,7 +15,7 @@ export const createContactSchema = z.object({
     .min(2, "El apellido debe tener al menos 2 caracteres."),
   email: z.string(),
   phone: z.string(),
-  position: z.string(),
+  position: z.string().min(1, "La posición es obligatoria."),
   linkedInUrl: optionalUrl,
   isPrimary: z.boolean(),
   notes: z.string(),

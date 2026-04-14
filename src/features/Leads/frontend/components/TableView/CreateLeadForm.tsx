@@ -135,7 +135,9 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
         <form.Field name="sectorId">
           {(field) => (
             <Field>
-              <FieldLabel htmlFor={field.name}>Sector</FieldLabel>
+              <FieldLabel htmlFor={field.name}>
+                Sector <span className="text-destructive">*</span>
+              </FieldLabel>
 
               <SearchableSelect
                 options={sectorOptions}
@@ -152,6 +154,11 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
                   <div className="flex items-center">{opt.label}</div>
                 )}
               />
+              {field.state.meta.errors.length > 0 && (
+                <p className="text-xs text-destructive mt-1">
+                  {field.state.meta.errors[0]?.toString()}
+                </p>
+              )}
             </Field>
           )}
         </form.Field>
@@ -159,19 +166,18 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
         <form.Field name="subsectorId">
           {(field) => (
             <Field>
-              <FieldLabel htmlFor={field.name}>Subsector</FieldLabel>
+              <FieldLabel htmlFor={field.name}>
+                Subsector <span className="text-destructive">*</span>
+              </FieldLabel>
               <Select
-                value={field.state.value ?? "none"}
-                onValueChange={(value) =>
-                  field.handleChange(value === "none" ? undefined : value)
-                }
+                value={field.state.value || ""}
+                onValueChange={(value) => field.handleChange(value)}
                 disabled={!selectedSectorId}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecciona un subsector" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">Sin subsector</SelectItem>
                   {subsectors.map((subsector) => (
                     <SelectItem key={subsector.id} value={subsector.id}>
                       {subsector.name}
@@ -179,6 +185,11 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
                   ))}
                 </SelectContent>
               </Select>
+              {field.state.meta.errors.length > 0 && (
+                <p className="text-xs text-destructive mt-1">
+                  {field.state.meta.errors[0]?.toString()}
+                </p>
+              )}
             </Field>
           )}
         </form.Field>
@@ -190,13 +201,14 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
         <form.Field name="originId">
           {(field) => (
             <Field>
-              <FieldLabel htmlFor={field.name}>Origen del lead</FieldLabel>
+              <FieldLabel htmlFor={field.name}>
+                Origen del lead <span className="text-destructive">*</span>
+              </FieldLabel>
               <Select
-                value={field.state.value ?? "none"}
+                value={field.state.value || ""}
                 onValueChange={(value) => {
-                  const v = value === "none" ? undefined : value;
-                  field.handleChange(v);
-                  setSelectedOriginId(v);
+                  field.handleChange(value);
+                  setSelectedOriginId(value);
                   form.setFieldValue("subOrigin", "");
                 }}
               >
@@ -204,7 +216,6 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
                   <SelectValue placeholder="Selecciona el origen" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">Sin origen</SelectItem>
                   {origins.map((origin) => (
                     <SelectItem key={origin.id} value={origin.id}>
                       {origin.name}
@@ -212,6 +223,11 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
                   ))}
                 </SelectContent>
               </Select>
+              {field.state.meta.errors.length > 0 && (
+                <p className="text-xs text-destructive mt-1">
+                  {field.state.meta.errors[0]?.toString()}
+                </p>
+              )}
             </Field>
           )}
         </form.Field>
@@ -220,7 +236,9 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
         <form.Field name="subOrigin">
           {(field) => (
             <Field>
-              <FieldLabel htmlFor={field.name}>Sub-Origen</FieldLabel>
+              <FieldLabel htmlFor={field.name}>
+                Sub-Origen <span className="text-destructive">*</span>
+              </FieldLabel>
               {isLinkedInOrigin ? (
                 <CreatableSelect
                   options={LINKEDIN_SUB_ORIGIN_OPTIONS}
@@ -238,6 +256,11 @@ export function CreateLeadForm({ onOpenChange }: CreateLeadFormProps) {
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="URL especifica, publicacion, etc."
                 />
+              )}
+              {field.state.meta.errors.length > 0 && (
+                <p className="text-xs text-destructive mt-1">
+                  {field.state.meta.errors[0]?.toString()}
+                </p>
               )}
             </Field>
           )}

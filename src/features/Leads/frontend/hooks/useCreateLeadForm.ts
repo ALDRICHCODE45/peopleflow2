@@ -40,9 +40,9 @@ export function useCreateLeadForm({
       subOrigin: "",
       employeeCount: "",
       notes: "",
-      sectorId: undefined as string | undefined,
-      subsectorId: undefined as string | undefined,
-      originId: undefined as string | undefined,
+      sectorId: "" as string,
+      subsectorId: "" as string,
+      originId: "" as string,
       assignedToId: "",
       status: "CONTACTO" as
         | "CONTACTO"
@@ -65,8 +65,8 @@ export function useCreateLeadForm({
 
   const handleSectorChange = (value: string | undefined) => {
     setSelectedSectorId(value);
-    form.setFieldValue("sectorId", value);
-    form.setFieldValue("subsectorId", undefined);
+    form.setFieldValue("sectorId", value ?? "");
+    form.setFieldValue("subsectorId", "");
   };
 
   return {

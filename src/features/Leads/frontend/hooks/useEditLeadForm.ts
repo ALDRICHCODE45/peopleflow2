@@ -120,9 +120,9 @@ export function useEditLeadForm({
       employeeCount: lead.employeeCount ?? "",
       notes: lead.notes ?? "",
       status: lead.status,
-      sectorId: lead.sectorId ?? undefined,
-      subsectorId: lead.subsectorId ?? undefined,
-      originId: lead.originId ?? undefined,
+      sectorId: lead.sectorId ?? "",
+      subsectorId: lead.subsectorId ?? "",
+      originId: lead.originId ?? "",
       assignedToId: lead.assignedToId ?? "",
     },
     validators: {
@@ -143,8 +143,8 @@ export function useEditLeadForm({
 
   const handleSectorChange = (value: string | undefined) => {
     setSelectedSectorId(value);
-    form.setFieldValue("sectorId", value);
-    form.setFieldValue("subsectorId", undefined);
+    form.setFieldValue("sectorId", value ?? "");
+    form.setFieldValue("subsectorId", "");
   };
 
   return {
