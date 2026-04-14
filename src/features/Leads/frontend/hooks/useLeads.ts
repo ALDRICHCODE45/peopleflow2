@@ -500,17 +500,29 @@ export function useUpdateLeadStatus() {
     // Always invalidate both columns using partial query keys
     // This ensures React Query finds the queries regardless of filter object references
     onSettled: (_data, _error, variables, context) => {
+      const { newStatus, leadId } = variables;
+
+      // Always invalidate the paginated view (table) — runs whether called from
+      // table or Kanban, and regardless of whether onMutate found the lead in cache
+      queryClient.invalidateQueries({
+        queryKey: leadsQueryKeys.paginated(),
+        refetchType: "active",
+      });
+
+      // Always invalidate the specific lead detail
+      queryClient.invalidateQueries({
+        queryKey: leadsQueryKeys.detail(leadId),
+      });
+
+      // Invalidate Kanban infinite columns only when context exists
+      // (context is only set when the lead was found in infinite queries)
       if (!context?.sourceQueryKey) return;
 
       const tenantId = context.sourceQueryKey[2];
       if (!tenantId) return;
 
-      // Extract the source status from the query key
       const sourceStatus = context.sourceQueryKey[3];
-      const { newStatus } = variables;
 
-      // Invalidate source column using partial query key (without filters object)
-      // exact: false allows matching regardless of the filter object reference
       if (sourceStatus) {
         queryClient.invalidateQueries({
           queryKey: leadsQueryKeys.infinite(tenantId as string, sourceStatus as string),
@@ -518,23 +530,9 @@ export function useUpdateLeadStatus() {
         });
       }
 
-      // Invalidate destination column using partial query key
       queryClient.invalidateQueries({
         queryKey: leadsQueryKeys.infinite(tenantId as string, newStatus),
         exact: false,
-      });
-
-      // Invalidate paginated view (table) so it reflects status changes
-      queryClient.invalidateQueries({
-        queryKey: leadsQueryKeys.paginated(),
-        refetchType: "active",
-      });
-
-      // Invalidate the specific lead's detail query to ensure fresh data
-      // This is critical for the incomplete data flow where the detail might be cached
-      const { leadId } = variables;
-      queryClient.invalidateQueries({
-        queryKey: leadsQueryKeys.detail(leadId),
       });
     },
   });
