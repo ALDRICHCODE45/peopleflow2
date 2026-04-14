@@ -1,10 +1,12 @@
 "use client";
 
 import { Row } from "@tanstack/react-table";
+import { useState } from "react";
 import { useModalState } from "@/core/shared/hooks/useModalState";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
-import type { Lead } from "../../../types";
+import type { Lead, LeadStatus } from "../../../types";
+import { LEAD_STATUS_LABELS, LEAD_STATUS_OPTIONS } from "../../../types";
 import { useDeleteLead } from "../../../hooks/useLeads";
 import { Button } from "@/core/shared/ui/shadcn/button";
 import {
@@ -13,15 +15,30 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/core/shared/ui/shadcn/dropdown-menu";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { MoreVerticalIcon } from "@hugeicons/core-free-icons";
+import { MoreVerticalIcon, Tick02Icon } from "@hugeicons/core-free-icons";
 import { LeadSheetForm } from "../LeadSheetForm";
 import { DeleteLeadAlertDialog } from "../DeleteLeadAlertDialog";
 import { LeadDetailSheet } from "../LeadDetailSheet";
 
-export function LeadRowActions({ row }: { row: Row<Lead> }) {
+export interface LeadRowActionCallbacks {
+  /** Llamado cuando el usuario solicita cambiar el estado de un lead */
+  onStatusChange: (lead: Lead, newStatus: LeadStatus) => void;
+  /** Llamado cuando hay datos incompletos — abre el edit sheet en la página */
+  onEditLead: (lead: Lead) => void;
+}
+
+interface LeadRowActionsProps {
+  row: Row<Lead>;
+  callbacks?: LeadRowActionCallbacks;
+}
+
+export function LeadRowActions({ row, callbacks }: LeadRowActionsProps) {
   const lead = row.original;
 
   const {
@@ -49,6 +66,17 @@ export function LeadRowActions({ row }: { row: Row<Lead> }) {
     closeDeleteModal();
   };
 
+  const handleStatusChange = (newStatus: LeadStatus) => {
+    if (callbacks?.onStatusChange) {
+      callbacks.onStatusChange(lead, newStatus);
+    }
+  };
+
+  // Opciones de estado excluyendo el estado actual
+  const availableStatuses = LEAD_STATUS_OPTIONS.filter(
+    (opt) => opt.value !== lead.status,
+  );
+
   return (
     <>
       <DropdownMenu>
@@ -62,6 +90,7 @@ export function LeadRowActions({ row }: { row: Row<Lead> }) {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Acciones</DropdownMenuLabel>
           <DropdownMenuSeparator />
+
           <PermissionGuard
             permissions={[
               PermissionActions.leads.acceder,
@@ -69,7 +98,7 @@ export function LeadRowActions({ row }: { row: Row<Lead> }) {
             ]}
           >
             <DropdownMenuItem onClick={openDetailModal}>
-              Detalles
+              Ver detalles
             </DropdownMenuItem>
           </PermissionGuard>
 
@@ -83,6 +112,32 @@ export function LeadRowActions({ row }: { row: Row<Lead> }) {
               Editar
             </DropdownMenuItem>
           </PermissionGuard>
+
+          {/* Cambio de estado — solo si hay callbacks (página los provee) */}
+          {callbacks && (
+            <PermissionGuard
+              permissions={[
+                PermissionActions.leads.editar,
+                PermissionActions.leads.gestionar,
+              ]}
+            >
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  Cambiar estado
+                </DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  {availableStatuses.map((opt) => (
+                    <DropdownMenuItem
+                      key={opt.value}
+                      onClick={() => handleStatusChange(opt.value)}
+                    >
+                      {opt.label}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+            </PermissionGuard>
+          )}
 
           <DropdownMenuSeparator />
 

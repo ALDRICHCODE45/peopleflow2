@@ -43,6 +43,8 @@ interface LeadsTableFilterProps extends BaseFilterProps {
   createdAtTo?: string;
   onDateFromChange?: (date: string) => void;
   onDateToChange?: (date: string) => void;
+  // Focus mode
+  isFocusMode?: boolean;
 }
 
 export const LeadsTableFilters = ({
@@ -72,6 +74,7 @@ export const LeadsTableFilters = ({
   createdAtTo,
   onDateFromChange,
   onDateToChange,
+  isFocusMode = false,
 }: LeadsTableFilterProps) => {
   const { data: sectors = [] } = useSectors();
 
@@ -91,6 +94,77 @@ export const LeadsTableFilters = ({
   const handleClearAllFilters = () => {
     onClearFilters?.();
   };
+
+  // Modo foco: layout inline compacto sin Card
+  if (isFocusMode) {
+    return (
+      <>
+        <div className="flex flex-wrap items-end gap-3 w-full min-w-0 py-2">
+          {/* Búsqueda */}
+          <div className="relative min-w-[200px] flex-1 max-w-xs">
+            <Input
+              id="leads-search-focus"
+              className="w-full pl-9"
+              placeholder="Buscar lead..."
+              value={
+                (table.getColumn("companyName")?.getFilterValue() ?? "") as string
+              }
+              onChange={(e) => {
+                table.getColumn("companyName")?.setFilterValue(e.target.value);
+                onGlobalFilterChange?.(e.target.value);
+              }}
+            />
+            <HugeiconsIcon
+              icon={Search}
+              className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+            />
+          </div>
+
+          {/* Sector */}
+          <div className="min-w-[180px] flex-1 max-w-xs">
+            <FilterMultiSelect
+              options={sectorOptions}
+              selected={selectedSectorIds ?? []}
+              onChange={(ids) => onSectorChange?.(ids)}
+              placeholder="Todos los sectores"
+            />
+          </div>
+
+          {/* Más filtros */}
+          <Button
+            onClick={openSheetFilters}
+            variant="outline-primary"
+            size="sm"
+            className="flex-shrink-0"
+          >
+            <HugeiconsIcon icon={Filter} className="h-4 w-4 text-primary" />
+            Más filtros
+          </Button>
+        </div>
+
+        <SheetFilters
+          onOpenChange={closeSheetFilters}
+          isSheetOpen={isOpenSheetFilters}
+          onOriginChange={onOriginChange}
+          selectedOriginIds={selectedOriginIds}
+          selectedAssignedToIds={selectedAssignedToIds}
+          onAssignedToChange={onAssignedToChange}
+          selectedEmployeesNumbers={selectedEmployeeCounts}
+          onSelectedEmployeeNumberChange={onEmployeeCountsChange}
+          selectedCountryCodes={selectedCountryCodes}
+          onCountryChange={onCountryChange}
+          selectedRegionCodes={selectedRegionCodes}
+          onRegionChange={onRegionChange}
+          postalCode={postalCode}
+          onPostalCodeChange={onPostalCodeChange}
+          createdAtFrom={createdAtFrom}
+          createdAtTo={createdAtTo}
+          onDateFromChange={onDateFromChange}
+          onDateToChange={onDateToChange}
+        />
+      </>
+    );
+  }
 
   return (
     <>

@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import type { Lead } from "../../../types";
 import { LeadStatusBadge } from "../LeadStatusBadge";
-import { LeadRowActions } from "./LeadRowActions";
+import { LeadRowActions, LeadRowActionCallbacks } from "./LeadRowActions";
 import { AsignToUserColumn } from "../AsignToUserColumn";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -9,7 +9,10 @@ import { Badge } from "@/core/shared/ui/shadcn/badge";
 import { Checkbox } from "@/core/shared/ui/shadcn/checkbox";
 import { EmpresaNameDetials } from "../EmpresaNameDetails";
 
-export const LeadColumns: ColumnDef<Lead>[] = [
+export function createLeadColumns(
+  callbacks?: LeadRowActionCallbacks,
+): ColumnDef<Lead>[] {
+  return [
   {
     id: "select",
     header: ({ table }) => (
@@ -130,10 +133,14 @@ export const LeadColumns: ColumnDef<Lead>[] = [
     },
     size: 10,
   },
-  {
-    id: "actions",
-    cell: ({ row }) => <LeadRowActions row={row} />,
-    size: 4,
-    enableHiding: false,
-  },
-];
+    {
+      id: "actions",
+      cell: ({ row }) => <LeadRowActions row={row} callbacks={callbacks} />,
+      size: 4,
+      enableHiding: false,
+    },
+  ];
+}
+
+/** Columnas sin callbacks — para usos donde no se necesita cambio de estado */
+export const LeadColumns = createLeadColumns();

@@ -6,20 +6,25 @@ import { usePaginatedLeadsQuery } from "../hooks/usePaginatedLeadsQuery";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { DataTable } from "@/core/shared/components/DataTable/DataTable";
-import { LeadColumns } from "../components/TableView/columns/LeadColumns";
+import { createLeadColumns } from "../components/TableView/columns/LeadColumns";
+import type { LeadRowActionCallbacks } from "../components/TableView/columns/LeadRowActions";
 import { useModalState } from "@/core/shared/hooks/useModalState";
 import { createTableConfig } from "@/core/shared/helpers/createTableConfig";
 import { LeadsTableConfig } from "../components/TableView/tableConfig/LeadsTableConfig";
 import { DataTableMultiTabs } from "@/core/shared/components/DataTable/DataTableMultiTabs";
 import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
+import { Button } from "@/core/shared/ui/shadcn/button";
 import { LeadSheetForm } from "../components/TableView/LeadSheetForm";
+import { IncompleteLeadDialog } from "../components/TableView/IncompleteLeadDialog";
 import { useServerPaginatedTable } from "@/core/shared/hooks/useServerPaginatedTable";
 import type { Lead, LeadStatus } from "../types";
 import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
 import { enrichLeadTabsWithCounts } from "../config/leadTabsConfig";
-import { useBulkDeleteLeads } from "../hooks/useLeads";
+import { useBulkDeleteLeads, useUpdateLeadStatus } from "../hooks/useLeads";
 import { BulkDeleteLeadsAlertDialog } from "../components/TableView/BulkDeleteLeadsAlertDialog";
 import { BulkReasignLeadsDialog } from "../components/TableView/BulkReasignLeadsDialog";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ExpanderIcon, Minimize01Icon } from "@hugeicons/core-free-icons";
 
 export function LeadsListPage() {
   const { isOpen, openModal, closeModal } = useModalState();
@@ -31,6 +36,18 @@ export function LeadsListPage() {
   }>({ type: null, selectedLeads: [] });
 
   const bulkDeleteMutation = useBulkDeleteLeads();
+
+  // Incomplete data journey — mismo patrón que el Kanban
+  const [incompleteData, setIncompleteData] = useState<{
+    lead: Lead;
+    missingFields: string[];
+  } | null>(null);
+  const [leadToEdit, setLeadToEdit] = useState<Lead | null>(null);
+  const [isEditingFromIncomplete, setIsEditingFromIncomplete] = useState(false);
+  const updateStatusMutation = useUpdateLeadStatus();
+
+  // Focus mode state
+  const [isFocusMode, setIsFocusMode] = useState(false);
 
   const handleBulkDelete = useCallback((rows: Lead[]) => {
     setBulkDialogState({ type: "bulkDelete", selectedLeads: rows });
@@ -207,6 +224,51 @@ export function LeadsListPage() {
     openModal();
   }, [openModal]);
 
+  // Status change desde la tabla — mismo journey que el Kanban
+  const handleStatusChange = useCallback(
+    (lead: Lead, newStatus: LeadStatus) => {
+      updateStatusMutation.mutate(
+        { leadId: lead.id, newStatus },
+        {
+          onError: (error: Error) => {
+            if (error.message === "INCOMPLETE_DATA") {
+              const typedError = error as Error & { missingFields: string[] };
+              setLeadToEdit(lead);
+              setIncompleteData({
+                lead,
+                missingFields: typedError.missingFields || [],
+              });
+            }
+          },
+        },
+      );
+    },
+    [updateStatusMutation],
+  );
+
+  const handleEditLeadFromIncomplete = useCallback(() => {
+    setIncompleteData(null);
+    setIsEditingFromIncomplete(true);
+  }, []);
+
+  // Callbacks para las columnas de la tabla
+  const rowActionCallbacks: LeadRowActionCallbacks = useMemo(
+    () => ({
+      onStatusChange: handleStatusChange,
+      onEditLead: (lead: Lead) => {
+        setLeadToEdit(lead);
+        setIsEditingFromIncomplete(true);
+      },
+    }),
+    [handleStatusChange],
+  );
+
+  // Columnas con callbacks para cambio de estado
+  const columns = useMemo(
+    () => createLeadColumns(rowActionCallbacks),
+    [rowActionCallbacks],
+  );
+
   // Table configuration with server-side enabled
   // Nota: isLoading e isFetching se pasan como props separadas al DataTable
   // para evitar recálculos del config en cada cambio de estado de carga
@@ -245,7 +307,11 @@ export function LeadsListPage() {
           enabled: true,
           totalCount,
           pageCount: paginationMeta?.pageCount ?? 0,
-          // No incluir isLoading/isFetching aquí - se pasan como props separadas
+        },
+        focusMode: {
+          enabled: true,
+          isFocusMode,
+          onFocusModeChange: setIsFocusMode,
         },
       }),
     [
@@ -254,6 +320,7 @@ export function LeadsListPage() {
       handleAdd,
       handleBulkDelete,
       handleBulkReasign,
+      isFocusMode,
       selectedSectorIds,
       selectedOriginIds,
       handleSectorChange,
@@ -280,16 +347,54 @@ export function LeadsListPage() {
     <Card className="p-2 m-1">
       <CardContent>
         <div className="space-y-6">
-          <TablePresentation
-            title="Gestion de Leads"
-            subtitle="Administra los leads de tu organizacion"
-          />
+          {/* Header y tabs — se ocultan en modo foco */}
+          {!isFocusMode && (
+            <>
+              <TablePresentation
+                title="Gestion de Leads"
+                subtitle="Administra los leads de tu organizacion"
+              />
 
-          <DataTableMultiTabs
-            tabs={tabsConfig}
-            activeTabs={activeTabs}
-            onTabsChange={handleMultiTabChange}
-          />
+              <div className="flex items-center justify-between gap-4">
+                <DataTableMultiTabs
+                  tabs={tabsConfig}
+                  activeTabs={activeTabs}
+                  onTabsChange={handleMultiTabChange}
+                />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsFocusMode(true)}
+                  className="gap-2 flex-shrink-0 text-muted-foreground hover:text-foreground"
+                  aria-label="Activar modo presentación"
+                >
+                  <HugeiconsIcon icon={ExpanderIcon} className="h-4 w-4" />
+                  <span className="hidden sm:inline">Modo presentación</span>
+                </Button>
+              </div>
+            </>
+          )}
+
+          {/* En modo foco: tabs + botón salir en la misma fila */}
+          {isFocusMode && (
+            <div className="flex items-center justify-between gap-4">
+              <DataTableMultiTabs
+                tabs={tabsConfig}
+                activeTabs={activeTabs}
+                onTabsChange={handleMultiTabChange}
+              />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsFocusMode(false)}
+                className="gap-2 flex-shrink-0"
+                aria-label="Salir del modo presentación"
+              >
+                <HugeiconsIcon icon={Minimize01Icon} className="h-4 w-4" />
+                <span>Salir de la presentación</span>
+              </Button>
+            </div>
+          )}
 
           <PermissionGuard
             permissions={[
@@ -298,7 +403,7 @@ export function LeadsListPage() {
             ]}
           >
             <DataTable
-              columns={LeadColumns}
+              columns={columns}
               data={leads}
               config={tableConfig}
               isLoading={showInitialLoading}
@@ -319,6 +424,30 @@ export function LeadsListPage() {
           >
             <LeadSheetForm open={isOpen} onOpenChange={closeModal} />
           </PermissionGuard>
+
+          {/* Edit sheet para el journey de datos incompletos */}
+          {leadToEdit && (
+            <LeadSheetForm
+              lead={leadToEdit}
+              open={isEditingFromIncomplete}
+              onOpenChange={(open) => {
+                if (!open) {
+                  setIsEditingFromIncomplete(false);
+                  setLeadToEdit(null);
+                }
+              }}
+            />
+          )}
+
+          {/* Dialog de datos incompletos — mismo journey que el Kanban */}
+          <IncompleteLeadDialog
+            open={!!incompleteData}
+            onOpenChange={(open) => {
+              if (!open) setIncompleteData(null);
+            }}
+            missingFields={incompleteData?.missingFields ?? []}
+            onEditLead={handleEditLeadFromIncomplete}
+          />
 
           <BulkDeleteLeadsAlertDialog
             isOpen={bulkDialogState.type === "bulkDelete"}
