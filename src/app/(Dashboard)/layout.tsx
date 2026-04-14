@@ -3,6 +3,7 @@ import { QueryProvider } from "@/core/shared/components/Providers/QueryProvider"
 import { RouteGuard } from "@/core/shared/components/RouteGuard";
 import { ThemeToogle } from "@/core/shared/components/ThemeToogle";
 import { PermissionProvider } from "@/core/shared/context/PermissionContext";
+import { requireVerifiedSession } from "@core/lib/require-verified-session";
 import { Separator } from "@/core/shared/ui/shadcn/separator";
 import {
   SidebarInset,
@@ -23,11 +24,16 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Server-side guard: verifica sesión válida + OTP completado antes de renderizar
+  // cualquier componente del dashboard. Sin esto, el layout se monta brevemente
+  // antes de que el AuthGuard client-side pueda actuar.
+  await requireVerifiedSession();
+
   return (
     <ThemeProvider attribute="class" defaultTheme="system">
       <QueryProvider>
