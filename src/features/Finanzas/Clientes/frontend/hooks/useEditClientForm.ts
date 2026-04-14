@@ -2,6 +2,7 @@
 
 import { useForm, useStore } from "@tanstack/react-form";
 import { useUpdateClient } from "./useClient";
+import { useTenantUsersQuery } from "@/features/Administracion/usuarios/frontend/hooks/useUsers";
 import type { ClientDTO } from "../types/client.types";
 import type {
   CommercialTermsData,
@@ -12,6 +13,8 @@ export interface EditClientFormValues {
   // General
   nombre: string;
   nombreComercial: string;
+  /** ID del usuario asignado como generador/responsable */
+  generadorId: string;
   // Commercial terms
   currency: string;
   paymentScheme: string;
@@ -38,11 +41,13 @@ export function useEditClientForm({
   client: ClientDTO;
 }) {
   const updateClientMutation = useUpdateClient();
+  const { data: users = [] } = useTenantUsersQuery();
 
   const defaultValues: EditClientFormValues = {
     // General
     nombre: client.nombre,
     nombreComercial: client.nombreComercial ?? "",
+    generadorId: client.generadorId ?? "",
     // Commercial terms
     currency: client.currency ?? "",
     paymentScheme: client.paymentScheme ?? "",
@@ -95,6 +100,7 @@ export function useEditClientForm({
         clientId: client.id,
         data: {
           nombre: value.nombre,
+          generadorId: value.generadorId || null,
           commercialTerms,
           fiscalData,
         },
@@ -114,6 +120,7 @@ export function useEditClientForm({
     isAdvance,
     feeType,
     advanceType,
+    users,
     isSubmitting: updateClientMutation.isPending,
   };
 }

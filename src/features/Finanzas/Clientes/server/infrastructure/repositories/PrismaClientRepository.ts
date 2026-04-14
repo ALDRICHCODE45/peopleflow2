@@ -233,6 +233,8 @@ class PrismaClientRepositoryImpl implements IClientRepository {
       where: { id },
       data: {
         ...(data.nombre !== undefined && { nombre: data.nombre }),
+        // Usuario asignado (generador)
+        ...(data.generadorId !== undefined && { generadorId: data.generadorId }),
         // Condiciones comerciales
         ...(terms && {
           currency: terms.currency,

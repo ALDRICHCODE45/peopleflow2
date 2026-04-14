@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { NumericFormat } from "react-number-format";
 import { Button } from "@shadcn/button";
 import { Input } from "@shadcn/input";
@@ -13,8 +14,10 @@ import {
 } from "@shadcn/select";
 import { Field, FieldError, FieldLabel } from "@shadcn/field";
 import { LoadingButton } from "@shadcn/loading-button";
+import { Avatar, AvatarFallback, AvatarImage } from "@shadcn/avatar";
 import { CurrencyInput } from "@/core/shared/components/CurrencyInput";
 import { PercentInput } from "@/core/shared/components/PercentInput";
+import { SearchableSelect } from "@/core/shared/components/SearchableSelect";
 import { useEditClientForm } from "../hooks/useEditClientForm";
 import type { ClientDTO } from "../types/client.types";
 import {
@@ -30,8 +33,18 @@ interface EditClientFormProps {
 }
 
 export function EditClientForm({ client, onClose }: EditClientFormProps) {
-  const { form, isAdvance, feeType, advanceType, isSubmitting } =
+  const { form, isAdvance, feeType, advanceType, users, isSubmitting } =
     useEditClientForm({ onClose, client });
+
+  const userOptions = useMemo(
+    () =>
+      users.map((u) => ({
+        value: u.id,
+        label: u.name ?? u.email,
+        avatar: u.avatar ?? undefined,
+      })),
+    [users],
+  );
 
   return (
     <form
@@ -82,6 +95,43 @@ export function EditClientForm({ client, onClose }: EditClientFormProps) {
                 onChange={(e) => field.handleChange(e.target.value)}
                 onBlur={field.handleBlur}
                 placeholder="Nombre comercial"
+              />
+            </Field>
+          )}
+        </form.Field>
+
+        <form.Field name="generadorId">
+          {(field) => (
+            <Field>
+              <FieldLabel htmlFor={field.name}>Usuario asignado</FieldLabel>
+              <SearchableSelect
+                options={userOptions}
+                value={field.state.value}
+                onChange={(v) => field.handleChange(v ?? "")}
+                placeholder="Selecciona el usuario responsable"
+                searchPlaceholder="Buscar usuario..."
+                renderOption={(opt) => (
+                  <>
+                    <Avatar className="size-6">
+                      <AvatarImage src={opt.avatar ?? ""} />
+                      <AvatarFallback className="text-xs">
+                        {opt.label.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="truncate">{opt.label}</span>
+                  </>
+                )}
+                renderSelected={(opt) => (
+                  <div className="flex items-center gap-2">
+                    <Avatar className="size-5">
+                      <AvatarImage src={opt.avatar ?? ""} />
+                      <AvatarFallback className="text-xs">
+                        {opt.label.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span>{opt.label}</span>
+                  </div>
+                )}
               />
             </Field>
           )}

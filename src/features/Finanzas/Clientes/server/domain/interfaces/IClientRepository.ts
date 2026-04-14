@@ -68,6 +68,8 @@ export interface CreateClientData {
 
 export interface UpdateClientData {
   nombre?: string;
+  /** ID del usuario asignado como generador/responsable del cliente */
+  generadorId?: string | null;
   commercialTerms?: CommercialTermsData;
   fiscalData?: FiscalData;
 }
