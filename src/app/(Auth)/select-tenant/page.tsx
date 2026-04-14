@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { auth } from "@/core/lib/auth";
 import { Routes } from "@core/shared/constants/routes";
-import { headers } from "next/headers";
 import prisma from "@/core/lib/prisma";
 import { SelectTenantPage } from "@/features/tenants/frontend/pages/SelectTenantPage";
 import { getDefaultRoute } from "@/core/lib/permissions/get-default-route";
+import { requireVerifiedSession } from "@core/lib/require-verified-session";
 
 export const metadata: Metadata = {
   title: "Seleccionar Organización",
@@ -20,13 +19,8 @@ export const metadata: Metadata = {
  * y necesita seleccionar con cuál trabajar.
  */
 export default async function SelectTenant() {
-  const headersList = await headers();
-  const session = await auth.api.getSession({ headers: headersList });
-
-  // Verificar autenticación
-  if (!session?.user) {
-    return redirect(Routes.signIn);
-  }
+  // Verifica sesión válida + OTP completado. Redirige automáticamente si falla.
+  const session = await requireVerifiedSession();
 
   // Obtener tenants del usuario
   const userRoles = await prisma.userRole.findMany({

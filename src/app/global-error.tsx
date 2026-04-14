@@ -170,7 +170,7 @@ export default function GlobalError({
                 Reintentar
               </button>
               <a
-                href={Routes.selectTenant}
+                href={Routes.home}
                 style={{
                   padding: "10px 20px",
                   background: "transparent",

@@ -1,10 +1,9 @@
 import { redirect } from "next/navigation";
-import { auth } from "@/core/lib/auth";
-import { headers } from "next/headers";
 import prisma from "@/core/lib/prisma";
 import { SUPER_ADMIN_PERMISSION_NAME } from "@/core/shared/constants/permissions";
 import { Routes } from "@core/shared/constants/routes";
 import { ThemeToogle } from "@/core/shared/components/ThemeToogle";
+import { requireVerifiedSession } from "@core/lib/require-verified-session";
 
 /**
  * Layout para el área de Super Admin
@@ -17,13 +16,8 @@ export default async function SuperAdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const headersList = await headers();
-  const session = await auth.api.getSession({ headers: headersList });
-
-  // Verificar autenticación
-  if (!session?.user) {
-    return redirect(Routes.signIn);
-  }
+  // Verifica sesión válida + OTP completado. Redirige automáticamente si falla.
+  const session = await requireVerifiedSession();
 
   // Verificar que tenga permiso super:admin
   const userRoles = await prisma.userRole.findMany({

@@ -83,7 +83,7 @@ export default function DashboardError({
             Reintentar
           </Button>
           <Button variant="outline" asChild>
-            <a href={Routes.selectTenant}>Seleccionar otra organización</a>
+            <a href={Routes.home}>Seleccionar otra organización</a>
           </Button>
         </CardContent>
       </Card>
