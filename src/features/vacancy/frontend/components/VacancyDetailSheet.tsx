@@ -64,6 +64,12 @@ import { PermissionActions } from "@/core/shared/constants/permissions";
 import { usePermissions } from "@/core/shared/hooks/use-permissions";
 import { ApplyWarrantyDialog } from "./ApplyWarrantyDialog";
 import { RecruiterAssignmentTimeline } from "./RecruiterAssignmentTimeline";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/core/shared/ui/shadcn/tooltip";
 
 interface VacancyDetailSheetProps {
   vacancyId: string | null;
@@ -215,7 +221,9 @@ export function VacancyDetailSheet({
       PermissionActions.vacantes.gestionar,
     ]);
 
-  const [transitionInitialStatus, setTransitionInitialStatus] = useState<VacancyStatusType | undefined>(undefined);
+  const [transitionInitialStatus, setTransitionInitialStatus] = useState<
+    VacancyStatusType | undefined
+  >(undefined);
   const [transitionDialogKey, setTransitionDialogKey] = useState(0);
 
   return (
@@ -235,8 +243,13 @@ export function VacancyDetailSheet({
               <SheetHeader className="px-4 md:px-6 pt-4 md:pt-6 pb-3 md:pb-4 border-b">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
-                    <SheetTitle className="text-base md:text-lg font-semibold truncate">
-                      {vacancy.position}
+                    <SheetTitle className="text-base md:text-lg font-semibold ">
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <span className="truncate">{vacancy.position}</span>
+                        </TooltipTrigger>
+                        <TooltipContent>{vacancy.position}</TooltipContent>
+                      </Tooltip>
                     </SheetTitle>
                     <div className="flex items-center gap-2 mt-1.5 flex-wrap">
                       <VacancyStatusBadge status={vacancy.status} />
@@ -292,7 +305,7 @@ export function VacancyDetailSheet({
                           <span
                             className={
                               new Date(vacancy.actualDeliveryDate) <=
-                                new Date(vacancy.targetDeliveryDate)
+                              new Date(vacancy.targetDeliveryDate)
                                 ? "flex items-center gap-1 text-green-600"
                                 : "flex items-center gap-1 text-red-500"
                             }
@@ -300,7 +313,7 @@ export function VacancyDetailSheet({
                             <HugeiconsIcon icon={Alert02Icon} size={11} />
                             <span>
                               {new Date(vacancy.actualDeliveryDate) <=
-                                new Date(vacancy.targetDeliveryDate)
+                              new Date(vacancy.targetDeliveryDate)
                                 ? "Terna en tiempo"
                                 : "Terna fuera de tiempo"}
                             </span>
@@ -314,7 +327,10 @@ export function VacancyDetailSheet({
                     {!isMobile && (
                       <>
                         <PermissionGuard
-                          permissions={[PermissionActions.vacantes.actualizarEstado, PermissionActions.vacantes.gestionar]}
+                          permissions={[
+                            PermissionActions.vacantes.actualizarEstado,
+                            PermissionActions.vacantes.gestionar,
+                          ]}
                         >
                           {vacancy.status === "PRE_PLACEMENT" && (
                             <Button
@@ -353,9 +369,17 @@ export function VacancyDetailSheet({
                           </Button>
                         </PermissionGuard>
                         <PermissionGuard
-                          permissions={[PermissionActions.vacantes.editar, PermissionActions.vacantes.gestionar]}
+                          permissions={[
+                            PermissionActions.vacantes.editar,
+                            PermissionActions.vacantes.gestionar,
+                          ]}
                         >
-                          {["QUICK_MEETING", "HUNTING", "FOLLOW_UP", "PRE_PLACEMENT"].includes(vacancy.status) && (
+                          {[
+                            "QUICK_MEETING",
+                            "HUNTING",
+                            "FOLLOW_UP",
+                            "PRE_PLACEMENT",
+                          ].includes(vacancy.status) && (
                             <Button
                               variant="outline"
                               size="sm"
@@ -402,24 +426,40 @@ export function VacancyDetailSheet({
                     {isMobile && (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="outline" size="icon-sm" aria-label="Acciones">
+                          <Button
+                            variant="outline"
+                            size="icon-sm"
+                            aria-label="Acciones"
+                          >
                             <HugeiconsIcon icon={MoreVerticalIcon} size={16} />
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          {(isSuperAdmin || hasAnyPermission([PermissionActions.vacantes.actualizarEstado, PermissionActions.vacantes.gestionar])) && vacancy.status === "PRE_PLACEMENT" && (
-                            <DropdownMenuItem
-                              onClick={() => {
-                                setTransitionInitialStatus("PLACEMENT");
-                                setTransitionDialogKey((k) => k + 1);
-                                openTransition();
-                              }}
-                            >
-                              <HugeiconsIcon icon={CheckmarkBadge01Icon} size={14} />
-                              Confirmar placement
-                            </DropdownMenuItem>
-                          )}
-                          {(isSuperAdmin || hasAnyPermission([PermissionActions.vacantes.actualizarEstado, PermissionActions.vacantes.gestionar])) && (
+                          {(isSuperAdmin ||
+                            hasAnyPermission([
+                              PermissionActions.vacantes.actualizarEstado,
+                              PermissionActions.vacantes.gestionar,
+                            ])) &&
+                            vacancy.status === "PRE_PLACEMENT" && (
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setTransitionInitialStatus("PLACEMENT");
+                                  setTransitionDialogKey((k) => k + 1);
+                                  openTransition();
+                                }}
+                              >
+                                <HugeiconsIcon
+                                  icon={CheckmarkBadge01Icon}
+                                  size={14}
+                                />
+                                Confirmar placement
+                              </DropdownMenuItem>
+                            )}
+                          {(isSuperAdmin ||
+                            hasAnyPermission([
+                              PermissionActions.vacantes.actualizarEstado,
+                              PermissionActions.vacantes.gestionar,
+                            ])) && (
                             <DropdownMenuItem
                               onClick={() => {
                                 setTransitionInitialStatus(undefined);
@@ -431,12 +471,22 @@ export function VacancyDetailSheet({
                               Cambiar estado
                             </DropdownMenuItem>
                           )}
-                          {(isSuperAdmin || hasAnyPermission([PermissionActions.vacantes.editar, PermissionActions.vacantes.gestionar])) && ["QUICK_MEETING", "HUNTING", "FOLLOW_UP", "PRE_PLACEMENT"].includes(vacancy.status) && (
-                            <DropdownMenuItem onClick={openRequestValidation}>
-                              <HugeiconsIcon icon={SentIcon} size={14} />
-                              Solicitar validación
-                            </DropdownMenuItem>
-                          )}
+                          {(isSuperAdmin ||
+                            hasAnyPermission([
+                              PermissionActions.vacantes.editar,
+                              PermissionActions.vacantes.gestionar,
+                            ])) &&
+                            [
+                              "QUICK_MEETING",
+                              "HUNTING",
+                              "FOLLOW_UP",
+                              "PRE_PLACEMENT",
+                            ].includes(vacancy.status) && (
+                              <DropdownMenuItem onClick={openRequestValidation}>
+                                <HugeiconsIcon icon={SentIcon} size={14} />
+                                Solicitar validación
+                              </DropdownMenuItem>
+                            )}
                           {vacancy.status === "PLACEMENT" &&
                             !vacancy.isWarranty &&
                             !vacancy.warrantyVacancyId && (
@@ -483,19 +533,26 @@ export function VacancyDetailSheet({
                         )}
                       </TabsTrigger>
                       {canAccessCandidates && (
-                        <TabsTrigger value="candidates" className="shrink-0 md:flex-1">
+                        <TabsTrigger
+                          value="candidates"
+                          className="shrink-0 md:flex-1"
+                        >
                           Candidatos{" "}
-                          {vacancy.candidates && vacancy.candidates.length > 0 && (
-                            <Badge
-                              variant="outline"
-                              className="ml-1 text-xs size-5 p-0 flex items-center justify-center"
-                            >
-                              {vacancy.candidates.length}
-                            </Badge>
-                          )}
+                          {vacancy.candidates &&
+                            vacancy.candidates.length > 0 && (
+                              <Badge
+                                variant="outline"
+                                className="ml-1 text-xs size-5 p-0 flex items-center justify-center"
+                              >
+                                {vacancy.candidates.length}
+                              </Badge>
+                            )}
                         </TabsTrigger>
                       )}
-                      <TabsTrigger value="checklist" className="shrink-0 md:flex-1">
+                      <TabsTrigger
+                        value="checklist"
+                        className="shrink-0 md:flex-1"
+                      >
                         Checklist{" "}
                         {vacancy.checklistItems &&
                           vacancy.checklistItems.length > 0 && (
@@ -507,14 +564,20 @@ export function VacancyDetailSheet({
                             </Badge>
                           )}
                       </TabsTrigger>
-                      <TabsTrigger value="history" className="shrink-0 md:flex-1">
+                      <TabsTrigger
+                        value="history"
+                        className="shrink-0 md:flex-1"
+                      >
                         Historial
                       </TabsTrigger>
                     </TabsList>
                   </div>
 
                   {/* ---- Tab: Información ---- */}
-                  <TabsContent value="info" className="mt-3 md:mt-4 space-y-4 md:space-y-5">
+                  <TabsContent
+                    value="info"
+                    className="mt-3 md:mt-4 space-y-4 md:space-y-5"
+                  >
                     {/* Fechas */}
                     <div>
                       <VacancyProgressIndicator
@@ -545,8 +608,12 @@ export function VacancyDetailSheet({
                           <InfoRow
                             label="Tiempo a Placement"
                             value={(() => {
-                              const confirmedDate = parseDateOnly(vacancy.placementConfirmedAt);
-                              const assignedDate = parseDateOnly(vacancy.assignedAt);
+                              const confirmedDate = parseDateOnly(
+                                vacancy.placementConfirmedAt,
+                              );
+                              const assignedDate = parseDateOnly(
+                                vacancy.assignedAt,
+                              );
                               if (!confirmedDate || !assignedDate) return "—";
                               const days = differenceInDays(
                                 startOfDay(confirmedDate),
@@ -576,9 +643,21 @@ export function VacancyDetailSheet({
                               : null
                           }
                         />
-                        <InfoRow label="Horario" value={vacancy.schedule?.replace(/^custom:/, "")} />
-                        <InfoRow label="País" value={resolveCountryName(vacancy.countryCode)} />
-                        <InfoRow label="Región" value={resolveRegionName(vacancy.countryCode, vacancy.regionCode)} />
+                        <InfoRow
+                          label="Horario"
+                          value={vacancy.schedule?.replace(/^custom:/, "")}
+                        />
+                        <InfoRow
+                          label="País"
+                          value={resolveCountryName(vacancy.countryCode)}
+                        />
+                        <InfoRow
+                          label="Región"
+                          value={resolveRegionName(
+                            vacancy.countryCode,
+                            vacancy.regionCode,
+                          )}
+                        />
                       </div>
                     </div>
 
@@ -664,7 +743,10 @@ export function VacancyDetailSheet({
 
                   {/* ---- Tab: Candidatos ---- */}
                   {canAccessCandidates && (
-                    <TabsContent value="candidates" className="mt-3 md:mt-4 space-y-3">
+                    <TabsContent
+                      value="candidates"
+                      className="mt-3 md:mt-4 space-y-3"
+                    >
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 flex-wrap">
                         <span className="text-sm font-medium">
                           {vacancy.candidates?.length ?? 0} candidato(s)
@@ -729,7 +811,8 @@ export function VacancyDetailSheet({
                         </div>
                       </div>
 
-                      {!vacancy.candidates || vacancy.candidates.length === 0 ? (
+                      {!vacancy.candidates ||
+                      vacancy.candidates.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-10 text-muted-foreground gap-2">
                           <HugeiconsIcon
                             icon={UserAdd01Icon}
@@ -759,14 +842,17 @@ export function VacancyDetailSheet({
                   </TabsContent>
 
                   {/* ---- Tab: Historial ---- */}
-                  <TabsContent value="history" className="mt-3 md:mt-4 space-y-4 md:space-y-6">
+                  <TabsContent
+                    value="history"
+                    className="mt-3 md:mt-4 space-y-4 md:space-y-6"
+                  >
                     {/* Status history */}
                     <div>
                       <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">
                         Historial de estados
                       </h4>
                       {!vacancy.statusHistory ||
-                        vacancy.statusHistory.length === 0 ? (
+                      vacancy.statusHistory.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-10 text-muted-foreground gap-2">
                           <HugeiconsIcon
                             icon={ArrowRight01Icon}
