@@ -14,14 +14,10 @@ import { useAuth } from "../../hooks/use-auth";
 import { usePermissions } from "../../hooks";
 import { filterSidebarLinks } from "../../helpers/sidebar-filter";
 import { TeamSwitcher } from "./TeamSwitcher";
-import { useIsMobile } from "../../hooks/use-mobile";
-import { cn } from "@/core/lib/utils";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useAuth();
   const { permissions } = usePermissions();
-
-  const isMobile = useIsMobile();
 
   const userData = user
     ? {

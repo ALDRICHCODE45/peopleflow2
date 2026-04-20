@@ -15,11 +15,7 @@ import { DeleteCandidateAlertDialog } from "./DeleteCandidateAlertDialog";
 import { EditCandidateDialog } from "./EditCandidateDialog";
 import { CandidateChecklistSheet } from "./CandidateChecklistSheet";
 import { CandidateDetailSheet } from "./CandidateDetailSheet";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@shadcn/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@shadcn/tooltip";
 import {
   Item,
   ItemMedia,
@@ -28,7 +24,11 @@ import {
   ItemDescription,
   ItemActions,
 } from "@shadcn/item";
-import type { VacancyCandidateDTO, CandidateStatus, VacancyChecklistItemDTO } from "../types/vacancy.types";
+import type {
+  VacancyCandidateDTO,
+  CandidateStatus,
+  VacancyChecklistItemDTO,
+} from "../types/vacancy.types";
 import { CANDIDATE_STATUS_LABELS } from "../types/vacancy.types";
 import { usePermissions } from "@/core/shared/hooks/use-permissions";
 import { PermissionActions } from "@/core/shared/constants/permissions";
@@ -46,7 +46,11 @@ const candidateStatusColorMap: Record<CandidateStatus, string> = {
   DESCARTADO: "bg-slate-100 text-slate-600 border-slate-200",
 };
 
-export function CandidateCard({ candidate, vacancyId, checklistItems = [] }: CandidateCardProps) {
+export function CandidateCard({
+  candidate,
+  vacancyId,
+  checklistItems = [],
+}: CandidateCardProps) {
   const fullName = `${candidate.firstName} ${candidate.lastName}`;
   const cvAttachment = candidate.attachments?.find((a) => a.subType === "CV");
 
@@ -56,20 +60,27 @@ export function CandidateCard({ candidate, vacancyId, checklistItems = [] }: Can
   const removeCandidateMutation = useRemoveCandidate();
   const { hasAnyPermission, isSuperAdmin } = usePermissions();
 
-  const canEdit = isSuperAdmin || hasAnyPermission([
-    PermissionActions.candidatos.editar,
-    PermissionActions.candidatos.gestionar,
-    PermissionActions.vacantes.gestionar,
-  ]);
-  const canDelete = isSuperAdmin || hasAnyPermission([
-    PermissionActions.candidatos.eliminar,
-    PermissionActions.candidatos.gestionar,
-    PermissionActions.vacantes.gestionar,
-  ]);
-  const canChecklist = isSuperAdmin || hasAnyPermission([
-    PermissionActions.candidatos.gestionar,
-    PermissionActions.vacantes.gestionar,
-  ]);
+  const canEdit =
+    isSuperAdmin ||
+    hasAnyPermission([
+      PermissionActions.candidatos.editar,
+      PermissionActions.candidatos.gestionar,
+      PermissionActions.vacantes.gestionar,
+    ]);
+  const canDelete =
+    isSuperAdmin ||
+    hasAnyPermission([
+      PermissionActions.candidatos.eliminar,
+      PermissionActions.candidatos.gestionar,
+      PermissionActions.vacantes.gestionar,
+    ]);
+  const canChecklist =
+    isSuperAdmin ||
+    hasAnyPermission([
+      PermissionActions.candidatos.editar,
+      PermissionActions.candidatos.gestionar,
+      PermissionActions.vacantes.gestionar,
+    ]);
 
   const {
     isOpen: isEditOpen,
@@ -104,22 +115,34 @@ export function CandidateCard({ candidate, vacancyId, checklistItems = [] }: Can
   };
 
   const dropdownActions = [
-    ...(canEdit ? [{
-      id: "edit",
-      label: "Editar",
-      onClick: openEdit,
-    }] : []),
-    ...(canChecklist ? [{
-      id: "checklist",
-      label: "Checklist",
-      onClick: openChecklist,
-    }] : []),
-    ...(canDelete ? [{
-      id: "delete",
-      label: "Eliminar",
-      variant: "destructive" as const,
-      onClick: openDelete,
-    }] : []),
+    ...(canEdit
+      ? [
+          {
+            id: "edit",
+            label: "Editar",
+            onClick: openEdit,
+          },
+        ]
+      : []),
+    ...(canChecklist
+      ? [
+          {
+            id: "checklist",
+            label: "Checklist",
+            onClick: openChecklist,
+          },
+        ]
+      : []),
+    ...(canDelete
+      ? [
+          {
+            id: "delete",
+            label: "Eliminar",
+            variant: "destructive" as const,
+            onClick: openDelete,
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -219,14 +242,15 @@ export function CandidateCard({ candidate, vacancyId, checklistItems = [] }: Can
                         "hover:bg-primary/10 transition-colors",
                       )}
                     >
-                      <HugeiconsIcon icon={FileAttachmentIcon} className="size-3.5" />
+                      <HugeiconsIcon
+                        icon={FileAttachmentIcon}
+                        className="size-3.5"
+                      />
                     </a>
                   </TooltipTrigger>
                   <TooltipContent>CV: {cvAttachment.fileName}</TooltipContent>
                 </Tooltip>
               )}
-
-
             </div>
           </ItemDescription>
         </ItemContent>

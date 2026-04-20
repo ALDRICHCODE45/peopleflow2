@@ -14,7 +14,7 @@
     "prisma:generate": "bunx prisma generate",
     "prisma:studio": "bunx prisma studio",
     "better:generate": "bunx @better-auth/cli@latest generate --config src/core/lib/auth.ts",
-    "prisma:deploy": "bun run better:generate && bunx prisma db push --accept-data-loss",
+    "prisma:deploy": "bun run better:generate && bunx prisma db push",
     "inggest:dev": "npx inngest-cli@latest dev"
   },
   "prisma": {

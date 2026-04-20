@@ -9,7 +9,10 @@ import { prismaVacancyCandidateRepository } from "../../infrastructure/repositor
 import { prismaVacancyChecklistRepository } from "../../infrastructure/repositories/PrismaVacancyChecklistRepository";
 import { prismaVacancyCandidateMatchRepository } from "../../infrastructure/repositories/PrismaVacancyCandidateMatchRepository";
 import { SaveCandidateMatchUseCase } from "../../application/use-cases/SaveCandidateMatchUseCase";
-import type { SaveMatchResult, CandidateMatchRating } from "../../../frontend/types/vacancy.types";
+import type {
+  SaveMatchResult,
+  CandidateMatchRating,
+} from "../../../frontend/types/vacancy.types";
 import { ServerErrors } from "@core/shared/constants/error-messages";
 
 export interface SaveCandidateMatchInput {
@@ -40,6 +43,7 @@ export async function saveCandidateMatchAction(
       permissions: [
         PermissionActions.candidatos.gestionar,
         PermissionActions.vacantes.gestionar,
+        PermissionActions.candidatos.editar,
       ],
       tenantId,
     });

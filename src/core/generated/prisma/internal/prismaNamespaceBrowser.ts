@@ -123,7 +123,8 @@ export const SessionScalarFieldEnum = {
   ipAddress: 'ipAddress',
   userAgent: 'userAgent',
   userId: 'userId',
-  activeTenantId: 'activeTenantId'
+  activeTenantId: 'activeTenantId',
+  otpVerifiedAt: 'otpVerifiedAt'
 } as const
 
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]

@@ -23,10 +23,12 @@ const TERMINAL_STATUSES = ["PLACEMENT", "CANCELADA", "PERDIDA"] as const;
 export class AddCandidateToVacancyUseCase {
   constructor(
     private readonly vacancyRepo: IVacancyRepository,
-    private readonly candidateRepo: IVacancyCandidateRepository
+    private readonly candidateRepo: IVacancyCandidateRepository,
   ) {}
 
-  async execute(input: AddCandidateInput): Promise<AddCandidateToVacancyOutput> {
+  async execute(
+    input: AddCandidateInput,
+  ): Promise<AddCandidateToVacancyOutput> {
     try {
       const { vacancyId, tenantId, firstName, lastName, ...rest } = input;
 
@@ -46,10 +48,16 @@ export class AddCandidateToVacancyUseCase {
 
       // 3. Validate firstName and lastName
       if (!firstName || firstName.trim().length === 0) {
-        return { success: false, error: "El nombre del candidato es requerido" };
+        return {
+          success: false,
+          error: "El nombre del candidato es requerido",
+        };
       }
       if (!lastName || lastName.trim().length === 0) {
-        return { success: false, error: "El apellido del candidato es requerido" };
+        return {
+          success: false,
+          error: "El apellido del candidato es requerido",
+        };
       }
 
       // 4. Create candidate
