@@ -16,20 +16,14 @@ import { CompanyNameNormalizationService } from "../src/core/shared/services/Com
 async function main() {
   console.log("🔄 Starting backfill of Client.normalizedNombre...");
 
-  // Fetch all clients with empty normalizedNombre
-  const clients = await prisma.client.findMany({
-    where: {
-      OR: [
-        { normalizedNombre: "" },
-        { normalizedNombre: null as unknown as string }, // Handle potential null values
-      ],
-    },
-    select: {
-      id: true,
-      nombre: true,
-      tenantId: true,
-    },
-  });
+  // Fetch all clients (use $queryRaw to avoid adapter-pg issues with new columns)
+  const clients = await prisma.$queryRaw<
+    { id: string; nombre: string; tenantId: string }[]
+  >`
+    SELECT id, nombre, "tenantId"
+    FROM client
+    WHERE "normalizedNombre" = '' OR "normalizedNombre" IS NULL
+  `;
 
   console.log(`📊 Found ${clients.length} clients to backfill`);
 
@@ -45,10 +39,9 @@ async function main() {
     try {
       const normalizedNombre = CompanyNameNormalizationService.normalize(client.nombre);
       
-      await prisma.client.update({
-        where: { id: client.id },
-        data: { normalizedNombre },
-      });
+      await prisma.$executeRaw`
+        UPDATE client SET "normalizedNombre" = ${normalizedNombre} WHERE id = ${client.id}
+      `;
 
       updated++;
       
@@ -82,16 +75,12 @@ async function main() {
       console.log(`   - Tenant ${dup.tenantId}, normalized: "${dup.normalizedNombre}" (${dup.count} clients)`);
       
       // Show the actual client names
-      const conflictingClients = await prisma.client.findMany({
-        where: {
-          tenantId: dup.tenantId,
-          normalizedNombre: dup.normalizedNombre,
-        },
-        select: {
-          id: true,
-          nombre: true,
-        },
-      });
+      const conflictingClients = await prisma.$queryRaw<
+        { id: string; nombre: string }[]
+      >`
+        SELECT id, nombre FROM client
+        WHERE "tenantId" = ${dup.tenantId} AND "normalizedNombre" = ${dup.normalizedNombre}
+      `;
       
       for (const client of conflictingClients) {
         console.log(`     → ${client.nombre} (ID: ${client.id})`);

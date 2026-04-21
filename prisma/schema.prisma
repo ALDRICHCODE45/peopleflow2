@@ -1148,9 +1148,7 @@ model Client {
   @@index([origenId])
   @@index([tenantId, createdAt])
   @@index([tenantId, normalizedNombre])
-  // TODO: Uncomment after running backfill script (scripts/backfill-client-normalized-nombre.ts)
-  // and confirming no duplicate (tenantId, normalizedNombre) pairs exist
-  // @@unique([tenantId, normalizedNombre])
+  @@unique([tenantId, normalizedNombre])
   @@map("client")
 }
 
