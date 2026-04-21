@@ -6,6 +6,7 @@ import { Lead } from "../../domain/entities/Lead";
 import type { LeadStatusType } from "../../domain/value-objects/LeadStatus";
 import { inngest } from "@core/shared/inngest/inngest";
 import { InngestEvents } from "@core/shared/constants/inngest-events";
+import { CompanyNameNormalizationService } from "@core/shared/services/CompanyNameNormalizationService";
 import prisma from "@lib/prisma";
 
 export interface UpdateLeadStatusInput {
@@ -122,10 +123,26 @@ export class UpdateLeadStatusUseCase {
           });
 
           if (!existingClient) {
+            // BEFORE creating the client, check for duplicate normalized name
+            const normalizedCompanyName = CompanyNameNormalizationService.normalize(lead.companyName);
+            const duplicateClient = await tx.client.findFirst({
+              where: {
+                tenantId: input.tenantId,
+                normalizedNombre: normalizedCompanyName,
+              },
+            });
+
+            if (duplicateClient) {
+              throw new Error(
+                `No se puede convertir el lead a cliente: ya existe un cliente con un nombre similar: "${duplicateClient.nombre}"`
+              );
+            }
+
             const terms = input.commercialTerms;
             await tx.client.create({
               data: {
                 nombre: lead.companyName,
+                normalizedNombre: normalizedCompanyName,
                 leadId: lead.id,
                 generadorId: lead.assignedToId,
                 origenId: lead.originId,
@@ -225,6 +242,15 @@ export class UpdateLeadStatusUseCase {
       };
     } catch (error) {
       console.error("Error in UpdateLeadStatusUseCase:", error);
+      
+      // Preserve business errors from transaction (e.g., duplicate client name)
+      if (error instanceof Error && error.message.includes("ya existe un cliente")) {
+        return {
+          success: false,
+          error: error.message,
+        };
+      }
+      
       return {
         success: false,
         error: "Error al actualizar estado del lead",

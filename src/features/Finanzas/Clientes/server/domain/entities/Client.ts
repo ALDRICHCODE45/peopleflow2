@@ -13,6 +13,7 @@ import type {
 export interface ClientProps {
   id: string;
   nombre: string;
+  normalizedNombre: string;
   leadId: string | null;
   generadorId: string | null;
   generadorName?: string | null;
@@ -60,6 +61,10 @@ export class Client {
 
   get nombre(): string {
     return this.props.nombre;
+  }
+
+  get normalizedNombre(): string {
+    return this.props.normalizedNombre;
   }
 
   get leadId(): string | null {
@@ -198,6 +203,7 @@ export class Client {
     return {
       id: this.props.id,
       nombre: this.props.nombre,
+      normalizedNombre: this.props.normalizedNombre,
       leadId: this.props.leadId,
       generadorId: this.props.generadorId,
       generadorName: this.props.generadorName,

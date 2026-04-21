@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 
 import { prismaClientRepository } from "../../infrastructure/repositories/PrismaClientRepository";
+import { CreateClientUseCase } from "../../application/use-cases/CreateClientUseCase";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { CheckAnyPermissonUseCase } from "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
@@ -65,9 +66,9 @@ export async function createClientManualAction(
       return { error: "El generador es requerido" };
     }
 
-    // Crear cliente (sin leadId ni origenId — creación manual)
-    const client = await prismaClientRepository.create({
-      nombre: input.companyName.trim(),
+    // Crear cliente usando el use case (incluye validación de duplicados)
+    const result = await new CreateClientUseCase(prismaClientRepository).execute({
+      nombre: input.companyName,
       leadId: null,
       generadorId: input.generadorId,
       origenId: null,
@@ -75,11 +76,15 @@ export async function createClientManualAction(
       createdById: session.user.id,
     });
 
+    if (!result.success) {
+      return { error: result.error ?? "Error al crear el cliente" };
+    }
+
     revalidatePath("/finanzas/clientes");
 
     return {
       error: null,
-      data: client.toJSON(),
+      data: result.data,
     };
   } catch (error) {
     console.error("Error in createClientManualAction:", error);

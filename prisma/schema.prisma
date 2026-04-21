@@ -1091,8 +1091,9 @@ model InvoiceFolioCounter {
 // =============================================
 
 model Client {
-  id     String @id @default(uuid())
-  nombre String // Copiado de Lead.companyName
+  id               String @id @default(uuid())
+  nombre           String // Copiado de Lead.companyName
+  normalizedNombre String @default("") // Nombre normalizado para detección de duplicados
 
   // Trazabilidad al Lead original (null para creación manual)
   leadId String? @unique
@@ -1146,6 +1147,10 @@ model Client {
   @@index([generadorId])
   @@index([origenId])
   @@index([tenantId, createdAt])
+  @@index([tenantId, normalizedNombre])
+  // TODO: Uncomment after running backfill script (scripts/backfill-client-normalized-nombre.ts)
+  // and confirming no duplicate (tenantId, normalizedNombre) pairs exist
+  // @@unique([tenantId, normalizedNombre])
   @@map("client")
 }
 
