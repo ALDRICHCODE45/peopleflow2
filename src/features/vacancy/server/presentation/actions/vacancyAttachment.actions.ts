@@ -109,13 +109,30 @@ export async function deleteVacancyAttachmentAction(
     const { error, session, tenantId } = await getAuthContext();
     if (error || !session || !tenantId) return { error: error ?? "Error de autenticación", success: false };
 
-    const hasPermission = await checkVacancyPermission(session.user.id, tenantId, [
-      PermissionActions.vacantes.eliminarArchivos,
-    ]);
-    if (!hasPermission) return { error: "Sin permisos para eliminar archivos", success: false };
-
+    // Fetch attachment first to determine type
     const attachment = await prismaVacancyAttachmentRepository.findById(attachmentId, tenantId);
     if (!attachment) return { error: "Archivo no encontrado", success: false };
+
+    // Permission check — branch by attachment target
+    const deletePermissions = attachment.vacancyCandidateId
+      ? [
+          PermissionActions.vacantes.eliminarArchivos,
+          PermissionActions.vacantes.gestionar,
+          PermissionActions.candidatos.editar,
+          PermissionActions.candidatos.eliminar,
+          PermissionActions.candidatos.gestionar,
+        ]
+      : [
+          PermissionActions.vacantes.eliminarArchivos,
+          PermissionActions.vacantes.gestionar,
+        ];
+
+    const hasPermission = await new CheckAnyPermissonUseCase().execute({
+      userId: session.user.id,
+      permissions: deletePermissions,
+      tenantId,
+    });
+    if (!hasPermission.hasAnyPermission) return { error: "Sin permisos para eliminar archivos", success: false };
 
     // Derive storage key from the URL
     const baseUrl = (process.env.DO_SPACES_CDN_URL ?? process.env.DO_SPACES_ENDPOINT ?? "").replace(/\/$/, "");

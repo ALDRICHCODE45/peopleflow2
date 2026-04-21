@@ -47,8 +47,8 @@ export async function uploadFileAction(
       return { error: ServerErrors.noActiveTenant };
     }
 
-    // 3. Permission check for vacancy-related uploads
-    if (input.attachableType === "VACANCY" || input.attachableType === "VACANCY_CANDIDATE") {
+    // 3. Permission check — split by attachable type
+    if (input.attachableType === "VACANCY") {
       const hasPermission = await new CheckAnyPermissonUseCase().execute({
         userId: session.user.id,
         permissions: [
@@ -57,8 +57,25 @@ export async function uploadFileAction(
         ],
         tenantId,
       });
-      if (!hasPermission) {
+      if (!hasPermission.hasAnyPermission) {
         return { error: "Sin permisos para subir archivos a vacantes" };
+      }
+    }
+
+    if (input.attachableType === "VACANCY_CANDIDATE") {
+      const hasPermission = await new CheckAnyPermissonUseCase().execute({
+        userId: session.user.id,
+        permissions: [
+          PermissionActions.vacantes.subirArchivos,
+          PermissionActions.vacantes.gestionar,
+          PermissionActions.candidatos.crear,
+          PermissionActions.candidatos.editar,
+          PermissionActions.candidatos.gestionar,
+        ],
+        tenantId,
+      });
+      if (!hasPermission.hasAnyPermission) {
+        return { error: "Sin permisos para subir archivos de candidatos" };
       }
     }
 
