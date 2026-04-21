@@ -101,3 +101,18 @@ export interface UpdateFiscalDataResult {
   error: string | null;
   data?: ClientDTO;
 }
+
+export interface DeleteClientActionResult {
+  error: string | null;
+  success: boolean;
+}
+
+// --- Component prop types ---
+
+export interface DeleteClientDialogProps {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  onConfirmDelete: () => void;
+  clientName: string;
+  isLoading?: boolean;
+}

@@ -58,6 +58,7 @@ export interface CommercialTermsData {
 
 export interface CreateClientData {
   nombre: string;
+  normalizedNombre: string;
   leadId: string | null;
   generadorId: string | null;
   origenId: string | null;
@@ -68,6 +69,7 @@ export interface CreateClientData {
 
 export interface UpdateClientData {
   nombre?: string;
+  normalizedNombre?: string;
   /** ID del usuario asignado como generador/responsable del cliente */
   generadorId?: string | null;
   commercialTerms?: CommercialTermsData;
@@ -91,6 +93,18 @@ export interface IClientRepository {
   findByLeadId(leadId: string, tenantId: string): Promise<Client | null>;
 
   /**
+   * Busca un cliente por nombre normalizado con scope de tenant
+   * @param normalizedNombre Nombre normalizado a buscar
+   * @param tenantId ID del tenant
+   * @param excludeId ID del cliente a excluir (para validación de updates)
+   */
+  findByNormalizedNombre(
+    normalizedNombre: string,
+    tenantId: string,
+    excludeId?: string,
+  ): Promise<Client | null>;
+
+  /**
    * Devuelve id, nombre y currency de todos los clientes de un tenant (para selects)
    */
   findAllByTenantId(tenantId: string): Promise<{ id: string; nombre: string; currency: string | null }[]>;
@@ -109,4 +123,19 @@ export interface IClientRepository {
    * Actualiza un cliente existente con scope de tenant
    */
   update(id: string, data: UpdateClientData, tenantId: string): Promise<Client>;
+
+  /**
+   * Elimina un cliente con scope de tenant
+   */
+  delete(id: string, tenantId: string): Promise<boolean>;
+
+  /**
+   * Cuenta las vacantes asociadas a un cliente
+   */
+  countVacanciesByClientId(id: string, tenantId: string): Promise<number>;
+
+  /**
+   * Cuenta las facturas asociadas a un cliente
+   */
+  countInvoicesByClientId(id: string, tenantId: string): Promise<number>;
 }

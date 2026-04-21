@@ -29,6 +29,7 @@ function toDomain(
   client: {
     id: string;
     nombre: string;
+    normalizedNombre: string;
     leadId: string | null;
     generadorId: string | null;
     generador?: { name: string | null } | null;
@@ -61,6 +62,7 @@ function toDomain(
   const props: ClientProps = {
     id: client.id,
     nombre: client.nombre,
+    normalizedNombre: client.normalizedNombre,
     leadId: client.leadId,
     generadorId: client.generadorId,
     generadorName: client.generador?.name,
@@ -100,6 +102,7 @@ class PrismaClientRepositoryImpl implements IClientRepository {
     const client = await prisma.client.create({
       data: {
         nombre: data.nombre,
+        normalizedNombre: data.normalizedNombre,
         leadId: data.leadId ?? undefined,
         generadorId: data.generadorId,
         origenId: data.origenId,
@@ -141,6 +144,27 @@ class PrismaClientRepositoryImpl implements IClientRepository {
   async findByLeadId(leadId: string, tenantId: string): Promise<Client | null> {
     const client = await prisma.client.findFirst({
       where: { leadId, tenantId },
+      include: CLIENT_INCLUDE,
+    });
+
+    if (!client) {
+      return null;
+    }
+
+    return toDomain(client);
+  }
+
+  async findByNormalizedNombre(
+    normalizedNombre: string,
+    tenantId: string,
+    excludeId?: string,
+  ): Promise<Client | null> {
+    const client = await prisma.client.findFirst({
+      where: {
+        tenantId,
+        normalizedNombre,
+        ...(excludeId && { id: { not: excludeId } }),
+      },
       include: CLIENT_INCLUDE,
     });
 
@@ -233,6 +257,7 @@ class PrismaClientRepositoryImpl implements IClientRepository {
       where: { id },
       data: {
         ...(data.nombre !== undefined && { nombre: data.nombre }),
+        ...(data.normalizedNombre !== undefined && { normalizedNombre: data.normalizedNombre }),
         // Usuario asignado (generador)
         ...(data.generadorId !== undefined && { generadorId: data.generadorId }),
         // Condiciones comerciales
@@ -262,6 +287,32 @@ class PrismaClientRepositoryImpl implements IClientRepository {
     });
 
     return toDomain(client);
+  }
+
+  async delete(id: string, tenantId: string): Promise<boolean> {
+    const result = await prisma.client.deleteMany({
+      where: { id, tenantId },
+    });
+
+    return result.count > 0;
+  }
+
+  async countVacanciesByClientId(id: string, tenantId: string): Promise<number> {
+    return prisma.vacancy.count({
+      where: {
+        clientId: id,
+        tenantId,
+      },
+    });
+  }
+
+  async countInvoicesByClientId(id: string, tenantId: string): Promise<number> {
+    return prisma.invoice.count({
+      where: {
+        clientId: id,
+        tenantId,
+      },
+    });
   }
 }
 
