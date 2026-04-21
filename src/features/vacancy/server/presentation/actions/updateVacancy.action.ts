@@ -101,6 +101,7 @@ export async function updateVacancyAction(
       id,
       tenantId,
       position: data.position,
+      clientId: data.clientId,
       currency: data.currency ?? undefined,
       salaryType: data.salaryType,
       salaryMin: data.salaryMin,

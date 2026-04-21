@@ -37,6 +37,8 @@ export interface CreateVacancyData {
 export interface UpdateVacancyData {
   position?: string;
   recruiterId?: string;
+  clientId?: string;
+  saleType?: VacancySaleType;
   serviceType?: VacancyServiceType;
   currency?: VacancyCurrency | null;
   assignedAt?: Date;

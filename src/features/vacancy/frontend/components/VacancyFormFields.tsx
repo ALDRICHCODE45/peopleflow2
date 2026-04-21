@@ -82,6 +82,8 @@ export interface VacancyFormFieldsProps {
   activeTab?: VacancyFormTab;
   /** Callback when user manually switches tabs */
   onTabChange?: (tab: VacancyFormTab) => void;
+  /** When true, disables recruiter field (edit mode) */
+  isEditMode?: boolean;
 }
 
 export function VacancyFormFields({
@@ -103,6 +105,7 @@ export function VacancyFormFields({
   validationErrors = {},
   activeTab,
   onTabChange,
+  isEditMode = false,
 }: VacancyFormFieldsProps) {
   const serviceTypeOptions = (
     Object.entries(VACANCY_SERVICE_TYPE_LABELS) as [
@@ -248,6 +251,7 @@ export function VacancyFormFields({
                     onChange={(v) => field.handleChange(v)}
                     placeholder="Selecciona el reclutador"
                     searchPlaceholder="Buscar reclutador..."
+                    disabled={isEditMode}
                     renderOption={(opt) => (
                       <>
                         <Avatar className="size-6">
@@ -267,6 +271,11 @@ export function VacancyFormFields({
                       </span>
                     )}
                   />
+                  {isEditMode && (
+                    <p className="text-xs text-muted-foreground">
+                      Para reasignar el reclutador, usá el flujo de reasignación
+                    </p>
+                  )}
                   {isEmpty && (
                     <FieldError>El reclutador es requerido</FieldError>
                   )}

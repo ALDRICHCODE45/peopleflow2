@@ -166,6 +166,7 @@ export function EditVacancyForm({ onClose, vacancy }: EditVacancyFormProps) {
         validationErrors={validationErrors}
         activeTab={activeTab}
         onTabChange={setActiveTab}
+        isEditMode={true}
       />
 
       {/* Action buttons */}

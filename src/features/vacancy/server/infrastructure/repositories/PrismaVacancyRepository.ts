@@ -480,6 +480,8 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       data: {
         ...(data.position !== undefined && { position: data.position }),
         ...(data.recruiterId !== undefined && { recruiterId: data.recruiterId }),
+        ...(data.clientId !== undefined && { clientId: data.clientId }),
+        ...(data.saleType !== undefined && { saleType: data.saleType }),
         ...(data.status !== undefined && { status: data.status }),
         ...(data.serviceType !== undefined && { serviceType: data.serviceType }),
         ...(data.currency !== undefined && { currency: data.currency }),

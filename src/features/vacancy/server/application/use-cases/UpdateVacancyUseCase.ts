@@ -2,6 +2,7 @@ import type {
   VacancyModality,
   VacancyServiceType,
   VacancyCurrency,
+  VacancySaleType,
 } from "@features/vacancy/frontend/types/vacancy.types";
 import type { Vacancy } from "../../domain/entities/Vacancy";
 import type {
@@ -9,11 +10,13 @@ import type {
   UpdateVacancyData,
 } from "../../domain/interfaces/IVacancyRepository";
 import { SalaryRangeVO } from "../../domain/value-objects/SalaryRange";
+import { VacancySaleTypeService } from "../../domain/services/VacancySaleTypeService";
 
 export interface UpdateVacancyInput {
   id: string;
   tenantId: string;
   position?: string;
+  clientId?: string;
   currency?: VacancyCurrency | null;
   salaryType?: "FIXED" | "RANGE";
   salaryMin?: number | null;
@@ -61,7 +64,14 @@ export class UpdateVacancyUseCase {
         };
       }
 
-      // 3. Validate position if provided
+      // 3. Detect client change and recompute saleType if needed
+      let computedSaleType: VacancySaleType | undefined;
+      if (input.clientId !== undefined && input.clientId !== existing.clientId) {
+        const count = await this.vacancyRepo.countByClientId(input.clientId, input.tenantId);
+        computedSaleType = VacancySaleTypeService.determine(count);
+      }
+
+      // 4. Validate position if provided
       if (input.position !== undefined) {
         const position = input.position.trim();
         if (position.length < 2) {
@@ -78,7 +88,7 @@ export class UpdateVacancyUseCase {
         }
       }
 
-      // 4. Validate salary fields if provided
+      // 5. Validate salary fields if provided
       const hasSalaryFields =
         input.salaryType !== undefined ||
         input.salaryMin !== undefined ||
@@ -102,9 +112,11 @@ export class UpdateVacancyUseCase {
         }
       }
 
-      // 5. Build updateData with only defined fields
+      // 6. Build updateData with only defined fields
       const updateData: UpdateVacancyData = {};
       if (input.position !== undefined) updateData.position = input.position.trim();
+      if (input.clientId !== undefined) updateData.clientId = input.clientId;
+      if (computedSaleType !== undefined) updateData.saleType = computedSaleType;
       if (input.currency !== undefined) updateData.currency = input.currency;
       if (input.salaryType !== undefined) updateData.salaryType = input.salaryType;
       if (input.salaryMin !== undefined) updateData.salaryMin = input.salaryMin;
@@ -123,7 +135,7 @@ export class UpdateVacancyUseCase {
       if (input.serviceType !== undefined) updateData.serviceType = input.serviceType;
       if (input.assignedAt !== undefined) updateData.assignedAt = input.assignedAt ?? undefined;
 
-      // 6. Update vacancy
+      // 7. Update vacancy
       const vacancy = await this.vacancyRepo.update(
         input.id,
         input.tenantId,
