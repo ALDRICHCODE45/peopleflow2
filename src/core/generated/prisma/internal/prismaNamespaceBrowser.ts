@@ -584,6 +584,7 @@ export type InvoiceFolioCounterScalarFieldEnum = (typeof InvoiceFolioCounterScal
 export const ClientScalarFieldEnum = {
   id: 'id',
   nombre: 'nombre',
+  normalizedNombre: 'normalizedNombre',
   leadId: 'leadId',
   generadorId: 'generadorId',
   origenId: 'origenId',
