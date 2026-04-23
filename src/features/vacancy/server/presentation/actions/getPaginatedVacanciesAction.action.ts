@@ -119,10 +119,10 @@ export async function getPaginatedVacanciesAction(
 
     // Whitelist de columnas permitidas para sorting (previene SQL injection)
     const allowedSortColumns = [
-      "title",
+      "position",
       "status",
-      "department",
-      "location",
+      "assignedAt",
+      "targetDeliveryDate",
       "createdAt",
       "updatedAt",
     ];

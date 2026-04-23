@@ -78,6 +78,7 @@ const ALLOWED_ORDER_FIELDS = [
   "position",
   "status",
   "assignedAt",
+  "targetDeliveryDate",
   "createdAt",
   "updatedAt",
 ];
