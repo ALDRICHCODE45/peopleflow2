@@ -1,4 +1,5 @@
 import prisma from "@lib/prisma";
+import { ServerErrors } from "@core/shared/constants/error-messages";
 import { Vacancy, type VacancyProps } from "../../domain/entities/Vacancy";
 import type {
   IVacancyRepository,
@@ -169,6 +170,14 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       where.modality = { in: filters.modalities };
     }
 
+    if (filters?.currencies && filters.currencies.length > 0) {
+      where.currency = { in: filters.currencies };
+    }
+
+    if (filters?.salaryTypes && filters.salaryTypes.length > 0) {
+      where.salaryType = { in: filters.salaryTypes };
+    }
+
     if (filters?.recruiterIds && filters.recruiterIds.length > 0) {
       where.recruiterId = { in: filters.recruiterIds };
     }
@@ -204,10 +213,57 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       where.assignedAt = assignedAtFilter;
     }
 
-    if (filters?.targetDeliveryDateFrom || filters?.targetDeliveryDateTo) {
-      const deliveryFilter: Record<string, Date> = {};
-      if (filters.targetDeliveryDateFrom) deliveryFilter.gte = new Date(filters.targetDeliveryDateFrom);
-      if (filters.targetDeliveryDateTo) deliveryFilter.lte = new Date(filters.targetDeliveryDateTo);
+    const deliveryFilter: Record<string, Date> = {};
+
+    if (filters?.targetDeliveryDateFrom) {
+      deliveryFilter.gte = new Date(filters.targetDeliveryDateFrom);
+    }
+
+    if (filters?.targetDeliveryDateTo) {
+      deliveryFilter.lte = new Date(filters.targetDeliveryDateTo);
+    }
+
+    if (filters?.deliveryUrgency) {
+      const today = new Date();
+      const startOfToday = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+        0,
+        0,
+        0,
+        0
+      );
+
+      switch (filters.deliveryUrgency) {
+        case "OVERDUE": {
+          deliveryFilter.lt = startOfToday;
+          break;
+        }
+        case "DUE_3_DAYS":
+        case "DUE_7_DAYS":
+        case "DUE_14_DAYS": {
+          const dueDays =
+            filters.deliveryUrgency === "DUE_3_DAYS"
+              ? 3
+              : filters.deliveryUrgency === "DUE_7_DAYS"
+                ? 7
+                : 14;
+
+          const endDate = new Date(startOfToday);
+          endDate.setDate(endDate.getDate() + dueDays);
+          endDate.setHours(23, 59, 59, 999);
+
+          deliveryFilter.gte = startOfToday;
+          deliveryFilter.lte = endDate;
+          break;
+        }
+        default:
+          break;
+      }
+    }
+
+    if (Object.keys(deliveryFilter).length > 0) {
       where.targetDeliveryDate = deliveryFilter;
     }
 
@@ -814,7 +870,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
     if (!tenantId) {
       return {
         succeeded: [],
-        failed: ids.map((id) => ({ id, reason: "No hay tenant activo" })),
+        failed: ids.map((id) => ({ id, reason: ServerErrors.noActiveTenant })),
       };
     }
 
@@ -895,7 +951,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
     if (!tenantId) {
       return {
         succeeded: [],
-        failed: ids.map((id) => ({ id, reason: "No hay tenant activo" })),
+        failed: ids.map((id) => ({ id, reason: ServerErrors.noActiveTenant })),
       };
     }
 

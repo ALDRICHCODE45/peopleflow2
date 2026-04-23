@@ -16,6 +16,9 @@ import type {
   VacancyStatusType,
   VacancySaleType,
   VacancyModality,
+  VacancyServiceType,
+  VacancyCurrency,
+  VacancySalaryType,
 } from "@/features/vacancy/frontend/types/vacancy.types";
 import { ServerErrors } from "@core/shared/constants/error-messages";
 
@@ -27,7 +30,10 @@ export interface GetPaginatedVacanciesParams {
   globalFilter?: string;
   statuses?: VacancyStatusType[];
   saleTypes?: VacancySaleType[];
+  serviceTypes?: VacancyServiceType[];
   modalities?: VacancyModality[];
+  currencies?: VacancyCurrency[];
+  salaryTypes?: VacancySalaryType[];
   recruiterIds?: string[];
   clientIds?: string[];
   countryCodes?: string[];
@@ -39,6 +45,7 @@ export interface GetPaginatedVacanciesParams {
   assignedAtTo?: string;
   targetDeliveryDateFrom?: string;
   targetDeliveryDateTo?: string;
+  deliveryUrgency?: "OVERDUE" | "DUE_3_DAYS" | "DUE_7_DAYS" | "DUE_14_DAYS";
 }
 
 /**
@@ -133,7 +140,10 @@ export async function getPaginatedVacanciesAction(
       filters: {
         statuses: params.statuses,
         saleTypes: params.saleTypes,
+        serviceTypes: params.serviceTypes,
         modalities: params.modalities,
+        currencies: params.currencies,
+        salaryTypes: params.salaryTypes,
         recruiterIds: params.recruiterIds,
         clientIds: params.clientIds,
         countryCodes: params.countryCodes,
@@ -145,6 +155,7 @@ export async function getPaginatedVacanciesAction(
         assignedAtTo: params.assignedAtTo,
         targetDeliveryDateFrom: params.targetDeliveryDateFrom,
         targetDeliveryDateTo: params.targetDeliveryDateTo,
+        deliveryUrgency: params.deliveryUrgency,
         search: params.globalFilter,
       },
     });

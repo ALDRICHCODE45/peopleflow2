@@ -14,14 +14,32 @@ import { Switch } from "@shadcn/switch";
 import { CurrencyInput } from "@/core/shared/components/CurrencyInput";
 import { DatePicker } from "@shadcn/date-picker";
 import { ScrollArea } from "@shadcn/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@shadcn/select";
 import { useIsMobile } from "@/core/shared/hooks/use-mobile";
-import { useTenantUsersQuery } from "@/features/Administracion/usuarios/frontend/hooks/useUsers";
 import { useClientsForSelect } from "../../hooks/useClientsForSelect";
 import {
   getCountryOptions,
   getRegionOptions,
 } from "@/core/lib/filter-countries";
-import type { VacancySaleType, VacancyModality } from "../../types/vacancy.types";
+import type {
+  VacancySaleType,
+  VacancyModality,
+  VacancyServiceType,
+  VacancyCurrency,
+  VacancySalaryType,
+} from "../../types/vacancy.types";
+import {
+  VACANCY_SERVICE_TYPE_LABELS,
+  VACANCY_CURRENCY_LABELS,
+  VACANCY_SALARY_TYPE_LABELS,
+} from "../../types/vacancy.types";
+import type { DeliveryUrgencyFilter } from "./hooks/useVacanciesFilters";
 
 const SALE_TYPE_OPTIONS: { value: VacancySaleType; label: string }[] = [
   { value: "NUEVA", label: "Nueva" },
@@ -34,18 +52,46 @@ const MODALITY_OPTIONS: { value: VacancyModality; label: string }[] = [
   { value: "HIBRIDO", label: "Híbrido" },
 ];
 
+const SERVICE_TYPE_OPTIONS: { value: VacancyServiceType; label: string }[] = [
+  { value: "END_TO_END", label: VACANCY_SERVICE_TYPE_LABELS.END_TO_END },
+  { value: "SOURCING", label: VACANCY_SERVICE_TYPE_LABELS.SOURCING },
+];
+
+const CURRENCY_OPTIONS: { value: VacancyCurrency; label: string }[] = [
+  { value: "MXN", label: VACANCY_CURRENCY_LABELS.MXN },
+  { value: "USD", label: VACANCY_CURRENCY_LABELS.USD },
+];
+
+const SALARY_TYPE_OPTIONS: { value: VacancySalaryType; label: string }[] = [
+  { value: "FIXED", label: VACANCY_SALARY_TYPE_LABELS.FIXED },
+  { value: "RANGE", label: VACANCY_SALARY_TYPE_LABELS.RANGE },
+];
+
+const DELIVERY_URGENCY_OPTIONS: Array<{ value: DeliveryUrgencyFilter; label: string }> = [
+  { value: "OVERDUE", label: "Vencidas" },
+  { value: "DUE_3_DAYS", label: "Por vencer (3 días)" },
+  { value: "DUE_7_DAYS", label: "Por vencer (7 días)" },
+  { value: "DUE_14_DAYS", label: "Por vencer (14 días)" },
+];
+
 interface Props {
   isSheetOpen: boolean;
   onOpenChange: () => void;
   // Tipo de venta
   selectedSaleTypes: VacancySaleType[];
   onSaleTypesChange: (values: VacancySaleType[]) => void;
+  // Tipo de servicio
+  selectedServiceTypes: VacancyServiceType[];
+  onServiceTypesChange: (values: VacancyServiceType[]) => void;
   // Modalidad
   selectedModalities: VacancyModality[];
   onModalitiesChange: (values: VacancyModality[]) => void;
-  // Recruiter
-  selectedRecruiterIds: string[];
-  onRecruiterIdsChange: (ids: string[]) => void;
+  // Moneda
+  selectedCurrencies: VacancyCurrency[];
+  onCurrenciesChange: (values: VacancyCurrency[]) => void;
+  // Tipo de salario
+  selectedSalaryTypes: VacancySalaryType[];
+  onSalaryTypesChange: (values: VacancySalaryType[]) => void;
   // Cliente
   selectedClientIds: string[];
   onClientIdsChange: (ids: string[]) => void;
@@ -72,6 +118,9 @@ interface Props {
   onTargetDeliveryDateFromChange: (date: string) => void;
   targetDeliveryDateTo: string;
   onTargetDeliveryDateToChange: (date: string) => void;
+  // Urgencia de entrega
+  deliveryUrgency: DeliveryUrgencyFilter | undefined;
+  onDeliveryUrgencyChange: (value: DeliveryUrgencyFilter | undefined) => void;
 }
 
 export function VacancySheetFilters({
@@ -79,10 +128,14 @@ export function VacancySheetFilters({
   onOpenChange,
   selectedSaleTypes,
   onSaleTypesChange,
+  selectedServiceTypes,
+  onServiceTypesChange,
   selectedModalities,
   onModalitiesChange,
-  selectedRecruiterIds,
-  onRecruiterIdsChange,
+  selectedCurrencies,
+  onCurrenciesChange,
+  selectedSalaryTypes,
+  onSalaryTypesChange,
   selectedClientIds,
   onClientIdsChange,
   selectedCountryCodes,
@@ -103,17 +156,13 @@ export function VacancySheetFilters({
   onTargetDeliveryDateFromChange,
   targetDeliveryDateTo,
   onTargetDeliveryDateToChange,
+  deliveryUrgency,
+  onDeliveryUrgencyChange,
 }: Props) {
   const isMobile = useIsMobile();
   const sheetSide = isMobile ? "bottom" : "right";
 
-  const { data: users = [] } = useTenantUsersQuery();
   const { data: clients = [] } = useClientsForSelect();
-
-  const recruiterOptions = useMemo(
-    () => users.map((u) => ({ value: u.id, label: u.name ?? u.email })),
-    [users]
-  );
 
   const clientOptions = useMemo(
     () => (clients ?? []).map((c) => ({ value: c.id, label: c.nombre })),
@@ -154,6 +203,15 @@ export function VacancySheetFilters({
             placeholder="Todos los tipos"
           />
 
+          {/* Tipo de servicio */}
+          <FilterMultiSelect
+            label="Tipo de servicio"
+            options={SERVICE_TYPE_OPTIONS}
+            selected={selectedServiceTypes}
+            onChange={(v) => onServiceTypesChange(v as VacancyServiceType[])}
+            placeholder="Todos los servicios"
+          />
+
           {/* Modalidad */}
           <FilterMultiSelect
             label="Modalidad"
@@ -163,13 +221,22 @@ export function VacancySheetFilters({
             placeholder="Todas las modalidades"
           />
 
-          {/* Recruiter */}
+          {/* Moneda */}
           <FilterMultiSelect
-            label="Recruiter"
-            options={recruiterOptions}
-            selected={selectedRecruiterIds}
-            onChange={onRecruiterIdsChange}
-            placeholder="Todos los recruiters"
+            label="Moneda"
+            options={CURRENCY_OPTIONS}
+            selected={selectedCurrencies}
+            onChange={(v) => onCurrenciesChange(v as VacancyCurrency[])}
+            placeholder="Todas las monedas"
+          />
+
+          {/* Tipo de salario */}
+          <FilterMultiSelect
+            label="Tipo de salario"
+            options={SALARY_TYPE_OPTIONS}
+            selected={selectedSalaryTypes}
+            onChange={(v) => onSalaryTypesChange(v as VacancySalaryType[])}
+            placeholder="Todos los tipos"
           />
 
           {/* Cliente */}
@@ -304,6 +371,33 @@ export function VacancySheetFilters({
                 />
               </div>
             </div>
+          </div>
+
+          {/* Urgencia de entrega */}
+          <div className="space-y-2">
+            <Label className="text-xs font-medium text-muted-foreground">
+              Urgencia de entrega
+            </Label>
+            <Select
+              value={deliveryUrgency ?? "all"}
+              onValueChange={(value) =>
+                onDeliveryUrgencyChange(
+                  value === "all" ? undefined : (value as DeliveryUrgencyFilter)
+                )
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Todas" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todas</SelectItem>
+                {DELIVERY_URGENCY_OPTIONS.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
         </ScrollArea>

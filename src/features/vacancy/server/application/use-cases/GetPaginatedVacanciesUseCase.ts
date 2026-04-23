@@ -2,6 +2,9 @@ import type {
   VacancyStatusType,
   VacancySaleType,
   VacancyModality,
+  VacancyServiceType,
+  VacancyCurrency,
+  VacancySalaryType,
   VacancyDTO,
 } from "@features/vacancy/frontend/types/vacancy.types";
 import type {
@@ -22,7 +25,10 @@ export interface GetPaginatedVacanciesInput {
   filters?: {
     statuses?: VacancyStatusType[];
     saleTypes?: VacancySaleType[];
+    serviceTypes?: VacancyServiceType[];
     modalities?: VacancyModality[];
+    currencies?: VacancyCurrency[];
+    salaryTypes?: VacancySalaryType[];
     recruiterIds?: string[];
     clientIds?: string[];
     countryCodes?: string[];
@@ -34,6 +40,7 @@ export interface GetPaginatedVacanciesInput {
     assignedAtTo?: string;
     targetDeliveryDateFrom?: string;
     targetDeliveryDateTo?: string;
+    deliveryUrgency?: "OVERDUE" | "DUE_3_DAYS" | "DUE_7_DAYS" | "DUE_14_DAYS";
     search?: string;
   };
 }
@@ -66,7 +73,10 @@ export class GetPaginatedVacanciesUseCase {
       const filters: FindVacanciesFilters = {};
       if (input.filters?.statuses?.length) filters.statuses = input.filters.statuses;
       if (input.filters?.saleTypes?.length) filters.saleTypes = input.filters.saleTypes;
+      if (input.filters?.serviceTypes?.length) filters.serviceTypes = input.filters.serviceTypes;
       if (input.filters?.modalities?.length) filters.modalities = input.filters.modalities;
+      if (input.filters?.currencies?.length) filters.currencies = input.filters.currencies;
+      if (input.filters?.salaryTypes?.length) filters.salaryTypes = input.filters.salaryTypes;
       if (input.filters?.recruiterIds?.length) filters.recruiterIds = input.filters.recruiterIds;
       if (input.filters?.clientIds?.length) filters.clientIds = input.filters.clientIds;
       if (input.filters?.countryCodes?.length) filters.countryCodes = input.filters.countryCodes;
@@ -78,6 +88,7 @@ export class GetPaginatedVacanciesUseCase {
       if (input.filters?.assignedAtTo) filters.assignedAtTo = input.filters.assignedAtTo;
       if (input.filters?.targetDeliveryDateFrom) filters.targetDeliveryDateFrom = input.filters.targetDeliveryDateFrom;
       if (input.filters?.targetDeliveryDateTo) filters.targetDeliveryDateTo = input.filters.targetDeliveryDateTo;
+      if (input.filters?.deliveryUrgency) filters.deliveryUrgency = input.filters.deliveryUrgency;
       if (input.filters?.search) filters.search = input.filters.search;
 
       // 4. Execute paginated query

@@ -74,6 +74,8 @@ export interface FindVacanciesFilters {
   saleTypes?: VacancySaleType[];
   serviceTypes?: VacancyServiceType[];
   modalities?: VacancyModality[];
+  currencies?: VacancyCurrency[];
+  salaryTypes?: VacancySalaryType[];
   recruiterIds?: string[];
   clientIds?: string[];
   countryCodes?: string[];
@@ -85,6 +87,7 @@ export interface FindVacanciesFilters {
   assignedAtTo?: string;
   targetDeliveryDateFrom?: string;
   targetDeliveryDateTo?: string;
+  deliveryUrgency?: "OVERDUE" | "DUE_3_DAYS" | "DUE_7_DAYS" | "DUE_14_DAYS";
   search?: string;
 }
 

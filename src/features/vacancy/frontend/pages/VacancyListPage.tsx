@@ -20,14 +20,35 @@ import type { VacancyStatusType } from "../types/vacancy.types";
 import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
 import { enrichVacancyTabsWithCounts } from "../config/vacancyTabsConfig";
 import { useVacanciesFilters } from "../components/tableConfig/hooks/useVacanciesFilters";
-import type { VacancyDTO } from "../types/vacancy.types";
+import type {
+  VacancyDTO,
+  VacancySaleType,
+  VacancyServiceType,
+  VacancyModality,
+  VacancyCurrency,
+  VacancySalaryType,
+} from "../types/vacancy.types";
+import { useAuth } from "@/core/shared/hooks/use-auth";
+import type { DeliveryUrgencyFilter } from "../components/tableConfig/hooks/useVacanciesFilters";
 import { BulkDeleteVacanciesDialog } from "../components/BulkDeleteVacanciesDialog";
 import { BulkReassignVacanciesDialog } from "../components/BulkReassignVacanciesDialog";
 import { BulkDuplicateVacanciesDialog } from "../components/BulkDuplicateVacanciesDialog";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ExpanderIcon, Minimize01Icon } from "@hugeicons/core-free-icons";
 
+type VacancyQuickPreset = "MY_VACANCIES" | "URGENT" | "THIS_WEEK";
+
+const toDateInput = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
 export function VacancyListPage() {
+  const { user } = useAuth();
+  const currentUserId = user?.id ?? null;
+  const currentUserLabel = user?.name ?? user?.email ?? "";
   const { hasAnyPermission, isSuperAdmin } = usePermissions();
   const canCreateVacancy =
     isSuperAdmin ||
@@ -71,9 +92,12 @@ export function VacancyListPage() {
   const {
     filters,
     hasActiveFilters,
-    setStatuses,
+    activeSheetFiltersCount,
     setSaleTypes,
+    setServiceTypes,
     setModalities,
+    setCurrencies,
+    setSalaryTypes,
     setRecruiterIds,
     setClientIds,
     setCountryCodes,
@@ -85,14 +109,18 @@ export function VacancyListPage() {
     setAssignedAtTo,
     setTargetDeliveryDateFrom,
     setTargetDeliveryDateTo,
+    setDeliveryUrgency,
     clearFilters: clearAdvancedFilters,
   } = useVacanciesFilters();
 
-  // Merge tab statuses with multi-select statuses (tabs take precedence when active)
+  const [activePreset, setActivePreset] = useState<VacancyQuickPreset | null>(
+    null,
+  );
+
+  // Tabs are the single source of truth for status filtering
   const effectiveStatuses = useMemo(() => {
-    if (statusFilters.length > 0) return statusFilters;
-    return filters.statuses.length > 0 ? filters.statuses : undefined;
-  }, [statusFilters, filters.statuses]);
+    return statusFilters.length > 0 ? statusFilters : undefined;
+  }, [statusFilters]);
 
   // Query with server-side pagination and all filters
   const { data, isFetching, isPending } = usePaginatedVacanciesQuery({
@@ -102,7 +130,12 @@ export function VacancyListPage() {
     globalFilter: debouncedSearch || undefined,
     statuses: effectiveStatuses,
     saleTypes: filters.saleTypes.length > 0 ? filters.saleTypes : undefined,
+    serviceTypes:
+      filters.serviceTypes.length > 0 ? filters.serviceTypes : undefined,
     modalities: filters.modalities.length > 0 ? filters.modalities : undefined,
+    currencies: filters.currencies.length > 0 ? filters.currencies : undefined,
+    salaryTypes:
+      filters.salaryTypes.length > 0 ? filters.salaryTypes : undefined,
     recruiterIds:
       filters.recruiterIds.length > 0 ? filters.recruiterIds : undefined,
     clientIds: filters.clientIds.length > 0 ? filters.clientIds : undefined,
@@ -117,6 +150,7 @@ export function VacancyListPage() {
     assignedAtTo: filters.assignedAtTo || undefined,
     targetDeliveryDateFrom: filters.targetDeliveryDateFrom || undefined,
     targetDeliveryDateTo: filters.targetDeliveryDateTo || undefined,
+    deliveryUrgency: filters.deliveryUrgency,
   });
 
   // Extract data from paginated response
@@ -138,6 +172,7 @@ export function VacancyListPage() {
   }, [openModal]);
 
   const handleClearFilters = useCallback(() => {
+    setActivePreset(null);
     handleGlobalFilterChange("");
     handleMultiTabChange([]);
     clearAdvancedFilters();
@@ -148,6 +183,66 @@ export function VacancyListPage() {
     clearAdvancedFilters,
     setPagination,
   ]);
+
+  const handlePresetChange = useCallback(
+    (preset: VacancyQuickPreset) => {
+      if (activePreset === preset) {
+        if (preset === "MY_VACANCIES") setRecruiterIds([]);
+        if (preset === "URGENT") setDeliveryUrgency(undefined);
+        if (preset === "THIS_WEEK") {
+          setAssignedAtFrom("");
+          setAssignedAtTo("");
+        }
+        setActivePreset(null);
+        setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+        return;
+      }
+
+      setActivePreset(preset);
+
+      if (preset === "MY_VACANCIES") {
+        setRecruiterIds(currentUserId ? [currentUserId] : []);
+      }
+
+      if (preset === "URGENT") {
+        setDeliveryUrgency("DUE_7_DAYS");
+      }
+
+      if (preset === "THIS_WEEK") {
+        const now = new Date();
+        const day = now.getDay();
+        const diffToMonday = day === 0 ? -6 : 1 - day;
+        const monday = new Date(now);
+        monday.setDate(now.getDate() + diffToMonday);
+        monday.setHours(0, 0, 0, 0);
+
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+
+        setAssignedAtFrom(toDateInput(monday));
+        setAssignedAtTo(toDateInput(sunday));
+      }
+
+      setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+    },
+    [
+      activePreset,
+      setRecruiterIds,
+      setDeliveryUrgency,
+      setAssignedAtFrom,
+      setAssignedAtTo,
+      currentUserId,
+      setPagination,
+    ],
+  );
+
+  const handleRemoveStatusChip = useCallback(
+    (status: VacancyStatusType) => {
+      handleMultiTabChange(statusFilters.filter((s) => s !== status));
+      setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+    },
+    [handleMultiTabChange, statusFilters, setPagination],
+  );
 
   const handleViewDetail = useCallback((id: string) => {
     setSelectedVacancyId(id);
@@ -192,36 +287,100 @@ export function VacancyListPage() {
         onClearFilters: handleClearFilters,
         // Inline filters
         globalFilter: globalFilter ?? "",
-        selectedStatuses: filters.statuses,
-        onStatusesChange: setStatuses,
+        selectedRecruiterIds: filters.recruiterIds,
+        onRecruiterIdsChange: (ids: string[]) => {
+          setActivePreset(null);
+          setRecruiterIds(ids);
+        },
+        currentUserId: currentUserId ?? "",
+        currentUserLabel,
+        activePreset,
+        onPresetChange: handlePresetChange,
+        selectedTabStatuses: statusFilters,
+        onRemoveTabStatus: handleRemoveStatusChip,
         // Sheet filters
         selectedSaleTypes: filters.saleTypes,
-        onSaleTypesChange: setSaleTypes,
+        onSaleTypesChange: (values: VacancySaleType[]) => {
+          setActivePreset(null);
+          setSaleTypes(values);
+        },
+        selectedServiceTypes: filters.serviceTypes,
+        onServiceTypesChange: (values: VacancyServiceType[]) => {
+          setActivePreset(null);
+          setServiceTypes(values);
+        },
         selectedModalities: filters.modalities,
-        onModalitiesChange: setModalities,
-        selectedRecruiterIds: filters.recruiterIds,
-        onRecruiterIdsChange: setRecruiterIds,
+        onModalitiesChange: (values: VacancyModality[]) => {
+          setActivePreset(null);
+          setModalities(values);
+        },
+        selectedCurrencies: filters.currencies,
+        onCurrenciesChange: (values: VacancyCurrency[]) => {
+          setActivePreset(null);
+          setCurrencies(values);
+        },
+        selectedSalaryTypes: filters.salaryTypes,
+        onSalaryTypesChange: (values: VacancySalaryType[]) => {
+          setActivePreset(null);
+          setSalaryTypes(values);
+        },
         selectedClientIds: filters.clientIds,
-        onClientIdsChange: setClientIds,
+        onClientIdsChange: (ids: string[]) => {
+          setActivePreset(null);
+          setClientIds(ids);
+        },
         selectedCountryCodes: filters.countryCodes,
-        onCountryCodesChange: setCountryCodes,
+        onCountryCodesChange: (codes: string[]) => {
+          setActivePreset(null);
+          setCountryCodes(codes);
+        },
         selectedRegionCodes: filters.regionCodes,
-        onRegionCodesChange: setRegionCodes,
+        onRegionCodesChange: (codes: string[]) => {
+          setActivePreset(null);
+          setRegionCodes(codes);
+        },
         requiresPsychometry: filters.requiresPsychometry,
-        onRequiresPsychometryChange: setRequiresPsychometry,
+        onRequiresPsychometryChange: (value: boolean | undefined) => {
+          setActivePreset(null);
+          setRequiresPsychometry(value);
+        },
         salaryMin: filters.salaryMin,
-        onSalaryMinChange: setSalaryMin,
+        onSalaryMinChange: (value: number | undefined) => {
+          setActivePreset(null);
+          setSalaryMin(value);
+        },
         salaryMax: filters.salaryMax,
-        onSalaryMaxChange: setSalaryMax,
+        onSalaryMaxChange: (value: number | undefined) => {
+          setActivePreset(null);
+          setSalaryMax(value);
+        },
         assignedAtFrom: filters.assignedAtFrom,
-        onAssignedAtFromChange: setAssignedAtFrom,
+        onAssignedAtFromChange: (date: string) => {
+          setActivePreset(null);
+          setAssignedAtFrom(date);
+        },
         assignedAtTo: filters.assignedAtTo,
-        onAssignedAtToChange: setAssignedAtTo,
+        onAssignedAtToChange: (date: string) => {
+          setActivePreset(null);
+          setAssignedAtTo(date);
+        },
         targetDeliveryDateFrom: filters.targetDeliveryDateFrom,
-        onTargetDeliveryDateFromChange: setTargetDeliveryDateFrom,
+        onTargetDeliveryDateFromChange: (date: string) => {
+          setActivePreset(null);
+          setTargetDeliveryDateFrom(date);
+        },
         targetDeliveryDateTo: filters.targetDeliveryDateTo,
-        onTargetDeliveryDateToChange: setTargetDeliveryDateTo,
+        onTargetDeliveryDateToChange: (date: string) => {
+          setActivePreset(null);
+          setTargetDeliveryDateTo(date);
+        },
+        deliveryUrgency: filters.deliveryUrgency,
+        onDeliveryUrgencyChange: (value: DeliveryUrgencyFilter | undefined) => {
+          setActivePreset(null);
+          setDeliveryUrgency(value);
+        },
         hasActiveSheetFilters: hasActiveFilters,
+        activeSheetFiltersCount,
         onBulkDelete: handleBulkDelete,
         onBulkReasign: handleBulkReassign,
         onBulkDuplicate: handleBulkDuplicate,
@@ -246,9 +405,12 @@ export function VacancyListPage() {
       globalFilter,
       filters,
       hasActiveFilters,
-      setStatuses,
+      activeSheetFiltersCount,
       setSaleTypes,
+      setServiceTypes,
       setModalities,
+      setCurrencies,
+      setSalaryTypes,
       setRecruiterIds,
       setClientIds,
       setCountryCodes,
@@ -260,6 +422,13 @@ export function VacancyListPage() {
       setAssignedAtTo,
       setTargetDeliveryDateFrom,
       setTargetDeliveryDateTo,
+      setDeliveryUrgency,
+      activePreset,
+      currentUserId,
+      currentUserLabel,
+      handlePresetChange,
+      statusFilters,
+      handleRemoveStatusChip,
       handleBulkDelete,
       handleBulkReassign,
       handleBulkDuplicate,
