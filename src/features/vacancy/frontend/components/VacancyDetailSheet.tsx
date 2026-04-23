@@ -67,7 +67,6 @@ import { RecruiterAssignmentTimeline } from "./RecruiterAssignmentTimeline";
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/core/shared/ui/shadcn/tooltip";
 
@@ -243,10 +242,12 @@ export function VacancyDetailSheet({
               <SheetHeader className="px-4 md:px-6 pt-4 md:pt-6 pb-3 md:pb-4 border-b">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
-                    <SheetTitle className="text-base md:text-lg font-semibold ">
+                    <SheetTitle className="text-base md:text-lg font-semibold leading-tight">
                       <Tooltip>
-                        <TooltipTrigger>
-                          <span className="truncate">{vacancy.position}</span>
+                        <TooltipTrigger asChild>
+                          <p className="block w-full max-w-full truncate pr-1 md:pr-2">
+                            {vacancy.position}
+                          </p>
                         </TooltipTrigger>
                         <TooltipContent>{vacancy.position}</TooltipContent>
                       </Tooltip>
