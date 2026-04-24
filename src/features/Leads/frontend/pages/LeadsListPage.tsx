@@ -16,8 +16,10 @@ import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
 import { Button } from "@/core/shared/ui/shadcn/button";
 import { LeadSheetForm } from "../components/TableView/LeadSheetForm";
 import { IncompleteLeadDialog } from "../components/TableView/IncompleteLeadDialog";
+import { CommercialTermsDialog } from "../components/CommercialTermsDialog";
 import { useServerPaginatedTable } from "@/core/shared/hooks/useServerPaginatedTable";
 import type { Lead, LeadStatus } from "../types";
+import type { CommercialTermsFormData } from "@features/Finanzas/Clientes/frontend/types/client.types";
 import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
 import { enrichLeadTabsWithCounts } from "../config/leadTabsConfig";
 import { useBulkDeleteLeads, useUpdateLeadStatus } from "../hooks/useLeads";
@@ -45,6 +47,11 @@ export function LeadsListPage() {
   const [leadToEdit, setLeadToEdit] = useState<Lead | null>(null);
   const [isEditingFromIncomplete, setIsEditingFromIncomplete] = useState(false);
   const updateStatusMutation = useUpdateLeadStatus();
+
+  // Commercial terms dialog state — intercepta transición a POSICIONES_ASIGNADAS
+  const [commercialTermsPending, setCommercialTermsPending] = useState<{
+    lead: Lead;
+  } | null>(null);
 
   // Focus mode state
   const [isFocusMode, setIsFocusMode] = useState(false);
@@ -224,9 +231,15 @@ export function LeadsListPage() {
     openModal();
   }, [openModal]);
 
-  // Status change desde la tabla — mismo journey que el Kanban
+  // Status change desde la tabla — intercepta transiciones con diálogo previo
   const handleStatusChange = useCallback(
     (lead: Lead, newStatus: LeadStatus) => {
+      // Interceptar: POSICIONES_ASIGNADAS requiere condiciones comerciales
+      if (newStatus === "POSICIONES_ASIGNADAS") {
+        setCommercialTermsPending({ lead });
+        return;
+      }
+
       updateStatusMutation.mutate(
         { leadId: lead.id, newStatus },
         {
@@ -245,6 +258,39 @@ export function LeadsListPage() {
     },
     [updateStatusMutation],
   );
+
+  const handleCommercialTermsSubmit = useCallback(
+    (terms: CommercialTermsFormData) => {
+      if (!commercialTermsPending) return;
+      updateStatusMutation.mutate(
+        {
+          leadId: commercialTermsPending.lead.id,
+          newStatus: "POSICIONES_ASIGNADAS",
+          commercialTerms: terms,
+        },
+        {
+          onSettled: () => {
+            setCommercialTermsPending(null);
+          },
+          onError: (error: Error) => {
+            if (error.message === "INCOMPLETE_DATA") {
+              const typedError = error as Error & { missingFields: string[] };
+              setLeadToEdit(commercialTermsPending.lead);
+              setIncompleteData({
+                lead: commercialTermsPending.lead,
+                missingFields: typedError.missingFields || [],
+              });
+            }
+          },
+        },
+      );
+    },
+    [commercialTermsPending, updateStatusMutation],
+  );
+
+  const handleCommercialTermsCancel = useCallback(() => {
+    setCommercialTermsPending(null);
+  }, []);
 
   const handleEditLeadFromIncomplete = useCallback(() => {
     setIncompleteData(null);
@@ -467,6 +513,20 @@ export function LeadsListPage() {
             selectedLeadIds={bulkDialogState.selectedLeads.map((l) => l.id)}
             selectedCount={bulkDialogState.selectedLeads.length}
           />
+
+          {/* Commercial Terms Dialog — intercepta transición a POSICIONES_ASIGNADAS */}
+          {commercialTermsPending && (
+            <CommercialTermsDialog
+              open={!!commercialTermsPending}
+              onOpenChange={(open) => {
+                if (!open) handleCommercialTermsCancel();
+              }}
+              companyName={commercialTermsPending.lead.companyName}
+              onSubmit={handleCommercialTermsSubmit}
+              onCancel={handleCommercialTermsCancel}
+              isSubmitting={updateStatusMutation.isPending}
+            />
+          )}
         </div>
       </CardContent>
     </Card>

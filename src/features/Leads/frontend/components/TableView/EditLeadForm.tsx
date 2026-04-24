@@ -20,9 +20,14 @@ import CountrySelect from "@/core/shared/components/CountrySelect";
 import RegionSelect from "@/core/shared/components/RegionSelect";
 import { SearchableSelect } from "@/core/shared/components/SearchableSelect";
 import { CreatableSelect } from "@/core/shared/components/CreatableSelect";
-import { useMemo, useState } from "react";
-import { useEditLeadForm } from "../../hooks/useEditLeadForm";
+import { useCallback, useMemo, useState } from "react";
+import {
+  useEditLeadForm,
+  type PendingCommercialTerms,
+} from "../../hooks/useEditLeadForm";
+import { CommercialTermsDialog } from "../CommercialTermsDialog";
 import type { Lead } from "../../types";
+import type { CommercialTermsFormData } from "@features/Finanzas/Clientes/frontend/types/client.types";
 import {
   LEAD_EMPLOYEE_OPTIONS,
   LEAD_STATUS_OPTIONS,
@@ -35,6 +40,17 @@ interface EditLeadFormProps {
 }
 
 export function EditLeadForm({ lead, onOpenChange }: EditLeadFormProps) {
+  // Estado para el diálogo de condiciones comerciales
+  const [commercialTermsPending, setCommercialTermsPending] =
+    useState<PendingCommercialTerms | null>(null);
+
+  const handleCommercialTermsRequired = useCallback(
+    (pending: PendingCommercialTerms) => {
+      setCommercialTermsPending(pending);
+    },
+    [],
+  );
+
   const {
     form,
     sectors,
@@ -44,7 +60,26 @@ export function EditLeadForm({ lead, onOpenChange }: EditLeadFormProps) {
     handleSectorChange,
     isSubmitting,
     users,
-  } = useEditLeadForm({ lead, onOpenChange });
+    submitWithCommercialTerms,
+    cancelCommercialTerms,
+  } = useEditLeadForm({
+    lead,
+    onOpenChange,
+    onCommercialTermsRequired: handleCommercialTermsRequired,
+  });
+
+  const handleCommercialTermsSubmit = useCallback(
+    async (terms: CommercialTermsFormData) => {
+      await submitWithCommercialTerms(terms);
+      setCommercialTermsPending(null);
+    },
+    [submitWithCommercialTerms],
+  );
+
+  const handleCommercialTermsCancel = useCallback(() => {
+    cancelCommercialTerms();
+    setCommercialTermsPending(null);
+  }, [cancelCommercialTerms]);
 
   const userOptions = useMemo(
     () =>
@@ -453,6 +488,20 @@ export function EditLeadForm({ lead, onOpenChange }: EditLeadFormProps) {
           {isSubmitting ? "Guardando..." : "Guardar cambios"}
         </Button>
       </div>
+
+      {/* Diálogo de condiciones comerciales — intercepta transición a POSICIONES_ASIGNADAS */}
+      {commercialTermsPending && (
+        <CommercialTermsDialog
+          open={!!commercialTermsPending}
+          onOpenChange={(open) => {
+            if (!open) handleCommercialTermsCancel();
+          }}
+          companyName={commercialTermsPending.companyName}
+          onSubmit={handleCommercialTermsSubmit}
+          onCancel={handleCommercialTermsCancel}
+          isSubmitting={isSubmitting}
+        />
+      )}
     </form>
   );
 }

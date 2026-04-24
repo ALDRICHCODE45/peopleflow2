@@ -10,25 +10,41 @@ import {
 } from "./useCatalogs";
 import { useTenantUsersQuery } from "@/features/Administracion/usuarios/frontend/hooks/useUsers";
 import { editLeadSchema } from "../schemas/lead.schema";
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import type { Lead } from "../types";
+import type { CommercialTermsFormData } from "@features/Finanzas/Clientes/frontend/types/client.types";
 import { showToast } from "@/core/shared/components/ShowToast";
 import {
   updateLeadAction,
   updateLeadStatusAction,
 } from "../../server/presentation/actions/lead.actions";
 
+/** Datos pendientes cuando se requiere el diálogo de condiciones comerciales */
+export interface PendingCommercialTerms {
+  leadId: string;
+  companyName: string;
+  formData: Partial<Omit<Lead, "status">>;
+}
+
+interface UseEditLeadFormParams {
+  lead: Lead;
+  onOpenChange: (open: boolean) => void;
+  /** Callback invocado cuando la transición a POSICIONES_ASIGNADAS requiere condiciones comerciales */
+  onCommercialTermsRequired?: (pending: PendingCommercialTerms) => void;
+}
+
 export function useEditLeadForm({
   lead,
   onOpenChange,
-}: {
-  lead: Lead;
-  onOpenChange: (open: boolean) => void;
-}) {
+  onCommercialTermsRequired,
+}: UseEditLeadFormParams) {
   const queryClient = useQueryClient();
   const [selectedSectorId, setSelectedSectorId] = useState<string | undefined>(
     lead.sectorId ?? undefined,
   );
+
+  // Ref para almacenar los datos del form pendientes mientras el dialog está abierto
+  const pendingFormDataRef = useRef<Partial<Omit<Lead, "status">> | null>(null);
 
   const { data: sectors = [] } = useSectors();
   const { data: subsectors = [] } = useSubsectorsBySector(
@@ -42,10 +58,12 @@ export function useEditLeadForm({
       leadId,
       data,
       newStatus,
+      commercialTerms,
     }: {
       leadId: string;
       data: Partial<Omit<Lead, "status">>;
       newStatus?: string;
+      commercialTerms?: CommercialTermsFormData;
     }) => {
       // Update general fields
       const updateResult = await updateLeadAction(leadId, data);
@@ -58,6 +76,7 @@ export function useEditLeadForm({
         const statusResult = await updateLeadStatusAction(
           leadId,
           newStatus as Lead["status"],
+          commercialTerms,
         );
         if (statusResult.error) {
           throw new Error(statusResult.error);
@@ -100,6 +119,17 @@ export function useEditLeadForm({
       });
     },
     onError: (error: Error) => {
+      // Datos incompletos: el usuario ya está en el form, mostrar mensaje descriptivo
+      if (error.message === "INCOMPLETE_DATA") {
+        showToast({
+          type: "error",
+          title: "Datos incompletos",
+          description:
+            "Completa todos los campos obligatorios antes de avanzar a este estado",
+        });
+        return;
+      }
+
       showToast({
         type: "error",
         title: "Error",
@@ -130,16 +160,56 @@ export function useEditLeadForm({
     },
     onSubmit: async ({ value }) => {
       const { status, ...dataWithoutStatus } = value;
+      const isStatusChanging = status !== lead.status;
+
+      // Interceptar: si el nuevo status es POSICIONES_ASIGNADAS, pedir condiciones comerciales
+      if (
+        isStatusChanging &&
+        status === "POSICIONES_ASIGNADAS" &&
+        onCommercialTermsRequired
+      ) {
+        pendingFormDataRef.current = dataWithoutStatus;
+        onCommercialTermsRequired({
+          leadId: lead.id,
+          companyName: value.companyName,
+          formData: dataWithoutStatus,
+        });
+        return;
+      }
 
       await editLeadMutation.mutateAsync({
         leadId: lead.id,
         data: dataWithoutStatus,
-        newStatus: status !== lead.status ? status : undefined,
+        newStatus: isStatusChanging ? status : undefined,
       });
 
       onOpenChange(false);
     },
   });
+
+  /** Completa la mutación pendiente con las condiciones comerciales del diálogo */
+  const submitWithCommercialTerms = useCallback(
+    async (commercialTerms: CommercialTermsFormData) => {
+      const formData = pendingFormDataRef.current;
+      if (!formData) return;
+
+      await editLeadMutation.mutateAsync({
+        leadId: lead.id,
+        data: formData,
+        newStatus: "POSICIONES_ASIGNADAS",
+        commercialTerms,
+      });
+
+      pendingFormDataRef.current = null;
+      onOpenChange(false);
+    },
+    [lead.id, editLeadMutation, onOpenChange],
+  );
+
+  /** Cancela la mutación pendiente (el usuario cerró el diálogo sin confirmar) */
+  const cancelCommercialTerms = useCallback(() => {
+    pendingFormDataRef.current = null;
+  }, []);
 
   const handleSectorChange = (value: string | undefined) => {
     setSelectedSectorId(value);
@@ -156,5 +226,7 @@ export function useEditLeadForm({
     handleSectorChange,
     isSubmitting: editLeadMutation.isPending,
     users,
+    submitWithCommercialTerms,
+    cancelCommercialTerms,
   };
 }

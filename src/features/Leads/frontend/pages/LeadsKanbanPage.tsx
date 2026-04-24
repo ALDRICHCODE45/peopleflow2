@@ -18,7 +18,7 @@ import { LeadDetailSheet } from "../components/TableView/LeadDetailSheet";
 import { LeadSheetForm } from "../components/TableView/LeadSheetForm";
 import { DeleteLeadAlertDialog } from "../components/TableView/DeleteLeadAlertDialog";
 import { ReasignLeadDialog } from "../components/KanbanView/ReasignLeadDialog";
-import { CommercialTermsDialog } from "../components/KanbanView/CommercialTermsDialog";
+import { CommercialTermsDialog } from "../components/CommercialTermsDialog";
 import { IncompleteLeadDialog } from "../components/TableView/IncompleteLeadDialog";
 import type { Lead } from "../types";
 import type { CommercialTermsFormData } from "@features/Finanzas/Clientes/frontend/types/client.types";
