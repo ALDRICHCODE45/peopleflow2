@@ -3,13 +3,15 @@ export interface VacancyEntryReminderEmailData {
   candidateName: string;
   vacancyPosition: string;
   entryDate: string; // formatted date
+  vacancyId: string;
   appUrl: string;
 }
 
 export function generateVacancyEntryReminderEmail(
   data: VacancyEntryReminderEmailData
 ): string {
-  const { recipientName, candidateName, vacancyPosition, entryDate, appUrl } = data;
+  const { recipientName, candidateName, vacancyPosition, entryDate, vacancyId, appUrl } = data;
+  const vacancyUrl = `${appUrl}/reclutamiento/vacantes?vacancyId=${vacancyId}`;
 
   return `
 <!DOCTYPE html>
@@ -82,8 +84,8 @@ export function generateVacancyEntryReminderEmail(
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
                 <tr>
                   <td align="center">
-                    <a href="${appUrl}" target="_blank" style="display: inline-block; padding: 16px 40px; background-color: #9333ea; color: #ffffff; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
-                      Ver en Sistema
+                    <a href="${vacancyUrl}" target="_blank" style="display: inline-block; padding: 16px 40px; background-color: #9333ea; color: #ffffff; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
+                      Ver Vacante
                     </a>
                   </td>
                 </tr>
@@ -133,7 +135,8 @@ export function generateVacancyEntryReminderEmail(
 export function generateVacancyEntryReminderPlainText(
   data: VacancyEntryReminderEmailData
 ): string {
-  const { recipientName, candidateName, vacancyPosition, entryDate, appUrl } = data;
+  const { recipientName, candidateName, vacancyPosition, entryDate, vacancyId, appUrl } = data;
+  const vacancyUrl = `${appUrl}/reclutamiento/vacantes?vacancyId=${vacancyId}`;
 
   return `
 Recordatorio de Ingreso
@@ -146,7 +149,7 @@ Por favor, accede al sistema y actualiza el estado de la vacante para registrar 
 
 Recuerda actualizar el estado de la vacante a Placement para completar el proceso de reclutamiento.
 
-Ver en sistema: ${appUrl}
+Ver vacante: ${vacancyUrl}
 
 ---
 © 2025 PeopleFlow

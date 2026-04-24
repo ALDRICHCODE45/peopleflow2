@@ -42,6 +42,7 @@ export interface PaginatedVacanciesQueryParams {
   targetDeliveryDateFrom?: string;
   targetDeliveryDateTo?: string;
   deliveryUrgency?: "OVERDUE" | "DUE_3_DAYS" | "DUE_7_DAYS" | "DUE_14_DAYS";
+  vacancyId?: string;
 }
 
 /** Query Key Factory - CRÍTICO: incluir TODOS los parámetros */
@@ -76,6 +77,7 @@ export const getPaginatedVacanciesQueryKey = (
       targetDeliveryDateFrom: params.targetDeliveryDateFrom,
       targetDeliveryDateTo: params.targetDeliveryDateTo,
       deliveryUrgency: params.deliveryUrgency,
+      vacancyId: params.vacancyId,
     },
   ] as const;
 
@@ -129,6 +131,7 @@ export function usePaginatedVacanciesQuery(
         targetDeliveryDateFrom: params.targetDeliveryDateFrom,
         targetDeliveryDateTo: params.targetDeliveryDateTo,
         deliveryUrgency: params.deliveryUrgency,
+        vacancyId: params.vacancyId,
       });
 
       if ("error" in result && result.error) {

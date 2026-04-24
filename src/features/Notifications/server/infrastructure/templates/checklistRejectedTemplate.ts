@@ -11,7 +11,7 @@ export function generateChecklistRejectedEmail(
   data: ChecklistRejectedData
 ): string {
   const { recruiterName, vacancyPosition, clientName, rejectionReason, appUrl, vacancyId } = data;
-  const vacancyUrl = `${appUrl}/reclutamiento/vacantes/${vacancyId}`;
+  const vacancyUrl = `${appUrl}/reclutamiento/vacantes?vacancyId=${vacancyId}`;
 
   return `
 <!DOCTYPE html>
@@ -146,7 +146,7 @@ export function generateChecklistRejectedPlainText(
   data: ChecklistRejectedData
 ): string {
   const { recruiterName, vacancyPosition, clientName, rejectionReason, appUrl, vacancyId } = data;
-  const vacancyUrl = `${appUrl}/reclutamiento/vacantes/${vacancyId}`;
+  const vacancyUrl = `${appUrl}/reclutamiento/vacantes?vacancyId=${vacancyId}`;
 
   return `
 Checklist Rechazado

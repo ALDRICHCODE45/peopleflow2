@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useCallback, useState } from "react";
+import { useMemo, useCallback, useState, useEffect } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { usePaginatedVacanciesQuery } from "../hooks/usePaginatedVacanciesQuery";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
@@ -58,9 +59,24 @@ export function VacancyListPage() {
     ]);
 
   const { isOpen, openModal, closeModal } = useModalState();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const rawVacancyId = searchParams.get("vacancyId");
+  const sanitizedVacancyId =
+    rawVacancyId && !/^(\[.+\]|<.+>)$/.test(rawVacancyId)
+      ? rawVacancyId
+      : null;
   const [selectedVacancyId, setSelectedVacancyId] = useState<string | null>(
-    null,
+    sanitizedVacancyId,
   );
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSelectedVacancyId((current) =>
+      current === sanitizedVacancyId ? current : sanitizedVacancyId,
+    );
+  }, [sanitizedVacancyId]);
   const [selectionResetSignal, setSelectionResetSignal] = useState(0);
   const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
   const [bulkReassignOpen, setBulkReassignOpen] = useState(false);
@@ -151,6 +167,7 @@ export function VacancyListPage() {
     targetDeliveryDateFrom: filters.targetDeliveryDateFrom || undefined,
     targetDeliveryDateTo: filters.targetDeliveryDateTo || undefined,
     deliveryUrgency: filters.deliveryUrgency,
+    vacancyId: selectedVacancyId || undefined,
   });
 
   // Extract data from paginated response
@@ -244,9 +261,24 @@ export function VacancyListPage() {
     [handleMultiTabChange, statusFilters, setPagination],
   );
 
-  const handleViewDetail = useCallback((id: string) => {
-    setSelectedVacancyId(id);
-  }, []);
+  const handleViewDetail = useCallback(
+    (id: string) => {
+      setSelectedVacancyId(id);
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("vacancyId", id);
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    },
+    [pathname, router, searchParams],
+  );
+
+  const handleCloseDetail = useCallback(() => {
+    setSelectedVacancyId(null);
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("vacancyId");
+    const queryString = params.toString();
+    const nextUrl = queryString ? `${pathname}?${queryString}` : pathname;
+    router.replace(nextUrl, { scroll: false });
+  }, [pathname, router, searchParams]);
 
   const handleBulkDelete = useCallback((rows: VacancyDTO[]) => {
     setSelectedBulkIds(rows.map((vacancy) => vacancy.id));
@@ -528,7 +560,7 @@ export function VacancyListPage() {
       {/* Detail Sheet — shown when a row is selected */}
       <VacancyDetailSheet
         vacancyId={selectedVacancyId}
-        onClose={() => setSelectedVacancyId(null)}
+        onClose={handleCloseDetail}
       />
 
       <BulkDeleteVacanciesDialog

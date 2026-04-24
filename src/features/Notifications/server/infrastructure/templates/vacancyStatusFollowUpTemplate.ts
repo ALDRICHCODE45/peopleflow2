@@ -10,7 +10,7 @@ export function generateVacancyStatusFollowUpEmail(
   data: VacancyStatusFollowUpData
 ): string {
   const { recruiterName, vacancyPosition, clientName, vacancyId, appUrl } = data;
-  const vacancyUrl = `${appUrl}/reclutamiento/vacantes/${vacancyId}`;
+  const vacancyUrl = `${appUrl}/reclutamiento/vacantes?vacancyId=${vacancyId}`;
 
   return `
 <!DOCTYPE html>
@@ -135,7 +135,7 @@ export function generateVacancyStatusFollowUpPlainText(
   data: VacancyStatusFollowUpData
 ): string {
   const { recruiterName, vacancyPosition, clientName, vacancyId, appUrl } = data;
-  const vacancyUrl = `${appUrl}/reclutamiento/vacantes/${vacancyId}`;
+  const vacancyUrl = `${appUrl}/reclutamiento/vacantes?vacancyId=${vacancyId}`;
 
   return `
 \u00a1Felicidades! Candidatos Entregados

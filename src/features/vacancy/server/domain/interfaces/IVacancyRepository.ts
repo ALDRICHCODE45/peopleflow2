@@ -89,6 +89,7 @@ export interface FindVacanciesFilters {
   targetDeliveryDateTo?: string;
   deliveryUrgency?: "OVERDUE" | "DUE_3_DAYS" | "DUE_7_DAYS" | "DUE_14_DAYS";
   search?: string;
+  vacancyId?: string;
 }
 
 export interface FindPaginatedVacanciesParams {

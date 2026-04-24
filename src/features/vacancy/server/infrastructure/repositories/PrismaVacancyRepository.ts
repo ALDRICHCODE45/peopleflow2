@@ -155,6 +155,10 @@ export class PrismaVacancyRepository implements IVacancyRepository {
   ): Record<string, unknown> {
     const where: Record<string, unknown> = { tenantId };
 
+    if (filters?.vacancyId) {
+      where.id = filters.vacancyId;
+    }
+
     if (filters?.statuses && filters.statuses.length > 0) {
       where.status = { in: filters.statuses };
     }

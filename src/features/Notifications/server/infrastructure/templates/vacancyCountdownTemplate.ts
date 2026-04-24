@@ -64,7 +64,7 @@ export function generateVacancyCountdownEmail(
     vacancyId,
     appUrl,
   } = data;
-  const vacancyUrl = `${appUrl}/reclutamiento/vacantes/${vacancyId}`;
+  const vacancyUrl = `${appUrl}/reclutamiento/vacantes?vacancyId=${vacancyId}`;
   const title = getCountdownTitle(daysRemaining);
   const message = getCountdownMessage(daysRemaining, vacancyPosition, clientName);
   const urgency = getUrgencyColor(daysRemaining);
@@ -201,7 +201,7 @@ export function generateVacancyCountdownPlainText(
     vacancyId,
     appUrl,
   } = data;
-  const vacancyUrl = `${appUrl}/reclutamiento/vacantes/${vacancyId}`;
+  const vacancyUrl = `${appUrl}/reclutamiento/vacantes?vacancyId=${vacancyId}`;
   const title = getCountdownTitle(daysRemaining);
   const message = getCountdownPlainMessage(daysRemaining, vacancyPosition, clientName);
   const formattedDate = new Date(targetDate).toLocaleDateString("es-MX", {

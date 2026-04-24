@@ -15,6 +15,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/reclutamiento/vacantes/:id",
+        destination: "/reclutamiento/vacantes?vacancyId=:id",
+        permanent: false,
+      },
+      {
         source: "/:path*",
         has: [{ type: "host", value: "peopleflow.tech" }],
         destination: "https://www.peopleflow.tech/:path*",

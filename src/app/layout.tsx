@@ -72,7 +72,7 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <html lang="es" className={outfit.variable}>
+      <html lang="es" className={outfit.variable} suppressHydrationWarning>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >

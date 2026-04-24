@@ -428,6 +428,7 @@ const handleVacancyPrePlacementEntryReminder = inngest.createFunction(
         candidateName,
         vacancyPosition,
         entryDate: formattedDate,
+        vacancyId,
         appUrl: APP_URL,
       };
 
@@ -542,6 +543,7 @@ const handleSendStandaloneEmail = inngest.createFunction(
             recruiterName: data.recruiterName,
             vacancyPosition: data.vacancyPosition,
             clientName: data.clientName,
+            vacancyId: data.vacancyId,
             appUrl: APP_URL,
           };
 

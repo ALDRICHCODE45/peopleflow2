@@ -12,7 +12,7 @@ export function generateAttachmentRejectedEmail(
   data: AttachmentRejectedData
 ): string {
   const { recruiterName, vacancyPosition, clientName, fileName, rejectionReason, appUrl, vacancyId } = data;
-  const vacancyUrl = `${appUrl}/reclutamiento/vacantes/${vacancyId}`;
+  const vacancyUrl = `${appUrl}/reclutamiento/vacantes?vacancyId=${vacancyId}`;
 
   return `
 <!DOCTYPE html>
@@ -147,7 +147,7 @@ export function generateAttachmentRejectedPlainText(
   data: AttachmentRejectedData
 ): string {
   const { recruiterName, vacancyPosition, clientName, fileName, rejectionReason, appUrl, vacancyId } = data;
-  const vacancyUrl = `${appUrl}/reclutamiento/vacantes/${vacancyId}`;
+  const vacancyUrl = `${appUrl}/reclutamiento/vacantes?vacancyId=${vacancyId}`;
 
   return `
 Archivo Rechazado

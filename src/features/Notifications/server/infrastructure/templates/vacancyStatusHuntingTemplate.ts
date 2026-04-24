@@ -10,7 +10,7 @@ export function generateVacancyStatusHuntingEmail(
   data: VacancyStatusHuntingData
 ): string {
   const { recruiterName, vacancyPosition, clientName, vacancyId, appUrl } = data;
-  const vacancyUrl = `${appUrl}/reclutamiento/vacantes/${vacancyId}`;
+  const vacancyUrl = `${appUrl}/reclutamiento/vacantes?vacancyId=${vacancyId}`;
 
   return `
 <!DOCTYPE html>
@@ -131,7 +131,7 @@ export function generateVacancyStatusHuntingPlainText(
   data: VacancyStatusHuntingData
 ): string {
   const { recruiterName, vacancyPosition, clientName, vacancyId, appUrl } = data;
-  const vacancyUrl = `${appUrl}/reclutamiento/vacantes/${vacancyId}`;
+  const vacancyUrl = `${appUrl}/reclutamiento/vacantes?vacancyId=${vacancyId}`;
 
   return `
 Tu Vacante Est\u00e1 Lista para Hunting

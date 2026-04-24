@@ -42,6 +42,7 @@ export interface GetPaginatedVacanciesInput {
     targetDeliveryDateTo?: string;
     deliveryUrgency?: "OVERDUE" | "DUE_3_DAYS" | "DUE_7_DAYS" | "DUE_14_DAYS";
     search?: string;
+    vacancyId?: string;
   };
 }
 
@@ -90,6 +91,7 @@ export class GetPaginatedVacanciesUseCase {
       if (input.filters?.targetDeliveryDateTo) filters.targetDeliveryDateTo = input.filters.targetDeliveryDateTo;
       if (input.filters?.deliveryUrgency) filters.deliveryUrgency = input.filters.deliveryUrgency;
       if (input.filters?.search) filters.search = input.filters.search;
+      if (input.filters?.vacancyId) filters.vacancyId = input.filters.vacancyId;
 
       // 4. Execute paginated query
       const result = await this.vacancyRepo.findPaginated({

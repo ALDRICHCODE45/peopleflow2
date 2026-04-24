@@ -21,7 +21,7 @@ export function generateVacancyStaleAlertEmail(
     vacancyId,
     appUrl,
   } = data;
-  const vacancyUrl = `${appUrl}/reclutamiento/vacantes/${vacancyId}`;
+  const vacancyUrl = `${appUrl}/reclutamiento/vacantes?vacancyId=${vacancyId}`;
 
   return `
 <!DOCTYPE html>
@@ -155,7 +155,7 @@ export function generateVacancyStaleAlertPlainText(
     vacancyId,
     appUrl,
   } = data;
-  const vacancyUrl = `${appUrl}/reclutamiento/vacantes/${vacancyId}`;
+  const vacancyUrl = `${appUrl}/reclutamiento/vacantes?vacancyId=${vacancyId}`;
 
   return `
 Vacante sin Movimiento

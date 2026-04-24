@@ -2,14 +2,15 @@ export interface VacancyRecruiterAssignedData {
   recruiterName: string;
   vacancyPosition: string;
   clientName: string;
+  vacancyId: string;
   appUrl: string;
 }
 
 export function generateVacancyRecruiterAssignedEmail(
   data: VacancyRecruiterAssignedData
 ): string {
-  const { recruiterName, vacancyPosition, clientName, appUrl } = data;
-  const vacanciesUrl = `${appUrl}/reclutamiento/vacantes`;
+  const { recruiterName, vacancyPosition, clientName, vacancyId, appUrl } = data;
+  const vacanciesUrl = `${appUrl}/reclutamiento/vacantes?vacancyId=${vacancyId}`;
 
   return `
 <!DOCTYPE html>
@@ -129,8 +130,8 @@ export function generateVacancyRecruiterAssignedEmail(
 export function generateVacancyRecruiterAssignedPlainText(
   data: VacancyRecruiterAssignedData
 ): string {
-  const { recruiterName, vacancyPosition, clientName, appUrl } = data;
-  const vacanciesUrl = `${appUrl}/reclutamiento/vacantes`;
+  const { recruiterName, vacancyPosition, clientName, vacancyId, appUrl } = data;
+  const vacanciesUrl = `${appUrl}/reclutamiento/vacantes?vacancyId=${vacancyId}`;
 
   return `
 Nueva Vacante Asignada

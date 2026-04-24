@@ -46,6 +46,7 @@ export interface GetPaginatedVacanciesParams {
   targetDeliveryDateFrom?: string;
   targetDeliveryDateTo?: string;
   deliveryUrgency?: "OVERDUE" | "DUE_3_DAYS" | "DUE_7_DAYS" | "DUE_14_DAYS";
+  vacancyId?: string;
 }
 
 /**
@@ -157,6 +158,7 @@ export async function getPaginatedVacanciesAction(
         targetDeliveryDateTo: params.targetDeliveryDateTo,
         deliveryUrgency: params.deliveryUrgency,
         search: params.globalFilter,
+        vacancyId: params.vacancyId,
       },
     });
 
