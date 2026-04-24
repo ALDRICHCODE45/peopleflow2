@@ -41,12 +41,15 @@ export async function addChecklistItemAction(
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({
       userId: session.user.id,
-      permissions: [PermissionActions.vacantes.gestionar],
+      permissions: [
+        PermissionActions.vacantes.editar,
+        PermissionActions.vacantes.gestionar,
+      ],
       tenantId,
     });
 
     if (!hasPermission) {
-      return { error: "Sin permisos para gestionar el checklist" };
+      return { error: "Sin permisos para modificar el checklist" };
     }
 
     const useCase = new AddChecklistItemUseCase(
@@ -101,12 +104,15 @@ export async function updateChecklistItemAction(
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({
       userId: session.user.id,
-      permissions: [PermissionActions.vacantes.gestionar],
+      permissions: [
+        PermissionActions.vacantes.editar,
+        PermissionActions.vacantes.gestionar,
+      ],
       tenantId,
     });
 
     if (!hasPermission) {
-      return { error: "Sin permisos para gestionar el checklist" };
+      return { error: "Sin permisos para modificar el checklist" };
     }
 
     const useCase = new UpdateChecklistItemUseCase(prismaVacancyChecklistRepository);
@@ -151,12 +157,15 @@ export async function deleteChecklistItemAction(
 
     const hasPermission = await new CheckAnyPermissonUseCase().execute({
       userId: session.user.id,
-      permissions: [PermissionActions.vacantes.gestionar],
+      permissions: [
+        PermissionActions.vacantes.editar,
+        PermissionActions.vacantes.gestionar,
+      ],
       tenantId,
     });
 
     if (!hasPermission) {
-      return { error: "Sin permisos para gestionar el checklist", success: false };
+      return { error: "Sin permisos para modificar el checklist", success: false };
     }
 
     const useCase = new DeleteChecklistItemUseCase(prismaVacancyChecklistRepository);

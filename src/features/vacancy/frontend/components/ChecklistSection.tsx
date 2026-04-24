@@ -420,7 +420,10 @@ export function ChecklistSection({ vacancy }: ChecklistSectionProps) {
 
   const canManage =
     isSuperAdmin ||
-    hasAnyPermission([PermissionActions.vacantes.gestionar]);
+    hasAnyPermission([
+      PermissionActions.vacantes.editar,
+      PermissionActions.vacantes.gestionar,
+    ]);
 
   const checklistItems = vacancy.checklistItems ?? [];
   const sortedItems = [...checklistItems].sort((a, b) => a.order - b.order);
@@ -443,7 +446,12 @@ export function ChecklistSection({ vacancy }: ChecklistSectionProps) {
         <span className="text-sm font-medium text-muted-foreground">
           {checklistItems.length} requisito(s) definido(s)
         </span>
-        <PermissionGuard permissions={[PermissionActions.vacantes.gestionar]}>
+        <PermissionGuard
+          permissions={[
+            PermissionActions.vacantes.editar,
+            PermissionActions.vacantes.gestionar,
+          ]}
+        >
           <Button
             variant="outline"
             size="sm"
@@ -485,7 +493,12 @@ export function ChecklistSection({ vacancy }: ChecklistSectionProps) {
       )}
 
       {/* Inline add form */}
-      <PermissionGuard permissions={[PermissionActions.vacantes.gestionar]}>
+      <PermissionGuard
+        permissions={[
+          PermissionActions.vacantes.editar,
+          PermissionActions.vacantes.gestionar,
+        ]}
+      >
         {showAddForm && (
           <div className="flex gap-2 mt-2">
             <Input
