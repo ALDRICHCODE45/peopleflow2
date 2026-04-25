@@ -46,5 +46,15 @@ export async function requireVerifiedSession() {
     redirect(Routes.verifyOtp);
   }
 
+  // Defense-in-depth: verificar que el usuario no esté desactivado (banned)
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { banned: true },
+  });
+
+  if (user?.banned) {
+    redirect(`${Routes.signIn}?error=inactive_user`);
+  }
+
   return session;
 }

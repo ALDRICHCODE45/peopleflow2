@@ -67,6 +67,19 @@ export const UserColumns: ColumnDef<TenantUser>[] = [
     size: 25,
   },
   {
+    header: "Estado",
+    accessorKey: "isActive",
+    cell: ({ row }) => {
+      const isActive = row.getValue("isActive") as boolean;
+      return (
+        <Badge variant={isActive ? "success" : "destructive"}>
+          {isActive ? "Activo" : "Inactivo"}
+        </Badge>
+      );
+    },
+    size: 10,
+  },
+  {
     header: "Creación",
     accessorKey: "createdAt",
     cell: ({ row }) => {

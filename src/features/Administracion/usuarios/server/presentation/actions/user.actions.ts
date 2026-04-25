@@ -39,6 +39,7 @@ export interface TenantUser {
   name: string | null;
   avatar?: string | null;
   roles: Array<{ id: string; name: string }>;
+  isActive: boolean;
   createdAt?: Date;
 }
 
@@ -139,7 +140,13 @@ export async function getTenantUsersAction(): Promise<GetTenantUsersResult> {
       return { error: result.error || "Error al obtener usuarios", users: [] };
     }
 
-    return { error: null, users: result.users };
+    // Mapear usuarios con isActive = !banned
+    const usersWithActiveState = result.users.map((user) => ({
+      ...user,
+      isActive: !user.banned,
+    }));
+
+    return { error: null, users: usersWithActiveState };
   } catch (error) {
     console.error("Error in getTenantUsersAction:", error);
     return { error: "Error al obtener usuarios", users: [] };
@@ -686,5 +693,75 @@ export async function inviteUserToTenantAction(data: {
   } catch (error) {
     console.error("Error in inviteUserToTenantAction:", error);
     return { error: "Error al invitar usuario", success: false };
+  }
+}
+
+/**
+ * Activa o desactiva un usuario
+ * SEGURIDAD: Valida permisos usuarios:editar y previene auto-desactivación
+ */
+export interface ToggleUserActiveInput {
+  userId: string;
+  isActive: boolean; // target state
+}
+
+export interface ToggleUserActiveResult {
+  error: string | null;
+  success: boolean;
+}
+
+export async function toggleUserActiveAction(
+  data: ToggleUserActiveInput
+): Promise<ToggleUserActiveResult> {
+  try {
+    const headersList = await headers();
+    const session = await auth.api.getSession({ headers: headersList });
+
+    if (!session?.user) {
+      return { error: ServerErrors.notAuthenticated, success: false };
+    }
+
+    // Obtener tenant activo - necesario para context y permisos
+    const { getActiveTenantId } = await import("../helpers/getActiveTenant.helper");
+    const tenantId = await getActiveTenantId();
+    if (!tenantId) {
+      return { error: ServerErrors.noActiveTenant, success: false };
+    }
+
+    // Verificar permiso usuarios:editar
+    const { CheckAnyPermissonUseCase } = await import(
+      "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase"
+    );
+    const hasPermission = await new CheckAnyPermissonUseCase().execute({
+      userId: session.user.id,
+      permissions: [PermissionActions.usuarios.editar],
+      tenantId,
+    });
+
+    if (!hasPermission) {
+      return { error: "Sin permisos para editar usuarios", success: false };
+    }
+
+    // Ejecutar caso de uso
+    const { ToggleUserActiveUseCase } = await import(
+      "../../application/use-cases/ToggleUserActiveUseCase"
+    );
+    const useCase = new ToggleUserActiveUseCase();
+    const result = await useCase.execute({
+      userId: data.userId,
+      currentUserId: session.user.id,
+      isActive: data.isActive,
+      tenantId,
+    });
+
+    if (!result.success) {
+      return { error: result.error || "Error al cambiar estado", success: false };
+    }
+
+    revalidatePath(Routes.admin.usuarios);
+    return { error: null, success: true };
+  } catch (error) {
+    console.error("Error in toggleUserActiveAction:", error);
+    return { error: "Che, pasó algo inesperado. Probá de nuevo.", success: false };
   }
 }

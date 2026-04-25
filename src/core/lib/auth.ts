@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { captcha, emailOTP } from "better-auth/plugins";
+import { admin, captcha, emailOTP } from "better-auth/plugins";
 import prisma from "./prisma";
 import nodemailer from "nodemailer";
 import {
@@ -46,6 +46,7 @@ export const auth = betterAuth({
     enabled: true, // Habilita autenticación con email y contraseña
   },
   plugins: [
+    admin(),
     ...(isDev
       ? []
       : [

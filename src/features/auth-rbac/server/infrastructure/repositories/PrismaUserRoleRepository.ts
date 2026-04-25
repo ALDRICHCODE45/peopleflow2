@@ -100,6 +100,7 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
           name: userRole.user.name,
           image: userRole.user.image,
           avatar: userRole.user.avatar,
+          banned: userRole.user.banned,
           roles: [],
         });
       }
@@ -334,6 +335,7 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
           name: true,
           image: true,
           avatar: true,
+          banned: true,
           createdAt: true,
           userRoles: {
             where: { tenantId },
@@ -354,6 +356,7 @@ export class PrismaUserRoleRepository implements IUserRoleRepository {
       name: user.name,
       image: user.image,
       avatar: user.avatar,
+      banned: user.banned,
       createdAt: user.createdAt,
       roles: user.userRoles.map((ur) => ({
         id: ur.role.id,

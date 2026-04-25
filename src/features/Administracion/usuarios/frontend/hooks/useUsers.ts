@@ -8,6 +8,7 @@ import {
   deleteUserFromTenantAction,
   updateUserRolesAction,
   getAvailableRolesAction,
+  toggleUserActiveAction,
 } from "../../server/presentation/actions/user.actions";
 import type { TenantUser, CreateUserData, UpdateUserData } from "../types";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
@@ -232,6 +233,53 @@ export function useUpdateUserRoles() {
       showToast({
         title: "Ocurrió un Error",
         description: "Error al actualizar roles",
+        type: "error",
+      });
+    },
+  });
+}
+
+/**
+ * Hook para activar/desactivar un usuario
+ */
+export function useToggleUserActive() {
+  const queryClient = useQueryClient();
+  const { tenant } = useTenant();
+
+  return useMutation({
+    mutationFn: async ({
+      userId,
+      isActive,
+    }: {
+      userId: string;
+      isActive: boolean;
+    }) => {
+      const result = await toggleUserActiveAction({ userId, isActive });
+      if (!result.success) {
+        throw new Error(result.error || "Error al cambiar estado");
+      }
+      return result;
+    },
+    onSuccess: (_, variables) => {
+      const action = variables.isActive ? "activado" : "desactivado";
+      showToast({
+        title: "Usuario actualizado",
+        description: `El usuario fue ${action} correctamente`,
+        type: "success",
+      });
+      if (tenant?.id) {
+        queryClient.invalidateQueries({
+          queryKey: getUsersQueryKey(tenant.id),
+        });
+        queryClient.invalidateQueries({
+          queryKey: usersQueryKeys.paginated(tenant.id),
+        });
+      }
+    },
+    onError: (error: Error) => {
+      showToast({
+        title: "Error",
+        description: error.message || "Error al cambiar el estado del usuario",
         type: "error",
       });
     },

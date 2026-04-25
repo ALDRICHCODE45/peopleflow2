@@ -40,11 +40,23 @@ export function useSignInForm(getCaptchaToken: () => string | null) {
       const result = await login(value.email, value.password, token);
 
       if (!result.success) {
-        showToast({
-          type: "error",
-          title: "Error de autenticacion",
-          description: result.error || "Credenciales incorrectas",
-        });
+        const isBanned =
+          result.error?.toLowerCase().includes("banned") ||
+          result.error?.toLowerCase().includes("desactivad");
+
+        if (isBanned) {
+          showToast({
+            type: "error",
+            title: "Usuario inactivo",
+            description: "Tu usuario está inactivo. Contactá a un administrador.",
+          });
+        } else {
+          showToast({
+            type: "error",
+            title: "Error de autenticacion",
+            description: result.error || "Credenciales incorrectas",
+          });
+        }
         return;
       }
 

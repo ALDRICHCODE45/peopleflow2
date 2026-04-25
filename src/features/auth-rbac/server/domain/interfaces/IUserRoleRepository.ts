@@ -12,6 +12,7 @@ export interface UserWithRoles {
   name: string | null;
   image: string | null;
   avatar: string | null;
+  banned?: boolean;
   roles: Array<{ id: string; name: string }>;
   createdAt?: Date;
 }

@@ -51,13 +51,14 @@ export class GetPaginatedUsersUseCase {
         },
       });
 
-      // Mapear a DTOs
+      // Mapear a DTOs con isActive = !banned
       const usersDto: TenantUser[] = result.data.map((user) => ({
         id: user.id,
         email: user.email,
         name: user.name,
         avatar: user.avatar,
         roles: user.roles,
+        isActive: !user.banned, // Mapeo banned → isActive
         createdAt: user.createdAt,
       }));
 

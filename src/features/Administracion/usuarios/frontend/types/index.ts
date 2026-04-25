@@ -8,6 +8,7 @@ export interface TenantUser {
   name: string | null;
   avatar?: string | null;
   roles: Array<{ id: string; name: string }>;
+  isActive: boolean;
   createdAt?: Date;
 }
 

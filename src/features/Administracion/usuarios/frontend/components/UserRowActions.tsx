@@ -19,6 +19,7 @@ import { UserSheetForm } from "./UserSheetForm";
 import { UserRolesSheet } from "./UserRolesSheet";
 import { DeleteUserAlertDialog } from "./DeleteUserAlertDialog";
 import { InviteToTenantDialog } from "./InviteToTenantDialog";
+import { ToggleUserActiveDialog } from "./ToggleUserActiveDialog";
 import { useAuth } from "@/core/shared/hooks/use-auth";
 
 interface UserRowActionsProps {
@@ -31,9 +32,13 @@ export function UserRowActions({ user }: UserRowActionsProps) {
   const [isRolesOpen, setIsRolesOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isInviteOpen, setIsInviteOpen] = useState(false);
+  const [isToggleActiveOpen, setIsToggleActiveOpen] = useState(false);
 
   // No mostrar opcion de invitar para el usuario actual (previene auto-invitacion)
   const canShowInviteOption = user.id !== currentUser?.id;
+  
+  // No mostrar opción de desactivar para el usuario actual (previene auto-desactivación)
+  const canShowToggleOption = user.id !== currentUser?.id;
 
   return (
     <>
@@ -68,6 +73,19 @@ export function UserRowActions({ user }: UserRowActionsProps) {
               Roles
             </DropdownMenuItem>
           </PermissionGuard>
+
+          {canShowToggleOption && (
+            <PermissionGuard
+              permissions={[
+                PermissionActions.usuarios.editar,
+                PermissionActions.usuarios.gestionar,
+              ]}
+            >
+              <DropdownMenuItem onClick={() => setIsToggleActiveOpen(true)}>
+                {user.isActive ? "Desactivar" : "Activar"}
+              </DropdownMenuItem>
+            </PermissionGuard>
+          )}
 
           {canShowInviteOption && (
             <PermissionGuard
@@ -139,6 +157,22 @@ export function UserRowActions({ user }: UserRowActionsProps) {
             user={user}
             open={isInviteOpen}
             onOpenChange={setIsInviteOpen}
+          />
+        </PermissionGuard>
+      )}
+
+      {/* Dialog para activar/desactivar usuario */}
+      {canShowToggleOption && (
+        <PermissionGuard
+          permissions={[
+            PermissionActions.usuarios.editar,
+            PermissionActions.usuarios.gestionar,
+          ]}
+        >
+          <ToggleUserActiveDialog
+            user={user}
+            open={isToggleActiveOpen}
+            onOpenChange={setIsToggleActiveOpen}
           />
         </PermissionGuard>
       )}

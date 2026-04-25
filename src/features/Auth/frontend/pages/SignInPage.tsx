@@ -19,7 +19,9 @@ import {
   PasswordInputInput,
 } from "@/core/shared/ui/shadcn/password-input";
 import { useCallback, useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import CookieConsent from "@/core/shared/components/cookie-consent";
+import { showToast } from "@/core/shared/components/ShowToast";
 
 const isDev = process.env.NODE_ENV !== "production";
 
@@ -50,10 +52,24 @@ interface SignInPageProps {
 
 export const SignInPage = ({ cloudflareSiteKey }: SignInPageProps) => {
   const { isPending } = useAuth();
+  const searchParams = useSearchParams();
+  const errorToastFiredRef = useRef(false);
 
   const turnstileRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
   const tokenRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (errorToastFiredRef.current) return;
+    if (searchParams.get("error") === "inactive_user") {
+      errorToastFiredRef.current = true;
+      showToast({
+        type: "error",
+        title: "Sesión inválida",
+        description: "Sesión inválida: tu usuario está inactivo.",
+      });
+    }
+  }, [searchParams]);
 
   const getCaptchaToken = useCallback((): string | null => {
     return tokenRef.current;
