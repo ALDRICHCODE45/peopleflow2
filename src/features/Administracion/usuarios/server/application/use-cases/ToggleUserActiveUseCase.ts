@@ -1,10 +1,10 @@
-import { auth } from "@lib/auth";
+import prisma from "@lib/prisma";
 
 export interface ToggleUserActiveInput {
   userId: string;
   currentUserId: string;
-  isActive: boolean; // target state
-  tenantId: string; // for audit/context
+  isActive: boolean;
+  tenantId: string;
 }
 
 export interface ToggleUserActiveOutput {
@@ -12,16 +12,11 @@ export interface ToggleUserActiveOutput {
   error?: string;
 }
 
-/**
- * Use Case para activar/desactivar usuarios mediante Better Auth admin plugin
- * Usa banUser/unbanUser para controlar el acceso y revocar sesiones automáticamente
- */
 export class ToggleUserActiveUseCase {
   async execute(input: ToggleUserActiveInput): Promise<ToggleUserActiveOutput> {
     try {
       const { userId, currentUserId, isActive } = input;
 
-      // Prevenir auto-desactivación
       if (userId === currentUserId) {
         return {
           success: false,
@@ -29,21 +24,29 @@ export class ToggleUserActiveUseCase {
         };
       }
 
-      // Ejecutar ban/unban según el estado objetivo
+      // Mutamos `banned` directo en la DB en vez de usar `auth.api.banUser`:
+      // el plugin admin() de Better Auth tiene su propio ACL basado en
+      // `User.role`, incompatible con el RBAC multi-tenant del proyecto.
+      // El plugin sigue interceptando el sign-in al leer este campo.
       if (!isActive) {
-        // Desactivar = banear usuario
-        await auth.api.banUser({
-          body: {
-            userId,
-            banReason: "Desactivado por administrador",
-            // banExpiresIn opcional - null/undefined = permanente hasta que se reactive manualmente
-          },
-        });
+        await prisma.$transaction([
+          prisma.user.update({
+            where: { id: userId },
+            data: {
+              banned: true,
+              banReason: "Desactivado por administrador",
+              banExpires: null,
+            },
+          }),
+          prisma.session.deleteMany({ where: { userId } }),
+        ]);
       } else {
-        // Activar = quitar ban
-        await auth.api.unbanUser({
-          body: {
-            userId,
+        await prisma.user.update({
+          where: { id: userId },
+          data: {
+            banned: false,
+            banReason: null,
+            banExpires: null,
           },
         });
       }
