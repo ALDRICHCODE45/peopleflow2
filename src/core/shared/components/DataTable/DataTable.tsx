@@ -280,21 +280,17 @@ export function DataTable<TData, TValue>({
         typeof updater === "function" ? updater(sorting) : updater;
 
       if (isServerSide) {
-        // En server-side, notificar al padre y resetear a página 0
+        // En server-side, notificar al padre.
+        // El reset a pageIndex: 0 lo maneja useServerPaginatedTable.setSorting internamente.
+        // No hacer doble-reset acá: dispara una carrera con la navegación de página
+        // cuando TanStack normaliza el sort al inicio (ver bug de paginación en Users).
         onSortingChangeProp?.(newSorting);
-        onPaginationChangeProp?.({ ...pagination, pageIndex: 0 });
       } else {
         // En client-side, actualizar estado interno
         setInternalSorting(newSorting);
       }
     },
-    [
-      isServerSide,
-      onSortingChangeProp,
-      onPaginationChangeProp,
-      pagination,
-      sorting,
-    ],
+    [isServerSide, onSortingChangeProp, sorting],
   );
 
   // Handler para cambios de column pinning

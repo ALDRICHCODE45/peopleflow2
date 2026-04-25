@@ -80,19 +80,21 @@ export function useCreateUser() {
       }
       return result.user;
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       showToast({
         title: "Operación Exitosa",
         description: "Usuario creado exitosamente",
         type: "success",
       });
       if (tenant?.id) {
-        queryClient.invalidateQueries({
-          queryKey: getUsersQueryKey(tenant.id),
-        });
-        queryClient.invalidateQueries({
-          queryKey: usersQueryKeys.paginated(tenant.id),
-        });
+        await Promise.all([
+          queryClient.invalidateQueries({
+            queryKey: getUsersQueryKey(tenant.id),
+          }),
+          queryClient.invalidateQueries({
+            queryKey: usersQueryKeys.paginated(tenant.id),
+          }),
+        ]);
       }
     },
     onError: (error: Error) => {
@@ -128,19 +130,21 @@ export function useUpdateUser() {
       }
       return result.user;
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       showToast({
         title: "Operación Exitosa",
         description: "Usuario actualizado exitosamente",
         type: "success",
       });
       if (tenant?.id) {
-        queryClient.invalidateQueries({
-          queryKey: getUsersQueryKey(tenant.id),
-        });
-        queryClient.invalidateQueries({
-          queryKey: usersQueryKeys.paginated(tenant.id),
-        });
+        await Promise.all([
+          queryClient.invalidateQueries({
+            queryKey: getUsersQueryKey(tenant.id),
+          }),
+          queryClient.invalidateQueries({
+            queryKey: usersQueryKeys.paginated(tenant.id),
+          }),
+        ]);
       }
     },
     onError: (error: Error) => {
@@ -168,19 +172,21 @@ export function useDeleteUserFromTenant() {
       }
       return result;
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       showToast({
         title: "Operación Exitosa",
         description: "Usuario eliminado exitosamente",
         type: "success",
       });
       if (tenant?.id) {
-        queryClient.invalidateQueries({
-          queryKey: getUsersQueryKey(tenant.id),
-        });
-        queryClient.invalidateQueries({
-          queryKey: usersQueryKeys.paginated(tenant.id),
-        });
+        await Promise.all([
+          queryClient.invalidateQueries({
+            queryKey: getUsersQueryKey(tenant.id),
+          }),
+          queryClient.invalidateQueries({
+            queryKey: usersQueryKeys.paginated(tenant.id),
+          }),
+        ]);
       }
     },
     onError: (error: Error) => {
@@ -214,19 +220,21 @@ export function useUpdateUserRoles() {
       }
       return result;
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       showToast({
         title: "Operación Exitosa",
         description: "Roles actualizados exitosamente",
         type: "success",
       });
       if (tenant?.id) {
-        queryClient.invalidateQueries({
-          queryKey: getUsersQueryKey(tenant.id),
-        });
-        queryClient.invalidateQueries({
-          queryKey: usersQueryKeys.paginated(tenant.id),
-        });
+        await Promise.all([
+          queryClient.invalidateQueries({
+            queryKey: getUsersQueryKey(tenant.id),
+          }),
+          queryClient.invalidateQueries({
+            queryKey: usersQueryKeys.paginated(tenant.id),
+          }),
+        ]);
       }
     },
     onError: (error: Error) => {
@@ -260,7 +268,7 @@ export function useToggleUserActive() {
       }
       return result;
     },
-    onSuccess: (_, variables) => {
+    onSuccess: async (_, variables) => {
       const action = variables.isActive ? "activado" : "desactivado";
       showToast({
         title: "Usuario actualizado",
@@ -268,12 +276,14 @@ export function useToggleUserActive() {
         type: "success",
       });
       if (tenant?.id) {
-        queryClient.invalidateQueries({
-          queryKey: getUsersQueryKey(tenant.id),
-        });
-        queryClient.invalidateQueries({
-          queryKey: usersQueryKeys.paginated(tenant.id),
-        });
+        await Promise.all([
+          queryClient.invalidateQueries({
+            queryKey: getUsersQueryKey(tenant.id),
+          }),
+          queryClient.invalidateQueries({
+            queryKey: usersQueryKeys.paginated(tenant.id),
+          }),
+        ]);
       }
     },
     onError: (error: Error) => {

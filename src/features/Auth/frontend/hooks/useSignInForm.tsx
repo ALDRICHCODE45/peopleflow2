@@ -48,7 +48,8 @@ export function useSignInForm(getCaptchaToken: () => string | null) {
           showToast({
             type: "error",
             title: "Usuario inactivo",
-            description: "Tu usuario está inactivo. Contactá a un administrador.",
+            description:
+              "Tu usuario ha sido desactivado, si crees que esto es un error, contacta con un administrador.",
           });
         } else {
           showToast({
