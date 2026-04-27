@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import { useForm } from "@tanstack/react-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAddCandidate } from "./useVacancyDetailMutations";
@@ -61,6 +61,7 @@ export function useAddCandidateForm({
       getInputProps: getCvInputProps,
       openFileDialog: openCvDialog,
       removeFile: removeCvFileInternal,
+      clearFiles: clearCvFiles,
       handleDragEnter: cvDragEnter,
       handleDragLeave: cvDragLeave,
       handleDragOver: cvDragOver,
@@ -180,16 +181,26 @@ export function useAddCandidateForm({
         }
       }
 
-      // Clear the ref for next use
+      // Reset form + files for next use, then close
+      form.reset();
+      clearCvFiles();
       cvFileRef.current = null;
       onClose();
     },
   });
 
+  // Full reset — called when dialog closes (covers cancel + submit + backdrop click)
+  const resetForm = useCallback(() => {
+    form.reset();
+    clearCvFiles();
+    cvFileRef.current = null;
+  }, [form, clearCvFiles]);
+
   return {
     form,
     isSubmitting:
       addCandidateMutation.isPending || uploadCvMutation.isPending,
+    resetForm,
     // CV helpers
     cvFiles,
     cvIsDragging,

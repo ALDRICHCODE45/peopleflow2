@@ -48,6 +48,7 @@ export function AddCandidateDialog({
   const {
     form,
     isSubmitting,
+    resetForm,
     cvFiles,
     cvIsDragging,
     cvErrors,
@@ -64,7 +65,7 @@ export function AddCandidateDialog({
   const cvFile = cvFiles[0]?.file instanceof File ? cvFiles[0].file : null;
 
   return (
-    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+    <Dialog open={open} onOpenChange={(o) => { if (!o) { resetForm(); onClose(); } }}>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>Agregar candidato</DialogTitle>
@@ -161,7 +162,7 @@ export function AddCandidateDialog({
         </ScrollArea>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
+          <Button variant="outline" onClick={() => { resetForm(); onClose(); }}>
             Cancelar
           </Button>
           <Button
