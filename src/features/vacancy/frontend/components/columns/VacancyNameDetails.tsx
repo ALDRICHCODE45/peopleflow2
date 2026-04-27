@@ -28,9 +28,9 @@ export function VacancyNameDetails({
       <div className="flex items-center gap-1.5">
         <Tooltip>
           <TooltipTrigger>
-            <span className="truncate font-medium group-hover:text-primary transition-colors group-hover:underline underline-offset-4 decoration-primary/50">
+            <p className="truncate w-32 font-medium group-hover:text-primary transition-colors group-hover:underline underline-offset-4 decoration-primary/50">
               {vacancy.position || "Sin posición"}
-            </span>
+            </p>
           </TooltipTrigger>
           <TooltipContent>
             <span>{vacancy.position || "Sin posición"}</span>
