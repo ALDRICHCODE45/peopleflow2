@@ -397,17 +397,21 @@ const handleVacancyPrePlacementEntryReminder = inngest.createFunction(
       return { skipped: true, reason: "Recruiter not found" };
     }
 
-    // Step 4: Fetch finalist candidate name
-    const finalistCandidate = await step.run("fetch-finalist", async () => {
-      return prisma.vacancyCandidate.findFirst({
-        where: { vacancyId, tenantId, isInTerna: true },
-        orderBy: { createdAt: "asc" },
-        select: { firstName: true, lastName: true },
+    // Step 4: Fetch hired candidate name via FK
+    const hiredCandidate = await step.run("fetch-hired-candidate", async () => {
+      const v = await prisma.vacancy.findFirst({
+        where: { id: vacancyId, tenantId },
+        select: {
+          hiredCandidate: {
+            select: { firstName: true, lastName: true },
+          },
+        },
       });
+      return v?.hiredCandidate ?? null;
     });
 
-    const candidateName = finalistCandidate
-      ? `${finalistCandidate.firstName} ${finalistCandidate.lastName}`
+    const candidateName = hiredCandidate
+      ? `${hiredCandidate.firstName} ${hiredCandidate.lastName}`
       : "el candidato";
 
     const formattedDate = new Date(entryDate).toLocaleDateString("es-MX", {
@@ -469,13 +473,36 @@ const handleVacancyPlacementCongratsEmail = inngest.createFunction(
       return { skipped: true, reason: "No candidate email" };
     }
 
-    // Get vacancy entry date
+    // Get vacancy entry date and verify hired candidate
     const vacancy = await step.run("fetch-vacancy", async () => {
       return prisma.vacancy.findFirst({
         where: { id: vacancyId, tenantId },
-        select: { entryDate: true, createdById: true },
+        select: {
+          entryDate: true,
+          createdById: true,
+          hiredCandidate: {
+            select: { email: true, status: true },
+          },
+        },
       });
     });
+
+    // Defense in depth: verify the hired candidate is CONTRATADO and email matches
+    if (vacancy?.hiredCandidate) {
+      const hired = vacancy.hiredCandidate;
+      if (hired.status !== "CONTRATADO") {
+        console.warn(
+          `[PlacementCongrats] Hired candidate for vacancy ${vacancyId} is not CONTRATADO (status: ${hired.status}). Skipping email.`
+        );
+        return { skipped: true, reason: "Hired candidate not CONTRATADO" };
+      }
+      if (hired.email !== candidateEmail) {
+        console.warn(
+          `[PlacementCongrats] Email mismatch for vacancy ${vacancyId}: event has ${candidateEmail}, hired candidate has ${hired.email}. Skipping email.`
+        );
+        return { skipped: true, reason: "Candidate email mismatch with hired candidate" };
+      }
+    }
 
     const formattedDate = vacancy?.entryDate
       ? new Date(vacancy.entryDate).toLocaleDateString("es-MX", {

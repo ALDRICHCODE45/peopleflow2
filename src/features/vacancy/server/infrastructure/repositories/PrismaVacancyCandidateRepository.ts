@@ -259,10 +259,10 @@ export class PrismaVacancyCandidateRepository
         where: { id, vacancyId, tenantId },
         data: { status: "CONTRATADO", isInTerna: false },
       }),
-      // Auto-discard all other candidates in the same vacancy
+      // Auto-discard all other candidates and clear stale flags
       prisma.vacancyCandidate.updateMany({
         where: { vacancyId, tenantId, id: { not: id } },
-        data: { status: "DESCARTADO" },
+        data: { status: "DESCARTADO", isInTerna: false, isFinalist: false },
       }),
     ]);
   }

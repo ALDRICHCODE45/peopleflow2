@@ -128,6 +128,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       recruiter: { select: { name: true, email: true, avatar: true } },
       client: { select: { nombre: true, warrantyMonths: true } },
       warrantyVacancy: { select: { id: true } },
+      hiredCandidate: { select: { id: true, firstName: true, lastName: true, email: true } },
       candidates: {
         orderBy: { createdAt: "asc" as const },
         include: {

@@ -221,22 +221,24 @@ export class TransitionVacancyStatusUseCase {
           },
         };
       } else if (newStatus === "PLACEMENT" && sendCongratsEmail) {
-        // Find finalist candidate for congrats email
-        const finalistCandidate = candidates.find(
-          (c) => c.isFinalist || c.isInTerna
-        );
-        inngestEvent = {
-          name: InngestEvents.vacancy.placementCongratsEmail,
-          data: {
-            vacancyId,
-            tenantId,
-            vacancyPosition: vacancy.position,
-            candidateName: finalistCandidate
-              ? `${finalistCandidate.firstName ?? ""} ${finalistCandidate.lastName ?? ""}`.trim()
-              : "",
-            candidateEmail: finalistCandidate?.email ?? null,
-          },
-        };
+        // Use the hired candidate FK (set during PRE_PLACEMENT transition)
+        const hired = vacancy.hiredCandidate;
+        if (hired) {
+          inngestEvent = {
+            name: InngestEvents.vacancy.placementCongratsEmail,
+            data: {
+              vacancyId,
+              tenantId,
+              vacancyPosition: vacancy.position,
+              candidateName: `${hired.firstName ?? ""} ${hired.lastName ?? ""}`.trim(),
+              candidateEmail: hired.email ?? null,
+            },
+          };
+        } else {
+          console.warn(
+            `[TransitionVacancyStatus] PLACEMENT congrats email requested but no hiredCandidate on vacancy ${vacancyId}. Skipping email.`
+          );
+        }
       }
 
       return { success: true, vacancy: updatedVacancy.toJSON(), inngestEvent };
