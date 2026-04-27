@@ -914,7 +914,6 @@ export function VacancyDetailSheet({
                 vacancyId={vacancyId}
                 currentStatus={vacancy.status}
                 candidates={vacancy.candidates ?? []}
-                vacancySalaryType={vacancy.salaryType}
                 vacancySalaryFixed={vacancy.salaryFixed}
                 vacancyEntryDate={vacancy.entryDate}
                 initialStatus={transitionInitialStatus}
