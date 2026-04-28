@@ -56,6 +56,13 @@ model User {
   recruiterAssignments          RecruiterAssignmentHistory[] @relation("AssignmentRecruiter")
   recruiterAssignmentsAssigned  RecruiterAssignmentHistory[] @relation("AssignmentAssignedBy")
 
+  // Relaciones con módulo de Compromisos de Vacantes
+  commitmentsResponsible VacancyCommitment[] @relation("CommitmentResponsibleUser")
+  commitmentsCreated     VacancyCommitment[] @relation("CommitmentCreatedBy")
+  commitmentsCompleted   VacancyCommitment[] @relation("CommitmentCompletedBy")
+  commitmentsCancelled   VacancyCommitment[] @relation("CommitmentCancelledBy")
+  commitmentEventsChanged VacancyCommitmentEvent[] @relation("CommitmentEventChangedBy")
+
   // Relaciones con módulo de Facturación
   invoicesCreated Invoice[] @relation("InvoiceCreatedBy")
 
@@ -158,6 +165,8 @@ model Tenant {
   vacancyConfig          VacancyConfig?
   vacancyTernaHistories  VacancyTernaHistory[]
   recruiterAssignmentHistory RecruiterAssignmentHistory[]
+  vacancyCommitments     VacancyCommitment[]
+  vacancyCommitmentEvents VacancyCommitmentEvent[]
 
   // Relación con configuración de notificaciones
   notificationConfig NotificationConfig?
@@ -616,6 +625,12 @@ enum ReassignmentReason {
   OTHER
 }
 
+enum CommitmentStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
 model Vacancy {
   id       String        @id @default(cuid())
   // Identificación
@@ -709,6 +724,7 @@ model Vacancy {
   attachments    Attachment[]           @relation("VacancyAttachments")
   ternaHistories VacancyTernaHistory[]
   recruiterAssignmentHistory RecruiterAssignmentHistory[]
+  commitments    VacancyCommitment[]
 
   // Relación con Facturas
   invoices Invoice[]
@@ -903,6 +919,75 @@ model VacancyConfig {
 
   @@index([tenantId])
   @@map("vacancy_config")
+}
+
+// =============================================
+// MÓDULO DE COMPROMISOS DE VACANTES
+// =============================================
+
+model VacancyCommitment {
+  id          String           @id @default(cuid())
+  vacancyId   String
+  vacancy     Vacancy          @relation(fields: [vacancyId], references: [id], onDelete: Cascade)
+  tenantId    String
+  tenant      Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  description String           @db.Text
+  dueDate     DateTime         // Required for accountability and overdue tracking
+  status      CommitmentStatus @default(PENDING)
+
+  // Responsible user (accountable for this commitment)
+  responsibleUserId String
+  responsibleUser   User   @relation("CommitmentResponsibleUser", fields: [responsibleUserId], references: [id], onDelete: Restrict)
+
+  // Soft-cancel fields
+  cancelledAt     DateTime?
+  cancelledById   String?
+  cancelledBy     User?    @relation("CommitmentCancelledBy", fields: [cancelledById], references: [id], onDelete: SetNull)
+  cancelReason    String?  @db.Text
+
+  // Completion fields
+  completedAt   DateTime?
+  completedById String?
+  completedBy   User?    @relation("CommitmentCompletedBy", fields: [completedById], references: [id], onDelete: SetNull)
+
+  createdById String?
+  createdBy   User?    @relation("CommitmentCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  events VacancyCommitmentEvent[]
+
+  @@index([vacancyId])
+  @@index([tenantId])
+  @@index([status])
+  @@index([responsibleUserId])
+  @@index([vacancyId, status])
+  @@index([tenantId, status])
+  @@index([dueDate])
+  @@map("vacancy_commitment")
+}
+
+model VacancyCommitmentEvent {
+  id           String           @id @default(cuid())
+  commitmentId String
+  commitment   VacancyCommitment @relation(fields: [commitmentId], references: [id], onDelete: Cascade)
+  tenantId     String
+  tenant       Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  previousStatus CommitmentStatus
+  newStatus      CommitmentStatus
+  note           String?          @db.Text
+
+  changedById String
+  changedBy   User   @relation("CommitmentEventChangedBy", fields: [changedById], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now())
+
+  @@index([commitmentId])
+  @@index([tenantId])
+  @@index([commitmentId, createdAt])
+  @@map("vacancy_commitment_event")
 }
 
 // =============================================

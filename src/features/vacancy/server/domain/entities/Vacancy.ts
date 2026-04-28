@@ -70,6 +70,8 @@ export interface VacancyProps {
   candidates?: VacancyCandidateDTO[];
   checklistItems?: VacancyChecklistItemDTO[];
   statusHistory?: VacancyStatusHistoryDTO[];
+  // Commitment count agregado (from _count.commitments)
+  activeCommitmentsCount?: number;
 }
 
 export class Vacancy {
@@ -429,6 +431,7 @@ export class Vacancy {
       candidates: this.props.candidates,
       checklistItems: this.props.checklistItems,
       statusHistory: this.props.statusHistory,
+      activeCommitmentsCount: this.props.activeCommitmentsCount,
     };
   }
 }

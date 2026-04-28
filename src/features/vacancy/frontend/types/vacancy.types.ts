@@ -49,6 +49,9 @@ export type ReassignmentReasonType =
 // Currency type (mirror del enum de Prisma)
 export type VacancyCurrency = "MXN" | "USD";
 
+// Commitment status type (mirror del enum CommitmentStatus de Prisma)
+export type CommitmentStatusType = "PENDING" | "COMPLETED" | "CANCELLED";
+
 // DTO principal de Vacancy
 export interface VacancyDTO {
   id: string;
@@ -101,6 +104,8 @@ export interface VacancyDTO {
   statusHistory?: VacancyStatusHistoryDTO[];
   attachments?: AttachmentDTO[];
   recruiterAssignmentHistory?: RecruiterAssignmentHistoryDTO[];
+  // Commitment count agregado (from _count.commitments)
+  activeCommitmentsCount?: number;
 }
 
 /**
@@ -583,4 +588,60 @@ export interface AddCandidateFormData {
 
   currentBenefits?: string;
   otherBenefits?: string;
+}
+
+// =============================================
+// VACANCY COMMITMENTS
+// =============================================
+
+export interface VacancyCommitmentDTO {
+  id: string;
+  vacancyId: string;
+  tenantId: string;
+  description: string;
+  dueDate: string; // ISO date-only string (yyyy-MM-dd) - required for accountability
+  status: CommitmentStatusType;
+  responsibleUserId: string;
+  responsibleUserName?: string | null;
+  cancelledAt: string | null;
+  cancelledById: string | null;
+  cancelReason: string | null;
+  completedAt: string | null;
+  completedById: string | null;
+  createdById: string | null;
+  createdAt: string;
+  updatedAt: string;
+  events?: VacancyCommitmentEventDTO[];
+}
+
+export interface VacancyCommitmentEventDTO {
+  id: string;
+  commitmentId: string;
+  previousStatus: CommitmentStatusType;
+  newStatus: CommitmentStatusType;
+  note: string | null;
+  changedById: string;
+  changedByName?: string | null;
+  createdAt: string;
+}
+
+// Action result types
+export interface CreateCommitmentResult {
+  error: string | null;
+  commitment?: VacancyCommitmentDTO;
+}
+
+export interface CompleteCommitmentResult {
+  error: string | null;
+  commitment?: VacancyCommitmentDTO;
+}
+
+export interface CancelCommitmentResult {
+  error: string | null;
+  commitment?: VacancyCommitmentDTO;
+}
+
+export interface ListCommitmentsResult {
+  error: string | null;
+  commitments?: VacancyCommitmentDTO[];
 }

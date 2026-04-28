@@ -514,6 +514,7 @@ export type VacancyWhereInput = {
   attachments?: Prisma.AttachmentListRelationFilter
   ternaHistories?: Prisma.VacancyTernaHistoryListRelationFilter
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryListRelationFilter
+  commitments?: Prisma.VacancyCommitmentListRelationFilter
   invoices?: Prisma.InvoiceListRelationFilter
 }
 
@@ -571,6 +572,7 @@ export type VacancyOrderByWithRelationInput = {
   attachments?: Prisma.AttachmentOrderByRelationAggregateInput
   ternaHistories?: Prisma.VacancyTernaHistoryOrderByRelationAggregateInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryOrderByRelationAggregateInput
+  commitments?: Prisma.VacancyCommitmentOrderByRelationAggregateInput
   invoices?: Prisma.InvoiceOrderByRelationAggregateInput
 }
 
@@ -631,6 +633,7 @@ export type VacancyWhereUniqueInput = Prisma.AtLeast<{
   attachments?: Prisma.AttachmentListRelationFilter
   ternaHistories?: Prisma.VacancyTernaHistoryListRelationFilter
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryListRelationFilter
+  commitments?: Prisma.VacancyCommitmentListRelationFilter
   invoices?: Prisma.InvoiceListRelationFilter
 }, "id" | "hiredCandidateId" | "originVacancyId">
 
@@ -773,6 +776,7 @@ export type VacancyCreateInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutVacancyInput
 }
 
@@ -823,6 +827,7 @@ export type VacancyUncheckedCreateInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentUncheckedCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutVacancyInput
 }
 
@@ -873,6 +878,7 @@ export type VacancyUpdateInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutVacancyNestedInput
 }
 
@@ -923,6 +929,7 @@ export type VacancyUncheckedUpdateInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUncheckedUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
@@ -1543,6 +1550,20 @@ export type VacancyUpdateOneRequiredWithoutStatusHistoryNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.VacancyUpdateToOneWithWhereWithoutStatusHistoryInput, Prisma.VacancyUpdateWithoutStatusHistoryInput>, Prisma.VacancyUncheckedUpdateWithoutStatusHistoryInput>
 }
 
+export type VacancyCreateNestedOneWithoutCommitmentsInput = {
+  create?: Prisma.XOR<Prisma.VacancyCreateWithoutCommitmentsInput, Prisma.VacancyUncheckedCreateWithoutCommitmentsInput>
+  connectOrCreate?: Prisma.VacancyCreateOrConnectWithoutCommitmentsInput
+  connect?: Prisma.VacancyWhereUniqueInput
+}
+
+export type VacancyUpdateOneRequiredWithoutCommitmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.VacancyCreateWithoutCommitmentsInput, Prisma.VacancyUncheckedCreateWithoutCommitmentsInput>
+  connectOrCreate?: Prisma.VacancyCreateOrConnectWithoutCommitmentsInput
+  upsert?: Prisma.VacancyUpsertWithoutCommitmentsInput
+  connect?: Prisma.VacancyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.VacancyUpdateToOneWithWhereWithoutCommitmentsInput, Prisma.VacancyUpdateWithoutCommitmentsInput>, Prisma.VacancyUncheckedUpdateWithoutCommitmentsInput>
+}
+
 export type VacancyCreateNestedOneWithoutInvoicesInput = {
   create?: Prisma.XOR<Prisma.VacancyCreateWithoutInvoicesInput, Prisma.VacancyUncheckedCreateWithoutInvoicesInput>
   connectOrCreate?: Prisma.VacancyCreateOrConnectWithoutInvoicesInput
@@ -1675,6 +1696,7 @@ export type VacancyCreateWithoutRecruiterInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutVacancyInput
 }
 
@@ -1724,6 +1746,7 @@ export type VacancyUncheckedCreateWithoutRecruiterInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentUncheckedCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutVacancyInput
 }
 
@@ -1783,6 +1806,7 @@ export type VacancyCreateWithoutCreatedByInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutVacancyInput
 }
 
@@ -1832,6 +1856,7 @@ export type VacancyUncheckedCreateWithoutCreatedByInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentUncheckedCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutVacancyInput
 }
 
@@ -1891,6 +1916,7 @@ export type VacancyCreateWithoutChecklistValidatedByInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutVacancyInput
 }
 
@@ -1940,6 +1966,7 @@ export type VacancyUncheckedCreateWithoutChecklistValidatedByInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentUncheckedCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutVacancyInput
 }
 
@@ -2092,6 +2119,7 @@ export type VacancyCreateWithoutTenantInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutVacancyInput
 }
 
@@ -2141,6 +2169,7 @@ export type VacancyUncheckedCreateWithoutTenantInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentUncheckedCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutVacancyInput
 }
 
@@ -2216,6 +2245,7 @@ export type VacancyCreateWithoutAttachmentsInput = {
   statusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutVacancyInput
 }
 
@@ -2265,6 +2295,7 @@ export type VacancyUncheckedCreateWithoutAttachmentsInput = {
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentUncheckedCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutVacancyInput
 }
 
@@ -2330,6 +2361,7 @@ export type VacancyUpdateWithoutAttachmentsInput = {
   statusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutVacancyNestedInput
 }
 
@@ -2379,6 +2411,7 @@ export type VacancyUncheckedUpdateWithoutAttachmentsInput = {
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUncheckedUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
@@ -2428,6 +2461,7 @@ export type VacancyCreateWithoutWarrantyVacancyInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutVacancyInput
 }
 
@@ -2477,6 +2511,7 @@ export type VacancyUncheckedCreateWithoutWarrantyVacancyInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentUncheckedCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutVacancyInput
 }
 
@@ -2531,6 +2566,7 @@ export type VacancyCreateWithoutOriginVacancyInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutVacancyInput
 }
 
@@ -2580,6 +2616,7 @@ export type VacancyUncheckedCreateWithoutOriginVacancyInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentUncheckedCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutVacancyInput
 }
 
@@ -2645,6 +2682,7 @@ export type VacancyUpdateWithoutWarrantyVacancyInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutVacancyNestedInput
 }
 
@@ -2694,6 +2732,7 @@ export type VacancyUncheckedUpdateWithoutWarrantyVacancyInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUncheckedUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
@@ -2754,6 +2793,7 @@ export type VacancyUpdateWithoutOriginVacancyInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutVacancyNestedInput
 }
 
@@ -2803,6 +2843,7 @@ export type VacancyUncheckedUpdateWithoutOriginVacancyInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUncheckedUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
@@ -2852,6 +2893,7 @@ export type VacancyCreateWithoutChecklistItemsInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutVacancyInput
 }
 
@@ -2901,6 +2943,7 @@ export type VacancyUncheckedCreateWithoutChecklistItemsInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentUncheckedCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutVacancyInput
 }
 
@@ -2966,6 +3009,7 @@ export type VacancyUpdateWithoutChecklistItemsInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutVacancyNestedInput
 }
 
@@ -3015,6 +3059,7 @@ export type VacancyUncheckedUpdateWithoutChecklistItemsInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUncheckedUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
@@ -3064,6 +3109,7 @@ export type VacancyCreateWithoutCandidatesInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutVacancyInput
 }
 
@@ -3113,6 +3159,7 @@ export type VacancyUncheckedCreateWithoutCandidatesInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentUncheckedCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutVacancyInput
 }
 
@@ -3167,6 +3214,7 @@ export type VacancyCreateWithoutHiredCandidateInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutVacancyInput
 }
 
@@ -3216,6 +3264,7 @@ export type VacancyUncheckedCreateWithoutHiredCandidateInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentUncheckedCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutVacancyInput
 }
 
@@ -3281,6 +3330,7 @@ export type VacancyUpdateWithoutCandidatesInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutVacancyNestedInput
 }
 
@@ -3330,6 +3380,7 @@ export type VacancyUncheckedUpdateWithoutCandidatesInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUncheckedUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
@@ -3390,6 +3441,7 @@ export type VacancyUpdateWithoutHiredCandidateInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutVacancyNestedInput
 }
 
@@ -3439,6 +3491,7 @@ export type VacancyUncheckedUpdateWithoutHiredCandidateInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUncheckedUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
@@ -3488,6 +3541,7 @@ export type VacancyCreateWithoutStatusHistoryInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutVacancyInput
 }
 
@@ -3537,6 +3591,7 @@ export type VacancyUncheckedCreateWithoutStatusHistoryInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentUncheckedCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutVacancyInput
 }
 
@@ -3602,6 +3657,7 @@ export type VacancyUpdateWithoutStatusHistoryInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutVacancyNestedInput
 }
 
@@ -3648,6 +3704,223 @@ export type VacancyUncheckedUpdateWithoutStatusHistoryInput = {
   warrantyVacancy?: Prisma.VacancyUncheckedUpdateOneWithoutOriginVacancyNestedInput
   checklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutVacancyNestedInput
   candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUncheckedUpdateManyWithoutVacancyNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutVacancyNestedInput
+}
+
+export type VacancyCreateWithoutCommitmentsInput = {
+  id?: string
+  position: string
+  status?: $Enums.VacancyStatus
+  saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
+  salaryMin?: number | null
+  salaryMax?: number | null
+  salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
+  commissions?: string | null
+  benefits?: string | null
+  tools?: string | null
+  modality?: $Enums.VacancyModality | null
+  schedule?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  requiresPsychometry?: boolean
+  checklistValidatedAt?: Date | string | null
+  checklistRejectionReason?: string | null
+  assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
+  targetDeliveryDate?: Date | string | null
+  actualDeliveryDate?: Date | string | null
+  entryDate?: Date | string | null
+  rollbackCount?: number
+  placementConfirmedAt?: Date | string | null
+  commissionDate?: Date | string | null
+  congratsEmailSent?: boolean
+  isWarranty?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  recruiter: Prisma.UserCreateNestedOneWithoutVacanciesAsRecruiterInput
+  client: Prisma.ClientCreateNestedOneWithoutVacanciesInput
+  checklistValidatedBy?: Prisma.UserCreateNestedOneWithoutVacancyChecklistValidatedInput
+  hiredCandidate?: Prisma.VacancyCandidateCreateNestedOneWithoutHiredVacancyInput
+  originVacancy?: Prisma.VacancyCreateNestedOneWithoutWarrantyVacancyInput
+  warrantyVacancy?: Prisma.VacancyCreateNestedOneWithoutOriginVacancyInput
+  tenant: Prisma.TenantCreateNestedOneWithoutVacanciesInput
+  createdBy?: Prisma.UserCreateNestedOneWithoutVacanciesCreatedInput
+  checklistItems?: Prisma.VacancyChecklistItemCreateNestedManyWithoutVacancyInput
+  candidates?: Prisma.VacancyCandidateCreateNestedManyWithoutVacancyInput
+  statusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutVacancyInput
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
+  recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutVacancyInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutVacancyInput
+}
+
+export type VacancyUncheckedCreateWithoutCommitmentsInput = {
+  id?: string
+  position: string
+  status?: $Enums.VacancyStatus
+  recruiterId: string
+  clientId: string
+  saleType: $Enums.VacancySaleType
+  serviceType: $Enums.VacancyServiceType
+  currency?: $Enums.Currency | null
+  salaryMin?: number | null
+  salaryMax?: number | null
+  salaryFixed?: number | null
+  salaryType?: $Enums.VacancySalaryType
+  commissions?: string | null
+  benefits?: string | null
+  tools?: string | null
+  modality?: $Enums.VacancyModality | null
+  schedule?: string | null
+  countryCode?: string | null
+  regionCode?: string | null
+  requiresPsychometry?: boolean
+  checklistValidatedAt?: Date | string | null
+  checklistValidatedById?: string | null
+  checklistRejectionReason?: string | null
+  assignedAt?: Date | string
+  currentCycleStartedAt?: Date | string
+  targetDeliveryDate?: Date | string | null
+  actualDeliveryDate?: Date | string | null
+  entryDate?: Date | string | null
+  rollbackCount?: number
+  placementConfirmedAt?: Date | string | null
+  commissionDate?: Date | string | null
+  congratsEmailSent?: boolean
+  hiredCandidateId?: string | null
+  isWarranty?: boolean
+  originVacancyId?: string | null
+  tenantId: string
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedCreateNestedOneWithoutOriginVacancyInput
+  checklistItems?: Prisma.VacancyChecklistItemUncheckedCreateNestedManyWithoutVacancyInput
+  candidates?: Prisma.VacancyCandidateUncheckedCreateNestedManyWithoutVacancyInput
+  statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutVacancyInput
+}
+
+export type VacancyCreateOrConnectWithoutCommitmentsInput = {
+  where: Prisma.VacancyWhereUniqueInput
+  create: Prisma.XOR<Prisma.VacancyCreateWithoutCommitmentsInput, Prisma.VacancyUncheckedCreateWithoutCommitmentsInput>
+}
+
+export type VacancyUpsertWithoutCommitmentsInput = {
+  update: Prisma.XOR<Prisma.VacancyUpdateWithoutCommitmentsInput, Prisma.VacancyUncheckedUpdateWithoutCommitmentsInput>
+  create: Prisma.XOR<Prisma.VacancyCreateWithoutCommitmentsInput, Prisma.VacancyUncheckedCreateWithoutCommitmentsInput>
+  where?: Prisma.VacancyWhereInput
+}
+
+export type VacancyUpdateToOneWithWhereWithoutCommitmentsInput = {
+  where?: Prisma.VacancyWhereInput
+  data: Prisma.XOR<Prisma.VacancyUpdateWithoutCommitmentsInput, Prisma.VacancyUncheckedUpdateWithoutCommitmentsInput>
+}
+
+export type VacancyUpdateWithoutCommitmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  position?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
+  saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
+  commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresPsychometry?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rollbackCount?: Prisma.IntFieldUpdateOperationsInput | number
+  placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recruiter?: Prisma.UserUpdateOneRequiredWithoutVacanciesAsRecruiterNestedInput
+  client?: Prisma.ClientUpdateOneRequiredWithoutVacanciesNestedInput
+  checklistValidatedBy?: Prisma.UserUpdateOneWithoutVacancyChecklistValidatedNestedInput
+  hiredCandidate?: Prisma.VacancyCandidateUpdateOneWithoutHiredVacancyNestedInput
+  originVacancy?: Prisma.VacancyUpdateOneWithoutWarrantyVacancyNestedInput
+  warrantyVacancy?: Prisma.VacancyUpdateOneWithoutOriginVacancyNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutVacanciesNestedInput
+  createdBy?: Prisma.UserUpdateOneWithoutVacanciesCreatedNestedInput
+  checklistItems?: Prisma.VacancyChecklistItemUpdateManyWithoutVacancyNestedInput
+  candidates?: Prisma.VacancyCandidateUpdateManyWithoutVacancyNestedInput
+  statusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutVacancyNestedInput
+  attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
+  ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
+  recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutVacancyNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutVacancyNestedInput
+}
+
+export type VacancyUncheckedUpdateWithoutCommitmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  position?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumVacancyStatusFieldUpdateOperationsInput | $Enums.VacancyStatus
+  recruiterId?: Prisma.StringFieldUpdateOperationsInput | string
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  saleType?: Prisma.EnumVacancySaleTypeFieldUpdateOperationsInput | $Enums.VacancySaleType
+  serviceType?: Prisma.EnumVacancyServiceTypeFieldUpdateOperationsInput | $Enums.VacancyServiceType
+  currency?: Prisma.NullableEnumCurrencyFieldUpdateOperationsInput | $Enums.Currency | null
+  salaryMin?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryMax?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryFixed?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salaryType?: Prisma.EnumVacancySalaryTypeFieldUpdateOperationsInput | $Enums.VacancySalaryType
+  commissions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tools?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modality?: Prisma.NullableEnumVacancyModalityFieldUpdateOperationsInput | $Enums.VacancyModality | null
+  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresPsychometry?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checklistValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checklistValidatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checklistRejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentCycleStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  targetDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  actualDeliveryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  entryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rollbackCount?: Prisma.IntFieldUpdateOperationsInput | number
+  placementConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  commissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  congratsEmailSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hiredCandidateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isWarranty?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  originVacancyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  warrantyVacancy?: Prisma.VacancyUncheckedUpdateOneWithoutOriginVacancyNestedInput
+  checklistItems?: Prisma.VacancyChecklistItemUncheckedUpdateManyWithoutVacancyNestedInput
+  candidates?: Prisma.VacancyCandidateUncheckedUpdateManyWithoutVacancyNestedInput
+  statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutVacancyNestedInput
@@ -3701,6 +3974,7 @@ export type VacancyCreateWithoutInvoicesInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyUncheckedCreateWithoutInvoicesInput = {
@@ -3750,6 +4024,7 @@ export type VacancyUncheckedCreateWithoutInvoicesInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentUncheckedCreateNestedManyWithoutVacancyInput
 }
 
 export type VacancyCreateOrConnectWithoutInvoicesInput = {
@@ -3815,6 +4090,7 @@ export type VacancyUpdateWithoutInvoicesInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyUncheckedUpdateWithoutInvoicesInput = {
@@ -3864,6 +4140,7 @@ export type VacancyUncheckedUpdateWithoutInvoicesInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
 export type VacancyCreateWithoutClientInput = {
@@ -3912,6 +4189,7 @@ export type VacancyCreateWithoutClientInput = {
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutVacancyInput
 }
 
@@ -3961,6 +4239,7 @@ export type VacancyUncheckedCreateWithoutClientInput = {
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentUncheckedCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutVacancyInput
 }
 
@@ -4036,6 +4315,7 @@ export type VacancyCreateWithoutTernaHistoriesInput = {
   statusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutVacancyInput
 }
 
@@ -4085,6 +4365,7 @@ export type VacancyUncheckedCreateWithoutTernaHistoriesInput = {
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentUncheckedCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutVacancyInput
 }
 
@@ -4150,6 +4431,7 @@ export type VacancyUpdateWithoutTernaHistoriesInput = {
   statusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutVacancyNestedInput
 }
 
@@ -4199,6 +4481,7 @@ export type VacancyUncheckedUpdateWithoutTernaHistoriesInput = {
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUncheckedUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
@@ -4248,6 +4531,7 @@ export type VacancyCreateWithoutRecruiterAssignmentHistoryInput = {
   statusHistory?: Prisma.VacancyStatusHistoryCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutVacancyInput
 }
 
@@ -4297,6 +4581,7 @@ export type VacancyUncheckedCreateWithoutRecruiterAssignmentHistoryInput = {
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedCreateNestedManyWithoutVacancyInput
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutVacancyInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedCreateNestedManyWithoutVacancyInput
+  commitments?: Prisma.VacancyCommitmentUncheckedCreateNestedManyWithoutVacancyInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutVacancyInput
 }
 
@@ -4362,6 +4647,7 @@ export type VacancyUpdateWithoutRecruiterAssignmentHistoryInput = {
   statusHistory?: Prisma.VacancyStatusHistoryUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutVacancyNestedInput
 }
 
@@ -4411,6 +4697,7 @@ export type VacancyUncheckedUpdateWithoutRecruiterAssignmentHistoryInput = {
   statusHistory?: Prisma.VacancyStatusHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUncheckedUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
@@ -4583,6 +4870,7 @@ export type VacancyUpdateWithoutRecruiterInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutVacancyNestedInput
 }
 
@@ -4632,6 +4920,7 @@ export type VacancyUncheckedUpdateWithoutRecruiterInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUncheckedUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
@@ -4722,6 +5011,7 @@ export type VacancyUpdateWithoutCreatedByInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutVacancyNestedInput
 }
 
@@ -4771,6 +5061,7 @@ export type VacancyUncheckedUpdateWithoutCreatedByInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUncheckedUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
@@ -4861,6 +5152,7 @@ export type VacancyUpdateWithoutChecklistValidatedByInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutVacancyNestedInput
 }
 
@@ -4910,6 +5202,7 @@ export type VacancyUncheckedUpdateWithoutChecklistValidatedByInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUncheckedUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
@@ -5041,6 +5334,7 @@ export type VacancyUpdateWithoutTenantInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutVacancyNestedInput
 }
 
@@ -5090,6 +5384,7 @@ export type VacancyUncheckedUpdateWithoutTenantInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUncheckedUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
@@ -5221,6 +5516,7 @@ export type VacancyUpdateWithoutClientInput = {
   attachments?: Prisma.AttachmentUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutVacancyNestedInput
 }
 
@@ -5270,6 +5566,7 @@ export type VacancyUncheckedUpdateWithoutClientInput = {
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutVacancyNestedInput
   ternaHistories?: Prisma.VacancyTernaHistoryUncheckedUpdateManyWithoutVacancyNestedInput
   recruiterAssignmentHistory?: Prisma.RecruiterAssignmentHistoryUncheckedUpdateManyWithoutVacancyNestedInput
+  commitments?: Prisma.VacancyCommitmentUncheckedUpdateManyWithoutVacancyNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutVacancyNestedInput
 }
 
@@ -5326,6 +5623,7 @@ export type VacancyCountOutputType = {
   attachments: number
   ternaHistories: number
   recruiterAssignmentHistory: number
+  commitments: number
   invoices: number
 }
 
@@ -5336,6 +5634,7 @@ export type VacancyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   attachments?: boolean | VacancyCountOutputTypeCountAttachmentsArgs
   ternaHistories?: boolean | VacancyCountOutputTypeCountTernaHistoriesArgs
   recruiterAssignmentHistory?: boolean | VacancyCountOutputTypeCountRecruiterAssignmentHistoryArgs
+  commitments?: boolean | VacancyCountOutputTypeCountCommitmentsArgs
   invoices?: boolean | VacancyCountOutputTypeCountInvoicesArgs
 }
 
@@ -5389,6 +5688,13 @@ export type VacancyCountOutputTypeCountTernaHistoriesArgs<ExtArgs extends runtim
  */
 export type VacancyCountOutputTypeCountRecruiterAssignmentHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.RecruiterAssignmentHistoryWhereInput
+}
+
+/**
+ * VacancyCountOutputType without action
+ */
+export type VacancyCountOutputTypeCountCommitmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VacancyCommitmentWhereInput
 }
 
 /**
@@ -5453,6 +5759,7 @@ export type VacancySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   attachments?: boolean | Prisma.Vacancy$attachmentsArgs<ExtArgs>
   ternaHistories?: boolean | Prisma.Vacancy$ternaHistoriesArgs<ExtArgs>
   recruiterAssignmentHistory?: boolean | Prisma.Vacancy$recruiterAssignmentHistoryArgs<ExtArgs>
+  commitments?: boolean | Prisma.Vacancy$commitmentsArgs<ExtArgs>
   invoices?: boolean | Prisma.Vacancy$invoicesArgs<ExtArgs>
   _count?: boolean | Prisma.VacancyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["vacancy"]>
@@ -5613,6 +5920,7 @@ export type VacancyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   attachments?: boolean | Prisma.Vacancy$attachmentsArgs<ExtArgs>
   ternaHistories?: boolean | Prisma.Vacancy$ternaHistoriesArgs<ExtArgs>
   recruiterAssignmentHistory?: boolean | Prisma.Vacancy$recruiterAssignmentHistoryArgs<ExtArgs>
+  commitments?: boolean | Prisma.Vacancy$commitmentsArgs<ExtArgs>
   invoices?: boolean | Prisma.Vacancy$invoicesArgs<ExtArgs>
   _count?: boolean | Prisma.VacancyCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -5652,6 +5960,7 @@ export type $VacancyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     attachments: Prisma.$AttachmentPayload<ExtArgs>[]
     ternaHistories: Prisma.$VacancyTernaHistoryPayload<ExtArgs>[]
     recruiterAssignmentHistory: Prisma.$RecruiterAssignmentHistoryPayload<ExtArgs>[]
+    commitments: Prisma.$VacancyCommitmentPayload<ExtArgs>[]
     invoices: Prisma.$InvoicePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -6102,6 +6411,7 @@ export interface Prisma__VacancyClient<T, Null = never, ExtArgs extends runtime.
   attachments<T extends Prisma.Vacancy$attachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vacancy$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ternaHistories<T extends Prisma.Vacancy$ternaHistoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vacancy$ternaHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyTernaHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   recruiterAssignmentHistory<T extends Prisma.Vacancy$recruiterAssignmentHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vacancy$recruiterAssignmentHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecruiterAssignmentHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  commitments<T extends Prisma.Vacancy$commitmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vacancy$commitmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VacancyCommitmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   invoices<T extends Prisma.Vacancy$invoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vacancy$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -6803,6 +7113,30 @@ export type Vacancy$recruiterAssignmentHistoryArgs<ExtArgs extends runtime.Types
   take?: number
   skip?: number
   distinct?: Prisma.RecruiterAssignmentHistoryScalarFieldEnum | Prisma.RecruiterAssignmentHistoryScalarFieldEnum[]
+}
+
+/**
+ * Vacancy.commitments
+ */
+export type Vacancy$commitmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VacancyCommitment
+   */
+  select?: Prisma.VacancyCommitmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VacancyCommitment
+   */
+  omit?: Prisma.VacancyCommitmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VacancyCommitmentInclude<ExtArgs> | null
+  where?: Prisma.VacancyCommitmentWhereInput
+  orderBy?: Prisma.VacancyCommitmentOrderByWithRelationInput | Prisma.VacancyCommitmentOrderByWithRelationInput[]
+  cursor?: Prisma.VacancyCommitmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VacancyCommitmentScalarFieldEnum | Prisma.VacancyCommitmentScalarFieldEnum[]
 }
 
 /**

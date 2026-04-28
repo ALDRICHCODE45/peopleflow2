@@ -353,6 +353,46 @@ const RECLUTAMIENTO_PERMISSIONS: PermissionDefinition[] = [
       "Gestionar completamente el módulo de vacantes (incluye todas las acciones)",
   },
 
+  // Compromisos de Vacantes - Granulares
+  {
+    name: "vacantes-compromisos:acceder",
+    resource: "vacantes-compromisos",
+    action: "acceder",
+    description: "Acceder al módulo de compromisos de vacantes",
+  },
+  {
+    name: "vacantes-compromisos:crear",
+    resource: "vacantes-compromisos",
+    action: "crear",
+    description: "Crear compromisos para vacantes",
+  },
+  {
+    name: "vacantes-compromisos:editar",
+    resource: "vacantes-compromisos",
+    action: "editar",
+    description: "Editar compromisos pendientes",
+  },
+  {
+    name: "vacantes-compromisos:cancelar",
+    resource: "vacantes-compromisos",
+    action: "cancelar",
+    description: "Cancelar compromisos pendientes",
+  },
+  {
+    name: "vacantes-compromisos:completar",
+    resource: "vacantes-compromisos",
+    action: "completar",
+    description: "Marcar compromisos como completados",
+  },
+  // Compromisos de Vacantes - Modular
+  {
+    name: "vacantes-compromisos:gestionar",
+    resource: "vacantes-compromisos",
+    action: "gestionar",
+    description:
+      "Gestionar completamente los compromisos de vacantes (incluye todas las acciones)",
+  },
+
   // Candidatos - Granulares
   {
     name: "candidatos:acceder",
@@ -693,6 +733,14 @@ export const PermissionActions = {
     modificarFechaTentativaEntrega: "vacantes:modificar-fecha-tentativa-entrega",
     reasignar: "vacantes:reasignar",
     gestionar: "vacantes:gestionar",
+  },
+  vacantesCompromisos: {
+    acceder: "vacantes-compromisos:acceder",
+    crear: "vacantes-compromisos:crear",
+    editar: "vacantes-compromisos:editar",
+    cancelar: "vacantes-compromisos:cancelar",
+    completar: "vacantes-compromisos:completar",
+    gestionar: "vacantes-compromisos:gestionar",
   },
   candidatos: {
     acceder: "candidatos:acceder",

@@ -18,6 +18,9 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/core/shared/ui/shadcn/tooltip";
+import { Badge } from "@shadcn/badge";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Calendar03Icon } from "@hugeicons/core-free-icons";
 
 export function createVacancyColumns(
   onViewDetail?: (id: string) => void,
@@ -145,13 +148,39 @@ export function createVacancyColumns(
       enableSorting: false,
     },
     {
-      header: "Tipo Venta",
+      header: "Tipo",
       accessorKey: "saleType",
       cell: ({ row }) => {
         const saleType = row.original.saleType;
         return <VacancySalesTypeBadge type={saleType} />;
       },
       size: 10,
+      enableSorting: false,
+    },
+    {
+      header: "Compromisos",
+      accessorKey: "activeCommitmentsCount",
+      cell: ({ row }) => {
+        const count = row.original.activeCommitmentsCount ?? 0;
+        if (count === 0) return null;
+        return (
+          <Tooltip>
+            <TooltipTrigger>
+              <Badge
+                variant="outline"
+                className="gap-1 text-amber-700 border-amber-300 bg-amber-50"
+              >
+                <HugeiconsIcon icon={Calendar03Icon} size={12} />
+                {count}
+              </Badge>
+            </TooltipTrigger>
+            <TooltipContent>
+              {count} compromiso{count > 1 ? "s" : ""} activo{count > 1 ? "s" : ""}
+            </TooltipContent>
+          </Tooltip>
+        );
+      },
+      size: 8,
       enableSorting: false,
     },
     {

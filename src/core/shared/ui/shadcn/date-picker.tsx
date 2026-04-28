@@ -30,6 +30,8 @@ interface DatePickerProps {
   className?: string;
   /** Disabled state */
   disabled?: boolean;
+  /** Custom display format (default: "eee dd/MM/yy") */
+  displayFormat?: string;
 }
 
 /**
@@ -44,6 +46,7 @@ export function DatePicker({
   maxDate,
   className,
   disabled = false,
+  displayFormat = "eee dd/MM/yy",
 }: DatePickerProps) {
   const [open, setOpen] = React.useState(false);
 
@@ -95,7 +98,7 @@ export function DatePicker({
             className="mr-2 h-4 w-4 shrink-0"
           />
           {selectedDate ? (
-            format(selectedDate, "eee dd/MM/yy", { locale: es })
+            format(selectedDate, displayFormat, { locale: es })
           ) : (
             <span>{placeholder}</span>
           )}

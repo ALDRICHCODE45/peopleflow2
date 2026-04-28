@@ -407,6 +407,8 @@ export const ModelName = {
   VacancyCandidateMatch: 'VacancyCandidateMatch',
   VacancyStatusHistory: 'VacancyStatusHistory',
   VacancyConfig: 'VacancyConfig',
+  VacancyCommitment: 'VacancyCommitment',
+  VacancyCommitmentEvent: 'VacancyCommitmentEvent',
   Notification: 'Notification',
   Invoice: 'Invoice',
   InvoiceFolioCounter: 'InvoiceFolioCounter',
@@ -430,7 +432,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "tenant" | "role" | "userRole" | "rolePermission" | "permission" | "sector" | "subsector" | "leadOrigin" | "lead" | "leadStatusHistory" | "contact" | "interaction" | "attachment" | "vacancy" | "vacancyChecklistItem" | "vacancyCandidate" | "vacancyCandidateMatch" | "vacancyStatusHistory" | "vacancyConfig" | "notification" | "invoice" | "invoiceFolioCounter" | "client" | "notificationConfig" | "vacancyTernaHistory" | "vacancyTernaHistoryCandidate" | "recruiterAssignmentHistory"
+    modelProps: "user" | "session" | "account" | "verification" | "tenant" | "role" | "userRole" | "rolePermission" | "permission" | "sector" | "subsector" | "leadOrigin" | "lead" | "leadStatusHistory" | "contact" | "interaction" | "attachment" | "vacancy" | "vacancyChecklistItem" | "vacancyCandidate" | "vacancyCandidateMatch" | "vacancyStatusHistory" | "vacancyConfig" | "vacancyCommitment" | "vacancyCommitmentEvent" | "notification" | "invoice" | "invoiceFolioCounter" | "client" | "notificationConfig" | "vacancyTernaHistory" | "vacancyTernaHistoryCandidate" | "recruiterAssignmentHistory"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2136,6 +2138,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    VacancyCommitment: {
+      payload: Prisma.$VacancyCommitmentPayload<ExtArgs>
+      fields: Prisma.VacancyCommitmentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VacancyCommitmentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VacancyCommitmentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentPayload>
+        }
+        findFirst: {
+          args: Prisma.VacancyCommitmentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VacancyCommitmentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentPayload>
+        }
+        findMany: {
+          args: Prisma.VacancyCommitmentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentPayload>[]
+        }
+        create: {
+          args: Prisma.VacancyCommitmentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentPayload>
+        }
+        createMany: {
+          args: Prisma.VacancyCommitmentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VacancyCommitmentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentPayload>[]
+        }
+        delete: {
+          args: Prisma.VacancyCommitmentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentPayload>
+        }
+        update: {
+          args: Prisma.VacancyCommitmentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentPayload>
+        }
+        deleteMany: {
+          args: Prisma.VacancyCommitmentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VacancyCommitmentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VacancyCommitmentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentPayload>[]
+        }
+        upsert: {
+          args: Prisma.VacancyCommitmentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentPayload>
+        }
+        aggregate: {
+          args: Prisma.VacancyCommitmentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVacancyCommitment>
+        }
+        groupBy: {
+          args: Prisma.VacancyCommitmentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VacancyCommitmentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VacancyCommitmentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VacancyCommitmentCountAggregateOutputType> | number
+        }
+      }
+    }
+    VacancyCommitmentEvent: {
+      payload: Prisma.$VacancyCommitmentEventPayload<ExtArgs>
+      fields: Prisma.VacancyCommitmentEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VacancyCommitmentEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VacancyCommitmentEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentEventPayload>
+        }
+        findFirst: {
+          args: Prisma.VacancyCommitmentEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VacancyCommitmentEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentEventPayload>
+        }
+        findMany: {
+          args: Prisma.VacancyCommitmentEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentEventPayload>[]
+        }
+        create: {
+          args: Prisma.VacancyCommitmentEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentEventPayload>
+        }
+        createMany: {
+          args: Prisma.VacancyCommitmentEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VacancyCommitmentEventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentEventPayload>[]
+        }
+        delete: {
+          args: Prisma.VacancyCommitmentEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentEventPayload>
+        }
+        update: {
+          args: Prisma.VacancyCommitmentEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.VacancyCommitmentEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VacancyCommitmentEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VacancyCommitmentEventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentEventPayload>[]
+        }
+        upsert: {
+          args: Prisma.VacancyCommitmentEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyCommitmentEventPayload>
+        }
+        aggregate: {
+          args: Prisma.VacancyCommitmentEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVacancyCommitmentEvent>
+        }
+        groupBy: {
+          args: Prisma.VacancyCommitmentEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VacancyCommitmentEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VacancyCommitmentEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VacancyCommitmentEventCountAggregateOutputType> | number
+        }
+      }
+    }
     Notification: {
       payload: Prisma.$NotificationPayload<ExtArgs>
       fields: Prisma.NotificationFieldRefs
@@ -3174,6 +3324,41 @@ export const VacancyConfigScalarFieldEnum = {
 export type VacancyConfigScalarFieldEnum = (typeof VacancyConfigScalarFieldEnum)[keyof typeof VacancyConfigScalarFieldEnum]
 
 
+export const VacancyCommitmentScalarFieldEnum = {
+  id: 'id',
+  vacancyId: 'vacancyId',
+  tenantId: 'tenantId',
+  description: 'description',
+  dueDate: 'dueDate',
+  status: 'status',
+  responsibleUserId: 'responsibleUserId',
+  cancelledAt: 'cancelledAt',
+  cancelledById: 'cancelledById',
+  cancelReason: 'cancelReason',
+  completedAt: 'completedAt',
+  completedById: 'completedById',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VacancyCommitmentScalarFieldEnum = (typeof VacancyCommitmentScalarFieldEnum)[keyof typeof VacancyCommitmentScalarFieldEnum]
+
+
+export const VacancyCommitmentEventScalarFieldEnum = {
+  id: 'id',
+  commitmentId: 'commitmentId',
+  tenantId: 'tenantId',
+  previousStatus: 'previousStatus',
+  newStatus: 'newStatus',
+  note: 'note',
+  changedById: 'changedById',
+  createdAt: 'createdAt'
+} as const
+
+export type VacancyCommitmentEventScalarFieldEnum = (typeof VacancyCommitmentEventScalarFieldEnum)[keyof typeof VacancyCommitmentEventScalarFieldEnum]
+
+
 export const NotificationScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -3611,6 +3796,20 @@ export type ListEnumCandidateStatusFieldRefInput<$PrismaModel> = FieldRefInputTy
 
 
 /**
+ * Reference to a field of type 'CommitmentStatus'
+ */
+export type EnumCommitmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CommitmentStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'CommitmentStatus[]'
+ */
+export type ListEnumCommitmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CommitmentStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'NotificationProvider'
  */
 export type EnumNotificationProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationProvider'>
@@ -3895,6 +4094,8 @@ export type GlobalOmitConfig = {
   vacancyCandidateMatch?: Prisma.VacancyCandidateMatchOmit
   vacancyStatusHistory?: Prisma.VacancyStatusHistoryOmit
   vacancyConfig?: Prisma.VacancyConfigOmit
+  vacancyCommitment?: Prisma.VacancyCommitmentOmit
+  vacancyCommitmentEvent?: Prisma.VacancyCommitmentEventOmit
   notification?: Prisma.NotificationOmit
   invoice?: Prisma.InvoiceOmit
   invoiceFolioCounter?: Prisma.InvoiceFolioCounterOmit

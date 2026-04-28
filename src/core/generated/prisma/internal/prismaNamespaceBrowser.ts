@@ -74,6 +74,8 @@ export const ModelName = {
   VacancyCandidateMatch: 'VacancyCandidateMatch',
   VacancyStatusHistory: 'VacancyStatusHistory',
   VacancyConfig: 'VacancyConfig',
+  VacancyCommitment: 'VacancyCommitment',
+  VacancyCommitmentEvent: 'VacancyCommitmentEvent',
   Notification: 'Notification',
   Invoice: 'Invoice',
   InvoiceFolioCounter: 'InvoiceFolioCounter',
@@ -505,6 +507,41 @@ export const VacancyConfigScalarFieldEnum = {
 } as const
 
 export type VacancyConfigScalarFieldEnum = (typeof VacancyConfigScalarFieldEnum)[keyof typeof VacancyConfigScalarFieldEnum]
+
+
+export const VacancyCommitmentScalarFieldEnum = {
+  id: 'id',
+  vacancyId: 'vacancyId',
+  tenantId: 'tenantId',
+  description: 'description',
+  dueDate: 'dueDate',
+  status: 'status',
+  responsibleUserId: 'responsibleUserId',
+  cancelledAt: 'cancelledAt',
+  cancelledById: 'cancelledById',
+  cancelReason: 'cancelReason',
+  completedAt: 'completedAt',
+  completedById: 'completedById',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VacancyCommitmentScalarFieldEnum = (typeof VacancyCommitmentScalarFieldEnum)[keyof typeof VacancyCommitmentScalarFieldEnum]
+
+
+export const VacancyCommitmentEventScalarFieldEnum = {
+  id: 'id',
+  commitmentId: 'commitmentId',
+  tenantId: 'tenantId',
+  previousStatus: 'previousStatus',
+  newStatus: 'newStatus',
+  note: 'note',
+  changedById: 'changedById',
+  createdAt: 'createdAt'
+} as const
+
+export type VacancyCommitmentEventScalarFieldEnum = (typeof VacancyCommitmentEventScalarFieldEnum)[keyof typeof VacancyCommitmentEventScalarFieldEnum]
 
 
 export const NotificationScalarFieldEnum = {

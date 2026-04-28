@@ -8,6 +8,11 @@ export const vacancyQueryKeys = {
     ["recruiter-assignment-history", tenantId, vacancyId] as const,
 };
 
+export const vacancyCommitmentsQueryKeys = {
+  list: (tenantId: string, vacancyId: string) =>
+    ["vacancy-commitments", tenantId, vacancyId] as const,
+};
+
 export const leadsQueryKeys = {
   paginated: () => ["leads", "paginated"] as const,
   infinite: (tenantId: string, status: string) =>

@@ -72,6 +72,7 @@ type VacancyWithRelations = {
   createdById: string | null;
   createdAt: Date;
   updatedAt: Date;
+  _count?: { commitments: number };
 };
 
 const ALLOWED_ORDER_FIELDS = [
@@ -120,6 +121,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       client: { select: { nombre: true, warrantyMonths: true } },
       warrantyVacancy: { select: { id: true } },
       hiredCandidate: { select: { id: true, firstName: true, lastName: true, email: true } },
+      _count: { select: { commitments: { where: { status: "PENDING" } } } },
     } as const;
   }
 
@@ -338,6 +340,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       createdById: record.createdById,
       createdAt: record.createdAt,
       updatedAt: record.updatedAt,
+      activeCommitmentsCount: record._count?.commitments ?? 0,
     };
   }
 

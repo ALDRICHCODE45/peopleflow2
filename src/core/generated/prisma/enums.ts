@@ -143,6 +143,15 @@ export const ReassignmentReason = {
 export type ReassignmentReason = (typeof ReassignmentReason)[keyof typeof ReassignmentReason]
 
 
+export const CommitmentStatus = {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type CommitmentStatus = (typeof CommitmentStatus)[keyof typeof CommitmentStatus]
+
+
 export const Currency = {
   MXN: 'MXN',
   USD: 'USD'

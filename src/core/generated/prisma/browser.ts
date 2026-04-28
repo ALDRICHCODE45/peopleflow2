@@ -133,6 +133,16 @@ export type VacancyStatusHistory = Prisma.VacancyStatusHistoryModel
  */
 export type VacancyConfig = Prisma.VacancyConfigModel
 /**
+ * Model VacancyCommitment
+ * 
+ */
+export type VacancyCommitment = Prisma.VacancyCommitmentModel
+/**
+ * Model VacancyCommitmentEvent
+ * 
+ */
+export type VacancyCommitmentEvent = Prisma.VacancyCommitmentEventModel
+/**
  * Model Notification
  * 
  */

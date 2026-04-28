@@ -402,6 +402,23 @@ export type EnumCandidateStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumCandidateStatusFilter<$PrismaModel>
 }
 
+export type EnumCommitmentStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.CommitmentStatus | Prisma.EnumCommitmentStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CommitmentStatus[] | Prisma.ListEnumCommitmentStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CommitmentStatus[] | Prisma.ListEnumCommitmentStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCommitmentStatusFilter<$PrismaModel> | $Enums.CommitmentStatus
+}
+
+export type EnumCommitmentStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CommitmentStatus | Prisma.EnumCommitmentStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CommitmentStatus[] | Prisma.ListEnumCommitmentStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CommitmentStatus[] | Prisma.ListEnumCommitmentStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCommitmentStatusWithAggregatesFilter<$PrismaModel> | $Enums.CommitmentStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCommitmentStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCommitmentStatusFilter<$PrismaModel>
+}
+
 export type EnumNotificationProviderFilter<$PrismaModel = never> = {
   equals?: $Enums.NotificationProvider | Prisma.EnumNotificationProviderFieldRefInput<$PrismaModel>
   in?: $Enums.NotificationProvider[] | Prisma.ListEnumNotificationProviderFieldRefInput<$PrismaModel>
@@ -1127,6 +1144,23 @@ export type NestedEnumCandidateStatusWithAggregatesFilter<$PrismaModel = never> 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumCandidateStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumCandidateStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumCommitmentStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.CommitmentStatus | Prisma.EnumCommitmentStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CommitmentStatus[] | Prisma.ListEnumCommitmentStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CommitmentStatus[] | Prisma.ListEnumCommitmentStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCommitmentStatusFilter<$PrismaModel> | $Enums.CommitmentStatus
+}
+
+export type NestedEnumCommitmentStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CommitmentStatus | Prisma.EnumCommitmentStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CommitmentStatus[] | Prisma.ListEnumCommitmentStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CommitmentStatus[] | Prisma.ListEnumCommitmentStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCommitmentStatusWithAggregatesFilter<$PrismaModel> | $Enums.CommitmentStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCommitmentStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCommitmentStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumNotificationProviderFilter<$PrismaModel = never> = {
