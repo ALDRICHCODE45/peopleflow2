@@ -630,7 +630,7 @@ export function CommitmentsSheet({
         <SheetContent
           side="right"
           width="lg"
-          className="md:mr-8 ml-0 rounded-3xl dark:bg-[#18181B] overflow-y-auto p-0 z-[60]"
+          className="md:mr-8 ml-0 rounded-3xl dark:bg-[#18181B] overflow-y-auto p-0"
           showCloseButton={false}
         >
           {historyCommitment && (
