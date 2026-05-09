@@ -2,6 +2,8 @@ export const Routes = {
   home: "/",
   signIn: "/sign-in",
   verifyOtp: "/verify-otp",
+  forgotPassword: "/forgot-password",
+  resetPassword: "/reset-password",
   selectTenant: "/select-tenant",
   accessDenied: "/access-denied",
   superAdmin: "/super-admin",

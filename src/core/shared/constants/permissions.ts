@@ -61,6 +61,12 @@ const ADMINISTRACION_PERMISSIONS: PermissionDefinition[] = [
     action: "invitar-tenant",
     description: "Invitar usuarios a otros tenants",
   },
+  {
+    name: "usuarios:cambiar-contrasena",
+    resource: "usuarios",
+    action: "cambiar-contrasena",
+    description: "Cambiar la contraseña de otros usuarios",
+  },
 
   // Roles - Granulares
   {
@@ -676,6 +682,7 @@ export const PermissionActions = {
     asignarRoles: "usuarios:asignar-roles",
     gestionar: "usuarios:gestionar",
     invitarTenant: "usuarios:invitar-tenant",
+    cambiarContrasena: "usuarios:cambiar-contrasena",
   },
   roles: {
     acceder: "roles:acceder",

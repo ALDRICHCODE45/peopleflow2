@@ -7,6 +7,10 @@ import {
   generateOTPVerificationEmail,
   generateOTPVerificationPlainText,
 } from "@features/Notifications/server/infrastructure/templates/otpVerificationTemplate";
+import {
+  generatePasswordResetEmail,
+  generatePasswordResetPlainText,
+} from "@features/Notifications/server/infrastructure/templates/passwordResetTemplate";
 
 const isDev = process.env.NODE_ENV !== "production";
 
@@ -44,6 +48,38 @@ export const auth = betterAuth({
     .filter(Boolean),
   emailAndPassword: {
     enabled: true, // Habilita autenticación con email y contraseña
+    async sendResetPassword({ user, url }) {
+      // Active user gate: skip email for banned/deactivated users
+      const targetUser = await prisma.user.findUnique({
+        where: { email: user.email },
+        select: { banned: true, name: true },
+      });
+
+      // Silently skip sending email if user is banned
+      if (!targetUser || targetUser.banned) {
+        return;
+      }
+
+      const htmlContent = generatePasswordResetEmail({
+        recipientName: targetUser.name || undefined,
+        resetUrl: url,
+        expiresInMinutes: 60, // 1 hour
+      });
+
+      const plainText = generatePasswordResetPlainText({
+        recipientName: targetUser.name || undefined,
+        resetUrl: url,
+        expiresInMinutes: 60,
+      });
+
+      await otpEmailTransporter.sendMail({
+        from: process.env.SMTP_FROM || "noreply@peopleflow.com",
+        to: user.email,
+        subject: "Restablecer contraseña - PeopleFlow",
+        text: plainText,
+        html: htmlContent,
+      });
+    },
   },
   plugins: [
     admin(),
@@ -58,7 +94,7 @@ export const auth = betterAuth({
     emailOTP({
       otpLength: 6,
       expiresIn: 300, // 5 minutes
-      sendVerificationOTP: async ({ email, otp, type }, request) => {
+      sendVerificationOTP: async ({ email, otp }) => {
         // Get user name if available
         const user = await prisma.user.findUnique({
           where: { email },
