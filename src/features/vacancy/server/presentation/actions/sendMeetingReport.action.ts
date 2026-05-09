@@ -8,6 +8,7 @@ import { PermissionActions } from "@/core/shared/constants/permissions";
 import { ServerErrors } from "@core/shared/constants/error-messages";
 import { inngest } from "@core/shared/inngest/inngest";
 import { InngestEvents } from "@core/shared/constants/inngest-events";
+import { prismaNotificationConfigRepository } from "@features/Sistema/configuracion/server/infrastructure/repositories/PrismaNotificationConfigRepository";
 
 export interface SendMeetingReportResult {
   error: string | null;
@@ -29,12 +30,20 @@ export async function sendMeetingReportAction(): Promise<SendMeetingReportResult
     // Permission check
     const hasPermission = await new CheckAnyPermissonUseCase().execute({
       userId: session.user.id,
-      permissions: [PermissionActions.vacantesCompromisos.gestionar],
+      permissions: [PermissionActions.vacantes.gestionar],
       tenantId,
     });
 
     if (!hasPermission) {
       return { error: "Sin permisos para enviar reportes de compromisos" };
+    }
+
+    // Check if meeting report notifications are enabled
+    const config = await prismaNotificationConfigRepository.findByTenantId(tenantId);
+    if (!config?.enabled || !config.commitmentMeetingReportEnabled) {
+      return {
+        error: "Las notificaciones de reporte de compromisos están desactivadas. Actívalas en Configuración > Notificaciones > Compromisos.",
+      };
     }
 
     // Emit Inngest event (async processing)
