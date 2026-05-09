@@ -8,6 +8,9 @@ export const InngestEvents = {
     countdownSchedule: "vacancy/countdown.schedule",
     statusChanged: "vacancy/status.changed",
   },
+  commitment: {
+    meetingReportRequested: "commitment/meeting-report.requested",
+  },
   email: {
     send: "email/send",
   },

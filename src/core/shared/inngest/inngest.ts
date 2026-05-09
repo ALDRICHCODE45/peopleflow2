@@ -167,6 +167,12 @@ type Events = {
   "email/send": {
     data: StandaloneEmailPayload;
   };
+  "commitment/meeting-report.requested": {
+    data: {
+      tenantId: string;
+      triggeredByUserId: string;
+    };
+  };
 };
 
 // Create a client to send and receive events
