@@ -174,9 +174,8 @@ export function createVacancyColumns(
           ]);
 
         const count = row.original.activeCommitmentsCount ?? 0;
-        if (count === 0) return null;
 
-        const badge = (
+        const badge = count > 0 ? (
           <Badge
             variant="outline"
             className="gap-1 text-amber-700 border-amber-300 bg-amber-50 dark:text-amber-300 dark:border-amber-500/50 dark:bg-amber-950/30"
@@ -184,16 +183,19 @@ export function createVacancyColumns(
             <HugeiconsIcon icon={Calendar03Icon} size={12} />
             {count}
           </Badge>
+        ) : (
+          <span className="text-xs text-muted-foreground">—</span>
         );
+
+        const tooltipText = count > 0
+          ? `${count} compromiso${count > 1 ? "s" : ""} activo${count > 1 ? "s" : ""}`
+          : "Sin compromisos";
 
         if (!canAccessCommitments || !onOpenCommitments) {
           return (
             <Tooltip>
               <TooltipTrigger>{badge}</TooltipTrigger>
-              <TooltipContent>
-                {count} compromiso{count > 1 ? "s" : ""} activo
-                {count > 1 ? "s" : ""}
-              </TooltipContent>
+              <TooltipContent>{tooltipText}</TooltipContent>
             </Tooltip>
           );
         }
@@ -213,8 +215,7 @@ export function createVacancyColumns(
               </button>
             </TooltipTrigger>
             <TooltipContent>
-              {count} compromiso{count > 1 ? "s" : ""} activo
-              {count > 1 ? "s" : ""} · Click para ver
+              {tooltipText} · Click para ver
             </TooltipContent>
           </Tooltip>
         );

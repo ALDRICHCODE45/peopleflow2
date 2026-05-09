@@ -36,10 +36,10 @@ export const VacanciesTableConfig: TableConfig<VacancyDTO> = {
   enableSorting: true,
   columnPinning: {
     enabled: true,
-    persistKey: "vacancies-table",
+    persistKey: "vacancies-table-v2",
   },
   columnOrder: {
     enabled: true,
-    persistKey: "vacancies-table",
+    persistKey: "vacancies-table-v2",
   },
 };
