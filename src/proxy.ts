@@ -31,7 +31,7 @@ import type { NextRequest } from "next/server";
 /**
  * Rutas públicas que no requieren autenticación
  */
-const PUBLIC_PATHS = ["/sign-in", "/api/auth", "/access-denied"];
+const PUBLIC_PATHS = ["/sign-in", "/api/auth", "/access-denied", "/forgot-password", "/reset-password"];
 
 /**
  * Rutas del flujo de autenticación:
