@@ -111,18 +111,18 @@ function CommitmentTimeline({
     description: string;
   }> = [];
 
-  // Created event
-  events.push({
-    type: "created",
-    timestamp: commitment.createdAt,
-    actor: null,
-    description: "Compromiso creado",
-  });
-
   // Parse commitment events (status changes)
   if (commitment.events && commitment.events.length > 0) {
     commitment.events.forEach((evt) => {
-      if (evt.previousStatus === "PENDING" && evt.newStatus === "COMPLETED") {
+      if (evt.previousStatus === "PENDING" && evt.newStatus === "PENDING") {
+        // Creation event (PENDING → PENDING)
+        events.push({
+          type: "created",
+          timestamp: evt.createdAt,
+          actor: evt.changedByName || null,
+          description: evt.note || "Compromiso creado",
+        });
+      } else if (evt.previousStatus === "PENDING" && evt.newStatus === "COMPLETED") {
         events.push({
           type: "completed",
           timestamp: evt.createdAt,
@@ -147,6 +147,14 @@ function CommitmentTimeline({
           description: evt.note || "Compromiso modificado",
         });
       }
+    });
+  } else {
+    // Fallback: if no events exist, show creation from commitment metadata
+    events.push({
+      type: "created",
+      timestamp: commitment.createdAt,
+      actor: null,
+      description: "Compromiso creado",
     });
   }
 
