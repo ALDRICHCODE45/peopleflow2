@@ -765,3 +765,86 @@ export async function toggleUserActiveAction(
     return { error: "Che, pasó algo inesperado. Probá de nuevo.", success: false };
   }
 }
+
+/**
+ * Cambia la contraseña de un usuario (solo admin)
+ * SEGURIDAD:
+ * - Valida permisos usuarios:cambiar-contrasena o usuarios:gestionar
+ * - Previene auto-cambio de contraseña
+ * - Valida que el usuario objetivo pertenezca al tenant del admin
+ * - Revoca todas las sesiones del usuario objetivo
+ */
+export interface ChangeUserPasswordInput {
+  userId: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface ChangeUserPasswordResult {
+  error: string | null;
+  success: boolean;
+}
+
+export async function changeUserPasswordAction(
+  data: ChangeUserPasswordInput
+): Promise<ChangeUserPasswordResult> {
+  try {
+    const headersList = await headers();
+    const session = await auth.api.getSession({ headers: headersList });
+
+    if (!session?.user) {
+      return { error: ServerErrors.notAuthenticated, success: false };
+    }
+
+    // Obtener tenant activo
+    const { getActiveTenantId } = await import("../helpers/getActiveTenant.helper");
+    const tenantId = await getActiveTenantId();
+    if (!tenantId) {
+      return { error: ServerErrors.noActiveTenant, success: false };
+    }
+
+    // Verificar permiso usuarios:cambiar-contrasena o usuarios:gestionar
+    const { CheckAnyPermissonUseCase } = await import(
+      "@/features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase"
+    );
+    const hasPermission = await new CheckAnyPermissonUseCase().execute({
+      userId: session.user.id,
+      permissions: [
+        PermissionActions.usuarios.cambiarContrasena,
+        PermissionActions.usuarios.gestionar,
+      ],
+      tenantId,
+    });
+
+    if (!hasPermission) {
+      return { error: "Sin permisos para cambiar contraseñas", success: false };
+    }
+
+    // Ejecutar caso de uso
+    const { ChangeUserPasswordUseCase } = await import(
+      "../../application/use-cases/ChangeUserPasswordUseCase"
+    );
+    const { prismaUserPasswordRepository } = await import(
+      "../../infrastructure/repositories/PrismaUserPasswordRepository"
+    );
+
+    const useCase = new ChangeUserPasswordUseCase(prismaUserPasswordRepository);
+    const result = await useCase.execute({
+      adminUserId: session.user.id,
+      targetUserId: data.userId,
+      newPassword: data.newPassword,
+      confirmPassword: data.confirmPassword,
+      tenantId,
+    });
+
+    if (!result.success) {
+      return { error: result.error || "Error al cambiar contraseña", success: false };
+    }
+
+    revalidatePath(Routes.admin.usuarios);
+    return { error: null, success: true };
+  } catch (error) {
+    console.error("Error in changeUserPasswordAction:", error);
+    return { error: "Error inesperado al cambiar la contraseña", success: false };
+  }
+}

@@ -73,3 +73,14 @@ export interface InviteToTenantResult {
   error: string | null;
   success: boolean;
 }
+
+export interface ChangeUserPasswordInput {
+  userId: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface ChangeUserPasswordResult {
+  error: string | null;
+  success: boolean;
+}

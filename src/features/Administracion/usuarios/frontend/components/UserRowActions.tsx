@@ -20,6 +20,7 @@ import { UserRolesSheet } from "./UserRolesSheet";
 import { DeleteUserAlertDialog } from "./DeleteUserAlertDialog";
 import { InviteToTenantDialog } from "./InviteToTenantDialog";
 import { ToggleUserActiveDialog } from "./ToggleUserActiveDialog";
+import { ChangeUserPasswordDialog } from "./ChangeUserPasswordDialog";
 import { useAuth } from "@/core/shared/hooks/use-auth";
 
 interface UserRowActionsProps {
@@ -33,12 +34,16 @@ export function UserRowActions({ user }: UserRowActionsProps) {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [isToggleActiveOpen, setIsToggleActiveOpen] = useState(false);
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
 
   // No mostrar opcion de invitar para el usuario actual (previene auto-invitacion)
   const canShowInviteOption = user.id !== currentUser?.id;
   
   // No mostrar opción de desactivar para el usuario actual (previene auto-desactivación)
   const canShowToggleOption = user.id !== currentUser?.id;
+
+  // No mostrar opción de cambiar contraseña para el usuario actual
+  const canShowChangePasswordOption = user.id !== currentUser?.id;
 
   return (
     <>
@@ -83,6 +88,19 @@ export function UserRowActions({ user }: UserRowActionsProps) {
             >
               <DropdownMenuItem onClick={() => setIsToggleActiveOpen(true)}>
                 {user.isActive ? "Desactivar" : "Activar"}
+              </DropdownMenuItem>
+            </PermissionGuard>
+          )}
+
+          {canShowChangePasswordOption && (
+            <PermissionGuard
+              permissions={[
+                PermissionActions.usuarios.cambiarContrasena,
+                PermissionActions.usuarios.gestionar,
+              ]}
+            >
+              <DropdownMenuItem onClick={() => setIsChangePasswordOpen(true)}>
+                Cambiar contraseña
               </DropdownMenuItem>
             </PermissionGuard>
           )}
@@ -173,6 +191,22 @@ export function UserRowActions({ user }: UserRowActionsProps) {
             user={user}
             open={isToggleActiveOpen}
             onOpenChange={setIsToggleActiveOpen}
+          />
+        </PermissionGuard>
+      )}
+
+      {/* Dialog para cambiar contraseña */}
+      {canShowChangePasswordOption && (
+        <PermissionGuard
+          permissions={[
+            PermissionActions.usuarios.cambiarContrasena,
+            PermissionActions.usuarios.gestionar,
+          ]}
+        >
+          <ChangeUserPasswordDialog
+            user={user}
+            open={isChangePasswordOpen}
+            onOpenChange={setIsChangePasswordOpen}
           />
         </PermissionGuard>
       )}

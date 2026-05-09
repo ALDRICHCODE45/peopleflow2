@@ -51,3 +51,9 @@ export {
   type GetUserByIdUseCaseInput,
   type GetUserByIdUseCaseOutput,
 } from "./GetUserByIdUseCase";
+
+export {
+  ChangeUserPasswordUseCase,
+  type ChangeUserPasswordInput,
+  type ChangeUserPasswordOutput,
+} from "./ChangeUserPasswordUseCase";

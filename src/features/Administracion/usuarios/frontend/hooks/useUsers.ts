@@ -9,6 +9,7 @@ import {
   updateUserRolesAction,
   getAvailableRolesAction,
   toggleUserActiveAction,
+  changeUserPasswordAction,
 } from "../../server/presentation/actions/user.actions";
 import type { TenantUser, CreateUserData, UpdateUserData } from "../types";
 import { useTenant } from "@/features/tenants/frontend/context/TenantContext";
@@ -290,6 +291,52 @@ export function useToggleUserActive() {
       showToast({
         title: "Error",
         description: error.message || "Error al cambiar el estado del usuario",
+        type: "error",
+      });
+    },
+  });
+}
+
+/**
+ * Hook para cambiar la contraseña de un usuario
+ */
+export function useChangeUserPassword() {
+  const queryClient = useQueryClient();
+  const { tenant } = useTenant();
+
+  return useMutation({
+    mutationFn: async (data: {
+      userId: string;
+      newPassword: string;
+      confirmPassword: string;
+    }) => {
+      const result = await changeUserPasswordAction(data);
+      if (!result.success) {
+        throw new Error(result.error || "Error al cambiar contraseña");
+      }
+      return result;
+    },
+    onSuccess: async () => {
+      showToast({
+        title: "Contraseña actualizada",
+        description: "La contraseña fue cambiada correctamente. El usuario deberá iniciar sesión nuevamente.",
+        type: "success",
+      });
+      if (tenant?.id) {
+        await Promise.all([
+          queryClient.invalidateQueries({
+            queryKey: getUsersQueryKey(tenant.id),
+          }),
+          queryClient.invalidateQueries({
+            queryKey: usersQueryKeys.paginated(tenant.id),
+          }),
+        ]);
+      }
+    },
+    onError: (error: Error) => {
+      showToast({
+        title: "Error",
+        description: error.message || "Error al cambiar la contraseña",
         type: "error",
       });
     },
