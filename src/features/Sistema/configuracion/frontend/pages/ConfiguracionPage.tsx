@@ -75,6 +75,30 @@ const NOTIFICATION_MODULES = [
       },
     ],
   },
+  {
+    id: "commitments",
+    label: "Compromisos",
+    actions: [
+      {
+        id: "commitment-meeting-report",
+        label: "Reporte post-reunión",
+        description:
+          "Enviar reporte de compromisos al finalizar la reunión de seguimiento",
+      },
+      {
+        id: "commitment-morning-reminder",
+        label: "Recordatorio matutino",
+        description:
+          "Enviar recordatorio a reclutadores con compromisos que vencen hoy (9:00 AM)",
+      },
+      {
+        id: "commitment-evening-report",
+        label: "Reporte vespertino para admins",
+        description:
+          "Enviar reporte a administradores de compromisos que vencieron hoy (5:00 PM)",
+      },
+    ],
+  },
 ] as const;
 
 const TAB_CONFIG = [
@@ -168,9 +192,12 @@ export function ConfiguracionPage() {
       vacancyStaleRepeatValue: state.vacancyStaleRepeatValue,
       vacancyStaleRepeatUnit:
         state.vacancyStaleRepeatUnit === "horas" ? "HOURS" : "DAYS",
-      commitmentMeetingReportEnabled: state.commitmentMeetingReportEnabled,
-      commitmentMorningReminderEnabled: state.commitmentMorningReminderEnabled,
-      commitmentEveningReportEnabled: state.commitmentEveningReportEnabled,
+      commitmentMeetingReportEnabled:
+        state.activeActions["commitment-meeting-report"] ?? false,
+      commitmentMorningReminderEnabled:
+        state.activeActions["commitment-morning-reminder"] ?? false,
+      commitmentEveningReportEnabled:
+        state.activeActions["commitment-evening-report"] ?? false,
     });
   }, [state, saveConfigMutation]);
 

@@ -24,7 +24,7 @@ import {
   CheckmarkCircle02Icon,
   AlertCircleIcon,
   Add01Icon,
-  MailSend01Icon,
+
   Clock01Icon,
   Edit02Icon,
   Cancel01Icon,
@@ -37,8 +37,7 @@ import { useVacancyDetailQuery } from "../hooks/useVacancyDetailQuery";
 import { CommitmentItem } from "./CommitmentItem";
 import { Skeleton } from "@shadcn/skeleton";
 import { DatePicker } from "@/core/shared/ui/shadcn/date-picker";
-import { sendMeetingReportAction } from "../../server/presentation/actions/sendMeetingReport.action";
-import { showToast } from "@/core/shared/components/ShowToast";
+
 import type { VacancyCommitmentDTO } from "../types/vacancy.types";
 
 interface CommitmentsSheetProps {
@@ -173,7 +172,7 @@ export function CommitmentsSheet({
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [showCreateDialog, setShowCreateDialog] = useState(false);
-  const [isSendingReport, setIsSendingReport] = useState(false);
+
   const [historyCommitment, setHistoryCommitment] =
     useState<VacancyCommitmentDTO | null>(null);
 
@@ -200,36 +199,6 @@ export function CommitmentsSheet({
         },
       }
     );
-  };
-
-  const handleSendMeetingReport = async () => {
-    setIsSendingReport(true);
-    try {
-      const result = await sendMeetingReportAction();
-      if (result.error) {
-        showToast({
-          type: "error",
-          title: "Error",
-          description: result.error,
-        });
-      } else {
-        showToast({
-          type: "success",
-          title: "Reporte enviado",
-          description:
-            "El reporte de reunión se está procesando y se enviará por correo",
-        });
-      }
-    } catch (error) {
-      console.error("Error sending meeting report:", error);
-      showToast({
-        type: "error",
-        title: "Error inesperado",
-        description: "No se pudo enviar el reporte de reunión",
-      });
-    } finally {
-      setIsSendingReport(false);
-    }
   };
 
   const activeCommitments =
@@ -394,54 +363,30 @@ export function CommitmentsSheet({
 
                 <Separator />
 
-                {/* Create Button + Send Report Button */}
+                {/* Create Button */}
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <h3 className="text-sm font-semibold">
                     Compromisos activos
                   </h3>
-                  <div className="flex items-center gap-2">
-                    <PermissionGuard
-                      permissions={[
-                        PermissionActions.vacantesCompromisos.gestionar,
-                      ]}
+                  <PermissionGuard
+                    permissions={[
+                      PermissionActions.vacantesCompromisos.crear,
+                      PermissionActions.vacantesCompromisos.gestionar,
+                    ]}
+                  >
+                    <Button
+                      size="sm"
+                      onClick={() => setShowCreateDialog(true)}
+                      className="gap-1.5"
                     >
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={handleSendMeetingReport}
-                        disabled={isSendingReport}
-                        className="gap-1.5"
-                      >
-                        <HugeiconsIcon
-                          icon={MailSend01Icon}
-                          size={14}
-                          strokeWidth={2}
-                        />
-                        {isSendingReport
-                          ? "Enviando..."
-                          : "Enviar reporte de reunión"}
-                      </Button>
-                    </PermissionGuard>
-                    <PermissionGuard
-                      permissions={[
-                        PermissionActions.vacantesCompromisos.crear,
-                        PermissionActions.vacantesCompromisos.gestionar,
-                      ]}
-                    >
-                      <Button
-                        size="sm"
-                        onClick={() => setShowCreateDialog(true)}
-                        className="gap-1.5"
-                      >
-                        <HugeiconsIcon
-                          icon={Add01Icon}
-                          size={14}
-                          strokeWidth={2}
-                        />
-                        Crear compromiso
-                      </Button>
-                    </PermissionGuard>
-                  </div>
+                      <HugeiconsIcon
+                        icon={Add01Icon}
+                        size={14}
+                        strokeWidth={2}
+                      />
+                      Crear compromiso
+                    </Button>
+                  </PermissionGuard>
                 </div>
 
                 {/* Active Commitments List */}

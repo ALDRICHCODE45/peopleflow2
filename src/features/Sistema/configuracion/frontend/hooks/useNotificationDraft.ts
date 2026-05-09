@@ -19,10 +19,6 @@ export interface NotificationDraft {
   vacancyStaleTimeUnit: "horas" | "dias";
   vacancyStaleRepeatValue: number;
   vacancyStaleRepeatUnit: "horas" | "dias";
-  // Commitment notifications
-  commitmentMeetingReportEnabled: boolean;
-  commitmentMorningReminderEnabled: boolean;
-  commitmentEveningReportEnabled: boolean;
 }
 
 type Action =
@@ -55,9 +51,6 @@ const initialState: NotificationDraft = {
   vacancyStaleTimeUnit: "horas",
   vacancyStaleRepeatValue: 24,
   vacancyStaleRepeatUnit: "horas",
-  commitmentMeetingReportEnabled: false,
-  commitmentMorningReminderEnabled: false,
-  commitmentEveningReportEnabled: false,
 };
 
 function toggleInArray<T>(arr: T[], item: T, checked: boolean): T[] {
@@ -75,6 +68,9 @@ function reducer(state: NotificationDraft, action: Action): NotificationDraft {
           "lead-inactive": action.config.leadInactiveEnabled,
           "vacancy-countdown": action.config.vacancyCountdownEnabled,
           "vacancy-stale": action.config.vacancyStaleEnabled,
+          "commitment-meeting-report": action.config.commitmentMeetingReportEnabled,
+          "commitment-morning-reminder": action.config.commitmentMorningReminderEnabled,
+          "commitment-evening-report": action.config.commitmentEveningReportEnabled,
         },
         selectedStatuses: action.config.leadStatusChangeTriggers,
         inactiveStatuses: action.config.leadInactiveStatuses,
@@ -89,9 +85,6 @@ function reducer(state: NotificationDraft, action: Action): NotificationDraft {
         vacancyStaleRepeatValue: action.config.vacancyStaleRepeatValue,
         vacancyStaleRepeatUnit:
           action.config.vacancyStaleRepeatUnit === "HOURS" ? "horas" : "dias",
-        commitmentMeetingReportEnabled: action.config.commitmentMeetingReportEnabled,
-        commitmentMorningReminderEnabled: action.config.commitmentMorningReminderEnabled,
-        commitmentEveningReportEnabled: action.config.commitmentEveningReportEnabled,
       };
     case "SET_ENABLED":
       return { ...state, enabled: action.enabled };

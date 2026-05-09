@@ -36,7 +36,9 @@ import { BulkDeleteVacanciesDialog } from "../components/BulkDeleteVacanciesDial
 import { BulkReassignVacanciesDialog } from "../components/BulkReassignVacanciesDialog";
 import { BulkDuplicateVacanciesDialog } from "../components/BulkDuplicateVacanciesDialog";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ExpanderIcon, Minimize01Icon } from "@hugeicons/core-free-icons";
+import { ExpanderIcon, Minimize01Icon, MailSend01Icon } from "@hugeicons/core-free-icons";
+import { sendMeetingReportAction } from "../../server/presentation/actions/sendMeetingReport.action";
+import { showToast } from "@/core/shared/components/ShowToast";
 
 type VacancyQuickPreset = "MY_VACANCIES" | "URGENT" | "THIS_WEEK";
 
@@ -74,6 +76,35 @@ export function VacancyListPage() {
   const [commitmentsVacancyId, setCommitmentsVacancyId] = useState<
     string | null
   >(null);
+  const [isSendingReport, setIsSendingReport] = useState(false);
+
+  const canSendMeetingReport =
+    isSuperAdmin ||
+    hasAnyPermission([PermissionActions.vacantes.gestionar]);
+
+  const handleSendMeetingReport = async () => {
+    setIsSendingReport(true);
+    try {
+      const result = await sendMeetingReportAction();
+      if (result.error) {
+        showToast({ type: "error", title: "Error", description: result.error });
+      } else {
+        showToast({
+          type: "success",
+          title: "Reporte enviado",
+          description: "El reporte de reunión se está procesando y se enviará por correo",
+        });
+      }
+    } catch {
+      showToast({
+        type: "error",
+        title: "Error inesperado",
+        description: "No se pudo enviar el reporte de reunión",
+      });
+    } finally {
+      setIsSendingReport(false);
+    }
+  };
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -499,16 +530,30 @@ export function VacancyListPage() {
                     activeTabs={activeTabs}
                     onTabsChange={handleMultiTabChange}
                   />
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setIsFocusMode(true)}
-                    className="gap-2 flex-shrink-0 text-muted-foreground hover:text-foreground"
-                    aria-label="Activar modo presentación"
-                  >
-                    <HugeiconsIcon icon={ExpanderIcon} className="h-4 w-4" />
-                    <span className="hidden sm:inline">Modo presentación</span>
-                  </Button>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    {canSendMeetingReport && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleSendMeetingReport}
+                        disabled={isSendingReport}
+                        className="gap-1.5"
+                      >
+                        <HugeiconsIcon icon={MailSend01Icon} size={14} strokeWidth={2} />
+                        {isSendingReport ? "Enviando..." : "Enviar reporte de reunión"}
+                      </Button>
+                    )}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setIsFocusMode(true)}
+                      className="gap-2 text-muted-foreground hover:text-foreground"
+                      aria-label="Activar modo presentación"
+                    >
+                      <HugeiconsIcon icon={ExpanderIcon} className="h-4 w-4" />
+                      <span className="hidden sm:inline">Modo presentación</span>
+                    </Button>
+                  </div>
                 </div>
               </>
             )}
