@@ -28,13 +28,14 @@ export class PrismaUserPasswordRepository implements IUserPasswordRepository {
    * Sets a new password for a user by directly updating the Account table
    * Better Auth admin API requires User.role='admin', incompatible with tenant RBAC
    * We hash the password ourselves and update the credential account record
+   * @throws Error if user has no credential account
    */
   async setUserPassword(userId: string, newPassword: string): Promise<void> {
     // Hash password with bcrypt (Better Auth uses bcryptjs internally)
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     // Update the credential account password
-    await prisma.account.updateMany({
+    const result = await prisma.account.updateMany({
       where: {
         userId,
         providerId: "credential",
@@ -43,6 +44,13 @@ export class PrismaUserPasswordRepository implements IUserPasswordRepository {
         password: hashedPassword,
       },
     });
+
+    // Assert that a credential account exists for this user
+    if (result.count === 0) {
+      throw new Error(
+        "Usuario no tiene cuenta de credenciales (sin email/contraseña)",
+      );
+    }
   }
 
   /**
