@@ -3,10 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@shadcn/button";
-import {
-  Card,
-  CardContent,
-} from "@shadcn/card";
+import { Card, CardContent } from "@shadcn/card";
 import { Field, FieldError, FieldGroup } from "@/core/shared/ui/shadcn/field";
 import {
   PasswordInput,
@@ -15,7 +12,6 @@ import {
 } from "@/core/shared/ui/shadcn/password-input";
 import Image from "next/image";
 import { Routes } from "@/core/shared/constants/routes";
-import { useResetPassword } from "../hooks/usePasswordReset";
 import { showToast } from "@/core/shared/components/ShowToast";
 
 export const ResetPasswordPage = () => {
@@ -26,11 +22,12 @@ export const ResetPasswordPage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [newPasswordError, setNewPasswordError] = useState<string | null>(null);
-  const [confirmPasswordError, setConfirmPasswordError] = useState<string | null>(null);
+  const [confirmPasswordError, setConfirmPasswordError] = useState<
+    string | null
+  >(null);
   const [newPasswordTouched, setNewPasswordTouched] = useState(false);
   const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
-
-  const { mutate: resetPassword, isPending } = useResetPassword();
+  const [isPending, setIsPending] = useState(false);
 
   // Validate token exists
   useEffect(() => {
@@ -38,7 +35,8 @@ export const ResetPasswordPage = () => {
       showToast({
         type: "error",
         title: "Enlace inválido",
-        description: "El enlace de restablecimiento es inválido o ha expirado.",
+        description:
+          "El enlace de restablecimiento es inválido o ha expirado.",
       });
       router.push(Routes.forgotPassword);
     }
@@ -51,7 +49,9 @@ export const ResetPasswordPage = () => {
     }
 
     if (value.length < 8) {
-      setNewPasswordError("La contraseña debe tener al menos 8 caracteres");
+      setNewPasswordError(
+        "La contraseña debe tener al menos 8 caracteres"
+      );
       return false;
     }
 
@@ -84,7 +84,7 @@ export const ResetPasswordPage = () => {
     validateConfirmPassword(confirmPassword);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!token) {
@@ -106,24 +106,63 @@ export const ResetPasswordPage = () => {
       return;
     }
 
-    resetPassword(
-      {
-        newPassword,
-        token,
-      },
-      {
-        onSuccess: () => {
-          // Redirect to sign-in after successful reset
-          setTimeout(() => {
-            router.push(Routes.signIn);
-          }, 1500);
-        },
-      },
-    );
+    setIsPending(true);
+
+    try {
+      const response = await fetch("/api/auth/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          newPassword,
+          token,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.message ?? "Error al restablecer la contraseña"
+        );
+      }
+
+      showToast({
+        type: "success",
+        title: "Contraseña actualizada",
+        description: "Tu contraseña ha sido restablecida exitosamente.",
+      });
+
+      setTimeout(() => {
+        router.push(Routes.signIn);
+      }, 1500);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "";
+
+      let description = "No se pudo restablecer la contraseña.";
+
+      if (
+        message.includes("token") ||
+        message.includes("expired") ||
+        message.includes("invalid")
+      ) {
+        description =
+          "El enlace es inválido o ha expirado. Solicita un nuevo enlace.";
+      }
+
+      showToast({
+        type: "error",
+        title: "Error",
+        description,
+      });
+    } finally {
+      setIsPending(false);
+    }
   };
 
-  const isNewPasswordInvalid = newPasswordTouched && newPasswordError !== null;
-  const isConfirmPasswordInvalid = confirmPasswordTouched && confirmPasswordError !== null;
+  const isNewPasswordInvalid =
+    newPasswordTouched && newPasswordError !== null;
+  const isConfirmPasswordInvalid =
+    confirmPasswordTouched && confirmPasswordError !== null;
 
   return (
     <div className="flex items-center justify-center min-h-screen p-4">
@@ -145,13 +184,18 @@ export const ResetPasswordPage = () => {
               </h1>
               <p className="text-muted-foreground text-sm">
                 Ingresa tu nueva contraseña para{" "}
-                <span className="text-foreground">completar el restablecimiento.</span>
+                <span className="text-foreground">
+                  completar el restablecimiento.
+                </span>
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="w-full">
               <FieldGroup className="w-full">
-                <Field data-invalid={isNewPasswordInvalid} className="w-full">
+                <Field
+                  data-invalid={isNewPasswordInvalid}
+                  className="w-full"
+                >
                   <PasswordInput className="rounded-xl">
                     <PasswordInputInput
                       placeholder="Nueva contraseña"
@@ -164,12 +208,11 @@ export const ResetPasswordPage = () => {
                         if (newPasswordTouched) {
                           validateNewPassword(e.target.value);
                         }
-                        // Re-validate confirm password if it's been touched
                         if (confirmPasswordTouched && confirmPassword) {
                           setConfirmPasswordError(
                             e.target.value !== confirmPassword
                               ? "Las contraseñas no coinciden"
-                              : null,
+                              : null
                           );
                         }
                       }}
@@ -180,11 +223,16 @@ export const ResetPasswordPage = () => {
                     <PasswordInputAdornmentToggle />
                   </PasswordInput>
                   {isNewPasswordInvalid && newPasswordError && (
-                    <FieldError errors={[{ message: newPasswordError }]} />
+                    <FieldError
+                      errors={[{ message: newPasswordError }]}
+                    />
                   )}
                 </Field>
 
-                <Field data-invalid={isConfirmPasswordInvalid} className="w-full">
+                <Field
+                  data-invalid={isConfirmPasswordInvalid}
+                  className="w-full"
+                >
                   <PasswordInput className="rounded-xl">
                     <PasswordInputInput
                       placeholder="Confirmar contraseña"
@@ -205,7 +253,9 @@ export const ResetPasswordPage = () => {
                     <PasswordInputAdornmentToggle />
                   </PasswordInput>
                   {isConfirmPasswordInvalid && confirmPasswordError && (
-                    <FieldError errors={[{ message: confirmPasswordError }]} />
+                    <FieldError
+                      errors={[{ message: confirmPasswordError }]}
+                    />
                   )}
                 </Field>
               </FieldGroup>
@@ -217,7 +267,9 @@ export const ResetPasswordPage = () => {
                   size="lg"
                   disabled={isPending}
                 >
-                  {isPending ? "Actualizando..." : "Restablecer contraseña"}
+                  {isPending
+                    ? "Actualizando..."
+                    : "Restablecer contraseña"}
                 </Button>
               </div>
             </form>
