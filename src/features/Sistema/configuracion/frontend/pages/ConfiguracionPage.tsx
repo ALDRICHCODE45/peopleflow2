@@ -168,6 +168,9 @@ export function ConfiguracionPage() {
       vacancyStaleRepeatValue: state.vacancyStaleRepeatValue,
       vacancyStaleRepeatUnit:
         state.vacancyStaleRepeatUnit === "horas" ? "HOURS" : "DAYS",
+      commitmentMeetingReportEnabled: state.commitmentMeetingReportEnabled,
+      commitmentMorningReminderEnabled: state.commitmentMorningReminderEnabled,
+      commitmentEveningReportEnabled: state.commitmentEveningReportEnabled,
     });
   }, [state, saveConfigMutation]);
 

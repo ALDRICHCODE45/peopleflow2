@@ -85,6 +85,9 @@ export async function saveNotificationConfigAction(data: {
   vacancyStaleTimeUnit: "HOURS" | "DAYS";
   vacancyStaleRepeatValue: number;
   vacancyStaleRepeatUnit: "HOURS" | "DAYS";
+  commitmentMeetingReportEnabled: boolean;
+  commitmentMorningReminderEnabled: boolean;
+  commitmentEveningReportEnabled: boolean;
 }): Promise<SaveNotificationConfigResult> {
   try {
     const headersList = await headers();

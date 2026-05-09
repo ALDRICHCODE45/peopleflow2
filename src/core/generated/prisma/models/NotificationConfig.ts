@@ -54,6 +54,9 @@ export type NotificationConfigMinAggregateOutputType = {
   vacancyStaleTimeUnit: $Enums.InactiveTimeUnit | null
   vacancyStaleRepeatValue: number | null
   vacancyStaleRepeatUnit: $Enums.InactiveTimeUnit | null
+  commitmentMeetingReportEnabled: boolean | null
+  commitmentMorningReminderEnabled: boolean | null
+  commitmentEveningReportEnabled: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -72,6 +75,9 @@ export type NotificationConfigMaxAggregateOutputType = {
   vacancyStaleTimeUnit: $Enums.InactiveTimeUnit | null
   vacancyStaleRepeatValue: number | null
   vacancyStaleRepeatUnit: $Enums.InactiveTimeUnit | null
+  commitmentMeetingReportEnabled: boolean | null
+  commitmentMorningReminderEnabled: boolean | null
+  commitmentEveningReportEnabled: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -95,6 +101,9 @@ export type NotificationConfigCountAggregateOutputType = {
   vacancyStaleTimeUnit: number
   vacancyStaleRepeatValue: number
   vacancyStaleRepeatUnit: number
+  commitmentMeetingReportEnabled: number
+  commitmentMorningReminderEnabled: number
+  commitmentEveningReportEnabled: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -129,6 +138,9 @@ export type NotificationConfigMinAggregateInputType = {
   vacancyStaleTimeUnit?: true
   vacancyStaleRepeatValue?: true
   vacancyStaleRepeatUnit?: true
+  commitmentMeetingReportEnabled?: true
+  commitmentMorningReminderEnabled?: true
+  commitmentEveningReportEnabled?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -147,6 +159,9 @@ export type NotificationConfigMaxAggregateInputType = {
   vacancyStaleTimeUnit?: true
   vacancyStaleRepeatValue?: true
   vacancyStaleRepeatUnit?: true
+  commitmentMeetingReportEnabled?: true
+  commitmentMorningReminderEnabled?: true
+  commitmentEveningReportEnabled?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -170,6 +185,9 @@ export type NotificationConfigCountAggregateInputType = {
   vacancyStaleTimeUnit?: true
   vacancyStaleRepeatValue?: true
   vacancyStaleRepeatUnit?: true
+  commitmentMeetingReportEnabled?: true
+  commitmentMorningReminderEnabled?: true
+  commitmentEveningReportEnabled?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -280,6 +298,9 @@ export type NotificationConfigGroupByOutputType = {
   vacancyStaleTimeUnit: $Enums.InactiveTimeUnit
   vacancyStaleRepeatValue: number
   vacancyStaleRepeatUnit: $Enums.InactiveTimeUnit
+  commitmentMeetingReportEnabled: boolean
+  commitmentMorningReminderEnabled: boolean
+  commitmentEveningReportEnabled: boolean
   createdAt: Date
   updatedAt: Date
   _count: NotificationConfigCountAggregateOutputType | null
@@ -326,6 +347,9 @@ export type NotificationConfigWhereInput = {
   vacancyStaleTimeUnit?: Prisma.EnumInactiveTimeUnitFilter<"NotificationConfig"> | $Enums.InactiveTimeUnit
   vacancyStaleRepeatValue?: Prisma.IntFilter<"NotificationConfig"> | number
   vacancyStaleRepeatUnit?: Prisma.EnumInactiveTimeUnitFilter<"NotificationConfig"> | $Enums.InactiveTimeUnit
+  commitmentMeetingReportEnabled?: Prisma.BoolFilter<"NotificationConfig"> | boolean
+  commitmentMorningReminderEnabled?: Prisma.BoolFilter<"NotificationConfig"> | boolean
+  commitmentEveningReportEnabled?: Prisma.BoolFilter<"NotificationConfig"> | boolean
   createdAt?: Prisma.DateTimeFilter<"NotificationConfig"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NotificationConfig"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -350,6 +374,9 @@ export type NotificationConfigOrderByWithRelationInput = {
   vacancyStaleTimeUnit?: Prisma.SortOrder
   vacancyStaleRepeatValue?: Prisma.SortOrder
   vacancyStaleRepeatUnit?: Prisma.SortOrder
+  commitmentMeetingReportEnabled?: Prisma.SortOrder
+  commitmentMorningReminderEnabled?: Prisma.SortOrder
+  commitmentEveningReportEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
@@ -377,6 +404,9 @@ export type NotificationConfigWhereUniqueInput = Prisma.AtLeast<{
   vacancyStaleTimeUnit?: Prisma.EnumInactiveTimeUnitFilter<"NotificationConfig"> | $Enums.InactiveTimeUnit
   vacancyStaleRepeatValue?: Prisma.IntFilter<"NotificationConfig"> | number
   vacancyStaleRepeatUnit?: Prisma.EnumInactiveTimeUnitFilter<"NotificationConfig"> | $Enums.InactiveTimeUnit
+  commitmentMeetingReportEnabled?: Prisma.BoolFilter<"NotificationConfig"> | boolean
+  commitmentMorningReminderEnabled?: Prisma.BoolFilter<"NotificationConfig"> | boolean
+  commitmentEveningReportEnabled?: Prisma.BoolFilter<"NotificationConfig"> | boolean
   createdAt?: Prisma.DateTimeFilter<"NotificationConfig"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NotificationConfig"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -401,6 +431,9 @@ export type NotificationConfigOrderByWithAggregationInput = {
   vacancyStaleTimeUnit?: Prisma.SortOrder
   vacancyStaleRepeatValue?: Prisma.SortOrder
   vacancyStaleRepeatUnit?: Prisma.SortOrder
+  commitmentMeetingReportEnabled?: Prisma.SortOrder
+  commitmentMorningReminderEnabled?: Prisma.SortOrder
+  commitmentEveningReportEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.NotificationConfigCountOrderByAggregateInput
@@ -432,6 +465,9 @@ export type NotificationConfigScalarWhereWithAggregatesInput = {
   vacancyStaleTimeUnit?: Prisma.EnumInactiveTimeUnitWithAggregatesFilter<"NotificationConfig"> | $Enums.InactiveTimeUnit
   vacancyStaleRepeatValue?: Prisma.IntWithAggregatesFilter<"NotificationConfig"> | number
   vacancyStaleRepeatUnit?: Prisma.EnumInactiveTimeUnitWithAggregatesFilter<"NotificationConfig"> | $Enums.InactiveTimeUnit
+  commitmentMeetingReportEnabled?: Prisma.BoolWithAggregatesFilter<"NotificationConfig"> | boolean
+  commitmentMorningReminderEnabled?: Prisma.BoolWithAggregatesFilter<"NotificationConfig"> | boolean
+  commitmentEveningReportEnabled?: Prisma.BoolWithAggregatesFilter<"NotificationConfig"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"NotificationConfig"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"NotificationConfig"> | Date | string
 }
@@ -454,6 +490,9 @@ export type NotificationConfigCreateInput = {
   vacancyStaleTimeUnit?: $Enums.InactiveTimeUnit
   vacancyStaleRepeatValue?: number
   vacancyStaleRepeatUnit?: $Enums.InactiveTimeUnit
+  commitmentMeetingReportEnabled?: boolean
+  commitmentMorningReminderEnabled?: boolean
+  commitmentEveningReportEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutNotificationConfigInput
@@ -478,6 +517,9 @@ export type NotificationConfigUncheckedCreateInput = {
   vacancyStaleTimeUnit?: $Enums.InactiveTimeUnit
   vacancyStaleRepeatValue?: number
   vacancyStaleRepeatUnit?: $Enums.InactiveTimeUnit
+  commitmentMeetingReportEnabled?: boolean
+  commitmentMorningReminderEnabled?: boolean
+  commitmentEveningReportEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -500,6 +542,9 @@ export type NotificationConfigUpdateInput = {
   vacancyStaleTimeUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
   vacancyStaleRepeatValue?: Prisma.IntFieldUpdateOperationsInput | number
   vacancyStaleRepeatUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
+  commitmentMeetingReportEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  commitmentMorningReminderEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  commitmentEveningReportEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutNotificationConfigNestedInput
@@ -524,6 +569,9 @@ export type NotificationConfigUncheckedUpdateInput = {
   vacancyStaleTimeUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
   vacancyStaleRepeatValue?: Prisma.IntFieldUpdateOperationsInput | number
   vacancyStaleRepeatUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
+  commitmentMeetingReportEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  commitmentMorningReminderEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  commitmentEveningReportEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -547,6 +595,9 @@ export type NotificationConfigCreateManyInput = {
   vacancyStaleTimeUnit?: $Enums.InactiveTimeUnit
   vacancyStaleRepeatValue?: number
   vacancyStaleRepeatUnit?: $Enums.InactiveTimeUnit
+  commitmentMeetingReportEnabled?: boolean
+  commitmentMorningReminderEnabled?: boolean
+  commitmentEveningReportEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -569,6 +620,9 @@ export type NotificationConfigUpdateManyMutationInput = {
   vacancyStaleTimeUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
   vacancyStaleRepeatValue?: Prisma.IntFieldUpdateOperationsInput | number
   vacancyStaleRepeatUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
+  commitmentMeetingReportEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  commitmentMorningReminderEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  commitmentEveningReportEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -592,6 +646,9 @@ export type NotificationConfigUncheckedUpdateManyInput = {
   vacancyStaleTimeUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
   vacancyStaleRepeatValue?: Prisma.IntFieldUpdateOperationsInput | number
   vacancyStaleRepeatUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
+  commitmentMeetingReportEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  commitmentMorningReminderEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  commitmentEveningReportEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -652,6 +709,9 @@ export type NotificationConfigCountOrderByAggregateInput = {
   vacancyStaleTimeUnit?: Prisma.SortOrder
   vacancyStaleRepeatValue?: Prisma.SortOrder
   vacancyStaleRepeatUnit?: Prisma.SortOrder
+  commitmentMeetingReportEnabled?: Prisma.SortOrder
+  commitmentMorningReminderEnabled?: Prisma.SortOrder
+  commitmentEveningReportEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -677,6 +737,9 @@ export type NotificationConfigMaxOrderByAggregateInput = {
   vacancyStaleTimeUnit?: Prisma.SortOrder
   vacancyStaleRepeatValue?: Prisma.SortOrder
   vacancyStaleRepeatUnit?: Prisma.SortOrder
+  commitmentMeetingReportEnabled?: Prisma.SortOrder
+  commitmentMorningReminderEnabled?: Prisma.SortOrder
+  commitmentEveningReportEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -695,6 +758,9 @@ export type NotificationConfigMinOrderByAggregateInput = {
   vacancyStaleTimeUnit?: Prisma.SortOrder
   vacancyStaleRepeatValue?: Prisma.SortOrder
   vacancyStaleRepeatUnit?: Prisma.SortOrder
+  commitmentMeetingReportEnabled?: Prisma.SortOrder
+  commitmentMorningReminderEnabled?: Prisma.SortOrder
+  commitmentEveningReportEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -805,6 +871,9 @@ export type NotificationConfigCreateWithoutTenantInput = {
   vacancyStaleTimeUnit?: $Enums.InactiveTimeUnit
   vacancyStaleRepeatValue?: number
   vacancyStaleRepeatUnit?: $Enums.InactiveTimeUnit
+  commitmentMeetingReportEnabled?: boolean
+  commitmentMorningReminderEnabled?: boolean
+  commitmentEveningReportEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -827,6 +896,9 @@ export type NotificationConfigUncheckedCreateWithoutTenantInput = {
   vacancyStaleTimeUnit?: $Enums.InactiveTimeUnit
   vacancyStaleRepeatValue?: number
   vacancyStaleRepeatUnit?: $Enums.InactiveTimeUnit
+  commitmentMeetingReportEnabled?: boolean
+  commitmentMorningReminderEnabled?: boolean
+  commitmentEveningReportEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -865,6 +937,9 @@ export type NotificationConfigUpdateWithoutTenantInput = {
   vacancyStaleTimeUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
   vacancyStaleRepeatValue?: Prisma.IntFieldUpdateOperationsInput | number
   vacancyStaleRepeatUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
+  commitmentMeetingReportEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  commitmentMorningReminderEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  commitmentEveningReportEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -887,6 +962,9 @@ export type NotificationConfigUncheckedUpdateWithoutTenantInput = {
   vacancyStaleTimeUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
   vacancyStaleRepeatValue?: Prisma.IntFieldUpdateOperationsInput | number
   vacancyStaleRepeatUnit?: Prisma.EnumInactiveTimeUnitFieldUpdateOperationsInput | $Enums.InactiveTimeUnit
+  commitmentMeetingReportEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  commitmentMorningReminderEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  commitmentEveningReportEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -912,6 +990,9 @@ export type NotificationConfigSelect<ExtArgs extends runtime.Types.Extensions.In
   vacancyStaleTimeUnit?: boolean
   vacancyStaleRepeatValue?: boolean
   vacancyStaleRepeatUnit?: boolean
+  commitmentMeetingReportEnabled?: boolean
+  commitmentMorningReminderEnabled?: boolean
+  commitmentEveningReportEnabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -936,6 +1017,9 @@ export type NotificationConfigSelectCreateManyAndReturn<ExtArgs extends runtime.
   vacancyStaleTimeUnit?: boolean
   vacancyStaleRepeatValue?: boolean
   vacancyStaleRepeatUnit?: boolean
+  commitmentMeetingReportEnabled?: boolean
+  commitmentMorningReminderEnabled?: boolean
+  commitmentEveningReportEnabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -960,6 +1044,9 @@ export type NotificationConfigSelectUpdateManyAndReturn<ExtArgs extends runtime.
   vacancyStaleTimeUnit?: boolean
   vacancyStaleRepeatValue?: boolean
   vacancyStaleRepeatUnit?: boolean
+  commitmentMeetingReportEnabled?: boolean
+  commitmentMorningReminderEnabled?: boolean
+  commitmentEveningReportEnabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -984,11 +1071,14 @@ export type NotificationConfigSelectScalar = {
   vacancyStaleTimeUnit?: boolean
   vacancyStaleRepeatValue?: boolean
   vacancyStaleRepeatUnit?: boolean
+  commitmentMeetingReportEnabled?: boolean
+  commitmentMorningReminderEnabled?: boolean
+  commitmentEveningReportEnabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type NotificationConfigOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "enabled" | "recipientUserIds" | "leadStatusChangeEnabled" | "leadStatusChangeTriggers" | "leadInactiveEnabled" | "leadInactiveStatuses" | "leadInactiveTimeValue" | "leadInactiveTimeUnit" | "vacancyCountdownEnabled" | "vacancyCountdownDaysBefore" | "vacancyStaleEnabled" | "vacancyStaleStatuses" | "vacancyStaleTimeValue" | "vacancyStaleTimeUnit" | "vacancyStaleRepeatValue" | "vacancyStaleRepeatUnit" | "createdAt" | "updatedAt", ExtArgs["result"]["notificationConfig"]>
+export type NotificationConfigOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "enabled" | "recipientUserIds" | "leadStatusChangeEnabled" | "leadStatusChangeTriggers" | "leadInactiveEnabled" | "leadInactiveStatuses" | "leadInactiveTimeValue" | "leadInactiveTimeUnit" | "vacancyCountdownEnabled" | "vacancyCountdownDaysBefore" | "vacancyStaleEnabled" | "vacancyStaleStatuses" | "vacancyStaleTimeValue" | "vacancyStaleTimeUnit" | "vacancyStaleRepeatValue" | "vacancyStaleRepeatUnit" | "commitmentMeetingReportEnabled" | "commitmentMorningReminderEnabled" | "commitmentEveningReportEnabled" | "createdAt" | "updatedAt", ExtArgs["result"]["notificationConfig"]>
 export type NotificationConfigInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
@@ -1023,6 +1113,9 @@ export type $NotificationConfigPayload<ExtArgs extends runtime.Types.Extensions.
     vacancyStaleTimeUnit: $Enums.InactiveTimeUnit
     vacancyStaleRepeatValue: number
     vacancyStaleRepeatUnit: $Enums.InactiveTimeUnit
+    commitmentMeetingReportEnabled: boolean
+    commitmentMorningReminderEnabled: boolean
+    commitmentEveningReportEnabled: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["notificationConfig"]>
@@ -1467,6 +1560,9 @@ export interface NotificationConfigFieldRefs {
   readonly vacancyStaleTimeUnit: Prisma.FieldRef<"NotificationConfig", 'InactiveTimeUnit'>
   readonly vacancyStaleRepeatValue: Prisma.FieldRef<"NotificationConfig", 'Int'>
   readonly vacancyStaleRepeatUnit: Prisma.FieldRef<"NotificationConfig", 'InactiveTimeUnit'>
+  readonly commitmentMeetingReportEnabled: Prisma.FieldRef<"NotificationConfig", 'Boolean'>
+  readonly commitmentMorningReminderEnabled: Prisma.FieldRef<"NotificationConfig", 'Boolean'>
+  readonly commitmentEveningReportEnabled: Prisma.FieldRef<"NotificationConfig", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"NotificationConfig", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"NotificationConfig", 'DateTime'>
 }

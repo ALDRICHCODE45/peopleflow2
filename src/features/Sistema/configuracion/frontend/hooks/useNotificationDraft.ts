@@ -19,6 +19,10 @@ export interface NotificationDraft {
   vacancyStaleTimeUnit: "horas" | "dias";
   vacancyStaleRepeatValue: number;
   vacancyStaleRepeatUnit: "horas" | "dias";
+  // Commitment notifications
+  commitmentMeetingReportEnabled: boolean;
+  commitmentMorningReminderEnabled: boolean;
+  commitmentEveningReportEnabled: boolean;
 }
 
 type Action =
@@ -51,6 +55,9 @@ const initialState: NotificationDraft = {
   vacancyStaleTimeUnit: "horas",
   vacancyStaleRepeatValue: 24,
   vacancyStaleRepeatUnit: "horas",
+  commitmentMeetingReportEnabled: false,
+  commitmentMorningReminderEnabled: false,
+  commitmentEveningReportEnabled: false,
 };
 
 function toggleInArray<T>(arr: T[], item: T, checked: boolean): T[] {
@@ -82,6 +89,9 @@ function reducer(state: NotificationDraft, action: Action): NotificationDraft {
         vacancyStaleRepeatValue: action.config.vacancyStaleRepeatValue,
         vacancyStaleRepeatUnit:
           action.config.vacancyStaleRepeatUnit === "HOURS" ? "horas" : "dias",
+        commitmentMeetingReportEnabled: action.config.commitmentMeetingReportEnabled,
+        commitmentMorningReminderEnabled: action.config.commitmentMorningReminderEnabled,
+        commitmentEveningReportEnabled: action.config.commitmentEveningReportEnabled,
       };
     case "SET_ENABLED":
       return { ...state, enabled: action.enabled };

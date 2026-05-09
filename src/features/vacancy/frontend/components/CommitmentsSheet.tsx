@@ -25,9 +25,9 @@ import {
   AlertCircleIcon,
   Add01Icon,
   MailSend01Icon,
-  ClockCircle01Icon,
+  Clock01Icon,
   Edit02Icon,
-  CancelCircleIcon,
+  Cancel01Icon,
 } from "@hugeicons/core-free-icons";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
@@ -61,8 +61,8 @@ function CommitmentTimelineEvent({
     created: Add01Icon,
     edited: Edit02Icon,
     completed: CheckmarkCircle02Icon,
-    cancelled: CancelCircleIcon,
-    reprogrammed: ClockCircle01Icon,
+    cancelled: Cancel01Icon,
+    reprogrammed: Clock01Icon,
   };
 
   const colorMap = {
@@ -203,7 +203,7 @@ export function CommitmentsSheet({
   const handleSendMeetingReport = async () => {
     setIsSendingReport(true);
     try {
-      const result = await sendMeetingReportAction({});
+      const result = await sendMeetingReportAction();
       if (result.error) {
         showToast({
           type: "error",

@@ -23,6 +23,10 @@ export interface SaveNotificationConfigInput {
   vacancyStaleTimeUnit: "HOURS" | "DAYS";
   vacancyStaleRepeatValue: number;
   vacancyStaleRepeatUnit: "HOURS" | "DAYS";
+  // Commitment notifications
+  commitmentMeetingReportEnabled: boolean;
+  commitmentMorningReminderEnabled: boolean;
+  commitmentEveningReportEnabled: boolean;
 }
 
 export interface SaveNotificationConfigOutput {
@@ -79,6 +83,9 @@ export class SaveNotificationConfigUseCase {
         vacancyStaleTimeUnit: input.vacancyStaleTimeUnit,
         vacancyStaleRepeatValue: input.vacancyStaleRepeatValue,
         vacancyStaleRepeatUnit: input.vacancyStaleRepeatUnit,
+        commitmentMeetingReportEnabled: input.commitmentMeetingReportEnabled,
+        commitmentMorningReminderEnabled: input.commitmentMorningReminderEnabled,
+        commitmentEveningReportEnabled: input.commitmentEveningReportEnabled,
       });
 
       return { success: true, config: config.toJSON() };

@@ -1278,6 +1278,18 @@ const handleVacancyStaleNotification = inngest.createFunction(
   },
 );
 
+// Helper: Inngest step.run() serializes Date → string. Rehydrate before passing to templates.
+function rehydrateReportRow<T extends { dueDate: unknown; createdAt: unknown; completedAt: unknown }>(
+  row: T,
+): T & { dueDate: Date; createdAt: Date; completedAt: Date | null } {
+  return {
+    ...row,
+    dueDate: new Date(row.dueDate as string),
+    createdAt: new Date(row.createdAt as string),
+    completedAt: row.completedAt ? new Date(row.completedAt as string) : null,
+  };
+}
+
 // Function 8: Manual post-meeting commitment report
 const handleCommitmentMeetingReport = inngest.createFunction(
   {
@@ -1326,18 +1338,19 @@ const handleCommitmentMeetingReport = inngest.createFunction(
           [emailProvider]
         );
 
+        const hydratedCommitments = recruiterReport.commitments.map(rehydrateReportRow);
         const dueTodayIds = recruiterReport.dueToday.map((c) => c.commitmentId);
 
         const htmlTemplate = generateCommitmentMeetingReportEmail({
           recruiterName: recruiterReport.recruiterName || "Reclutador",
-          commitments: recruiterReport.commitments,
+          commitments: hydratedCommitments,
           dueTodayCommitmentIds: dueTodayIds,
           appUrl: APP_URL,
         });
 
         const plainText = generateCommitmentMeetingReportPlainText({
           recruiterName: recruiterReport.recruiterName || "Reclutador",
-          commitments: recruiterReport.commitments,
+          commitments: hydratedCommitments,
           dueTodayCommitmentIds: dueTodayIds,
           appUrl: APP_URL,
         });
@@ -1360,7 +1373,7 @@ const handleCommitmentMeetingReport = inngest.createFunction(
 
     // Step 3: Send admin email
     if (adminRecipients.length > 0 && recruiterReports.length > 0) {
-      const allCommitments = recruiterReports.flatMap((r) => r.commitments);
+      const allCommitments = recruiterReports.flatMap((r) => r.commitments).map(rehydrateReportRow);
       const allDueTodayIds = recruiterReports.flatMap((r) =>
         r.dueToday.map((c) => c.commitmentId)
       );

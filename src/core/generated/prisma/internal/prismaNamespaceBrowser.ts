@@ -673,6 +673,9 @@ export const NotificationConfigScalarFieldEnum = {
   vacancyStaleTimeUnit: 'vacancyStaleTimeUnit',
   vacancyStaleRepeatValue: 'vacancyStaleRepeatValue',
   vacancyStaleRepeatUnit: 'vacancyStaleRepeatUnit',
+  commitmentMeetingReportEnabled: 'commitmentMeetingReportEnabled',
+  commitmentMorningReminderEnabled: 'commitmentMorningReminderEnabled',
+  commitmentEveningReportEnabled: 'commitmentEveningReportEnabled',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
