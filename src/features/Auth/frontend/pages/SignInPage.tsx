@@ -22,6 +22,8 @@ import { useCallback, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import CookieConsent from "@/core/shared/components/cookie-consent";
 import { showToast } from "@/core/shared/components/ShowToast";
+import Link from "next/link";
+import { Routes } from "@/core/shared/constants/routes";
 
 const isDev = process.env.NODE_ENV !== "production";
 
@@ -241,7 +243,7 @@ export const SignInPage = ({ cloudflareSiteKey }: SignInPageProps) => {
                   </div>
                 )}
 
-                <div className="w-full mt-4">
+                <div className="w-full mt-4 space-y-3">
                   <form.Subscribe selector={(state) => state.isSubmitting}>
                     {(isSubmitting) => (
                       <Button
@@ -254,6 +256,15 @@ export const SignInPage = ({ cloudflareSiteKey }: SignInPageProps) => {
                       </Button>
                     )}
                   </form.Subscribe>
+
+                  <div className="text-center">
+                    <Link
+                      href={Routes.forgotPassword}
+                      className="text-sm text-muted-foreground hover:text-foreground underline"
+                    >
+                      ¿Olvidaste tu contraseña?
+                    </Link>
+                  </div>
                 </div>
               </form>
 
