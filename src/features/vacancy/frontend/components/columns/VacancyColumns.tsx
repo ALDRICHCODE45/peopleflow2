@@ -175,16 +175,17 @@ export function createVacancyColumns(
 
         const count = row.original.activeCommitmentsCount ?? 0;
 
-        const badge = count > 0 ? (
+        const badge = (
           <Badge
             variant="outline"
-            className="gap-1 text-amber-700 border-amber-300 bg-amber-50 dark:text-amber-300 dark:border-amber-500/50 dark:bg-amber-950/30"
+            className={count > 0
+              ? "gap-1 text-amber-700 border-amber-300 bg-amber-50 dark:text-amber-300 dark:border-amber-500/50 dark:bg-amber-950/30"
+              : "gap-1 text-muted-foreground border-border/50"
+            }
           >
             <HugeiconsIcon icon={Calendar03Icon} size={12} />
             {count}
           </Badge>
-        ) : (
-          <span className="text-xs text-muted-foreground">—</span>
         );
 
         const tooltipText = count > 0
