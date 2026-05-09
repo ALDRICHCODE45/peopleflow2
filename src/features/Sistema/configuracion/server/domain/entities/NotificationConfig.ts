@@ -22,6 +22,10 @@ export interface NotificationConfigProps {
   vacancyStaleTimeUnit: "HOURS" | "DAYS";
   vacancyStaleRepeatValue: number;
   vacancyStaleRepeatUnit: "HOURS" | "DAYS";
+  // Commitment reporting
+  commitmentMeetingReportEnabled: boolean;
+  commitmentMorningReminderEnabled: boolean;
+  commitmentEveningReportEnabled: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -47,6 +51,10 @@ export interface NotificationConfigDTO {
   vacancyStaleTimeUnit: "HOURS" | "DAYS";
   vacancyStaleRepeatValue: number;
   vacancyStaleRepeatUnit: "HOURS" | "DAYS";
+  // Commitment reporting
+  commitmentMeetingReportEnabled: boolean;
+  commitmentMorningReminderEnabled: boolean;
+  commitmentEveningReportEnabled: boolean;
 }
 
 export class NotificationConfig {
@@ -105,6 +113,15 @@ export class NotificationConfig {
   }
   get vacancyStaleRepeatUnit() {
     return this.props.vacancyStaleRepeatUnit;
+  }
+  get commitmentMeetingReportEnabled() {
+    return this.props.commitmentMeetingReportEnabled;
+  }
+  get commitmentMorningReminderEnabled() {
+    return this.props.commitmentMorningReminderEnabled;
+  }
+  get commitmentEveningReportEnabled() {
+    return this.props.commitmentEveningReportEnabled;
   }
 
   shouldNotifyOnStatusChange(status: LeadStatus): boolean {
@@ -176,6 +193,9 @@ export class NotificationConfig {
       vacancyStaleTimeUnit: this.props.vacancyStaleTimeUnit,
       vacancyStaleRepeatValue: this.props.vacancyStaleRepeatValue,
       vacancyStaleRepeatUnit: this.props.vacancyStaleRepeatUnit,
+      commitmentMeetingReportEnabled: this.props.commitmentMeetingReportEnabled,
+      commitmentMorningReminderEnabled: this.props.commitmentMorningReminderEnabled,
+      commitmentEveningReportEnabled: this.props.commitmentEveningReportEnabled,
     };
   }
 }

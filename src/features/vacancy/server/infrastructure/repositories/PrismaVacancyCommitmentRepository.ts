@@ -7,6 +7,7 @@ import type {
   UpdateCommitmentStatusData,
   AppendCommitmentEventData,
   VacancyCommitmentEvent,
+  CommitmentReportRow,
 } from "../../domain/interfaces/IVacancyCommitmentRepository";
 import { VacancyCommitment } from "../../domain/entities/VacancyCommitment";
 import type { VacancyCommitmentEventDTO } from "@features/vacancy/frontend/types/vacancy.types";
@@ -197,6 +198,150 @@ export class PrismaVacancyCommitmentRepository
       changedById: e.changedById,
       changedByName: e.changedBy?.name ?? null,
       createdAt: e.createdAt,
+    }));
+  }
+
+  async findDueToday(
+    tenantId: string,
+    from: Date,
+    to: Date
+  ): Promise<CommitmentReportRow[]> {
+    const commitments = await prisma.vacancyCommitment.findMany({
+      where: {
+        tenantId,
+        status: "PENDING",
+        dueDate: {
+          gte: from,
+          lte: to,
+        },
+      },
+      include: {
+        vacancy: {
+          select: {
+            position: true,
+            client: {
+              select: { nombre: true },
+            },
+          },
+        },
+        responsibleUser: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: [{ dueDate: "asc" }],
+    });
+
+    return commitments.map((c) => ({
+      commitmentId: c.id,
+      vacancyId: c.vacancyId,
+      vacancyPosition: c.vacancy.position,
+      clientName: c.vacancy.client.nombre,
+      recruiterId: c.responsibleUser.id,
+      recruiterName: c.responsibleUser.name,
+      recruiterEmail: c.responsibleUser.email,
+      description: c.description,
+      dueDate: c.dueDate,
+      status: c.status,
+      createdAt: c.createdAt,
+      completedAt: c.completedAt,
+    }));
+  }
+
+  async findByCreatedInRange(
+    tenantId: string,
+    from: Date,
+    to: Date
+  ): Promise<CommitmentReportRow[]> {
+    const commitments = await prisma.vacancyCommitment.findMany({
+      where: {
+        tenantId,
+        status: "PENDING",
+        createdAt: {
+          gte: from,
+          lte: to,
+        },
+      },
+      include: {
+        vacancy: {
+          select: {
+            position: true,
+            client: {
+              select: { nombre: true },
+            },
+          },
+        },
+        responsibleUser: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: [{ dueDate: "asc" }],
+    });
+
+    return commitments.map((c) => ({
+      commitmentId: c.id,
+      vacancyId: c.vacancyId,
+      vacancyPosition: c.vacancy.position,
+      clientName: c.vacancy.client.nombre,
+      recruiterId: c.responsibleUser.id,
+      recruiterName: c.responsibleUser.name,
+      recruiterEmail: c.responsibleUser.email,
+      description: c.description,
+      dueDate: c.dueDate,
+      status: c.status,
+      createdAt: c.createdAt,
+      completedAt: c.completedAt,
+    }));
+  }
+
+  async findPendingForAdminReport(
+    tenantId: string
+  ): Promise<CommitmentReportRow[]> {
+    const commitments = await prisma.vacancyCommitment.findMany({
+      where: {
+        tenantId,
+        status: "PENDING",
+      },
+      include: {
+        vacancy: {
+          select: {
+            position: true,
+            client: {
+              select: { nombre: true },
+            },
+          },
+        },
+        responsibleUser: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: [{ dueDate: "asc" }],
+    });
+
+    return commitments.map((c) => ({
+      commitmentId: c.id,
+      vacancyId: c.vacancyId,
+      vacancyPosition: c.vacancy.position,
+      clientName: c.vacancy.client.nombre,
+      recruiterId: c.responsibleUser.id,
+      recruiterName: c.responsibleUser.name,
+      recruiterEmail: c.responsibleUser.email,
+      description: c.description,
+      dueDate: c.dueDate,
+      status: c.status,
+      createdAt: c.createdAt,
+      completedAt: c.completedAt,
     }));
   }
 

@@ -45,6 +45,21 @@ export interface VacancyCommitmentEvent {
   createdAt: Date;
 }
 
+export interface CommitmentReportRow {
+  commitmentId: string;
+  vacancyId: string;
+  vacancyPosition: string;
+  clientName: string;
+  recruiterId: string;
+  recruiterName: string | null;
+  recruiterEmail: string;
+  description: string;
+  dueDate: Date;
+  status: CommitmentStatusType;
+  createdAt: Date;
+  completedAt: Date | null;
+}
+
 export interface IVacancyCommitmentRepository {
   findByVacancyId(
     vacancyId: string,
@@ -69,4 +84,15 @@ export interface IVacancyCommitmentRepository {
     commitmentId: string,
     tenantId: string
   ): Promise<VacancyCommitmentEvent[]>;
+  findDueToday(
+    tenantId: string,
+    from: Date,
+    to: Date
+  ): Promise<CommitmentReportRow[]>;
+  findByCreatedInRange(
+    tenantId: string,
+    from: Date,
+    to: Date
+  ): Promise<CommitmentReportRow[]>;
+  findPendingForAdminReport(tenantId: string): Promise<CommitmentReportRow[]>;
 }

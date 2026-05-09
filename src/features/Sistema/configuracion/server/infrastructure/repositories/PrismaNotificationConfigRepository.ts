@@ -33,6 +33,9 @@ export class PrismaNotificationConfigRepository
       vacancyStaleTimeUnit: string;
       vacancyStaleRepeatValue: number;
       vacancyStaleRepeatUnit: string;
+      commitmentMeetingReportEnabled: boolean;
+      commitmentMorningReminderEnabled: boolean;
+      commitmentEveningReportEnabled: boolean;
       createdAt: Date;
       updatedAt: Date;
     },
@@ -56,6 +59,9 @@ export class PrismaNotificationConfigRepository
       vacancyStaleTimeUnit: record.vacancyStaleTimeUnit as NotificationConfigProps["vacancyStaleTimeUnit"],
       vacancyStaleRepeatValue: record.vacancyStaleRepeatValue,
       vacancyStaleRepeatUnit: record.vacancyStaleRepeatUnit as NotificationConfigProps["vacancyStaleRepeatUnit"],
+      commitmentMeetingReportEnabled: record.commitmentMeetingReportEnabled,
+      commitmentMorningReminderEnabled: record.commitmentMorningReminderEnabled,
+      commitmentEveningReportEnabled: record.commitmentEveningReportEnabled,
       createdAt: record.createdAt,
       updatedAt: record.updatedAt,
     });
@@ -91,6 +97,9 @@ export class PrismaNotificationConfigRepository
         vacancyStaleTimeUnit: data.vacancyStaleTimeUnit,
         vacancyStaleRepeatValue: data.vacancyStaleRepeatValue,
         vacancyStaleRepeatUnit: data.vacancyStaleRepeatUnit,
+        commitmentMeetingReportEnabled: data.commitmentMeetingReportEnabled,
+        commitmentMorningReminderEnabled: data.commitmentMorningReminderEnabled,
+        commitmentEveningReportEnabled: data.commitmentEveningReportEnabled,
       },
       update: {
         enabled: data.enabled,
@@ -109,6 +118,9 @@ export class PrismaNotificationConfigRepository
         vacancyStaleTimeUnit: data.vacancyStaleTimeUnit,
         vacancyStaleRepeatValue: data.vacancyStaleRepeatValue,
         vacancyStaleRepeatUnit: data.vacancyStaleRepeatUnit,
+        commitmentMeetingReportEnabled: data.commitmentMeetingReportEnabled,
+        commitmentMorningReminderEnabled: data.commitmentMorningReminderEnabled,
+        commitmentEveningReportEnabled: data.commitmentEveningReportEnabled,
       },
     });
 

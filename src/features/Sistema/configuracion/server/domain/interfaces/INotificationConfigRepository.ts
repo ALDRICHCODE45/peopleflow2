@@ -22,6 +22,10 @@ export interface UpsertNotificationConfigData {
   vacancyStaleTimeUnit: "HOURS" | "DAYS";
   vacancyStaleRepeatValue: number;
   vacancyStaleRepeatUnit: "HOURS" | "DAYS";
+  // Commitment reporting
+  commitmentMeetingReportEnabled: boolean;
+  commitmentMorningReminderEnabled: boolean;
+  commitmentEveningReportEnabled: boolean;
 }
 
 export interface INotificationConfigRepository {

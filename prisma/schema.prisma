@@ -965,6 +965,8 @@ model VacancyCommitment {
   @@index([vacancyId, status])
   @@index([tenantId, status])
   @@index([dueDate])
+  @@index([tenantId, status, dueDate])
+  @@index([tenantId, createdAt])
   @@map("vacancy_commitment")
 }
 
@@ -1277,6 +1279,11 @@ model NotificationConfig {
   vacancyStaleTimeUnit    InactiveTimeUnit @default(HOURS)
   vacancyStaleRepeatValue Int              @default(24)
   vacancyStaleRepeatUnit  InactiveTimeUnit @default(HOURS)
+
+  // === VACANCY COMMITMENT REPORTING ===
+  commitmentMeetingReportEnabled  Boolean @default(false)
+  commitmentMorningReminderEnabled Boolean @default(false)
+  commitmentEveningReportEnabled  Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

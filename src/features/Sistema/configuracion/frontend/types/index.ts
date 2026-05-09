@@ -20,6 +20,9 @@ export interface NotificationConfigDTO {
   vacancyStaleTimeUnit: "HOURS" | "DAYS";
   vacancyStaleRepeatValue: number;
   vacancyStaleRepeatUnit: "HOURS" | "DAYS";
+  commitmentMeetingReportEnabled: boolean;
+  commitmentMorningReminderEnabled: boolean;
+  commitmentEveningReportEnabled: boolean;
 }
 
 export interface SaveNotificationConfigData {
@@ -39,4 +42,7 @@ export interface SaveNotificationConfigData {
   vacancyStaleTimeUnit: "HOURS" | "DAYS";
   vacancyStaleRepeatValue: number;
   vacancyStaleRepeatUnit: "HOURS" | "DAYS";
+  commitmentMeetingReportEnabled: boolean;
+  commitmentMorningReminderEnabled: boolean;
+  commitmentEveningReportEnabled: boolean;
 }
