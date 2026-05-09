@@ -37,7 +37,7 @@ import { useVacancyDetailQuery } from "../hooks/useVacancyDetailQuery";
 import { CommitmentItem } from "./CommitmentItem";
 import { Skeleton } from "@shadcn/skeleton";
 import { DatePicker } from "@/core/shared/ui/shadcn/date-picker";
-
+import { useIsMobile } from "@/core/shared/hooks/use-mobile";
 import type { VacancyCommitmentDTO } from "../types/vacancy.types";
 
 interface CommitmentsSheetProps {
@@ -183,6 +183,8 @@ export function CommitmentsSheet({
 
   const [historyCommitment, setHistoryCommitment] =
     useState<VacancyCommitmentDTO | null>(null);
+  const isMobile = useIsMobile();
+  const sheetSide = isMobile ? "bottom" : "right";
 
   const { data: commitments, isLoading } = useCommitmentsQuery(
     vacancyId || ""
@@ -238,7 +240,7 @@ export function CommitmentsSheet({
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
         <SheetContent
-          side="right"
+          side={sheetSide}
           width="2xl"
           className="md:mr-8 ml-0 rounded-3xl dark:bg-[#18181B] overflow-y-auto p-0"
           showCloseButton={false}
@@ -581,7 +583,7 @@ export function CommitmentsSheet({
         onOpenChange={(o) => !o && setHistoryCommitment(null)}
       >
         <SheetContent
-          side="right"
+          side={sheetSide}
           width="lg"
           className="md:mr-8 ml-0 rounded-3xl dark:bg-[#18181B] overflow-y-auto p-0"
           showCloseButton={false}
