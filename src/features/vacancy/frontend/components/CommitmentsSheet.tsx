@@ -260,7 +260,8 @@ export function CommitmentsSheet({
       <Sheet open={open} onOpenChange={onOpenChange}>
         <SheetContent
           side="right"
-          className="md:mr-8 ml-0 rounded-3xl dark:bg-[#18181B] overflow-y-auto p-0 w-full sm:max-w-2xl"
+          width="4xl"
+          className="md:mr-8 ml-0 rounded-3xl dark:bg-[#18181B] overflow-y-auto p-0"
           showCloseButton={false}
         >
           {isLoading || !vacancy ? (
