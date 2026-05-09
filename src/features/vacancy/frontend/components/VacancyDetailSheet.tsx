@@ -64,7 +64,6 @@ import { PermissionActions } from "@/core/shared/constants/permissions";
 import { usePermissions } from "@/core/shared/hooks/use-permissions";
 import { ApplyWarrantyDialog } from "./ApplyWarrantyDialog";
 import { RecruiterAssignmentTimeline } from "./RecruiterAssignmentTimeline";
-import { CommitmentsTab } from "./CommitmentsTab";
 import {
   Tooltip,
   TooltipContent,
@@ -572,28 +571,6 @@ export function VacancyDetailSheet({
                       >
                         Historial
                       </TabsTrigger>
-                      <PermissionGuard
-                        permissions={[
-                          PermissionActions.vacantesCompromisos.acceder,
-                          PermissionActions.vacantesCompromisos.gestionar,
-                        ]}
-                      >
-                        <TabsTrigger
-                          value="commitments"
-                          className="shrink-0 md:flex-1"
-                        >
-                          Compromisos{" "}
-                          {vacancy.activeCommitmentsCount !== undefined &&
-                            vacancy.activeCommitmentsCount > 0 && (
-                              <Badge
-                                variant="outline"
-                                className="ml-1 text-xs size-5 p-0 flex items-center justify-center"
-                              >
-                                {vacancy.activeCommitmentsCount}
-                              </Badge>
-                            )}
-                        </TabsTrigger>
-                      </PermissionGuard>
                     </TabsList>
                   </div>
 
@@ -910,18 +887,6 @@ export function VacancyDetailSheet({
                       <RecruiterAssignmentTimeline vacancyId={vacancy.id} />
                     </div>
                   </TabsContent>
-
-                  {/* ---- Tab: Compromisos ---- */}
-                  <PermissionGuard
-                    permissions={[
-                      PermissionActions.vacantesCompromisos.acceder,
-                      PermissionActions.vacantesCompromisos.gestionar,
-                    ]}
-                  >
-                    <TabsContent value="commitments" className="mt-3 md:mt-4">
-                      <CommitmentsTab vacancyId={vacancy.id} />
-                    </TabsContent>
-                  </PermissionGuard>
                 </Tabs>
               </div>
             </>

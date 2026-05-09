@@ -16,6 +16,7 @@ import { Card, CardContent } from "@/core/shared/ui/shadcn/card";
 import { Button } from "@/core/shared/ui/shadcn/button";
 import { VacancySheetForm } from "../components/VacancySheetForm";
 import { VacancyDetailSheet } from "../components/VacancyDetailSheet";
+import { CommitmentsSheet } from "../components/CommitmentsSheet";
 import { useServerPaginatedTable } from "@/core/shared/hooks/useServerPaginatedTable";
 import type { VacancyStatusType } from "../types/vacancy.types";
 import { TablePresentation } from "@/core/shared/components/DataTable/TablePresentation";
@@ -70,6 +71,9 @@ export function VacancyListPage() {
   const [selectedVacancyId, setSelectedVacancyId] = useState<string | null>(
     sanitizedVacancyId,
   );
+  const [commitmentsVacancyId, setCommitmentsVacancyId] = useState<
+    string | null
+  >(null);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -280,6 +284,14 @@ export function VacancyListPage() {
     router.replace(nextUrl, { scroll: false });
   }, [pathname, router, searchParams]);
 
+  const handleOpenCommitments = useCallback((vacancyId: string) => {
+    setCommitmentsVacancyId(vacancyId);
+  }, []);
+
+  const handleCloseCommitments = useCallback(() => {
+    setCommitmentsVacancyId(null);
+  }, []);
+
   const handleBulkDelete = useCallback((rows: VacancyDTO[]) => {
     setSelectedBulkIds(rows.map((vacancy) => vacancy.id));
     setBulkDeleteOpen(true);
@@ -305,10 +317,10 @@ export function VacancyListPage() {
     setSelectionResetSignal((current) => current + 1);
   }, []);
 
-  // Columns factory with detail handler
+  // Columns factory with detail handler and commitments handler
   const columns = useMemo(
-    () => createVacancyColumns(handleViewDetail),
-    [handleViewDetail],
+    () => createVacancyColumns(handleViewDetail, handleOpenCommitments),
+    [handleViewDetail, handleOpenCommitments],
   );
 
   // Table configuration with server-side enabled
@@ -561,6 +573,13 @@ export function VacancyListPage() {
       <VacancyDetailSheet
         vacancyId={selectedVacancyId}
         onClose={handleCloseDetail}
+      />
+
+      {/* Commitments Sheet — shown when commitments cell is clicked */}
+      <CommitmentsSheet
+        vacancyId={commitmentsVacancyId}
+        open={commitmentsVacancyId !== null}
+        onOpenChange={(open) => !open && handleCloseCommitments()}
       />
 
       <BulkDeleteVacanciesDialog

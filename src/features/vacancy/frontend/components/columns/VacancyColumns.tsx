@@ -21,9 +21,12 @@ import {
 import { Badge } from "@shadcn/badge";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Calendar03Icon } from "@hugeicons/core-free-icons";
+import { PermissionActions } from "@/core/shared/constants/permissions";
+import { usePermissions } from "@/core/shared/hooks/use-permissions";
 
 export function createVacancyColumns(
   onViewDetail?: (id: string) => void,
+  onOpenCommitments?: (vacancyId: string) => void,
 ): ColumnDef<VacancyDTO>[] {
   return [
     {
@@ -161,21 +164,57 @@ export function createVacancyColumns(
       header: "Compromisos",
       accessorKey: "activeCommitmentsCount",
       cell: ({ row }) => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const { hasAnyPermission, isSuperAdmin } = usePermissions();
+        const canAccessCommitments =
+          isSuperAdmin ||
+          hasAnyPermission([
+            PermissionActions.vacantesCompromisos.acceder,
+            PermissionActions.vacantesCompromisos.gestionar,
+          ]);
+
         const count = row.original.activeCommitmentsCount ?? 0;
         if (count === 0) return null;
+
+        const badge = (
+          <Badge
+            variant="outline"
+            className="gap-1 text-amber-700 border-amber-300 bg-amber-50 dark:text-amber-300 dark:border-amber-500/50 dark:bg-amber-950/30"
+          >
+            <HugeiconsIcon icon={Calendar03Icon} size={12} />
+            {count}
+          </Badge>
+        );
+
+        if (!canAccessCommitments || !onOpenCommitments) {
+          return (
+            <Tooltip>
+              <TooltipTrigger>{badge}</TooltipTrigger>
+              <TooltipContent>
+                {count} compromiso{count > 1 ? "s" : ""} activo
+                {count > 1 ? "s" : ""}
+              </TooltipContent>
+            </Tooltip>
+          );
+        }
+
         return (
           <Tooltip>
-            <TooltipTrigger>
-              <Badge
-                variant="outline"
-                className="gap-1 text-amber-700 border-amber-300 bg-amber-50"
+            <TooltipTrigger asChild>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenCommitments(row.original.id);
+                }}
+                className="cursor-pointer hover:opacity-80 transition-opacity"
+                aria-label={`Ver compromisos de ${row.original.position}`}
               >
-                <HugeiconsIcon icon={Calendar03Icon} size={12} />
-                {count}
-              </Badge>
+                {badge}
+              </button>
             </TooltipTrigger>
             <TooltipContent>
-              {count} compromiso{count > 1 ? "s" : ""} activo{count > 1 ? "s" : ""}
+              {count} compromiso{count > 1 ? "s" : ""} activo
+              {count > 1 ? "s" : ""} · Click para ver
             </TooltipContent>
           </Tooltip>
         );
@@ -196,5 +235,5 @@ export function createVacancyColumns(
   ];
 }
 
-/** Backward-compat export: columns without detail handler */
+/** Backward-compat export: columns without detail handler or commitments handler */
 export const VacancyColumns: ColumnDef<VacancyDTO>[] = createVacancyColumns();
