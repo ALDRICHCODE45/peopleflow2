@@ -90,6 +90,7 @@ export const auth = betterAuth({
           captcha({
             provider: "cloudflare-turnstile",
             secretKey: process.env.CLOUDFLARE_SECRET_KEY!,
+            endpoints: ["/sign-up/email", "/sign-in/email"], // Exclude /request-password-reset — protected by anti-enumeration + banned user gate
           }),
         ]),
     emailOTP({
