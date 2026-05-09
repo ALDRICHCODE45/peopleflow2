@@ -7,7 +7,6 @@ import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
 } from "@shadcn/card";
@@ -27,6 +26,7 @@ import {
   Calendar03Icon,
   AlertCircleIcon,
   PencilEdit02Icon,
+  Clock01Icon,
 } from "@hugeicons/core-free-icons";
 import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
 import { PermissionActions } from "@/core/shared/constants/permissions";
@@ -35,16 +35,12 @@ import { useCancelCommitment } from "../hooks/useCancelCommitment";
 import { useUpdateCommitment } from "../hooks/useUpdateCommitment";
 import { Label } from "@shadcn/label";
 import type { VacancyCommitmentDTO } from "../types/vacancy.types";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@shadcn/collapsible";
 import { DatePicker } from "@/core/shared/ui/shadcn/date-picker";
 
 interface CommitmentItemProps {
   commitment: VacancyCommitmentDTO;
   vacancyId: string;
+  onShowHistory?: (commitment: VacancyCommitmentDTO) => void;
 }
 
 function getStatusBadge(status: string) {
@@ -72,7 +68,7 @@ function getStatusBadge(status: string) {
   }
 }
 
-export function CommitmentItem({ commitment, vacancyId }: CommitmentItemProps) {
+export function CommitmentItem({ commitment, vacancyId, onShowHistory }: CommitmentItemProps) {
   const [showCompleteDialog, setShowCompleteDialog] = useState(false);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -89,8 +85,6 @@ export function CommitmentItem({ commitment, vacancyId }: CommitmentItemProps) {
   const [editDueDate, setEditDueDate] = useState(
     parseDueDateOnly(commitment.dueDate)
   );
-  const [showHistory, setShowHistory] = useState(false);
-
   const completeCommitment = useCompleteCommitment();
   const cancelCommitment = useCancelCommitment();
   const updateCommitment = useUpdateCommitment();
@@ -258,47 +252,18 @@ export function CommitmentItem({ commitment, vacancyId }: CommitmentItemProps) {
           </div>
         </CardHeader>
 
-        {commitment.events && commitment.events.length > 0 && (
-          <CardContent className="pt-0">
-            <Collapsible open={showHistory} onOpenChange={setShowHistory}>
-              <CollapsibleTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-xs text-muted-foreground hover:text-foreground"
-                >
-                  {showHistory ? "Ocultar" : "Ver"} historial ({commitment.events.length})
-                </Button>
-              </CollapsibleTrigger>
-              <CollapsibleContent className="mt-2 space-y-2 border-l-2 border-muted pl-3">
-                {commitment.events.map((event) => {
-                  const eventTime = new Date(event.createdAt);
-                  
-                  return (
-                    <div key={event.id} className="text-xs space-y-0.5">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        {event.note && (
-                          <span className="font-medium text-foreground">
-                            {event.note}
-                          </span>
-                        )}
-                        <span className="text-muted-foreground">
-                          {format(eventTime, "eee dd/MM/yyyy HH:mm", {
-                            locale: es,
-                          })}
-                        </span>
-                      </div>
-                      {event.changedByName && (
-                        <p className="text-muted-foreground">
-                          por {event.changedByName}
-                        </p>
-                      )}
-                    </div>
-                  );
-                })}
-              </CollapsibleContent>
-            </Collapsible>
-          </CardContent>
+        {commitment.events && commitment.events.length > 0 && onShowHistory && (
+          <div className="px-6 pb-3 pt-0">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onShowHistory(commitment)}
+              className="text-xs text-muted-foreground hover:text-foreground gap-1.5 -ml-2"
+            >
+              <HugeiconsIcon icon={Clock01Icon} size={13} />
+              Ver historial ({commitment.events.length})
+            </Button>
+          </div>
         )}
       </Card>
 

@@ -7,7 +7,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@shadcn/sheet";
 import { Button } from "@shadcn/button";
 import { Textarea } from "@shadcn/textarea";
 import { Label } from "@shadcn/label";
-import { Card, CardContent } from "@shadcn/card";
+import { Card, CardContent, CardHeader } from "@shadcn/card";
 import {
   Dialog,
   DialogContent,
@@ -174,6 +174,8 @@ export function CommitmentsSheet({
   const [dueDate, setDueDate] = useState("");
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [isSendingReport, setIsSendingReport] = useState(false);
+  const [historyCommitment, setHistoryCommitment] =
+    useState<VacancyCommitmentDTO | null>(null);
 
   const { data: commitments, isLoading } = useCommitmentsQuery(
     vacancyId || ""
@@ -467,28 +469,29 @@ export function CommitmentsSheet({
                         key={commitment.id}
                         commitment={commitment}
                         vacancyId={vacancyId || ""}
+                        onShowHistory={setHistoryCommitment}
                       />
                     ))}
                   </div>
                 )}
 
-                {/* History Timeline Section */}
+                {/* Closed Commitments Section */}
                 {closedCommitments.length > 0 && (
                   <>
                     <Separator />
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       <h3 className="text-sm font-semibold">
-                        Historial de compromisos
+                        Compromisos cerrados
                       </h3>
                       {closedCommitments.map((commitment) => (
                         <Card
                           key={commitment.id}
                           className="dark:bg-card/60 dark:border-border/70"
                         >
-                          <CardContent className="p-4 space-y-3">
+                          <CardHeader className="pb-2">
                             <div className="flex items-start justify-between gap-2">
-                              <div className="flex-1 space-y-1">
-                                <p className="text-sm font-medium">
+                              <div className="flex-1 space-y-1 min-w-0">
+                                <p className="text-sm font-medium line-clamp-2">
                                   {commitment.description}
                                 </p>
                                 <div className="flex items-center gap-2 flex-wrap">
@@ -528,8 +531,20 @@ export function CommitmentsSheet({
                                 </div>
                               </div>
                             </div>
-                            <CommitmentTimeline commitment={commitment} />
-                          </CardContent>
+                          </CardHeader>
+                          {commitment.events && commitment.events.length > 0 && (
+                            <div className="px-6 pb-3 pt-0">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setHistoryCommitment(commitment)}
+                                className="text-xs text-muted-foreground hover:text-foreground gap-1.5 -ml-2"
+                              >
+                                <HugeiconsIcon icon={Clock01Icon} size={13} />
+                                Ver historial ({commitment.events.length})
+                              </Button>
+                            </div>
+                          )}
                         </Card>
                       ))}
                     </div>
@@ -606,6 +621,84 @@ export function CommitmentsSheet({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* History Sub-Sheet */}
+      <Sheet
+        open={historyCommitment !== null}
+        onOpenChange={(o) => !o && setHistoryCommitment(null)}
+      >
+        <SheetContent
+          side="right"
+          width="lg"
+          className="md:mr-8 ml-0 rounded-3xl dark:bg-[#18181B] overflow-y-auto p-0 z-[60]"
+          showCloseButton={false}
+        >
+          {historyCommitment && (
+            <>
+              <SheetHeader className="px-5 pt-5 pb-4 border-b sticky top-0 bg-background z-10">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <SheetTitle className="text-base font-semibold">
+                      Historial
+                    </SheetTitle>
+                    <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                      {historyCommitment.description}
+                    </p>
+                    <div className="flex items-center gap-2 mt-2 flex-wrap">
+                      <Badge
+                        variant="outline"
+                        className={
+                          historyCommitment.status === "PENDING"
+                            ? "text-amber-700 border-amber-300 dark:text-amber-300 dark:border-amber-500/50"
+                            : historyCommitment.status === "COMPLETED"
+                              ? "text-green-700 border-green-300 dark:text-green-300 dark:border-green-500/50"
+                              : "text-gray-500 border-gray-300 dark:text-gray-400 dark:border-gray-500/50"
+                        }
+                      >
+                        {historyCommitment.status === "PENDING"
+                          ? "Pendiente"
+                          : historyCommitment.status === "COMPLETED"
+                            ? "Completado"
+                            : "Cancelado"}
+                      </Badge>
+                      <Badge
+                        variant="outline"
+                        className="text-muted-foreground"
+                      >
+                        <HugeiconsIcon
+                          icon={Calendar03Icon}
+                          size={12}
+                          className="mr-1"
+                        />
+                        {format(
+                          parse(
+                            historyCommitment.dueDate,
+                            "yyyy-MM-dd",
+                            new Date()
+                          ),
+                          "eee dd/MM/yyyy",
+                          { locale: es }
+                        )}
+                      </Badge>
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={() => setHistoryCommitment(null)}
+                    aria-label="Cerrar historial"
+                  >
+                    ✕
+                  </Button>
+                </div>
+              </SheetHeader>
+              <div className="px-5 py-4">
+                <CommitmentTimeline commitment={historyCommitment} />
+              </div>
+            </>
+          )}
+        </SheetContent>
+      </Sheet>
     </>
   );
 }
