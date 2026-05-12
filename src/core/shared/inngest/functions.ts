@@ -1500,7 +1500,6 @@ const handleCommitmentMorningReminder = inngest.createFunction(
               triggerEvent: "COMMITMENT_MORNING_REMINDER",
               htmlTemplate,
             },
-            createdById: "system",
           });
 
           totalSent++;
@@ -1520,7 +1519,7 @@ const handleCommitmentEveningAdminReport = inngest.createFunction(
     id: "handle-commitment-evening-admin-report",
     name: "Reporte vespertino de compromisos para admins",
   },
-  { cron: "TZ=America/Mexico_City 0 17 * * 1-5" },
+  { cron: "TZ=America/Mexico_City 30 16 * * 1-5" },
   async ({ step }) => {
     // Step 1: Get all tenants with evening report enabled
     const tenants = await step.run("fetch-enabled-tenants", async () => {
@@ -1595,7 +1594,6 @@ const handleCommitmentEveningAdminReport = inngest.createFunction(
               triggerEvent: "COMMITMENT_EVENING_ADMIN_REPORT",
               htmlTemplate,
             },
-            createdById: "system",
           });
 
           totalSent++;
