@@ -3,6 +3,7 @@ import type {
   CommitmentReportRow,
 } from "@features/vacancy/server/domain/interfaces/IVacancyCommitmentRepository";
 import type { INotificationConfigRepository } from "@features/Sistema/configuracion/server/domain/interfaces/INotificationConfigRepository";
+import { getMexicoDayRangeUTC } from "@core/shared/helpers/timezone";
 
 export interface GenerateMeetingReportInput {
   tenantId: string;
@@ -59,14 +60,9 @@ export class GenerateMeetingReportUseCase {
         };
       }
 
-      // 3. Determine due-today window (Mexico timezone)
-      const nowMexico = new Date(
-        new Date().toLocaleString("en-US", { timeZone: "America/Mexico_City" })
-      );
-      const startOfDayMexico = new Date(nowMexico);
-      startOfDayMexico.setHours(0, 0, 0, 0);
-      const endOfDayMexico = new Date(nowMexico);
-      endOfDayMexico.setHours(23, 59, 59, 999);
+      // 3. Determine due-today window (Mexico timezone → proper UTC range)
+      const { startOfDay: startOfDayMexico, endOfDay: endOfDayMexico } =
+        getMexicoDayRangeUTC();
 
       // 4. Group by recruiter
       const recruiterMap = new Map<string, CommitmentByRecruiter>();

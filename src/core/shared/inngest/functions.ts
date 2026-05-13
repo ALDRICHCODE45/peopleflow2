@@ -77,6 +77,7 @@ import { GenerateDailyReminderUseCase } from "@features/vacancy/server/applicati
 import { GenerateEveningAdminReportUseCase } from "@features/vacancy/server/application/use-cases/GenerateEveningAdminReportUseCase";
 import { prismaVacancyCommitmentRepository } from "@features/vacancy/server/infrastructure/repositories/PrismaVacancyCommitmentRepository";
 import { prismaNotificationConfigRepository } from "@features/Sistema/configuracion/server/infrastructure/repositories/PrismaNotificationConfigRepository";
+import { getMexicoDayRangeUTC } from "@core/shared/helpers/timezone";
 
 const STATUS_LABELS: Record<string, string> = {
   CONTACTO: "Contacto",
@@ -1300,12 +1301,8 @@ const handleCommitmentMeetingReport = inngest.createFunction(
   async ({ event, step }) => {
     const { tenantId, triggeredByUserId } = event.data;
 
-    // Calculate Mexico timezone meeting window: start of day → now
-    const nowMexico = new Date(
-      new Date().toLocaleString("en-US", { timeZone: "America/Mexico_City" })
-    );
-    const startOfDayMexico = new Date(nowMexico);
-    startOfDayMexico.setHours(0, 0, 0, 0);
+    // Calculate Mexico timezone meeting window: start of day → now (proper UTC range)
+    const { startOfDay } = getMexicoDayRangeUTC();
 
     // Step 1: Generate meeting report
     const reportData = await step.run("generate-meeting-report", async () => {
@@ -1315,8 +1312,8 @@ const handleCommitmentMeetingReport = inngest.createFunction(
       );
       return useCase.execute({
         tenantId,
-        from: startOfDayMexico,
-        to: nowMexico,
+        from: startOfDay,
+        to: new Date(), // use actual UTC now for the upper bound
       });
     });
 
@@ -1371,8 +1368,8 @@ const handleCommitmentMeetingReport = inngest.createFunction(
       });
     }
 
-    // Step 3: Send admin email
-    if (adminRecipients.length > 0 && recruiterReports.length > 0) {
+    // Step 3: Send admin email (admins receive report even if no per-recruiter emails)
+    if (adminRecipients.length > 0) {
       const allCommitments = recruiterReports.flatMap((r) => r.commitments).map(rehydrateReportRow);
       const allDueTodayIds = recruiterReports.flatMap((r) =>
         r.dueToday.map((c) => c.commitmentId)

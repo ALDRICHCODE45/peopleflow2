@@ -3,6 +3,7 @@ import type {
   CommitmentReportRow,
 } from "@features/vacancy/server/domain/interfaces/IVacancyCommitmentRepository";
 import type { INotificationConfigRepository } from "@features/Sistema/configuracion/server/domain/interfaces/INotificationConfigRepository";
+import { getMexicoDayRangeUTC } from "@core/shared/helpers/timezone";
 
 export interface GenerateDailyReminderInput {
   tenantId: string;
@@ -42,14 +43,8 @@ export class GenerateDailyReminderUseCase {
         };
       }
 
-      // 2. Calculate today's window in Mexico timezone
-      const nowMexico = new Date(
-        new Date().toLocaleString("en-US", { timeZone: "America/Mexico_City" })
-      );
-      const startOfDay = new Date(nowMexico);
-      startOfDay.setHours(0, 0, 0, 0);
-      const endOfDay = new Date(nowMexico);
-      endOfDay.setHours(23, 59, 59, 999);
+      // 2. Calculate today's window in Mexico timezone (proper UTC range)
+      const { startOfDay, endOfDay } = getMexicoDayRangeUTC();
 
       // 3. Fetch commitments due today
       const commitments = await this.commitmentRepo.findDueToday(
