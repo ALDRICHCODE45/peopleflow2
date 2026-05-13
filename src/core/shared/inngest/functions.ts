@@ -1143,6 +1143,12 @@ const handleVacancyStaleNotification = inngest.createFunction(
       recruiterEmail,
     } = event.data;
 
+    // Guard: tenantId is required for all config/notification queries
+    if (!tenantId) {
+      console.error("[vacancy-stale-notification] Missing tenantId in event data", { vacancyId, newStatus });
+      return { skipped: true, reason: "Missing tenantId in event data" };
+    }
+
     // Step 1: Load config and check if monitoring is enabled for this status
     const config = await step.run("load-config", async () => {
       return prisma.notificationConfig.findUnique({ where: { tenantId } });
