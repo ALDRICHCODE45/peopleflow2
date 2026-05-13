@@ -1330,7 +1330,12 @@ const handleCommitmentMeetingReport = inngest.createFunction(
     const { recruiterReports, adminRecipients } = reportData.data;
 
     if (recruiterReports.length === 0 && adminRecipients.length === 0) {
-      return { skipped: true, reason: "No commitments or recipients" };
+      return {
+        skipped: true,
+        reason: recruiterReports.length === 0
+          ? "No commitments created in meeting window"
+          : "No admin recipients configured",
+      };
     }
 
     // Step 2: Send recruiter emails

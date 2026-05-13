@@ -60,9 +60,18 @@ export class GenerateMeetingReportUseCase {
         };
       }
 
-      // 3. Determine due-today window (Mexico timezone → proper UTC range)
-      const { startOfDay: startOfDayMexico, endOfDay: endOfDayMexico } =
-        getMexicoDayRangeUTC();
+      // 3. Determine due-today window
+      // dueDate is stored as midnight UTC (e.g. 2026-05-13T00:00:00Z) via date-fns
+      // parse("yyyy-MM-dd"), so we compare against the full UTC calendar day of
+      // the Mexico date, not the Mexico-adjusted UTC range.
+      const { startOfDay: startOfDayMexico } = getMexicoDayRangeUTC();
+      const calendarDate = new Date(startOfDayMexico);
+      const dateOnlyStart = new Date(
+        Date.UTC(calendarDate.getUTCFullYear(), calendarDate.getUTCMonth(), calendarDate.getUTCDate(), 0, 0, 0, 0)
+      );
+      const dateOnlyEnd = new Date(
+        Date.UTC(calendarDate.getUTCFullYear(), calendarDate.getUTCMonth(), calendarDate.getUTCDate(), 23, 59, 59, 999)
+      );
 
       // 4. Group by recruiter
       const recruiterMap = new Map<string, CommitmentByRecruiter>();
@@ -83,9 +92,9 @@ export class GenerateMeetingReportUseCase {
         const recruiterData = recruiterMap.get(recruiterId)!;
         recruiterData.commitments.push(commitment);
 
-        // Check if due today
+        // Check if due today (date-only comparison for midnight-UTC dueDates)
         const dueDate = new Date(commitment.dueDate);
-        if (dueDate >= startOfDayMexico && dueDate <= endOfDayMexico) {
+        if (dueDate >= dateOnlyStart && dueDate <= dateOnlyEnd) {
           recruiterData.dueToday.push(commitment);
         }
       }
