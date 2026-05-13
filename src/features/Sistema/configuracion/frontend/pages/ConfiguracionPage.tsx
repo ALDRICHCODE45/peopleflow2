@@ -95,7 +95,7 @@ const NOTIFICATION_MODULES = [
         id: "commitment-evening-report",
         label: "Reporte vespertino para admins",
         description:
-          "Enviar reporte a administradores de compromisos que vencieron hoy (5:00 PM)",
+          "Enviar reporte a administradores de compromisos que vencieron hoy (4:00 PM)",
       },
     ],
   },
