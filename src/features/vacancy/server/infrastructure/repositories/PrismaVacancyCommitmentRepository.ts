@@ -206,13 +206,29 @@ export class PrismaVacancyCommitmentRepository
     from: Date,
     to: Date
   ): Promise<CommitmentReportRow[]> {
+    // dueDate is stored as midnight UTC (e.g. 2026-05-13T00:00:00Z) because
+    // date-fns parse("yyyy-MM-dd") produces local midnight which on a UTC server
+    // equals T00:00:00.000Z. However, from/to represent Mexico City day boundaries
+    // converted to UTC (e.g. 05:00Z–04:59Z next day for UTC-5).
+    //
+    // To reliably match date-only dueDates regardless of timezone offset,
+    // we extract the calendar date from the Mexico-adjusted range and query
+    // the full UTC day (00:00Z–23:59Z) of that calendar date.
+    const calendarDate = new Date(from);
+    const dateOnlyStart = new Date(
+      Date.UTC(calendarDate.getUTCFullYear(), calendarDate.getUTCMonth(), calendarDate.getUTCDate(), 0, 0, 0, 0)
+    );
+    const dateOnlyEnd = new Date(
+      Date.UTC(calendarDate.getUTCFullYear(), calendarDate.getUTCMonth(), calendarDate.getUTCDate(), 23, 59, 59, 999)
+    );
+
     const commitments = await prisma.vacancyCommitment.findMany({
       where: {
         tenantId,
         status: "PENDING",
         dueDate: {
-          gte: from,
-          lte: to,
+          gte: dateOnlyStart,
+          lte: dateOnlyEnd,
         },
       },
       include: {

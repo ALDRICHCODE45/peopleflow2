@@ -1558,7 +1558,12 @@ const handleCommitmentEveningAdminReport = inngest.createFunction(
         const { dueTodayCommitments, adminRecipients } = result.data;
 
         if (dueTodayCommitments.length === 0 || adminRecipients.length === 0) {
-          return { skipped: true, reason: "No commitments or recipients" };
+          return {
+            skipped: true,
+            reason: dueTodayCommitments.length === 0
+              ? "No commitments due today"
+              : "No admin recipients configured",
+          };
         }
 
         // Fetch admin users
