@@ -36,9 +36,21 @@ import { BulkDeleteVacanciesDialog } from "../components/BulkDeleteVacanciesDial
 import { BulkReassignVacanciesDialog } from "../components/BulkReassignVacanciesDialog";
 import { BulkDuplicateVacanciesDialog } from "../components/BulkDuplicateVacanciesDialog";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ExpanderIcon, Minimize01Icon, MailSend01Icon } from "@hugeicons/core-free-icons";
+import {
+  ExpanderIcon,
+  Minimize01Icon,
+  MailSend01Icon,
+  MoreVerticalIcon,
+} from "@hugeicons/core-free-icons";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@shadcn/dropdown-menu";
 import { sendMeetingReportAction } from "../../server/presentation/actions/sendMeetingReport.action";
 import { showToast } from "@/core/shared/components/ShowToast";
+import { SendMeetingReportAlertDialog } from "../components/SendMeetingReportAlertDialog";
 
 type VacancyQuickPreset = "MY_VACANCIES" | "URGENT" | "THIS_WEEK";
 
@@ -77,6 +89,7 @@ export function VacancyListPage() {
     string | null
   >(null);
   const [isSendingReport, setIsSendingReport] = useState(false);
+  const [isConfirmReportOpen, setIsConfirmReportOpen] = useState(false);
 
   const canSendMeetingReport =
     isSuperAdmin ||
@@ -103,6 +116,7 @@ export function VacancyListPage() {
       });
     } finally {
       setIsSendingReport(false);
+      setIsConfirmReportOpen(false);
     }
   };
 
@@ -525,17 +539,19 @@ export function VacancyListPage() {
                 />
 
                 <div className="flex items-center justify-between gap-4">
-                  <DataTableMultiTabs
-                    tabs={tabsConfig}
-                    activeTabs={activeTabs}
-                    onTabsChange={handleMultiTabChange}
-                  />
-                  <div className="flex items-center gap-2 flex-shrink-0">
+                  <div className="flex-1 min-w-0 overflow-hidden">
+                    <DataTableMultiTabs
+                      tabs={tabsConfig}
+                      activeTabs={activeTabs}
+                      onTabsChange={handleMultiTabChange}
+                    />
+                  </div>
+                  <div className="hidden md:flex items-center gap-2 flex-shrink-0">
                     {canSendMeetingReport && (
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={handleSendMeetingReport}
+                        onClick={() => setIsConfirmReportOpen(true)}
                         disabled={isSendingReport}
                         className="gap-1.5"
                       >
@@ -554,6 +570,29 @@ export function VacancyListPage() {
                       <span className="hidden sm:inline">Modo presentación</span>
                     </Button>
                   </div>
+
+                  <div className="flex md:hidden flex-shrink-0">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" aria-label="Acciones">
+                          <HugeiconsIcon icon={MoreVerticalIcon} className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="min-w-[220px]">
+                        {canSendMeetingReport && (
+                          <DropdownMenuItem
+                            onClick={() => setIsConfirmReportOpen(true)}
+                            disabled={isSendingReport}
+                          >
+                            {isSendingReport ? "Enviando..." : "Enviar reporte de reunión"}
+                          </DropdownMenuItem>
+                        )}
+                        <DropdownMenuItem onClick={() => setIsFocusMode(true)}>
+                          Modo presentación
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </div>
               </>
             )}
@@ -561,11 +600,13 @@ export function VacancyListPage() {
             {/* En modo foco: tabs + botón de salir en la misma fila */}
             {isFocusMode && (
               <div className="flex items-center justify-between gap-4">
-                <DataTableMultiTabs
-                  tabs={tabsConfig}
-                  activeTabs={activeTabs}
-                  onTabsChange={handleMultiTabChange}
-                />
+                <div className="flex-1 min-w-0 overflow-hidden">
+                  <DataTableMultiTabs
+                    tabs={tabsConfig}
+                    activeTabs={activeTabs}
+                    onTabsChange={handleMultiTabChange}
+                  />
+                </div>
                 <Button
                   variant="outline"
                   size="sm"
@@ -663,6 +704,15 @@ export function VacancyListPage() {
         }}
         selectedIds={selectedBulkIds}
         onCompleted={handleBulkCompleted}
+      />
+
+      <SendMeetingReportAlertDialog
+        isOpen={isConfirmReportOpen}
+        onOpenChange={(open) => {
+          if (!isSendingReport) setIsConfirmReportOpen(open);
+        }}
+        onConfirm={handleSendMeetingReport}
+        isLoading={isSendingReport}
       />
     </>
   );

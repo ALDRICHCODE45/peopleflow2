@@ -77,6 +77,9 @@ const DELIVERY_URGENCY_OPTIONS: Array<{ value: DeliveryUrgencyFilter; label: str
 interface Props {
   isSheetOpen: boolean;
   onOpenChange: () => void;
+  recruiterOptions?: Array<{ value: string; label: string }>;
+  selectedRecruiterIds?: string[];
+  onRecruiterIdsChange?: (ids: string[]) => void;
   // Tipo de venta
   selectedSaleTypes: VacancySaleType[];
   onSaleTypesChange: (values: VacancySaleType[]) => void;
@@ -126,6 +129,9 @@ interface Props {
 export function VacancySheetFilters({
   isSheetOpen,
   onOpenChange,
+  recruiterOptions,
+  selectedRecruiterIds,
+  onRecruiterIdsChange,
   selectedSaleTypes,
   onSaleTypesChange,
   selectedServiceTypes,
@@ -194,6 +200,18 @@ export function VacancySheetFilters({
 
         <ScrollArea className="max-h-[75vh]">
         <div className="space-y-4 p-3 mb-10">
+          {recruiterOptions && onRecruiterIdsChange && (
+            <div className="md:hidden">
+              <FilterMultiSelect
+                label="Recruiter"
+                options={recruiterOptions}
+                selected={selectedRecruiterIds ?? []}
+                onChange={onRecruiterIdsChange}
+                placeholder="Todos los recruiters"
+              />
+            </div>
+          )}
+
           {/* Tipo de venta */}
           <FilterMultiSelect
             label="Tipo de venta"

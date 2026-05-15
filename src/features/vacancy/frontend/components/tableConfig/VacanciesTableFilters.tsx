@@ -380,7 +380,7 @@ export const VacanciesTableFilters = ({
   };
 
   const PresetButtons = (
-    <div className="w-full flex flex-wrap gap-2">
+    <div className="w-full flex flex-nowrap overflow-x-auto -mx-1 px-1 md:flex-wrap md:overflow-visible md:mx-0 md:px-0 gap-2">
       <Button
         type="button"
         size="sm"
@@ -410,14 +410,14 @@ export const VacanciesTableFilters = ({
 
   const ActiveChips =
     activeFilterChips.length > 0 ? (
-      <div className="w-full flex flex-wrap gap-2">
+      <div className="w-full flex flex-nowrap overflow-x-auto -mx-1 px-1 md:flex-wrap md:overflow-visible md:mx-0 md:px-0 gap-2">
         {activeFilterChips.map((chip) => (
           <Button
             key={chip.key}
             type="button"
             variant="outline"
             size="sm"
-            className="h-7 px-2 text-xs"
+            className="h-7 px-2 text-xs shrink-0"
             onClick={chip.onRemove}
           >
             {chip.label}
@@ -514,7 +514,7 @@ export const VacanciesTableFilters = ({
   return (
     <>
       <Card className="mb-6 border-0 shadow-md w-full min-w-0 overflow-hidden m-1">
-        <CardHeader className="pb-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 w-full min-w-0">
+        <CardHeader className="hidden md:flex pb-2 flex-col sm:flex-row items-start sm:items-center justify-between gap-4 w-full min-w-0">
           <div className="flex items-center gap-2 min-w-0">
             <Badge variant="outline" className="ml-2 shrink">
               {table.getRowCount()} resultados
@@ -535,7 +535,32 @@ export const VacanciesTableFilters = ({
           </div>
         </CardHeader>
 
-        <CardContent className="pt-4 pb-3 px-4 sm:px-6 w-full min-w-0">
+        <div className="flex md:hidden flex-col gap-3 p-4">
+          <div className="relative w-full">
+            <Input
+              id="vacancy-search-mobile"
+              className="w-full pl-9"
+              placeholder="Buscar vacante..."
+              value={globalFilter ?? ""}
+              onChange={(e) => onGlobalFilterChange?.(e.target.value)}
+            />
+            <HugeiconsIcon
+              icon={Search}
+              className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+            />
+          </div>
+          <Button
+            onClick={openSheetFilters}
+            variant={hasActiveSheetFilters ? "default" : "outline-primary"}
+            size="sm"
+            className="w-full"
+          >
+            <HugeiconsIcon icon={Filter} className="h-4 w-4" />
+            {hasActiveSheetFilters ? `Filtros (${activeSheetFiltersCount})` : "Filtros"}
+          </Button>
+        </div>
+
+        <CardContent className="hidden md:block pt-4 pb-3 px-4 sm:px-6 w-full min-w-0">
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 w-full min-w-0">
             <div className="space-y-2 w-full min-w-0">
               <Label htmlFor="vacancy-search" className="text-xs font-medium">
@@ -578,17 +603,20 @@ export const VacanciesTableFilters = ({
               </Button>
             </div>
           </div>
-
-          <div className="mt-4 space-y-3">
-            {PresetButtons}
-            {ActiveChips}
-          </div>
         </CardContent>
+
+        <div className="px-4 sm:px-6 pb-3 space-y-3">
+          {PresetButtons}
+          {ActiveChips}
+        </div>
       </Card>
 
       <VacancySheetFilters
         isSheetOpen={isOpenSheetFilters}
         onOpenChange={closeSheetFilters}
+        recruiterOptions={recruiterOptions}
+        selectedRecruiterIds={selectedRecruiterIds}
+        onRecruiterIdsChange={onRecruiterIdsChange}
         selectedSaleTypes={selectedSaleTypes}
         onSaleTypesChange={onSaleTypesChange}
         selectedServiceTypes={selectedServiceTypes}
