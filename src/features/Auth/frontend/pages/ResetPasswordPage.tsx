@@ -13,6 +13,11 @@ import {
 import Image from "next/image";
 import { Routes } from "@/core/shared/constants/routes";
 import { showToast } from "@/core/shared/components/ShowToast";
+import {
+  PASSWORD_MIN,
+  PASSWORD_MESSAGES,
+  validatePassword,
+} from "../schemas/passwordPolicy";
 
 export const ResetPasswordPage = () => {
   const router = useRouter();
@@ -43,20 +48,9 @@ export const ResetPasswordPage = () => {
   }, [token, router]);
 
   const validateNewPassword = (value: string): boolean => {
-    if (!value) {
-      setNewPasswordError("La contraseña es requerida");
-      return false;
-    }
-
-    if (value.length < 8) {
-      setNewPasswordError(
-        "La contraseña debe tener al menos 8 caracteres"
-      );
-      return false;
-    }
-
-    setNewPasswordError(null);
-    return true;
+    const error = validatePassword(value);
+    setNewPasswordError(error);
+    return error === null;
   };
 
   const validateConfirmPassword = (value: string): boolean => {
@@ -66,7 +60,7 @@ export const ResetPasswordPage = () => {
     }
 
     if (value !== newPassword) {
-      setConfirmPasswordError("Las contraseñas no coinciden");
+      setConfirmPasswordError(PASSWORD_MESSAGES.mismatch);
       return false;
     }
 
@@ -211,7 +205,7 @@ export const ResetPasswordPage = () => {
                         if (confirmPasswordTouched && confirmPassword) {
                           setConfirmPasswordError(
                             e.target.value !== confirmPassword
-                              ? "Las contraseñas no coinciden"
+                              ? PASSWORD_MESSAGES.mismatch
                               : null
                           );
                         }
@@ -275,7 +269,7 @@ export const ResetPasswordPage = () => {
             </form>
 
             <p className="text-center text-xs w-full text-muted-foreground mt-2">
-              La contraseña debe tener al menos 8 caracteres.
+              La contraseña debe tener al menos {PASSWORD_MIN} caracteres.
             </p>
           </div>
         </CardContent>

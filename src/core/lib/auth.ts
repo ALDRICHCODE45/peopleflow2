@@ -48,6 +48,8 @@ export const auth = betterAuth({
     .filter(Boolean),
   emailAndPassword: {
     enabled: true, // Habilita autenticación con email y contraseña
+    minPasswordLength: 8, // Sincronizado con passwordPolicy.ts (PASSWORD_MIN)
+    maxPasswordLength: 128, // Sincronizado con passwordPolicy.ts (PASSWORD_MAX)
     revokeSessionsOnPasswordReset: true, // Revoke all sessions on password reset for security
     async sendResetPassword({ user, url }) {
       // Active user gate: skip email for banned/deactivated users

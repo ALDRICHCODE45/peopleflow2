@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { strongPasswordSchema } from "@features/Auth/frontend/schemas/passwordPolicy";
 
 /**
  * Schemas de validación Zod para Users
@@ -7,7 +8,7 @@ import { z } from "zod";
 export const createUserSchema = z.object({
   email: z.string().email("Email inválido"),
   name: z.string().min(2, "El nombre debe tener al menos 2 caracteres").optional(),
-  password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres"),
+  password: strongPasswordSchema,
 });
 
 export const assignUserToTenantSchema = z.object({

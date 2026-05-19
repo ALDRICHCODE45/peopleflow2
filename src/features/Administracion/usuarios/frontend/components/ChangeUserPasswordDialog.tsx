@@ -16,6 +16,11 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { Alert01Icon } from "@hugeicons/core-free-icons";
 import { useChangeUserPassword } from "../hooks/useUsers";
 import type { TenantUser } from "../types";
+import {
+  PASSWORD_MIN,
+  PASSWORD_MESSAGES,
+  validatePassword,
+} from "@features/Auth/frontend/schemas/passwordPolicy";
 
 interface ChangeUserPasswordDialogProps {
   user: TenantUser;
@@ -39,13 +44,14 @@ export function ChangeUserPasswordDialog({
     setValidationError(null);
 
     // Client-side validation
-    if (newPassword.length < 8) {
-      setValidationError("La contraseña debe tener al menos 8 caracteres");
+    const passwordError = validatePassword(newPassword);
+    if (passwordError) {
+      setValidationError(passwordError);
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setValidationError("Las contraseñas no coinciden");
+      setValidationError(PASSWORD_MESSAGES.mismatch);
       return;
     }
 
@@ -108,12 +114,12 @@ export function ChangeUserPasswordDialog({
               <Input
                 id="newPassword"
                 type="password"
-                placeholder="Mínimo 8 caracteres"
+                placeholder={`Mínimo ${PASSWORD_MIN} caracteres`}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 disabled={isLoading}
                 required
-                minLength={8}
+                minLength={PASSWORD_MIN}
               />
             </div>
 
@@ -128,7 +134,7 @@ export function ChangeUserPasswordDialog({
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 disabled={isLoading}
                 required
-                minLength={8}
+                minLength={PASSWORD_MIN}
               />
             </div>
 

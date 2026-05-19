@@ -1,4 +1,5 @@
 import z from "zod";
+import { strongPasswordSchema } from "@features/Auth/frontend/schemas/passwordPolicy";
 
 const avatarPattern = /^\/avatars\/.*\.webp$/;
 
@@ -6,9 +7,7 @@ const avatarField = z.string();
 
 export const createUserSchema = z.object({
   email: z.email("El correo electrónico no es válido."),
-  password: z
-    .string()
-    .min(8, "La contraseña debe tener al menos 8 caracteres."),
+  password: strongPasswordSchema,
   name: z.string().min(1, "El nombre es requerido."),
   roleId: z.string(),
   avatar: avatarField,
