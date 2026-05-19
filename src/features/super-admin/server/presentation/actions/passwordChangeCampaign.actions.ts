@@ -50,9 +50,15 @@ async function requireSuperAdmin(): Promise<
     return { ok: false, error: "Sin permisos de super administrador" };
   }
 
-  // Necesitamos un tenantId valido para Notification.tenantId (es required en
-  // el schema). Tomamos uno cualquiera del super-admin.
-  const anyRole = await prisma.userRole.findFirst({
+  // Necesitamos un tenantId valido para Notification.tenantId (required en
+  // el schema). Estrategia de fallback:
+  //  1. Un tenant donde el super-admin tenga UserRole (cubre el caso normal).
+  //  2. Si el super-admin no tiene ningun rol con tenant (caso comun: rol
+  //     super:admin es global, con tenantId=null), tomamos el primer Tenant
+  //     del sistema. La Notification es solo para auditoria del envio.
+  let fallbackTenantId: string | undefined;
+
+  const userRoleWithTenant = await prisma.userRole.findFirst({
     where: {
       userId: session.user.id,
       tenantId: { not: null },
@@ -60,10 +66,21 @@ async function requireSuperAdmin(): Promise<
     select: { tenantId: true },
   });
 
-  if (!anyRole?.tenantId) {
+  if (userRoleWithTenant?.tenantId) {
+    fallbackTenantId = userRoleWithTenant.tenantId;
+  } else {
+    const anyTenant = await prisma.tenant.findFirst({
+      select: { id: true },
+      orderBy: { createdAt: "asc" },
+    });
+    fallbackTenantId = anyTenant?.id;
+  }
+
+  if (!fallbackTenantId) {
     return {
       ok: false,
-      error: "El super-admin no tiene ningun tenant asignado para auditoria",
+      error:
+        "No hay ningun tenant en el sistema para registrar la auditoria del envio",
     };
   }
 
@@ -72,7 +89,7 @@ async function requireSuperAdmin(): Promise<
     data: {
       userId: session.user.id,
       userName: session.user.name ?? null,
-      fallbackTenantId: anyRole.tenantId,
+      fallbackTenantId,
     },
   };
 }
