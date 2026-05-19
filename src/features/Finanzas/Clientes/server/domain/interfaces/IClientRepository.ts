@@ -107,7 +107,7 @@ export interface IClientRepository {
   /**
    * Devuelve id, nombre y currency de todos los clientes de un tenant (para selects)
    */
-  findAllByTenantId(tenantId: string): Promise<{ id: string; nombre: string; currency: string | null }[]>;
+  findAllByTenantId(tenantId: string): Promise<{ id: string; nombre: string; nombreComercial: string | null; currency: string | null }[]>;
 
   /**
    * Devuelve todos los clientes del tenant con datos completos (para listado)

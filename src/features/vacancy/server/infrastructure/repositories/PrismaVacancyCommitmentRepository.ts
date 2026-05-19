@@ -11,6 +11,7 @@ import type {
 } from "../../domain/interfaces/IVacancyCommitmentRepository";
 import { VacancyCommitment } from "../../domain/entities/VacancyCommitment";
 import type { VacancyCommitmentEventDTO } from "@features/vacancy/frontend/types/vacancy.types";
+import { pickClientDisplayName } from "@features/Finanzas/Clientes/server/helpers/pickClientDisplayName.helper";
 
 type CommitmentWithEvents = Prisma.VacancyCommitmentGetPayload<{
   include: {
@@ -236,7 +237,7 @@ export class PrismaVacancyCommitmentRepository
           select: {
             position: true,
             client: {
-              select: { nombre: true },
+              select: { nombre: true, nombreComercial: true },
             },
           },
         },
@@ -255,7 +256,7 @@ export class PrismaVacancyCommitmentRepository
       commitmentId: c.id,
       vacancyId: c.vacancyId,
       vacancyPosition: c.vacancy.position,
-      clientName: c.vacancy.client.nombre,
+      clientName: pickClientDisplayName(c.vacancy.client),
       recruiterId: c.responsibleUser.id,
       recruiterName: c.responsibleUser.name,
       recruiterEmail: c.responsibleUser.email,
@@ -286,7 +287,7 @@ export class PrismaVacancyCommitmentRepository
           select: {
             position: true,
             client: {
-              select: { nombre: true },
+              select: { nombre: true, nombreComercial: true },
             },
           },
         },
@@ -305,7 +306,7 @@ export class PrismaVacancyCommitmentRepository
       commitmentId: c.id,
       vacancyId: c.vacancyId,
       vacancyPosition: c.vacancy.position,
-      clientName: c.vacancy.client.nombre,
+      clientName: pickClientDisplayName(c.vacancy.client),
       recruiterId: c.responsibleUser.id,
       recruiterName: c.responsibleUser.name,
       recruiterEmail: c.responsibleUser.email,
@@ -330,7 +331,7 @@ export class PrismaVacancyCommitmentRepository
           select: {
             position: true,
             client: {
-              select: { nombre: true },
+              select: { nombre: true, nombreComercial: true },
             },
           },
         },
@@ -349,7 +350,7 @@ export class PrismaVacancyCommitmentRepository
       commitmentId: c.id,
       vacancyId: c.vacancyId,
       vacancyPosition: c.vacancy.position,
-      clientName: c.vacancy.client.nombre,
+      clientName: pickClientDisplayName(c.vacancy.client),
       recruiterId: c.responsibleUser.id,
       recruiterName: c.responsibleUser.name,
       recruiterEmail: c.responsibleUser.email,

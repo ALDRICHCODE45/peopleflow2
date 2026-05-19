@@ -26,6 +26,7 @@ import type {
   AttachmentDTO,
   CandidateMatchRating,
 } from "@features/vacancy/frontend/types/vacancy.types";
+import { pickClientDisplayName } from "@features/Finanzas/Clientes/server/helpers/pickClientDisplayName.helper";
 
 type VacancyWithRelations = {
   id: string;
@@ -34,7 +35,7 @@ type VacancyWithRelations = {
   recruiterId: string;
   recruiter: { name: string | null; email: string | null; avatar: string | null } | null;
   clientId: string;
-  client: { nombre: string; warrantyMonths: number | null } | null;
+  client: { nombre: string; nombreComercial: string | null; warrantyMonths: number | null } | null;
   saleType: string;
   serviceType: string | null;
   currency: string | null;
@@ -118,7 +119,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
   private getBaseInclude() {
     return {
       recruiter: { select: { name: true, email: true, avatar: true } },
-      client: { select: { nombre: true, warrantyMonths: true } },
+      client: { select: { nombre: true, nombreComercial: true, warrantyMonths: true } },
       warrantyVacancy: { select: { id: true } },
       hiredCandidate: { select: { id: true, firstName: true, lastName: true, email: true } },
       _count: { select: { commitments: { where: { status: "PENDING" } } } },
@@ -128,7 +129,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
   private getDetailInclude() {
     return {
       recruiter: { select: { name: true, email: true, avatar: true } },
-      client: { select: { nombre: true, warrantyMonths: true } },
+      client: { select: { nombre: true, nombreComercial: true, warrantyMonths: true } },
       warrantyVacancy: { select: { id: true } },
       hiredCandidate: { select: { id: true, firstName: true, lastName: true, email: true } },
       candidates: {
@@ -294,7 +295,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
       recruiterEmail: record.recruiter?.email ?? null,
       recruiterAvatar: record.recruiter?.avatar ?? null,
       clientId: record.clientId,
-      clientName: record.client?.nombre ?? null,
+      clientName: record.client ? pickClientDisplayName(record.client) : null,
       saleType: record.saleType as VacancySaleType,
       serviceType: (record.serviceType as VacancyServiceType) ?? null,
       currency: (record.currency as VacancyCurrency) ?? null,
@@ -852,7 +853,7 @@ export class PrismaVacancyRepository implements IVacancyRepository {
         where: { id: newVacancy.id },
         include: {
           recruiter: { select: { name: true, email: true, avatar: true } },
-          client: { select: { nombre: true } },
+          client: { select: { nombre: true, nombreComercial: true } },
           warrantyVacancy: { select: { id: true } },
         },
       });

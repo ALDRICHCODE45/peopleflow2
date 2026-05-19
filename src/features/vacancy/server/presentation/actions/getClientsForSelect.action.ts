@@ -4,6 +4,7 @@ import { auth } from "@lib/auth";
 import { headers } from "next/headers";
 import { getActiveTenantId } from "../helpers/getActiveTenant.helper";
 import { prismaClientRepository } from "@features/Finanzas/Clientes/server/infrastructure/repositories/PrismaClientRepository";
+import { pickClientDisplayName } from "@features/Finanzas/Clientes/server/helpers/pickClientDisplayName.helper";
 import { CheckAnyPermissonUseCase } from "@features/auth-rbac/server/application/use-cases/CheckAnyPermissionUseCase";
 import { PermissionActions } from "@/core/shared/constants/permissions";
 import { ServerErrors } from "@core/shared/constants/error-messages";
@@ -39,7 +40,17 @@ export async function getClientsForSelectAction(): Promise<GetClientsResult> {
     });
     if (!hasPermission) return { error: ServerErrors.noPermission, clients: [] };
 
-    const clients = await prismaClientRepository.findAllByTenantId(tenantId);
+    const rawClients = await prismaClientRepository.findAllByTenantId(tenantId);
+
+    // Mantenemos la shape del ClientOption (id, nombre, currency) pero ahora
+    // `nombre` es el display name (nombreComercial si existe, sino la razón social).
+    const clients: ClientOption[] = rawClients
+      .map((c) => ({
+        id: c.id,
+        nombre: pickClientDisplayName(c),
+        currency: c.currency,
+      }))
+      .sort((a, b) => a.nombre.localeCompare(b.nombre, "es", { sensitivity: "base" }));
 
     return { error: null, clients };
   } catch (error) {

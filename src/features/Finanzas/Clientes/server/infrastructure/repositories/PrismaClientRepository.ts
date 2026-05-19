@@ -175,10 +175,10 @@ class PrismaClientRepositoryImpl implements IClientRepository {
     return toDomain(client);
   }
 
-  async findAllByTenantId(tenantId: string): Promise<{ id: string; nombre: string; currency: string | null }[]> {
+  async findAllByTenantId(tenantId: string): Promise<{ id: string; nombre: string; nombreComercial: string | null; currency: string | null }[]> {
     return prisma.client.findMany({
       where: { tenantId },
-      select: { id: true, nombre: true, currency: true },
+      select: { id: true, nombre: true, nombreComercial: true, currency: true },
       orderBy: { nombre: "asc" },
     });
   }
