@@ -920,8 +920,8 @@ const handleSendStandaloneEmail = inngest.createFunction(
           };
 
           const subject = data.isTest
-            ? "[PRUEBA] Actualiza tu contraseña — PeopleFlow"
-            : "Actualiza tu contraseña — PeopleFlow";
+            ? "[PRUEBA] Actualice su contraseña — PeopleFlow"
+            : "Actualice su contraseña — PeopleFlow";
 
           await notificationUseCase.execute({
             tenantId,

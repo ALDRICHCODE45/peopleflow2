@@ -16,7 +16,7 @@ export function generatePasswordChangeCampaignEmail(
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Actualiza tu contraseña - PeopleFlow</title>
+  <title>Actualice su contraseña - PeopleFlow</title>
 </head>
 <body style="margin: 0; padding: 0; background-color: #f4f4f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;">
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f4f4f5;">
@@ -48,7 +48,7 @@ export function generatePasswordChangeCampaignEmail(
             <td style="padding: 32px 40px;">
               <!-- Title -->
               <h1 style="margin: 0 0 24px 0; font-size: 28px; font-weight: 700; color: #1c1917; text-align: center;">
-                Actualiza tu contraseña
+                Actualice su contraseña
               </h1>
 
               <!-- Greeting -->
@@ -58,11 +58,11 @@ export function generatePasswordChangeCampaignEmail(
 
               <!-- Message -->
               <p style="margin: 0 0 16px 0; font-size: 16px; line-height: 1.6; color: #3f3f46;">
-                Como parte de nuestras buenas prácticas de seguridad, te invitamos a actualizar la contraseña de tu cuenta de PeopleFlow.
+                Como parte de nuestras buenas prácticas de seguridad, lo invitamos a actualizar la contraseña de su cuenta de PeopleFlow.
               </p>
 
               <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #3f3f46;">
-                Es especialmente importante si todavía estás usando la contraseña que te asignamos al darte de alta. Tener una contraseña personal y robusta protege tu información y la de tu equipo.
+                Es especialmente importante si todavía está usando la contraseña que se le asignó al darse de alta. Tener una contraseña personal y robusta protege su información y la de su equipo.
               </p>
 
               <!-- CTA Button -->
@@ -84,7 +84,7 @@ export function generatePasswordChangeCampaignEmail(
 
               <!-- Alternative Link -->
               <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.6; color: #71717a; text-align: center;">
-                Si el botón no funciona, copia y pega el siguiente enlace en tu navegador:
+                Si el botón no funciona, copie y pegue el siguiente enlace en su navegador:
               </p>
               <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.6; color: #9333ea; word-break: break-all; text-align: center;">
                 ${forgotPasswordUrl}
@@ -98,9 +98,9 @@ export function generatePasswordChangeCampaignEmail(
                       ¿Cómo funciona?
                     </p>
                     <ol style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.7; color: #3f3f46;">
-                      <li>Hacé clic en el botón de arriba.</li>
-                      <li>Ingresá tu correo y pedí el enlace de cambio.</li>
-                      <li>Vas a recibir un correo con un enlace seguro para crear tu nueva contraseña.</li>
+                      <li>Haga clic en el botón de arriba.</li>
+                      <li>Ingrese su correo y solicite el enlace de cambio.</li>
+                      <li>Recibirá un correo con un enlace seguro para crear su nueva contraseña.</li>
                     </ol>
                   </td>
                 </tr>
@@ -112,14 +112,14 @@ export function generatePasswordChangeCampaignEmail(
               </p>
               <ul style="margin: 0 0 24px 0; padding-left: 20px; font-size: 14px; line-height: 1.7; color: #3f3f46;">
                 <li>Al menos 8 caracteres.</li>
-                <li>Combiná mayúsculas, minúsculas, números y símbolos.</li>
-                <li>Evitá datos personales fáciles de adivinar.</li>
-                <li>No la reutilices de otros sitios.</li>
+                <li>Combine mayúsculas, minúsculas, números y símbolos.</li>
+                <li>Evite datos personales fáciles de adivinar.</li>
+                <li>No la reutilice de otros sitios.</li>
               </ul>
 
               <!-- Security Note -->
               <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #71717a;">
-                Si tenés alguna duda o algo no funciona, contactá al administrador de tu organización.
+                Si tiene alguna duda o algo no funciona, contacte al administrador de su organización.
               </p>
             </td>
           </tr>
@@ -134,7 +134,7 @@ export function generatePasswordChangeCampaignEmail(
                       &copy; ${new Date().getFullYear()} PeopleFlow
                     </p>
                     <p style="margin: 0; font-size: 12px; color: #a1a1aa;">
-                      Tu sistema de gestión empresarial
+                      Su sistema de gestión empresarial
                     </p>
                   </td>
                 </tr>
@@ -149,7 +149,7 @@ export function generatePasswordChangeCampaignEmail(
           <tr>
             <td align="center" style="padding: 24px 20px;">
               <p style="margin: 0; font-size: 12px; color: #71717a;">
-                Recibiste este correo porque sos usuario activo de PeopleFlow.
+                Recibió este correo porque es usuario activo de PeopleFlow.
               </p>
             </td>
           </tr>
@@ -170,32 +170,32 @@ export function generatePasswordChangeCampaignPlainText(
   const greeting = recipientName ? `Hola ${recipientName}` : "Hola";
 
   return `
-Actualiza tu contraseña
+Actualice su contraseña
 
 ${greeting},
 
-Como parte de nuestras buenas prácticas de seguridad, te invitamos a actualizar la contraseña de tu cuenta de PeopleFlow.
+Como parte de nuestras buenas prácticas de seguridad, lo invitamos a actualizar la contraseña de su cuenta de PeopleFlow.
 
-Es especialmente importante si todavía estás usando la contraseña que te asignamos al darte de alta. Tener una contraseña personal y robusta protege tu información y la de tu equipo.
+Es especialmente importante si todavía está usando la contraseña que se le asignó al darse de alta. Tener una contraseña personal y robusta protege su información y la de su equipo.
 
 ¿Cómo funciona?
-1. Visitá el siguiente enlace.
-2. Ingresá tu correo y pedí el enlace de cambio.
-3. Vas a recibir un correo con un enlace seguro para crear tu nueva contraseña.
+1. Visite el siguiente enlace.
+2. Ingrese su correo y solicite el enlace de cambio.
+3. Recibirá un correo con un enlace seguro para crear su nueva contraseña.
 
 Enlace:
 ${forgotPasswordUrl}
 
 Recomendaciones para una buena contraseña:
 - Al menos 8 caracteres.
-- Combiná mayúsculas, minúsculas, números y símbolos.
-- Evitá datos personales fáciles de adivinar.
-- No la reutilices de otros sitios.
+- Combine mayúsculas, minúsculas, números y símbolos.
+- Evite datos personales fáciles de adivinar.
+- No la reutilice de otros sitios.
 
-Si tenés alguna duda o algo no funciona, contactá al administrador de tu organización.
+Si tiene alguna duda o algo no funciona, contacte al administrador de su organización.
 
 ---
 © ${new Date().getFullYear()} PeopleFlow
-Tu sistema de gestión empresarial
+Su sistema de gestión empresarial
 `.trim();
 }

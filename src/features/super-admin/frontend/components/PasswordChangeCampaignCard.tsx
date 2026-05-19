@@ -80,7 +80,7 @@ export function PasswordChangeCampaignCard() {
           type: "success",
           title: "Correo de prueba encolado",
           description:
-            "Inngest procesara el envio en segundos. Revisa la bandeja del destinatario de pruebas.",
+            "Inngest procesará el envío en segundos. Revise la bandeja del destinatario de pruebas.",
         });
       }
     } finally {
@@ -102,8 +102,8 @@ export function PasswordChangeCampaignCard() {
       } else {
         showToast({
           type: "success",
-          title: "Campania encolada",
-          description: `Se encolaron ${result.enqueued ?? 0} correos. Inngest los procesara en segundo plano (max 5 simultaneos).`,
+          title: "Campaña encolada",
+          description: `Se encolaron ${result.enqueued ?? 0} correos. Inngest los procesará en segundo plano (máx. 5 simultáneos).`,
         });
       }
     } finally {
@@ -116,12 +116,12 @@ export function PasswordChangeCampaignCard() {
       <Card className="bg-white/10 border-white/20">
         <CardHeader>
           <CardTitle className="text-white">
-            Campania: Cambio de contrasena
+            Campaña: Cambio de contraseña
           </CardTitle>
           <CardDescription className="text-purple-200">
             Invita a todos los usuarios activos del sistema a actualizar su
-            contrasena. El correo NO incluye un token — solo enlaza a
-            /forgot-password para que el usuario inicie el flujo estandar.
+            contraseña. El correo NO incluye un token — solo enlaza a
+            /forgot-password para que el usuario inicie el flujo estándar.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -135,7 +135,7 @@ export function PasswordChangeCampaignCard() {
                   <span className="font-semibold text-white">
                     {recipientCount}
                   </span>{" "}
-                  usuarios (excluye banneados y sin email).
+                  usuarios (excluye bloqueados y sin email).
                 </>
               )}
             </div>
@@ -162,7 +162,7 @@ export function PasswordChangeCampaignCard() {
               >
                 {isSendingCampaign
                   ? "Encolando..."
-                  : "Enviar campania a todos"}
+                  : "Enviar campaña a todos"}
               </Button>
             </div>
           </div>
@@ -173,18 +173,18 @@ export function PasswordChangeCampaignCard() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              Confirmar envio masivo
+              Confirmar envío masivo
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Vas a encolar un correo de cambio de contrasena para{" "}
+              Está a punto de encolar un correo de cambio de contraseña para{" "}
               <span className="font-semibold">
                 {recipientCount} usuario{recipientCount === 1 ? "" : "s"}
               </span>
-              . Esta accion no se puede revertir.
+              . Esta acción no se puede revertir.
               <br />
               <br />
-              Inngest procesara los envios en background con un maximo de 5
-              correos simultaneos para no saturar el servidor SMTP. Podes seguir
+              Inngest procesará los envíos en segundo plano con un máximo de 5
+              correos simultáneos para no saturar el servidor SMTP. Puede seguir
               usando el sistema mientras se procesa.
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -197,7 +197,7 @@ export function PasswordChangeCampaignCard() {
               disabled={isSendingCampaign}
               className="bg-purple-600 hover:bg-purple-700"
             >
-              {isSendingCampaign ? "Encolando..." : "Si, enviar a todos"}
+              {isSendingCampaign ? "Encolando..." : "Sí, enviar a todos"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
