@@ -12,6 +12,7 @@ import {
 import { switchTenantAction } from "@/features/tenants/server/presentation/actions/tenant.actions";
 import { authClient } from "@/core/lib/auth-client";
 import { Routes } from "@core/shared/constants/routes";
+import { PasswordChangeCampaignCard } from "../components/PasswordChangeCampaignCard";
 
 interface Tenant {
   id: string;
@@ -172,6 +173,9 @@ export function SuperAdminDashboard({
           )}
         </CardContent>
       </Card>
+
+      {/* Campañas masivas */}
+      <PasswordChangeCampaignCard />
 
       {/* User Info & Logout */}
       <Card className="bg-white/10 border-white/20">

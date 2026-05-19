@@ -107,6 +107,20 @@ export type StandaloneEmailPayload =
         tenantName: string;
         vacancyId: string;
       };
+    }
+  | {
+      template: "password-change-campaign";
+      // Tenant del destinatario para auditoria (Notification.tenantId).
+      // Para envios de prueba sin destinatario real del sistema, isTest=true y
+      // tenantId apunta al tenant del super-admin que disparo el envio.
+      tenantId: string;
+      triggeredById: string;
+      data: {
+        recipientName: string | null;
+        recipientEmail: string;
+        // isTest=true marca explicitamente que es un envio de prueba (para logs/auditoria)
+        isTest: boolean;
+      };
     };
 
 type Events = {

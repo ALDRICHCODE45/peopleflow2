@@ -72,6 +72,10 @@ import {
   generateCommitmentEveningAdminReportEmail,
   generateCommitmentEveningAdminReportPlainText,
 } from "@features/Notifications/server/infrastructure/templates/commitmentEveningAdminReport.template";
+import {
+  generatePasswordChangeCampaignEmail,
+  generatePasswordChangeCampaignPlainText,
+} from "@features/Notifications/server/infrastructure/templates/passwordChangeCampaignTemplate";
 import { GenerateMeetingReportUseCase } from "@features/vacancy/server/application/use-cases/GenerateMeetingReportUseCase";
 import { GenerateDailyReminderUseCase } from "@features/vacancy/server/application/use-cases/GenerateDailyReminderUseCase";
 import { GenerateEveningAdminReportUseCase } from "@features/vacancy/server/application/use-cases/GenerateEveningAdminReportUseCase";
@@ -573,6 +577,9 @@ const handleSendStandaloneEmail = inngest.createFunction(
   {
     id: "handle-send-standalone-email",
     name: "Cola de emails standalone",
+    // Procesa hasta 5 emails en paralelo contra el SMTP.
+    // Inngest encola el resto y los va liberando segun terminan los anteriores.
+    concurrency: { limit: 5 },
   },
   { event: InngestEvents.email.send },
   async ({ event, step }) => {
@@ -895,6 +902,45 @@ const handleSendStandaloneEmail = inngest.createFunction(
         });
 
         return { sent: true, template: payload.template };
+      }
+
+      case "password-change-campaign": {
+        const { data, tenantId, triggeredById } = payload;
+
+        await step.run("send-password-change-campaign-email", async () => {
+          const notificationUseCase = new SendNotificationUseCase(
+            prismaNotificationRepository,
+            [emailProvider],
+          );
+
+          const forgotPasswordUrl = `${APP_URL}/forgot-password`;
+          const emailData = {
+            recipientName: data.recipientName || undefined,
+            forgotPasswordUrl,
+          };
+
+          const subject = data.isTest
+            ? "[PRUEBA] Actualiza tu contraseña — PeopleFlow"
+            : "Actualiza tu contraseña — PeopleFlow";
+
+          await notificationUseCase.execute({
+            tenantId,
+            provider: "EMAIL",
+            recipient: data.recipientEmail,
+            subject,
+            body: generatePasswordChangeCampaignPlainText(emailData),
+            priority: "MEDIUM",
+            metadata: {
+              triggerEvent: data.isTest
+                ? "PASSWORD_CHANGE_CAMPAIGN_TEST"
+                : "PASSWORD_CHANGE_CAMPAIGN",
+              htmlTemplate: generatePasswordChangeCampaignEmail(emailData),
+            },
+            createdById: triggeredById,
+          });
+        });
+
+        return { sent: true, template: payload.template, isTest: data.isTest };
       }
 
       default:
