@@ -11,6 +11,7 @@ export type StandaloneEmailPayload =
         vacancyPosition: string;
         clientName: string;
         vacancyId: string;
+        recipientUserId?: string;
       };
     }
   | {
@@ -94,6 +95,7 @@ export type StandaloneEmailPayload =
         daysRemaining: number;
         targetDate: string;
         vacancyId: string;
+        recipientUserId?: string;
       };
     }
   | {
@@ -109,6 +111,7 @@ export type StandaloneEmailPayload =
         daysInStatus: number;
         tenantName: string;
         vacancyId: string;
+        recipientUserId?: string;
       };
     }
   | {

@@ -147,6 +147,7 @@ export async function createVacancyAction(
             vacancyPosition: data.position,
             clientName: clientName ?? "Cliente",
             vacancyId: vacancyDTO.id,
+            recipientUserId: data.recruiterId,
           },
         },
       });
