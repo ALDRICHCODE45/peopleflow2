@@ -2,6 +2,7 @@
 
 import type { InAppNotificationDTO } from "../types/inAppNotification.types";
 import { formatRelativeNotificationTime } from "../utils/formatRelativeNotificationTime";
+import { NotificationTypeIcon } from "./NotificationTypeIcon";
 
 interface NotificationItemProps {
   notification: InAppNotificationDTO;
@@ -18,27 +19,32 @@ export function NotificationItem({
     <button
       type="button"
       onClick={() => onClick(notification)}
-      className="w-full text-left px-3 py-2 rounded-md hover:bg-muted transition-colors"
+      className="group relative flex w-full items-start gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-muted/60 focus-visible:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
     >
-      <div className="flex gap-2">
-        <div className="w-2 h-2 mt-1.5 shrink-0">
-          {isUnread ? (
-            <span
-              aria-hidden
-              className="block w-2 h-2 rounded-full bg-primary"
-            />
-          ) : null}
-        </div>
-        <div className="min-w-0 flex-1">
-          <p className="text-sm font-medium truncate">{notification.title}</p>
-          <p className="text-xs text-muted-foreground line-clamp-2">
-            {notification.body}
-          </p>
-          <p className="text-xs text-muted-foreground mt-1">
-            {formatRelativeNotificationTime(notification.createdAt)}
-          </p>
-        </div>
+      <NotificationTypeIcon type={notification.type} />
+
+      <div className="min-w-0 flex-1 pr-4">
+        <p
+          className={`text-sm leading-snug text-foreground ${
+            isUnread ? "font-semibold" : "font-medium"
+          }`}
+        >
+          {notification.title}
+        </p>
+        <p className="mt-0.5 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
+          {notification.body}
+        </p>
+        <p className="mt-1.5 text-[11px] font-medium text-muted-foreground/80">
+          {formatRelativeNotificationTime(notification.createdAt)}
+        </p>
       </div>
+
+      {isUnread ? (
+        <span
+          aria-hidden
+          className="mt-1.5 size-2 shrink-0 rounded-full bg-primary"
+        />
+      ) : null}
     </button>
   );
 }
