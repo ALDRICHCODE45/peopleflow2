@@ -232,6 +232,29 @@ const handleLeadStatusChangeNotification = inngest.createFunction(
       });
     }
 
+    await step.run("create-in-app-notification-lead-status-changed", async () => {
+      if (config.recipientUserIds.length === 0) {
+        return;
+      }
+
+      const statusLabelForNotification = STATUS_LABELS[newStatus] || newStatus;
+
+      await createInAppNotificationsForRecipients(
+        config.recipientUserIds.map((recipientUserId) => ({
+          userId: recipientUserId,
+          tenantId,
+          type: "LEAD_STATUS_CHANGED",
+          title: "Cambio de estado en lead",
+          body: `El lead ${leadTenantContext.leadName} cambió de estado a ${statusLabelForNotification}.`,
+          resourceType: "lead",
+          resourceId: leadId,
+          actionUrl: `/leads/${leadId}`,
+          triggeredByUserId: changedById,
+          metadata: { newStatus },
+        })),
+      );
+    });
+
     return { sent: true, recipientCount: recipients.length };
   },
 );
@@ -375,6 +398,27 @@ const handleLeadInactivityAlert = inngest.createFunction(
         });
       });
     }
+
+    await step.run("create-in-app-notification-lead-inactive", async () => {
+      if (freshConfig.recipientUserIds.length === 0) {
+        return;
+      }
+
+      await createInAppNotificationsForRecipients(
+        freshConfig.recipientUserIds.map((recipientUserId) => ({
+          userId: recipientUserId,
+          tenantId,
+          type: "LEAD_INACTIVE",
+          title: "Lead inactivo",
+          body: `El lead ${leadName} ha estado inactivo por ${inactiveDuration}.`,
+          resourceType: "lead",
+          resourceId: leadId,
+          actionUrl: `/leads/${leadId}`,
+          triggeredByUserId: changedById,
+          metadata: { currentStatus: newStatus, inactiveDuration },
+        })),
+      );
+    });
 
     return { sent: true, recipientCount: recipients.length };
   },
@@ -621,6 +665,29 @@ const handleSendStandaloneEmail = inngest.createFunction(
           });
         });
 
+        await step.run("create-in-app-notification-vacancy-assigned", async () => {
+          if (!data.recipientUserId) {
+            console.warn(
+              "[handleSendStandaloneEmail] Missing recipientUserId for recruiter-vacancy-assigned",
+            );
+            return;
+          }
+
+          await createInAppNotificationsForRecipients([
+            {
+              userId: data.recipientUserId,
+              tenantId,
+              type: "VACANCY_ASSIGNED",
+              title: "Se le asignó una vacante",
+              body: `Se le ha asignado la vacante de ${data.vacancyPosition} para ${data.clientName}. Por favor, revísela.`,
+              resourceType: "vacancy",
+              resourceId: data.vacancyId,
+              actionUrl: `/vacantes/${data.vacancyId}`,
+              triggeredByUserId: triggeredById,
+            },
+          ]);
+        });
+
         return { sent: true, template: payload.template };
       }
 
@@ -661,7 +728,7 @@ const handleSendStandaloneEmail = inngest.createFunction(
           });
         });
 
-        await step.run("create-in-app-notification", async () => {
+        await step.run("create-in-app-notification-attachment-rejected", async () => {
           if (!data.recipientUserId) {
             console.warn(
               "[handleSendStandaloneEmail] Missing recipientUserId for attachment-rejected",
@@ -728,7 +795,7 @@ const handleSendStandaloneEmail = inngest.createFunction(
           });
         });
 
-        await step.run("create-in-app-notification", async () => {
+        await step.run("create-in-app-notification-checklist-rejected", async () => {
           if (!data.recipientUserId) {
             console.warn(
               "[handleSendStandaloneEmail] Missing recipientUserId for checklist-rejected",
@@ -871,7 +938,7 @@ const handleSendStandaloneEmail = inngest.createFunction(
           });
         });
 
-        await step.run("create-in-app-notification", async () => {
+        await step.run("create-in-app-notification-validation-request", async () => {
           if (!data.recipientUserId) {
             console.warn(
               "[handleSendStandaloneEmail] Missing recipientUserId for validation-request",
@@ -947,6 +1014,30 @@ const handleSendStandaloneEmail = inngest.createFunction(
           });
         });
 
+        await step.run("create-in-app-notification-vacancy-countdown", async () => {
+          if (!data.recipientUserId) {
+            console.warn(
+              "[handleSendStandaloneEmail] Missing recipientUserId for vacancy-countdown",
+            );
+            return;
+          }
+
+          await createInAppNotificationsForRecipients([
+            {
+              userId: data.recipientUserId,
+              tenantId,
+              type: "VACANCY_COUNTDOWN",
+              title: "Vacante próxima a vencer",
+              body: `Quedan ${data.daysRemaining} días para entregar la vacante ${data.vacancyPosition} de ${data.clientName}.`,
+              resourceType: "vacancy",
+              resourceId: data.vacancyId,
+              actionUrl: `/vacantes/${data.vacancyId}`,
+              triggeredByUserId: triggeredById,
+              metadata: { daysRemaining: data.daysRemaining },
+            },
+          ]);
+        });
+
         return { sent: true, template: payload.template };
       }
 
@@ -987,6 +1078,30 @@ const handleSendStandaloneEmail = inngest.createFunction(
             },
             createdById: triggeredById,
           });
+        });
+
+        await step.run("create-in-app-notification-vacancy-stale", async () => {
+          if (!data.recipientUserId) {
+            console.warn(
+              "[handleSendStandaloneEmail] Missing recipientUserId for vacancy-stale-alert",
+            );
+            return;
+          }
+
+          await createInAppNotificationsForRecipients([
+            {
+              userId: data.recipientUserId,
+              tenantId,
+              type: "VACANCY_STALE",
+              title: "Vacante estancada",
+              body: `La vacante ${data.vacancyPosition} de ${data.clientName} lleva ${data.daysInStatus} en estado ${data.currentStatus}.`,
+              resourceType: "vacancy",
+              resourceId: data.vacancyId,
+              actionUrl: `/vacantes/${data.vacancyId}`,
+              triggeredByUserId: triggeredById,
+              metadata: { daysInStatus: data.daysInStatus, currentStatus: data.currentStatus },
+            },
+          ]);
         });
 
         return { sent: true, template: payload.template };
@@ -1126,10 +1241,10 @@ const handleVacancyCountdownNotification = inngest.createFunction(
               })
             : [];
         const allRecipients = [
-          { name: recruiterName, email: recruiterEmail },
+          { id: recruiterId, name: recruiterName, email: recruiterEmail },
           ...users
             .filter((u) => u.id !== recruiterId)
-            .map((u) => ({ name: u.name, email: u.email })),
+            .map((u) => ({ id: u.id, name: u.name, email: u.email })),
         ];
         return allRecipients;
       });
@@ -1153,6 +1268,7 @@ const handleVacancyCountdownNotification = inngest.createFunction(
                   daysRemaining: daysAhead,
                   targetDate: targetDeliveryDate,
                   vacancyId,
+                  recipientUserId: recipient.id,
                 },
               },
             });
@@ -1200,10 +1316,10 @@ const handleVacancyCountdownNotification = inngest.createFunction(
               })
             : [];
         return [
-          { name: recruiterName, email: recruiterEmail },
+          { id: recruiterId, name: recruiterName, email: recruiterEmail },
           ...users
             .filter((u) => u.id !== recruiterId)
-            .map((u) => ({ name: u.name, email: u.email })),
+            .map((u) => ({ id: u.id, name: u.name, email: u.email })),
         ];
       });
 
@@ -1225,6 +1341,7 @@ const handleVacancyCountdownNotification = inngest.createFunction(
                   daysRemaining: 0,
                   targetDate: targetDeliveryDate,
                   vacancyId,
+                  recipientUserId: recipient.id,
                 },
               },
             });
@@ -1376,10 +1493,10 @@ const handleVacancyStaleNotification = inngest.createFunction(
               })
             : [];
         return [
-          { name: recruiterName, email: recruiterEmail },
+          { id: recruiterId, name: recruiterName, email: recruiterEmail },
           ...users
             .filter((u) => u.id !== recruiterId)
-            .map((u) => ({ name: u.name, email: u.email })),
+            .map((u) => ({ id: u.id, name: u.name, email: u.email })),
         ];
       });
 
@@ -1403,6 +1520,7 @@ const handleVacancyStaleNotification = inngest.createFunction(
                 daysInStatus,
                 tenantName,
                 vacancyId,
+                recipientUserId: recipient.id,
               },
             },
           });
@@ -1644,6 +1762,23 @@ const handleCommitmentMorningReminder = inngest.createFunction(
             },
           });
 
+          await step.run(
+            `create-in-app-notification-commitment-morning-${recruiterData.recruiterId}`,
+            async () => {
+              await createInAppNotificationsForRecipients([
+                {
+                  userId: recruiterData.recruiterId,
+                  tenantId: tenant.tenantId,
+                  type: "COMMITMENT_MORNING_REMINDER",
+                  title: "Recordatorio: compromisos de hoy",
+                  body: `Tiene ${recruiterData.dueTodayCommitments.length} compromisos programados para hoy.`,
+                  resourceType: "commitment",
+                  actionUrl: "/compromisos",
+                },
+              ]);
+            },
+          );
+
           totalSent++;
         }
 
@@ -1742,6 +1877,23 @@ const handleCommitmentEveningAdminReport = inngest.createFunction(
               htmlTemplate,
             },
           });
+
+          await step.run(
+            `create-in-app-notification-commitment-evening-admin-${admin.id}`,
+            async () => {
+              await createInAppNotificationsForRecipients([
+                {
+                  userId: admin.id,
+                  tenantId: tenant.tenantId,
+                  type: "COMMITMENT_EVENING_ADMIN_REPORT",
+                  title: "Reporte vespertino de compromisos",
+                  body: `Resumen de compromisos del día: ${dueTodayCommitments.length} compromisos vencían hoy.`,
+                  resourceType: "commitment",
+                  actionUrl: "/compromisos",
+                },
+              ]);
+            },
+          );
 
           totalSent++;
         }
