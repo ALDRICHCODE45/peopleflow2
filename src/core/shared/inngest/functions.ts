@@ -749,6 +749,7 @@ const handleSendStandaloneEmail = inngest.createFunction(
                 resourceType: "vacancy",
                 resourceId: data.vacancyId,
                 actionUrl: `/reclutamiento/vacantes?vacancyId=${data.vacancyId}`,
+                triggeredByUserId: triggeredById,
               },
             ]);
           } catch (error) {
@@ -816,6 +817,7 @@ const handleSendStandaloneEmail = inngest.createFunction(
                 resourceType: "vacancy",
                 resourceId: data.vacancyId,
                 actionUrl: `/reclutamiento/vacantes?vacancyId=${data.vacancyId}`,
+                triggeredByUserId: triggeredById,
               },
             ]);
           } catch (error) {
@@ -959,6 +961,7 @@ const handleSendStandaloneEmail = inngest.createFunction(
                 resourceType: "vacancy",
                 resourceId: data.vacancyId,
                 actionUrl: `/reclutamiento/vacantes?vacancyId=${data.vacancyId}`,
+                triggeredByUserId: triggeredById,
               },
             ]);
           } catch (error) {
