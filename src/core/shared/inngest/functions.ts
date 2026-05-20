@@ -957,7 +957,7 @@ const handleSendStandaloneEmail = inngest.createFunction(
                 tenantId,
                 type: "TERNA_VALIDATION_PENDING",
                 title: `Validación pendiente para ${data.vacancyPosition}`,
-                body: `${data.requesterName} solicitó validar ${data.resources.join(", ")}. Revise la terna para continuar el proceso.`,
+                body: `${data.requesterName} solicitó validar ${data.resources.join(", ")}. Revise la vacante para continuar el proceso.`,
                 resourceType: "vacancy",
                 resourceId: data.vacancyId,
                 actionUrl: `/reclutamiento/vacantes?vacancyId=${data.vacancyId}`,
