@@ -162,6 +162,110 @@ export class PrismaInAppNotificationRepository
 
     return result.count;
   }
+
+  async applyRetentionForUser(input: {
+    userId: string;
+    tenantId: string;
+    archiveReadOlderThanDays: number;
+    archiveUnreadOlderThanDays: number;
+    hardDeleteArchivedOlderThanDays: number;
+    maxActive: number;
+  }): Promise<{ archived: number; deleted: number }> {
+    const now = new Date();
+    const cutoffRead = new Date(now.getTime());
+    cutoffRead.setDate(cutoffRead.getDate() - input.archiveReadOlderThanDays);
+
+    const cutoffUnread = new Date(now.getTime());
+    cutoffUnread.setDate(cutoffUnread.getDate() - input.archiveUnreadOlderThanDays);
+
+    const cutoffDelete = new Date(now.getTime());
+    cutoffDelete.setDate(cutoffDelete.getDate() - input.hardDeleteArchivedOlderThanDays);
+
+    const archivedReadResult = await prisma.inAppNotification.updateMany({
+      where: {
+        userId: input.userId,
+        tenantId: input.tenantId,
+        readAt: { not: null, lt: cutoffRead },
+        archivedAt: null,
+      },
+      data: {
+        archivedAt: now,
+      },
+    });
+
+    const archivedUnreadResult = await prisma.inAppNotification.updateMany({
+      where: {
+        userId: input.userId,
+        tenantId: input.tenantId,
+        readAt: null,
+        archivedAt: null,
+        createdAt: { lt: cutoffUnread },
+      },
+      data: {
+        archivedAt: now,
+      },
+    });
+
+    const deletedResult = await prisma.inAppNotification.deleteMany({
+      where: {
+        userId: input.userId,
+        tenantId: input.tenantId,
+        archivedAt: { not: null, lt: cutoffDelete },
+      },
+    });
+
+    const activeCount = await prisma.inAppNotification.count({
+      where: {
+        userId: input.userId,
+        tenantId: input.tenantId,
+        archivedAt: null,
+      },
+    });
+
+    let cappedCount = 0;
+
+    if (activeCount > input.maxActive) {
+      const overflow = activeCount - input.maxActive;
+      const oldestNotifications = await prisma.inAppNotification.findMany({
+        where: {
+          userId: input.userId,
+          tenantId: input.tenantId,
+          archivedAt: null,
+        },
+        orderBy: { createdAt: "asc" },
+        take: overflow,
+        select: { id: true },
+      });
+
+      if (oldestNotifications.length > 0) {
+        const archivedOverflowResult = await prisma.inAppNotification.updateMany({
+          where: {
+            id: { in: oldestNotifications.map((notification) => notification.id) },
+          },
+          data: {
+            archivedAt: now,
+          },
+        });
+
+        cappedCount = archivedOverflowResult.count;
+      }
+    }
+
+    return {
+      archived: archivedReadResult.count + archivedUnreadResult.count + cappedCount,
+      deleted: deletedResult.count,
+    };
+  }
+
+  async getDistinctUserTenantPairs(): Promise<Array<{ userId: string; tenantId: string }>> {
+    return prisma.inAppNotification.findMany({
+      distinct: ["userId", "tenantId"],
+      select: {
+        userId: true,
+        tenantId: true,
+      },
+    });
+  }
 }
 
 export const prismaInAppNotificationRepository =

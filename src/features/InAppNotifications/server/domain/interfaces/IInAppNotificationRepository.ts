@@ -36,4 +36,13 @@ export interface IInAppNotificationRepository {
   getUnreadCount(input: { tenantId: string; userId: string }): Promise<number>;
   markAsRead(input: { id: string; tenantId: string; userId: string }): Promise<void>;
   markAllAsRead(input: { tenantId: string; userId: string }): Promise<number>;
+  applyRetentionForUser(input: {
+    userId: string;
+    tenantId: string;
+    archiveReadOlderThanDays: number;
+    archiveUnreadOlderThanDays: number;
+    hardDeleteArchivedOlderThanDays: number;
+    maxActive: number;
+  }): Promise<{ archived: number; deleted: number }>;
+  getDistinctUserTenantPairs(): Promise<Array<{ userId: string; tenantId: string }>>;
 }
