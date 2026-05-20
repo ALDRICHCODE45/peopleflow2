@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@lib/utils";
 import type { InAppNotificationDTO } from "../types/inAppNotification.types";
 import { formatRelativeNotificationTime } from "../utils/formatRelativeNotificationTime";
 import { NotificationTypeIcon } from "./NotificationTypeIcon";
@@ -23,28 +24,28 @@ export function NotificationItem({
     >
       <NotificationTypeIcon type={notification.type} />
 
-      <div className="min-w-0 flex-1 pr-4">
+      <div className="min-w-0 flex-1 pr-2">
         <p
-          className={`text-sm leading-snug text-foreground ${
-            isUnread ? "font-semibold" : "font-medium"
-          }`}
+          className={cn(
+            "line-clamp-2 text-sm leading-snug text-foreground",
+            isUnread && "font-semibold",
+          )}
         >
           {notification.title}
+          {isUnread ? (
+            <span
+              aria-hidden
+              className="ml-1.5 inline-block size-1.5 rounded-full bg-primary align-middle"
+            />
+          ) : null}
         </p>
         <p className="mt-0.5 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
           {notification.body}
         </p>
-        <p className="mt-1.5 text-[11px] font-medium text-muted-foreground/80">
+        <p className="mt-1.5 text-xs text-muted-foreground">
           {formatRelativeNotificationTime(notification.createdAt)}
         </p>
       </div>
-
-      {isUnread ? (
-        <span
-          aria-hidden
-          className="mt-1.5 size-2 shrink-0 rounded-full bg-primary"
-        />
-      ) : null}
     </button>
   );
 }

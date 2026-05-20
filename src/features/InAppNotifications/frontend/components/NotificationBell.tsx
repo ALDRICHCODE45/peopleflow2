@@ -2,51 +2,76 @@
 
 import { Notification03Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { useIsMobile } from "@core/shared/hooks/use-mobile";
+import { Badge } from "@shadcn/badge";
 import { Button } from "@shadcn/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@shadcn/popover";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@shadcn/sheet";
 import { useState } from "react";
 import { useUnreadCountQuery } from "../hooks/useUnreadCountQuery";
-import { NotificationPopover } from "./NotificationPopover";
+import { NotificationListContent } from "./NotificationListContent";
 
 export function NotificationBell() {
   const [open, setOpen] = useState(false);
+  const isMobile = useIsMobile();
   const { data: unreadCount = 0 } = useUnreadCountQuery();
   const hasUnread = unreadCount > 0;
+  const unreadCountDisplay = unreadCount > 99 ? "99+" : unreadCount;
+
+  const trigger = (
+    <Button
+      variant="ghost"
+      size="icon"
+      aria-label={
+        hasUnread
+          ? `Abrir notificaciones (${unreadCount} sin leer)`
+          : "Abrir notificaciones"
+      }
+      className="relative"
+    >
+      <HugeiconsIcon icon={Notification03Icon} strokeWidth={1.75} />
+      {hasUnread ? (
+        <Badge
+          aria-hidden
+          variant="default"
+          className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 text-xs leading-none"
+        >
+          {unreadCountDisplay}
+        </Badge>
+      ) : null}
+    </Button>
+  );
+
+  if (isMobile) {
+    return (
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetTrigger asChild>{trigger}</SheetTrigger>
+        <SheetContent side="bottom" className="p-0">
+          <SheetHeader className="sr-only">
+            <SheetTitle>Notificaciones</SheetTitle>
+          </SheetHeader>
+          <NotificationListContent variant="sheet" />
+        </SheetContent>
+      </Sheet>
+    );
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label={
-            hasUnread
-              ? `Abrir notificaciones (${unreadCount} sin leer)`
-              : "Abrir notificaciones"
-          }
-          className="relative"
-        >
-          <HugeiconsIcon
-            icon={Notification03Icon}
-            className="size-5"
-            strokeWidth={1.75}
-          />
-          {hasUnread ? (
-            <span
-              aria-hidden
-              className="absolute -top-0.5 -right-0.5 inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-foreground px-1 text-[10px] font-semibold leading-none text-background ring-2 ring-background"
-            >
-              {unreadCount > 99 ? "99+" : unreadCount}
-            </span>
-          ) : null}
-        </Button>
-      </PopoverTrigger>
+      <PopoverTrigger asChild>{trigger}</PopoverTrigger>
       <PopoverContent
         align="end"
         sideOffset={8}
-        className="overflow-hidden p-0 shadow-lg"
+        collisionPadding={16}
+        className="w-[420px] overflow-hidden p-0"
       >
-        <NotificationPopover />
+        <NotificationListContent variant="popover" />
       </PopoverContent>
     </Popover>
   );
