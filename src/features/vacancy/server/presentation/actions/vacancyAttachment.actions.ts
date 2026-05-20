@@ -248,6 +248,7 @@ export async function rejectAttachmentAction(input: {
               fileName: record.fileName,
               rejectionReason: input.reason,
               vacancyId: input.vacancyId,
+              recipientUserId: vacancy.recruiterId,
             },
           },
         });
@@ -332,6 +333,7 @@ export async function rejectVacancyChecklistAction(input: {
               clientName,
               rejectionReason: input.reason,
               vacancyId: input.vacancyId,
+              recipientUserId: fullVacancy.recruiterId,
             },
           },
         });

@@ -129,6 +129,7 @@ export async function requestValidationAction(input: {
             resources: resourceLabels,
             vacancyId: vacancy.id,
             tenantName,
+            recipientUserId: recipient.id,
           },
         },
       });
