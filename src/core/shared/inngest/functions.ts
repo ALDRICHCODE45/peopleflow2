@@ -61,7 +61,7 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 // Function 1: Immediate notification on lead status change
-const handleLeadStatusChangeNotification = inngest.createFunction(
+export const handleLeadStatusChangeNotification = inngest.createFunction(
   {
     id: "handle-lead-status-change-notification",
     name: "Notificación de cambio de estado de Lead",
@@ -223,7 +223,7 @@ const handleLeadStatusChangeNotification = inngest.createFunction(
 );
 
 // Function 2: Inactivity alert with configurable sleep
-const handleLeadInactivityAlert = inngest.createFunction(
+export const handleLeadInactivityAlert = inngest.createFunction(
   {
     id: "handle-lead-inactivity-alert",
     name: "Alerta de inactividad de Lead",
@@ -388,7 +388,7 @@ const handleLeadInactivityAlert = inngest.createFunction(
 );
 
 // Function 3: Entry date reminder for PRE_PLACEMENT vacancies
-const handleVacancyPrePlacementEntryReminder = inngest.createFunction(
+export const handleVacancyPrePlacementEntryReminder = inngest.createFunction(
   {
     id: "handle-vacancy-pre-placement-entry-reminder",
     name: "Recordatorio de fecha de ingreso en Pre-Placement",
@@ -493,7 +493,7 @@ const handleVacancyPrePlacementEntryReminder = inngest.createFunction(
 );
 
 // Function 4: Placement congrats email
-const handleVacancyPlacementCongratsEmail = inngest.createFunction(
+export const handleVacancyPlacementCongratsEmail = inngest.createFunction(
   {
     id: "handle-vacancy-placement-congrats-email",
     name: "Email de felicitaciones por placement",
@@ -583,7 +583,7 @@ const handleVacancyPlacementCongratsEmail = inngest.createFunction(
 // Function 6: Vacancy countdown reminders before targetDeliveryDate
 const VACANCY_TERMINAL_STATUSES = ["CANCELADA", "PERDIDA", "STAND_BY", "PLACEMENT"] as const;
 
-const handleVacancyCountdownNotification = inngest.createFunction(
+export const handleVacancyCountdownNotification = inngest.createFunction(
   {
     id: "vacancy-countdown-notification",
     name: "Recordatorios de countdown antes de entrega de vacante",
@@ -798,7 +798,7 @@ const VACANCY_STATUS_DISPLAY: Record<string, string> = {
   PERDIDA: "Perdida",
 };
 
-const handleVacancyStaleNotification = inngest.createFunction(
+export const handleVacancyStaleNotification = inngest.createFunction(
   {
     id: "vacancy-stale-notification",
     name: "Alerta de vacante estancada (repetitiva)",
@@ -978,7 +978,7 @@ function rehydrateReportRow<T extends { dueDate: unknown; createdAt: unknown; co
 }
 
 // Function 8: Manual post-meeting commitment report
-const handleCommitmentMeetingReport = inngest.createFunction(
+export const handleCommitmentMeetingReport = inngest.createFunction(
   {
     id: "handle-commitment-meeting-report",
     name: "Reporte de compromisos post-junta",
@@ -1120,7 +1120,7 @@ const handleCommitmentMeetingReport = inngest.createFunction(
 );
 
 // Function 9: Morning cron — daily recruiter reminder for due-today commitments
-const handleCommitmentMorningReminder = inngest.createFunction(
+export const handleCommitmentMorningReminder = inngest.createFunction(
   {
     id: "handle-commitment-morning-reminder",
     name: "Recordatorio matutino de compromisos",
@@ -1219,7 +1219,7 @@ const handleCommitmentMorningReminder = inngest.createFunction(
 );
 
 // Function 10: Evening cron — daily admin report of due-today commitments
-const handleCommitmentEveningAdminReport = inngest.createFunction(
+export const handleCommitmentEveningAdminReport = inngest.createFunction(
   {
     id: "handle-commitment-evening-admin-report",
     name: "Reporte vespertino de compromisos para admins",
