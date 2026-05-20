@@ -31,6 +31,7 @@ export interface ListInAppNotificationsOutput {
 
 export interface IInAppNotificationRepository {
   create(data: CreateInAppNotificationData): Promise<InAppNotification>;
+  createMany(data: CreateInAppNotificationData[]): Promise<number>;
   listForUser(input: ListInAppNotificationsInput): Promise<ListInAppNotificationsOutput>;
   getUnreadCount(input: { tenantId: string; userId: string }): Promise<number>;
   markAsRead(input: { id: string; tenantId: string; userId: string }): Promise<void>;

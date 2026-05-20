@@ -69,6 +69,29 @@ export class PrismaInAppNotificationRepository
     return this.mapToDomain(record as PrismaInAppNotificationRecord);
   }
 
+  async createMany(data: CreateInAppNotificationData[]): Promise<number> {
+    if (data.length === 0) {
+      return 0;
+    }
+
+    const result = await prisma.inAppNotification.createMany({
+      data: data.map((item) => ({
+        tenantId: item.tenantId,
+        userId: item.userId,
+        type: item.type,
+        title: item.title,
+        body: item.body,
+        resourceType: item.resourceType,
+        resourceId: item.resourceId,
+        actionUrl: item.actionUrl,
+        triggeredByUserId: item.triggeredByUserId,
+        metadata: item.metadata as Prisma.InputJsonValue | undefined,
+      })),
+    });
+
+    return result.count;
+  }
+
   async listForUser(
     input: ListInAppNotificationsInput
   ): Promise<ListInAppNotificationsOutput> {

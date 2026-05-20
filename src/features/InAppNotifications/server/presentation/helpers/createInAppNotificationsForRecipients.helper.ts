@@ -1,5 +1,4 @@
 import type { InAppNotificationType } from "../../domain/entities/InAppNotification";
-import { CreateInAppNotificationUseCase } from "../../application/use-cases/CreateInAppNotificationUseCase";
 import { prismaInAppNotificationRepository } from "../../infrastructure/repositories/PrismaInAppNotificationRepository";
 
 export interface CreateInAppNotificationRecipientInput {
@@ -11,6 +10,8 @@ export interface CreateInAppNotificationRecipientInput {
   resourceType?: string;
   resourceId?: string;
   actionUrl?: string;
+  triggeredByUserId?: string;
+  metadata?: Record<string, unknown>;
 }
 
 export async function createInAppNotificationsForRecipients(
@@ -20,32 +21,25 @@ export async function createInAppNotificationsForRecipients(
     return;
   }
 
-  const useCase = new CreateInAppNotificationUseCase(
-    prismaInAppNotificationRepository,
-  );
-
-  for (const recipient of recipients) {
-    const result = await useCase.execute({
-      userId: recipient.userId,
-      tenantId: recipient.tenantId,
-      type: recipient.type,
-      title: recipient.title,
-      body: recipient.body,
-      resourceType: recipient.resourceType,
-      resourceId: recipient.resourceId,
-      actionUrl: recipient.actionUrl,
+  try {
+    await prismaInAppNotificationRepository.createMany(
+      recipients.map((recipient) => ({
+        userId: recipient.userId,
+        tenantId: recipient.tenantId,
+        type: recipient.type,
+        title: recipient.title,
+        body: recipient.body,
+        resourceType: recipient.resourceType,
+        resourceId: recipient.resourceId,
+        actionUrl: recipient.actionUrl,
+        triggeredByUserId: recipient.triggeredByUserId,
+        metadata: recipient.metadata,
+      })),
+    );
+  } catch (error) {
+    console.warn("createInAppNotificationsForRecipients failed", {
+      count: recipients.length,
+      error,
     });
-
-    if (!result.success) {
-      console.error(
-        "[createInAppNotificationsForRecipients] Failed to create in-app notification",
-        {
-          userId: recipient.userId,
-          tenantId: recipient.tenantId,
-          type: recipient.type,
-          error: result.error,
-        },
-      );
-    }
   }
 }
