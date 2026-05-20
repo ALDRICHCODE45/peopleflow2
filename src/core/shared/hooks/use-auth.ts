@@ -12,6 +12,7 @@ export interface AuthUser {
   email: string;
   name: string | null;
   image: string | null;
+  avatar: string | null;
   emailVerified: boolean;
   createdAt: Date;
   updatedAt: Date;

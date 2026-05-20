@@ -46,6 +46,19 @@ export const auth = betterAuth({
     .flatMap((value) => value!.split(","))
     .map((value) => value.trim())
     .filter(Boolean),
+  user: {
+    additionalFields: {
+      // Project-specific avatar field. We persist user avatars in `User.avatar`
+      // (separate from Better Auth's default `image`) so they're admin-managed
+      // and not overwritten by OAuth providers. Exposing it here makes it flow
+      // through `authClient.useSession()` everywhere we use `useAuth()`.
+      avatar: {
+        type: "string",
+        required: false,
+        input: false, // not settable during signup; managed via admin/profile flows
+      },
+    },
+  },
   emailAndPassword: {
     enabled: true, // Habilita autenticación con email y contraseña
     minPasswordLength: 8, // Sincronizado con passwordPolicy.ts (PASSWORD_MIN)
