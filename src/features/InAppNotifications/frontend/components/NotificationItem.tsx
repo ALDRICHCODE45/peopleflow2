@@ -1,13 +1,21 @@
 "use client";
 
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "@shadcn/avatar";
 import { cn } from "@lib/utils";
 import type { InAppNotificationDTO } from "../types/inAppNotification.types";
 import { formatRelativeNotificationTime } from "../utils/formatRelativeNotificationTime";
-import { NotificationTypeIcon } from "./NotificationTypeIcon";
+import { NotificationTypeIcon, TONE_CLASSES, TYPE_CONFIG } from "./NotificationTypeIcon";
 
 interface NotificationItemProps {
   notification: InAppNotificationDTO;
   onClick: (notification: InAppNotificationDTO) => void;
+}
+
+function getInitials(name: string | null): string {
+  if (!name) return "?";
+  const parts = name.trim().split(/\s+/).slice(0, 2);
+  return parts.map((part) => part[0]?.toUpperCase() ?? "").join("") || "?";
 }
 
 export function NotificationItem({
@@ -15,6 +23,11 @@ export function NotificationItem({
   onClick,
 }: NotificationItemProps) {
   const isUnread = !notification.readAt;
+  const hasTriggeredByActor =
+    !!notification.triggeredBy &&
+    (!!notification.triggeredBy.image || !!notification.triggeredBy.name);
+  const typeConfig = TYPE_CONFIG[notification.type];
+  const toneClass = TONE_CLASSES[typeConfig.tone];
 
   return (
     <button
@@ -22,7 +35,24 @@ export function NotificationItem({
       onClick={() => onClick(notification)}
       className="group relative flex w-full items-start gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-muted/60 focus-visible:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
     >
-      <NotificationTypeIcon type={notification.type} />
+      {hasTriggeredByActor && notification.triggeredBy ? (
+        <Avatar size="default">
+          <AvatarImage
+            src={notification.triggeredBy.image ?? undefined}
+            alt={notification.triggeredBy.name ?? ""}
+          />
+          <AvatarFallback>
+            {notification.triggeredBy.name
+              ? getInitials(notification.triggeredBy.name)
+              : notification.triggeredBy.id[0]?.toUpperCase() ?? "?"}
+          </AvatarFallback>
+          <AvatarBadge className={cn(toneClass)}>
+            <HugeiconsIcon icon={typeConfig.icon} strokeWidth={2} />
+          </AvatarBadge>
+        </Avatar>
+      ) : (
+        <NotificationTypeIcon type={notification.type} />
+      )}
 
       <div className="min-w-0 flex-1 pr-2">
         <p

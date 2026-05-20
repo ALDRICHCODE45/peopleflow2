@@ -10,6 +10,12 @@ export type InAppNotificationType =
   | "COMMITMENT_MORNING_REMINDER"
   | "COMMITMENT_EVENING_ADMIN_REPORT";
 
+export interface TriggeredByActorDTO {
+  id: string;
+  name: string | null;
+  image: string | null;
+}
+
 export interface InAppNotificationDTO {
   id: string;
   tenantId: string;
@@ -23,6 +29,7 @@ export interface InAppNotificationDTO {
   readAt: string | null;
   archivedAt: string | null;
   triggeredByUserId: string | null;
+  triggeredBy: TriggeredByActorDTO | null;
   metadata: Record<string, unknown> | null;
   createdAt: string;
 }

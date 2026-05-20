@@ -13,6 +13,7 @@ import {
   Tick02Icon,
   UserCheck01Icon,
 } from "@hugeicons/core-free-icons";
+import { cn } from "@lib/utils";
 import type { InAppNotificationType } from "../types/inAppNotification.types";
 
 interface IconConfig {
@@ -23,7 +24,7 @@ interface IconConfig {
 
 // Map each notification type to its visual identity.
 // Tone drives both the icon color and the soft background tint of the circle.
-const TYPE_CONFIG: Record<InAppNotificationType, IconConfig> = {
+export const TYPE_CONFIG: Record<InAppNotificationType, IconConfig> = {
   VACANCY_ATTACHMENT_REJECTED: {
     icon: FileRemoveIcon,
     tone: "red",
@@ -78,7 +79,7 @@ const TYPE_CONFIG: Record<InAppNotificationType, IconConfig> = {
 
 // Tone tokens — light tint background + saturated icon foreground.
 // Kept minimal so the system reads as "color is meaning", not decoration.
-const TONE_CLASSES: Record<IconConfig["tone"], string> = {
+export const TONE_CLASSES: Record<IconConfig["tone"], string> = {
   violet: "bg-violet-100 text-violet-600 dark:bg-violet-500/10 dark:text-violet-400",
   red: "bg-rose-100 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400",
   blue: "bg-sky-100 text-sky-600 dark:bg-sky-500/10 dark:text-sky-400",
@@ -99,7 +100,10 @@ export function NotificationTypeIcon({ type }: NotificationTypeIconProps) {
     <span
       role="img"
       aria-label={config.label}
-      className={`inline-flex size-9 shrink-0 items-center justify-center rounded-full ${toneClass}`}
+      className={cn(
+        "inline-flex size-9 shrink-0 items-center justify-center rounded-full",
+        toneClass
+      )}
     >
       <HugeiconsIcon icon={config.icon} className="size-4" strokeWidth={2} />
     </span>

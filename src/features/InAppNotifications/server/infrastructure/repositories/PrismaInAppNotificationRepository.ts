@@ -24,6 +24,11 @@ type PrismaInAppNotificationRecord = {
   readAt: Date | null;
   archivedAt: Date | null;
   triggeredByUserId: string | null;
+  triggeredByUser?: {
+    id: string;
+    name: string | null;
+    image: string | null;
+  } | null;
   metadata: Record<string, unknown> | null;
   createdAt: Date;
 };
@@ -45,6 +50,13 @@ export class PrismaInAppNotificationRepository
       readAt: record.readAt,
       archivedAt: record.archivedAt,
       triggeredByUserId: record.triggeredByUserId,
+      triggeredBy: record.triggeredByUser
+        ? {
+            id: record.triggeredByUser.id,
+            name: record.triggeredByUser.name,
+            image: record.triggeredByUser.image,
+          }
+        : null,
       metadata: record.metadata,
       createdAt: record.createdAt,
     });
@@ -104,6 +116,15 @@ export class PrismaInAppNotificationRepository
       },
       orderBy: [{ readAt: "asc" }, { createdAt: "desc" }],
       take: input.limit + 1,
+      include: {
+        triggeredByUser: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+          },
+        },
+      },
       ...(input.cursor ? { cursor: { id: input.cursor }, skip: 1 } : {}),
     });
 
