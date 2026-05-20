@@ -81,6 +81,7 @@ import { GenerateDailyReminderUseCase } from "@features/vacancy/server/applicati
 import { GenerateEveningAdminReportUseCase } from "@features/vacancy/server/application/use-cases/GenerateEveningAdminReportUseCase";
 import { prismaVacancyCommitmentRepository } from "@features/vacancy/server/infrastructure/repositories/PrismaVacancyCommitmentRepository";
 import { prismaNotificationConfigRepository } from "@features/Sistema/configuracion/server/infrastructure/repositories/PrismaNotificationConfigRepository";
+import { createInAppNotificationsForRecipients } from "@features/InAppNotifications/server/presentation/helpers/createInAppNotificationsForRecipients.helper";
 import { getMexicoDayRangeUTC } from "@core/shared/helpers/timezone";
 
 const STATUS_LABELS: Record<string, string> = {
@@ -660,6 +661,35 @@ const handleSendStandaloneEmail = inngest.createFunction(
           });
         });
 
+        await step.run("create-in-app-notification", async () => {
+          if (!data.recipientUserId) {
+            console.warn(
+              "[handleSendStandaloneEmail] Missing recipientUserId for attachment-rejected",
+            );
+            return;
+          }
+
+          try {
+            await createInAppNotificationsForRecipients([
+              {
+                userId: data.recipientUserId,
+                tenantId,
+                type: "VACANCY_ATTACHMENT_REJECTED",
+                title: `Adjunto rechazado en ${data.vacancyPosition}`,
+                body: `Su adjunto ${data.fileName} fue rechazado: ${data.rejectionReason}. Por favor, revíselo y vuelva a subirlo.`,
+                resourceType: "vacancy",
+                resourceId: data.vacancyId,
+                actionUrl: `/reclutamiento/vacantes?vacancyId=${data.vacancyId}`,
+              },
+            ]);
+          } catch (error) {
+            console.error(
+              "[handleSendStandaloneEmail] Failed to create in-app notification for attachment-rejected",
+              error,
+            );
+          }
+        });
+
         return { sent: true, template: payload.template };
       }
 
@@ -696,6 +726,35 @@ const handleSendStandaloneEmail = inngest.createFunction(
             },
             createdById: triggeredById,
           });
+        });
+
+        await step.run("create-in-app-notification", async () => {
+          if (!data.recipientUserId) {
+            console.warn(
+              "[handleSendStandaloneEmail] Missing recipientUserId for checklist-rejected",
+            );
+            return;
+          }
+
+          try {
+            await createInAppNotificationsForRecipients([
+              {
+                userId: data.recipientUserId,
+                tenantId,
+                type: "VACANCY_CHECKLIST_REJECTED",
+                title: `Checklist rechazado en ${data.vacancyPosition}`,
+                body: `El checklist de la vacante fue rechazado: ${data.rejectionReason}. Por favor, actualice la información solicitada.`,
+                resourceType: "vacancy",
+                resourceId: data.vacancyId,
+                actionUrl: `/reclutamiento/vacantes?vacancyId=${data.vacancyId}`,
+              },
+            ]);
+          } catch (error) {
+            console.error(
+              "[handleSendStandaloneEmail] Failed to create in-app notification for checklist-rejected",
+              error,
+            );
+          }
         });
 
         return { sent: true, template: payload.template };
@@ -810,6 +869,35 @@ const handleSendStandaloneEmail = inngest.createFunction(
             },
             createdById: triggeredById,
           });
+        });
+
+        await step.run("create-in-app-notification", async () => {
+          if (!data.recipientUserId) {
+            console.warn(
+              "[handleSendStandaloneEmail] Missing recipientUserId for validation-request",
+            );
+            return;
+          }
+
+          try {
+            await createInAppNotificationsForRecipients([
+              {
+                userId: data.recipientUserId,
+                tenantId,
+                type: "TERNA_VALIDATION_PENDING",
+                title: `Validación pendiente para ${data.vacancyPosition}`,
+                body: `${data.requesterName} solicitó validar ${data.resources.join(", ")}. Revise la terna para continuar el proceso.`,
+                resourceType: "vacancy",
+                resourceId: data.vacancyId,
+                actionUrl: `/reclutamiento/vacantes?vacancyId=${data.vacancyId}`,
+              },
+            ]);
+          } catch (error) {
+            console.error(
+              "[handleSendStandaloneEmail] Failed to create in-app notification for validation-request",
+              error,
+            );
+          }
         });
 
         return { sent: true, template: payload.template };
