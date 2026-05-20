@@ -1,6 +1,5 @@
 "use client";
 
-import { HugeiconsIcon } from "@hugeicons/react";
 import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "@shadcn/avatar";
 import { cn } from "@lib/utils";
 import type { InAppNotificationDTO } from "../types/inAppNotification.types";
@@ -25,7 +24,7 @@ export function NotificationItem({
   const isUnread = !notification.readAt;
   const hasTriggeredByActor =
     !!notification.triggeredBy &&
-    (!!notification.triggeredBy.image || !!notification.triggeredBy.name);
+    (!!notification.triggeredBy.avatar || !!notification.triggeredBy.name);
   const typeConfig = TYPE_CONFIG[notification.type];
   const toneClass = TONE_CLASSES[typeConfig.tone];
 
@@ -38,7 +37,7 @@ export function NotificationItem({
       {hasTriggeredByActor && notification.triggeredBy ? (
         <Avatar size="default">
           <AvatarImage
-            src={notification.triggeredBy.image ?? undefined}
+            src={notification.triggeredBy.avatar ?? undefined}
             alt={notification.triggeredBy.name ?? ""}
           />
           <AvatarFallback>
@@ -46,9 +45,13 @@ export function NotificationItem({
               ? getInitials(notification.triggeredBy.name)
               : notification.triggeredBy.id[0]?.toUpperCase() ?? "?"}
           </AvatarFallback>
-          <AvatarBadge className={cn(toneClass)}>
-            <HugeiconsIcon icon={typeConfig.icon} strokeWidth={2} />
-          </AvatarBadge>
+          <AvatarBadge
+            aria-label={typeConfig.label}
+            className={cn(
+              "border-2 border-background [&>svg]:hidden",
+              toneClass,
+            )}
+          />
         </Avatar>
       ) : (
         <NotificationTypeIcon type={notification.type} />

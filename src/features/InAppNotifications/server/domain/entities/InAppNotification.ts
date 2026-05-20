@@ -31,7 +31,7 @@ export interface InAppNotificationProps {
 export interface TriggeredByActorDTO {
   id: string;
   name: string | null;
-  image: string | null;
+  avatar: string | null;
 }
 
 export interface InAppNotificationDTO {

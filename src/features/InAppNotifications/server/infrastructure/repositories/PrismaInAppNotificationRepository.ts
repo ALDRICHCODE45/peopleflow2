@@ -27,7 +27,7 @@ type PrismaInAppNotificationRecord = {
   triggeredByUser?: {
     id: string;
     name: string | null;
-    image: string | null;
+    avatar: string | null;
   } | null;
   metadata: Record<string, unknown> | null;
   createdAt: Date;
@@ -54,7 +54,7 @@ export class PrismaInAppNotificationRepository
         ? {
             id: record.triggeredByUser.id,
             name: record.triggeredByUser.name,
-            image: record.triggeredByUser.image,
+            avatar: record.triggeredByUser.avatar,
           }
         : null,
       metadata: record.metadata,
@@ -121,7 +121,7 @@ export class PrismaInAppNotificationRepository
           select: {
             id: true,
             name: true,
-            image: true,
+            avatar: true,
           },
         },
       },

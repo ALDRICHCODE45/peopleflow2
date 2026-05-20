@@ -78,7 +78,7 @@ export function NotificationListContent({ variant }: NotificationListContentProp
       ) : (
         <ScrollArea
           className={cn(
-            variant === "popover" ? "max-h-[min(70vh,480px)]" : "max-h-[60vh]",
+            variant === "popover" ? "h-[min(70vh,480px)]" : "h-[60vh]",
           )}
         >
           <ul>
