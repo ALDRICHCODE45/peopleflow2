@@ -170,6 +170,11 @@ export type VacancyCommitmentEvent = Prisma.VacancyCommitmentEventModel
  */
 export type Notification = Prisma.NotificationModel
 /**
+ * Model InAppNotification
+ * 
+ */
+export type InAppNotification = Prisma.InAppNotificationModel
+/**
  * Model Invoice
  * 
  */

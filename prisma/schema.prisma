@@ -40,6 +40,8 @@ model User {
 
   // Relaciones con módulo de Notificaciones
   notificationsCreated Notification[] @relation("NotificationCreatedBy")
+  inAppNotifications          InAppNotification[] @relation("UserInAppNotifications")
+  inAppNotificationsTriggered InAppNotification[] @relation("InAppNotificationTriggeredBy")
 
   // Relaciones con módulo de Clientes
   clientsGenerated Client[] @relation("ClientGenerator")
@@ -152,6 +154,7 @@ model Tenant {
 
   // Relaciones con módulo de Notificaciones
   notifications Notification[]
+  inAppNotifications InAppNotification[]
 
   // Relaciones con módulo de Clientes
   clients Client[]
@@ -263,6 +266,19 @@ enum NotificationPriority {
   MEDIUM
   HIGH
   CRITICAL
+}
+
+enum InAppNotificationType {
+  VACANCY_ATTACHMENT_REJECTED
+  VACANCY_CHECKLIST_REJECTED
+  TERNA_VALIDATION_PENDING
+  VACANCY_ASSIGNED
+  LEAD_STATUS_CHANGED
+  LEAD_INACTIVE
+  VACANCY_STALE
+  VACANCY_COUNTDOWN
+  COMMITMENT_MORNING_REMINDER
+  COMMITMENT_EVENING_ADMIN_REPORT
 }
 
 // =============================================
@@ -1027,6 +1043,38 @@ model Notification {
   @@index([provider])
   @@index([tenantId, status])
   @@map("notification")
+}
+
+model InAppNotification {
+  id       String @id @default(uuid())
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation("UserInAppNotifications", fields: [userId], references: [id], onDelete: Cascade)
+
+  type  InAppNotificationType
+  title String
+  body  String @db.Text
+
+  resourceType String?
+  resourceId   String?
+  actionUrl    String?
+
+  readAt     DateTime?
+  archivedAt DateTime?
+
+  triggeredByUserId String?
+  triggeredByUser   User? @relation("InAppNotificationTriggeredBy", fields: [triggeredByUserId], references: [id], onDelete: SetNull)
+  metadata Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, readAt])
+  @@index([userId, archivedAt, createdAt])
+  @@index([tenantId])
+  @@index([tenantId, userId, archivedAt, createdAt])
+  @@map("in_app_notification")
 }
 
 // =============================================

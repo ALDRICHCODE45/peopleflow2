@@ -77,6 +77,7 @@ export const ModelName = {
   VacancyCommitment: 'VacancyCommitment',
   VacancyCommitmentEvent: 'VacancyCommitmentEvent',
   Notification: 'Notification',
+  InAppNotification: 'InAppNotification',
   Invoice: 'Invoice',
   InvoiceFolioCounter: 'InvoiceFolioCounter',
   Client: 'Client',
@@ -565,6 +566,26 @@ export const NotificationScalarFieldEnum = {
 } as const
 
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const InAppNotificationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  userId: 'userId',
+  type: 'type',
+  title: 'title',
+  body: 'body',
+  resourceType: 'resourceType',
+  resourceId: 'resourceId',
+  actionUrl: 'actionUrl',
+  readAt: 'readAt',
+  archivedAt: 'archivedAt',
+  triggeredByUserId: 'triggeredByUserId',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type InAppNotificationScalarFieldEnum = (typeof InAppNotificationScalarFieldEnum)[keyof typeof InAppNotificationScalarFieldEnum]
 
 
 export const InvoiceScalarFieldEnum = {

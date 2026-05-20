@@ -521,6 +521,23 @@ export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
   _max?: Prisma.NestedJsonNullableFilter<$PrismaModel>
 }
 
+export type EnumInAppNotificationTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.InAppNotificationType | Prisma.EnumInAppNotificationTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.InAppNotificationType[] | Prisma.ListEnumInAppNotificationTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InAppNotificationType[] | Prisma.ListEnumInAppNotificationTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInAppNotificationTypeFilter<$PrismaModel> | $Enums.InAppNotificationType
+}
+
+export type EnumInAppNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.InAppNotificationType | Prisma.EnumInAppNotificationTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.InAppNotificationType[] | Prisma.ListEnumInAppNotificationTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InAppNotificationType[] | Prisma.ListEnumInAppNotificationTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInAppNotificationTypeWithAggregatesFilter<$PrismaModel> | $Enums.InAppNotificationType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumInAppNotificationTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumInAppNotificationTypeFilter<$PrismaModel>
+}
+
 export type EnumInvoiceTypeFilter<$PrismaModel = never> = {
   equals?: $Enums.InvoiceType | Prisma.EnumInvoiceTypeFieldRefInput<$PrismaModel>
   in?: $Enums.InvoiceType[] | Prisma.ListEnumInvoiceTypeFieldRefInput<$PrismaModel>
@@ -1236,6 +1253,23 @@ export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
   gt?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   gte?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+}
+
+export type NestedEnumInAppNotificationTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.InAppNotificationType | Prisma.EnumInAppNotificationTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.InAppNotificationType[] | Prisma.ListEnumInAppNotificationTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InAppNotificationType[] | Prisma.ListEnumInAppNotificationTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInAppNotificationTypeFilter<$PrismaModel> | $Enums.InAppNotificationType
+}
+
+export type NestedEnumInAppNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.InAppNotificationType | Prisma.EnumInAppNotificationTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.InAppNotificationType[] | Prisma.ListEnumInAppNotificationTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InAppNotificationType[] | Prisma.ListEnumInAppNotificationTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInAppNotificationTypeWithAggregatesFilter<$PrismaModel> | $Enums.InAppNotificationType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumInAppNotificationTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumInAppNotificationTypeFilter<$PrismaModel>
 }
 
 export type NestedEnumInvoiceTypeFilter<$PrismaModel = never> = {
