@@ -13,6 +13,7 @@ import {
 import { AppSidebar } from "@/core/shared/ui/sidebar/app-sidebar";
 import { BreadcrumbNavbar } from "@/core/shared/ui/sidebar/BreadCrumNavbar";
 import { TenantProvider } from "@/features/tenants/frontend/context/TenantContext";
+import { NotificationBell } from "@features/InAppNotifications/frontend/components/NotificationBell";
 import { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 
@@ -55,7 +56,8 @@ export default async function DashboardLayout({
                           <BreadcrumbNavbar />
                         </div>
                       </div>
-                      <div className="mr-4 sm:mr-6 md:mr-8 lg:mr-10 shrink">
+                      <div className="mr-4 sm:mr-6 md:mr-8 lg:mr-10 shrink flex items-center gap-2">
+                        <NotificationBell />
                         <ThemeToogle />
                       </div>
                     </header>
