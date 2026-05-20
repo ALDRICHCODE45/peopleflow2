@@ -25,6 +25,7 @@ export type StandaloneEmailPayload =
         fileName: string;
         rejectionReason: string;
         vacancyId: string;
+        recipientUserId?: string;
       };
     }
   | {
@@ -38,6 +39,7 @@ export type StandaloneEmailPayload =
         clientName: string;
         rejectionReason: string;
         vacancyId: string;
+        recipientUserId?: string;
       };
     }
   | {
@@ -77,6 +79,7 @@ export type StandaloneEmailPayload =
         resources: string[];
         vacancyId: string;
         tenantName: string;
+        recipientUserId?: string;
       };
     }
   | {
