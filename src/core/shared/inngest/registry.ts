@@ -2,7 +2,6 @@ import {
   handleCommitmentEveningAdminReport,
   handleCommitmentMeetingReport,
   handleCommitmentMorningReminder,
-  handleVacancyCountdownNotification,
   handleVacancyStaleNotification,
 } from "@core/shared/inngest/functions";
 import { applyInAppNotificationRetention } from "@features/InAppNotifications/server/presentation/inngest/applyRetention.inngest";
@@ -11,6 +10,7 @@ import { handleLeadStatusChangeNotification } from "@features/Leads/server/prese
 import { handleSendStandaloneEmail } from "@features/Notifications/server/presentation/inngest/handleStandaloneEmail.inngest";
 import { handleVacancyPlacementCongratsEmail } from "@features/vacancy/server/presentation/inngest/handlePlacementCongratsEmail.inngest";
 import { handleVacancyPrePlacementEntryReminder } from "@features/vacancy/server/presentation/inngest/handlePrePlacementEntryReminder.inngest";
+import { handleVacancyCountdownNotification } from "@features/vacancy/server/presentation/inngest/vacancyCountdownNotification.inngest";
 
 export const functions = [
   handleLeadStatusChangeNotification,
