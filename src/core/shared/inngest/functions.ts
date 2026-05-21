@@ -48,17 +48,7 @@ import { GenerateEveningAdminReportUseCase } from "@features/vacancy/server/appl
 import { prismaVacancyCommitmentRepository } from "@features/vacancy/server/infrastructure/repositories/PrismaVacancyCommitmentRepository";
 import { prismaNotificationConfigRepository } from "@features/Sistema/configuracion/server/infrastructure/repositories/PrismaNotificationConfigRepository";
 import { createInAppNotificationsForRecipients } from "@features/InAppNotifications/server/presentation/helpers/createInAppNotificationsForRecipients.helper";
-
-const STATUS_LABELS: Record<string, string> = {
-  CONTACTO: "Contacto",
-  CONTACTO_CALIDO: "Contacto Cálido",
-  SOCIAL_SELLING: "Social Selling",
-  CITA_AGENDADA: "Cita Agendada",
-  CITA_ATENDIDA: "Cita Atendida",
-  CITA_VALIDADA: "Cita Validada",
-  POSICIONES_ASIGNADAS: "Posiciones Asignadas",
-  STAND_BY: "Stand By",
-};
+import { STATUS_LABELS } from "@features/Leads/server/presentation/inngest/constants";
 
 // Function 1: Immediate notification on lead status change
 export const handleLeadStatusChangeNotification = inngest.createFunction(
