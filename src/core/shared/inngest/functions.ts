@@ -36,6 +36,11 @@ import { GenerateEveningAdminReportUseCase } from "@features/vacancy/server/appl
 import { prismaVacancyCommitmentRepository } from "@features/vacancy/server/infrastructure/repositories/PrismaVacancyCommitmentRepository";
 import { prismaNotificationConfigRepository } from "@features/Sistema/configuracion/server/infrastructure/repositories/PrismaNotificationConfigRepository";
 import { createInAppNotificationsForRecipients } from "@features/InAppNotifications/server/presentation/helpers/createInAppNotificationsForRecipients.helper";
+import {
+  VACANCY_STATUS_DISPLAY,
+  VACANCY_TERMINAL_STATUSES,
+} from "@features/vacancy/server/presentation/inngest/constants";
+import { formatDuration } from "@features/vacancy/server/presentation/inngest/helpers/formatDuration";
 // Function 1: Entry date reminder for PRE_PLACEMENT vacancies
 export const handleVacancyPrePlacementEntryReminder = inngest.createFunction(
   {
@@ -228,9 +233,6 @@ export const handleVacancyPlacementCongratsEmail = inngest.createFunction(
     return { sent: true };
   },
 );
-
-// Function 6: Vacancy countdown reminders before targetDeliveryDate
-const VACANCY_TERMINAL_STATUSES = ["CANCELADA", "PERDIDA", "STAND_BY", "PLACEMENT"] as const;
 
 export const handleVacancyCountdownNotification = inngest.createFunction(
   {
@@ -430,22 +432,6 @@ export const handleVacancyCountdownNotification = inngest.createFunction(
     return { sent: true, reason: "Countdown sequence completed" };
   },
 );
-
-// Function 7: Stale vacancy repeating notification
-function formatDuration(value: number, unit: string): string {
-  return unit === "HOURS" ? `${value}h` : `${value}d`;
-}
-
-const VACANCY_STATUS_DISPLAY: Record<string, string> = {
-  QUICK_MEETING: "Quick Meeting",
-  HUNTING: "Hunting",
-  FOLLOW_UP: "Follow Up",
-  PRE_PLACEMENT: "Pre-Placement",
-  PLACEMENT: "Placement",
-  STAND_BY: "Stand By",
-  CANCELADA: "Cancelada",
-  PERDIDA: "Perdida",
-};
 
 export const handleVacancyStaleNotification = inngest.createFunction(
   {
