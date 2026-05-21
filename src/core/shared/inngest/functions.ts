@@ -7,14 +7,6 @@ import { SendNotificationUseCase } from "@features/Notifications/server/applicat
 import { prismaNotificationRepository } from "@features/Notifications/server/infrastructure/repositories/PrismaNotificationRepository";
 import { emailProvider } from "@features/Notifications/server/infrastructure/providers/EmailProvider";
 import {
-  generateVacancyEntryReminderEmail,
-  generateVacancyEntryReminderPlainText,
-} from "@features/Notifications/server/infrastructure/templates/vacancyPrePlacementEntryReminderTemplate";
-import {
-  generateVacancyPlacementCongratsEmail,
-  generateVacancyPlacementCongratsPlainText,
-} from "@features/Notifications/server/infrastructure/templates/vacancyPlacementCongratsTemplate";
-import {
   generateCommitmentMeetingReportEmail,
   generateCommitmentMeetingReportPlainText,
 } from "@features/Notifications/server/infrastructure/templates/commitmentMeetingReport.template";
@@ -36,178 +28,6 @@ import { GenerateEveningAdminReportUseCase } from "@features/vacancy/server/appl
 import { prismaVacancyCommitmentRepository } from "@features/vacancy/server/infrastructure/repositories/PrismaVacancyCommitmentRepository";
 import { prismaNotificationConfigRepository } from "@features/Sistema/configuracion/server/infrastructure/repositories/PrismaNotificationConfigRepository";
 import { createInAppNotificationsForRecipients } from "@features/InAppNotifications/server/presentation/helpers/createInAppNotificationsForRecipients.helper";
-import {
-  VACANCY_STATUS_DISPLAY,
-  VACANCY_TERMINAL_STATUSES,
-} from "@features/vacancy/server/presentation/inngest/constants";
-import { formatDuration } from "@features/vacancy/server/presentation/inngest/helpers/formatDuration";
-export const handleVacancyStaleNotification = inngest.createFunction(
-  {
-    id: "vacancy-stale-notification",
-    name: "Alerta de vacante estancada (repetitiva)",
-    cancelOn: [
-      {
-        event: InngestEvents.vacancy.statusChanged,
-        match: "data.vacancyId",
-      },
-    ],
-  },
-  { event: InngestEvents.vacancy.statusChanged },
-  async ({ event, step }) => {
-    const {
-      vacancyId,
-      tenantId,
-      newStatus,
-      vacancyPosition,
-      clientName,
-      recruiterId,
-      recruiterName,
-      recruiterEmail,
-    } = event.data;
-
-    // Guard: tenantId is required for all config/notification queries
-    if (!tenantId) {
-      console.error("[vacancy-stale-notification] Missing tenantId in event data", { vacancyId, newStatus });
-      return { skipped: true, reason: "Missing tenantId in event data" };
-    }
-
-    // Step 1: Load config and check if monitoring is enabled for this status
-    const config = await step.run("load-config", async () => {
-      return prisma.notificationConfig.findUnique({ where: { tenantId } });
-    });
-
-    if (!config?.enabled || !config.vacancyStaleEnabled) {
-      return { skipped: true, reason: "Stale vacancy monitoring disabled" };
-    }
-
-    const monitoredStatuses = config.vacancyStaleStatuses as string[];
-    if (!monitoredStatuses.includes(newStatus)) {
-      return { skipped: true, reason: "Status not monitored for staleness" };
-    }
-
-    // Calculate sleep durations from config
-    const initialSleep = formatDuration(config.vacancyStaleTimeValue, config.vacancyStaleTimeUnit);
-    const repeatSleep = formatDuration(config.vacancyStaleRepeatValue, config.vacancyStaleRepeatUnit);
-
-    // Step 2: Initial sleep (wait for stale threshold)
-    await step.sleep("wait-for-stale", initialSleep);
-
-    // Step 3: Verify vacancy is STILL in the same status
-    const vacancy = await step.run("verify-status", async () => {
-      return prisma.vacancy.findUnique({
-        where: { id: vacancyId },
-        select: { status: true },
-      });
-    });
-
-    if (!vacancy || vacancy.status !== newStatus) {
-      return { skipped: true, reason: "Vacancy status changed during initial sleep" };
-    }
-
-    // Step 4: Enter notification loop
-    let iteration = 0;
-    const MAX_ITERATIONS = 52; // Safety cap: ~1 year of weekly notifications
-
-    while (iteration < MAX_ITERATIONS) {
-      // Reload config each iteration (may have changed)
-      const freshConfig = await step.run(`reload-config-${iteration}`, async () => {
-        return prisma.notificationConfig.findUnique({ where: { tenantId } });
-      });
-
-      if (!freshConfig?.enabled || !freshConfig.vacancyStaleEnabled) {
-        return { skipped: true, reason: "Stale monitoring disabled during loop" };
-      }
-
-      // Re-verify vacancy status
-      const currentVacancy = await step.run(`verify-status-${iteration}`, async () => {
-        return prisma.vacancy.findUnique({
-          where: { id: vacancyId },
-          select: { status: true },
-        });
-      });
-
-      if (!currentVacancy || currentVacancy.status !== newStatus) {
-        return { skipped: true, reason: "Vacancy status changed during loop" };
-      }
-
-      // Calculate days in status from status history
-      const statusEntryIso = await step.run(`get-status-entry-${iteration}`, async () => {
-        const history = await prisma.vacancyStatusHistory.findFirst({
-          where: { vacancyId, newStatus: newStatus as "QUICK_MEETING" | "HUNTING" | "FOLLOW_UP" | "PRE_PLACEMENT" | "PLACEMENT" | "STAND_BY" | "PERDIDA" | "CANCELADA" },
-          orderBy: { createdAt: "desc" },
-          select: { createdAt: true },
-        });
-        return history?.createdAt?.toISOString() ?? new Date().toISOString();
-      });
-
-      const daysInStatus = Math.floor(
-        (Date.now() - new Date(statusEntryIso).getTime()) / (1000 * 60 * 60 * 24),
-      );
-
-      // Get tenant name
-      const tenantName = await step.run(`get-tenant-${iteration}`, async () => {
-        const tenant = await prisma.tenant.findUnique({
-          where: { id: tenantId },
-          select: { name: true },
-        });
-        return tenant?.name ?? "Sistema";
-      });
-
-      // Get recipients (recruiter + configured users)
-      const recipients = await step.run(`get-recipients-${iteration}`, async () => {
-        const recipientIds = freshConfig.recipientUserIds ?? [];
-        const users =
-          recipientIds.length > 0
-            ? await prisma.user.findMany({
-                where: { id: { in: recipientIds } },
-                select: { id: true, name: true, email: true },
-              })
-            : [];
-        return [
-          { id: recruiterId, name: recruiterName, email: recruiterEmail },
-          ...users
-            .filter((u) => u.id !== recruiterId)
-            .map((u) => ({ id: u.id, name: u.name, email: u.email })),
-        ];
-      });
-
-      const statusLabel = VACANCY_STATUS_DISPLAY[newStatus] ?? newStatus;
-
-      // Send to each recipient
-      for (const recipient of recipients) {
-        await step.run(`send-stale-${iteration}-${recipient.email}`, async () => {
-          await inngest.send({
-            name: InngestEvents.email.send,
-            data: {
-              template: "vacancy-stale-alert" as const,
-              tenantId,
-              triggeredById: recruiterId,
-              data: {
-                recipientName: recipient.name ?? "Usuario",
-                recipientEmail: recipient.email,
-                vacancyPosition,
-                clientName,
-                currentStatus: statusLabel,
-                daysInStatus,
-                tenantName,
-                vacancyId,
-                recipientUserId: recipient.id,
-              },
-            },
-          });
-        });
-      }
-
-      iteration++;
-
-      // Sleep until next repeat
-      await step.sleep(`repeat-wait-${iteration}`, repeatSleep);
-    }
-
-    return { sent: true, reason: "Max iterations reached" };
-  },
-);
-
 // Helper: Inngest step.run() serializes Date → string. Rehydrate before passing to templates.
 function rehydrateReportRow<T extends { dueDate: unknown; createdAt: unknown; completedAt: unknown }>(
   row: T,
@@ -578,7 +398,6 @@ export const handleCommitmentEveningAdminReport = inngest.createFunction(
 );
 
 export const functions = [
-  handleVacancyStaleNotification,
   handleCommitmentMeetingReport,
   handleCommitmentMorningReminder,
   handleCommitmentEveningAdminReport,
