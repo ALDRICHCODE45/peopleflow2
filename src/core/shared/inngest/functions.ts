@@ -2,18 +2,9 @@ import prisma from "@/core/lib/prisma";
 import { inngest } from "./inngest";
 import { InngestEvents } from "@core/shared/constants/inngest-events";
 import { APP_URL } from "@core/shared/constants/app";
-import { getMexicoDayRangeUTC } from "@core/shared/helpers/timezone";
 import { SendNotificationUseCase } from "@features/Notifications/server/application/use-cases/SendNotificationUseCase";
 import { prismaNotificationRepository } from "@features/Notifications/server/infrastructure/repositories/PrismaNotificationRepository";
 import { emailProvider } from "@features/Notifications/server/infrastructure/providers/EmailProvider";
-import {
-  generateCommitmentMeetingReportEmail,
-  generateCommitmentMeetingReportPlainText,
-} from "@features/Notifications/server/infrastructure/templates/commitmentMeetingReport.template";
-import {
-  generateCommitmentAdminMeetingReportEmail,
-  generateCommitmentAdminMeetingReportPlainText,
-} from "@features/Notifications/server/infrastructure/templates/commitmentAdminMeetingReport.template";
 import {
   generateCommitmentDailyReminderEmail,
   generateCommitmentDailyReminderPlainText,
@@ -22,165 +13,11 @@ import {
   generateCommitmentEveningAdminReportEmail,
   generateCommitmentEveningAdminReportPlainText,
 } from "@features/Notifications/server/infrastructure/templates/commitmentEveningAdminReport.template";
-import { GenerateMeetingReportUseCase } from "@features/vacancy/server/application/use-cases/GenerateMeetingReportUseCase";
 import { GenerateDailyReminderUseCase } from "@features/vacancy/server/application/use-cases/GenerateDailyReminderUseCase";
 import { GenerateEveningAdminReportUseCase } from "@features/vacancy/server/application/use-cases/GenerateEveningAdminReportUseCase";
 import { prismaVacancyCommitmentRepository } from "@features/vacancy/server/infrastructure/repositories/PrismaVacancyCommitmentRepository";
 import { prismaNotificationConfigRepository } from "@features/Sistema/configuracion/server/infrastructure/repositories/PrismaNotificationConfigRepository";
 import { createInAppNotificationsForRecipients } from "@features/InAppNotifications/server/presentation/helpers/createInAppNotificationsForRecipients.helper";
-// Helper: Inngest step.run() serializes Date → string. Rehydrate before passing to templates.
-function rehydrateReportRow<T extends { dueDate: unknown; createdAt: unknown; completedAt: unknown }>(
-  row: T,
-): T & { dueDate: Date; createdAt: Date; completedAt: Date | null } {
-  return {
-    ...row,
-    dueDate: new Date(row.dueDate as string),
-    createdAt: new Date(row.createdAt as string),
-    completedAt: row.completedAt ? new Date(row.completedAt as string) : null,
-  };
-}
-
-// Function 8: Manual post-meeting commitment report
-export const handleCommitmentMeetingReport = inngest.createFunction(
-  {
-    id: "handle-commitment-meeting-report",
-    name: "Reporte de compromisos post-junta",
-  },
-  { event: InngestEvents.commitment.meetingReportRequested },
-  async ({ event, step }) => {
-    const { tenantId, triggeredByUserId } = event.data;
-
-    // Calculate Mexico timezone meeting window: start of day → now (proper UTC range)
-    const { startOfDay } = getMexicoDayRangeUTC();
-
-    // Step 1: Generate meeting report
-    const reportData = await step.run("generate-meeting-report", async () => {
-      const useCase = new GenerateMeetingReportUseCase(
-        prismaVacancyCommitmentRepository,
-        prismaNotificationConfigRepository
-      );
-      return useCase.execute({
-        tenantId,
-        from: startOfDay,
-        to: new Date(), // use actual UTC now for the upper bound
-      });
-    });
-
-    if (!reportData.success || !reportData.data) {
-      return { skipped: true, reason: reportData.error ?? "No data" };
-    }
-
-    const { recruiterReports, adminRecipients } = reportData.data;
-
-    if (recruiterReports.length === 0 && adminRecipients.length === 0) {
-      return {
-        skipped: true,
-        reason: recruiterReports.length === 0
-          ? "No commitments created in meeting window"
-          : "No admin recipients configured",
-      };
-    }
-
-    // Step 2: Send recruiter emails
-    for (const recruiterReport of recruiterReports) {
-      await step.run(`send-recruiter-email-${recruiterReport.recruiterId}`, async () => {
-        const notificationUseCase = new SendNotificationUseCase(
-          prismaNotificationRepository,
-          [emailProvider]
-        );
-
-        const hydratedCommitments = recruiterReport.commitments.map(rehydrateReportRow);
-        const dueTodayIds = recruiterReport.dueToday.map((c) => c.commitmentId);
-
-        const htmlTemplate = generateCommitmentMeetingReportEmail({
-          recruiterName: recruiterReport.recruiterName || "Reclutador",
-          commitments: hydratedCommitments,
-          dueTodayCommitmentIds: dueTodayIds,
-          appUrl: APP_URL,
-        });
-
-        const plainText = generateCommitmentMeetingReportPlainText({
-          recruiterName: recruiterReport.recruiterName || "Reclutador",
-          commitments: hydratedCommitments,
-          dueTodayCommitmentIds: dueTodayIds,
-          appUrl: APP_URL,
-        });
-
-        await notificationUseCase.execute({
-          tenantId,
-          provider: "EMAIL",
-          recipient: recruiterReport.recruiterEmail,
-          subject: `Reporte de Compromisos de Junta — ${recruiterReport.commitments.length} compromisos`,
-          body: plainText,
-          priority: "MEDIUM",
-          metadata: {
-            triggerEvent: "COMMITMENT_MEETING_REPORT",
-            htmlTemplate,
-          },
-          createdById: triggeredByUserId,
-        });
-      });
-    }
-
-    // Step 3: Send admin email (admins receive report even if no per-recruiter emails)
-    if (adminRecipients.length > 0) {
-      const allCommitments = recruiterReports.flatMap((r) => r.commitments).map(rehydrateReportRow);
-      const allDueTodayIds = recruiterReports.flatMap((r) =>
-        r.dueToday.map((c) => c.commitmentId)
-      );
-
-      const adminUsers = await step.run("fetch-admin-users", async () => {
-        return prisma.user.findMany({
-          where: { id: { in: adminRecipients } },
-          select: { id: true, name: true, email: true },
-        });
-      });
-
-      for (const admin of adminUsers) {
-        await step.run(`send-admin-email-${admin.id}`, async () => {
-          const notificationUseCase = new SendNotificationUseCase(
-            prismaNotificationRepository,
-            [emailProvider]
-          );
-
-          const htmlTemplate = generateCommitmentAdminMeetingReportEmail({
-            adminName: admin.name || "Administrador",
-            allCommitments,
-            dueTodayCommitmentIds: allDueTodayIds,
-            appUrl: APP_URL,
-          });
-
-          const plainText = generateCommitmentAdminMeetingReportPlainText({
-            adminName: admin.name || "Administrador",
-            allCommitments,
-            dueTodayCommitmentIds: allDueTodayIds,
-            appUrl: APP_URL,
-          });
-
-          await notificationUseCase.execute({
-            tenantId,
-            provider: "EMAIL",
-            recipient: admin.email,
-            subject: `Reporte Administrativo de Compromisos — ${allCommitments.length} compromisos`,
-            body: plainText,
-            priority: "MEDIUM",
-            metadata: {
-              triggerEvent: "COMMITMENT_ADMIN_MEETING_REPORT",
-              htmlTemplate,
-            },
-            createdById: triggeredByUserId,
-          });
-        });
-      }
-    }
-
-    return {
-      sent: true,
-      recruiterCount: recruiterReports.length,
-      adminCount: adminRecipients.length,
-    };
-  }
-);
 
 // Function 9: Morning cron — daily recruiter reminder for due-today commitments
 export const handleCommitmentMorningReminder = inngest.createFunction(
@@ -398,7 +235,6 @@ export const handleCommitmentEveningAdminReport = inngest.createFunction(
 );
 
 export const functions = [
-  handleCommitmentMeetingReport,
   handleCommitmentMorningReminder,
   handleCommitmentEveningAdminReport,
 ];
