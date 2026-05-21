@@ -2,7 +2,7 @@ import { applyInAppNotificationRetention } from "@features/InAppNotifications/se
 import { handleLeadInactivityAlert } from "@features/Leads/server/presentation/inngest/handleLeadInactivityAlert.inngest";
 import { handleLeadStatusChangeNotification } from "@features/Leads/server/presentation/inngest/handleLeadStatusChange.inngest";
 import { handleSendStandaloneEmail } from "@features/Notifications/server/presentation/inngest/handleStandaloneEmail.inngest";
-import { handleCommitmentEveningAdminReport } from "@core/shared/inngest/functions";
+import { handleCommitmentEveningAdminReport } from "@features/vacancy/server/presentation/inngest/handleCommitmentEveningAdminReport.inngest";
 import { handleCommitmentMeetingReport } from "@features/vacancy/server/presentation/inngest/handleCommitmentMeetingReport.inngest";
 import { handleCommitmentMorningReminder } from "@features/vacancy/server/presentation/inngest/handleCommitmentMorningReminder.inngest";
 import { handleVacancyPlacementCongratsEmail } from "@features/vacancy/server/presentation/inngest/handlePlacementCongratsEmail.inngest";
