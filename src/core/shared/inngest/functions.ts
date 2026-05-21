@@ -41,94 +41,6 @@ import {
   VACANCY_TERMINAL_STATUSES,
 } from "@features/vacancy/server/presentation/inngest/constants";
 import { formatDuration } from "@features/vacancy/server/presentation/inngest/helpers/formatDuration";
-// Function 4: Placement congrats email
-export const handleVacancyPlacementCongratsEmail = inngest.createFunction(
-  {
-    id: "handle-vacancy-placement-congrats-email",
-    name: "Email de felicitaciones por placement",
-  },
-  { event: InngestEvents.vacancy.placementCongratsEmail },
-  async ({ event, step }) => {
-    const { vacancyId, tenantId, vacancyPosition, candidateName, candidateEmail } =
-      event.data;
-
-    if (!candidateEmail) {
-      return { skipped: true, reason: "No candidate email" };
-    }
-
-    // Get vacancy entry date and verify hired candidate
-    const vacancy = await step.run("fetch-vacancy", async () => {
-      return prisma.vacancy.findFirst({
-        where: { id: vacancyId, tenantId },
-        select: {
-          entryDate: true,
-          createdById: true,
-          hiredCandidate: {
-            select: { email: true, status: true },
-          },
-        },
-      });
-    });
-
-    // Defense in depth: verify the hired candidate is CONTRATADO and email matches
-    if (vacancy?.hiredCandidate) {
-      const hired = vacancy.hiredCandidate;
-      if (hired.status !== "CONTRATADO") {
-        console.warn(
-          `[PlacementCongrats] Hired candidate for vacancy ${vacancyId} is not CONTRATADO (status: ${hired.status}). Skipping email.`
-        );
-        return { skipped: true, reason: "Hired candidate not CONTRATADO" };
-      }
-      if (hired.email !== candidateEmail) {
-        console.warn(
-          `[PlacementCongrats] Email mismatch for vacancy ${vacancyId}: event has ${candidateEmail}, hired candidate has ${hired.email}. Skipping email.`
-        );
-        return { skipped: true, reason: "Candidate email mismatch with hired candidate" };
-      }
-    }
-
-    const formattedDate = vacancy?.entryDate
-      ? new Date(vacancy.entryDate).toLocaleDateString("es-MX", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        })
-      : "próximamente";
-
-    await step.run("send-congrats-email", async () => {
-      const notificationUseCase = new SendNotificationUseCase(
-        prismaNotificationRepository,
-        [emailProvider],
-      );
-
-      const emailData = {
-        candidateName,
-        vacancyPosition,
-        entryDate: formattedDate,
-        appUrl: APP_URL,
-      };
-
-      await notificationUseCase.execute({
-        tenantId,
-        provider: "EMAIL",
-        recipient: candidateEmail,
-        subject: `¡Felicitaciones ${candidateName}! Bienvenido(a) a "${vacancyPosition}"`,
-        body: generateVacancyPlacementCongratsPlainText(emailData),
-        priority: "HIGH",
-        metadata: {
-          vacancyId,
-          vacancyPosition,
-          triggerEvent: "VACANCY_PLACEMENT_CONGRATS",
-          htmlTemplate: generateVacancyPlacementCongratsEmail(emailData),
-        },
-        createdById: vacancy?.createdById ?? "system",
-      });
-    });
-
-    return { sent: true };
-  },
-);
-
 export const handleVacancyCountdownNotification = inngest.createFunction(
   {
     id: "vacancy-countdown-notification",
@@ -865,7 +777,6 @@ export const handleCommitmentEveningAdminReport = inngest.createFunction(
 );
 
 export const functions = [
-  handleVacancyPlacementCongratsEmail,
   handleVacancyCountdownNotification,
   handleVacancyStaleNotification,
   handleCommitmentMeetingReport,
