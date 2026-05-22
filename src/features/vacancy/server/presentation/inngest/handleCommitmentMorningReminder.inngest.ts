@@ -37,7 +37,7 @@ export const handleCommitmentMorningReminder = inngest.createFunction(
     let totalSent = 0;
 
     for (const tenant of tenants) {
-      await step.run(`process-tenant-${tenant.tenantId}`, async () => {
+      const recruiters = await step.run(`compute-recruiters-${tenant.tenantId}`, async () => {
         const useCase = new GenerateDailyReminderUseCase(
           prismaVacancyCommitmentRepository,
           prismaNotificationConfigRepository,
@@ -46,61 +46,78 @@ export const handleCommitmentMorningReminder = inngest.createFunction(
         const result = await useCase.execute({ tenantId: tenant.tenantId });
 
         if (!result.success || !result.data || result.data.length === 0) {
-          return { skipped: true, reason: "No due-today commitments" };
+          return [];
         }
 
-        for (const recruiterData of result.data) {
-          const notificationUseCase = new SendNotificationUseCase(prismaNotificationRepository, [
-            emailProvider,
+        return result.data;
+      });
+
+      if (recruiters.length === 0) {
+        continue;
+      }
+
+      for (const recruiterData of recruiters) {
+        await step.run(
+          `send-email-morning-${tenant.tenantId}-${recruiterData.recruiterId}`,
+          async () => {
+            const notificationUseCase = new SendNotificationUseCase(prismaNotificationRepository, [
+              emailProvider,
+            ]);
+
+            const dueTodayCommitments = recruiterData.dueTodayCommitments.map((commitment) => ({
+              ...commitment,
+              dueDate: new Date(commitment.dueDate),
+              createdAt: new Date(commitment.createdAt),
+              completedAt: commitment.completedAt ? new Date(commitment.completedAt) : null,
+            }));
+
+            const htmlTemplate = generateCommitmentDailyReminderEmail({
+              recruiterName: recruiterData.recruiterName || "Reclutador",
+              dueTodayCommitments,
+              appUrl: APP_URL,
+            });
+
+            const plainText = generateCommitmentDailyReminderPlainText({
+              recruiterName: recruiterData.recruiterName || "Reclutador",
+              dueTodayCommitments,
+              appUrl: APP_URL,
+            });
+
+            await notificationUseCase.execute({
+              tenantId: tenant.tenantId,
+              provider: "EMAIL",
+              recipient: recruiterData.recruiterEmail,
+              subject: `⏰ Recordatorio: ${recruiterData.dueTodayCommitments.length} compromiso${recruiterData.dueTodayCommitments.length === 1 ? "" : "s"} que vence${recruiterData.dueTodayCommitments.length === 1 ? "" : "n"} HOY`,
+              body: plainText,
+              priority: "HIGH",
+              metadata: {
+                triggerEvent: "COMMITMENT_MORNING_REMINDER",
+                htmlTemplate,
+              },
+            });
+
+            return { sent: true };
+          },
+        );
+
+        await step.run(`in-app-morning-${tenant.tenantId}-${recruiterData.recruiterId}`, async () => {
+          await createInAppNotificationsForRecipients([
+            {
+              userId: recruiterData.recruiterId,
+              tenantId: tenant.tenantId,
+              type: "COMMITMENT_MORNING_REMINDER",
+              title: "Recordatorio: compromisos de hoy",
+              body: `Tiene ${recruiterData.dueTodayCommitments.length} compromisos programados para hoy.`,
+              resourceType: "commitment",
+              actionUrl: "/compromisos",
+            },
           ]);
 
-          const htmlTemplate = generateCommitmentDailyReminderEmail({
-            recruiterName: recruiterData.recruiterName || "Reclutador",
-            dueTodayCommitments: recruiterData.dueTodayCommitments,
-            appUrl: APP_URL,
-          });
+          return { created: true };
+        });
+      }
 
-          const plainText = generateCommitmentDailyReminderPlainText({
-            recruiterName: recruiterData.recruiterName || "Reclutador",
-            dueTodayCommitments: recruiterData.dueTodayCommitments,
-            appUrl: APP_URL,
-          });
-
-          await notificationUseCase.execute({
-            tenantId: tenant.tenantId,
-            provider: "EMAIL",
-            recipient: recruiterData.recruiterEmail,
-            subject: `⏰ Recordatorio: ${recruiterData.dueTodayCommitments.length} compromiso${recruiterData.dueTodayCommitments.length === 1 ? "" : "s"} que vence${recruiterData.dueTodayCommitments.length === 1 ? "" : "n"} HOY`,
-            body: plainText,
-            priority: "HIGH",
-            metadata: {
-              triggerEvent: "COMMITMENT_MORNING_REMINDER",
-              htmlTemplate,
-            },
-          });
-
-          await step.run(
-            `create-in-app-notification-commitment-morning-${recruiterData.recruiterId}`,
-            async () => {
-              await createInAppNotificationsForRecipients([
-                {
-                  userId: recruiterData.recruiterId,
-                  tenantId: tenant.tenantId,
-                  type: "COMMITMENT_MORNING_REMINDER",
-                  title: "Recordatorio: compromisos de hoy",
-                  body: `Tiene ${recruiterData.dueTodayCommitments.length} compromisos programados para hoy.`,
-                  resourceType: "commitment",
-                  actionUrl: "/compromisos",
-                },
-              ]);
-            },
-          );
-
-          totalSent++;
-        }
-
-        return { sent: result.data.length };
-      });
+      totalSent += recruiters.length;
     }
 
     return { sent: true, totalEmailsSent: totalSent };
