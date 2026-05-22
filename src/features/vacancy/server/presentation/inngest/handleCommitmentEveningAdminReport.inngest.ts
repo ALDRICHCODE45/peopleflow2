@@ -37,7 +37,7 @@ export const handleCommitmentEveningAdminReport = inngest.createFunction(
     let totalSent = 0;
 
     for (const tenant of tenants) {
-      await step.run(`process-tenant-${tenant.tenantId}`, async () => {
+      const reportData = await step.run(`compute-report-${tenant.tenantId}`, async () => {
         const useCase = new GenerateEveningAdminReportUseCase(
           prismaVacancyCommitmentRepository,
           prismaNotificationConfigRepository,
@@ -46,19 +46,13 @@ export const handleCommitmentEveningAdminReport = inngest.createFunction(
         const result = await useCase.execute({ tenantId: tenant.tenantId });
 
         if (!result.success || !result.data) {
-          return { skipped: true, reason: result.error ?? "No data" };
+          return null;
         }
 
         const { dueTodayCommitments, adminRecipients } = result.data;
 
         if (dueTodayCommitments.length === 0 || adminRecipients.length === 0) {
-          return {
-            skipped: true,
-            reason:
-              dueTodayCommitments.length === 0
-                ? "No commitments due today"
-                : "No admin recipients configured",
-          };
+          return null;
         }
 
         const adminUsers = await prisma.user.findMany({
@@ -66,10 +60,29 @@ export const handleCommitmentEveningAdminReport = inngest.createFunction(
           select: { id: true, name: true, email: true },
         });
 
-        for (const admin of adminUsers) {
+        if (adminUsers.length === 0) {
+          return null;
+        }
+
+        return { dueTodayCommitments, adminUsers };
+      });
+
+      if (!reportData) {
+        continue;
+      }
+
+      for (const admin of reportData.adminUsers) {
+        await step.run(`send-email-evening-${tenant.tenantId}-${admin.id}`, async () => {
           const notificationUseCase = new SendNotificationUseCase(prismaNotificationRepository, [
             emailProvider,
           ]);
+
+          const dueTodayCommitments = reportData.dueTodayCommitments.map((commitment) => ({
+            ...commitment,
+            dueDate: new Date(commitment.dueDate),
+            createdAt: new Date(commitment.createdAt),
+            completedAt: commitment.completedAt ? new Date(commitment.completedAt) : null,
+          }));
 
           const htmlTemplate = generateCommitmentEveningAdminReportEmail({
             adminName: admin.name || "Administrador",
@@ -87,7 +100,7 @@ export const handleCommitmentEveningAdminReport = inngest.createFunction(
             tenantId: tenant.tenantId,
             provider: "EMAIL",
             recipient: admin.email,
-            subject: `📅 Reporte Vespertino de Compromisos — ${dueTodayCommitments.length} compromisos que vencían hoy`,
+            subject: `📅 Reporte Vespertino de Compromisos — ${reportData.dueTodayCommitments.length} compromisos que vencían hoy`,
             body: plainText,
             priority: "MEDIUM",
             metadata: {
@@ -96,28 +109,27 @@ export const handleCommitmentEveningAdminReport = inngest.createFunction(
             },
           });
 
-          await step.run(
-            `create-in-app-notification-commitment-evening-admin-${admin.id}`,
-            async () => {
-              await createInAppNotificationsForRecipients([
-                {
-                  userId: admin.id,
-                  tenantId: tenant.tenantId,
-                  type: "COMMITMENT_EVENING_ADMIN_REPORT",
-                  title: "Reporte vespertino de compromisos",
-                  body: `Resumen de compromisos del día: ${dueTodayCommitments.length} compromisos vencían hoy.`,
-                  resourceType: "commitment",
-                  actionUrl: "/compromisos",
-                },
-              ]);
+          return { sent: true };
+        });
+
+        await step.run(`in-app-evening-${tenant.tenantId}-${admin.id}`, async () => {
+          await createInAppNotificationsForRecipients([
+            {
+              userId: admin.id,
+              tenantId: tenant.tenantId,
+              type: "COMMITMENT_EVENING_ADMIN_REPORT",
+              title: "Reporte vespertino de compromisos",
+              body: `Resumen de compromisos del día: ${reportData.dueTodayCommitments.length} compromisos vencían hoy.`,
+              resourceType: "commitment",
+              actionUrl: "/compromisos",
             },
-          );
+          ]);
 
-          totalSent++;
-        }
+          return { created: true };
+        });
+      }
 
-        return { sent: adminUsers.length };
-      });
+      totalSent += reportData.adminUsers.length;
     }
 
     return { sent: true, totalEmailsSent: totalSent };
