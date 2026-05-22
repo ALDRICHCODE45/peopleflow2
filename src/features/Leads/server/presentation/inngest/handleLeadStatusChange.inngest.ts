@@ -123,26 +123,28 @@ export const handleLeadStatusChangeNotification = inngest.createFunction(
       });
     }
 
-    await step.run("create-in-app-notification-lead-status-changed", async () => {
-      if (config.recipientUserIds.length === 0) {
-        return;
-      }
-      const statusLabelForNotification = STATUS_LABELS[newStatus] || newStatus;
-      await createInAppNotificationsForRecipients(
-        config.recipientUserIds.map((recipientUserId) => ({
-          userId: recipientUserId,
-          tenantId,
-          type: "LEAD_STATUS_CHANGED",
-          title: "Cambio de estado en lead",
-          body: `El lead ${leadTenantContext.leadName} cambió de estado a ${statusLabelForNotification}.`,
-          resourceType: "lead",
-          resourceId: leadId,
-          actionUrl: `/leads/${leadId}`,
-          triggeredByUserId: changedById,
-          metadata: { newStatus },
-        })),
+    const statusLabelForNotification = STATUS_LABELS[newStatus] || newStatus;
+    for (const recipientUserId of config.recipientUserIds) {
+      await step.run(
+        `in-app-lead-status-changed-${leadId}-${recipientUserId}`,
+        async () => {
+          await createInAppNotificationsForRecipients([
+            {
+              userId: recipientUserId,
+              tenantId,
+              type: "LEAD_STATUS_CHANGED",
+              title: "Cambio de estado en lead",
+              body: `El lead ${leadTenantContext.leadName} cambió de estado a ${statusLabelForNotification}.`,
+              resourceType: "lead",
+              resourceId: leadId,
+              actionUrl: `/leads/${leadId}`,
+              triggeredByUserId: changedById,
+              metadata: { newStatus },
+            },
+          ]);
+        },
       );
-    });
+    }
 
     return { sent: true, recipientCount: recipients.length };
   },
