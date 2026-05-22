@@ -131,26 +131,27 @@ export const handleLeadInactivityAlert = inngest.createFunction(
       });
     }
 
-    await step.run("create-in-app-notification-lead-inactive", async () => {
-      if (freshConfig.recipientUserIds.length === 0) {
-        return;
-      }
-
-      await createInAppNotificationsForRecipients(
-        freshConfig.recipientUserIds.map((recipientUserId) => ({
-          userId: recipientUserId,
-          tenantId,
-          type: "LEAD_INACTIVE",
-          title: "Lead inactivo",
-          body: `El lead ${leadName} ha estado inactivo por ${inactiveDuration}.`,
-          resourceType: "lead",
-          resourceId: leadId,
-          actionUrl: `/leads/${leadId}`,
-          triggeredByUserId: changedById,
-          metadata: { currentStatus: newStatus, inactiveDuration },
-        })),
+    for (const recipientUserId of freshConfig.recipientUserIds) {
+      await step.run(
+        `in-app-lead-inactive-${leadId}-${recipientUserId}`,
+        async () => {
+          await createInAppNotificationsForRecipients([
+            {
+              userId: recipientUserId,
+              tenantId,
+              type: "LEAD_INACTIVE",
+              title: "Lead inactivo",
+              body: `El lead ${leadName} ha estado inactivo por ${inactiveDuration}.`,
+              resourceType: "lead",
+              resourceId: leadId,
+              actionUrl: `/leads/${leadId}`,
+              triggeredByUserId: changedById,
+              metadata: { currentStatus: newStatus, inactiveDuration },
+            },
+          ]);
+        },
       );
-    });
+    }
 
     return { sent: true, recipientCount: recipients.length };
   },
