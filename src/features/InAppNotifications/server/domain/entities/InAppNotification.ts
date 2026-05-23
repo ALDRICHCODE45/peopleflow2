@@ -23,8 +23,15 @@ export interface InAppNotificationProps {
   readAt: Date | null;
   archivedAt: Date | null;
   triggeredByUserId: string | null;
+  triggeredBy?: TriggeredByActorDTO | null;
   metadata: Record<string, unknown> | null;
   createdAt: Date;
+}
+
+export interface TriggeredByActorDTO {
+  id: string;
+  name: string | null;
+  avatar: string | null;
 }
 
 export interface InAppNotificationDTO {
@@ -40,6 +47,7 @@ export interface InAppNotificationDTO {
   readAt: string | null;
   archivedAt: string | null;
   triggeredByUserId: string | null;
+  triggeredBy: TriggeredByActorDTO | null;
   metadata: Record<string, unknown> | null;
   createdAt: string;
 }
@@ -110,6 +118,10 @@ export class InAppNotification {
     return this.props.triggeredByUserId;
   }
 
+  get triggeredBy(): TriggeredByActorDTO | null {
+    return this.props.triggeredBy ?? null;
+  }
+
   get metadata(): Record<string, unknown> | null {
     return this.props.metadata;
   }
@@ -140,6 +152,7 @@ export class InAppNotification {
       readAt: this.props.readAt?.toISOString() ?? null,
       archivedAt: this.props.archivedAt?.toISOString() ?? null,
       triggeredByUserId: this.props.triggeredByUserId,
+      triggeredBy: this.props.triggeredBy ?? null,
       metadata: this.props.metadata,
       createdAt: this.props.createdAt.toISOString(),
     };

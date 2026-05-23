@@ -1,6 +1,18 @@
 "use client";
 
+import { Notification03Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Button } from "@shadcn/button";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@shadcn/empty";
 import { ScrollArea } from "@shadcn/scroll-area";
+import { Separator } from "@shadcn/separator";
+import { cn } from "@lib/utils";
 import { useRouter } from "next/navigation";
 import { useInAppNotificationsQuery } from "../hooks/useInAppNotificationsQuery";
 import { useMarkAllAsReadMutation } from "../hooks/useMarkAllAsReadMutation";
@@ -8,7 +20,11 @@ import { useMarkAsReadMutation } from "../hooks/useMarkAsReadMutation";
 import type { InAppNotificationDTO } from "../types/inAppNotification.types";
 import { NotificationItem } from "./NotificationItem";
 
-export function NotificationPopover() {
+interface NotificationListContentProps {
+  variant: "popover" | "sheet";
+}
+
+export function NotificationListContent({ variant }: NotificationListContentProps) {
   const router = useRouter();
   const { data, isLoading } = useInAppNotificationsQuery({ limit: 20 });
   const markAsReadMutation = useMarkAsReadMutation();
@@ -29,58 +45,52 @@ export function NotificationPopover() {
   };
 
   return (
-    <div className="w-[400px]">
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 pt-3 pb-2">
-        <div className="flex items-baseline gap-2">
-          <h3 className="text-sm font-semibold text-foreground">
-            Notificaciones
-          </h3>
+    <div className="bg-popover">
+      <div className="flex items-center justify-between px-4 py-3">
+        <div className="flex items-center gap-2">
+          <h3 className="text-sm font-semibold text-foreground">Notificaciones</h3>
           {unreadCount > 0 ? (
-            <span className="text-xs font-medium text-muted-foreground">
+            <span className="text-xs text-muted-foreground">
               {unreadCount} sin leer
             </span>
           ) : null}
         </div>
         {unreadCount > 0 ? (
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="sm"
             onClick={() => markAllAsReadMutation.mutate()}
             disabled={markAllAsReadMutation.isPending}
-            className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground disabled:opacity-50"
           >
-            Marcar todas como leídas
-          </button>
+            Marcar todas
+          </Button>
         ) : null}
       </div>
+      <Separator />
 
-      <div className="h-px bg-border/60" aria-hidden />
-
-      {/* Body */}
       {isLoading ? (
-        <div className="flex h-[200px] items-center justify-center">
-          <p className="text-xs text-muted-foreground">Cargando…</p>
+        <div className="flex h-40 items-center justify-center">
+          <span className="text-xs text-muted-foreground">Cargando…</span>
         </div>
       ) : notifications.length === 0 ? (
         <EmptyState />
       ) : (
-        <ScrollArea className="h-[420px]">
-          <ul className="py-1">
+        <ScrollArea
+          className={cn(
+            variant === "popover" ? "h-[min(70vh,480px)]" : "h-[60vh]",
+          )}
+        >
+          <ul>
             {notifications.map((notification, index) => (
               <li
                 key={notification.id}
-                className={
-                  index < notifications.length - 1
-                    ? "border-b border-border/40"
-                    : undefined
-                }
               >
-                <div className="px-1">
-                  <NotificationItem
-                    notification={notification}
-                    onClick={handleNotificationClick}
-                  />
-                </div>
+                <NotificationItem
+                  notification={notification}
+                  onClick={handleNotificationClick}
+                />
+                {index < notifications.length - 1 ? <Separator /> : null}
               </li>
             ))}
           </ul>
@@ -92,12 +102,16 @@ export function NotificationPopover() {
 
 function EmptyState() {
   return (
-    <div className="flex h-[200px] flex-col items-center justify-center px-6 text-center">
-      <div className="mb-2 size-10 rounded-full bg-muted/60" aria-hidden />
-      <p className="text-sm font-medium text-foreground">Todo al día</p>
-      <p className="mt-1 text-xs text-muted-foreground">
-        No tiene notificaciones nuevas.
-      </p>
+    <div className="px-4 py-6">
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <HugeiconsIcon icon={Notification03Icon} />
+          </EmptyMedia>
+          <EmptyTitle>Todo al día</EmptyTitle>
+          <EmptyDescription>No tiene notificaciones nuevas.</EmptyDescription>
+        </EmptyHeader>
+      </Empty>
     </div>
   );
 }
