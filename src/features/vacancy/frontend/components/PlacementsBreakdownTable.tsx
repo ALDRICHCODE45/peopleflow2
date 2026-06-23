@@ -36,8 +36,8 @@ export function PlacementsBreakdownTable({
           <TableHeader>
             <TableRow>
               <TableHead>Dimensión</TableHead>
-              <TableHead className="text-right">Bruto</TableHead>
-              <TableHead className="text-right">Neto</TableHead>
+              <TableHead className="text-right">Total</TableHead>
+              <TableHead className="text-right">Netos</TableHead>
               <TableHead className="text-right">Garantías</TableHead>
             </TableRow>
           </TableHeader>

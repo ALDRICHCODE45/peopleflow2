@@ -19,7 +19,7 @@ export function PlacementsReportSummary({
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground">
-            Total Colocaciones
+            Total placements
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -30,7 +30,7 @@ export function PlacementsReportSummary({
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground">
-            Neto Negocio
+            Placements netos
           </CardTitle>
         </CardHeader>
         <CardContent>

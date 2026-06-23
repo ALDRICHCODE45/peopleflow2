@@ -21,9 +21,9 @@ export function PlacementsDetailedList({ rows }: PlacementsDetailedListProps) {
   if (rows.length === 0) {
     return (
       <div>
-        <h3 className="mb-2 text-sm font-semibold">Detalle de Colocaciones</h3>
+        <h3 className="mb-2 text-sm font-semibold">Detalle de placements</h3>
         <p className="text-sm text-muted-foreground">
-          Sin colocaciones en el rango seleccionado.
+          Sin placements en el rango seleccionado.
         </p>
       </div>
     );
@@ -31,7 +31,7 @@ export function PlacementsDetailedList({ rows }: PlacementsDetailedListProps) {
 
   return (
     <div>
-      <h3 className="mb-2 text-sm font-semibold">Detalle de Colocaciones</h3>
+      <h3 className="mb-2 text-sm font-semibold">Detalle de placements</h3>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -39,7 +39,7 @@ export function PlacementsDetailedList({ rows }: PlacementsDetailedListProps) {
               <TableHead>Vacante / Posición</TableHead>
               <TableHead>Cliente</TableHead>
               <TableHead>Reclutador</TableHead>
-              <TableHead>Fecha Colocación</TableHead>
+              <TableHead>Fecha placement</TableHead>
               <TableHead>Garantía</TableHead>
             </TableRow>
           </TableHeader>

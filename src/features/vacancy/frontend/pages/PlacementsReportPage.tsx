@@ -39,9 +39,9 @@ export function PlacementsReportPage() {
   return (
     <div className="space-y-6 p-6">
       <div>
-        <h1 className="text-2xl font-bold">Reporte de Colocaciones</h1>
+        <h1 className="text-2xl font-bold">Reporte de placements</h1>
         <p className="text-sm text-muted-foreground">
-          Colocaciones confirmadas en el rango de fechas seleccionado.
+          Placements confirmados en el rango de fechas seleccionado.
         </p>
       </div>
 
@@ -94,7 +94,7 @@ export function PlacementsReportPage() {
       {/* Empty state — data loaded but no results */}
       {data && data.summary.gross === 0 && (
         <p className="text-sm text-muted-foreground">
-          No se encontraron colocaciones en el rango seleccionado.
+          No se encontraron placements en el rango seleccionado.
         </p>
       )}
     </div>
