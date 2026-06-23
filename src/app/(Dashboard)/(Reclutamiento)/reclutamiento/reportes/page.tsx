@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { PermissionGuard } from "@/core/shared/components/PermissionGuard";
+import { PermissionActions } from "@/core/shared/constants/permissions";
+import { PlacementsReportPage } from "@features/vacancy/frontend/pages/PlacementsReportPage";
 
 export const metadata: Metadata = {
   title: "Reportes de Reclutamiento",
@@ -8,9 +11,20 @@ export const metadata: Metadata = {
 
 export default function ReclutadoresReportesPage() {
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold">Kanban</h1>
-      <p className="text-muted-foreground">Página de Kanban en construcción</p>
-    </div>
+    <PermissionGuard
+      permissions={[
+        PermissionActions.reportesReclutamiento.acceder,
+        PermissionActions.reportesReclutamiento.gestionar,
+      ]}
+      fallback={
+        <div className="container mx-auto py-8">
+          <p className="text-muted-foreground">
+            No tienes permiso para acceder a los reportes de reclutamiento.
+          </p>
+        </div>
+      }
+    >
+      <PlacementsReportPage />
+    </PermissionGuard>
   );
 }

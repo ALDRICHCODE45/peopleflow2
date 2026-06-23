@@ -645,3 +645,38 @@ export interface ListCommitmentsResult {
   error: string | null;
   commitments?: VacancyCommitmentDTO[];
 }
+
+// =============================================
+// PLACEMENTS DATE-RANGE REPORT
+// =============================================
+
+export interface PlacementsReportFilters {
+  from: string;
+  to: string;
+}
+
+export interface BreakdownRow {
+  key: string;
+  label: string;
+  gross: number;
+  net: number;
+  warranty: number;
+}
+
+export interface PlacementListRow {
+  vacancyId: string;
+  position: string;
+  clientName: string;
+  recruiterName: string;
+  isWarranty: boolean;
+  placedAt: string;
+}
+
+export interface PlacementsReportDTO {
+  filters: PlacementsReportFilters;
+  summary: { gross: number; net: number; warranty: number };
+  byMonth: BreakdownRow[];
+  byClient: BreakdownRow[];
+  byRecruiter: BreakdownRow[];
+  list: PlacementListRow[];
+}
