@@ -1,8 +1,10 @@
 import prisma from "@lib/prisma";
+import { Prisma } from "@core/generated/prisma/client";
 import type {
   IVacancyStatusHistoryRepository,
   CreateStatusHistoryData,
   VacancyStatusHistoryEntry,
+  PlacementRow,
 } from "../../domain/interfaces/IVacancyStatusHistoryRepository";
 import type { VacancyStatusType } from "@features/vacancy/frontend/types/vacancy.types";
 
@@ -78,6 +80,40 @@ export class PrismaVacancyStatusHistoryRepository
     return records.map((r) =>
       this.mapToEntry(r as unknown as PrismaStatusHistoryRecord)
     );
+  }
+
+  async getPlacementsReport(params: {
+    tenantId: string;
+    from: Date;
+    toExclusive: Date;
+  }): Promise<PlacementRow[]> {
+    const { tenantId, from, toExclusive } = params;
+
+    const rows = await prisma.$queryRaw<PlacementRow[]>(Prisma.sql`
+      SELECT DISTINCT ON (sh."vacancyId")
+        sh."vacancyId" AS "vacancyId",
+        v.position    AS position,
+        v."clientId"  AS "clientId",
+        c.nombre      AS "clientName",
+        v."recruiterId" AS "recruiterId",
+        u.name        AS "recruiterName",
+        v."isWarranty" AS "isWarranty",
+        sh."createdAt" AS "placedAt"
+      FROM vacancy_status_history sh
+      JOIN vacancy v ON sh."vacancyId" = v.id
+      JOIN client  c ON v."clientId"   = c.id
+      JOIN "user"  u ON v."recruiterId" = u.id
+      WHERE sh."tenantId"  = ${tenantId}
+        AND sh."newStatus" = 'PLACEMENT'
+        AND sh."createdAt" >= ${from}
+        AND sh."createdAt" <  ${toExclusive}
+      ORDER BY sh."vacancyId", sh."createdAt" DESC
+    `);
+
+    return rows.map((r) => ({
+      ...r,
+      isWarranty: Boolean(r.isWarranty),
+    }));
   }
 }
 
