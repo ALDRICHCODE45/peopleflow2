@@ -455,6 +455,15 @@ export const VacanciesTableFilters = ({
             />
           </div>
 
+          <div className="min-w-[180px] flex-1 max-w-xs">
+            <FilterMultiSelect
+              options={clientOptions}
+              selected={selectedClientIds}
+              onChange={onClientIdsChange}
+              placeholder="Todos los clientes"
+            />
+          </div>
+
           <Button
             onClick={openSheetFilters}
             variant={hasActiveSheetFilters ? "default" : "outline-primary"}
@@ -587,6 +596,14 @@ export const VacanciesTableFilters = ({
               selected={selectedRecruiterIds}
               onChange={onRecruiterIdsChange}
               placeholder="Todos los recruiters"
+            />
+
+            <FilterMultiSelect
+              label="Cliente"
+              options={clientOptions}
+              selected={selectedClientIds}
+              onChange={onClientIdsChange}
+              placeholder="Todos los clientes"
             />
 
             <div className="space-y-2 w-full min-w-0">
