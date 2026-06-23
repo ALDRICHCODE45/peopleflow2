@@ -115,7 +115,7 @@ Each commit is self-contained, builds green, and represents a logical layer of t
 
 **User Interface**: Query hook + page + components + route wiring
 
-- [ ] 3.1 **Create `usePlacementsReportQuery.ts`** in `src/features/reclutamiento/frontend/hooks/`
+- [x] 3.1 **Create `usePlacementsReportQuery.ts`** in `src/features/reclutamiento/frontend/hooks/`
   - `"use client"` directive
   - `useQuery` with key `["placements-report", tenant?.id, from, to]`
   - `queryFn`: Call `getPlacementsReportAction({ from, to })`; throw on `result.error`; return `result.data`
@@ -124,34 +124,34 @@ Each commit is self-contained, builds green, and represents a logical layer of t
   - `staleTime: 30_000` (30s)
   - Error toast: `showToast({ type: "error", title: "Error al cargar reporte", description: error.message })`
 
-- [ ] 3.2 **Create `PlacementsReportPage.tsx`** in `src/features/reclutamiento/frontend/pages/`
+- [x] 3.2 **Create `PlacementsReportPage.tsx`** in `src/features/reclutamiento/frontend/pages/`
   - State: `const [from, setFrom] = useState<string>(startOfMonth ISO)`, `const [to, setTo] = useState<string>(today ISO)`
   - Default range: current month from day 1 through today (UTC ISO strings)
   - Query: `const { data, isLoading } = usePlacementsReportQuery({ from, to })`
   - Layout: Two `DatePicker`s (Desde/Hasta) with min/max linkage (Desde.max = to, Hasta.min = from), Summary card, 3 breakdown tables, detailed list
 
-- [ ] 3.3 **Create summary card component** (`PlacementsReportSummary.tsx`)
+- [x] 3.3 **Create summary card component** (`PlacementsReportSummary.tsx`)
   - Display `summary.gross`, `summary.net`, `summary.warranty` in card layout
   - Labels: "Total Colocaciones", "Neto Negocio", "Garantías"
   - Show warranty count badge if > 0
 
-- [ ] 3.4 **Create breakdown table components** (`PlacementsBreakdownTable.tsx`)
+- [x] 3.4 **Create breakdown table components** (`PlacementsBreakdownTable.tsx`)
   - Reusable component accepting `{ title: string; rows: BreakdownRow[] }`
   - Columns: Dimension (label), Gross, Net, Warranty
   - Use `@shadcn/*` DataTable or simple `<table>` with shadcn styling
   - Three instances: "Por Mes" (byMonth), "Por Cliente" (byClient), "Por Reclutador" (byRecruiter)
 
-- [ ] 3.5 **Create detailed list component** (`PlacementsDetailedList.tsx`)
+- [x] 3.5 **Create detailed list component** (`PlacementsDetailedList.tsx`)
   - Columns: Vacante/Posición, Cliente, Reclutador, Fecha Colocación, Garantía (badge)
   - Use `@shadcn/*` DataTable or simple table
   - Warranty badge: visual flag for `isWarranty = true`
   - Format `placedAt` ISO string as readable date (using `date-fns`)
 
-- [ ] 3.6 **Render `PlacementsReportPage` at `reclutamiento/reportes/page.tsx`**
+- [x] 3.6 **Render `PlacementsReportPage` at `reclutamiento/reportes/page.tsx`**
   - Wrap with `<PermissionGuard permissions={[PermissionActions.reportesReclutamiento.acceder]}>`
   - Import and render `<PlacementsReportPage />`
 
-- [ ] 3.7 **Verification**
+- [x] 3.7 **Verification**
   - `bun run build` passes
   - `bun run lint` passes
   - **Manual count check** (Success Criteria):
