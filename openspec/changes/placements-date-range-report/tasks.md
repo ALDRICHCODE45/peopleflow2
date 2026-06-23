@@ -72,7 +72,7 @@ Each commit is self-contained, builds green, and represents a logical layer of t
 
 **Business Logic**: Use case + server action + DTO types
 
-- [ ] 2.1 **Create `GetPlacementsReportUseCase.ts`** in `src/features/reclutamiento/server/application/use-cases/`
+- [x] 2.1 **Create `GetPlacementsReportUseCase.ts`** in `src/features/reclutamiento/server/application/use-cases/`
   - Constructor: `(private readonly repo: IVacancyStatusHistoryRepository)`
   - Method: `async execute(input: { tenantId: string; from: string /*ISO*/; to: string /*ISO*/ }): Promise<{ success: boolean; data?: PlacementsReportDTO; error?: string }>`
   - **Range validation**: Parse ISO strings; reject `from > to` with `{ success: false, error: "Rango inválido" }`; single-day (`from == to`) works via `toExclusive = startOfDay(from) + 1 day`
@@ -88,7 +88,7 @@ Each commit is self-contained, builds green, and represents a logical layer of t
   - **List**: Map placements to `PlacementListRow[]` (dates as ISO strings)
   - Return `{ success: true, data: { filters: { from: input.from, to: input.to }, summary, byMonth, byClient, byRecruiter, list } }`
 
-- [ ] 2.2 **Create `getPlacementsReport.action.ts`** in `src/features/reclutamiento/server/presentation/actions/`
+- [x] 2.2 **Create `getPlacementsReport.action.ts`** in `src/features/reclutamiento/server/presentation/actions/`
   - `"use server"` directive
   - Input: `{ from: string; to: string }` (ISO dates, inclusive days)
   - Auth: `const session = await auth.api.getSession({ headers: await headers() }); if (!session?.user) return { error: "No autenticado" };`
@@ -98,13 +98,13 @@ Each commit is self-contained, builds green, and represents a logical layer of t
   - Return: `{ error: null, data: result.data }` or `{ error: result.error ?? "Error inesperado" }`
   - No `revalidatePath` (read-only report)
 
-- [ ] 2.3 **Add report DTO types to `vacancy.types.ts`** in `src/features/reclutamiento/frontend/types/`
+- [x] 2.3 **Add report DTO types to `vacancy.types.ts`** in `src/features/reclutamiento/frontend/types/`
   - `interface PlacementsReportFilters { from: string; to: string }` (inclusive day, UTC)
   - `interface BreakdownRow { key: string; label: string; gross: number; net: number; warranty: number }`
   - `interface PlacementListRow { vacancyId: string; position: string; clientName: string; recruiterName: string; isWarranty: boolean; placedAt: string /*ISO*/ }`
   - `interface PlacementsReportDTO { filters: PlacementsReportFilters; summary: { gross: number; net: number; warranty: number }; byMonth: BreakdownRow[]; byClient: BreakdownRow[]; byRecruiter: BreakdownRow[]; list: PlacementListRow[] }`
 
-- [ ] 2.4 **Verification**
+- [x] 2.4 **Verification**
   - `bun run build` passes
   - `bun run lint` passes
   - Manual: Action compiles; use case logic type-checks
