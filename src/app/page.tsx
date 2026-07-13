@@ -1,9 +1,8 @@
 import { redirect } from "next/navigation";
-import { auth } from "@/core/lib/auth";
-import { headers } from "next/headers";
 import { Routes } from "@core/shared/constants/routes";
 import prisma from "@/core/lib/prisma";
 import { getDefaultRoute } from "@/core/lib/permissions/get-default-route";
+import { getSessionOtpStatus } from "@core/lib/session-otp";
 import { prismaUserRoleRepository } from "@/features/auth-rbac/server/infrastructure/repositories/PrismaUserRoleRepository";
 
 /**
@@ -20,16 +19,18 @@ import { prismaUserRoleRepository } from "@/features/auth-rbac/server/infrastruc
  * permission leakage entre tenants (fix de bug de seguridad).
  */
 export default async function HomePage() {
-  const headersList = await headers();
-  const session = await auth.api.getSession({ headers: headersList });
+  const { session, isLoggedIn, otpVerified } = await getSessionOtpStatus();
 
   // 1. Si no hay sesión, redirigir a sign-in
-  if (!session?.user) {
+  if (!isLoggedIn || !session?.user) {
     return redirect(Routes.signIn);
   }
 
-  // 2. Si el email no está verificado, redirigir a verificación OTP
-  if (!session.user.emailVerified) {
+  // 2. Si la sesión no completó el OTP, redirigir a verificación.
+  //    Verificamos otpVerifiedAt POR SESIÓN (vía getSessionOtpStatus), no
+  //    emailVerified del User: ese flag es permanente tras el primer OTP y
+  //    dejaba pasar sesiones OTP-pendientes, causando un loop de redirección.
+  if (!otpVerified) {
     return redirect(Routes.verifyOtp);
   }
 

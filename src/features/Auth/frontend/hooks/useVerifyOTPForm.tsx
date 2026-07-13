@@ -12,22 +12,25 @@ import { markSessionOtpVerified } from "@features/Auth/server/presentation/actio
 const MAX_ATTEMPTS = 3;
 const OTP_SESSION_KEY = "otp_verification_email";
 
-export function useVerifyOTPForm() {
+export function useVerifyOTPForm(initialEmail: string) {
   const router = useRouter();
-  const [email, setEmail] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(initialEmail || null);
   const [attemptsRemaining, setAttemptsRemaining] = useState(MAX_ATTEMPTS);
   const [isResending, setIsResending] = useState(false);
 
-  // Load email from sessionStorage on mount
+  // The email is provided authoritatively by the server component. This is only
+  // a defensive fallback: if it ever arrives empty, try sessionStorage and, as a
+  // last resort, send the user back to sign-in. With the server guard in place
+  // this normally never runs.
   useEffect(() => {
+    if (email) return;
     const storedEmail = sessionStorage.getItem(OTP_SESSION_KEY);
     if (storedEmail) {
       setEmail(storedEmail);
     } else {
-      // No email in session, redirect to sign-in
       router.push(Routes.signIn);
     }
-  }, [router]);
+  }, [email, router]);
 
   const form = useForm({
     defaultValues: {

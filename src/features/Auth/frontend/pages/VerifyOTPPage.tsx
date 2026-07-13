@@ -15,9 +15,14 @@ import {
 } from "@/core/shared/ui/shadcn/input-otp";
 import { Spinner } from "@shadcn/spinner";
 
-export const VerifyOTPPage = () => {
+interface VerifyOTPPageProps {
+  /** Email of the active OTP-pending session, resolved server-side. */
+  email: string;
+}
+
+export const VerifyOTPPage = ({ email: initialEmail }: VerifyOTPPageProps) => {
   const { form, email, attemptsRemaining, isResending, resendOTP } =
-    useVerifyOTPForm();
+    useVerifyOTPForm(initialEmail);
 
   // Show loading while checking for email in session storage
   if (!email) {
