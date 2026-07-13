@@ -35,6 +35,15 @@ const SERVICE_TYPE_DAYS: Record<VacancyServiceType, number> = {
   END_TO_END: 9,
 };
 
+/**
+ * Normalizes a server ISO date string ("2026-07-13T00:00:00.000Z") to the
+ * "yyyy-MM-dd" format the DatePicker expects. Returns "" for null/undefined so
+ * the field renders its placeholder instead of failing to parse.
+ */
+function toDateInput(isoString: string | null | undefined): string {
+  return isoString ? isoString.slice(0, 10) : "";
+}
+
 function calculateTargetDeliveryDate(
   assignedAt: string,
   serviceType: VacancyServiceType | "",
@@ -161,8 +170,11 @@ export function useEditVacancyForm({
     clientId: vacancy.clientId,
     serviceType: vacancy.serviceType ?? "",
     currency: vacancy.currency ?? "",
-    assignedAt: vacancy.assignedAt,
-    targetDeliveryDate: vacancy.targetDeliveryDate ?? "",
+    // DatePicker only parses "yyyy-MM-dd"; the DTO sends a full ISO string
+    // (e.g. "2026-07-13T00:00:00.000Z"), so slice it to the date part or the
+    // picker fails to parse and renders empty.
+    assignedAt: toDateInput(vacancy.assignedAt),
+    targetDeliveryDate: toDateInput(vacancy.targetDeliveryDate),
     salaryType: vacancy.salaryType ?? "RANGE",
     salaryFixed: vacancy.salaryFixed ?? undefined,
     salaryMin: vacancy.salaryMin ?? undefined,
